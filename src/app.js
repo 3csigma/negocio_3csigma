@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(require('./routes'));
 app.use(require('./routes/authentication'));
 app.use('/links',require('./routes/links'));
-app.use(require('./routes/empresa'));
+app.use('/empresa', require('./routes/empresa'));
 
 app.listen(app.get('port'), () => {
   console.log('Servidor corriendo in http://localhost:'+app.get('port'));
