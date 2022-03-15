@@ -1,0 +1,261 @@
+<div class="wrapper shadow-lg mx-auto mt-3">
+    <form action="" id="wizard">
+        <!-- SECTION 1 -->
+        <h4></h4>
+        <section>
+            <h3>Datos Personales</h3>
+            <div class="form-row">
+                <div class="form-holder">
+                    <i class="zmdi zmdi-account"></i>
+                    <input type="text" class="form-control" name="nombre" placeholder="Nombre">
+                </div>
+                <div class="form-holder">
+                    <i class="zmdi zmdi-account"></i>
+                    <input type="text" class="form-control" name="apellido" placeholder="Apellido">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder">
+                    <i class="zmdi zmdi-email"></i>
+                    <input type="email" class="form-control" name="email" placeholder="Email">
+                </div>
+                <div class="form-holder">
+                    <i class="zmdi zmdi-smartphone-android"></i>
+                    <input type="text" class="form-control" name="telefono" placeholder="Teléfono">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder">
+                    <i class="zmdi zmdi-calendar"></i>
+                    <input type="text" class="form-control" name="fecha_nacimiento" placeholder="Fecha de Nacimiento">
+                </div>
+                <div class="form-holder">
+                    <i class="zmdi zmdi-map"></i>
+                    <input type="text" class="form-control" name="pais" placeholder="País/Nacionalidad">
+                </div>
+            </div>
+            <p><strong>Redes Sociales</strong></p>
+            <div class="form-holder">
+                <i class="zmdi zmdi-twitter"></i>
+                <input type="text" class="form-control" name="twitter" placeholder="Twitter">
+            </div>
+            <div class="form-holder">
+                <i class="zmdi zmdi-facebook"></i>
+                <input type="text" class="form-control" name="facebook" placeholder="Facebook">
+            </div>
+            <div class="form-holder">
+                <i class="zmdi zmdi-instagram"></i>
+                <input type="text" class="form-control" name="instagram" placeholder="Instagram">
+            </div>
+            <div class="form-holder">
+                <i class="zmdi zmdi-link"></i>
+                <input type="text" class="form-control" name="otra" placeholder="Otra">
+            </div>
+        </section>
+
+        <!-- SECTION 2 -->
+        <h4></h4>
+        <section>
+            <h3>Sobre la Empresa</h3>
+            <div class="form-row">
+                <div class="input-group w-80 form-holder">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" value="" name="es_propietario" aria-label="Checkbox for following text input">
+                    </div>
+                    <input type="text" class="form-control" value="¿Eres dueño de negocio?" readonly style="background:white">
+                </div>
+                <div class="input-group w-80 form-holder">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" value="" name="socios" aria-label="Checkbox for following text input">
+                    </div>
+                    <input type="text" class="form-control" value="¿Tienes socios??" readonly style="background:white">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder w-100">
+                    <input type="text" class="form-control" name="nombre_empresa" placeholder="Nombre de la empresa">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+                <div class="form-holder w-40">
+                    <input type="text" class="form-control" name="cantidad_socios" placeholder="Cantidad de socios">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="porcentaje_accionario" placeholder="¿Porcentaje accionario?">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="tiempo_fundacion" placeholder="Tiempo de fundacion">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="tiempo_experiencia" placeholder="Años de experiencia en la rama">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="promedio_ingreso_anual" placeholder="Promedio de ingreso anual*">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="num_empleados" placeholder="Número de empleados ">
+                    <i class="zmdi zmdi-accounts-list"></i>
+                </div>
+                <div class="form-holder w-80">
+                    <input type="text" class="form-control" name="page_web" placeholder="Página Web">
+                    <i class="zmdi zmdi-link"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 -->
+        <h4></h4>
+        <section>
+            <h3 style="margin-bottom: 16px;">Descripción de tu negocio</h3>
+            <table cellspacing="0"
+                class="table-cart shop_table shop_table_responsive cart woocommerce-cart-form__contents table"
+                id="shop_table">
+                <thead>
+                    <th>&nbsp;</th>
+                    <th style="text-align: left;">Product Detail</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>&nbsp;</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="product-thumb">
+                            <a href="#" class="item-thumb">
+                                <img src="/img/item-1.jpg" alt="">
+                            </a>
+                        </td>
+                        <td class="product-detail" data-title="Product Detail">
+                            <div>
+                                <a href="#">Cherry</a>
+                                <span>$</span>
+                                <span>35</span>
+                            </div>
+                        </td>
+                        <td class="product-quantity" data-title="Quantity">
+                            <div class="quantity">
+                                <span class="plus">+</span>
+                                <input type="number" id="quantity_5b4f198d958e1" class="input-text qty text" step="1"
+                                    min="0" max="" name="cart[5934c1ec0cd31e12bd9084d106bc2e32][qty]" value="1"
+                                    title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" />
+                                <span class="minus">-</span>
+                            </div>
+                        </td>
+                        <td class="total-price" data-title="Total Price">
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">$</span>
+                                70
+                            </span>
+                        </td>
+                        <td class="product-remove">
+                            <a href="#">
+                                <i class="zmdi zmdi-close-circle-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="product-thumb">
+                            <a href="#" class="item-thumb">
+                                <img src="/img/item-2.jpg" alt="">
+                            </a>
+                        </td>
+                        <td class="product-detail" data-title="Product Detail">
+                            <div>
+                                <a href="#">Mango</a>
+                                <span>$</span>
+                                <span>2035</span>
+                            </div>
+                        </td>
+                        <td class="product-quantity" data-title="Quantity">
+                            <div class="quantity">
+                                <span class="plus">+</span>
+                                <input type="number" id="quantity_5b4f198d958e1" class="input-text qty text" step="1"
+                                    min="0" max="" name="cart[5934c1ec0cd31e12bd9084d106bc2e32][qty]" value="1"
+                                    title="Qty" size="4" pattern="[0-9]*" inputmode="numeric" />
+                                <span class="minus">-</span>
+                            </div>
+                        </td>
+                        <td class="total-price" data-title="Total Price">
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">$</span>
+                                20
+                            </span>
+                        </td>
+                        <td class="product-remove">
+                            <a href="#">
+                                <i class="zmdi zmdi-close-circle-o"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- SECTION 4 -->
+        <h4></h4>
+        <section>
+            <h3>Cart Totals</h3>
+            <div class="cart_totals">
+                <table cellspacing="0" class="shop_table shop_table_responsive">
+                    <tr class="cart-subtotal">
+                        <th>Subtotal</th>
+                        <td data-title="Subtotal">
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">$</span>110.00
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="cart-subtotal shipping">
+                        <th>Shipping:</th>
+                        <td data-title="Subtotal">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="radio" name="shipping" checked> Free Shipping
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="shipping"> Local pickup: <span>$</span><span>0.00</span>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <span>Calculate shipping</span>
+                        </td>
+                    </tr>
+                    <tr class="cart-subtotal">
+                        <th>Service <span>(estimated for Vietnam)</span></th>
+                        <td data-title="Subtotal">
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">$</span>5.60
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="order-total border-0">
+                        <th>Total</th>
+                        <td data-title="Total">
+                            <span class="woocommerce-Price-amount amount">
+                                <span class="woocommerce-Price-currencySymbol">$</span>64.69
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </section>
+    </form>
+</div>
+
+<script src="/js/jquery-3.3.1.min.js"></script>
+
+<!-- JQUERY STEP -->
+<script src="/js/jquery.steps.js"></script>
+
+<script src="/js/main.js"></script>
