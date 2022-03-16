@@ -1,4 +1,6 @@
 $(function(){
+
+    let form = $("#wizard");
 	$("#wizard").steps({
         headerTag: "h4",
         bodyTag: "section",
@@ -6,9 +8,9 @@ $(function(){
         enableAllSteps: true,
         transitionEffectSpeed: 300,
         labels: {
-            next: "Continue",
-            previous: "Back",
-            finish: 'Proceed to checkout'
+            next: "Continuar",
+            previous: "Anterior",
+            finish: 'Enviar Datos'
         },
         onStepChanging: function (event, currentIndex, newIndex) { 
             if ( newIndex >= 1 ) {
@@ -37,6 +39,12 @@ $(function(){
                 $('.actions ul').removeClass('step-4');
             }
             return true; 
+        },
+        onFinished: function(event, currentIndex, newIndex) {
+            form.submit();
+        },
+        onStepChanged: function(event, currentIndex, newIndex) {
+            return true;
         }
     });
     // Custom Button Jquery Steps
@@ -55,10 +63,10 @@ $(function(){
         }
     }) 
     // Create Steps Image
-    $('.steps ul li:first-child').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-1-active.png" alt=""> ').append('<span class="step-order">Step 01</span>');
-    $('.steps ul li:nth-child(2').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-2.png" alt="">').append('<span class="step-order">Step 02</span>');
-    $('.steps ul li:nth-child(3)').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-3.png" alt="">').append('<span class="step-order">Step 03</span>');
-    $('.steps ul li:last-child a').append('<img src="/img/step-4.png" alt="">').append('<span class="step-order">Step 04</span>');
+    $('.steps ul li:first-child').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-1-active.png" alt=""> ').append('<span class="step-order">Paso 01</span>');
+    $('.steps ul li:nth-child(2').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-2.png" alt="">').append('<span class="step-order">Paso 02</span>');
+    $('.steps ul li:nth-child(3)').append('<img src="/img/step-arrow.png" alt="" class="step-arrow">').find('a').append('<img src="/img/step-3.png" alt="">').append('<span class="step-order">Paso 03</span>');
+    $('.steps ul li:last-child a').append('<img src="/img/step-4.png" alt="">').append('<span class="step-order">Paso 04</span>');
     // Count input 
     $(".quantity span").on("click", function() {
 
