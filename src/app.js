@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 
 // Configuraciones
-app.set('port', process.env.PORT || 3200);
+app.set('port', process.env.PORT || 4000);
 
 app.set('views', __dirname + '/views');
 app.engine('.hbs', engine({
@@ -33,11 +33,11 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Rutas
-app.use(require('./routes'));
-app.use(require('./routes/authentication'));
-app.use('/links',require('./routes/links'));
-app.use('/empresa', require('./routes/empresa'));
+// app.use(require('./routes'));
+// app.use(require('./routes/authentication'));
+app.use('/', require('./routes/empresa'));
 
 app.listen(app.get('port'), () => {
+  // console.log(path.join(__dirname, 'public'))
   console.log('Servidor corriendo in http://localhost:'+app.get('port'));
 });

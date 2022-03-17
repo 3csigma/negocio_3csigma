@@ -1,0 +1,325 @@
+	<div id="preloader">
+		<div data-loader="circle-side"></div>
+	</div><!-- /Preload -->
+	
+	<div id="loader_form">
+		<div data-loader="circle-side-2"></div>
+	</div><!-- /loader_form -->
+	
+	<div class="container-fluid">
+	    <div class="row row-height">
+	        <div class="col-xl-4 col-lg-4 content-left">
+	            <div class="content-left-wrapper">
+	                <a href="#" id="logo"><img src="/img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="45" height="45"></a>
+	                <div id="social">
+	                    <ul>
+	                        <li><a href="#0"><i class="icon-facebook"></i></a></li>
+	                        <li><a href="#0"><i class="icon-twitter"></i></a></li>
+	                        <li><a href="#0"><i class="icon-google"></i></a></li>
+	                        <li><a href="#0"><i class="icon-linkedin"></i></a></li>
+	                    </ul>
+	                </div>
+	                <!-- /social -->
+	                <div>
+	                    <figure><img src="/img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270"></figure>
+	                    <h2>Ficha Cliente</h2>
+	                    <p>Diagnóstico de Negocio</p>
+	                    <a href="#0" class="btn_1 rounded yellow">xxxxxxx</a>
+	                    <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a>
+	                </div>
+	                <div class="copy">© 2022 3CSigma</div>
+	            </div>
+	            <!-- /content-left-wrapper -->
+	        </div>
+	        <!-- /content-left -->
+	        <div class="col-xl-8 col-lg-8 content-right" id="start">
+	            <div id="wizard_container">
+	                <div id="top-wizard">
+	                    <span id="location"></span>
+	                    <div id="progressbar"></div>
+	                </div>
+	                <!-- /top-wizard -->
+	                <form id="wrapped" method="post" enctype="multipart/form-data">
+	                    <input id="website" name="website" type="text" value="">
+	                    <!-- Leave for security protection, read docs for details -->
+	                    <div id="middle-wizard">
+                            <!-- Paso 1 DATOS PERSONALES -->
+	                        <div class="step">
+	                            <h2 class="section_title">DATOS PERSONALES</h2>
+	                            {{!-- <h3 class="main_question">Personal info</h3> --}}
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="name">Nombres</label>
+										<input type="text" name="nombre" id="name" class="form-control required" onchange="getVals(this, 'name_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="apellido">Apellido</label>
+										<input type="text" name="apellido" id="apellido" class="form-control required" onchange="getVals(this, 'apellido_field');">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="email">Email</label>
+										<input type="email" name="email" id="email" class="form-control required" onchange="getVals(this, 'email_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="phone">Teléfono</label>
+	                                	<input type="number" name="telefono" id="phone" class="form-control required">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="fecha">Fecha de Nacimiento</label>
+										<input type="date" name="fecha_nacimiento" id="fecha" class="form-control required" onchange="getVals(this, 'fecha_nacimiento_field');">
+									</div>
+									<div class="form-group col-md-6 mt-4">
+										<label for="pais">País/Nacionalidad</label>
+	                                	<input type="text" name="pais" id="pais" class="form-control required">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<label>Redes Sociales</label>
+									<label for="twitter">Twitter</label>
+									<input type="text" name="twitter" id="twitter" class="form-control"
+										onchange="getVals(this, 'twitter_field');">
+								</div>
+								<div class="row add_top_10">
+									<label for="facebook">Facebook</label>
+									<input type="text" name="facebook" id="facebook" class="form-control"
+										onchange="getVals(this, 'twitter_field');">
+								</div>
+								<div class="row add_top_10">
+									<label for="instagram">Instagram</label>
+									<input type="text" name="instagram" id="instagram" class="form-control"
+										onchange="getVals(this, 'instagram_field');">
+								</div>
+								<div class="row add_top_10">
+									<label for="otra">Otra</label>
+									<input type="text" name="otra" id="otra" class="form-control"
+										onchange="getVals(this, 'otra_field');">
+								</div>
+								<!-- /Fila Grupo de campos -->
+	                        </div>
+	                        <!-- /Paso 1 -->
+
+	                        <!-- Paso 2 SOBRE LA EMPRESA ============================== -->
+	                        <div class="step">
+	                            <h2 class="section_title">SOBRE LA EMPRESA</h2>
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label>¿Eres dueño de negocio?</label>
+										<div class="form-group mb-3 radio_input">
+											<label class="container_radio mr-3">Si
+												<input type="radio" name="es_propietario" value="Si" class="required">
+												<span class="checkmark"></span>
+											</label>
+											<label class="container_radio">No
+												<input type="radio" name="es_propietario" value="No" class="required">
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+									<div class="form-group col-md-6">
+										<label>¿Tienes socios?</label>
+										<div class="form-group mb-3 radio_input">
+											<label class="container_radio mr-3">Si
+												<input type="radio" name="socios" value="Si" class="required">
+												<span class="checkmark"></span>
+											</label>
+											<label class="container_radio">No
+												<input type="radio" name="socios" value="No" class="required">
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+	                            <div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="nombre_empresa">Nombre de la empresa</label>
+										<input type="text" name="nombre_empresa" id="nombre_empresa" class="form-control required" onchange="getVals(this, 'nombre_empresa_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="cantidad_socios">Cantidad de socios</label>
+										<input type="number" name="cantidad_socios" id="cantidad_socios" class="form-control " onchange="getVals(this, 'cantidad_socios_field');">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="porcentaje_accionario">¿Porcentaje accionario?</label>
+										<input type="text" name="porcentaje_accionario" id="porcentaje_accionario" class="form-control required" onchange="getVals(this, 'porcentaje_accionario_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="tiempo_fundacion">Tiempo de fundacion</label>
+										<input type="text" name="tiempo_fundacion" id="tiempo_fundacion" class="form-control " onchange="getVals(this, 'tiempo_fundacion_field');">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="tiempo_experiencia">Años de experiencia</label>
+										<input type="number" name="tiempo_experiencia" id="tiempo_experiencia" class="form-control required" onchange="getVals(this, 'tiempo_experiencia_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="promedio_ingreso_anual">Promedio de ingreso anual*</label>
+										<input type="text" name="promedio_ingreso_anual" id="promedio_ingreso_anual" class="form-control " onchange="getVals(this, 'promedio_ingreso_anual_field');">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-6 ">
+										<label for="num_empleados">Número de empleados</label>
+										<input type="number" name="num_empleados" id="num_empleados" class="form-control required" onchange="getVals(this, 'num_empleados_field');">
+									</div>
+									<div class="form-group col-md-6">
+										<label for="page_web">Página Web</label>
+										<input type="text" name="page_web" id="page_web" class="form-control " onchange="getVals(this, 'page_web_field');">
+									</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+	                        </div>
+                            <!-- /Paso 2 -->
+
+							<!-- Paso 3 DESCRIPCIÓN DE TU NEGOCIO -->
+	                        <div class="step">
+	                            <h2 class="section_title">DESCRIPCIÓN DE TU NEGOCIO</h2>
+								<div class="row add_top_10">
+									<div class="form-group">
+							        	<label for="descripcion">¿Qué hace tu negocio?</label>
+							        	<textarea name="descripcion" id="descripcion" class="form-control required" style="height: 115px; min-height: 110px;"></textarea>
+							    	</div>
+								</div>
+								<!-- /Fila Grupo de campos -->
+								<div class="row add_top_10">
+									<div class="form-group col-md-12">
+										<label>¿En qué etapa se encuentra tu negocio?</label>
+										<div class="form-group mb-3 radio_input">
+											<label class="container_radio mr-3">En Proyecto
+												<input type="radio" name="etapa_actual" value="En Proyecto" class="required">
+												<span class="checkmark"></span>
+											</label>
+											<label class="container_radio">Operativo
+												<input type="radio" name="etapa_actual" value="Operativo" class="required">
+												<span class="checkmark"></span>
+											</label>
+											<label class="container_radio">En expansión
+												<input type="radio" name="etapa_actual" value="En expansión" class="required">
+												<span class="checkmark"></span>
+											</label>
+											<label class="container_radio">Otro
+												<input type="radio" name="etapa_actual" value="Otro" class="required">
+												<span class="checkmark"></span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="row add_top_10">
+									<label>Objetivos</label>
+									<label for="objetivo1">1-</label>
+									<input type="text" name="objetivo1" id="objetivo1" class="form-control required"
+										onchange="getVals(this, 'objetivo1_field');">
+								</div>
+								<div class="row add_top_10">
+									<label for="objetivo2">2-</label>
+									<input type="text" name="objetivo2" id="objetivo2" class="form-control required"
+										onchange="getVals(this, 'objetivo2_field');">
+								</div>
+								<div class="row add_top_10">
+									<label for="objetivo3">3-</label>
+									<input type="text" name="objetivo3" id="objetivo3" class="form-control required"
+										onchange="getVals(this, 'objetivo3_field');">
+								</div>
+								<!-- /Fila Grupo de campos -->
+	                        </div>
+	                        <!-- /Paso 3 -->
+
+                            <!-- Último Paso ============================== -->
+	                        <div class="submit step" id="end">
+	                            <div class="summary">
+	                                <div class="wrapper">
+	                                    <h3>Thank your for your time<br><span id="name_field"></span>!</h3>
+	                                    <p>We will contat you shorly at the following email address <strong id="email_field"></strong></p>
+	                                </div>
+	                                <div class="text-center">
+	                                    <div class="form-group terms">
+	                                        <label class="container_check">Por favor aceptar nuestros <a href="#" data-toggle="modal" data-target="#terms-txt">Terminos y condiciones</a> antes de Enviar
+	                                            <input type="checkbox" name="terms" value="Si" class="required">
+	                                            <span class="checkmark"></span>
+	                                        </label>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <!-- /Último Paso-->
+
+	                    </div>
+	                    <!-- /middle-wizard -->
+	                    <div id="bottom-wizard">
+	                        <button type="button" name="backward" class="backward">Anterior</button>
+	                        <button type="button" name="forward" class="forward">Siguiente</button>
+	                        <button type="submit" name="process" class="submit">Enviar Datos</button>
+	                    </div>
+	                    <!-- /bottom-wizard -->
+	                </form>
+	            </div>
+	            <!-- /Wizard container -->
+	        </div>
+	        <!-- /content-right-->
+	    </div>
+	    <!-- /row-->
+	</div>
+	<!-- /container-fluid -->
+
+	<div class="cd-overlay-nav">
+		<span></span>
+	</div>
+	<!-- /cd-overlay-nav -->
+
+	<div class="cd-overlay-content">
+		<span></span>
+	</div>
+	<!-- /cd-overlay-content -->
+
+	{{!-- <a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a> --}}
+	<!-- /menu button -->
+	
+	<!-- Modal Terminos & Condiciones -->
+	<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="termsLabel">Terminos y condiciones</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in <strong>nec quod novum accumsan</strong>, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus. Lorem ipsum dolor sit amet, <strong>in porro albucius qui</strong>, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+					<p>Lorem ipsum dolor sit amet, in porro albucius qui, in nec quod novum accumsan, mei ludus tamquam dolores id. No sit debitis meliore postulant, per ex prompta alterum sanctus, pro ne quod dicunt sensibus.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn_1" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- MODERNIZR MENU -->
+	<script src="/js/modernizr.js"></script>
+	<!-- COMMON SCRIPTS -->
+	<script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/common_scripts.min.js"></script>
+	<script src="/js/velocity.min.js"></script>
+	<script src="/js/common_functions.js"></script>
+	<script src="/js/file-validator.js"></script>
+
+	<!-- Wizard script-->
+	<script src="/js/func_1.js"></script>
+
+</body>
