@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 // Rutas
 // app.use(require('./routes'));
 // app.use(require('./routes/authentication'));
-app.use('/', require('./routes/empresa'));
+app.use(require('./routes/empresa'));
 
 app.listen(app.get('port'), () => {
   // console.log(path.join(__dirname, 'public'))

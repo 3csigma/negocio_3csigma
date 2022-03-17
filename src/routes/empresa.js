@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
 // Llenar formulario Ficha cliente
 router.get('/fichaCliente', async (req, res) => {
     const empresa = await pool.query('SELECT * FROM empresa')
+    // const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
     res.render('empresa/addFicha', {empresa})
 })
 
@@ -28,22 +29,29 @@ router.post('/add', async (req, res) => {
         }
         
         // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
-        
         console.log(newFichaCliente)
         await pool.query('INSERT INTO empresa SET ?', [newFichaCliente])
-        res.redirect('/empresa')
+        res.redirect('/')
 })
 
 // Llenar Editar datos del formulario ficha cliente
-router.get('/editar/:id', async (req, res) => {
+// router.get('/editar/:id', async (req, res) => {
+//     const { id } = req.params
+//     const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
+//     res.render('/empresa/addFicha', {ficha: ficha[0]})
+// })
+
+/* router.post('/editar/:id', async (req, res) => {
     const { id } = req.params
-    await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
-})
+    const updateFicha = {}
+    await pool.query('UPDATE empresa SET ? id = ?', [updateFicha, id])
+    res.render('/empresa/addFicha', {ficha: ficha[0]})
+}) */
 
 // Eliminar empresa
 router.get('/eliminar/:id', async (req, res) => {
     const { id } = req.params
-    await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
+    await pool.query('DELENTE FROM empresa WHERE id = ?', [id])
     // res.send('ELIMINADO')
     res.redirect('/empresa')
 })
