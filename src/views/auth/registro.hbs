@@ -1,0 +1,81 @@
+<div class="form-body" style="overflow: hidden;">
+        <div class="website-logo">
+            <a href="/">
+                <div class="logo">
+                    {{!-- <img class="logo-size" src="images/logo-light.svg" alt=""> --}}
+                </div>
+            </a>
+        </div>
+        <div class="row">
+            <div class="img-holder">
+                <div class="bg"></div>
+                <div class="info-holder">
+
+                </div>
+            </div>
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items">
+                        <p class="msg-Login-Top">Preparate para ver crecer tu empresa</p>
+                        <h3>Crea tu cuenta hoy</h3>
+                        <div class="row mb-2">
+                            <div class="col-12 col-sm-6">
+                                <a class="btn btn-lg btn-block btn-gg" id="" href="#" role="button">
+                                    <i class="fab fa-google gg-color" id=""></i> Registrate con Google
+                                </a>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <a class="btn btn-primary btn-lg btn-block" style="border-radius: 20px;" href="#" role="button">
+                                    <i class="fab fa-facebook"></i> Registrate con Facebook
+                                </a>
+                            </div>
+                        </div>
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0 text-muted">o usa tu correo</p>
+                        </div>
+                        {{!-- Referencia de Login o Registro --}}
+                        {{!-- <div class="page-links">
+                            <a href="#" class="active">Login</a><a href="#">Register</a>
+                        </div> --}}
+                        
+                        <form action="/registro" method="post">
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <label style="color:#000;font-weight: bold !important;">Email*</label>
+                                    <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com" required autofocusk>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <label style="color:#000;font-weight: bold !important;">Password*</label>
+                                    <input class="form-control" type="password" name="clave" placeholder="Introduce tu contraseña" required>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label style="color:#000;font-weight: bold !important;">Empresa*</label>
+                                <input class="form-control" type="text" name="nombre_empresa" placeholder="Ingresa el nombre de tu empresa" required autofocusk>
+                            </div>
+                            <div class="row d-flex align-items-center">
+                                <div class="col-12 text-center fw-bold mx-auto mb-4">
+                                    <input class="form" id="customSwitch1" type="checkbox" >
+                                    <label for="customSwitch1"> Acepto las <a href="#" style="color:#812082;font-weight: bold !important;"> politicas de privacidad</a></label>
+                                </div>
+                            </div>
+                            <div class="form-button d-flex align-items-center" >
+                                <button id="submit" type="submit" class="ibtn login-ingresar text-center fw-bold mx-auto mb-4">Crear cuenta</button>
+                            </div>
+                        </form>
+                        <div class="other-links d-flex align-items-center" style="margin-top: -26px;">
+                            <span class="text-center fw-bold mx-auto mb-4" style="color:#000;font-weight: bold !important;">¿Ya tienes una cuenta? <a href="/login"><span style="color:#812082;font-weight: bold !important;"> inicia sesión ahora</span></span></a>
+                        </div>
+                        {{!-- Copyright --}}
+                        <div class="d-flex align-items-center my-4">
+                            <br><br>
+                            <span class="text-center fw-bold mx-auto mb-0 mt-4">2022 Copyright &copy; 3C Sigma</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    

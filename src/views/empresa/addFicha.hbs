@@ -5,27 +5,37 @@
 	<div id="loader_form">
 		<div data-loader="circle-side-2"></div>
 	</div><!-- /loader_form -->
+
+	{{!-- <nav>
+		<ul class="cd-primary-nav">
+			<li><a href="#" class="animated_link">Inicio</a></li>
+			<li><a href="#" class="animated_link">Cerrar Sesión</a></li>
+		</ul>
+	</nav>
+	<!-- /menu --> --}}
 	
 	<div class="container-fluid">
 	    <div class="row row-height">
 	        <div class="col-xl-4 col-lg-4 content-left">
 	            <div class="content-left-wrapper">
-	                <a href="#" id="logo"><img src="/img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="45" height="45"></a>
+	                <a href="#" id="logo"><img src="/img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75" height="75"></a>
 	                <div id="social">
 	                    <ul>
-	                        <li><a href="#0"><i class="icon-facebook"></i></a></li>
-	                        <li><a href="#0"><i class="icon-twitter"></i></a></li>
-	                        <li><a href="#0"><i class="icon-google"></i></a></li>
-	                        <li><a href="#0"><i class="icon-linkedin"></i></a></li>
+	                        <li><a href="#0"><i class="fab fa-facebook-f"></i></a></li>
+	                        <li><a href="#0"><i class="fab fa-twitter"></i></a></li>
+	                        <li><a href="#0"><i class="fab fa-instagram"></i></a></li>
+	                        <li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li>
 	                    </ul>
 	                </div>
 	                <!-- /social -->
 	                <div>
 	                    <figure><img src="/img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270"></figure>
 	                    <h2>Ficha Cliente</h2>
-	                    <p>Diagnóstico de Negocio</p>
-	                    <a href="#0" class="btn_1 rounded yellow">xxxxxxx</a>
-	                    <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a>
+	                    <p>Estos datos nos permiten conocerte y a tu empresa, para tener datos reales sobre el estado actual de la misma, y encontrar los puntos a mejorar para empezar juntos el proceso de crecimiento corporativo.</p>
+						<a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
+							<i class="fab fa-whatsapp" style="font-size:19px"></i>  ¿Tienes dudas?
+							</a>
+	                    {{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
 	                </div>
 	                <div class="copy">© 2022 3CSigma</div>
 	            </div>
@@ -80,8 +90,8 @@
 									</div>
 								</div>
 								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<label>Redes Sociales</label>
+								<div class="row add_top_10 col-12">
+									<label class="mb-2" >Redes Sociales</label>
 									<label for="twitter">Twitter</label>
 									<input type="text" name="twitter" id="twitter" class="form-control"
 										onchange="getVals(this, 'twitter_field');">
@@ -321,7 +331,7 @@
 	</div>
 	<!-- /container-fluid -->
 
-	<div class="cd-overlay-nav">
+	{{!-- <div class="cd-overlay-nav">
 		<span></span>
 	</div>
 	<!-- /cd-overlay-nav -->
@@ -331,8 +341,8 @@
 	</div>
 	<!-- /cd-overlay-content -->
 
-	{{!-- <a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a> --}}
-	<!-- /menu button -->
+	<a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a>
+	<!-- /menu button --> --}}
 	
 	<!-- Modal Terminos & Condiciones -->
 	<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
@@ -356,17 +366,3 @@
 		<!-- /.modal-dialog -->
 	</div>
 	<!-- /.modal -->
-
-	<!-- MODERNIZR MENU -->
-	<script src="/js/modernizr.js"></script>
-	<!-- COMMON SCRIPTS -->
-	<script src="/js/jquery-3.6.0.min.js"></script>
-    <script src="/js/common_scripts.min.js"></script>
-	<script src="/js/velocity.min.js"></script>
-	<script src="/js/common_functions.js"></script>
-	<script src="/js/file-validator.js"></script>
-
-	<!-- Wizard script-->
-	<script src="/js/func_1.js"></script>
-
-</body>

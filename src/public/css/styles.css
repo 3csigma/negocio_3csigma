@@ -48,11 +48,6 @@ html * {
 
 body {
   background: #fff;
-  font-size: 15px;
-  font-size: 0.9375rem;
-  line-height: 1.4;
-  font-family: "Work Sans", Arial, sans-serif;
-  color: #555;
 }
 
 h1,
@@ -123,7 +118,7 @@ a.animated_link:before {
   bottom: -5px;
   opacity: 1;
   left: 0;
-  background-color: #1dbe72;
+  background-color: #50368C;
   visibility: hidden;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);
@@ -220,12 +215,12 @@ a.btn_1.rounded,
 }
 a.btn_1.yellow,
 .btn_1.yellow {
-  background: #f8bd2c;
+  background: #FED061;
   color: #111;
 }
 a.btn_1.yellow:hover,
 .btn_1.yellow:hover {
-  background-color: #d80075;
+  background-color: #E5A923;
   color: #fff;
 }
 
@@ -361,7 +356,7 @@ a.btn_1.yellow:hover,
 }
 
 .content-left {
-  background-color: #1dbe72;
+  background-color: #50368C;
   padding: 0;
 }
 
@@ -485,7 +480,7 @@ a#logo {
 }
 #social ul li {
   float: left;
-  margin: 0 5px 10px 0;
+  margin: 0 15px 10px 0;
   list-style: none;
 }
 #social ul li a {
@@ -582,7 +577,7 @@ button.submit {
   cursor: pointer;
   outline: none;
   text-align: center;
-  background: #1dbe72;
+  background: #50368C;
   position: relative;
   font-size: 14px;
   font-size: 0.875rem;
@@ -606,7 +601,7 @@ button[disabled] {
 
 .backward:hover,
 .forward:hover {
-  background: #d80075;
+  background: #2B265D;
   color: #fff;
 }
 
@@ -630,7 +625,7 @@ button[disabled] {
 }
 
 .ui-widget-header {
-  background: #6C3;
+  background: #812082;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   -ms-border-radius: 10px;

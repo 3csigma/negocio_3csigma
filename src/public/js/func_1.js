@@ -35,7 +35,7 @@ jQuery(function($) {
     $("#wizard_container").wizard({
         afterSelect: function(event, state) {
             $("#progressbar").progressbar("value", state.percentComplete);
-            $("#location").text("" + state.stepsComplete + " of " + state.stepsPossible + " completed");
+            $("#location").text("" + state.stepsComplete + " de " + state.stepsPossible + " completado");
         }
     });
 });

@@ -6,25 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocio | 3CSigma</title>
     <link rel="icon" type="image/x-icon" href="/img/logo_small_3csigma.png">
-    {{!-- GOOGLE FONTS --}}
-    <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,500,600" rel="stylesheet">
+    {{!-- FONTS --}}
+    <link href="http://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
     {{!-- BOOTSTRAP 5 --}}
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     {{!-- FONT AWESOME 5 --}}
+    {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
         crossorigin="anonymous">
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="/fonts/material-design-iconic-font/css/material-design-iconic-font.css">
-    <!-- DATE-PICKER -->
-    <link rel="stylesheet" href="/css/datepicker.min.css">
-    <!-- STYLE CSS -->
-    <link rel="stylesheet" href="/css/styles.css">
+    <!-- STYLE GENERAL CSS -->
+    <link href="/css/styles.css" rel="stylesheet">
+    <link href="/css/menu.css" rel="stylesheet">
+    <!-- CSS WIZARD LOGIN -->
+    <link href="/css/iofrm-style.css" rel="stylesheet">
+    <link href="/css/iofrm-theme3.css" rel="stylesheet">
     <!-- YOUR CUSTOM CSS -->
     <link href="/css/custom.css" rel="stylesheet">
+    <!-- MODERNIZR MENU -->
+	<script src="/js/modernizr.js"></script>
     
 </head>
 <body>
+
     {{> navigation }}
     {{{ body }}}
+    {{#if user}}
+        {{!-- Div Para el Efecto del Menú --}}
+    <div class="cd-overlay-nav">
+		<span></span>
+	</div>
+	<!-- /cd-overlay-nav -->
+
+	<div class="cd-overlay-content">
+		<span></span>
+	</div>
+	<!-- /cd-overlay-content -->
+
+	<a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a>
+	<!-- /menu button -->
+    {{/if}}
+
+    <!-- COMMON SCRIPTS -->
+	<script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+	<!-- Wizard Formularios Scripts-->
+    <script src="/js/common_scripts.min.js"></script>
+	<script src="/js/velocity.min.js"></script>
+	<script src="/js/common_functions.js"></script>
+	<script src="/js/file-validator.js"></script>
+	<script src="/js/func_1.js"></script>
+    {{!-- Login --}}
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/loginMain.js"></script>
+
 </body>
 </html>
