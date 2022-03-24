@@ -32,7 +32,7 @@ router.post('/add', async (req, res) => {
         // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
         console.log(newFichaCliente)
         await pool.query('INSERT INTO empresa SET ?', [newFichaCliente])
-        res.redirect('/')
+        res.redirect('/negocio')
 })
 
 // Llenar Editar datos del formulario ficha cliente
@@ -49,12 +49,12 @@ router.post('/add', async (req, res) => {
     res.render('/empresa/addFicha', {ficha: ficha[0]})
 }) */
 
-// Eliminar empresa
-router.get('/eliminar/:id', async (req, res) => {
-    const { id } = req.params
-    await pool.query('UPDATE FROM empresa WHERE id = ?', [id])
-    // res.send('ELIMINADO')
-    res.redirect('/empresa')
-})
+// // Eliminar empresa
+// router.get('/eliminar/:id', async (req, res) => {
+//     const { id } = req.params
+//     await pool.query('UPDATE FROM empresa WHERE id = ?', [id])
+//     // res.send('ELIMINADO')
+//     res.redirect('/empresa')
+// })
 
 module.exports = router

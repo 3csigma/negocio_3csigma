@@ -50,9 +50,10 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Rutas
-app.use(require('./routes'));
-app.use(require('./routes/empresa'));
-app.use(require('./routes/authentication'));
+// app.use(base_rute('negocio'))
+app.use('/negocio', require('./routes'));
+app.use('/negocio', require('./routes/empresa'));
+app.use('/negocio', require('./routes/authentication'));
 
 app.listen(app.get('port'), () => {
   // console.log(path.join(__dirname, 'public'))

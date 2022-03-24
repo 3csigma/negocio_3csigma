@@ -5,14 +5,14 @@ module.exports = {
         if (req.isAuthenticated()) { 
             return next();
         }
-        return res.redirect('/login')
+        return res.redirect('/negocio/login')
     },
 
     noLogueado(req, res, next) {
         if (!req.isAuthenticated()) { 
             return next();
         }
-        return res.redirect('/')
+        return res.redirect('/negocio')
     }
 
 }
