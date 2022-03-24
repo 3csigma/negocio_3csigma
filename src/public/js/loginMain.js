@@ -1,6 +1,6 @@
 "use strict"
 
-$(window).on("load", function() {
+$( window ).load(function() {
     $('.btn-forget').on('click',function(e){
         e.preventDefault();
         var inputField = $(this).closest('form').find('input');

@@ -41,6 +41,8 @@ app.use(passport.session()); // Inicio de sesiones persistentes
 
 /******** Variables Globales ********/
 app.use((req, res, next) => {
+  // app.locals.success = req.flash('success');
+  app.locals.user = req.user;
   next();
 })
 
@@ -48,7 +50,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Rutas
-// app.use(require('./routes'));
+app.use(require('./routes'));
 app.use(require('./routes/empresa'));
 app.use(require('./routes/authentication'));
 

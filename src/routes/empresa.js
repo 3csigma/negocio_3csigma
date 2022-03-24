@@ -1,18 +1,19 @@
 const express = require('express')
 const router = express.Router()
 const pool = require('../database')
+const { estaLogueado, noLogueado } = require('../lib/auth')
 
 // Listar Categorías para realizar solicitudes
-router.get('/', async (req, res) => {
-    const empresa = await pool.query('SELECT * FROM empresa')
-    res.render('empresa/list', {empresa})
-})
+// router.get('/', async (req, res) => {
+//     const empresa = await pool.query('SELECT * FROM empresa')
+//     res.render('empresa/list', {empresa})
+// })
 
 // Llenar formulario Ficha cliente
 router.get('/fichaCliente', async (req, res) => {
     const empresa = await pool.query('SELECT * FROM empresa')
     // const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
-    res.render('empresa/addFicha', {empresa})
+    res.render('empresa/addFicha', {empresa, wizarx: true, dashx: false})
 })
 
 router.post('/add', async (req, res) => {
@@ -51,7 +52,7 @@ router.post('/add', async (req, res) => {
 // Eliminar empresa
 router.get('/eliminar/:id', async (req, res) => {
     const { id } = req.params
-    await pool.query('DELENTE FROM empresa WHERE id = ?', [id])
+    await pool.query('UPDATE FROM empresa WHERE id = ?', [id])
     // res.send('ELIMINADO')
     res.redirect('/empresa')
 })

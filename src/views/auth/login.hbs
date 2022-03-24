@@ -38,7 +38,7 @@
                             <a href="#" class="active">Login</a><a href="#">Register</a>
                         </div> --}}
                         
-                        <form>
+                        <form action="/login" method="post">
                             <label style="color:#000;font-weight: bold !important;">Email*</label>
                             <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com" required autofocusk>
                             <label style="color:#000;font-weight: bold !important;">Password*</label>
@@ -71,4 +71,7 @@
         </div>
     </div>
 
-    
+
+    {{!-- Login Scripts --}}
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/loginMain.js"></script>

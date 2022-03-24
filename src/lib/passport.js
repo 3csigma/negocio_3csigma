@@ -1,6 +1,5 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 
@@ -32,8 +31,18 @@ passport.use('local.login', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback luego de la configuración para indicar que más hacer
     console.log(req.body)
-    console.log(email)
-    console.log(clave)
+    const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+    if (filas.length > 0) {
+        const user = filas[0]
+        const claveValida = await helpers.matchPass(clave, user.clave)
+        if (claveValida){
+            done(null, user, {msg: 1})
+        } else {
+            done(null, false, {msg: 2})
+        }
+    } else {
+        return done(null, false, {msg: 3})
+    }
 }))
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada

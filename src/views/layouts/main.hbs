@@ -4,63 +4,66 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negocio | 3CSigma</title>
+    <title>Negocio - 3CSigma</title>
     <link rel="icon" type="image/x-icon" href="/img/logo_small_3csigma.png">
-    {{!-- FONTS --}}
-    <link href="http://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
-    {{!-- BOOTSTRAP 5 --}}
+    <!--  FONTS -->
+    <link href="https://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
+    <!--  BOOTSTRAP 5-->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-    {{!-- FONT AWESOME 5 --}}
-    {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" --}}
+    <!--  FONT AWESOME 5.5 -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
         crossorigin="anonymous">
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="/fonts/material-design-iconic-font/css/material-design-iconic-font.css">
     <!-- STYLE GENERAL CSS -->
+    {{#if wizarx}}
     <link href="/css/styles.css" rel="stylesheet">
-    <link href="/css/menu.css" rel="stylesheet">
+    {{/if}}
     <!-- CSS WIZARD LOGIN -->
     <link href="/css/iofrm-style.css" rel="stylesheet">
     <link href="/css/iofrm-theme3.css" rel="stylesheet">
     <!-- YOUR CUSTOM CSS -->
     <link href="/css/custom.css" rel="stylesheet">
-    <!-- MODERNIZR MENU -->
-	<script src="/js/modernizr.js"></script>
-    
+    {{#if dashx}}
+    <!-- DASHBOARD -->
+    <link href="/vendor/css/chartist.min.css" rel="stylesheet">
+    <link href="/vendor/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="/vendor/css/owl.carousel.css" rel="stylesheet">
+    <link href="/vendor/css/style.css" rel="stylesheet">
+    {{/if}}
 </head>
 <body>
 
     {{> navigation }}
+
     {{{ body }}}
-    {{#if user}}
-        {{!-- Div Para el Efecto del Menú --}}
-    <div class="cd-overlay-nav">
-		<span></span>
-	</div>
-	<!-- /cd-overlay-nav -->
-
-	<div class="cd-overlay-content">
-		<span></span>
-	</div>
-	<!-- /cd-overlay-content -->
-
-	<a href="#0" class="cd-nav-trigger">Menu<span class="cd-icon"></span></a>
-	<!-- /menu button -->
-    {{/if}}
 
     <!-- COMMON SCRIPTS -->
 	<script src="/js/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap.bundle.min.js"></script>
-	<!-- Wizard Formularios Scripts-->
+    {{#if wizarx}}
+    <!-- Wizard Formularios Scripts-->
     <script src="/js/common_scripts.min.js"></script>
 	<script src="/js/velocity.min.js"></script>
 	<script src="/js/common_functions.js"></script>
 	<script src="/js/file-validator.js"></script>
 	<script src="/js/func_1.js"></script>
-    {{!-- Login --}}
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/loginMain.js"></script>
-
+    {{/if}}
+    {{#if dashx}}
+    <!-- ****************** Required vendors - DASHBOARD ****************** -->
+    <script src="/vendor/js/global.min.js"></script>
+    <script src="/vendor/js/bootstrap-select.min.js"></script>
+    <script src="/vendor/js/Chart.bundle.min.js"></script>
+    <script src="/vendor/js/custom.min.js"></script>
+    <script src="/vendor/js/deznav-init.js"></script>
+    <script src="/vendor/js/owl.carousel.js"></script>
+    <!-- Chart piety plugin files -->
+    <script src="/vendor/js/jquery.peity.min.js"></script>
+    <!-- Apex Chart -->
+    <script src="/vendor/js/apexchart.js"></script>
+    <!-- Dashboard 1 -->
+    <script src="/vendor/js/dashboard-1.js"></script>
+    {{/if}}
 </body>
 </html>
