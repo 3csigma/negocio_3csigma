@@ -8,30 +8,26 @@ router.get('/registro', noLogueado, (req, res) => {
 })
 
 router.post('/registro', noLogueado, passport.authenticate('local.registro', {
-    successRedirect: '/negocio',
+    successRedirect: '/',
     failureRedirect: '/registro',
     failureFlash: true
 }))
 
 router.get('/login', noLogueado, (req, res) => {
-    res.render('auth/login', {login: true, wizarx: false, dashx: false})
+    res.render('auth/login', {login: true, wizarx: false, dashx: true})
 })
 
 router.post('/login', noLogueado, (req, res, next) => {
     passport.authenticate('local.login', {
-        successRedirect: '/negocio',
-        failureRedirect: '/negocio/login',
+        successRedirect: '/',
+        failureRedirect: '/login',
         failureFlash: true
     })(req, res, next)
 })
 
-router.get('/perfil', estaLogueado, (req, res) => {
-    res.send('Este es su perfil')
-})
-
 router.get('/logout', estaLogueado, (req, res) => {
     req.logOut()
-    res.redirect('/negocio/login')
+    res.redirect('/login')
 })
 
 module.exports = router;

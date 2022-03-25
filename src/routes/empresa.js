@@ -32,7 +32,7 @@ router.post('/add', async (req, res) => {
         // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
         console.log(newFichaCliente)
         await pool.query('INSERT INTO empresa SET ?', [newFichaCliente])
-        res.redirect('/negocio')
+        res.redirect('/')
 })
 
 // Llenar Editar datos del formulario ficha cliente
