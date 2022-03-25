@@ -23,7 +23,6 @@ app.set('view engine', 'hbs');
 
 // app.set('trust proxy', 1) // Proxy de confianza
 
-
 /******* Middlewares *******/
 app.use(morgan('dev'))
 // parse application/x-www-form-urlencoded
@@ -42,7 +41,7 @@ app.use(passport.session()); // Inicio de sesiones persistentes
 /******** Variables Globales ********/
 app.use((req, res, next) => {
   // app.locals.success = req.flash('success');
-  app.locals.user = req.user;
+  app.locals.user = req.user; //Variable de sesión de usuario
   next();
 })
 
@@ -50,10 +49,9 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public')))
 
 // Rutas
-// app.use(base_rute('negocio'))
-app.use('/negocio', require('./routes'));
-app.use('/negocio', require('./routes/empresa'));
-app.use('/negocio', require('./routes/authentication'));
+app.use(require('./routes'));
+app.use(require('./routes/empresa'));
+app.use(require('./routes/authentication'));
 
 app.listen(app.get('port'), () => {
   // console.log(path.join(__dirname, 'public'))
