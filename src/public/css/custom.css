@@ -81,3 +81,116 @@ button.bg-plan:hover,
 button.bg-plan:focus {
     background-color: #50368C !important; 
 }
+
+/* Indicadores */
+#indicadores{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#btn-indicador1 {
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    border-radius: 22px;
+    color: #fff;
+    width: 125px;
+    height: 50px;
+    text-align: center;
+    padding: 17px;
+    font-size: 13px;
+    margin-right: 0.5em;
+    font-weight: 300;
+}
+#btn-indicador1:active{
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+}
+#btn-indicador2 {
+    background: #f2f2f2;
+    border-radius: 22px;
+    color: #50368C;
+    width: 140px;
+    height: 50px;
+    text-align: center;
+    padding: 17px;
+    font-size: 13px;
+    font-weight: 300;
+}
+.info-analisis{
+    font-size: 13px;
+}
+
+@media (max-width: 440px){
+    #titu-indicador{
+        margin-top: -3em;
+    }
+    #indicadores {
+        margin-top: 4em;
+        margin-left: -10em;
+    }
+    #btn-indicador1 {
+        width: 100px;
+        height: 35px;
+        padding: 11px;
+        font-size: 11px;
+        margin-right: 0.5em;
+    }
+    #btn-indicador2 {
+        width: 108px;
+        height: 35px;
+        padding: 11px;
+        font-size: 11px;
+    }
+    #tabla-indicadores {
+        margin-top: 4em;
+    }
+}
+
+@media (min-width: 441px) and (max-width: 539px) {
+    #titu-indicador{
+        margin-top: -3em;
+    }
+    #indicadores {
+        margin-top: 4em;
+        margin-left: -12em;
+    }
+    #btn-indicador1 {
+        width: 100px;
+        height: 35px;
+        padding: 11px;
+        font-size: 11px;
+        margin-right: 0.5em;
+    }
+    #btn-indicador2 {
+        width: 108px;
+        height: 35px;
+        padding: 11px;
+        font-size: 11px;
+    }
+    #tabla-indicadores {
+        margin-top: 4em;
+    }
+}
+
+@media (min-width: 540px) and (max-width: 670px) {
+    #titu-indicador {
+        margin-top: -3em;
+    }
+    #indicadores {
+        margin-top: 2em;
+        margin-left: -19em;
+    }
+    #btn-indicador1 {
+        width: 105px;
+        height: 40px;
+        padding: 13px;
+        font-size: 11px;
+    }
+    #btn-indicador2 {
+        width: 110px;
+        height: 40px;
+        padding: 12px;
+        font-size: 11px;
+    }
+    #tabla-indicadores {
+        margin-top: 2em;
+    }
+}

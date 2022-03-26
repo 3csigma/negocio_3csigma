@@ -12621,7 +12621,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       position: absolute;
       border-radius: 4px;
       width: 6px;
-      background: #0B2A97;
+      background: #50368C;
       top: 0;
       right: 0;
       opacity: 0;
@@ -12630,8 +12630,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       -ms-transition: all 0.5s;
       transition: all 0.5s; }
   [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a {
-    color: #0B2A97;
-    background: rgba(11, 42, 151, 0.1); }
+    color: #50368C;
+    background: #EAE6F4; }
     [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a i {
       color: #0B2A97; }
     [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu > li.mm-active > a:before {

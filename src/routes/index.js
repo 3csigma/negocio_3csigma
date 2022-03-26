@@ -7,4 +7,9 @@ router.get('/', estaLogueado, (req, res) => {
     res.render('dashboard', {dashx: true, wizarx: false})
 })
 
+router.get('/perfil', estaLogueado, (req, res) => {
+    // res.send("Hola Desde Dashboard")
+    res.render('perfil', {dashx: true, wizarx: false})
+})
+
 module.exports = router;
