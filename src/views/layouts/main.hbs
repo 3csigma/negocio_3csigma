@@ -57,16 +57,134 @@
     <script src="./vendor/js/custom.min.js"></script>
     <script src="./vendor/js/deznav-init.js"></script>
     <script src="./vendor/js/owl.carousel.js"></script>
-    {{!-- <!-- Chart piety plugin files -->
+    <!-- Chart piety plugin files -->
     <script src="./vendor/js/jquery.peity.min.js"></script>
     <!-- Apex Chart -->
-    <script src="./vendor/js/apexchart.js"></script> --}}
+    <script src="./vendor/js/apexchart.js"></script>
     <!-- Dashboard 1 -->
     <script src="./vendor/js/dashboard-1.js"></script>
-    <!-- Chart Morris plugin files -->
-    <script src="./vendor/morris/raphael-min.js"></script>
-    <script src="./vendor/morris/morris.min.js"></script>
-    <script src="./vendor/morris/morris-init.js"></script>
+    <script>
+            (function($) {
+    /* "use strict" */
+
+	
+	/* function draw() {
+		
+	} */
+
+ var dzSparkLine = function(){
+	let draw = Chart.controllers.line.__super__.draw; //draw shadow
+	
+	var screenWidth = $(window).width();
+	
+	var barChart1 = function(){
+		if(jQuery('#barChart_1').length > 0 ){
+			const barChart_1 = document.getElementById("barChart_1").getContext('2d');
+			
+			barChart_1.height = 100;
+			new Chart(barChart_1, {
+				type: 'bar',
+				data: {
+					defaultFontFamily: 'Poppins',
+                    labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+                    datasets: [{
+                        label: "Primer análisis",
+                        backgroundColor: "#50368C",
+                        borderColor: "#50368C",
+                        data: [
+                            1,
+                            5,
+                            2,
+                            4,
+                            1,
+                            7,
+                            4,
+                            3,
+                            1,
+                            2
+                        ],
+                        fill: false,
+                    }, {
+                        label: "Último análisis",
+                        fill: false,
+                        backgroundColor: "#FED061",
+                        borderColor: "#FED061",
+                        data: [
+                            3,
+                            7,
+                            5,
+                            10,
+                            2,
+                            3,
+                            3,
+                            5,
+                            4,
+                            6
+                        ],
+                    }]
+                },
+				options: {
+					legend: false, 
+					scales: {
+						yAxes: [{
+							gridLines: {
+					          display: false
+					        },
+							ticks: {
+								beginAtZero: true,
+                                min: 0, // minimum value
+                                max: 10 // maximum value
+							}
+						}],
+						xAxes: [{
+							gridLines: {
+					          display: false
+					        },
+							ticks: {
+								fontSize: 10
+							},
+                            barPercentage: 0.5,
+                            categoryPercentage : 1,
+                            barThickness: 14, 
+                            maxBarThickness: 10,
+						}]
+					}
+				}
+			});
+		}
+	}
+
+    /* Function ============ */
+		return {
+			init:function(){
+			},
+			
+			
+			load:function(){
+				barChart1();	
+			},
+			
+			resize:function(){
+				barChart1();	
+			}
+		}
+	
+	}();
+
+	jQuery(document).ready(function(){
+	});
+		
+	jQuery(window).on('load',function(){
+		dzSparkLine.load();
+	});
+
+	jQuery(window).on('resize',function(){
+		//dzSparkLine.resize();
+		setTimeout(function(){ dzSparkLine.resize(); }, 1000);
+	}); 
+	
+})(jQuery);
+    </script>
     {{/if}}
 </body>
 </html>

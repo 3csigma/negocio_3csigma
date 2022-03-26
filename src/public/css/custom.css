@@ -52,7 +52,7 @@ body{
     border-radius: 31.5px !important;
 }
 
-/* Personalizado para Dashboard */
+/* CSS Personalizado para Dashboard */
 .nav-text{
     font-size: 14px !important;
 }
@@ -68,7 +68,6 @@ button.bg-diagnostico:hover,
 button.bg-diagnostico:focus {
     background-color: #FED061 !important; 
 }
-
 .bgl-plan {
     background: rgba(80, 54, 140, 0.2);;
     ;

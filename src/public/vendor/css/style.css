@@ -9610,7 +9610,7 @@ a {
   transition: all .2s ease;
   z-index: 5; }
   .nav-header .logo-abbr {
-    max-width: 52px; 
+    max-width: 56px; 
     display:none
   }
     @media only screen and (max-width: 575px) {
@@ -9830,7 +9830,7 @@ svg.pulse-svg {
   border-radius: 3.5rem;
   height: 1rem;
   position: absolute;
-  background: #FFBC11;
+  background: #50368C;
   right: 0px;
   top: 0px;
   width: 1rem; }
@@ -9844,7 +9844,7 @@ svg.pulse-svg {
     right: 0;
     bottom: 0;
     left: -.2rem;
-    background-color: #FFBC11;
+    background-color: #50368C;
     margin: auto;
     -webkit-transform: scale(0.3);
     transform: scale(0.3);
