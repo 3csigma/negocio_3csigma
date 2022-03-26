@@ -51,3 +51,34 @@ body{
     background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
     border-radius: 31.5px !important;
 }
+
+/* Personalizado para Dashboard */
+.nav-text{
+    font-size: 14px !important;
+}
+.bgl-diagnostico {
+    background: rgba(254, 208, 97, 0.2);
+    border-color: rgba(254, 208, 97, 0.2);
+}
+.bg-diagnostico {
+    background-color: #FED061 !important; }
+  
+a.bg-diagnostico:hover, a.bg-diagnostico:focus,
+button.bg-diagnostico:hover,
+button.bg-diagnostico:focus {
+    background-color: #FED061 !important; 
+}
+
+.bgl-plan {
+    background: rgba(80, 54, 140, 0.2);;
+    ;
+    border-color: rgba(80, 54, 140, 0.2);;
+}
+.bg-plan {
+    background-color: #50368C !important; }
+  
+a.bg-plan:hover, a.bg-plan:focus,
+button.bg-plan:hover,
+button.bg-plan:focus {
+    background-color: #50368C !important; 
+}

@@ -14,7 +14,7 @@ router.post('/registro', noLogueado, passport.authenticate('local.registro', {
 }))
 
 router.get('/login', noLogueado, (req, res) => {
-    res.render('auth/login', {login: true, wizarx: false, dashx: true})
+    res.render('auth/login', {login: true, wizarx: false, dashx: false})
 })
 
 router.post('/login', noLogueado, (req, res, next) => {

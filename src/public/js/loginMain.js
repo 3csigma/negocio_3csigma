@@ -1,6 +1,6 @@
 "use strict"
 
-$( window ).load(function() {
+function camposLg() {
     $('.btn-forget').on('click',function(e){
         e.preventDefault();
         var inputField = $(this).closest('form').find('input');
@@ -23,4 +23,6 @@ $( window ).load(function() {
         var filename = $(this).val().split('\\').pop();
         $(this).next().text(filename);
     });
-});
+};
+
+window.onload = camposLg;

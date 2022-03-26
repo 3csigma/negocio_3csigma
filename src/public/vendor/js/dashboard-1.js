@@ -122,8 +122,8 @@
 				}
 			}
     };
-		var chartTimelineRender =  new ApexCharts(document.querySelector("#chartTimeline"), optionsTimeline);
-		 chartTimelineRender.render();
+		// var chartTimelineRender =  new ApexCharts(document.querySelector("#chartTimeline"), optionsTimeline);
+		//  chartTimelineRender.render();
 	}
 	
 	var chartBar = function(){
@@ -251,7 +251,7 @@
 			
 			load:function(){
 				btnAware();
-				chartTimeline();
+				//chartTimeline();
 				chartBar();
 			},
 			
