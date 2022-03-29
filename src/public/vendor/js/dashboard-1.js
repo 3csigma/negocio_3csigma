@@ -239,8 +239,8 @@
 		 }
 		 ] 
         };
-		var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
-        chartArea.render();
+		// var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+        // chartArea.render();
 
 	}	
 	/* Function ============ */

@@ -40,9 +40,28 @@ body{
 }
 
 .btn-gg:hover{
-    background-color: #ab98b4b5 !important;
-    border: 1px solid #ab98b4b5 !important;
+    border: 1px solid #EAE6F4 !important;
+    background: #EAE6F4 !important;
+    color: #000 !important;
+}
+
+.btn-fb {
     color: #fff !important;
+    border: 1px solid #1877F2 !important;
+    border-radius: 20px !important;
+    background: #1877F2 !important;
+}
+
+.btn-fb:hover{
+    border: 1px solid #0065d1 !important;
+    background: #0065d1 !important;
+    color: #fff !important;
+}
+
+.form-content .btn{
+    padding: 8px 20px !important;
+    font-weight: 300 !important;
+    height: 40px !important;
 }
 
 .login-ingresar {

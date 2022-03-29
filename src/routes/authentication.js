@@ -22,7 +22,7 @@ router.post('/login', noLogueado, (req, res, next) => {
         successRedirect: '/',
         failureRedirect: '/login',
         failureFlash: true,
-    })(req, res, next)
+    })(req, res, next) 
 })
 
 // Social Login
@@ -39,6 +39,7 @@ router.get('/auth/facebook', noLogueado, passport.authenticate('facebook.auth', 
 // }))
 
 router.get('/logout', estaLogueado, (req, res) => {
+    cerrado = true;
     req.logOut()
     res.redirect('/login')
 })

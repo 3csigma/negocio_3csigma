@@ -19,14 +19,14 @@
                     {{!-- {{> message }} --}}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
                     <h3>Inicia sesión en tu cuenta</h3>
-                    <div class="row mb-2">
-                        <div class="col-12 col-sm-6">
-                            <a class="btn btn-lg btn-block btn-gg" id="" href="#" role="button">
-                                <i class="fab fa-google gg-color" id=""></i> Continuar con Google
+                    <div class="row">
+                        <div class="col-12 col-sm-6 mb-2">
+                            <a class="btn btn-lg btn-block btn-gg" href="#" role="button">
+                                <i class="fab fa-google gg-color"></i> Continuar con Google
                             </a>
                         </div>
-                        <div class="col-12 col-sm-6">
-                            <a class="btn btn-primary btn-lg btn-block" style="border-radius: 20px;" href="/auth/facebook"
+                        <div class="col-12 col-sm-6 mb-2">
+                            <a class="btn btn-lg btn-block btn-fb" href="/auth/facebook"
                                 role="button">
                                 <i class="fab fa-facebook"></i> Continuar con Facebook
                             </a>
@@ -96,6 +96,6 @@
             text: `${msg}`
         })
     }
-      window.onload = load;
-    </script>
+    window.onload = load;
+</script>
 {{/if}}

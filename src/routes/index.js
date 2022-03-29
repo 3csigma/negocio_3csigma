@@ -8,11 +8,11 @@ router.get('/', estaLogueado, (req, res) => {
     /** if (req.user.rol == 'Admin') {
      * tipoUser = 'Admin'
      * }else{ tipoUser = 'User' } */
-    res.render('dashboard', {dashx: true, wizarx: false, tipoUser: 'User'})
+    res.render('dashboard', {dashx: true, wizarx: false, tipoUser: 'User', noPago: true})
 })
 
 router.get('/perfil', estaLogueado, (req, res) => {
-    res.render('perfil', {dashx: true, wizarx: false})
+    res.render('perfil', {dashx: true, wizarx: false, login: false})
 })
 
 module.exports = router;
