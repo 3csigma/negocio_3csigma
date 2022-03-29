@@ -1,7 +1,19 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy  // Autenticación por Facebook
+// const GoogleStrategy = require('passport-google-oauth20').Strategy      // Autenticación por Google
 const pool = require('../database')
 const helpers = require('../lib/helpers')
+const {config} = require('../keys') // Importar Api Keys Secret
+
+passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
+    done(null, user.id);
+})
+
+passport.deserializeUser(async (id, done) => { // Deserialización
+    const filas = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
+    done(null, filas[0])
+})
 
 passport.use('local.registro', new LocalStrategy({
     usernameField: 'email',
@@ -16,13 +28,14 @@ passport.use('local.registro', new LocalStrategy({
         username,
         email,
         clave,
-        rol: 'User'
+        rol: 'User',
+        // estado: 1
     }
     newUser.clave = await helpers.encryptPass(clave)
     const result = await pool.query('INSERT INTO users SET ?', [newUser])
     newUser.id = result.insertId
     // console.log(result)
-    return done(null, newUser)
+    return done(null, newUser, req.flash('success', 'Bienvenido a la plataforma'))
 }))
 
 passport.use('local.login', new LocalStrategy({
@@ -30,26 +43,29 @@ passport.use('local.login', new LocalStrategy({
     passwordField: 'clave',
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback luego de la configuración para indicar que más hacer
-    console.log(req.body)
+    // console.log(req.body)
     const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
     if (filas.length > 0) {
         const user = filas[0]
         const claveValida = await helpers.matchPass(clave, user.clave)
         if (claveValida){
-            done(null, user, {msg: 1})
+            return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
         } else {
-            done(null, false, {msg: 2})
+            return done(null, false, req.flash('message', 'Contraseña invalida'))
         }
     } else {
-        return done(null, false, {msg: 3})
+        return done(null, false, req.flash('message', 'No existe este usuario'))
     }
 }))
 
-passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
-    done(null, user.id);
-})
-
-passport.deserializeUser(async (id, done) => { // Deserialización
-    const filas = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-    done(null, filas[0])
-})
+passport.use('facebook.auth', new FacebookStrategy({
+    clientID: config.facebook.id,
+    clientSecret: config.facebook.secret,
+    // callbackURL: '/auth/facebook/secrets'
+  },
+  (accessToken, refreshToken, profile, done) => {
+      console.log(profile)
+    // const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+  }
+  
+));

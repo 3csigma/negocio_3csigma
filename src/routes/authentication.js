@@ -21,9 +21,22 @@ router.post('/login', noLogueado, (req, res, next) => {
     passport.authenticate('local.login', {
         successRedirect: '/',
         failureRedirect: '/login',
-        failureFlash: true
+        failureFlash: true,
     })(req, res, next)
 })
+
+// Social Login
+router.get('/auth/facebook', noLogueado, passport.authenticate('facebook.auth', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+}))
+
+// router.get('/auth/facebook/secrets', noLogueado, passport.authenticate('facebook.auth', {
+//     successRedirect: '/',
+//     failureRedirect: '/login',
+//     failureFlash: true
+// }))
 
 router.get('/logout', estaLogueado, (req, res) => {
     req.logOut()

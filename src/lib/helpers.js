@@ -1,12 +1,13 @@
 const bcrypt = require('bcryptjs');
 const helpers = {}
 
+//Encriptar clave
 helpers.encryptPass = async (password) => {
     const salt = await bcrypt.genSalt(10);
     const claveCifrada = await bcrypt.hash(password, salt)
     return claveCifrada;
 }
-
+//Encontrar coincidencia de la clave en la base de datos
 helpers.matchPass = async (password, passDB) => {
     try {
         return await bcrypt.compare(password, passDB)

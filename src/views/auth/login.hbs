@@ -16,6 +16,7 @@
         <div class="form-holder">
             <div class="form-content">
                 <div class="form-items">
+                    {{!-- {{> message }} --}}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
                     <h3>Inicia sesión en tu cuenta</h3>
                     <div class="row mb-2">
@@ -25,7 +26,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-sm-6">
-                            <a class="btn btn-primary btn-lg btn-block" style="border-radius: 20px;" href="#"
+                            <a class="btn btn-primary btn-lg btn-block" style="border-radius: 20px;" href="/auth/facebook"
                                 role="button">
                                 <i class="fab fa-facebook"></i> Continuar con Facebook
                             </a>
@@ -40,6 +41,7 @@
                     </div> --}}
 
                     <form action="/login" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <label style="color:#000;font-weight: bold !important;">Email*</label>
                         <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com"
                             required autofocusk>
@@ -81,3 +83,19 @@
 {{!-- Login Scripts --}}
 <script src="/js/popper.min.js"></script>
 <script src="/js/loginMain.js"></script>
+
+{{!-- Mensajes de Sweet Alert  --}}
+{{#if message}}
+<input type="hidden" name="msg" id="msg" value="{{message}}">
+<script>
+    let msg = document.getElementById("msg").value;
+    function load() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Advertencia',
+            text: `${msg}`
+        })
+    }
+      window.onload = load;
+    </script>
+{{/if}}

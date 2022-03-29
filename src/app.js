@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser')
 const passport = require('passport')
 const path = require('path');
+const csrf = require('csurf')
+const flash = require('connect-flash')
 
 // Inicializaciones
 const app = express();
@@ -31,17 +33,22 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(session({
   secret: 'secret_3csigma',
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: { secure: false }
 }))
+app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session()); // Inicio de sesiones persistentes
+//Protección contra los ataques csrf
+app.use(csrf())
 
 /******** Variables Globales ********/
 app.use((req, res, next) => {
-  // app.locals.success = req.flash('success');
+  app.locals.success = req.flash('success');
+  app.locals.message = req.flash('message');
   app.locals.user = req.user; //Variable de sesión de usuario
+  app.locals.csrfToken = req.csrfToken();
   next();
 })
 

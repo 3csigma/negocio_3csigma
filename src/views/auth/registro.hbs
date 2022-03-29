@@ -40,6 +40,7 @@
                     </div> --}}
 
                     <form action="/registro" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <div class="row">
                             <div class="col-12 col-sm-6">
                                 <label style="color:#000;font-weight: bold !important;">Email*</label>

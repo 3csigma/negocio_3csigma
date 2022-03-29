@@ -50,6 +50,7 @@
 	                </div>
 	                <!-- /top-wizard -->
 	                <form id="wrapped" method="post" enctype="multipart/form-data" action="/empresa/add">
+						<input type="hidden" name="_csrf" value="{{csrfToken}}">
 	                    <input id="website" name="website" type="text" value="">
 	                    <!-- Leave for security protection, read docs for details -->
 	                    <div id="middle-wizard">
