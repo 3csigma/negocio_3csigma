@@ -80,7 +80,7 @@
 
 .img-holder .bg {
     opacity: 1;
-    background-image: url("../img/Login_Banner_Web.jpg");
+    /* background-image: url("../img/Login_Banner_Web.jpg"); */
 }
 
 .form-holder {
@@ -490,11 +490,5 @@
 
     .form-body.without-side .website-logo .logo {
         background-image: url("../images/logo-dark.svg");
-    }
-}
-
-@media (min-width: 1560px) {
-    .img-holder {
-        width: 800px;
     }
 }

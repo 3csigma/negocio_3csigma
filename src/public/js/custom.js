@@ -1,18 +1,13 @@
-function confirmarSalir() {
-    Swal.fire({
-        title: '¿Quieres cerrar tu sesión?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Salir'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            
-            Swal.fire(
-                'Haz cerrado tu sesión',
-                'success'
-            )
+function validarFormRegistro() {
+    var switchStatus = false;
+    $("#politicas").on('change', function () {
+        if ($(this).is(':checked')) {
+            switchStatus = $(this).is(':checked');
+            alert(switchStatus);// To verify
         }
-    })
+        else {
+            switchStatus = $(this).is(':checked');
+            alert(switchStatus);// To verify
+        }
+    });
 }

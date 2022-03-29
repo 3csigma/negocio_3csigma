@@ -1,8 +1,8 @@
-<div class="form-body" style="overflow: hidden;">
-    <div class="website-logo">
+<div class="form-body">
+    <div class="top_logo">
         <a href="/">
-            <div class="logo">
-                {{!-- <img class="logo-size" src="images/logo-light.svg" alt=""> --}}
+            <div class="logo-Login" >
+                <img class="logo-size-Login" src="/img/3C-sigma-logo-full.png" alt="Logo 3CSigma">
             </div>
         </a>
     </div>
@@ -10,30 +10,30 @@
         <div class="img-holder">
             <div class="bg"></div>
             <div class="info-holder">
-
             </div>
         </div>
-        <div class="form-holder">
+        <div class="loginBanner">
+            <img class="loginBanner-size" src="/img/Login_Banner_movil.jpg" alt="Banner Móvil">
+        </div>
+        <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
-                    {{!-- {{> message }} --}}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
-                    <h3>Inicia sesión en tu cuenta</h3>
-                    <div class="row">
-                        <div class="col-12 col-sm-6 mb-2">
+                    <h3 class="tituH3">Inicia sesión en tu cuenta</h3>
+                    <div class="row" style="margin-top: 1.2em;">
+                        <div class="col-12 col-sm-6 mb-2 p-1">
                             <a class="btn btn-lg btn-block btn-gg" href="#" role="button">
                                 <i class="fab fa-google gg-color"></i> Continuar con Google
                             </a>
                         </div>
-                        <div class="col-12 col-sm-6 mb-2">
-                            <a class="btn btn-lg btn-block btn-fb" href="/auth/facebook"
-                                role="button">
+                        <div class="col-12 col-sm-6 mb-2 p-1">
+                            <a class="btn btn-lg btn-block btn-fb" href="#" role="button">
                                 <i class="fab fa-facebook"></i> Continuar con Facebook
                             </a>
                         </div>
                     </div>
                     <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0 text-muted">o inicia con tu correo</p>
+                        <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu correo</p>
                     </div>
                     {{!-- Referencia de Login o Registro --}}
                     {{!-- <div class="page-links">
@@ -42,18 +42,22 @@
 
                     <form action="/login" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                        <label style="color:#000;font-weight: bold !important;">Email*</label>
+                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Email*</label>
                         <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com"
-                            required autofocusk>
-                        <label style="color:#000;font-weight: bold !important;">Password*</label>
+                            required autofocus>
+                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Password*</label>
                         <input class="form-control" type="password" name="clave" placeholder="Introduce tu contraseña"
                             required>
                         <div class="row">
                             <div class="col-12 col-sm-7">
-                                <input class="form" id="customSwitch1" type="checkbox">
-                                <label for="customSwitch1"> Recuérdame</label>
+                                <label class="switch" style="margin-top: 6px;">
+                                    <input type="checkbox" name="recuerdame" id="recuerdame" value="true">
+                                    <span class="slider round"></span>
+                                    <label for=""></label>
+                                </label>
+                                <label for="customSwitch1" style="font-weight: bold !important"> Recuérdame</label>
                             </div>
-                            <div class="col-12 col-sm-5">
+                            <div class="col-12 col-sm-5" style="margin-top: 9px;">
                                 <a href="#" style="color:#50368C;">Olvidé mi contraseña</a>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 @import url("https://fonts.cdnfonts.com/css/oblivian-text");
-body{
-    font-family: 'Oblivian Text', sans-serif !important;
+body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Oblivian Text' !important;
 }
 
 /* ¡Bienvenido de vuelta! */
@@ -70,6 +70,101 @@ body{
     background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
     border-radius: 31.5px !important;
 }
+
+.top_logo{
+    float: right;
+    position: relative;
+    width: 80px;
+}
+
+.logo-Login{
+    position: absolute;
+    top: 30px;
+    right: 35px;
+    z-index: 9999;
+}
+
+.logo-size-Login{
+    width: 80px;
+}
+
+.loginBanner{
+    display: none;
+}
+
+.loginBanner-size{
+    width: 100%;
+    margin-bottom: 0em;
+    z-index: 8888;
+    top: 0;
+    position: absolute;
+}
+
+.img-holder .bg {
+    background-image: url("../img/Login_Banner_Web.jpg");
+}
+
+/* Switch del Login  - Recuerdame & Acepto las condiciones o politicas */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: " ";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #812082;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #812082;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+/* ************************************ Fin del Login ************************************ */
 
 /* CSS Personalizado para Dashboard */
 .deznav .metismenu a:hover {
@@ -165,6 +260,19 @@ button.bg-plan:focus {
     #tabla-indicadores {
         margin-top: 4em;
     }
+    .logo-size-Login{
+        width: 65px;
+    }
+    .loginBanner{
+        display: block;
+    }
+    .form-abajo{
+        margin-top: 22em !important;
+    }
+    .logo-Login {
+        top: 21.5em !important;
+        right: 0;
+    }
 }
 
 @media (min-width: 441px) and (max-width: 539px) {
@@ -191,6 +299,17 @@ button.bg-plan:focus {
     #tabla-indicadores {
         margin-top: 4em;
     }
+    .loginBanner{
+        display: block;
+    }
+    .logo-Login {
+        top: 21.5em !important;
+        right: 0;
+    }
+    .form-abajo{
+        margin-top: 22em !important;
+    }
+    
 }
 
 @media (min-width: 540px) and (max-width: 670px) {
@@ -215,5 +334,93 @@ button.bg-plan:focus {
     }
     #tabla-indicadores {
         margin-top: 2em;
+    }
+    .loginBanner{
+        display: block;
+    }
+    .logo-Login {
+        top: 21.5em !important;
+        right: 0;
+    }
+    .form-abajo{
+        margin-top: 22em !important;
+    }
+    
+}
+
+@media (max-width: 830px) {
+    .loginBanner{
+        display: block;
+    }
+    .form-abajo{
+        margin-top: 40em;
+    }
+    .top_logo{
+        float: none;
+        margin: 0 auto;
+    }
+    .logo-size-Login {
+        width: 85px;
+    }
+    .logo-Login {
+        top: 39em;
+        right: 0;
+    }
+    .tituH3{
+        font-size: 20px !important;
+    }
+}
+
+@media (max-width: 912px) {
+    .loginBanner{
+        display: block;
+    }
+    .form-abajo{
+        margin-top: 43em;
+    }
+    .top_logo{
+        float: none;
+        margin: 0 auto;
+    }
+    .logo-size-Login {
+        width: 90px;
+    }
+    .logo-Login {
+        top: 41.5em;
+        right: 0;
+    }
+    .tituH3{
+        font-size: 20px !important;
+    }
+    .form-body{
+        overflow: scroll;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1368px) {
+    .img-holder {
+        width: 550px;
+        background-position: right;
+    }
+    .form-body{
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1369px) and (max-width: 1920px) {
+    .img-holder {
+        width: 808px;
+    }
+    .form-holder {
+        margin-left: 670px;
+    }
+}
+
+@media (min-width: 1921px) and (max-width: 2560px) {
+    .img-holder {
+        width: 1082px;
+    }
+    .form-holder {
+        margin-left: 925px;
     }
 }

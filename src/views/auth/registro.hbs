@@ -1,8 +1,8 @@
-<div class="form-body" style="overflow: hidden;">
-    <div class="website-logo">
+<div class="form-body">
+    <div class="top_logo">
         <a href="/">
-            <div class="logo">
-                {{!-- <img class="logo-size" src="images/logo-light.svg" alt=""> --}}
+            <div class="logo-Login" >
+                <img class="logo-size-Login" src="/img/3C-sigma-logo-full.png" alt="Logo 3CSigma">
             </div>
         </a>
     </div>
@@ -10,29 +10,33 @@
         <div class="img-holder">
             <div class="bg"></div>
             <div class="info-holder">
-
             </div>
         </div>
-        <div class="form-holder">
+        {{!-- Banner para Móvil --}}
+        <div class="loginBanner">
+            <img class="loginBanner-size" src="/img/Login_Banner_movil.jpg" alt="Banner Móvil">
+        </div>
+        {{!-- Fin Banner Móvil --}}
+        <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
                     <p class="msg-Login-Top">Preparate para ver crecer tu empresa</p>
-                    <h3>Crea tu cuenta hoy</h3>
-                    <div class="row mb-2">
-                        <div class="col-12 col-sm-6">
-                            <a class="btn btn-lg btn-block btn-gg" id="" href="#" role="button">
-                                <i class="fab fa-google gg-color" id=""></i> Registrate con Google
+                    <h3 class="tituH3">Crea tu cuenta hoy</h3>
+                    <div class="row" style="margin-top: 1.2em;">
+                        <div class="col-12 col-sm-6 mb-2 p-1">
+                            <a class="btn btn-lg btn-block btn-gg" href="#" role="button">
+                                <i class="fab fa-google gg-color"></i> Registrate con Google
                             </a>
                         </div>
-                        <div class="col-12 col-sm-6 mb-2">
-                            <a class="btn btn-lg btn-block btn-fb" href="/auth/facebook"
-                                role="button">
+                        <div class="col-12 col-sm-6 mb-2 p-1">
+                            <a class="btn btn-lg btn-block btn-fb" href="#" role="button">
                                 <i class="fab fa-facebook"></i> Registrate con Facebook
                             </a>
                         </div>
                     </div>
                     <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0 text-muted">o usa tu correo</p>
+                        <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu
+                            correo</p>
                     </div>
                     {{!-- Referencia de Login o Registro --}}
                     {{!-- <div class="page-links">
@@ -60,15 +64,26 @@
                         </div>
                         <div class="row d-flex align-items-center">
                             <div class="col-12 text-center fw-bold mx-auto mb-4">
-                                <input  class="form" id="customSwitch1" type="checkbox" required autofocus>
+                                <label class="switch" style="margin-top: 6px;">
+                                    <input type="checkbox" name="politicas" id="politicas" value="true" required>
+                                    <span class="slider round"></span>
+                                    <label for=""></label>
+                                </label>
                                 <label for="customSwitch1"> Acepto las <a href="#"
                                         style="color:#812082;font-weight: bold !important;"> politicas de
                                         privacidad</a></label>
                             </div>
+                            {{!-- <div class="col-12 text-center fw-bold mx-auto mb-4">
+                                <input class="form" id="customSwitch1" type="checkbox" required autofocus>
+                                <label for="customSwitch1"> Acepto las <a href="#"
+                                        style="color:#812082;font-weight: bold !important;"> politicas de
+                                        privacidad</a></label>
+                            </div> --}}
                         </div>
                         <div class="form-button d-flex align-items-center">
                             <button id="submit" type="submit"
-                                class="ibtn login-ingresar text-center fw-bold mx-auto mb-4">Crear cuenta</button>
+                                class="ibtn login-ingresar text-center fw-bold mx-auto mb-4"
+                                onclick="validarFormRegistro()">Crear cuenta</button>
                         </div>
                     </form>
                     <div class="other-links d-flex align-items-center" style="margin-top: -26px;">
@@ -92,3 +107,19 @@
 {{!-- Login Scripts --}}
 <script src="/js/popper.min.js"></script>
 <script src="/js/loginMain.js"></script>
+{{!-- Scripts Personalizados --}}
+<script>
+    function validarFormRegistro(){
+        const a = document.getElementById("politicas").checked
+        if(a == false){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: "Por favor acepta las politicas de privacidad"
+            })
+            //alert("Por favor acepta las politicas de privacidad")
+        } else {
+            console.log("Registro exitoso")
+        }
+    }
+</script>

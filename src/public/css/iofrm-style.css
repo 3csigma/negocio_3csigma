@@ -20,7 +20,7 @@
     1 - General Styles
 ------------------------------------*/
 *, body {
-    font-family: 'Oblivian Text', sans-serif;
+    font-family: 'Oblivian Text';
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -262,7 +262,7 @@ html, body {
 }
 
 .form-holder {
-    margin-left: 550px;
+    margin-left: 640px;
     width: 100%;
 }
 
