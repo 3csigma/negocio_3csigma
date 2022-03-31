@@ -2,10 +2,6 @@ const {format} = require('timeago.js')
 
 const helpers = {}
 
-helpers.timeago = (timestamp) => {
-    return format(timestamp)
-}
-
 //Comparar 2 parámetros en las vistas
 helpers.comparar = (lvalue, operator, rvalue, options) => {
     let operators, result;

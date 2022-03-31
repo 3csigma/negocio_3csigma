@@ -28,6 +28,7 @@
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",
     "passport-facebook": "^3.0.0",
+    "passport-google-oidc": "^0.1.0",
     "passport-local": "^1.0.0",
     "timeago.js": "^4.0.2"
   },

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const pool = require('../database')
 const { estaLogueado, noLogueado } = require('../lib/auth')
+const empresaController = require('../controllers/empresaController');
 
 // Listar Categorías para realizar solicitudes
 // router.get('/', async (req, res) => {
@@ -10,6 +11,8 @@ const { estaLogueado, noLogueado } = require('../lib/auth')
 // })
 
 // Llenar formulario Ficha cliente
+// router.get('/fichaCliente', empresaController.ficha);
+
 router.get('/fichaCliente', async (req, res) => {
     const empresa = await pool.query('SELECT * FROM empresa')
     // const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
