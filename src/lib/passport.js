@@ -51,7 +51,7 @@ passport.use('local.login', new LocalStrategy({
         if (claveValida){
             return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
         } else {
-            return done(null, false, req.flash('message', 'Contraseña invalida'))
+            return done(null, false, req.flash('message', 'Contraseña inválida'))
         }
     } else {
         return done(null, false, req.flash('message', 'No existe este usuario'))

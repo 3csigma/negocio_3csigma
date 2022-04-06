@@ -15,9 +15,11 @@
         <div class="loginBanner">
             <img class="loginBanner-size" src="/img/Login_Banner_movil.jpg" alt="Banner Móvil">
         </div>
+        
         <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
+                    {{> message }}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
                     <h3 class="tituH3">Inicia sesión en tu cuenta</h3>
                     <div class="row" style="margin-top: 1.2em;">
@@ -35,17 +37,13 @@
                     <div class="divider d-flex align-items-center my-4">
                         <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu correo</p>
                     </div>
-                    {{!-- Referencia de Login o Registro --}}
-                    {{!-- <div class="page-links">
-                        <a href="#" class="active">Login</a><a href="#">Register</a>
-                    </div> --}}
 
                     <form action="/login" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Email*</label>
+                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Correo electrónico</label>*</label>
                         <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com"
                             required autofocus>
-                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Password*</label>
+                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Contraseña*</label>
                         <input class="form-control" type="password" name="clave" placeholder="Introduce tu contraseña"
                             required>
                         <div class="row">
@@ -89,7 +87,7 @@
 <script src="/js/loginMain.js"></script>
 
 {{!-- Mensajes de Sweet Alert  --}}
-{{#if message}}
+{{!-- {{#if message}}
 <input type="hidden" name="msg" id="msg" value="{{message}}">
 <script>
     let msg = document.getElementById("msg").value;
@@ -102,4 +100,4 @@
     }
     window.onload = load;
 </script>
-{{/if}}
+{{/if}} --}}

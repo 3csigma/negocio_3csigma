@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { estaLogueado, noLogueado } = require('../lib/auth')
+const signingViaEmail = require('../controllers/envelopeController');
 
 router.get('/', estaLogueado, (req, res) => {
     // res.send("Hola Desde Dashboard")
@@ -14,5 +15,11 @@ router.get('/', estaLogueado, (req, res) => {
 router.get('/perfil', estaLogueado, (req, res) => {
     res.render('perfil', {dashx: true, wizarx: false, login: false})
 })
+
+router.get('/firmar', (req, res) => {
+    res.render('/empresa/acuerdoConfidencial')
+})
+
+router.post('/firmar', signingViaEmail.createController)
 
 module.exports = router;

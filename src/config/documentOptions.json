@@ -1,0 +1,10 @@
+[
+  {
+    "langCode": "node",
+    "name": "Node.js",
+    "githubExampleUrl": "https://github.com/docusign/code-examples-node/tree/master/lib/examples/",
+    "owner": "docusign",
+    "repo": "code-examples-node",
+    "pathPrefix": "lib/examples/"
+  }
+]
