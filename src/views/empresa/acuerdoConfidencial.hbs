@@ -1,27 +1,48 @@
-<form class="eg" action="/firmar" method="post" data-busy="form">
-    <div class="form-group">
-      <label for="signerEmail">Signer Email</label>
-      <input type="email" class="form-control" id="signerEmail" name="signerEmail"
-             aria-describedby="emailHelp" placeholder="pat@example.com" required
-             value="hello@3csigma.com">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+<!--**********************************
+                    Content body start
+                ***********************************-->
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="card avtivity-card" style="background: transparent !important;border: none !important; box-shadow: none !important">
+          <div class="card-body">
+            <div class="">
+              <h2 style="color: #000">Firmar acuerdo de confidencialidad</h2>
+              <p style="text-align: justify;margin-top: 2em;color: #000">Para completar este paso, por favor introduce tus datos y presiona <strong>“Enviar documento”</strong>. Recibirás en tu correo un link personalizado para acceder a la plataforma donde
+                deberás firmar el acuerdo de confidencialidad.</p>
+              <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar el documento.</strong></p>
+              <form class="eg" action="/acuerdo-de-confidencialidad" method="post" data-busy="form">
+                <div class="form-group">
+                  <p style="color: #000" for="signerName"><strong>Nombre completo*</strong></p>
+                  <input type="text" class="form-control" id="signerName" placeholder="Nombre de quien firma el acuerdo"
+                    name="signerName" required>
+                </div>
+                <div class="form-group">
+                  <p style="color: #000" for="signerEmail"><strong>Correo electrónico*</strong></p>
+                  <input type="email" class="form-control" id="signerEmail" name="signerEmail"
+                    aria-describedby="emailHelp" placeholder="Correo de quien firma el acuerdo" required>
+                </div>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                <button type="submit" class="ibtn login-ingresar text-center fw-bold mx-auto mb-4"
+                  style="color: white">Enviar documento</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      {{!-- IMAGEN ACUERDO DE CONFIDENCIALIDAD --}}
+      <div class="col d-flex align-items-center">
+        <img src="/img/BG-Acuerdo.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+      </div>
     </div>
-    <div class="form-group">
-      <label for="signerName">Signer Name</label>
-      <input type="text" class="form-control" id="signerName" placeholder="Pat Johnson" name="signerName"
-             value="Carlos R" required>
-    </div>
-    {{!-- <div class="form-group">
-      <label for="ccEmail">CC Email</label>
-      <input type="email" class="form-control" id="ccEmail" name="ccEmail"
-             aria-describedby="emailHelp" placeholder="pat@example.com" required
-      <small id="emailHelp" class="form-text text-muted">The email for the cc recipient must be different from the signer's email.</small>
-    </div>
-    <div class="form-group">
-      <label for="ccName">CC Name</label>
-      <input type="text" class="form-control" id="ccName" placeholder="Pat Johnson" name="ccName"
-             required>
-    </div> --}}
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <button type="submit" class="btn btn-docu">Submit</button>
-</form>
+  </div>
+</div>
+
+</div> <!-- Fin del Main Wrapper - Inicia en el Partial Navigation -->
+
+<!--**********************************
+            Scripts
+        ***********************************-->

@@ -1,25 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const { estaLogueado, noLogueado } = require('../lib/auth')
-const signingViaEmail = require('../controllers/envelopeController');
+const helpers = require('../lib/helpers')
+
 
 router.get('/', estaLogueado, (req, res) => {
-    // res.send("Hola Desde Dashboard")
-    // Validación de tipo de Usuario
-    /** if (req.user.rol == 'Admin') {
-     * tipoUser = 'Admin'
-     * }else{ tipoUser = 'User' } */
-    res.render('dashboard', {dashx: true, wizarx: false, tipoUser: 'User', noPago: true})
+    let tipoUser = req.user.rol;
+    // req.user.rol == 'Admin'  ? tipoUser = 'Admin' : tipoUser = 'User'; // Validación de tipo de Usuario
+    res.render('dashboard', {dashx: true, wizarx: false, tipoUser, noPago: true, itemActivo: 1})
 })
 
 router.get('/perfil', estaLogueado, (req, res) => {
     res.render('perfil', {dashx: true, wizarx: false, login: false})
 })
 
-router.get('/firmar', (req, res) => {
-    res.render('/empresa/acuerdoConfidencial')
+router.get('/token', (req, res) => {
+    helpers.authToken();
 })
-
-router.post('/firmar', signingViaEmail.createController)
 
 module.exports = router;

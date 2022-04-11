@@ -1,35 +1,10 @@
 {
   "node": {
-      "eg001": "eg001EmbeddedSigning.js",
       "eg002": "eg002SigningViaEmail.js",
       "eg003": "eg003ListEnvelopes.js",
       "eg004": "eg004EnvelopeInfo.js",
       "eg005": "eg005EnvelopeRecipients.js",
       "eg006": "eg006EnvelopeDocs.js",
-      "eg007": "eg007EnvelopeGetDoc.js",
-      "eg008": "eg008CreateTemplate.js",
-      "eg009": "eg009UseTemplate.js",
-      "eg010": "eg010SendBinaryDocs.js",
-      "eg011": "eg011EmbeddedSending.js",
-      "eg012": "eg012EmbeddedConsole.js",
-      "eg013": "eg013AddDocToTemplate.js",
-      "eg014": "eg014CollectPayment.js",
-      "eg015": "eg015EnvelopeTabData.js",
-      "eg016": "eg016SetTabValues.js",
-      "eg017": "eg017SetTemplateTabValues.js",
-      "eg018": "eg018EnvelopeCustomFieldData.js",
-      "eg019": "eg019AccessCodeAuthentication.js",
-      "eg020": "eg020PhoneAuthentication.js",
-      "eg022": "eg022KbaAuthentication.js",
-      "eg023": "eg023IdvAuthentication.js",
-      "eg024": "eg024CreateBrand.js",
-      "eg025": "eg025ApplyBrandToEnvelope.js",
-      "eg026": "eg026ApplyBrandToTemplate.js",
-      "eg027": "eg027PermissionChangeSingleSetting.js",
-      "eg028": "eg028CreatePermission.js",
-      "eg029": "eg029DeletePermission.js",
-      "eg030": "eg030PermissionSetUserGroup.js",
-      "eg031": "eg031BulkSendEnvelopes.js",
-      "eg032": "eg032PauseSignatureWorkflow.js"
+      "eg007": "eg007EnvelopeGetDoc.js"
   }
 }

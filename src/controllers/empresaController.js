@@ -1,10 +1,14 @@
 const pool = require('../database')
 const empresaController = exports;
 
+empresaController.acuerdo = async (req, res) => {
+    res.render('empresa/acuerdoConfidencial', {wizarx: false, dashx: true, tipoUser: 'User', noPago: true, itemActivo: 2 })
+}
+
 empresaController.fichaCliente = async (req, res) => {
     const empresa = await pool.query('SELECT * FROM empresa')
     // const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
-    res.render('empresa/addFicha', { empresa, wizarx: true, dashx: false })
+    res.render('/empresa/addFicha', { empresa, wizarx: true, dashx: false })
 }
 
 empresaController.add = async (req, res) => {
@@ -38,3 +42,4 @@ empresaController.actualizado = async (req, res) => {
     await pool.query('UPDATE empresa SET ? id = ?', [updateFicha, id])
     res.render('/empresa/addFicha', {ficha: ficha[0]})
 }
+

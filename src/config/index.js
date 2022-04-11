@@ -3,9 +3,7 @@ exports.docNames = require('./documentNames.json');
 const settings = require('./appsettings.json');
 exports.github = require('./github.json');
 
-const dsOauthServer = settings.production
-  ? 'https://account.docusign.com'
-  : 'https://account-d.docusign.com';
+const dsOauthServer = settings.production ? 'account.docusign.com' : 'account-d.docusign.com';
 
 settings.gatewayAccountId = process.env.DS_PAYMENT_GATEWAY_ID || settings.gatewayAccountId;
 settings.dsClientSecret = process.env.DS_CLIENT_SECRET || settings.dsClientSecret;
@@ -17,7 +15,24 @@ settings.dsJWTClientId = process.env.DS_JWT_CLIENT_ID || settings.dsJWTClientId;
 settings.privateKeyLocation = process.env.DS_PRIVATE_KEY_PATH  || settings.privateKeyLocation;
 settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settings.impersonatedUserGuid;
 
+let fechaActual = Math.floor(Date.now()/1000)
+let fechaExp = Math.floor(Date.now()/1000)+(60*60);
+const privateKeyRSA = settings.privateKeyLocation
+let authToken;
+
+const dsPayload = {
+  "iss": settings.dsIntegrationKey,
+  "sub": settings.impersonatedUserGuid,
+  "aud" : dsOauthServer,
+  "iat": fechaActual,
+  "exp" : fechaExp,
+  "scope" : "signature"
+}
+
 exports.config = {
   dsOauthServer,
-  ...settings
+  dsPayload,
+  privateKeyRSA,
+  authToken,
+  settings,
 };

@@ -1,12 +1,11 @@
 /**
  * @file
- * Method 002: Remote signer, cc, envelope has three documents
+ * Method 002: Remote signer
  * @author DocuSign
  */
 
 const fs = require("fs-extra");
 const docusign = require("docusign-esign");
-
 /**
  * This function does the work of creating the envelope
  */
@@ -49,23 +48,16 @@ function makeEnvelope(args) {
   // args.signerName
   // args.status
   // doc2File
-  // doc3File
 
   // document 1 (html) has tag **signature_1**
   // document 2 (docx) has tag /sn1/
   // document 3 (pdf) has tag /sn1/
-  //
-  // The envelope has two recipients.
-  // recipient 1 - signer
-  // recipient 2 - cc
-  // The envelope will be sent first to the signer.
-  // After it is signed, a copy is sent to the cc person.
 
   let doc2DocxBytes, doc3PdfBytes;
   // read files from a local directory
   // The reads could raise an exception if the file is not available!
   doc2DocxBytes = fs.readFileSync(args.doc2File);
-  //  doc3PdfBytes = fs.readFileSync(args.doc3File);
+   doc3PdfBytes = fs.readFileSync(args.doc3File);
 
   // create the envelope definition
   let env = new docusign.EnvelopeDefinition();
@@ -77,7 +69,7 @@ function makeEnvelope(args) {
     doc2b64 = Buffer.from(doc2DocxBytes).toString("base64"),
     doc3b64 = Buffer.from(doc3PdfBytes).toString("base64");
   doc1.documentBase64 = doc1b64;
-  doc1.name = "Order acknowledgement"; // can be different from actual file name
+  doc1.name = "Acuerdo de Confidencialidad"; // can be different from actual file name
   doc1.fileExtension = "html"; // Source data format. Signed docs are always pdf.
   doc1.documentId = "1"; // a label used to reference the doc
 
@@ -89,12 +81,12 @@ function makeEnvelope(args) {
     documentId: "2",
   });
 
-  //  let doc3 = new docusign.Document.constructFromObject({
-  //    documentBase64: doc3b64,
-  //    name: "Lorem Ipsum", // can be different from actual file name
-  //    fileExtension: "pdf",
-  //    documentId: "3",
-  //  });
+   let doc3 = new docusign.Document.constructFromObject({
+     documentBase64: doc3b64,
+     name: "Lorem Ipsum", // can be different from actual file name
+     fileExtension: "pdf",
+     documentId: "3",
+   });
 
   // The order in the docs array determines the order in the envelope
   env.documents = [doc1, doc2, doc3];

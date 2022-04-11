@@ -484,17 +484,35 @@
           <p class="	font-w500 mb-0">Pagar diagnóstico de negocio</p>
         </a>
         <ul class="metismenu no-pago-diagnostico" id="menu">
-          <li class="mm-active"><a href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 1}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 1}}
+          <li>
+          {{/comparar}}
+            <a href="/" aria-expanded="false">
               <i class="zmdi zmdi-view-dashboard"></i>
               <span class="nav-text">Dashboard</span>
             </a>
           </li>
-          <li><a href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 2}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 2}}
+          <li>
+          {{/comparar}}
+            <a href="/acuerdo-de-confidencialidad" aria-expanded="false">
               <i class="zmdi zmdi-circle-o"></i>
               <span class="nav-text">Acuerdo de confidencialidad</span>
             </a>
           </li>
-          <li><a class="has-arrow ai-icon" href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 3}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 3}}
+          <li>
+          {{/comparar}}
+            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
               <i class="fa-solid fa-gauge-high"></i>
               <span class="nav-text">Diagnóstico de negocio</span>
             </a>
@@ -504,7 +522,13 @@
               <li><a href="#">3</a></li>
             </ul>
           </li>
-          <li><a class="has-arrow ai-icon" href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 4}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 4}}
+          <li>
+          {{/comparar}}
+            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
               {{!-- <i class="flaticon-381-internet"></i> --}}
               <i class="fa-solid fa-magnifying-glass-dollar"></i>
               <span class="nav-text">Análisis de negocio</span>
@@ -515,7 +539,13 @@
               <li><a href="#">3</a></li>
             </ul>
           </li>
-          <li><a class="has-arrow ai-icon" href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 5}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 5}}
+          <li>
+          {{/comparar}}
+            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
               <i class="fa-solid fa-lightbulb"></i>
               <span class="nav-text">Plan estratégico de negocio</span>
             </a>
@@ -525,7 +555,13 @@
               <li><a href="#">3</a></li>
             </ul>
           </li>
-          <li><a class="has-arrow ai-icon" href="#" aria-expanded="false">
+          {{#comparar itemActivo '==' 6}}
+          <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 6}}
+          <li>
+          {{/comparar}}
+            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
               <i class="fa-solid fa-envelope"></i>
               <span class="nav-text">Correo</span>
             </a>

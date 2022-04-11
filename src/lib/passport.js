@@ -49,11 +49,15 @@ passport.use('local.login', new LocalStrategy({
         const user = filas[0]
         const claveValida = await helpers.matchPass(clave, user.clave)
         if (claveValida){
+            // const authToken = helpers.authToken()
+            // req.AuthTokenApi = authToken;
             return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
         } else {
+            req.AuthTokenApi = false;
             return done(null, false, req.flash('message', 'Contraseña inválida'))
         }
     } else {
+        req.AuthTokenApi = false;
         return done(null, false, req.flash('message', 'No existe este usuario'))
     }
 }))

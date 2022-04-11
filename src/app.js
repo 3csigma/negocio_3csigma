@@ -7,6 +7,8 @@ const passport = require('passport')
 const path = require('path');
 const csrf = require('csurf')
 const flash = require('connect-flash')
+const cookieParser = require('cookie-parser');
+const MemoryStore = require('memorystore')(session); // https://github.com/roccomuso/memorystore
 
 // Inicializaciones
 const app = express();
@@ -31,11 +33,17 @@ app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 app.use(bodyParser.json())
+app.use(cookieParser())
 app.use(session({
-  secret: 'secret_3csigma',
-  resave: true,
+  secret: 'secretNegocio_3CSigma',
+  name: '3C-launcher-session',
+  cookie: { maxAge: 180 * 60000 },
   saveUninitialized: true,
-  cookie: { secure: false }
+  resave: true,
+  cookie: { secure: false },
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  })
 }))
 app.use(flash())
 app.use(passport.initialize());
@@ -45,10 +53,12 @@ app.use(csrf())
 
 /******** Variables Globales ********/
 app.use((req, res, next) => {
-  app.locals.success = req.flash('success');
-  app.locals.message = req.flash('message');
-  app.locals.user = req.user; //Variable de sesión de usuario
-  app.locals.csrfToken = req.csrfToken();
+  res.locals.success = req.flash('success');
+  res.locals.message = req.flash('message');
+  res.locals.user = req.user; //Variable de sesión de usuario
+  res.locals.csrfToken = req.csrfToken();
+  res.locals.AuthTokenApi = req.AuthTokenApi;
+  res.locals.session = req.session;
   next();
 })
 
