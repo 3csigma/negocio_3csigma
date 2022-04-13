@@ -12,8 +12,8 @@ settings.dsJWTClientId = process.env.DS_JWT_CLIENT_ID || settings.dsJWTClientId;
 settings.privateKeyLocation = process.env.DS_PRIVATE_KEY_PATH  || settings.privateKeyLocation;
 settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settings.impersonatedUserGuid;
 
-let fechaActual = Math.floor(Date.now()/1000)
-let fechaExp = Math.floor(Date.now()/1000)+(60*60);
+let fechaActual = Math.floor(Date.now()/1000) //
+let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
 const privateKeyRSA = settings.privateKeyLocation
 let authToken, args = {};
 let acuerdoFirmado = {};

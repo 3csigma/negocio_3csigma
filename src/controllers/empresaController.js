@@ -1,6 +1,7 @@
 const pool = require('../database')
 const empresaController = exports;
-const config = require('../config/index.js').config;
+const dsConfig = require('../config/index.js').config;
+const { listEnvelope } = require('./listEnvelopes');
 
 // Función para validar el Pago del Diagnóstico de Negocio
 empresaController.pagoDiagnostico = async (req, res) => {
@@ -13,9 +14,8 @@ empresaController.acuerdo = async (req, res) => {
      * Sin enviar: 0, Enviado: 1, Firmado: 2
      */
     const id_user = req.user.id;
-    let estado = {}, email;
-    // Validar si el documento fue enviado
-
+    let estado = {}, email, noPago = true;
+    console.log(dsConfig.args)
     const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
     if (acuerdo.length === 0) {
         const newAcuerdo = { id_user } // Campo id_user para la tabla acuerdo_confidencial
@@ -26,17 +26,14 @@ empresaController.acuerdo = async (req, res) => {
             console.log("1 Registro insertado");
             res.redirect('/acuerdo-de-confidencialidad')
         })
-        // const sql = ('INSERT INTO acuerdo_confidencial SET ?', [newAcuerdo])
-        // pool.query(sql, function (err, result) {
-        //     if (err) throw err;
-        //     console.log("1 Registro insertado");
-        //   });
     } else {
         if (req.session.email_user) {
             newDatos = {
                 email_signer: req.session.email_user,
+                envelopeId: req.session.envelopeId,
                 estado: 1
             }
+            // Actualiza los datos del usuario para el Acuerdo de Confidencialidad indicando que ya fue enviado el documento
             await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [newDatos, id_user], (err, result) => {
                 if (err) throw err;
                 console.log(result.affectedRows + " registro actualizado");
@@ -44,7 +41,20 @@ empresaController.acuerdo = async (req, res) => {
                 res.redirect('/acuerdo-de-confidencialidad')
             })
         }
-        estado.valor = acuerdo[0].estado;
+        if (acuerdo[0].envelopeId){
+            let statusSign;
+            await listEnvelope(dsConfig.args, acuerdo[0].envelopeId).then((values) => {
+                statusSign = values.envelopes[0].status
+                console.log("ESTADO DEL SOBRE ==> ", statusSign)       
+            })
+            if (statusSign == 'completed'){
+                noPago = false;
+                updateEstado = {estado: 2}
+                // Actualizando Estado del acuerdo a 2 (Firmado)
+                await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [updateEstado, id_user])
+            }
+        }
+        estado.valor = acuerdo[0].estado; // Captura el estado del documento
         if (estado.valor == 0) {
             estado.sinEnviar = true;
             estado.form = true;
@@ -60,6 +70,10 @@ empresaController.acuerdo = async (req, res) => {
     const acuerdoFirmado = estado.firmado
     console.log("Email Signer => ", email)
     res.render('empresa/acuerdoConfidencial', { dashx: true, tipoUser: 'User', itemActivo: 2, estado, email, acuerdoFirmado })
+}
+
+empresaController.diagnostico = async (req, res) => {
+    res.render('/empresa/diagnostico', {dashx: true, tipoUser: 'User', noPago: false, itemActivo: 3, estado, acuerdoFirmado})
 }
 
 empresaController.fichaCliente = async (req, res) => {
@@ -95,7 +109,7 @@ empresaController.editar = async (req, res) => {
 
 empresaController.actualizado = async (req, res) => {
     const { id } = req.params
-    const updateFicha = {}
+    const updateFicha = {} // Los datos a modificar
     await pool.query('UPDATE ficha_cliente SET ? WHERE id = ?', [updateFicha, id])
     res.render('/empresa/addFicha', { ficha: ficha[0] })
 }

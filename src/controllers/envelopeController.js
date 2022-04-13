@@ -4,8 +4,8 @@ const dsConfig = require('../config/index.js').config;
 const { sendEnvelope } = require('./signingViaEmail');
 const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers.js');
-
 const signingViaEmail = exports;
+
 const rutaDocs = path.resolve(__dirname, '../public/documents');
 const doc2File = 'World_Wide_Corp_lorem.pdf';
 
@@ -32,7 +32,10 @@ signingViaEmail.createController = (req, res) => {
             accountId: dsConfig.settings.dsAccountID,
             envelopeArgs: envelopeArgs
         };
-        // console.log("args DATA >>> ", args)
+
+        dsConfig.args = args;
+        console.log("dsConfig.args >>> ", dsConfig.args)
+        console.log("Cargando...\n")
 
         let results = null;
 
@@ -50,16 +53,16 @@ signingViaEmail.createController = (req, res) => {
         }
         if (results) {
             req.session.envelopeId = results.envelopeId; // Guardando el ID del Sobre
+            req.session.email_user = args.envelopeArgs.signerEmail;
+            console.log("Value Email ==> ", args.envelopeArgs.signerEmail )
             console.log("\n***** ¡El sobre se ha enviado satisfactoriamente! ******")
             /**
              * Actualizando estado del acuerdo en la Base de datos
              */
-            await listEnvelope(args, results.envelopeId, body.signerEmail).then((values) => {
-                console.log("Value Email ==> ", values.email)
-                console.log("Value Result ==> ", values.result.envelopes[0].status)
-                req.session.email_user = values.email;
+            await listEnvelope(dsConfig.args, results.envelopeId).then((values) => {
+                console.log("Value Result ==> ", values.envelopes[0].status)               
                 res.redirect('/acuerdo-de-confidencialidad')
-            })
+            }) 
         }
     })
 }

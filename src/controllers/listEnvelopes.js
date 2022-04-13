@@ -1,9 +1,9 @@
 const docusign = require("docusign-esign");
-const moment = require('moment') 
+const dsConfig = require('../config/index.js').config;
 /**
  * Consult envelope status
  */
- const listEnvelope = async (args, envelopeId, email) => {
+ const listEnvelope = async (args, envelopeId) => {
     
     let dsApiClient = new docusign.ApiClient();
     dsApiClient.setBasePath(args.basePath);
@@ -18,12 +18,10 @@ const moment = require('moment')
     // Filtrado de la consulta
     // let options = {fromDate: moment().subtract(5, 'days').format()};
     let options = {envelopeIds: envelopeId};
-
     // Exceptions will be caught by the calling function
-    result = await envelopesApi.listStatusChanges(args.accountId, options);
+    results = await envelopesApi.listStatusChanges(dsConfig.settings.dsAccountID, options);
     // console.log("<<<< Results List Envelope >>>>\n", result);
-    resultados = {result, email}
-    return resultados;
+    return results;
   }
 
   module.exports = { listEnvelope };

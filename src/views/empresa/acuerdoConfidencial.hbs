@@ -17,14 +17,15 @@
               <p style="text-align: justify;margin-top: 2em;color: #000">Para completar este paso, por favor introduce tus datos y
                 presiona <strong>“Enviar documento”</strong>. Recibirás en tu correo un link personalizado para acceder a la
                 plataforma donde deberás firmar el acuerdo de confidencialidad.</p>
+                <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar ni reenviar el documento.</strong></p>
               {{/if}}
               {{#if estado.enviado}}
               <h2 style="color: #000">Documento enviado</h2>
               <p style="text-align: justify;margin-top: 2em;color: #000">El documento ya ha sido enviado al correo <strong>{{email}}</strong> para ser
               firmado. Por favor revisa tu bandeja de SPAM si no lo ves en tu bandeja principal. <br>
               Si deseas cambiar los datos de quien firma o reenviar el documento, por favor completa los campos a continuación:</p>
+              <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar ni reenviar el documento. Si ya firmaste por favor haz clic <a href="/acuerdo-de-confidencialidad" style="color: #812082">aquí</a> para recargar </strong></p>
               {{/if}}
-              <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar ni reenviar el documento.</strong></p>
               <div class="form-group">
                 <p style="color: #000" for="signerName"><strong>Nombre completo*</strong></p>
                 <input type="text" class="form-control" id="signerName" placeholder="Nombre de quien firma el acuerdo"
@@ -50,7 +51,15 @@
       </div>
       {{!-- IMAGEN ACUERDO DE CONFIDENCIALIDAD --}}
       <div class="col d-flex align-items-center">
+        {{#if estado.sinEnviar}}
         <img src="/img/BG-Acuerdo.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
+        {{#if estado.enviado}}
+        <img src="/img/Acuerdo-enviado.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
+        {{#if estado.firmado}}
+        <img src="/img/Acuerdo-firmado.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
       </div>
     </div>
   </div>

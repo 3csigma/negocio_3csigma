@@ -62,6 +62,8 @@ app.use((req, res, next) => {
   next();
 })
 
+global.quitarBloqueo = false;
+
 // Carpeta de archivos publicos
 app.use(express.static(path.join(__dirname, 'public')))
 

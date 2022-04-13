@@ -4,7 +4,9 @@ const { estaLogueado } = require('../lib/auth')
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
 
-
+// Diagnóstico de Negocio
+router.get('/diagnostico-de-negocio', estaLogueado, empresaController.diagnostico)
+// Ficha de Cliente
 router.get('/fichaCliente', estaLogueado, empresaController.fichaCliente)
 router.post('/add', estaLogueado, empresaController.addFichaCliente)
 // Llenar Editar datos del formulario ficha cliente

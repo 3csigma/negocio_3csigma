@@ -44,7 +44,7 @@ function makeEnvelope(args) {
 
   // create the envelope definition
   let env = new docusign.EnvelopeDefinition();
-  env.emailSubject = "Por favor, firme el acuerdo de confidencialidad - 3C Sigma";
+  env.emailSubject = "Acuerdo de confidencialidad - 3C Sigma";
 
   // add the documents
   let doc1 = new docusign.Document(),
