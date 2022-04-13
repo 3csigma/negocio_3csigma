@@ -1,5 +1,3 @@
-const {format} = require('timeago.js')
-
 const helpers = {}
 
 //Comparar 2 parámetros en las vistas

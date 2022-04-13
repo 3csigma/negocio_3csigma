@@ -5,7 +5,7 @@
 Sweet-alert JS 
 *******************/
 
-    document.querySelector(".pagar-diagnostico").onclick = function () {
+    document.querySelector(".pagar-cuenta").onclick = function () {
         const noPago = document.getElementById('noPago').value;
         console.log(noPago);
         if (noPago) {
@@ -17,8 +17,8 @@ Sweet-alert JS
                 confirmButtonText: 'Pagar ahora',
             })
         }
-    },
-    document.querySelector(".no-pago-diagnostico").onclick = function () {
+    }
+    document.querySelector(".pagar-diagnostico").onclick = function () {
         const noPago = document.getElementById('noPago').value;
         console.log(noPago);
         if (noPago) {

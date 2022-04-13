@@ -1,0 +1,72 @@
+<!--**********************************
+                    Content body start
+                ***********************************-->
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="card avtivity-card"
+          style="background: transparent !important;border: none !important; box-shadow: none !important">
+          <div class="card-body">
+            {{#if estado.form}}
+            <form class="eg" action="/acuerdo-de-confidencialidad" method="post" data-busy="form">
+              <input type="hidden" name="_csrf" value="{{csrfToken}}">
+              {{#if estado.sinEnviar}}
+              <h2 style="color: #000">Firmar acuerdo de confidencialidad</h2>
+              <p style="text-align: justify;margin-top: 2em;color: #000">Para completar este paso, por favor introduce tus datos y
+                presiona <strong>“Enviar documento”</strong>. Recibirás en tu correo un link personalizado para acceder a la
+                plataforma donde deberás firmar el acuerdo de confidencialidad.</p>
+                <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar ni reenviar el documento.</strong></p>
+              {{/if}}
+              {{#if estado.enviado}}
+              <h2 style="color: #000">Documento enviado</h2>
+              <p style="text-align: justify;margin-top: 2em;color: #000">El documento ya ha sido enviado al correo <strong>{{email}}</strong> para ser
+              firmado. Por favor revisa tu bandeja de SPAM si no lo ves en tu bandeja principal. <br>
+              Si deseas cambiar los datos de quien firma o reenviar el documento, por favor completa los campos a continuación:</p>
+              <p style="margin-top: 2em; margin-bottom: 2em;color: #000"><strong>Una vez firmado no podras editar ni reenviar el documento. Si ya firmaste por favor haz clic <a href="/acuerdo-de-confidencialidad" style="color: #812082">aquí</a> para recargar </strong></p>
+              {{/if}}
+              <div class="form-group">
+                <p style="color: #000" for="signerName"><strong>Nombre completo*</strong></p>
+                <input type="text" class="form-control" id="signerName" placeholder="Nombre de quien firma el acuerdo"
+                  name="signerName" required>
+              </div>
+              <div class="form-group">
+                <p style="color: #000" for="signerEmail"><strong>Correo electrónico*</strong></p>
+                <input type="email" class="form-control" id="signerEmail" name="signerEmail"
+                  aria-describedby="emailHelp" placeholder="Correo de quien firma el acuerdo" required>
+              </div>
+              <button type="submit" class="ibtn login-ingresar text-center fw-bold mx-auto mb-4"
+                style="color: white">Enviar documento</button>
+            </form>
+          {{/if}}
+          {{#if estado.firmado}}
+          <h2 style="color: #000">Documento firmado</h2>
+          <p style="text-align: justify;margin-top: 2em;color: #000">Su firma se ha enviado satisfactoriamente, ahora
+            puede continuar con el proceso.</p>
+          {{/if}}
+          </div>
+        </div>
+
+      </div>
+      {{!-- IMAGEN ACUERDO DE CONFIDENCIALIDAD --}}
+      <div class="col d-flex align-items-center">
+        {{#if estado.sinEnviar}}
+        <img src="/img/BG-Acuerdo.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
+        {{#if estado.enviado}}
+        <img src="/img/Acuerdo-enviado.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
+        {{#if estado.firmado}}
+        <img src="/img/Acuerdo-firmado.svg" class="text-center fw-bold mx-auto" alt="Acuerdo de Condifidencialidad">
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- Fin del Main Wrapper - Inicia en el Partial Navigation -->
+
+<!--**********************************
+            Scripts
+        ***********************************-->
