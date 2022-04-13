@@ -1,7 +1,4 @@
-exports.docOptions = require('./documentOptions.json');
-exports.docNames = require('./documentNames.json');
 const settings = require('./appsettings.json');
-exports.github = require('./github.json');
 
 const dsOauthServer = settings.production ? 'account.docusign.com' : 'account-d.docusign.com';
 
@@ -18,7 +15,8 @@ settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settin
 let fechaActual = Math.floor(Date.now()/1000)
 let fechaExp = Math.floor(Date.now()/1000)+(60*60);
 const privateKeyRSA = settings.privateKeyLocation
-let authToken;
+let authToken, args = {};
+let acuerdoFirmado = {};
 
 const dsPayload = {
   "iss": settings.dsIntegrationKey,
@@ -30,9 +28,7 @@ const dsPayload = {
 }
 
 exports.config = {
-  dsOauthServer,
-  dsPayload,
-  privateKeyRSA,
-  authToken,
-  settings,
+  dsOauthServer, dsPayload,
+  privateKeyRSA, authToken,
+  settings, args, acuerdoFirmado
 };

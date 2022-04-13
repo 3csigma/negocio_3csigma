@@ -1,10 +1,3 @@
-/**
- * @file
- * Method 002: Remote signer
- * @author DocuSign
- */
-
-const fs = require("fs-extra");
 const docusign = require("docusign-esign");
 /**
  * This function does the work of creating the envelope
@@ -47,49 +40,22 @@ function makeEnvelope(args) {
   // args.signerEmail
   // args.signerName
   // args.status
-  // doc2File
-
   // document 1 (html) has tag **signature_1**
-  // document 2 (docx) has tag /sn1/
-  // document 3 (pdf) has tag /sn1/
-
-  let doc2DocxBytes, doc3PdfBytes;
-  // read files from a local directory
-  // The reads could raise an exception if the file is not available!
-  doc2DocxBytes = fs.readFileSync(args.doc2File);
-   doc3PdfBytes = fs.readFileSync(args.doc3File);
 
   // create the envelope definition
   let env = new docusign.EnvelopeDefinition();
-  env.emailSubject = "Por favor, firme este documento";
+  env.emailSubject = "Por favor, firme el acuerdo de confidencialidad - 3C Sigma";
 
   // add the documents
   let doc1 = new docusign.Document(),
-    doc1b64 = Buffer.from(document1(args)).toString("base64"),
-    doc2b64 = Buffer.from(doc2DocxBytes).toString("base64"),
-    doc3b64 = Buffer.from(doc3PdfBytes).toString("base64");
+    doc1b64 = Buffer.from(document1(args)).toString("base64");
   doc1.documentBase64 = doc1b64;
   doc1.name = "Acuerdo de Confidencialidad"; // can be different from actual file name
   doc1.fileExtension = "html"; // Source data format. Signed docs are always pdf.
   doc1.documentId = "1"; // a label used to reference the doc
 
-  // Alternate pattern: using constructors for docs 2 and 3...
-  let doc2 = new docusign.Document.constructFromObject({
-    documentBase64: doc2b64,
-    name: "Battle Plan", // can be different from actual file name
-    fileExtension: "docx",
-    documentId: "2",
-  });
-
-   let doc3 = new docusign.Document.constructFromObject({
-     documentBase64: doc3b64,
-     name: "Lorem Ipsum", // can be different from actual file name
-     fileExtension: "pdf",
-     documentId: "3",
-   });
-
   // The order in the docs array determines the order in the envelope
-  env.documents = [doc1, doc2, doc3];
+  env.documents = [doc1];
 
   // create a signer recipient to sign the document, identified by name and email
   // We're setting the parameters via the object constructor
@@ -105,26 +71,17 @@ function makeEnvelope(args) {
 
   // Create signHere fields (also known as tabs) on the documents,
   // We're using anchor (autoPlace) positioning
-  //
-  // The DocuSign platform searches throughout your envelope's
-  // documents for matching anchor strings. So the
-  // signHere2 tab will be used in both document 2 and 3 since they
-  // use the same anchor string for their "signer 1" tabs.
   let signHere1 = docusign.SignHere.constructFromObject({
     anchorString: "**signature_1**",
     anchorYOffset: "10",
     anchorUnits: "pixels",
     anchorXOffset: "20",
-  }),
-    signHere2 = docusign.SignHere.constructFromObject({
-      anchorString: "/sn1/",
-      anchorYOffset: "10",
-      anchorUnits: "pixels",
-      anchorXOffset: "20",
-    });
+  });
+    
   // Tabs are set per recipient / signer
   let signer1Tabs = docusign.Tabs.constructFromObject({
-    signHereTabs: [signHere1, signHere2],
+    signHereTabs: [signHere1],
+    // signHereTabs: [signHere1, signHere2],
   });
   signer1.tabs = signer1Tabs;
 
@@ -177,5 +134,6 @@ function document1(args) {
      </html>
    `;
 }
+
 
 module.exports = { sendEnvelope };

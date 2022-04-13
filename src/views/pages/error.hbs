@@ -1,0 +1,18 @@
+<h2>Problema: ocurrió un error</h2>
+<p>Información de errores:</p>
+
+{{#if errorCode}}
+  <p>{{errorCode}}: {{errorMessage}}</p>
+  {{#comparar 'typeof' errorInfo '!==' 'undefined') }}
+    <p>- {{errorInfo}}</p>
+  {{/comparar}}
+{{else}}
+  <p><pre>{{err}}</pre></p>
+
+  <h3>Seguimiento</h3>
+  <p><pre>
+    {{err.stack}}
+  </pre></p>
+{{/if}}
+
+<p><a href="/">Continuar</a></p>

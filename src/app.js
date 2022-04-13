@@ -72,5 +72,5 @@ app.use(require('./routes/authentication'));
 
 app.listen(app.get('port'), () => {
   // console.log(path.join(__dirname, 'public'))
-  console.log('Servidor corriendo in http://localhost:'+app.get('port'));
+  console.log('CORRIENDO DESDE http://localhost:'+app.get('port'));
 });

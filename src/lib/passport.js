@@ -19,23 +19,23 @@ passport.use('local.registro', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'clave',
     passReqToCallback: true
-}, async (req, email, clave, done) => { //Callback luego de la configuración para indicar que más hacer
-    const { nombre_empresa } = req.body
+}, async (req, email, clave, done) => { //Callback luego de la configuración
+    const { nombre_empresa, nombres, apellidos } = req.body
     let username = email.split('@')
     username = username[0]
     const newUser = {
         nombre_empresa,
+        nombres,
+        apellidos,
         username,
         email,
         clave,
         rol: 'User',
-        // estado: 1
     }
     newUser.clave = await helpers.encryptPass(clave)
     const result = await pool.query('INSERT INTO users SET ?', [newUser])
     newUser.id = result.insertId
-    // console.log(result)
-    return done(null, newUser, req.flash('success', 'Bienvenido a la plataforma'))
+    return done(null, newUser, req.flash('success', 'Bienvenido a la plataforma de consultoría 3C Sigma'))
 }))
 
 passport.use('local.login', new LocalStrategy({
