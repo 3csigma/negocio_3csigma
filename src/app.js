@@ -8,7 +8,7 @@ const path = require('path');
 const csrf = require('csurf')
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser');
-const MemoryStore = require('memorystore')(session); // https://github.com/roccomuso/memorystore
+const MemoryStore = require('memorystore')(session);
 
 // Inicializaciones
 const app = express();
@@ -25,7 +25,7 @@ app.engine('.hbs', engine({
 }));
 app.set('view engine', 'hbs');
 
-// app.set('trust proxy', 1) // Proxy de confianza
+app.set('trust proxy', 1) // Proxy de confianza
 
 /******* Middlewares *******/
 app.use(morgan('dev'))
@@ -42,27 +42,32 @@ app.use(session({
   resave: true,
   cookie: { secure: false },
   store: new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
+    checkPeriod: 86400000 // eliminar las entradas caducadas cada 24 horas
   })
 }))
 app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session()); // Inicio de sesiones persistentes
-//Protección contra los ataques csrf
-app.use(csrf())
+app.use(csrf()) //Protección contra los ataques csrf
+
+// No almacenar caché
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+  next();
+});
 
 /******** Variables Globales ********/
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.message = req.flash('message');
-  res.locals.user = req.user; //Variable de sesión de usuario
+  res.locals.user = req.user; //Variable de usuario
   res.locals.csrfToken = req.csrfToken();
   res.locals.AuthTokenApi = req.AuthTokenApi;
   res.locals.session = req.session;
   next();
 })
 
-global.quitarBloqueo = false;
+// global.quitarBloqueo = false;
 
 // Carpeta de archivos publicos
 app.use(express.static(path.join(__dirname, 'public')))
@@ -73,6 +78,5 @@ app.use(require('./routes/empresa'));
 app.use(require('./routes/authentication'));
 
 app.listen(app.get('port'), () => {
-  // console.log(path.join(__dirname, 'public'))
   console.log('CORRIENDO DESDE http://localhost:'+app.get('port'));
 });

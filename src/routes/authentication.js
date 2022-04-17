@@ -4,7 +4,6 @@ const passport = require('passport')
 const { estaLogueado, noLogueado } = require('../lib/auth')
 
 router.get('/registro', noLogueado, (req, res) => {
-    
     res.render('auth/registro', { login: true, wizarx: false, dashx: false })
 })
 
@@ -26,7 +25,7 @@ router.post('/login', noLogueado, (req, res, next) => {
     })(req, res, next)
 })
 
-// Social Login
+// Social Login - Facebook & Google
 router.get('/auth/facebook', noLogueado, passport.authenticate('facebook.auth', {
     successRedirect: '/',
     failureRedirect: '/login',
@@ -50,10 +49,11 @@ router.get('/auth/facebook', noLogueado, passport.authenticate('facebook.auth', 
 //     res.redirect('/');
 // });
 
+
+/** Cerrar Sesión */
 router.get('/logout', estaLogueado, (req, res) => {
-    quitarBloqueo = false;
-    req.logOut()
-    res.redirect('/login')
+    req.logOut();
+    res.redirect('/login');
 })
 
 module.exports = router;

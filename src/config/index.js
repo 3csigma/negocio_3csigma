@@ -15,7 +15,7 @@ settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settin
 let fechaActual = Math.floor(Date.now()/1000) //
 let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
 const privateKeyRSA = settings.privateKeyLocation
-let authToken, args = {};
+let authToken, args = {}, envelopeId;
 let acuerdoFirmado = {};
 
 const dsPayload = {
@@ -30,5 +30,5 @@ const dsPayload = {
 exports.config = {
   dsOauthServer, dsPayload,
   privateKeyRSA, authToken,
-  settings, args, acuerdoFirmado
+  settings, args, acuerdoFirmado, envelopeId
 };

@@ -20,13 +20,11 @@ passport.use('local.registro', new LocalStrategy({
     passwordField: 'clave',
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback luego de la configuración
-    const { nombre_empresa, nombres, apellidos } = req.body
+    const { nombre_empresa } = req.body
     let username = email.split('@')
     username = username[0]
     const newUser = {
         nombre_empresa,
-        nombres,
-        apellidos,
         username,
         email,
         clave,

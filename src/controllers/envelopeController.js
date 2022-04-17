@@ -4,13 +4,13 @@ const dsConfig = require('../config/index.js').config;
 const { sendEnvelope } = require('./signingViaEmail');
 const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers.js');
+const pool = require('../database')
 const signingViaEmail = exports;
 
 const rutaDocs = path.resolve(__dirname, '../public/documents');
 const doc2File = 'World_Wide_Corp_lorem.pdf';
 
 signingViaEmail.createController = (req, res) => {
-    // Step 1. Check the token
     const { body } = req;
     helpers.authToken().then(async (values) => {
         const envelopeArgs = {
@@ -20,12 +20,6 @@ signingViaEmail.createController = (req, res) => {
             doc2File: path.resolve(rutaDocs, doc2File),
         };
 
-        // dsConfig.args = {
-        //     accessToken: values.access_token,
-        //     basePath: `https://${dsConfig.settings.basePath}/restapi`,
-        //     accountId: dsConfig.settings.dsAccountID,
-        //     envelopeArgs: envelopeArgs
-        // }
         const args = {
             accessToken: values.access_token,
             basePath: `https://${dsConfig.settings.basePath}/restapi`,
@@ -34,7 +28,7 @@ signingViaEmail.createController = (req, res) => {
         };
 
         dsConfig.args = args;
-        console.log("dsConfig.args >>> ", dsConfig.args)
+        // console.log("dsConfig.args >>> ", dsConfig.args)
         console.log("Cargando...\n")
 
         let results = null;
@@ -53,15 +47,38 @@ signingViaEmail.createController = (req, res) => {
         }
         if (results) {
             req.session.envelopeId = results.envelopeId; // Guardando el ID del Sobre
+            dsConfig.envelopeId = results.envelopeId;
             req.session.email_user = args.envelopeArgs.signerEmail;
             console.log("Value Email ==> ", args.envelopeArgs.signerEmail )
             console.log("\n***** ¡El sobre se ha enviado satisfactoriamente! ******")
             /**
              * Actualizando estado del acuerdo en la Base de datos
              */
-            await listEnvelope(dsConfig.args, results.envelopeId).then((values) => {
-                console.log("Value Result ==> ", values.envelopes[0].status)               
-                res.redirect('/acuerdo-de-confidencialidad')
+            await listEnvelope(dsConfig.args, results.envelopeId).then(async (values) => {
+                const statusSign = values.envelopes[0].status;
+                const email = args.envelopeArgs.signerEmail
+                console.log("Result STATUS SIGN ==> ", statusSign)               
+                const id_user = req.user.id;
+                let estado = {}, noPago = true, acuerdoFirmado = false;
+
+                estado.valor = 1; // Documento enviado
+                estado.form = true; // Debe mostrar el formulario
+                estado.enviado = true;
+                
+                if (req.session.email_user) {
+                    const newDatos = {
+                        email_signer: req.session.email_user,
+                        envelopeId: req.session.envelopeId,
+                        estado: estado.valor,
+                        args: JSON.stringify(args)
+                    }
+                    await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [newDatos, id_user])
+                    console.log("<<< TABLA ACUERDO >>>", estado)
+                    console.log("Email Signer => ", email)
+                    console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
+                    console.log("** NO HA PAGADO => ", noPago)
+                    res.render('empresa/acuerdoConfidencial', { dashx: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado })
+                }
             }) 
         }
     })
