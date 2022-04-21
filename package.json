@@ -1,8 +1,8 @@
 {
   "name": "negocio-3csigma",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Plataforma de Automatización de documentos",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
@@ -36,6 +36,7 @@
     "passport-google-oidc": "^0.1.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "stripe": "^8.218.0",
     "superagent": "^7.1.2",
     "validator": "^13.7.0"
   },

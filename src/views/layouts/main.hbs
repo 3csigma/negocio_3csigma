@@ -28,10 +28,14 @@
     <!-- SWEET ALERT CSS -->
     <link href="./css/sweetalert2.min.css" rel="stylesheet">
     {{#if dashx}}
-    <!-- DASHBOARD -->
+    <!-- DASHBOARD -->  
     <link href="./vendor/css/chartist.min.css" rel="stylesheet">
     <link href="./vendor/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./vendor/css/style.css" rel="stylesheet">
+    <!-- Stripe Style --> 
+        {{#if stripe}}
+        <link href="./css/checkout.css" rel="stylesheet"/> 
+        {{/if}}
     {{/if}}
 </head>
 <body>
@@ -188,6 +192,11 @@
     </script>
     {{!-- Scripts Personalizados --}}
     <script src="./js/custom.js"></script>
+        {{!-- Scripts Stripe --}}
+        {{#if stripe}}
+        <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        {{/if}}
     {{/if}}
 </body>
 </html>

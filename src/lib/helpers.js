@@ -38,7 +38,7 @@ helpers.authToken = async () => {
     }
     const responseTK = await fetch(url, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
     }).then(res => res.json())
         .catch(error => console.error('Error:', error))
@@ -49,5 +49,15 @@ helpers.authToken = async () => {
 
     return responseTK;
 }
+
+helpers.validatePay = (req, res, next) => {
+    // Método de passport que se ha poblado al objeto req & lo que devuelve true or false para saber si el usuario existe
+    if (req.intentPayment) {
+        return next();
+    } else {
+        return res.redirect('/')
+    }
+}
+
 
 module.exports = helpers;

@@ -5,6 +5,7 @@ const { listEnvelope } = require('./listEnvelopes');
 
 /** Función para mostrar Dashboard & validación dependiendo del usuario */
 empresaController.dashboard = async (req, res) => {
+    req.intentPay = undefined;
     console.log("Signer Email Global >>>> ", dsConfig.envelopeId)
     const tipoUser = req.user.rol;
     const id_user = req.user.id;
