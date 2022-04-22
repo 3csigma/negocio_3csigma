@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,11 +12,12 @@
     <!--  BOOTSTRAP 5-->
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <!--  FONT AWESOME 5.5 -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- MATERIAL DESIGN ICONIC FONT -->
     <link rel="stylesheet" href="./fonts/material-design-iconic-font/css/material-design-iconic-font.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"
+        integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
     <!-- STYLE GENERAL CSS -->
     {{#if wizarx}}
     <link href="./css/styles.css" rel="stylesheet">
@@ -32,8 +34,13 @@
     <link href="./vendor/css/chartist.min.css" rel="stylesheet">
     <link href="./vendor/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./vendor/css/style.css" rel="stylesheet">
+    <!-- Stripe Style -->
+    {{#if stripe}}
+    <link href="./css/checkout.css" rel="stylesheet" />
+    {{/if}}
     {{/if}}
 </head>
+
 <body>
 
     {{> navigation }}
@@ -43,7 +50,7 @@
     <!-- COMMON SCRIPTS -->
     <script src="/js/popper.min.js"></script>
     <script src="/js/loginMain.js"></script>
-	<script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/jquery-3.6.0.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/sweetalert2.min.js"></script>
@@ -52,14 +59,15 @@
     <script src="./vendor/js/bootstrap-select.min.js"></script>
     <script src="./vendor/js/custom.min.js"></script>
     <script src="./vendor/js/deznav-init.js"></script>
-    {{!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.7/dist/sweetalert2.all.min.js"></script> --}}
+    {{!--
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.7/dist/sweetalert2.all.min.js"></script> --}}
     {{#if wizarx}}
     <!-- Wizard Formularios Scripts-->
     <script src="./js/common_scripts.min.js"></script>
-	<script src="./js/velocity.min.js"></script>
-	<script src="./js/common_functions.js"></script>
-	<script src="./js/file-validator.js"></script>
-	<script src="./js/func_1.js"></script>
+    <script src="./js/velocity.min.js"></script>
+    <script src="./js/common_functions.js"></script>
+    <script src="./js/file-validator.js"></script>
+    <script src="./js/func_1.js"></script>
     {{/if}}
     {{#if dashx}}
     <!-- ****************** Required vendors - DASHBOARD ****************** -->
@@ -155,7 +163,7 @@
                         });
                     }
                 }
-                
+
                 /* Function ============ */
                 return {
                     init: function () {
@@ -177,6 +185,31 @@
 
             jQuery(window).on('load', function () {
                 dzSparkLine.load();
+                {{#if alertSuccess}}
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Pago exitoso!',
+                    html: '<p>Tu pago ha sido recibido, ahora puedes continuar con la firma del acuerdo de confidencialidad.</p>'
+                            +'<a href="/acuerdo-de-confidencialidad" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+                            +'border-radius: 22px;'
+                            +'color: #fff;'
+                            +'width: 160px;'
+                            +'height: 50px;'
+                            +'text-align: center;'
+                            +'padding: 14px;'
+                            +'font-size: 17px;'
+                            +'font-weight: 300;" id="checkout-button">Firmar acuerdo</a>',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                })
+                {{/if}}
+                {{#if alertCancel}}
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pago Cancelado',
+                    text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
+                })
+                {{/if}}
             });
 
             jQuery(window).on('resize', function () {
@@ -188,6 +221,12 @@
     </script>
     {{!-- Scripts Personalizados --}}
     <script src="./js/custom.js"></script>
+        {{!-- Scripts Stripe --}}
+        {{#if stripe}}
+        <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        {{/if}}
     {{/if}}
 </body>
+
 </html>

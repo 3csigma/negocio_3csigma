@@ -17,6 +17,10 @@ let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
 const privateKeyRSA = settings.privateKeyLocation
 let authToken, args = {}, envelopeId;
 let acuerdoFirmado = {};
+const clavesStripe = {
+  publica: 'pk_test_51KoWlrGzbo0cXNUHA7kdUqpjjt4fEX8PP4usXF7s3YUC65UriJ2RHJsfB4fO4aqBIjZlu4lYD2lOfiEiGVyBilbt00qRzO8fn7',
+  secreta: 'sk_test_51KoWlrGzbo0cXNUH7JnVHxXqKjN9UaAmSVRrf89EGuk3hQM8BztHtlLYLiPIZsH7u7eLHkyYdM7gYwJpXOfQLi9f00f5mJxKsw'
+};
 
 const dsPayload = {
   "iss": settings.dsIntegrationKey,
@@ -30,5 +34,6 @@ const dsPayload = {
 exports.config = {
   dsOauthServer, dsPayload,
   privateKeyRSA, authToken,
-  settings, args, acuerdoFirmado, envelopeId
+  settings, args, acuerdoFirmado, envelopeId,
+  clavesStripe
 };

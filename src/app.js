@@ -1,8 +1,8 @@
 const express = require('express');
 const session = require('express-session')
 const { engine } = require('express-handlebars');
-const morgan = require('morgan');
-const bodyParser = require('body-parser')
+const morgan = require('morgan'); // Registra las solicitudes + otra información & la muestra por consola
+// const bodyParser = require('body-parser')
 const passport = require('passport')
 const path = require('path');
 const csrf = require('csurf')
@@ -18,7 +18,7 @@ require('./lib/passport')
 app.set('port', process.env.PORT || 4000);
 
 app.set('views', __dirname + '/views');
-app.engine('.hbs', engine({
+app.engine('hbs', engine({
   extname: '.hbs',
   defaultLayout: 'main',
   helpers: require('./lib/handlebars')
@@ -30,9 +30,9 @@ app.set('trust proxy', 1) // Proxy de confianza
 /******* Middlewares *******/
 app.use(morgan('dev'))
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.urlencoded({extended:true}))
 // parse application/json
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(cookieParser())
 app.use(session({
   secret: 'secretNegocio_3CSigma',
@@ -67,8 +67,6 @@ app.use((req, res, next) => {
   next();
 })
 
-// global.quitarBloqueo = false;
-
 // Carpeta de archivos publicos
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -76,6 +74,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(require('./routes'));
 app.use(require('./routes/empresa'));
 app.use(require('./routes/authentication'));
+app.use(require('./routes/pagos'));
 
 app.listen(app.get('port'), () => {
   console.log('CORRIENDO DESDE http://localhost:'+app.get('port'));
