@@ -327,7 +327,7 @@
                 </div>
               </li> --}}
               {{!-- Notificaciones  --}}
-              <li class="nav-item dropdown notification_dropdown"> 
+              <li class="nav-item dropdown notification_dropdown activar-cuenta"> 
                 <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-toggle="dropdown">
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -477,13 +477,20 @@
     <!--**********************************
                 Sidebar start
             ***********************************-->
-    <div class="deznav pagar-cuenta">
+    <div class="deznav">
       <div class="deznav-scroll">
-        <a href="#" class="add-menu-sidebar">
+        <form action="/create-checkout-session" method="POST">'
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          <button type="submit" class="add-menu-sidebar">
+            <img src="/img/Pago-diagnostico de-negocio.png">
+            <p class="mb-0" style="text-align: left;padding-left: 1em;">Pagar diagnóstico de negocio</p>
+          </button>
+        </form>
+        {{!-- <a href="#" class="add-menu-sidebar pagar-diagnostico">
           <img src="/img/Pago-diagnostico de-negocio.png" alt="" class="mr-3">
           <p class="	font-w500 mb-0">Pagar diagnóstico de negocio</p>
-        </a>
-        <ul class="metismenu pagar-cuenta" id="menu">
+        </a> --}}
+        <ul class="metismenu" id="menu">
           {{#comparar itemActivo '==' 1}}
           <li class="mm-active">
           {{/comparar}}
@@ -499,9 +506,14 @@
           <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 2}}
-          <li>
+          <li class="pagar-diagnostico">
           {{/comparar}}
+            {{#comparar diagnosticoPagado '==' 0}}
+            <a style="cursor:pointer" aria-expanded="false">
+            {{/comparar}}
+            {{#comparar diagnosticoPagado '!=' 0}}
             <a href="/acuerdo-de-confidencialidad" aria-expanded="false">
+            {{/comparar}}
               {{#if acuerdoFirmado}}
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -522,67 +534,53 @@
           <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 3}}
-          <li>
+          <li class="activar-cuenta">
           {{/comparar}}
-            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
+            <a id="item-link3" href="#item3" aria-expanded="false">
               <i class="fa-solid fa-gauge-high"></i>
               <span class="nav-text">Diagnóstico de negocio</span>
             </a>
-            <ul aria-expanded="false">
+            {{!-- <ul aria-expanded="false">
               <li><a href="#">1</a></li>
               <li><a href="#">2</a></li>
               <li><a href="#">3</a></li>
-            </ul>
+            </ul> --}}
           </li>
           {{#comparar itemActivo '==' 4}}
           <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 4}}
-          <li>
+          <li class="activar-cuenta">
           {{/comparar}}
-            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
+            <a href="#item4" aria-expanded="false">
               {{!-- <i class="flaticon-381-internet"></i> --}}
               <i class="fa-solid fa-magnifying-glass-dollar"></i>
               <span class="nav-text">Análisis de negocio</span>
             </a>
-            <ul aria-expanded="false">
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-            </ul>
           </li>
           {{#comparar itemActivo '==' 5}}
           <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 5}}
-          <li>
+          <li class="activar-cuenta">
           {{/comparar}}
-            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
+            <a id="item-link5" href="#item5" aria-expanded="false">
+            {{!-- <a class="has-arrow ai-icon" id="item-link5" href="" aria-expanded="false"></a> --}}
               <i class="fa-solid fa-lightbulb"></i>
               <span class="nav-text">Plan estratégico de negocio</span>
             </a>
-            <ul aria-expanded="false">
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-            </ul>
           </li>
-          {{#comparar itemActivo '==' 6}}
+          {{!-- {{#comparar itemActivo '==' 6}}
           <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 6}}
-          <li>
+          <li class="activar-cuenta">
           {{/comparar}}
-            <a class="has-arrow ai-icon" href="#" aria-expanded="false">
+            <a id="item-link6" href="/perfil#item6" aria-expanded="false">
               <i class="fa-solid fa-envelope"></i>
               <span class="nav-text">Correo</span>
             </a>
-            <ul aria-expanded="false">
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-            </ul>
-          </li>
+          </li> --}}
         </ul>
         <div class="add-menu-sidebar" style="background: #484848 !important; color:#fff !important; ">
           <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em">

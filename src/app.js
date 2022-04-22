@@ -64,11 +64,8 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   res.locals.AuthTokenApi = req.AuthTokenApi;
   res.locals.session = req.session;
-  res.locals.intentPay = req.intentPay = undefined; // Variable para el intento de pago
   next();
 })
-
-// global.quitarBloqueo = false;
 
 // Carpeta de archivos publicos
 app.use(express.static(path.join(__dirname, 'public')))

@@ -2,25 +2,51 @@ const pool = require('../database')
 const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
+const { consultarPagos } = require('../lib/helpers')
 
 /** Función para mostrar Dashboard & validación dependiendo del usuario */
 empresaController.dashboard = async (req, res) => {
-    req.intentPay = undefined;
-    console.log("Signer Email Global >>>> ", dsConfig.envelopeId)
+    req.intentPay = undefined; // Intento de pago
+    // console.log("Signer Email Global >>>> ", dsConfig.envelopeId)
     const tipoUser = req.user.rol;
     const id_user = req.user.id;
-    let noPago = true, acuerdoFirmado = false;
-
-    const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
-    if (acuerdo.length > 0) {
-        if (acuerdo[0].estado == 2) {
-            acuerdoFirmado = true;
-            noPago = false;
+    let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
+    console.log()
+    /** Consultando que pagos ha realizado el usuario */
+    const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
+    if (pagos.length == 0) {
+        const nuevoPago = { id_user }
+        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
+            if (err) throw err;
+            console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0");
+        })
+    } else {
+        if (pagos[0].diagnostico_negocio == '1') {
+            diagnosticoPagado = 1; // Pago Diagnóstico
+        }
+        if (pagos[0].analisis_negocio == '1') {
+            analisisPagado = 1; // Pago Análisis
         }
     }
-    console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
-    console.log("** NO HA PAGADO => ", noPago)
-    res.render('dashboard', { dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 1, acuerdoFirmado })
+
+    if (diagnosticoPagado) {
+        /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+        const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
+        if (acuerdo.length > 0) {
+            if (acuerdo[0].estado == 2) {
+                acuerdoFirmado = true;
+                noPago = false;
+            }
+        }
+    }
+
+    console.log("** ¿ACUERDO FIRMADO? ==> ", acuerdoFirmado)
+    console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
+    console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
+    res.render('dashboard', {
+        dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, itemActivo: 1, acuerdoFirmado
+    })
+
 }
 
 // Función para validar el Pago del Diagnóstico de Negocio
@@ -63,9 +89,9 @@ empresaController.acuerdo = async (req, res) => {
                 estado.valor = 2; //Documento Firmado
                 estado.firmado = true;
                 acuerdoFirmado = true;
-                const updateEstado = { estado: estado.valor }
+                const actualizarEstado = { estado: estado.valor }
                 // Actualizando Estado del acuerdo a 2 (Firmado)
-                await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [updateEstado, id_user])
+                await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [actualizarEstado, id_user])
             } else {
                 estado.valor = 1; // Documento enviado
                 estado.form = true; // Debe mostrar el formulario
@@ -81,12 +107,12 @@ empresaController.acuerdo = async (req, res) => {
 
         // Si no se ha solicitado el documento a firmar desde el formulario Acuerdo de Confidencialidad
     } else {
-        const newAcuerdo = { id_user } // Campo id_user para la tabla acuerdo_confidencial
+        const nuevoAcuerdo = { id_user } // Campo id_user para la tabla acuerdo_confidencial
         estado.sinEnviar = true; // Documento sin enviar 
         estado.valor = 0;
         estado.form = true; // Debe mostrar el formulario
         dsConfig.envelopeId = ''
-        await pool.query('INSERT INTO acuerdo_confidencial SET ?', [newAcuerdo], (err, result) => {
+        await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
             if (err) throw err;
             console.log("1 Registro insertado");
             res.redirect('/acuerdo-de-confidencialidad')
@@ -110,10 +136,10 @@ empresaController.acuerdo = async (req, res) => {
 //     const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
 //     estado.valor = acuerdo[0].estado; // Captura el estado del documento
 //     if (acuerdo.length === 0) {
-//         const newAcuerdo = { id_user } // Campo id_user para la tabla acuerdo_confidencial
+//         const nuevoAcuerdo = { id_user } // Campo id_user para la tabla acuerdo_confidencial
 //         estado.sinEnviar = true; // Documento sin enviar 
 //         estado.valor = 0; 
-//         await pool.query('INSERT INTO acuerdo_confidencial SET ?', [newAcuerdo], (err, result) => {
+//         await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
 //             if (err) throw err;
 //             console.log("1 Registro insertado");
 //             res.redirect('/acuerdo-de-confidencialidad')
@@ -129,9 +155,9 @@ empresaController.acuerdo = async (req, res) => {
 
 //             if (statusSign == 'completed') {
 //                 noPago = false;
-//                 const updateEstado = { estado: 2 }
+//                 const actualizarEstado = { estado: 2 }
 //                 // Actualizando Estado del acuerdo a 2 (Firmado)
-//                 await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [updateEstado, id_user])
+//                 await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [actualizarEstado, id_user])
 //             }
 //         } else {
 //             console.log('\n---- Aún no se ha firmado el documento -----\n')
@@ -150,7 +176,7 @@ empresaController.acuerdo = async (req, res) => {
 //         //         res.redirect('/acuerdo-de-confidencialidad')
 //         //     })
 //         // } else {
-            
+
 //         // }
 //         if (estado.valor == 0) {
 //             estado.sinEnviar = true;
@@ -171,7 +197,7 @@ empresaController.acuerdo = async (req, res) => {
 
 /** Mostrar vista del Panel Diagnóstico de negocio */
 empresaController.diagnostico = async (req, res) => {
-    res.render('/empresa/diagnostico', {dashx: true, tipoUser: 'User', noPago: false, itemActivo: 3, estado, acuerdoFirmado})
+    res.render('/empresa/diagnostico', { dashx: true, tipoUser: 'User', noPago: false, itemActivo: 3, estado, acuerdoFirmado })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */

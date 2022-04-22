@@ -13,7 +13,7 @@ router.post("/create-payment-intent", estaLogueado, paymentController.createPaym
 
 
 router.get('/perfil', estaLogueado, (req, res) => {
-    res.render('perfil', {dashx: true, wizarx: false, login: false})
+    res.render('profile', {dashx: true, wizarx: false, login: false})
 })
 
 router.get('/pagar-diagnostico-de-negocio', estaLogueado, (req, res) => {

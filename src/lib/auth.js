@@ -15,5 +15,13 @@ module.exports = {
         } else {
             return res.redirect('/')
         }
-    }
+    },
+
+    validarURLPagar(req, res, next) {
+        if (req.session.intentPay) { 
+            return next();
+        } else {
+            return res.redirect('/')
+        }
+    },
 }
