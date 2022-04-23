@@ -62,7 +62,6 @@ app.use((req, res, next) => {
   res.locals.message = req.flash('message');
   res.locals.user = req.user; //Variable de usuario
   res.locals.csrfToken = req.csrfToken();
-  res.locals.AuthTokenApi = req.AuthTokenApi;
   res.locals.session = req.session;
   next();
 })

@@ -1,7 +1,10 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy  // Autenticación por Facebook
-// const GoogleStrategy = require('passport-google-oauth20').Strategy      // Autenticación por Google
+/** Autenticación por Google */
+// const { Strategy } = require('passport-google-oauth20');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;      
+// const GoogleStrategy = require('passport-google-oidc');
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 const {config} = require('../keys') // Importar Api Keys Secret
@@ -40,7 +43,7 @@ passport.use('local.login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'clave',
     passReqToCallback: true
-}, async (req, email, clave, done) => { //Callback luego de la configuración para indicar que más hacer
+}, async (req, email, clave, done) => { //Callback para indicar más procesos
     // console.log(req.body)
     const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
     if (filas.length > 0) {
@@ -49,11 +52,9 @@ passport.use('local.login', new LocalStrategy({
         if (claveValida){
             return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
         } else {
-            req.AuthTokenApi = false;
             return done(null, false, req.flash('message', 'Contraseña inválida'))
         }
     } else {
-        req.AuthTokenApi = false;
         return done(null, false, req.flash('message', 'No existe este usuario'))
     }
 }))
@@ -69,3 +70,79 @@ passport.use('facebook.auth', new FacebookStrategy({
   }
   
 ));
+
+passport.use('google.auth', new GoogleStrategy({
+    clientID: config.google.id,
+    clientSecret: config.google.secret,
+    callbackURL: '/auth/google/secrets'
+  },
+  async (accessToken, refreshToken, profile, done) => {
+        console.log(profile)
+        const newUser = {
+            nombre_empresa: 'xxxxx',
+            nombres: profile.name.givenName,
+            apellidos: profile.name.familyName,
+            imagen: profile.photos[0].value,
+            email: profile.emails[0].value,
+            id_google: profile.id
+        }
+
+        console.log("\n<<<DATOS A INSERTAR>>> ", newUser)
+
+        try {
+            const oldUser = await pool.query('SELECT * FROM users WHERE id_google = ?', [newUser.id_google])
+            if (oldUser) {
+                return done(null, oldUser)
+            } else {
+                const user = await pool.query('INSERT INTO users SET ?', [newUser])
+                return done(null, user)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+  }
+  
+));
+
+// passport.use('google.auth', new Strategy({
+//     clientID: config.google.id,
+//     clientSecret: config.google.secret,
+//     callbackURL: '/auth/google/secrets'
+// },
+//     async (accessToken, refreshToken, profile, done) => {
+//         // console.log(profile);
+//         const newUser = {
+//             id: 5,
+//             nombre_empresa: 'xxxxx',
+//             nombres: profile.givenName,
+//             apellidos: profile.familyName,
+//             imagen: profile.photos[0].value,
+//             email: profile.emails[0].value,
+//             id_google: profile.id
+//         }
+//         await pool.query('SELECT * FROM users WHERE id_google = ?', [newUser.id_google], async (err, result) => {
+//             if (err) { return done(err); }
+//             if (!result) {
+//                 pool.query('INSERT INTO users SET ?', [newUser], (err, result) => {
+//                     if (err) { return done(err); }
+//                     console.log("RESULTADO >>>", result);
+//                     return done(null, newUser);
+//                 })
+//             } else {
+//                 pool.query('SELECT * FROM users WHERE id = ?', [newUser.id], (err, result) => {
+//                     if (err) { return done(err); }
+//                     if (!result) {return done(null, false);}
+//                     return done(null, newUser);
+//                 })
+//             }
+//         })
+//     }
+// ));
+
+// passport.serializeUser((user, done) => {
+//     done(null, user);
+//   });
+  
+//   passport.deserializeUser((obj, done) => {
+//     done(null, obj);
+//   });

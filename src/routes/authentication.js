@@ -49,7 +49,22 @@ router.get('/auth/facebook', noLogueado, passport.authenticate('facebook.auth', 
 //     res.redirect('/');
 // });
 
+router.get('/auth/google', noLogueado, passport.authenticate('google.auth', {
+    // scope: ['email', 'profile']
+    scope: [
+        "https://www.googleapis.com/auth/userinfo.profile", // Ver su dirección de correo electrónico
+        "https://www.googleapis.com/auth/userinfo.email" //Ver su información personal, incluida la información personal que haya puesto a disposición del público.
+    ],
+    // session: false
+}))
 
+router.get('/auth/google/secrets',
+    passport.authenticate('google.auth', {
+        successRedirect: '/',
+        failureRedirect: '/login',
+        failureFlash: true
+    })
+)
 /** Cerrar Sesión */
 router.get('/logout', estaLogueado, (req, res) => {
     req.logOut();
