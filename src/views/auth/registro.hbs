@@ -20,9 +20,11 @@
         <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
+                    {{> message }}
                     <p class="msg-Login-Top">Preparate para ver crecer tu empresa</p>
                     <h3 class="tituH3">Crea tu cuenta hoy</h3>
-                    <div class="row" style="margin-top: 1.2em;">
+                    {{!-- Autenticación Google & Facebook --}}
+                    {{!-- <div class="row" style="margin-top: 1.2em;">
                         <div class="col-12 col-sm-6 mb-2 p-1">
                             <a class="btn btn-lg btn-block btn-gg" href="/auth/google" role="button">
                                 <i class="fab fa-google gg-color"></i> Registrate con Google
@@ -37,12 +39,12 @@
                     <div class="divider d-flex align-items-center my-4">
                         <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu
                             correo</p>
-                    </div>
+                    </div> --}}
                     {{!-- Referencia de Login o Registro --}}
                     {{!-- <div class="page-links">
                         <a href="#" class="active">Login</a><a href="#">Register</a>
                     </div> --}}
-
+                    <br>
                     <form action="/registro" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <div class="row">

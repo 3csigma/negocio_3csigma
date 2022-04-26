@@ -47,7 +47,7 @@ router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
       const nuevoPago = { id_user }
       await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
           if (err) throw err;
-          console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0");
+          // console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0");
       })
   } else {
       if (pagos[0].diagnostico_negocio == '1') {

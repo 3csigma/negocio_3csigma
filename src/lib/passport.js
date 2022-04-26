@@ -1,13 +1,14 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy  // Autenticación por Facebook
-/** Autenticación por Google */
-// const { Strategy } = require('passport-google-oauth20');
-const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;      
-// const GoogleStrategy = require('passport-google-oidc');
 const pool = require('../database')
 const helpers = require('../lib/helpers')
-const {config} = require('../keys') // Importar Api Keys Secret
+const crypto = require('crypto');
+const {getTemplate, sendEmail} = require('../lib/mail.config')
+// const {config} = require('../keys') // Importar Api Keys Secret Google & Facebook
+// const FacebookStrategy = require('passport-facebook').Strategy  // Autenticación por Facebook
+// const { Strategy } = require('passport-google-oauth20');
+// const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;      
+// const GoogleStrategy = require('passport-google-oidc');
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id);
@@ -24,19 +25,40 @@ passport.use('local.registro', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback luego de la configuración
     const { nombre_empresa } = req.body
-    let username = email.split('@')
-    username = username[0]
-    const newUser = {
-        nombre_empresa,
-        username,
-        email,
-        clave,
-        rol: 'User',
-    }
-    newUser.clave = await helpers.encryptPass(clave)
-    const result = await pool.query('INSERT INTO users SET ?', [newUser])
-    newUser.id = result.insertId
-    return done(null, newUser, req.flash('success', 'Bienvenido a la plataforma de consultoría 3C Sigma'))
+    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
+        if (err) throw err;
+        if (result.length > 0) {
+            return done(null, false, req.flash('message', 'Ya existe un usuario con este Email'))
+        } else {
+            // Capturando Nombre de usuario con base al email del usuario
+            let username = email.split('@')
+            username = username[0]
+            
+            // Generar código MD5
+            const codigo = crypto.createHash('md5').update(email).digest("hex");
+            
+            // Objeto de Usuario
+            const newUser = {nombre_empresa, username, email, clave, rol: 'User', codigo}
+            
+            // Encriptando la clave
+            newUser.clave = await helpers.encryptPass(clave)
+            
+            // Obtener la plantilla de Email
+            const template = getTemplate(nombre_empresa, codigo);
+            
+            // Enviar Email
+            const resultEmail = await sendEmail(email, 'Confirma tu registro de 3C Sigma', template)
+
+            if (resultEmail == false) {
+                return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
+            }
+
+            // Guardar en la DB
+            const resultado = await pool.query('INSERT INTO users SET ?', [newUser])
+            newUser.id = resultado.insertId
+            return done(null, newUser, req.flash('success', 'Registro enviado, verifica la bandeja de entrada de tu email para confirmar el registro'))
+        }
+    })
 }))
 
 passport.use('local.login', new LocalStrategy({
@@ -59,50 +81,50 @@ passport.use('local.login', new LocalStrategy({
     }
 }))
 
-passport.use('facebook.auth', new FacebookStrategy({
-    clientID: config.facebook.id,
-    clientSecret: config.facebook.secret,
-    // callbackURL: '/auth/facebook/secrets'
-  },
-  (accessToken, refreshToken, profile, done) => {
-      console.log(profile)
-    // const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
-  }
+// passport.use('facebook.auth', new FacebookStrategy({
+//     clientID: config.facebook.id,
+//     clientSecret: config.facebook.secret,
+//     // callbackURL: '/auth/facebook/secrets'
+//   },
+//   (accessToken, refreshToken, profile, done) => {
+//       console.log(profile)
+//     // const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+//   }
   
-));
+// ));
 
-passport.use('google.auth', new GoogleStrategy({
-    clientID: config.google.id,
-    clientSecret: config.google.secret,
-    callbackURL: '/auth/google/secrets'
-  },
-  async (accessToken, refreshToken, profile, done) => {
-        console.log(profile)
-        const newUser = {
-            nombre_empresa: 'xxxxx',
-            nombres: profile.name.givenName,
-            apellidos: profile.name.familyName,
-            imagen: profile.photos[0].value,
-            email: profile.emails[0].value,
-            id_google: profile.id
-        }
+// passport.use('google.auth', new GoogleStrategy({
+//     clientID: config.google.id,
+//     clientSecret: config.google.secret,
+//     callbackURL: '/auth/google/secrets'
+//   },
+//   async (accessToken, refreshToken, profile, done) => {
+//         console.log(profile)
+//         const newUser = {
+//             nombre_empresa: 'xxxxx',
+//             nombres: profile.name.givenName,
+//             apellidos: profile.name.familyName,
+//             imagen: profile.photos[0].value,
+//             email: profile.emails[0].value,
+//             id_google: profile.id
+//         }
 
-        console.log("\n<<<DATOS A INSERTAR>>> ", newUser)
+//         console.log("\n<<<DATOS A INSERTAR>>> ", newUser)
 
-        try {
-            const oldUser = await pool.query('SELECT * FROM users WHERE id_google = ?', [newUser.id_google])
-            if (oldUser) {
-                return done(null, oldUser)
-            } else {
-                const user = await pool.query('INSERT INTO users SET ?', [newUser])
-                return done(null, user)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-  }
+//         try {
+//             const oldUser = await pool.query('SELECT * FROM users WHERE id_google = ?', [newUser.id_google])
+//             if (oldUser) {
+//                 return done(null, oldUser)
+//             } else {
+//                 const user = await pool.query('INSERT INTO users SET ?', [newUser])
+//                 return done(null, user)
+//             }
+//         } catch (error) {
+//             console.log(error)
+//         }
+//   }
   
-));
+// ));
 
 // passport.use('google.auth', new Strategy({
 //     clientID: config.google.id,

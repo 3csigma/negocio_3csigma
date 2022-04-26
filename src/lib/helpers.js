@@ -58,7 +58,7 @@ helpers.consultarPagos = async (id_user) => {
         const nuevoPago = { id_user }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
             if (err) throw err;
-            return console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0 >>>>\n");
+            // return console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0 >>>>\n");
         })
     } else {
         if (tabla_pagos[0].diagnostico_negocio == '1') {
