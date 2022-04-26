@@ -24,39 +24,44 @@ passport.use('local.registro', new LocalStrategy({
     passwordField: 'clave',
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback luego de la configuración
-    const { nombre_empresa } = req.body
-    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
-        if (err) throw err;
+    
+    const { nombres, apellidos, nombre_empresa } = req.body
+    
+    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => { // Verificando si el usuario existe o no
+        
+        if (err) throw err; // Si ocurre un error
+        
         if (result.length > 0) {
             return done(null, false, req.flash('message', 'Ya existe un usuario con este Email'))
         } else {
             // Capturando Nombre de usuario con base al email del usuario
             let username = email.split('@')
             username = username[0]
-            
+
             // Generar código MD5
             const codigo = crypto.createHash('md5').update(email).digest("hex");
             
             // Objeto de Usuario
-            const newUser = {nombre_empresa, username, email, clave, rol: 'User', codigo}
+            const newUser = {nombres, apellidos, nombre_empresa, username, email, clave, rol: 'User', codigo}
             
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave)
             
             // Obtener la plantilla de Email
-            const template = getTemplate(nombre_empresa, codigo);
+            const template = getTemplate(nombres, nombre_empresa, codigo);
             
             // Enviar Email
-            const resultEmail = await sendEmail(email, 'Confirma tu registro de 3C Sigma', template)
+            const resultEmail = await sendEmail(email, 'Confirma tu registro en 3C Sigma', template)
 
             if (resultEmail == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
             }
 
-            // Guardar en la DB
+            // Guardar en la base de datos
             const resultado = await pool.query('INSERT INTO users SET ?', [newUser])
             newUser.id = resultado.insertId
-            return done(null, newUser, req.flash('success', 'Registro enviado, verifica la bandeja de entrada de tu email para confirmar el registro'))
+            return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
+            // return done(null, newUser, req.flash('success', 'Registro enviado, verifica la bandeja de entrada en unos minutos para activar tu cuenta.'))
         }
     })
 }))
@@ -66,17 +71,27 @@ passport.use('local.login', new LocalStrategy({
     passwordField: 'clave',
     passReqToCallback: true
 }, async (req, email, clave, done) => { //Callback para indicar más procesos
-    // console.log(req.body)
+    
     const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+
     if (filas.length > 0) {
+
         const user = filas[0]
         const claveValida = await helpers.matchPass(clave, user.clave)
+
         if (claveValida){
-            return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
+            req.userEmail = true;
+            if (user.estado == 1) {
+                return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
+            } else {
+                return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
+            }
         } else {
+            req.userEmail = false;
             return done(null, false, req.flash('message', 'Contraseña inválida'))
         }
     } else {
+        req.userEmail = false;
         return done(null, false, req.flash('message', 'No existe este usuario'))
     }
 }))

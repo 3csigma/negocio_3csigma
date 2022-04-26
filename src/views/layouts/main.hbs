@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocio - 3CSigma</title>
-    <link rel="icon" type="image/x-icon" href="./img/logo_small_3csigma.png">
+    <link rel="icon" type="image/x-icon" href="../img/logo_small_3csigma.png">
     <!--  FONTS -->
     <link href="https://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
     <!--  BOOTSTRAP 5-->
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
     <!--  FONT AWESOME 5.5 -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="stylesheet" href="./fonts/material-design-iconic-font/css/material-design-iconic-font.css">
+    <link rel="stylesheet" href="../fonts/material-design-iconic-font/css/material-design-iconic-font.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"
         integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
     <!-- STYLE GENERAL CSS -->
@@ -23,12 +23,12 @@
     <link href="./css/styles.css" rel="stylesheet">
     {{/if}}
     <!-- CSS WIZARD LOGIN -->
-    <link href="./css/iofrm-style.css" rel="stylesheet">
-    <link href="./css/iofrm-theme3.css" rel="stylesheet">
+    <link href="../css/iofrm-style.css" rel="stylesheet">
+    <link href="../css/iofrm-theme3.css" rel="stylesheet">
     <!-- YOUR CUSTOM CSS -->
-    <link href="./css/custom.css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
     <!-- SWEET ALERT CSS -->
-    <link href="./css/sweetalert2.min.css" rel="stylesheet">
+    <link href="../css/sweetalert2.min.css" rel="stylesheet">
     {{#if dashx}}
     <!-- DASHBOARD -->
     <link href="./vendor/css/chartist.min.css" rel="stylesheet">
@@ -48,17 +48,19 @@
     {{{ body }}}
 
     <!-- COMMON SCRIPTS -->
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/loginMain.js"></script>
-    <script src="./js/jquery-3.6.0.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
-    <script src="./js/bootstrap.bundle.min.js"></script>
-    <script src="./js/sweetalert2.min.js"></script>
     <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
-    <script src="./vendor/js/global.min.js"></script>
-    <script src="./vendor/js/bootstrap-select.min.js"></script>
-    <script src="./vendor/js/custom.min.js"></script>
-    <script src="./vendor/js/deznav-init.js"></script>
+    {{!-- {{#if todoLink}} --}}
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/loginMain.js"></script>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/sweetalert2.min.js"></script>
+    <script src="../vendor/js/global.min.js"></script>
+    <script src="../vendor/js/bootstrap-select.min.js"></script>
+    <script src="../vendor/js/custom.min.js"></script>
+    <script src="../vendor/js/deznav-init.js"></script>
+    {{!-- {{/if}} --}}
     {{!--
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.7/dist/sweetalert2.all.min.js"></script> --}}
     {{#if wizarx}}
@@ -210,6 +212,13 @@
                     text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
                 })
                 {{/if}}
+                {{#if confirmarLogin}}
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Confirmación de correo satisfactoria',
+                    text: 'Ya puedes iniciar sesión.',
+                })
+                {{/if}}
             });
 
             jQuery(window).on('resize', function () {
@@ -226,6 +235,38 @@
         <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
         <script src="https://js.stripe.com/v3/"></script>
         {{/if}}
+    {{/if}}
+    
+    {{!-- Vainas para el Login --}}
+    {{#if login}}
+    {{!-- <script src="../js/popper.min.js"></script>
+    <script src="../js/loginMain.js"></script>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <script src="../js/sweetalert2.min.js"></script>
+    <script src="../vendor/js/global.min.js"></script>
+    <script src="../vendor/js/bootstrap-select.min.js"></script>
+    <script src="../vendor/js/custom.min.js"></script>
+    <script src="../vendor/js/deznav-init.js"></script> --}}
+    <script>
+        (function ($) {
+
+            jQuery(document).ready(function () {
+            });
+
+            jQuery(window).on('load', function () {
+                {{#if confirmarLogin}}
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo verificado',
+                    text: 'Has confirmado satisfactoriamente tu cuenta, ahora puedes iniciar sesión.',
+                })
+                {{/if}}
+            });
+
+        })(jQuery);
+    </script>
     {{/if}}
 </body>
 

@@ -10,7 +10,8 @@ userController.cerrarSesion = (req, res) => {
 }
 
 userController.getRegistro = (req, res) => {
-    res.render('auth/registro', { login: true, wizarx: false, dashx: false })
+    req.userEmail = false;
+    res.render('auth/registro', { todoLink: true, wizarx: false, dashx: false })
 }
 
 userController.postRegistro = (req, res, next) => {
@@ -22,7 +23,7 @@ userController.postRegistro = (req, res, next) => {
 }
 
 userController.getLogin = (req, res) => {
-    res.render('auth/login', { login: true, wizarx: false, dashx: false })
+    res.render('auth/login', { todoLink: true, wizarx: false, dashx: false})
 }
 
 userController.postLogin = (req, res, next) => {
@@ -36,9 +37,9 @@ userController.postLogin = (req, res, next) => {
 userController.confirmarRegistro = async (req, res) => {
     try {
 
-       // Obtener el token
+       // Obtener el código
        const { codigo } = req.params;
-       
+
        // Verificar existencia del usuario por medio del código
        const user = await pool.query("SELECT * FROM users WHERE codigo = ?", [codigo])
 
@@ -50,10 +51,10 @@ userController.confirmarRegistro = async (req, res) => {
        }
 
        // Verificar el código
-       if(code !== user.code) {
+       if(codigo !== user[0].codigo) {
         return res.json({
             success: false,
-            msg: 'Error al confirmar el registro'
+            msg: 'Error al confirmar el registro, los códigos no coinciden'
         });
        }
 
@@ -61,15 +62,14 @@ userController.confirmarRegistro = async (req, res) => {
        // Actualizando el estado del usuario - Activo (1)
        await pool.query('UPDATE users SET ? WHERE codigo = ?', [updateEstado, codigo])
 
-       // Redireccionar a la confirmación
-       return res.render('/auth/confirmar')
-    //    return res.redirect('/confirm.html');
+       // Redirigir al Login con un mensaje de alerta de que ya confirmó su cuenta
+       res.render('auth/login', { login: true, wizarx: false, dashx: false, confirmarLogin: true })
         
     } catch (error) {
         console.log(error);
         return res.json({
             success: false,
-            msg: 'Error al confirmar usuario:\n'+error
+            msg: 'Error al confirmar usuario - '+error
         });
     }
 }

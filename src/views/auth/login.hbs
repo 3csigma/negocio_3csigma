@@ -1,4 +1,4 @@
-<div class="form-body">
+<div class="form-body" onload="cargarMensaje()">
     <div class="top_logo">
         <a href="/">
             <div class="logo-Login" >
@@ -82,23 +82,3 @@
         </div>
     </div>
 </div>
-
-{{!-- Login Scripts --}}
-{{!-- <script src="/js/popper.min.js"></script>
-<script src="/js/loginMain.js"></script> --}}
-
-{{!-- Mensajes de Sweet Alert  --}}
-{{!-- {{#if message}}
-<input type="hidden" name="msg" id="msg" value="{{message}}">
-<script>
-    let msg = document.getElementById("msg").value;
-    function load() {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Advertencia',
-            text: `${msg}`
-        })
-    }
-    window.onload = load;
-</script>
-{{/if}} --}}

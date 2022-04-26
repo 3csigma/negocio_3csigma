@@ -45,7 +45,7 @@ empresaController.dashboard = async (req, res) => {
     console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
     console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
     res.render('dashboard', {
-        dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, itemActivo: 1, acuerdoFirmado
+        todoLink: true, dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, itemActivo: 1, acuerdoFirmado
     })
     // res.send("HOLA DESDE DASHBOARD")
 }
@@ -123,7 +123,7 @@ empresaController.acuerdo = async (req, res) => {
     console.log("Email Signer => ", email)
     console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
     console.log("** NO HA PAGADO => ", noPago)
-    res.render('empresa/acuerdoConfidencial', { dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
+    res.render('empresa/acuerdoConfidencial', {todoLink: true, dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
 }
 
 // empresaController.acuerdo = async (req, res) => {
@@ -198,14 +198,14 @@ empresaController.acuerdo = async (req, res) => {
 
 /** Mostrar vista del Panel Diagnóstico de negocio */
 empresaController.diagnostico = async (req, res) => {
-    res.render('/empresa/diagnostico', { dashx: true, tipoUser: 'User', noPago: false, itemActivo: 3, estado, acuerdoFirmado })
+    res.render('/empresa/diagnostico', {todoLink: true, dashx: true, tipoUser: 'User', noPago: false, itemActivo: 3, estado, acuerdoFirmado })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
 empresaController.fichaCliente = async (req, res) => {
     const empresa = await pool.query('SELECT * FROM ficha_cliente')
     // const ficha = await pool.query('SELECT * FROM empresa WHERE id = ?', [id])
-    res.render('/empresa/addFicha', { empresa, wizarx: true, dashx: false })
+    res.render('/empresa/addFicha', { empresa, wizarx: true, todoLink: true, dashx: false })
 }
 
 

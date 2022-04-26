@@ -15,3 +15,14 @@
     <strong>Atención!</strong> {{message}}
 </div>
 {{/if}}
+
+{{#if registro}}
+<div class="alert alert-warning alert-dismissible alert-alt fade show" style="background-color: #efffe3;
+    border-color: #b7ffa6;">
+    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+    <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{registro}}
+</div>
+{{/if}}

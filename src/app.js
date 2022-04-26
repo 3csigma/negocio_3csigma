@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session')
 const { engine } = require('express-handlebars');
 const morgan = require('morgan'); // Registra las solicitudes + otra información & la muestra por consola
-// const bodyParser = require('body-parser')
 const passport = require('passport')
 const path = require('path');
 const csrf = require('csurf')
@@ -60,6 +59,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.message = req.flash('message');
+  res.locals.registro = req.flash('registro');
   res.locals.user = req.user; //Variable de usuario
   res.locals.csrfToken = req.csrfToken();
   res.locals.session = req.session;
@@ -76,5 +76,5 @@ app.use(require('./routes/authentication'));
 app.use(require('./routes/pagos'));
 
 app.listen(app.get('port'), () => {
-  console.log('CORRIENDO DESDE http://localhost:'+app.get('port'));
+  console.log('\nCORRIENDO DESDE http://localhost:'+app.get('port'));
 });

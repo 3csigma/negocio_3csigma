@@ -17,6 +17,14 @@ module.exports = {
         }
     },
 
+    validarRegistro(req, res, next) {
+        if (!req.isAuthenticated() && !req.userEmail) {
+            return next();
+        } else {
+            return res.redirect('/')
+        }
+    },
+
     validarURLPagar(req, res, next) {
         if (req.session.intentPay) { 
             return next();
