@@ -34,10 +34,6 @@
     <link href="./vendor/css/chartist.min.css" rel="stylesheet">
     <link href="./vendor/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./vendor/css/style.css" rel="stylesheet">
-        <!-- Stripe Style -->
-        {{#if stripe}}
-        <link href="./css/checkout.css" rel="stylesheet" />
-        {{/if}}
     {{/if}}
 </head>
 
@@ -49,7 +45,6 @@
 
     <!-- COMMON SCRIPTS -->
     <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
-    {{!-- {{#if todoLink}}
     <script src="./js/popper.min.js"></script>
     <script src="./js/loginMain.js"></script>
     <script src="./js/jquery-3.6.0.min.js"></script>
@@ -60,7 +55,6 @@
     <script src="./vendor/js/bootstrap-select.min.js"></script>
     <script src="./vendor/js/custom.min.js"></script>
     <script src="./vendor/js/deznav-init.js"></script>
-    {{/if}} --}}
     {{!--
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.7/dist/sweetalert2.all.min.js"></script> --}}
     {{#if wizarx}}
@@ -212,17 +206,9 @@
                     text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
                 })
                 {{/if}}
-                {{#if confirmarLogin}}
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Confirmación de correo satisfactoria',
-                    text: 'Ya puedes iniciar sesión.',
-                })
-                {{/if}}
             });
 
             jQuery(window).on('resize', function () {
-                //dzSparkLine.resize();
                 setTimeout(function () { dzSparkLine.resize(); }, 1000);
             });
 
@@ -238,31 +224,18 @@
     {{/if}}
     
     {{!-- Vainas para el Login --}}
-    {{#if login}}
-    {{!-- <script src="../js/popper.min.js"></script>
-    <script src="../js/loginMain.js"></script>
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <script src="../js/sweetalert2.min.js"></script>
-    <script src="../vendor/js/global.min.js"></script>
-    <script src="../vendor/js/bootstrap-select.min.js"></script>
-    <script src="../vendor/js/custom.min.js"></script>
-    <script src="../vendor/js/deznav-init.js"></script> --}}
+    {{#if confirmarLogin}}
     <script>
         (function ($) {
-
             jQuery(document).ready(function () {
             });
 
             jQuery(window).on('load', function () {
-                {{#if confirmarLogin}}
                 Swal.fire({
                     icon: 'success',
                     title: 'Correo verificado',
                     text: 'Has confirmado satisfactoriamente tu cuenta, ahora puedes iniciar sesión.',
                 })
-                {{/if}}
             });
 
         })(jQuery);
