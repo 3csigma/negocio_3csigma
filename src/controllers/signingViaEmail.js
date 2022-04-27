@@ -35,6 +35,30 @@ const sendEnvelope = async (args) => {
  * @returns {Envelope} An envelope definition
  * @private
  */
+// Create envelope from template
+ function makeEnvelope(args){
+
+  // Create the envelope definition
+  let env = new docusign.EnvelopeDefinition();
+  env.templateId = args.templateId;
+
+  // Create template role elements to connect the signer and cc recipients
+  // to the template
+  // We're setting the parameters via the object creation
+  let signer1 = docusign.TemplateRole.constructFromObject({
+      email: args.signerEmail,
+      name: args.signerName,
+      roleName: 'signer'});
+
+  // Add the TemplateRole objects to the envelope object
+  env.templateRoles = [signer1];
+  env.status = "sent"; // We want the envelope to be sent
+
+  return env;
+}
+
+// Create envelope without template
+/*
 function makeEnvelope(args) {
   // Data for this method
   // args.signerEmail
@@ -97,6 +121,8 @@ function makeEnvelope(args) {
 
   return env;
 }
+*/
+
 
 /**
  * Creates document 1
@@ -105,35 +131,34 @@ function makeEnvelope(args) {
  * @param {Object} args parameters for the envelope
  * @returns {string} A document in HTML format
  */
-
+// Creando documento html para enviar
 function document1(args) {
   // Data for this method
   // args.signerEmail
   // args.signerName
 
-  return `
-     <!DOCTYPE html>
-     <html>
-         <head>
-           <meta charset="UTF-8">
-         </head>
-         <body style="font-family:sans-serif;margin-left:2em;">
-         <h1 style="font-family: 'Trebuchet MS', Helvetica, sans-serif;
-             color: darkblue;margin-bottom: 0;">World Wide Corp</h1>
-         <h2 style="font-family: 'Trebuchet MS', Helvetica, sans-serif;
-           margin-top: 0px;margin-bottom: 3.5em;font-size: 1em;
-           color: darkblue;">Order Processing Division</h2>
-         <h4>Ordered by ${args.signerName}</h4>
-         <p style="margin-top:0em; margin-bottom:0em;">Email: ${args.signerEmail}</p>
-         <p style="margin-top:3em;">
-   Candy bonbon pastry jujubes lollipop wafer biscuit biscuit. Topping brownie sesame snaps sweet roll pie. Croissant danish biscuit soufflé caramels jujubes jelly. Dragée danish caramels lemon drops dragée. Gummi bears cupcake biscuit tiramisu sugar plum pastry. Dragée gummies applicake pudding liquorice. Donut jujubes oat cake jelly-o. Dessert bear claw chocolate cake gummies lollipop sugar plum ice cream gummies cheesecake.
-         </p>
-         <!-- Note the anchor tag for the signature field is in white. -->
-         <h3 style="margin-top:3em;">Agreed: <span style="color:white;">**signature_1**/</span></h3>
-         </body>
-     </html>
-   `;
+  // return `
+  //    <!DOCTYPE html>
+  //    <html>
+  //        <head>
+  //          <meta charset="UTF-8">
+  //        </head>
+  //        <body style="font-family:sans-serif;margin-left:2em;">
+  //        <h1 style="font-family: 'Trebuchet MS', Helvetica, sans-serif;
+  //            color: darkblue;margin-bottom: 0;">World Wide Corp</h1>
+  //        <h2 style="font-family: 'Trebuchet MS', Helvetica, sans-serif;
+  //          margin-top: 0px;margin-bottom: 3.5em;font-size: 1em;
+  //          color: darkblue;">Order Processing Division</h2>
+  //        <h4>Ordered by ${args.signerName}</h4>
+  //        <p style="margin-top:0em; margin-bottom:0em;">Email: ${args.signerEmail}</p>
+  //        <p style="margin-top:3em;">
+  //  Candy bonbon pastry jujubes lollipop wafer biscuit biscuit. Topping brownie sesame snaps sweet roll pie. Croissant danish biscuit soufflé caramels jujubes jelly. Dragée danish caramels lemon drops dragée. Gummi bears cupcake biscuit tiramisu sugar plum pastry. Dragée gummies applicake pudding liquorice. Donut jujubes oat cake jelly-o. Dessert bear claw chocolate cake gummies lollipop sugar plum ice cream gummies cheesecake.
+  //        </p>
+  //        <!-- Note the anchor tag for the signature field is in white. -->
+  //        <h3 style="margin-top:3em;">Agreed: <span style="color:white;">**signature_1**/</span></h3>
+  //        </body>
+  //    </html>
+  //  `;
 }
-
 
 module.exports = { sendEnvelope };

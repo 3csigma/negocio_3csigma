@@ -17,7 +17,7 @@ signingViaEmail.createController = (req, res) => {
             signerEmail: validator.escape(body.signerEmail),
             signerName: validator.escape(body.signerName),
             status: "sent",
-            doc2File: path.resolve(rutaDocs, doc2File),
+            templateId: 'd0597eb4-8a25-4c7b-a495-269b539e2eeb'
         };
 
         const args = {
