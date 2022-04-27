@@ -6,20 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocio - 3CSigma</title>
-    <!--  FONTS -->
-    <link href="https://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
-    <!--  FONT AWESOME 5.5 -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"
-        integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
-    {{#if todoLink}}
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="stylesheet" href="./fonts/material-design-iconic-font/css/material-design-iconic-font.css">
     {{!-- FAVICON --}}
     <link rel="icon" type="image/x-icon" href="./img/logo_small_3csigma.png">
+    <!--  FONTS -->
+    <link href="https://fonts.cdnfonts.com/css/oblivian-text" rel="stylesheet">
     <!--  BOOTSTRAP 5-->
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <!--  FONT AWESOME 5.5 -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="./fonts/material-design-iconic-font/css/material-design-iconic-font.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
+    <!-- STYLE GENERAL CSS -->
+    {{#if wizarx}}
+    <link href="./css/styles.css" rel="stylesheet">
+    {{/if}}
     <!-- CSS WIZARD LOGIN -->
     <link href="./css/iofrm-style.css" rel="stylesheet">
     <link href="./css/iofrm-theme3.css" rel="stylesheet">
@@ -27,37 +29,15 @@
     <link href="./css/custom.css" rel="stylesheet">
     <!-- SWEET ALERT CSS -->
     <link href="./css/sweetalert2.min.css" rel="stylesheet">
-    {{/if}}
-    
-    {{!-- Vainas para el Login --}}
-    {{#if login}}
-    <link rel="stylesheet" href="../fonts/material-design-iconic-font/css/material-design-iconic-font.css">
-    {{!-- FAVICON --}}
-    <link rel="icon" type="image/x-icon" href="../img/logo_small_3csigma.png">
-    <!--  BOOTSTRAP 5-->
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <!-- CSS WIZARD LOGIN -->
-    <link href="../css/iofrm-style.css" rel="stylesheet">
-    <link href="../css/iofrm-theme3.css" rel="stylesheet">
-    <!-- YOUR CUSTOM CSS -->
-    <link href="../css/custom.css" rel="stylesheet">
-    <!-- SWEET ALERT CSS -->
-    <link href="../css/sweetalert2.min.css" rel="stylesheet">
-    {{/if}}
-
-    <!-- STYLE GENERAL CSS -->
-    {{#if wizarx}}
-    <link href="./css/styles.css" rel="stylesheet">
-    {{/if}}
     {{#if dashx}}
     <!-- DASHBOARD -->
     <link href="./vendor/css/chartist.min.css" rel="stylesheet">
     <link href="./vendor/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="./vendor/css/style.css" rel="stylesheet">
-    <!-- Stripe Style -->
-    {{#if stripe}}
-    <link href="./css/checkout.css" rel="stylesheet" />
-    {{/if}}
+        <!-- Stripe Style -->
+        {{#if stripe}}
+        <link href="./css/checkout.css" rel="stylesheet" />
+        {{/if}}
     {{/if}}
 </head>
 
@@ -259,7 +239,7 @@
     
     {{!-- Vainas para el Login --}}
     {{#if login}}
-    <script src="../js/popper.min.js"></script>
+    {{!-- <script src="../js/popper.min.js"></script>
     <script src="../js/loginMain.js"></script>
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
@@ -268,7 +248,7 @@
     <script src="../vendor/js/global.min.js"></script>
     <script src="../vendor/js/bootstrap-select.min.js"></script>
     <script src="../vendor/js/custom.min.js"></script>
-    <script src="../vendor/js/deznav-init.js"></script>
+    <script src="../vendor/js/deznav-init.js"></script> --}}
     <script>
         (function ($) {
 
