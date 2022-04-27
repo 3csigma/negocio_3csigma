@@ -1,7 +1,6 @@
 const pool = require('../database')
 const userController = exports;
 const passport = require('passport')
-// const { getToken, getTokenData } = require('../config/jwt.config');
 
 // Cerrar Sesión
 userController.cerrarSesion = (req, res) => {
@@ -11,7 +10,7 @@ userController.cerrarSesion = (req, res) => {
 
 userController.getRegistro = (req, res) => {
     req.userEmail = false;
-    res.render('auth/registro', { todoLink: true, wizarx: false, dashx: false })
+    res.render('auth/registro', { todoLink: true, wizarx: false, dashx: false, login: false, confirmarLogin: false });
 }
 
 userController.postRegistro = (req, res, next) => {
@@ -23,7 +22,7 @@ userController.postRegistro = (req, res, next) => {
 }
 
 userController.getLogin = (req, res) => {
-    res.render('auth/login', { todoLink: true, wizarx: false, dashx: false})
+    res.render('auth/login', { todoLink: true, wizarx: false, dashx: false, login: false, confirmarLogin: false})
 }
 
 userController.postLogin = (req, res, next) => {
