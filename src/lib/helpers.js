@@ -24,7 +24,8 @@ helpers.matchPass = async (password, passDB) => {
 // Generar Token de Autenticación en API Docusing
 helpers.authToken = async () => {
     // Leyendo Clave Privada RSA emitida por Docusing
-    const privateKey = fs.readFileSync('src/' + dsConfig.privateKeyRSA);
+    // const privateKey = fs.readFileSync('src/' + dsConfig.privateKeyRSA);
+    const privateKey = fs.readFileSync(dsConfig.privateKeyRSA);
     try {
         //Generando Token de Autenticación para DocuSign
         dsConfig.authToken = jwt.sign(dsConfig.dsPayload, privateKey, { algorithm: 'RS256' })
