@@ -17,7 +17,7 @@ signingViaEmail.createController = (req, res) => {
             signerEmail: validator.escape(body.signerEmail),
             signerName: validator.escape(body.signerName),
             status: "sent",
-            templateId: 'd0597eb4-8a25-4c7b-a495-269b539e2eeb'
+            templateId: '05605966-f97f-44aa-a640-5d9b428bd9a3'
         };
 
         const args = {

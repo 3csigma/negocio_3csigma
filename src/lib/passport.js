@@ -61,7 +61,6 @@ passport.use('local.registro', new LocalStrategy({
             const resultado = await pool.query('INSERT INTO users SET ?', [newUser])
             newUser.id = resultado.insertId
             return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
-            // return done(null, newUser, req.flash('success', 'Registro enviado, verifica la bandeja de entrada en unos minutos para activar tu cuenta.'))
         }
     })
 }))

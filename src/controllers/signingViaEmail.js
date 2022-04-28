@@ -48,7 +48,7 @@ const sendEnvelope = async (args) => {
   let signer1 = docusign.TemplateRole.constructFromObject({
       email: args.signerEmail,
       name: args.signerName,
-      roleName: 'signer'});
+      roleName: '3CSigmaClientCompany'});
 
   // Add the TemplateRole objects to the envelope object
   env.templateRoles = [signer1];
