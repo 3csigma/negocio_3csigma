@@ -4,7 +4,7 @@ const router = express.Router();
 const { estaLogueado, validarURLPagar } = require('../lib/auth')
 const { my_domain, clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
-const {consultarPagos} = require('../lib/helpers')
+// const {consultarPagos} = require('../lib/helpers')
 
 // const MY_DOMAIN = 'http://localhost:4000';
 

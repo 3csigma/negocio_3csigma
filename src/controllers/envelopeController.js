@@ -7,9 +7,6 @@ const helpers = require('../lib/helpers.js');
 const pool = require('../database')
 const signingViaEmail = exports;
 
-const rutaDocs = path.resolve(__dirname, '../public/documents');
-const doc2File = 'World_Wide_Corp_lorem.pdf';
-
 signingViaEmail.createController = (req, res) => {
     const { body } = req;
     helpers.authToken().then(async (values) => {
