@@ -116,7 +116,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	<tbody>
 	<tr>
 	<td>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
@@ -148,7 +148,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	</tr>
 	</tbody>
 	</table>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
@@ -171,7 +171,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	</tr>
 	</tbody>
 	</table>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
@@ -194,7 +194,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	</tr>
 	</tbody>
 	</table>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-4" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-4" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
@@ -217,7 +217,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	</tr>
 	</tbody>
 	</table>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-5" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-5" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
@@ -258,7 +258,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	</tr>
 	</tbody>
 	</table>
-	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-6" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #292142;" width="100%">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-6" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
 	<tbody>
 	<tr>
 	<td>
