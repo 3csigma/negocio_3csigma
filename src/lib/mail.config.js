@@ -138,7 +138,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="padding-bottom:20px;padding-left:55px;padding-right:55px;padding-top:20px;text-align:center;width:100%;">
-<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Hola (Nombre)!</strong> confirma tu correo para comenzar</span></h1>
+<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Hola ${nombre}!</strong> confirma tu correo para comenzar</span></h1>
 </td>
 </tr>
 </table>
@@ -146,7 +146,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tr>
 <td style="padding-bottom:20px;padding-left:55px;padding-right:55px;padding-top:10px;">
 <div style="color:#812082;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:180%;text-align:center;">
-<p style="margin: 0;">Para completar el registro de <strong>(tu empresa)</strong> en 3C Sigma, Por favor haz clic en el botón "Confirmar correo".</p>
+<p style="margin: 0;">Para completar el registro de <strong>${empresa}</strong> en 3C Sigma, Por favor haz clic en el botón "Confirmar correo".</p>
 </div>
 </td>
 </tr>
@@ -193,7 +193,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="width:100%;padding-right:0px;padding-left:0px;">
-<div align="center" style="line-height:10px"><a href="Reemplazar link de boton aqui" style="outline:none" tabindex="-1" target="_blank"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_003.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></a></div>
+<div align="center" style="line-height:10px"><a href="${my_domain}/confirmar/${codigo}" style="outline:none" tabindex="-1" target="_blank"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_003.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></a></div>
 </td>
 </tr>
 </table>
