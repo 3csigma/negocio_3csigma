@@ -127,7 +127,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	<table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 	<tr>
 	<td style="padding-bottom:20px;padding-left:60px;padding-right:60px;padding-top:20px;text-align:center;width:100%;">
-	<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Bienvenido ${nombre}!</strong> confirma tu correo para comenzar</span></h1>
+	<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Hola ${nombre}!</strong> confirma tu correo para comenzar</span></h1>
 	</td>
 	</tr>
 	</table>
@@ -135,7 +135,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 	<tr>
 	<td style="padding-bottom:20px;padding-left:55px;padding-right:55px;padding-top:10px;">
 	<div style="color:#812082;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:180%;text-align:center;">
-	<p style="margin: 0;">Para completar el registro de ${empresa} en 3C Sigma, Por favor haz clic en el botón "Confirmar correo".</p>
+	<p style="margin: 0;">Para completar el registro de <strong>${empresa}</strong> en 3C Sigma, Por favor haz clic en el botón "Confirmar correo".</p>
 	</div>
 	</td>
 	</tr>
