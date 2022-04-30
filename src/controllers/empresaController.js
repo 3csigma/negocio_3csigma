@@ -70,6 +70,7 @@ empresaController.acuerdo = async (req, res) => {
     const id_user = req.user.id;
     const tipoUser = req.user.rol;
     let estado = {}, email, noPago = true, statusSign = '';
+    const pagoDiag = req.pagoDiag;
     const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
 
     if (acuerdo.length > 0) {
@@ -126,7 +127,7 @@ empresaController.acuerdo = async (req, res) => {
             res.redirect('/acuerdo-de-confidencialidad')
         })
     }
-    res.render('empresa/acuerdoConfidencial', { dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
+    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -136,6 +137,8 @@ empresaController.diagnostico = async (req, res) => {
     const formDiag = {}
     formDiag.usuario = helpers.encriptarTxt(''+id_user)
     formDiag.fecha = new Date().toLocaleDateString("en-US")
+    const pagoDiag = req.pagoDiag;
+
 
     const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     if (ficha.length == 0) {
@@ -152,7 +155,7 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { dashx: true, tipoUser, itemActivo: 3, acuerdoFirmado, formDiag })
+    res.render('empresa/diagnostico', { dashx: true, pagoDiag: true, tipoUser, itemActivo: 3, acuerdoFirmado, formDiag })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
