@@ -12,6 +12,7 @@ empresaController.dashboard = async (req, res) => {
     // console.log("Signer Email Global >>>> ", dsConfig.envelopeId)
     const tipoUser = req.user.rol;
     const id_user = req.user.id;
+    req.pagoDiag = false, pagoDiag = false;
 
     /** Consultando que pagos ha realizado el usuario */
     const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
@@ -25,7 +26,10 @@ empresaController.dashboard = async (req, res) => {
         })
     } else {
         if (pagos[0].diagnostico_negocio == '1') {
-            diagnosticoPagado = 1; // Pago Diagnóstico
+            // Pago Diagnóstico
+            diagnosticoPagado = 1;
+            req.pagoDiag = true;
+            pagoDiag = req.pagoDiag;
         }
         if (pagos[0].analisis_negocio == '1') {
             analisisPagado = 1; // Pago Análisis
@@ -47,7 +51,7 @@ empresaController.dashboard = async (req, res) => {
     console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
     console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
     res.render('dashboard', {
-        dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, itemActivo: 1, acuerdoFirmado
+        dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado
     })
     // res.send("HOLA DESDE DASHBOARD")
 }

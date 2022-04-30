@@ -190,6 +190,9 @@
 
             jQuery(window).on('load', function () {
                 dzSparkLine.load();
+                {{#if pagoDiag}}
+                //$("..add-menu-sidebar").css("background", "none");
+                {{/if}}
                 {{#if alertSuccess}}
                 Swal.fire({
                     icon: 'success',

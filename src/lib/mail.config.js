@@ -53,6 +53,8 @@ const getTemplate = (nombre, empresa, codigo) => {
 <link href="https://fonts.googleapis.com/css?family=Bitter" rel="stylesheet" type="text/css"/>
 <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet" type="text/css"/>
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet" type="text/css"/>
 <!--<![endif]-->
 <style>
 		* {
@@ -129,7 +131,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fceff7; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; background-size: auto; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #fceff7; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -138,14 +140,14 @@ const getTemplate = (nombre, empresa, codigo) => {
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="padding-bottom:20px;padding-left:55px;padding-right:55px;padding-top:20px;text-align:center;width:100%;">
-<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 28px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Hola ${nombre}!</strong> confirma tu correo para comenzar</span></h1>
+<h1 style="margin: 0; color: #812082; direction: ltr; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder"><strong>¡Hola ${nombre}!</strong> confirma tu correo para comenzar</span></h1>
 </td>
 </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
 <tr>
 <td style="padding-bottom:20px;padding-left:55px;padding-right:55px;padding-top:10px;">
-<div style="color:#812082;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:400;letter-spacing:0px;line-height:180%;text-align:center;">
+<div style="color:#812082;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:15px;font-weight:400;letter-spacing:0px;line-height:180%;text-align:center;">
 <p style="margin: 0;">Para completar el registro de <strong>${empresa}</strong> en 3C Sigma, Por favor haz clic en el botón "Confirmar correo".</p>
 </div>
 </td>
@@ -163,7 +165,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_002.jpg'); width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -182,18 +184,21 @@ const getTemplate = (nombre, empresa, codigo) => {
 </tr>
 </tbody>
 </table>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto;" width="100%">
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-repeat: no-repeat; background-size: cover; color: #000000; background-color: #50368c; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_boton.jpg'); width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" class="button_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td style="width:100%;padding-right:0px;padding-left:0px;">
-<div align="center" style="line-height:10px"><a href="${my_domain}/confirmar/${codigo}" style="outline:none" tabindex="-1" target="_blank"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_003.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></a></div>
+<td style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:25px;text-align:center;">
+<div align="center">
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/confirmar/${codigo}" style="height:54px;width:466px;v-text-anchor:middle;" arcsize="15%" strokeweight="0.75pt" strokecolor="#8a3b8f" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/confirmar/${codigo}" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%; width:calc(80% - 2px);border-top:1px solid #8a3b8f;font-weight:700;border-right:1px solid #8a3b8f;border-bottom:1px solid #8a3b8f;border-left:1px solid #8a3b8f;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 14px; line-height: 28px;" style="font-size: 14px; line-height: 28px;"><strong>CONFIRMAR CORREO</strong></span></span></span></a>
+<!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+</div>
 </td>
 </tr>
 </table>
@@ -205,18 +210,18 @@ const getTemplate = (nombre, empresa, codigo) => {
 </tr>
 </tbody>
 </table>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-4" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6;" width="100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-4" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #f6f6f6; background-size: auto;" width="100%">
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-repeat: no-repeat; background-size: cover; color: #000000; background-color: #50368c; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_redireccionamiento.jpg'); width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td style="width:100%;padding-right:0px;padding-left:0px;">
-<div align="center" style="line-height:10px"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_04.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></div>
+<td style="padding-bottom:85px;padding-left:15px;padding-right:15px;padding-top:15px;width:100%;text-align:center;">
+<h3 style="margin: 0; color: #ffffff; font-size: 14px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 120%; text-align: center; direction: ltr; font-weight: 400; letter-spacing: normal; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Serás redireccionado a nuestra plataforma para iniciar sesión.</span></h3>
 </td>
 </tr>
 </table>
@@ -302,6 +307,14 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tbody>
 <tr>
 <td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 600px;" width="600">
+<tbody>
+<tr>
+<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+</td>
+</tr>
+</tbody>
+</table>
 </td>
 </tr>
 </tbody>

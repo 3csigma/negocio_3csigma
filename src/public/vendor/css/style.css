@@ -28618,7 +28618,9 @@ span#counter {
   align-items: center;
   border-radius: 1.25rem;
   position: relative;
-  margin: 50px 50px; }
+  margin: 50px 50px; 
+  border: none;
+}
   .add-menu-sidebar p {
     font-size: 16px;
     font-weight: 500;

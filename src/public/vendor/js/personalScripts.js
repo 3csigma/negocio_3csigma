@@ -23,7 +23,7 @@
                     + 'text-align: center;'
                     + 'padding: 16px;'
                     + 'font-size: 17px;'
-                    + 'font-weight: 300;" id="checkout-button">Pagar ahora</button>'
+                    + 'font-weight: 300; border: none;" id="checkout-button">Pagar ahora</button>'
                     + '</form>',
                 showCancelButton: false,
                 showConfirmButton: false,

@@ -222,11 +222,18 @@
             ***********************************-->
     <div class="deznav">
       <div class="deznav-scroll">
-        <form action="/create-checkout-session" method="POST">'
+        {{#if pagoDiag}}
+        <form>
+          <button type="submit" class="add-menu-sidebar" style="cursor: auto; background: #585858 !important;pointer-events:none;">
+            <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
+        {{else}}
+        <form action="/create-checkout-session" method="POST">
           {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}"> --}}
           <button type="submit" class="add-menu-sidebar">
             <img src="./img/Pago-diagnostico de-negocio.png">
             <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
+        {{/if}}
           </button>
         </form>
         {{!-- <a href="#" class="add-menu-sidebar pagar-diagnostico">
@@ -328,8 +335,8 @@
             </a>
           </li> --}}
         </ul>
-        <div class="add-menu-sidebar" style="background: #484848 !important; color:#fff !important; ">
-          <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em">
+        <div class="add-menu-sidebar" style="background: #585858 !important; color:#fff !important; ">
+          <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em;filter: grayscale(1)">
           <p class="font-w500 mb-0 text-center">Agendar cita</p>
         </div>
         <div class="copyright text-center">

@@ -14,7 +14,7 @@ settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settin
 
 let fechaActual = Math.floor(Date.now()/1000) //
 let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
-const privateKeyRSA = settings.privateKeyLocation
+const privateKeyRSA = 'private.key'
 let authToken, args = {}, envelopeId;
 let acuerdoFirmado = {};
 const clavesStripe = {

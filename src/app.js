@@ -65,6 +65,7 @@ app.use((req, res, next) => {
   res.locals.registro = req.flash('registro');
   res.locals.user = req.user; //Variable de usuario
   res.locals.session = req.session;
+  res.locals.pagoDiag = req.pagoDiag;
   // res.locals.csrfToken = req.csrfToken();
   next();
 })

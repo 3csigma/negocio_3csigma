@@ -52,6 +52,8 @@ router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
   } else {
       if (pagos[0].diagnostico_negocio == '1') {
           diagnosticoPagado = 1; // Pago Diagnóstico
+          req.pagoDiag = true;
+          pagoDiag = true;
       }
       if (pagos[0].analisis_negocio == '1') {
           analisisPagado = 1; // Pago Análisis
@@ -59,6 +61,7 @@ router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
   }
   res.render('dashboard', {
     alertSuccess: true, // Pago Exitoso
+    pagoDiag,
     dashx: true, wizarx: false, login: false, diagnosticoPagado, analisisPagado, itemActivo: 1
   })
 })
