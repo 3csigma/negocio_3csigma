@@ -1,4 +1,3 @@
-const path = require('path');
 const validator = require('validator');
 const dsConfig = require('../config/index.js').config;
 const { sendEnvelope } = require('./signingViaEmail');
@@ -70,10 +69,10 @@ signingViaEmail.createController = (req, res) => {
                         args: JSON.stringify(args)
                     }
                     await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [newDatos, id_user])
-                    console.log("<<< TABLA ACUERDO >>>", estado)
-                    console.log("Email Signer => ", email)
-                    console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
-                    console.log("** NO HA PAGADO => ", noPago)
+                    // console.log("<<< TABLA ACUERDO >>>", estado)
+                    // console.log("Email Signer => ", email)
+                    // console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
+                    // console.log("** NO HA PAGADO => ", noPago)
                     res.render('empresa/acuerdoConfidencial', { dashx: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado })
                 }
             }) 

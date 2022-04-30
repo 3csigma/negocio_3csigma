@@ -32,4 +32,12 @@ module.exports = {
             return res.redirect('/')
         }
     },
+
+    validarIDFicha(req, res, next) {
+        if (req.session.fichaCliente) { 
+            return next();
+        } else {
+            return res.redirect('/')
+        }
+    },
 }

@@ -1,13 +1,8 @@
 /*  Wizard */
 jQuery(function($) {
     "use strict";
-    // Chose below which method to send the email, available:
-    // Simple phpmail text/plain > send_email_1.php (default)
-    // PHPMailer text/html > phpmailer/send_email_1_phpmailer.php
-    // PHPMailer text/html SMTP > phpmailer/send_email_1_phpmailer_smtp.php
-    // PHPMailer with html template > phpmailer/send_email_1_phpmailer_template.php
-    // PHPMailer with html template SMTP > phpmailer/send_email_1_phpmailer_template_smtp.php
-    // $('form#wrapped').attr('action', 'send_email_1.php');
+    
+    $('form#wrapped').attr('action', '/addficha');
     $("#wizard_container").wizard({
         stepsWrapper: "#wrapped",
         submit: ".submit",

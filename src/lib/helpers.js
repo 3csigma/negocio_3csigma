@@ -4,6 +4,10 @@ const fs = require('fs');
 const fetch = require('cross-fetch');
 const dsConfig = require('../config/index.js').config;
 const pool = require('../database')
+const crypto = require('crypto');
+const algorithm = 'aes-256-cbc'; //Using AES encryption
+const key = crypto.randomBytes(32);
+const iv = crypto.randomBytes(16);
 const helpers = {}
 
 // Encriptar clave
@@ -69,6 +73,23 @@ helpers.consultarPagos = async (id_user) => {
             analisis_pagado = 1;
         }
     }
+}
+
+// Encriptando texto
+helpers.encriptarTxt = (text) => {
+   let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+   let encrypted = cipher.update(text);
+   encrypted = Buffer.concat([encrypted, cipher.final()]);
+   return encrypted.toString('hex');
+}
+
+// Desencriptando texto
+helpers.desencriptarTxt = (text) => {
+   let encryptedText = Buffer.from(text, 'hex');
+   let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
+   let decrypted = decipher.update(encryptedText);
+   decrypted = Buffer.concat([decrypted, decipher.final()]);
+   return decrypted.toString();
 }
 
 module.exports = helpers;

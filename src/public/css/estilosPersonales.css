@@ -1,0 +1,14 @@
+.form-completado {
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    color: #fff;
+}
+
+.form-incompleto {
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    color: #fff;
+}
+
+.form-pendiente {
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    color: #fff;
+}

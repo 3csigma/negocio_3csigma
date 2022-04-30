@@ -83,7 +83,7 @@ body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     position: absolute;
     top: 30px;
     right: 35px;
-    z-index: 9999;
+    z-index: 10;
 }
 
 .logo-size-Login{
@@ -410,6 +410,10 @@ button.bg-plan:focus {
     .form-body{
         overflow: hidden;
     }
+    /* Modal Login */
+    .modal.show .modal-dialog {
+        max-width: 900px;
+    }
 }
 
 @media (min-width: 1369px) and (max-width: 1920px) {
@@ -419,6 +423,10 @@ button.bg-plan:focus {
     .form-holder {
         margin-left: 670px;
     }
+    /* Modal Login */
+    .modal.show .modal-dialog {
+        max-width: 900px;
+    }
 }
 
 @media (min-width: 1921px) and (max-width: 2560px) {
@@ -427,5 +435,9 @@ button.bg-plan:focus {
     }
     .form-holder {
         margin-left: 925px;
+    }
+    /* Modal Login */
+    .modal.show .modal-dialog {
+        max-width: 900px;
     }
 }

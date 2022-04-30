@@ -5,7 +5,150 @@
   <!-- row -->
   <div class="container-fluid">
     <div class="row">
-      <h2 style="color: #000">Bienvenido a la sección de Diagnóstico de negocio</h2>
+      <div class="col">
+        <div class="card avtivity-card"
+          style="background: transparent !important;border: none !important; box-shadow: none !important">
+          <div class="card-body">
+            <h2 style="color: #000; font-weight: bold;">Queremos conocerte un poco más</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Por favor completa el formulario a continuación
+              para tener información mas detallada sobre tu empresa, estos datos son vitales para realizar un
+              diagnóstico preciso.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card avtivity-card"
+          style="background: transparent !important;border: none !important; box-shadow: none !important">
+          <div class="card-body">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    {{!-- Fin de la 1era fila --}}
+
+    <div class="row">
+      {{!-- FORMULARIOS --}}
+      <div class="col-xl-6 col-xxl-6">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Formularios</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive-md">
+                    <thead>
+                      <tr class="text-center">
+                        <th>FECHA MODIFICACIÓN</th>
+                        <th>ETAPA</th>
+                        <th>NOMBRE</th>
+                        <th>ESTADO</th>
+                        <th>ACCIÓN</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{formDiag.fecha}}</td>
+                        <td>Diagnóstico de negocio</td>
+                        <td>Ficha de cliente</td>
+                        <td><span class="badge light {{formDiag.color}}" style="background: {{formDiag.estilo}}">{{formDiag.texto}}</span></td>
+                        <td>
+                          <div class="d-flex">
+                            <a href="/ficha-cliente/{{formDiag.usuario}}" class="btn btn-primary shadow btn-xs sharp mr-1"
+                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                              <i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
+                                class="fa fa-trash"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+
+                      {{!-- <tr>
+                        <td>xx/xx/xxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td><span class="badge light badge-warning">Incompleto</span></td>
+                        <td>
+                          <div class="d-flex">
+                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
+                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                              <i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
+                                class="fa fa-trash"></i></a>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>xx/xx/xxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td><span class="badge light badge-danger">Pendiente</span></td>
+                        <td>
+                          <div class="d-flex">
+                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
+                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                              <i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
+                                class="fa fa-trash"></i></a>
+                          </div>
+                        </td>
+                      </tr> --}}
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Informes generados --}}
+      <div class="col-xl-6 col-xxl-6">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Informes generados</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive-md">
+                    <thead>
+                      <tr>
+                        <th>FECHA</th>
+                        <th>ETAPA</th>
+                        <th>NOMBRE</th>
+                        <th>ACCIÓN</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr>
+                        {{!-- <td>xx/xx/xxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td>xxxxxxxx</td>
+                        <td>
+                          <div class="d-flex">
+                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
+                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                              <i class="fa fa-pencil"></i></a>
+                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
+                                class="fa fa-trash"></i></a>
+                          </div>
+                        </td> --}}
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
