@@ -122,11 +122,13 @@
             Scripts
 ***********************************-->
 <script>
+  {{#if formDiag.fechaLocal}}
   const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
   console.log("ZONA HORARIA LOCAL")
   console.log(tzLocal);
   const fechaCliente = new Date().toLocaleString("en-US", {timeZone: tzLocal})
   document.getElementById("fActual").innerHTML = fechaCliente
+  {{/if}}
 
   function eliminarFichaCliente(id) {
     Swal.fire({

@@ -419,6 +419,9 @@
 							</div>
 							<!-- /Último Paso-->
 
+							{{!-- FECHA DE EDICIÓN --}}
+							<input type="hidden" id="fecha_modificacion" name="fecha_modificacion">
+
 						</div>
 						<!-- /middle-wizard -->
 						<div id="bottom-wizard">
@@ -449,6 +452,12 @@
 		//Capturando Campo Nombres para el paso Final
 		const nom1 = document.getElementById("name").value;
 		document.getElementById("nameStepFinal").innerHTML = nom1;
+
+		// Asignando fecha de modificación al campo oculto
+		const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+		console.log(tzLocal);
+		const fechaCliente = new Date().toLocaleString("en-US", {timeZone: tzLocal})
+		document.getElementById("fecha_modificacion").value = fechaCliente
 
 		// Formato de número USA (+1)
 		document.addEventListener("DOMContentLoaded", function () {

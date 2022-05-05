@@ -145,7 +145,7 @@ empresaController.diagnostico = async (req, res) => {
     if (fichaCliente.length == 0) {
         formDiag.color = 'badge-danger'
         formDiag.texto = 'Pendiente'
-        // formDiag.fecha = new Date().toLocaleString("en-US")
+        formDiag.fechaLocal = true;
     } else {
         const datos = {}
         datos.redes_sociales = JSON.parse(ficha.redes_sociales)
@@ -223,7 +223,7 @@ empresaController.fichaCliente = async (req, res) => {
 }
 
 empresaController.addFichaCliente = async (req, res) => {
-    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria } = req.body
+    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_modificacion } = req.body
 
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
@@ -233,7 +233,7 @@ empresaController.addFichaCliente = async (req, res) => {
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
     const id_user = req.user.id;
-    const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: tzx})
+    // const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: tzx})
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
     const newFichaCliente = {
