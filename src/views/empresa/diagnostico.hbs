@@ -53,7 +53,7 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{{formDiag.fecha}}</td>
+                        <td id="fActual">{{formDiag.fecha}}</td>
                         <td>Diagnóstico de negocio</td>
                         <td>Ficha de cliente</td>
                         <td><span class="badge light {{formDiag.color}}"
@@ -122,6 +122,12 @@
             Scripts
 ***********************************-->
 <script>
+  const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("ZONA HORARIA LOCAL")
+  console.log(tzLocal);
+  const fechaCliente = new Date().toLocaleString("en-US", {timeZone: tzLocal})
+  document.getElementById("fActual").innerHTML = fechaCliente
+
   function eliminarFichaCliente(id) {
     Swal.fire({
       title: '¿Deseas restablecer el formulario?',
