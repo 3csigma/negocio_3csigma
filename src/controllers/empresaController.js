@@ -4,6 +4,7 @@ const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers')
 const { Country } = require('country-state-city')
+const tzx = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
@@ -141,10 +142,12 @@ empresaController.diagnostico = async (req, res) => {
     formDiag.estado = false;
     const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     const ficha = fichaCliente[0]
+    console.log("ZONA HORARIA PROBANDO >>> ")
+    console.log(tzx);
     if (fichaCliente.length == 0) {
         formDiag.color = 'badge-danger'
         formDiag.texto = 'Pendiente'
-        formDiag.fecha = new Date().toLocaleString("en-US")
+        formDiag.fecha = new Date().toLocaleString("en-US", {timeZone: tzx})
     } else {
         const datos = {}
         datos.redes_sociales = JSON.parse(ficha.redes_sociales)
@@ -232,7 +235,7 @@ empresaController.addFichaCliente = async (req, res) => {
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
     const id_user = req.user.id;
-    const fecha_modificacion = new Date().toLocaleString("en-US")
+    const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: tzx})
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
     const newFichaCliente = {
@@ -264,10 +267,13 @@ empresaController.eliminarFicha = async (req, res) => {
     // })
 
     const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id])
-    let respu = false;
-    if (ficha){
+    let respu = undefined;
+    console.log(ficha.affectedRows)
+    if (ficha.affectedRows > 0) {
         console.log("Eliminando ficha cliente")
         respu = true;
+    } else {
+        respu = false;
     }
     res.send(respu)
 }
