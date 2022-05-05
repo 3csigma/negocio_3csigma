@@ -19,9 +19,12 @@
       <div class="col">
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
+          {{#if formDiag.estado}}
           <div class="card-body">
-            
+            <h2 style="color: #000; font-weight: bold;">Hemos recibido la información de tu empresa</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">De acuerdo al perfil de tu empresa asignaremos al mejor consultor disponible para ti, recibirás una notificación pronto al correo <strong>{{user.email}}</strong> para informarte que tu consultor está listo y podrás agendar tu cita en el botón de la izquierda para continuar el proceso del diagnóstico de negocio.</p>
           </div>
+          {{/if}}
         </div>
       </div>
     </div>
@@ -38,9 +41,9 @@
               </div>
               <div class="card-body">
                 <div class="table-responsive">
-                  <table class="table table-responsive-md">
+                  <table class="table table-responsive-md text-center">
                     <thead>
-                      <tr class="text-center">
+                      <tr>
                         <th>FECHA MODIFICACIÓN</th>
                         <th>ETAPA</th>
                         <th>NOMBRE</th>
@@ -53,49 +56,20 @@
                         <td>{{formDiag.fecha}}</td>
                         <td>Diagnóstico de negocio</td>
                         <td>Ficha de cliente</td>
-                        <td><span class="badge light {{formDiag.color}}" style="background: {{formDiag.estilo}}">{{formDiag.texto}}</span></td>
+                        <td><span class="badge light {{formDiag.color}}"
+                            style="background: {{formDiag.estilo}}">{{formDiag.texto}}</span></td>
                         <td>
                           <div class="d-flex">
-                            <a href="/ficha-cliente/{{formDiag.usuario}}" class="btn btn-primary shadow btn-xs sharp mr-1"
+                            <a href="/ficha-cliente/{{formDiag.usuario}}"
+                              class="btn btn-primary shadow btn-xs sharp mr-1"
                               style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
                               <i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
+                            <a onclick="eliminarFichaCliente({{formDiag.id}})"
+                              class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000; color: white"><i
                                 class="fa fa-trash"></i></a>
                           </div>
                         </td>
                       </tr>
-
-                      {{!-- <tr>
-                        <td>xx/xx/xxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td><span class="badge light badge-warning">Incompleto</span></td>
-                        <td>
-                          <div class="d-flex">
-                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                              <i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
-                                class="fa fa-trash"></i></a>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>xx/xx/xxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td><span class="badge light badge-danger">Pendiente</span></td>
-                        <td>
-                          <div class="d-flex">
-                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                              <i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
-                                class="fa fa-trash"></i></a>
-                          </div>
-                        </td>
-                      </tr> --}}
-
                     </tbody>
                   </table>
                 </div>
@@ -127,18 +101,7 @@
                     <tbody>
 
                       <tr>
-                        {{!-- <td>xx/xx/xxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td>xxxxxxxx</td>
-                        <td>
-                          <div class="d-flex">
-                            <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                              <i class="fa fa-pencil"></i></a>
-                            <a href="#" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000"><i
-                                class="fa fa-trash"></i></a>
-                          </div>
-                        </td> --}}
+
                       </tr>
 
                     </tbody>
@@ -157,4 +120,39 @@
 
 <!--**********************************
             Scripts
-        ***********************************-->
+***********************************-->
+<script>
+  function eliminarFichaCliente(id) {
+    Swal.fire({
+      title: '¿Deseas restablecer el formulario?',
+      text: "Todas tus respuestas se eliminarán.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#50368C',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: '¡Sí, restablecer!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch('/eliminarFicha', {
+          method: 'POST', // or 'PUT'
+          body: JSON.stringify({id}),
+          headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+          .catch(error => console.error('Error:', error))
+          .then(response => {
+            if (response) {
+              location.reload();
+            } else {
+              Swal.fire(
+                'Error!',
+                'El formulario no ha sido llenado.',
+                'error'
+              )
+            }
+          });
+          
+      }
+    })
+  }
+</script>

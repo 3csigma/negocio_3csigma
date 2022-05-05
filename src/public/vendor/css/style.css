@@ -511,7 +511,9 @@ h1, .h1 {
   font-size: 2.25rem; }
 
 h2, .h2 {
-  font-size: 1.875rem; }
+  /*font-size: 1.875rem; */
+  font-size: 28px;
+}
 
 h3, .h3 {
   font-size: 1.5rem; }
@@ -9938,7 +9940,7 @@ svg.pulse-svg {
   display: flex;
   align-items: center; }
   .header-left .dashboard_bar {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: #000; }
     @media only screen and (max-width: 1400px) {

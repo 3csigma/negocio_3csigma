@@ -10,6 +10,10 @@
 		.duet-date__input {
 			height: 44px;
 			border: 1px solid #ddd;
+			color: #000;
+    		font-weight: 500;
+    		font-size: 14px;
+			cursor: no-drop;
 		}
 
 		.close {
@@ -45,6 +49,10 @@
 		.close:after {
 			transform: rotate(-45deg);
 		}
+		.chosen-container-single .chosen-single{
+    		height: 43px !important;
+    		padding-top: 7px;
+    	}
 	</style>
 
 	<div class="container-fluid">
@@ -75,7 +83,7 @@
 						</a>
 						{{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
 					</div>
-					<div class="copy">© 2022 3C Sigma</div>
+					<div class="copy">© {{actualYear}} 3C Sigma</div>
 				</div>
 				<!-- /content-left-wrapper -->
 			</div>
@@ -98,20 +106,20 @@
 								<div class="row add_top_10">
 									<div class="form-group col-md-6 ">
 										<label for="name">Nombres</label>
-										<input type="text" name="nombre" id="name" value="{{ficha.nombre}}"
-											class="form-control required" onchange="getVals(this, 'name_field');">
+										<input type="text" name="nombre" id="name" value="{{user.nombres}}"
+											class="form-control campoLetras required" onchange="getVals(this, 'name_field');">
 									</div>
 									<div class="form-group col-md-6">
 										<label for="apellido">Apellido</label>
-										<input type="text" name="apellido" id="apellido" value="{{ficha.apellido}}"
-											class="form-control required" onchange="getVals(this, 'apellido_field');">
+										<input type="text" name="apellido" id="apellido" value="{{user.apellidos}}"
+											class="form-control campoLetras required" onchange="getVals(this, 'apellido_field');">
 									</div>
 								</div>
 								<!-- /Fila Grupo de campos -->
 								<div class="row add_top_10">
 									<div class="form-group col-md-6 ">
 										<label for="email">Email</label>
-										<input type="email" name="email" id="email" value="{{ficha.email}}"
+										<input type="email" name="email" id="email" value="{{user.email}}"
 											class="form-control required" onchange="getVals(this, 'email_field');">
 									</div>
 									<div class="form-group col-md-6">
@@ -122,37 +130,47 @@
 								</div>
 								<!-- /Fila Grupo de campos -->
 								<div class="row add_top_10">
+									{{!-- CAMPO FECHA DE NACIMIENTO --}}
 									<div class="form-group col-md-6 ">
 										{{!-- <label for="fecha_nacimiento">Fecha de Nacimiento</label> --}}
-										<duet-date-picker first-day-of-week="0" identifier="date"
-											name="fecha_nacimiento" id="fecha_nacimiento" min="1932-05-02"
-											max="2004-05-02"></duet-date-picker>
+										<duet-date-picker placeholder="Fecha de nacimiento" name="fecha_nacimiento" id="fecha_nacimiento" min="1932-01-01" max="{{fechaMaxima}}" value="{{ficha.fecha_nacimiento}}"></duet-date-picker>
 									</div>
 									<div class="form-group col-md-6">
-										<label for="pais">País/Nacionalidad</label>
-										<input type="text" name="pais" id="pais" value="{{ficha.pais}}"
-											class="form-control required">
+										{{!-- <label for="pais">País/Nacionalidad</label> --}}
+										<select name="pais" id="pais" 
+										class="form-control sltBox chosen-container chosen-container-single required">
+											{{#if ficha}}
+												<option value="{{ficha.pais}}">{{ficha.pais}}</option>
+											{{else}}
+												<option value=""></option>
+											{{/if}} 
+											{{#each datos.paises}}
+											<option value="{{name}} ({{isoCode}})">{{name}} ({{isoCode}})</option>
+											{{/each}}
+										</select>
+										{{!-- <input type="text" name="pais" id="pais" value="{{ficha.pais}}"
+											> --}}
 									</div>
 								</div>
-								<!-- /Fila Grupo de campos -->
+								<!-- / GRUPO DE CAMPOS REDES SOCIALES -->
 								<div class="row add_top_10">
 									<div class="form-group col-md-12">
 										<label class="mb-2">Redes Sociales</label>
 										<label for="twitter">Twitter</label>
-										<input type="text" name="twitter" id="twitter"
-											value="{{datos.redes_sociales.twitter}}" class="form-control mb-2"
+										<input type="url" name="twitter" id="twitter"
+											value="{{datos.redes_sociales.twitter}}" class="form-control mb-2 urlFields"
 											onchange="getVals(this, 'twitter_field');">
 										<label for="facebook">Facebook</label>
-										<input type="text" name="facebook" id="facebook"
-											value="{{datos.redes_sociales.facebook}}" class="form-control mb-2"
+										<input type="url" name="facebook" id="facebook"
+											value="{{datos.redes_sociales.facebook}}" class="form-control mb-2 urlFields"
 											onchange="getVals(this, 'twitter_field');">
 										<label for="instagram">Instagram</label>
-										<input type="text" name="instagram" id="instagram"
-											value="{{datos.redes_sociales.instagram}}" class="form-control mb-2"
+										<input type="url" name="instagram" id="instagram"
+											value="{{datos.redes_sociales.instagram}}" class="form-control mb-2 urlFields"
 											onchange="getVals(this, 'instagram_field');">
 										<label for="otra">Otra</label>
-										<input type="text" name="otra" id="otra" value="{{datos.redes_sociales.otra}}"
-											class="form-control mb-2" onchange="getVals(this, 'otra_field');">
+										<input type="url" name="otra" id="otra" value="{{datos.redes_sociales.otra}}"
+											class="form-control mb-2 urlFields" onchange="getVals(this, 'otra_field');">
 									</div>
 								</div>
 
@@ -183,12 +201,12 @@
 										<label>¿Tienes socios?</label>
 										<div class="form-group mb-3 radio_input">
 											<label class="container_radio mr-3">Si
-												<input type="radio" name="socios" value="Si" class="required"
+												<input type="radio" name="socios" value="Si" class="checkSocios required"
 													{{datos.socio1}}>
 												<span class="checkmark"></span>
 											</label>
 											<label class="container_radio">No
-												<input type="radio" name="socios" value="No" class="required"
+												<input type="radio" name="socios" value="No" class="checkSocios required"
 													{{datos.socio2}}>
 												<span class="checkmark"></span>
 											</label>
@@ -205,9 +223,10 @@
 									</div>
 									<div class="form-group col-md-6">
 										<label for="cantidad_socios">Cantidad de socios</label>
-										<input type="number" name="cantidad_socios" id="cantidad_socios"
-											value="{{ficha.cantidad_socios}}" class="form-control "
-											onchange="getVals(this, 'cantidad_socios_field');">
+										<input type="text" name="cantidad_socios" id="cantidad_socios"
+											value="{{ficha.cantidad_socios}}" class="campoNum form-control"
+											style="{{datos.estiloSocio}}" {{datos.socioNo}} 
+											min="{{datos.socioMin}}">
 									</div>
 								</div>
 								<!-- /Fila Grupo de campos -->
@@ -215,9 +234,8 @@
 									<div class="form-group col-md-6 ">
 										<label for="porcentaje_accionario">¿Cuál es tu % accionario?</label>
 										<input type="text" name="porcentaje_accionario" id="porcentaje_accionario"
-											value="{{ficha.porcentaje_accionario}}" class="form-control required"
-											onchange="getVals(this, 'porcentaje_accionario_field');" maxlength="6"
-											pattern="[0-9]+">
+											value="{{ficha.porcentaje_accionario}}" class="form-control campoNum required"
+											onchange="getVals(this, 'porcentaje_accionario_field');" maxlength="6">
 									</div>
 									<div class="form-group col-md-6">
 										<label for="tiempo_fundacion">Tiempo de fundacion</label>
@@ -230,8 +248,8 @@
 								<div class="row add_top_10">
 									<div class="form-group col-md-6 ">
 										<label for="tiempo_experiencia">Años de experiencia</label>
-										<input type="number" name="tiempo_experiencia" id="tiempo_experiencia"
-											value="{{ficha.tiempo_experiencia}}" class="form-control required"
+										<input type="text" name="tiempo_experiencia" id="tiempo_experiencia"
+											value="{{ficha.tiempo_experiencia}}" class="form-control campoNum required"
 											onchange="getVals(this, 'tiempo_experiencia_field');" min="0">
 									</div>
 									<div class="form-group col-md-6">
@@ -245,14 +263,14 @@
 								<div class="row add_top_10">
 									<div class="form-group col-md-6 ">
 										<label for="num_empleados">Número de empleados</label>
-										<input type="number" name="num_empleados" id="num_empleados"
-											value="{{ficha.num_empleados}}" class="form-control required"
+										<input type="text" name="num_empleados" id="num_empleados"
+											value="{{ficha.num_empleados}}" class="form-control campoNum required"
 											onchange="getVals(this, 'num_empleados_field');" min="1">
 									</div>
 									<div class="form-group col-md-6">
 										<label for="page_web">Página Web</label>
-										<input type="text" name="page_web" id="page_web" value="{{ficha.page_web}}"
-											class="form-control " onchange="getVals(this, 'page_web_field');">
+										<input type="url" name="page_web" id="page_web" value="{{ficha.page_web}}"
+											class="form-control" onchange="getVals(this, 'page_web_field');">
 									</div>
 								</div>
 								<!-- /Fila Grupo de campos -->
@@ -374,8 +392,7 @@
 
 								<div class="row add_top_10">
 									<div class="form-group col-md-12">
-										<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta
-											consultoría de negocio?</label>
+										<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta consultoría de negocio?</label>
 										<textarea name="motivo_consultoria" id="motivo_consultoria"
 											class="form-control required"
 											style="height: 115px; min-height: 110px; padding-top: 1.3em;">{{ficha.motivo_consultoria}}</textarea>
@@ -392,27 +409,11 @@
 											{{#if ficha.nombre}}
 											{{ficha.nombre}}!
 											{{else}}
-											<span id="name_field"></span>!
+											<span id="nameStepFinal"></span>!
 											{{/if}}
 										</h3>
 										<p>Al guardar los datos será redirigido al panel de diagnóstico de negocio</p>
-										{{!-- <p>We will contat you shorly at the following email address <strong
-												id="email_field"></strong></p> --}}
 									</div>
-
-									{{!-- Abrir modal terms --}}
-									{{!-- <div class="text-center">
-										<div class="form-group terms">
-											<label class="container_check">Por favor acepta nuestros <a href="#"
-													data-toggle="modal" data-target="#terms-txt">Terminos y
-													condiciones</a>
-												antes de Enviar
-												<input type="checkbox" name="terms" value="Si" class="required">
-												<span class="checkmark"></span>
-											</label>
-										</div>
-									</div> --}}
-
 
 								</div>
 							</div>
@@ -438,18 +439,46 @@
 	<!-- /container-fluid -->
 
 	<a href="/diagnostico-de-negocio" class="close">
-
+	
 
 	{{!-- SCRIPT MASCARAS PARA INPUT --}}
 	<script src="https://unpkg.com/imask"></script>
 
 	<script>
+
+		//Capturando Campo Nombres para el paso Final
+		const nom1 = document.getElementById("name").value;
+		document.getElementById("nameStepFinal").innerHTML = nom1;
+
 		// Formato de número USA (+1)
 		document.addEventListener("DOMContentLoaded", function () {
 			IMask(document.getElementById('tel_Ficha'), {
 				mask: '+{1} (000) 000-0000'
 			});
 		});
+
+		// Formato https para URLs
+		const urlTW = document.getElementById('twitter')
+		const urlFB = document.getElementById('facebook')
+		const urlIG = document.getElementById('instagram')
+		const urlOT = document.getElementById('otra')
+		const urlPage = document.getElementById('page_web')
+
+		IMask(urlTW, {
+			mask: 'https://twitter.com/****[***************************************************]',
+		})
+		IMask(urlFB, {
+			mask: 'https://fb.com/****[***************************************************]',
+		})
+		IMask(urlIG, {
+			mask: '{https://**************[***************************************************]',
+		})
+		IMask(urlOT, {
+			mask: 'https://****[***************************************************]',
+		})
+		IMask(urlPage, {
+			mask: 'https://****[***************************************************]',
+		})
 
 		// Separación para cifras en millares
 		IMask(document.getElementById('promedio_ingreso_anual'), {
@@ -468,7 +497,7 @@
 			let int = e.target.value.slice(0, e.target.value.length - 1);
 
 			if (int.includes('%')) {
-				e.target.value = '%';
+				e.target.value = 0 + '';
 			} else if (int == 100 && !int.includes('.')) {
 				e.target.value = int + '%';
 			} else if (int.length >= 3 && int.length <= 4 && !int.includes('.')) {
@@ -479,11 +508,15 @@
 				let fraction = int.slice(3, 5);
 				e.target.value = whole + '.' + fraction + '%';
 			} else {
+				/*
+				if (int.length == 0) {
+					e.target.value = int;
+				} else {
+				}*/
 				e.target.value = int + '%';
 				e.target.setSelectionRange(e.target.value.length - 1, e.target.value.length - 1);
 			}
 		});
-
 
 		// CAMPO DATE PICKER (DUET LIBRARY)
 		const picker = document.querySelector("duet-date-picker")

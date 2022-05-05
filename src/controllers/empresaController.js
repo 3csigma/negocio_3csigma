@@ -3,6 +3,7 @@ const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers')
+const { Country } = require('country-state-city')
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
@@ -135,27 +136,36 @@ empresaController.diagnostico = async (req, res) => {
     const id_user = req.user.id;
     const tipoUser = req.user.rol;
     const formDiag = {}
-    formDiag.usuario = helpers.encriptarTxt(''+id_user)
-    formDiag.fecha = new Date().toLocaleDateString("en-US")
-    const pagoDiag = req.pagoDiag;
-
-
-    const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
-    if (ficha.length == 0) {
+    formDiag.id = id_user;
+    formDiag.usuario = helpers.encriptarTxt('' + id_user)
+    formDiag.estado = false;
+    const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
+    const ficha = fichaCliente[0]
+    if (fichaCliente.length == 0) {
         formDiag.color = 'badge-danger'
         formDiag.texto = 'Pendiente'
-    } else{
-        if (ficha[0].page_web == ''){
+        formDiag.fecha = new Date().toLocaleString("en-US")
+    } else {
+        const datos = {}
+        datos.redes_sociales = JSON.parse(ficha.redes_sociales)
+        datos.objetivos = JSON.parse(ficha.objetivos)
+        datos.fortalezas = JSON.parse(ficha.fortalezas)
+        datos.problemas = JSON.parse(ficha.problemas)
+        formDiag.fecha = ficha.fecha_modificacion
+
+        if (ficha.page_web == '' || datos.redes_sociales.twitter == '' || datos.redes_sociales.facebook == '' || datos.redes_sociales.instagram == '') {
             formDiag.color = 'badge-warning'
             formDiag.texto = 'Incompleto'
+            formDiag.estado = true;
         } else {
             formDiag.color = 'badge-success'
             formDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
             formDiag.texto = 'Completado'
+            formDiag.estado = true;
         }
     }
 
-    res.render('empresa/diagnostico', { dashx: true, pagoDiag: true, tipoUser, itemActivo: 3, acuerdoFirmado, formDiag })
+    res.render('empresa/diagnostico', { dashx: true, pagoDiag: true, tipoUser, itemActivo: 3, acuerdoFirmado, formDiag, actualYear: req.actualYear })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
@@ -172,10 +182,8 @@ empresaController.validarFichaCliente = async (req, res) => {
 
 empresaController.fichaCliente = async (req, res) => {
     req.session.fichaCliente = false
-    const id_user = req.user.id
+    const id_user = req.user.id, datos = {};
     const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
-    // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
-    const datos = {}
     const ficha = fichaCliente[0]
     if (fichaCliente.length > 0) {
         ficha.es_propietario === "Si" ? datos.prop1 = 'checked' : datos.prop2 = 'checked';
@@ -192,11 +200,25 @@ empresaController.fichaCliente = async (req, res) => {
 
         datos.descripcion = ficha.descripcion;
         datos.motivo = ficha.motivo_consultoria;
-        
-    }
-    console.log("DESCRIPCION >>", datos.descripcion)
 
-    res.render('empresa/fichaCliente', {ficha, datos, wizarx: true, dashx: false})
+        datos.socioMin = 1;
+
+        if (datos.socio2) {
+            datos.estiloSocio = 'background:#f2f2f2;'
+            datos.socioNo = 'disabled'
+            datos.socioMin = 0;
+        }
+
+    }
+    // Obteniendo todos los países
+    datos.paises = Country.getAllCountries();
+    // Capturando Fecha Máxima - 18 años atrás
+    let fm = new Date()
+    const max = fm.getFullYear() - 18; // Restando los años
+    fm.setFullYear(max) // Asignando nuevo año
+    const fechaMaxima = fm.toLocaleDateString("fr-CA"); // Colocando el formato yyyy-mm-dd
+
+    res.render('empresa/fichaCliente', { ficha, datos, fechaMaxima, wizarx: true, dashx: false })
 }
 
 empresaController.addFichaCliente = async (req, res) => {
@@ -210,11 +232,13 @@ empresaController.addFichaCliente = async (req, res) => {
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
     const id_user = req.user.id;
+    const fecha_modificacion = new Date().toLocaleString("en-US")
+    cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
     const newFichaCliente = {
-        nombre, apellido, email, telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user
+        nombre, apellido, email, telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
-    
+
     // Consultar si ya existen datos en la Base de datos
     const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     if (ficha.length > 0) {
@@ -226,17 +250,26 @@ empresaController.addFichaCliente = async (req, res) => {
     res.redirect('/diagnostico-de-negocio')
 }
 
-empresaController.editar = async (req, res) => {
-    const { id } = req.params
-    const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id = ?', [id])
-    res.render('empresa/fichaCliente', { ficha: ficha[0] })
-}
+empresaController.eliminarFicha = async (req, res) => {
+    const { id } = req.body;
+    // await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id], (err, result) => {
+    //     if (err) throw err;
+    //     if (result.affectedRows > 1){
+    //         console.log("Eliminando ficha cliente", result)
+    //         res.send(true)
+    //     }else{
+    //         console.log("No hay datos")
+    //         res.send(false)
+    //     }
+    // })
 
-empresaController.actualizado = async (req, res) => {
-    const { id } = req.params
-    const updateFicha = {} // Los datos a modificar
-    await pool.query('UPDATE ficha_cliente SET ? WHERE id = ?', [updateFicha, id])
-    res.render('empresa/fichaCliente', { ficha: ficha[0] })
+    const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id])
+    let respu = false;
+    if (ficha){
+        console.log("Eliminando ficha cliente")
+        respu = true;
+    }
+    res.send(respu)
 }
 
 // Función para validar el Pago del Análisis de Negocio
