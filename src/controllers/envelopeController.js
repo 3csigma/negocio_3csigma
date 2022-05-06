@@ -73,7 +73,7 @@ signingViaEmail.createController = (req, res) => {
                     // console.log("Email Signer => ", email)
                     // console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
                     // console.log("** NO HA PAGADO => ", noPago)
-                    res.render('empresa/acuerdoConfidencial', { dashx: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado })
+                    res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado })
                 }
             }) 
         }

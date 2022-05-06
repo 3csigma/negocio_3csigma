@@ -10,7 +10,7 @@ userController.cerrarSesion = (req, res) => {
 
 userController.getRegistro = (req, res) => {
     req.userEmail = false;
-    res.render('auth/registro', { wizarx: false, dashx: false, csrfToken: req.csrfToken()});
+    res.render('auth/registro', { wizarx: false, user_dash: false, csrfToken: req.csrfToken()});
 }
 
 userController.postRegistro = (req, res, next) => {
@@ -22,7 +22,7 @@ userController.postRegistro = (req, res, next) => {
 }
 
 userController.getLogin = (req, res) => {
-    res.render('auth/login', { wizarx: false, dashx: false, login: false, confirmarLogin: false, csrfToken: req.csrfToken()})
+    res.render('auth/login', { wizarx: false, user_dash: false, login: false, confirmarLogin: false, csrfToken: req.csrfToken()})
 }
 
 userController.postLogin = (req, res, next) => {
@@ -62,7 +62,7 @@ userController.confirmarRegistro = async (req, res) => {
        await pool.query('UPDATE users SET ? WHERE codigo = ?', [updateEstado, codigo])
 
        // Redirigir al Login con un mensaje de alerta de que ya confirmó su cuenta
-       res.render('auth/login', { wizarx: false, dashx: false, confirmarLogin: true, csrfToken: req.csrfToken() })
+       res.render('auth/login', { wizarx: false, user_dash: false, confirmarLogin: true, csrfToken: req.csrfToken() })
         
     } catch (error) {
         console.log(error);

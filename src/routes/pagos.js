@@ -62,7 +62,7 @@ router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
   res.render('dashboard', {
     alertSuccess: true, // Pago Exitoso
     pagoDiag,
-    dashx: true, wizarx: false, login: false, diagnosticoPagado, analisisPagado, itemActivo: 1
+    user_dash: true, wizarx: false, login: false, diagnosticoPagado, analisisPagado, itemActivo: 1
   })
 })
 
@@ -73,7 +73,7 @@ router.get('/pago-cancelado', estaLogueado, validarURLPagar, (req, res) => {
   req.session.intentPay = undefined;
   res.render('dashboard', {
     alertCancel: true, // Pago Cancelado
-    dashx: true, wizarx: false, login: false, pagoPendiente : true, diagnosticoPagado, analisisPagado, itemActivo: 1
+    user_dash: true, wizarx: false, login: false, pagoPendiente : true, diagnosticoPagado, analisisPagado, itemActivo: 1
   })
 })
 

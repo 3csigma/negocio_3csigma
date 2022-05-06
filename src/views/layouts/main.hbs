@@ -7,229 +7,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocio - 3CSigma</title>
 
-    {{!-- FAVICON --}}
-    <link rel="icon" type="image/x-icon" href="https://3csigma.com/app_public_files/img/logo_small_3csigma.png">
-    <!--  FONTS -->
-    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/oblivian-text">
-    <!--  BOOTSTRAP 5 -->
-    <link rel="stylesheet" href="https://3csigma.com/app_public_files/css/bootstrap.min.css">
-    <!--  FONT AWESOME 5.5 -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-
-    <!-- MATERIAL DESIGN ICONIC FONT -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-    
-    {{!-- FONT AWESOME ICONS --}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"
-        integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous">
-    
-    {{!-- ESTILOS PARA SWEET ALERT --}}
-    <link rel="stylesheet" href="https://3csigma.com/app_public_files/css/sweetalert2.min.css">
-    
-    <!-- CSS WIZARD LOGIN -->
-    <link href="https://3csigma.com/app_public_files/css/iofrm-style.css" rel="stylesheet">
-    <link href="https://3csigma.com/app_public_files/css/iofrm-theme3.css" rel="stylesheet">
-    
-    <!-- YOUR CUSTOM CSS -->
-    <link href="https://3csigma.com/app_public_files/css/custom.css" rel="stylesheet">
-
-    <!-- CSS DE CALENDARIO DE LAS FECHAS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/themes/default.css" />
-
-    {{!-- SELECTOR CON BUSCADOR --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-    {{!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /> --}}
+    {{!-- HEADER GENERAL --}}
+    {{> header }}
 
     <!-- STYLE GENERAL CSS -->
     {{#if wizarx}}
     <link href="./css/styles.css" rel="stylesheet">
     {{/if}}
 
-    {{#if dashx}}
-    <!-- DASHBOARD -->
-    <link href="./vendor/css/chartist.min.css" rel="stylesheet">
-    <link href="./vendor/css/bootstrap-select.min.css" rel="stylesheet">
-    <link href="./vendor/css/style.css" rel="stylesheet">
+    <!-- DASHBOARD USUARIO EMPRESA -->
+    {{#if user_dash}}
+        {{> user/headerUser }}
+    {{/if}}
+    {{!-- DASHBOARD ADMINISTRADOR --}}
+    {{#if adminDash}}
+        {{> user/headerUser }}
     {{/if}}
 
 </head>
 
 <body>
-
-    {{> navigation }}
-
+    {{#if user_dash}}
+        {{> user/navigation }}
+    {{/if}}
+    {{#if adminDash}}
+        {{> admin/navigationAdmin }}
+    {{/if}}
+    
     {{{ body }}}
 
-    <!-- COMMON SCRIPTS -->
-    <script src="./js/jquery.js"></script>
-    <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/js/popper.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/js/loginMain.js"></script>
-    <script src="https://3csigma.com/app_public_files/js/bootstrap.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/js/bootstrap.bundle.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/vendor/js/global.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/vendor/js/bootstrap-select.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/vendor/js/custom.min.js"></script>
-    <script src="https://3csigma.com/app_public_files/vendor/js/deznav-init.js"></script>
-
-    {{!-- SWEET ALERT 2 --}}
-    <script src="https://3csigma.com/app_public_files/js/sweetalert2.min.js"></script>
-
-    {{#if wizarx}}
-    <!-- Wizard Formularios Scripts-->
-    <script src="./js/common_scripts.min.js"></script>
-    <script src="./js/velocity.min.js"></script>
-    <script src="./js/common_functions.js"></script>
-    <script src="./js/file-validator.js"></script>
-    <script src="./js/func_1.js"></script>
+    {{!-- FOOTER PARTIALS & MORE --}}
+    {{> footer }}
+    {{!-- FOOTER USUARIO EMPRESA --}}
+    {{#if user_dash}}
+        {{> user/footerUser }}
+    {{/if}}
+    {{!-- FOOTER ADMINISTRADOR --}}
+    {{#if adminDash}}
+        {{> admin/footerAdmin }}
     {{/if}}
 
-    <!-- ****************** Required JS - DASHBOARD ****************** -->
-    {{#if dashx}}
-    <script src="./vendor/js/Chart.bundle.min.js"></script>
-    <script src="./vendor/js/owl.carousel.js"></script>
-    <script src="./vendor/js/personalScripts.js"></script>
-    <!-- Chart piety plugin files -->
-    <script src="./vendor/js/jquery.peity.min.js"></script>
-    <!-- Apex Chart -->
-    <script src="./vendor/js/apexchart.js"></script>
-    <!-- Dashboard 1 -->
-    <script src="./vendor/js/dashboard-1.js"></script>
-
-    {{!-- Gráfica de Indicadores - Dashboard Principal --}}
-    <script>
-       
-        (function ($) {
-            var dzSparkLine = function () {
-                let draw = Chart.controllers.line.__super__.draw; //draw shadow
-                var screenWidth = $(window).width();
-
-                var barChart1 = function () {
-                    if (jQuery('#barChart_1').length > 0) {
-                        const barChart_1 = document.getElementById("barChart_1").getContext('2d');
-
-                        barChart_1.height = 100;
-                        new Chart(barChart_1, {
-                            type: 'bar',
-                            data: {
-                                defaultFontFamily: 'Oblivian',
-                                labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
-                                datasets: [{
-                                    label: "Primer análisis",
-                                    backgroundColor: "#50368C",
-                                    borderColor: "#50368C",
-                                    data: [
-                                        1, 5, 2, 4, 1, 7, 4, 3, 1, 2
-                                    ],
-                                    fill: false,
-                                }, {
-                                    label: "Último análisis",
-                                    fill: false,
-                                    backgroundColor: "#FED061",
-                                    borderColor: "#FED061",
-                                    data: [
-                                        3, 7, 5, 10, 2, 3, 3, 5, 4, 6
-                                    ],
-                                }]
-                            },
-                            options: {
-                                legend: false,
-                                scales: {
-                                    yAxes: [{
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            beginAtZero: true,
-                                            min: 0, // minimum value
-                                            max: 10 // maximum value
-                                        }
-                                    }],
-                                    xAxes: [{
-                                        gridLines: {
-                                            display: false
-                                        },
-                                        ticks: {
-                                            fontSize: 10
-                                        },
-                                        barPercentage: 0.5,
-                                        categoryPercentage: 1,
-                                        barThickness: 14,
-                                        maxBarThickness: 10,
-                                    }]
-                                }
-                            }
-                        });
-                    }
-                }
-
-                return {
-                    init: function () {
-                    },
-
-                    load: function () {
-                        barChart1();
-                    },
-
-                    resize: function () {
-                        barChart1();
-                    }
-                }
-
-            }();
-
-            jQuery(document).ready(function () {
-            });
-
-            jQuery(window).on('load', function () {
-                dzSparkLine.load();
-                {{#if alertSuccess}}
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Pago exitoso!',
-                    html: '<p>Tu pago ha sido recibido, ahora puedes continuar con la firma del acuerdo de confidencialidad.</p>'
-                        + '<a href="/acuerdo-de-confidencialidad" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
-                        + 'border-radius: 22px;'
-                        + 'color: #fff;'
-                        + 'width: 160px;'
-                        + 'height: 50px;'
-                        + 'text-align: center;'
-                        + 'padding: 14px;'
-                        + 'font-size: 17px;'
-                        + 'font-weight: 300;" id="checkout-button">Firmar acuerdo</a>',
-                    showCancelButton: false,
-                    showConfirmButton: false,
-                })
-                {{/if}}
-                {{#if alertCancel}}
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Pago Cancelado',
-                        text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
-                    })
-                {{/if}}
-            });
-
-            jQuery(window).on('resize', function () {
-                setTimeout(function () { dzSparkLine.resize(); }, 1000);
-            });
-
-        })(jQuery);
-        
-    </script>
-
-    {{!-- Scripts Personalizados --}}
-    <script src="./js/custom.js"></script>
-    {{!-- Scripts Stripe --}}
-    {{#if stripe}}
-    <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-    <script src="https://js.stripe.com/v3/"></script>
-    {{/if}}
-    {{/if}}
-
-    {{!-- Vainas para el Login --}}
+    {{!-- SCRIPTS PARA EL LOGIN --}}
     {{#if confirmarLogin}}
     <script>
         $(document).ready(function () {
@@ -251,72 +69,6 @@
     </script>
     {{/if}}
 
-    {{!-- SELECTOR CON BUSCADOR --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-	{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script> --}}
-
-    <script>
-        (function () {
-            $(document).ready(function () {
-
-
-                // VAINAS PARA SELECTOR CON BUSCADOR
-                function selectBuscarPais(id){
-                    id.chosen({
-                        no_results_text: "Sin resultados para",
-                        allow_single_deselect: true,
-                        placeholder_text_single: "Selecciona tu País/Nacionalidad",
-                        width: '100%',
-                    });
-                }
-                const claseCajaPais =  $('.sltBox')
-                selectBuscarPais(claseCajaPais);
-
-				// CAMPOS SOLO LETRAS
-                $("input.campoLetras").bind('keypress', function(event) {
-                    let regex = new RegExp("^[a-zA-Z ]+$");
-                    let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                    if (!regex.test(key)) {
-                        event.preventDefault();
-                        return false;
-                    }
-                });
-
-				// CAMPOS SOLO NÚMEROS
-				$("input.campoNum").bind('keypress', function(event) {
-                    let regex = new RegExp("^[0-9 .]+$"); 
-					let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-					if (!regex.test(key)) {
-						event.preventDefault();
-						return false;
-					}
-				});
-
-                // CheckButton Tiene Socios - ficha Cliente
-                $("input.checkSocios").change(function(){
-                    //const numS = $("#cantidad_socios")
-                    const numS = document.getElementById("cantidad_socios")
-                    if($(this).val()=="Si"){
-				        numS.removeAttribute("disabled");
-				        numS.style.background = "white";
-				        numS.value = 1;
-                    }else{
-                        numS.setAttribute("disabled", true);
-                        numS.style.background = "#f2f2f2";
-                        numS.value = 0;
-                        numS.removeAttribute("min");
-                    }
-                });
-
-
-            });
-
-        })();
-    </script>
-
-    {{!-- SCRIPTS PARA CALENDARIO - DUET --}}
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.esm.js"></script>
-    <script nomodule src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.js"></script>
 </body>
 
 </html>

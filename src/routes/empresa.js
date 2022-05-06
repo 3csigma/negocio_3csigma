@@ -3,7 +3,10 @@ const router = express.Router()
 const { estaLogueado, validarIDFicha } = require('../lib/auth')
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
+const paymentController = require('../controllers/paymentController');
 
+/** Proceso de pago - API Stripe */
+router.post("/create-payment-intent", estaLogueado, paymentController.createPayment)
 // Diagnóstico de Negocio
 router.get('/diagnostico-de-negocio', estaLogueado, empresaController.diagnostico)
 // Ficha de Cliente
