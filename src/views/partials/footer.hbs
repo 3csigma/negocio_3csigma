@@ -1,4 +1,4 @@
-<!-- COMMON SCRIPTS -->
+{{!-- COMMON SCRIPTS --}}
 <script src="./js/jquery.js"></script>
 <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
 <script src="https://3csigma.com/app_public_files/js/popper.min.js"></script>
@@ -17,3 +17,72 @@
 {{!-- SCRIPTS PARA CALENDARIO - DUET --}}
 <script type="module" src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.esm.js"></script>
 <script nomodule src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.js"></script>
+
+{{#if wizarx}}
+{{!-- Wizard Formularios Scripts --}}
+<script src="./js/common_scripts.min.js"></script>
+<script src="./js/velocity.min.js"></script>
+<script src="./js/common_functions.js"></script>
+<script src="./js/file-validator.js"></script>
+<script src="./js/func_1.js"></script>
+{{/if}}
+
+
+{{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
+<script>
+    (function () {
+        $(document).ready(function () {
+
+            // VAINAS PARA SELECTOR CON BUSCADOR
+            function selectBuscarPais(id) {
+                id.chosen({
+                    no_results_text: "Sin resultados para",
+                    allow_single_deselect: true,
+                    placeholder_text_single: "Selecciona tu País/Nacionalidad",
+                    width: '100%',
+                });
+            }
+            const claseCajaPais = $('.sltBox')
+            selectBuscarPais(claseCajaPais);
+
+            // CAMPOS SOLO LETRAS
+            $("input.campoLetras").bind('keypress', function (event) {
+                let regex = new RegExp("^[a-zA-Z ]+$");
+                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            // CAMPOS SOLO NÚMEROS
+            $("input.campoNum").bind('keypress', function (event) {
+                let regex = new RegExp("^[0-9 .]+$");
+                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            // CheckButton Tiene Socios - ficha Cliente
+            $("input.checkSocios").change(function () {
+                //const numS = $("#cantidad_socios")
+                const numS = document.getElementById("cantidad_socios")
+                if ($(this).val() == "Si") {
+                    numS.removeAttribute("disabled");
+                    numS.style.background = "white";
+                    numS.value = 1;
+                } else {
+                    numS.setAttribute("disabled", true);
+                    numS.style.background = "#f2f2f2";
+                    numS.value = 0;
+                    numS.removeAttribute("min");
+                }
+            });
+
+
+        });
+
+    })();
+</script>

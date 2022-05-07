@@ -11,7 +11,6 @@ dashboardController.index = async (req, res) => {
 
     if (tipoUser == 'Admin') {
         res.render('pages/panelAdmin', { adminDash: true, itemActivo: 1 });
-        // res.send("HOLA DESDE ADMINISTRADOR")
     } else {
         req.intentPay = undefined; // Intento de pago
         const id_user = req.user.id;
@@ -61,6 +60,10 @@ dashboardController.index = async (req, res) => {
 
     }
 
+}
 
 
+/** REGISTRO DE CONSULTORES */
+dashboardController.registroConsultores = (req, res) => {
+    res.render('pages/consultor/registroConsultor', { wizarx: true })
 }

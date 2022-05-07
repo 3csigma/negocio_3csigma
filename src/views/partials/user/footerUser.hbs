@@ -1,14 +1,4 @@
-{{#if wizarx}}
-<!-- Wizard Formularios Scripts-->
-<script src="./js/common_scripts.min.js"></script>
-<script src="./js/velocity.min.js"></script>
-<script src="./js/common_functions.js"></script>
-<script src="./js/file-validator.js"></script>
-<script src="./js/func_1.js"></script>
-{{/if}}
-
 <!-- ****************** Required JS - DASHBOARD ****************** -->
-{{#if user_dash}}
 <script src="./vendor/js/Chart.bundle.min.js"></script>
 <script src="./vendor/js/owl.carousel.js"></script>
 <script src="./vendor/js/personalScripts.js"></script>
@@ -16,7 +6,7 @@
 <script src="./vendor/js/jquery.peity.min.js"></script>
 <!-- Apex Chart -->
 <script src="./vendor/js/apexchart.js"></script>
-<!-- Dashboard 1 -->
+<!-- Dashboard EMPRESA -->
 <script src="./vendor/js/dashboard-1.js"></script>
 
 {{!-- Gráfica de Indicadores - Dashboard Principal --}}
@@ -150,64 +140,3 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
 <script src="https://js.stripe.com/v3/"></script>
 {{/if}}
-{{/if}}
-
-
-{{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
-<script>
-    (function () {
-        $(document).ready(function () {
-
-            // VAINAS PARA SELECTOR CON BUSCADOR
-            function selectBuscarPais(id) {
-                id.chosen({
-                    no_results_text: "Sin resultados para",
-                    allow_single_deselect: true,
-                    placeholder_text_single: "Selecciona tu País/Nacionalidad",
-                    width: '100%',
-                });
-            }
-            const claseCajaPais = $('.sltBox')
-            selectBuscarPais(claseCajaPais);
-
-            // CAMPOS SOLO LETRAS
-            $("input.campoLetras").bind('keypress', function (event) {
-                let regex = new RegExp("^[a-zA-Z ]+$");
-                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                if (!regex.test(key)) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-
-            // CAMPOS SOLO NÚMEROS
-            $("input.campoNum").bind('keypress', function (event) {
-                let regex = new RegExp("^[0-9 .]+$");
-                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                if (!regex.test(key)) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-
-            // CheckButton Tiene Socios - ficha Cliente
-            $("input.checkSocios").change(function () {
-                //const numS = $("#cantidad_socios")
-                const numS = document.getElementById("cantidad_socios")
-                if ($(this).val() == "Si") {
-                    numS.removeAttribute("disabled");
-                    numS.style.background = "white";
-                    numS.value = 1;
-                } else {
-                    numS.setAttribute("disabled", true);
-                    numS.style.background = "#f2f2f2";
-                    numS.value = 0;
-                    numS.removeAttribute("min");
-                }
-            });
-
-
-        });
-
-    })();
-</script>

@@ -2,18 +2,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Negocio - 3CSigma</title>
-
     {{!-- HEADER GENERAL --}}
     {{> header }}
-
-    <!-- STYLE GENERAL CSS -->
-    {{#if wizarx}}
-    <link href="./css/styles.css" rel="stylesheet">
-    {{/if}}
 
     <!-- DASHBOARD USUARIO EMPRESA -->
     {{#if user_dash}}
@@ -36,7 +26,15 @@
     
     {{{ body }}}
 
-    {{!-- FOOTER PARTIALS & MORE --}}
+    <!-- ./FIN DEL MAIN WRAPPER -->
+    {{#if user_dash}}
+    </div>
+    {{/if}}
+    {{#if adminDash}}
+    </div>
+    {{/if}}
+
+    {{!-- FOOTER PARTIALS PRINCIPAL --}}
     {{> footer }}
     {{!-- FOOTER USUARIO EMPRESA --}}
     {{#if user_dash}}
