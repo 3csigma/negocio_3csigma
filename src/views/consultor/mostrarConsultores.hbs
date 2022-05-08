@@ -1,0 +1,69 @@
+<style>
+    div#consultoresTabla_filter,
+    div#consultoresTabla_paginate {
+        float: right;
+        margin-top: -55px;
+    }
+</style>
+
+<!--**********************************
+          Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Datos de consultores</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="consultoresTabla" class="table table-striped display min-w850 text-center"
+                                style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nombre</th>
+                                        <th>Fecha de registro</th>
+                                        <th>Email</th>
+                                        <th>Teléfono</th>
+                                        <th>Empresas asignadas</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each consultores}}
+                                    <tr>
+                                        <td><img class="rounded-circle" width="35" src="./img/profile/small/pic1.jpg"
+                                                alt=""></td>
+                                        <td>{{nombres_consultor}} {{apellidos_consultor}}</td>
+                                        <td>{{fecha_creacion}}</td>
+                                        <td>{{email_consultor}}</td>
+                                        <td>{{tel_consultor}}</td>
+                                        <td>0</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                                                    <i class="fa fa-pencil"></i></a>
+                                                <a href="#" class="btn btn-danger shadow btn-xs sharp"
+                                                    style="background: #DC0000; color: white"><i
+                                                        class="fa fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -111,7 +111,7 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, companyUser, itemActivo: 3, acuerdoFirmado, formDiag, actualYear: req.actualYear })
+    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, companyUser, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */

@@ -15,15 +15,22 @@ passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de 
 })
 
 passport.deserializeUser(async (id, done) => { // Deserialización
-    const filas = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-    done(null, filas[0])
+    const empresa = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
+    const consultor = await pool.query('SELECT * FROM consultores WHERE id = ?', [id]);
+    if (empresa.length > 0){
+        done(null, empresa[0])
+    } else {
+        done(null, consultor[0])
+    }
 })
 
+
+// Registro de Usuarios (Empresa)
 passport.use('local.registro', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'clave',
     passReqToCallback: true
-}, async (req, email, clave, done) => { //Callback luego de la configuración
+}, async (req, email, clave, done) => {
     
     const { nombres, apellidos, nombre_empresa } = req.body
     
@@ -65,17 +72,59 @@ passport.use('local.registro', new LocalStrategy({
     })
 }))
 
+// Registro de Consultores
+passport.use('local.registroConsultores', new LocalStrategy({
+    usernameField: 'email_consultor',
+    passwordField: 'clave_consultor',
+    passReqToCallback: true
+}, async (req, email_consultor, clave_consultor, done) => {
+    
+    const { nombres_consultor, apellidos_consultor, tel_consultor, direccion_consultor, experiencia_consultor, zh_consultor } = req.body
+    
+    pool.query('SELECT * FROM consultores WHERE email_consultor = ?', [email_consultor], async (err, result) => {
+
+        if (err)
+            throw err;
+
+        if (result.length > 0) {
+            return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
+        } else {
+
+            // Generar código MD5
+            let codigo = crypto.createHash('md5').update(email_consultor).digest("hex");
+            clave_consultor = codigo.slice(5, 13);
+
+            // Fecha de Creación
+            let fecha_creacion = new Date().toLocaleDateString("en-US", {timeZone: zh_consultor})
+            const arrayFecha = fecha_creacion.split("/")
+            fecha_creacion = arrayFecha[0] + "-" + arrayFecha[2]
+
+            // Objeto de Usuario
+            const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_consultor, fecha_creacion, codigo };
+
+            // Encriptando la clave
+            nuevoConsultor.clave_consultor = await helpers.encryptPass(clave_consultor);
+
+            // Guardar en la base de datos
+            const resultado = await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
+            nuevoConsultor.id = resultado.insertId;
+            return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
+        }
+    })
+}))
+
 passport.use('local.login', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'clave',
     passReqToCallback: true
-}, async (req, email, clave, done) => { //Callback para indicar más procesos
+}, async (req, email, clave, done) => {
     
-    const filas = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+    const usuarios = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+    const consultores = await pool.query('SELECT * FROM consultores WHERE email_consultor = ?', [email])
 
-    if (filas.length > 0) {
+    if (usuarios.length > 0) {
 
-        const user = filas[0]
+        const user = usuarios[0]
         const claveValida = await helpers.matchPass(clave, user.clave)
 
         if (claveValida){
@@ -89,6 +138,22 @@ passport.use('local.login', new LocalStrategy({
             req.userEmail = false;
             return done(null, false, req.flash('message', 'Contraseña inválida'))
         }
+
+    } else if (consultores.length > 0) {
+        const consultor = consultores[0]
+        const claveValida = await helpers.matchPass(clave, consultor.clave_consultor)
+        if (claveValida){
+            req.userEmail = true;
+            if (consultor.estado == 1) {
+                return done(null, consultor, req.flash('success', 'Bienvenido a la plataforma'))
+            } else {
+                return done(null, false, req.flash('message', 'Tu cuenta aún no ha sido activada.'))
+            }
+        } else {
+            req.userEmail = false;
+            return done(null, false, req.flash('message', 'Contraseña inválida'))
+        }
+        
     } else {
         req.userEmail = false;
         return done(null, false, req.flash('message', 'No existe este usuario'))

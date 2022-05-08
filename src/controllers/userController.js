@@ -1,6 +1,6 @@
 const pool = require('../database')
-const userController = exports;
 const passport = require('passport')
+const userController = exports;
 
 // Cerrar Sesión
 userController.cerrarSesion = (req, res) => {

@@ -1,5 +1,6 @@
-const pool = require('../database')
 const dashboardController = exports;
+const pool = require('../database')
+const passport = require('passport')
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
@@ -63,7 +64,20 @@ dashboardController.index = async (req, res) => {
 }
 
 
-/** REGISTRO DE CONSULTORES */
+/** CONSULTORES */
 dashboardController.registroConsultores = (req, res) => {
-    res.render('pages/consultor/registroConsultor', { wizarx: true })
+    res.render('consultor/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
+}
+
+dashboardController.addConsultores = (req, res, next) => {
+    passport.authenticate('local.registroConsultores', {
+        successRedirect: '/registro-de-consultores',
+        failureRedirect: '/registro-de-consultores',
+        failureFlash: true
+    })(req, res, next)
+}
+
+dashboardController.mostrarConsultores = async (req, res) => {
+    const consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor" AND estado = 1')
+    res.render('consultor/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores })
 }
