@@ -1,8 +1,41 @@
 module.exports = {
 
-    estaLogueado(req, res, next) {
+    checkLogin(req, res, next) {
         // Método de passport que se ha poblado al objeto req & lo que devuelve true or false para saber si el usuario existe
-        if (req.isAuthenticated() || req.user) { 
+        if (req.isAuthenticated()) { 
+            return next();
+        } else {
+            return res.redirect('/login')
+        }
+    },
+
+    activeLogin(req, res, next) {
+        if (req.session.empresa || req.session.admin || req.session.consultor) { 
+            return next();
+        } else {
+            return res.redirect('/login')
+        }
+    },
+
+    empresaLogueada(req, res, next) {
+        // Método de passport que se ha poblado al objeto req & lo que devuelve true or false para saber si el usuario existe
+        if (req.session.empresa && !req.session.admin && !req.session.consultor) { 
+            return next();
+        } else {
+            return res.redirect('/login')
+        }
+    },
+
+    adminLogueado(req, res, next) {
+        if (req.session.admin && !req.session.empresa && !req.session.consultor) { 
+            return next();
+        } else {
+            return res.redirect('/login')
+        }
+    },
+
+    consultorLogueado(req, res, next) {
+        if (req.session.consultor && !req.session.empresa && !req.session.admin) { 
             return next();
         } else {
             return res.redirect('/login')
@@ -10,15 +43,7 @@ module.exports = {
     },
 
     noLogueado(req, res, next) {
-        if (!req.isAuthenticated() || !req.user) {
-            return next();
-        } else {
-            return res.redirect('/')
-        }
-    },
-
-    validarRegistro(req, res, next) {
-        if (!req.isAuthenticated() && !req.userEmail) {
+        if (!req.isAuthenticated()) {
             return next();
         } else {
             return res.redirect('/')

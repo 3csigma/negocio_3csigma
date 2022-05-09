@@ -116,8 +116,8 @@
                                     <input type="text" name="direccion_consultor" id="direccion_consultor" class="form-control mb-2 required">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label for="experiencia_consultor">Experiencia</label>
-                                    <input type="text" name="experiencia_consultor" id="experiencia_consultor" class="form-control mb-2 required">
+                                    <label for="experiencia_consultor">Años de experiencia</label>
+                                    <input type="text" name="experiencia_consultor" id="experiencia_consultor" maxlength="2" class="form-control campoNum mb-2 required">
                                     <input type="hidden" name="zh_consultor" id="zh_consultor">
                                 </div>
                             </div>
@@ -153,7 +153,7 @@
             });
         });
 
-        // Asignando fecha de modificación al campo oculto
+        // Asignando Zona horaria
 		const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		document.getElementById("zh_consultor").value = tzLocal
 

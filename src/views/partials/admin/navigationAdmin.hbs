@@ -208,9 +208,7 @@
     ***********************************-->
     <div class="deznav">
       <div class="deznav-scroll">
-        <form action="/create-checkout-session" method="POST">
-          <button type="hiddem" class="add-menu-sidebar"></button>
-        </form>
+        <form><input type="button"></form>
 
         {{!-- MENÚ LATERAL IZQUIERDO --}}
         <ul class="metismenu" id="menu">
@@ -243,7 +241,7 @@
           {{#comparar itemActivo '!=' 3}}
           <li>
           {{/comparar}}
-            <a href="#empresas" aria-expanded="false">
+            <a href="/empresas" aria-expanded="false">
               <i class="fas fa-city"></i>
               <span class="nav-text">Empresas registradas</span>
             </a>
@@ -260,10 +258,10 @@
             </a>
           </li>
         </ul>
-        <div class="add-menu-sidebar" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; ">
-          <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em;filter: grayscale(1)">
+        <a href="#" class="add-menu-sidebar" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; padding: 10px 15px;">
+          <img src="/img/icon_consultor.png" alt="Aprobar consultor" class="mr-2">
           <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
-        </div>
+        </a>
         <div class="copyright text-center">
           <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
         </div>

@@ -79,7 +79,6 @@ empresaController.acuerdo = async (req, res) => {
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
     const id_user = req.user.id;
-    const tipoUser = req.user.rol;
     const formDiag = {}
     formDiag.id = id_user;
     formDiag.usuario = helpers.encriptarTxt('' + id_user)

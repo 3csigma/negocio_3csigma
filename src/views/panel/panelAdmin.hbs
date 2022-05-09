@@ -1,6 +1,6 @@
 <!--**********************************
-                    Content body start
-                ***********************************-->
+        Content body start
+***********************************-->
 <div class="content-body">
     <!-- row -->
     <div class="container-fluid">
@@ -103,12 +103,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#each empresas}}
                                             <tr>
-                                                <td>xx/xx/xxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td><span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
-                                                    color: #fff">Admin</span></td>
+                                                <td>{{fecha_creacion}}</td>
+                                                <td>{{nombre_empresa}}</td>
+                                                <td>{{nombres}} {{apellidos}}</td>
+                                                <td>{{#if consultor}}{{ consultor}}{{else}}N/A{{/if}}</td>
                                                 <td>
                                                     <div class="d-flex">
                                                         <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -119,6 +119,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            {{/each}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -148,13 +149,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#each consultores}}
                                             <tr>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
+                                                <td>{{nombres_consultor}}</td>
+                                                <td>{{apellidos_consultor}}</td>
+                                                <td>{{email_consultor}}</td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                        <a href="/consultores/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"
                                                             style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
                                                             <i class="fa fa-pencil"></i></a>
                                                         <a href="#" class="btn btn-danger shadow btn-xs sharp"
@@ -162,6 +164,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            {{/each}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -170,7 +173,9 @@
                     </div>
                 </div>
             </div>
+
             <br>
+
         </div>
     </div>
 </div>
@@ -178,12 +183,3 @@
 <!--**********************************
         Fin Content body end
 ***********************************-->
-
-<!--**********************************
-            Scripts
-***********************************-->
-{{!-- Mensajes de Sweet Alert --}}
-{{#if pagoPendiente}}
-<input type="hidden" id="diagnosticoPagado" value="{{diagnosticoPagado}}">
-<input type="hidden" id="tokenForm" value="{{csrfToken}}">
-{{/if}}

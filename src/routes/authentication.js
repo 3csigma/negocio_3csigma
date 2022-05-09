@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { estaLogueado, noLogueado, validarRegistro } = require('../lib/auth')
+const { checkLogin, noLogueado, activeLogin } = require('../lib/auth')
 const userController = require('../controllers/userController');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
@@ -16,6 +16,6 @@ router.get('/login', noLogueado, csrfProtection, userController.getLogin)
 router.post('/login', noLogueado, csrfProtection, userController.postLogin)
 
 /** Cerrar Sesión */
-router.get('/logout', estaLogueado, userController.cerrarSesion)
+router.get('/logout', checkLogin, activeLogin, userController.cerrarSesion)
 
 module.exports = router;

@@ -8,10 +8,14 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisi
 dashboardController.index = async (req, res) => {
     const tipoUser = req.user.rol;
 
-    console.log("\n<<<< ROL >>>> "+tipoUser+"\n");
+    console.log("\n<<<< ROL >>>> " + tipoUser + "\n");
 
     if (tipoUser == 'Admin') {
-        res.render('pages/panelAdmin', { adminDash: true, itemActivo: 1 });
+
+        const consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor" ORDER BY id DESC LIMIT 2')
+        const empresas = await pool.query('SELECT * FROM users ORDER BY id DESC LIMIT 2')
+        res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas });
+
     } else {
         req.intentPay = undefined; // Intento de pago
         const id_user = req.user.id;
@@ -64,7 +68,7 @@ dashboardController.index = async (req, res) => {
 }
 
 
-/** CONSULTORES */
+// CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
     res.render('consultor/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
 }
@@ -78,6 +82,28 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    const consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor" AND estado = 1')
-    res.render('consultor/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores })
+    let consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor"')
+
+    consultores.forEach(async c => {
+        const id_consul = c.id;
+        const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM users WHERE id_consultor = ?', [id_consul])
+        console.log(num[0].numEmpresas)
+        c.num_empresas = num[0].numEmpresas
+    });
+    res.render('panel/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores })
+}
+
+dashboardController.editarConsultor = async (req, res) => {
+    const codigo = req.params.codigo
+    console.log(codigo);
+    let consultor = await pool.query('SELECT * FROM consultores WHERE codigo = ?', [codigo])
+    console.log("-----------");
+    consultor = consultor[0]
+    res.render('panel/editarConsultor', { adminDash: true, itemActivo: 2, consultor})
+}
+
+// EMPRESAS
+dashboardController.mostrarEmpresas = async (req, res) => {
+    let empresas = await pool.query('SELECT * FROM users WHERE rol = "User" AND estado = 1')
+    res.render('panel/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas })
 }

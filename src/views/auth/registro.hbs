@@ -86,6 +86,7 @@
                             </div>
                         </div>
                         <div class="form-button d-flex align-items-center">
+                            <input type="hidden" name="zh_empresa" id="zh_empresa">
                             <button id="submit" type="submit"
                                 class="ibtn login-ingresar text-center fw-bold mx-auto mb-4"
                                 onclick="validarFormRegistro()">Crear cuenta</button>
@@ -153,4 +154,8 @@
             console.log("Registro exitoso")
         }
     }
+
+    // Asignando Zona horaria
+	const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	document.getElementById("zh_empresa").value = tzLocal
 </script>

@@ -1,14 +1,14 @@
 const pool = require('../database')
 const express = require('express');
 const router = express.Router();
-const { estaLogueado, validarURLPagar } = require('../lib/auth')
+const { checkLogin, validarURLPagar } = require('../lib/auth')
 const { my_domain, clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 // const {consultarPagos} = require('../lib/helpers')
 
 // const MY_DOMAIN = 'http://localhost:4000';
 
-router.post('/create-checkout-session', estaLogueado, async (req, res) => {
+router.post('/create-checkout-session', checkLogin, async (req, res) => {
   console.log("URL Sesión>>> ", req.intentPay);
   const session = await stripe.checkout.sessions.create({
     success_url: `${my_domain}/pago-exitoso`,
@@ -33,7 +33,7 @@ router.post('/create-checkout-session', estaLogueado, async (req, res) => {
   res.redirect(303, session.url);
 });
 
-router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
+router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
   let diagnosticoPagado = 0, analisisPagado = 0;
   console.log("\nSuccess - Intent Payment >>> ", req.session.intentPay)
   req.session.intentPay = undefined; // Borrando info del Intento de pago 
@@ -66,7 +66,7 @@ router.get('/pago-exitoso', estaLogueado, validarURLPagar, async (req, res) => {
   })
 })
 
-router.get('/pago-cancelado', estaLogueado, validarURLPagar, (req, res) => {
+router.get('/pago-cancelado', checkLogin, validarURLPagar, (req, res) => {
   const diagnosticoPagado = 0, analisisPagado = 0;
   console.log("\nCancel - Intent Payment >>> ", req.session.intentPay)
   console.log("DIAGNOSTICO PAGADO SI o NO >>> ", diagnosticoPagado)
