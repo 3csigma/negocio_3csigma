@@ -59,7 +59,7 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
           analisisPagado = 1; // Pago Análisis
       }
   }
-  res.render('dashboard', {
+  res.render('pages/dashboard', {
     alertSuccess: true, // Pago Exitoso
     pagoDiag,
     user_dash: true, wizarx: false, login: false, diagnosticoPagado, analisisPagado, itemActivo: 1
@@ -71,7 +71,7 @@ router.get('/pago-cancelado', checkLogin, validarURLPagar, (req, res) => {
   console.log("\nCancel - Intent Payment >>> ", req.session.intentPay)
   console.log("DIAGNOSTICO PAGADO SI o NO >>> ", diagnosticoPagado)
   req.session.intentPay = undefined;
-  res.render('dashboard', {
+  res.render('pages/dashboard', {
     alertCancel: true, // Pago Cancelado
     user_dash: true, wizarx: false, login: false, pagoPendiente : true, diagnosticoPagado, analisisPagado, itemActivo: 1
   })
