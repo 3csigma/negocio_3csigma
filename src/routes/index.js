@@ -11,8 +11,14 @@ router.get('/', checkLogin, dashboardController.index)
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.addConsultores)
 
+// Consultores Admin
 router.get('/consultores', checkLogin, adminLogueado, dashboardController.mostrarConsultores)
 router.get('/consultores/:codigo', checkLogin, adminLogueado, dashboardController.editarConsultor)
+router.post('/actualizarConsultor', checkLogin, adminLogueado, dashboardController.actualizarConsultor)
+
+// Empresas Admin
 router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
+router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
+router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 
 module.exports = router;

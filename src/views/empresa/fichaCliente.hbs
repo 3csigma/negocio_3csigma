@@ -6,443 +6,466 @@
 	<div data-loader="circle-side-2"></div>
 </div><!-- /loader_form -->
 
-	<style>
-		.duet-date__input {
-			height: 44px;
-			border: 1px solid #ddd;
-			color: #000;
-    		font-weight: 500;
-    		font-size: 14px;
-			cursor: no-drop;
-		}
+<style>
+	.duet-date__input {
+		height: 44px;
+		border: 1px solid #ddd;
+		color: #000;
+		font-weight: 500;
+		font-size: 14px;
+		cursor: no-drop;
+	}
 
-		.close {
-			position: absolute;
-			right: 32px;
-			top: 32px;
-			width: 45px;
-			height: 45px;
-			opacity: 0.5;
-			border-radius: 30px;
-			background-color: #ccc;
-		}
+	.close {
+		position: absolute;
+		right: 32px;
+		top: 32px;
+		width: 45px;
+		height: 45px;
+		opacity: 0.5;
+		border-radius: 30px;
+		background-color: #ccc;
+	}
 
-		.close:hover {
-			opacity: 1;
-		}
+	.close:hover {
+		opacity: 1;
+	}
 
-		.close:before,
-		.close:after {
-			position: absolute;
-			top: 10.5px;
-			left: 22px;
-			content: ' ';
-			height: 24px;
-			width: 2px;
-			background-color: #000;
-		}
+	.close:before,
+	.close:after {
+		position: absolute;
+		top: 10.5px;
+		left: 22px;
+		content: ' ';
+		height: 24px;
+		width: 2px;
+		background-color: #000;
+	}
 
-		.close:before {
-			transform: rotate(45deg);
-		}
+	.close:before {
+		transform: rotate(45deg);
+	}
 
-		.close:after {
-			transform: rotate(-45deg);
-		}
-		.chosen-container-single .chosen-single{
-    		height: 43px !important;
-    		padding-top: 7px;
-    	}
-	</style>
+	.close:after {
+		transform: rotate(-45deg);
+	}
 
-	<div class="container-fluid">
-		<div class="row row-height">
-			<div class="col-xl-4 col-lg-4 content-left">
-				<div class="content-left-wrapper">
-					<a href="#" id="logo"><img src="./img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75"
-							height="75"></a>
-					<div id="social">
-						<ul>
-							<li><a href="#0"><i class="fab fa-facebook-f"></i></a></li>
-							<li><a href="#0"><i class="fab fa-twitter"></i></a></li>
-							<li><a href="#0"><i class="fab fa-instagram"></i></a></li>
-							<li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li>
-						</ul>
-					</div>
-					<!-- /social -->
-					<div>
-						<figure><img src="./img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
-						</figure>
-						<h2>Ficha Cliente</h2>
-						<p>Estos datos nos permiten conocerte y a tu empresa, para tener datos reales sobre el estado
-							actual
-							de la misma, y encontrar los puntos a mejorar para empezar juntos el proceso de crecimiento
-							corporativo.</p>
-						<a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
-							<i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
-						</a>
-						{{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
-					</div>
-					<div class="copy">© {{actualYear}} 3C Sigma</div>
+	.chosen-container-single .chosen-single {
+		height: 43px !important;
+		padding-top: 7px;
+	}
+
+	.input-group-prepend {
+		height: 45px;
+	}
+
+	.fl-wrap.fl-wrap-input {
+		width: 100%;
+	}
+</style>
+
+<div class="container-fluid">
+	<div class="row row-height">
+		<div class="col-xl-4 col-lg-4 content-left">
+			<div class="content-left-wrapper">
+				<a href="#" id="logo"><img src="./img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75" height="75"></a>
+				<div id="social">
+					<ul>
+						<li><a href="#0"><i class="fab fa-facebook-f"></i></a></li>
+						<li><a href="#0"><i class="fab fa-twitter"></i></a></li>
+						<li><a href="#0"><i class="fab fa-instagram"></i></a></li>
+						<li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li>
+					</ul>
 				</div>
-				<!-- /content-left-wrapper -->
-			</div>
-			<!-- /content-left -->
-			<div class="col-xl-8 col-lg-8 content-right" id="start">
-				<div id="wizard_container">
-					<div id="top-wizard">
-						<span id="location"></span>
-						<div id="progressbar"></div>
-					</div>
-					<!-- /top-wizard -->
-					<form id="wrapped" method="POST">
-						<input id="website" name="website" type="text" value="">
-						<!-- Leave for security protection, read docs for details -->
-						<div id="middle-wizard">
-							<!-- Paso 1 DATOS PERSONALES -->
-							<div class="step">
-								<h2 class="section_title">DATOS PERSONALES</h2>
-								{{!-- <h3 class="main_question">Personal info</h3> --}}
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="name">Nombres</label>
-										<input type="text" name="nombre" id="name" value="{{user.nombres}}"
-											class="form-control campoLetras required" onchange="getVals(this, 'name_field');">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="apellido">Apellido</label>
-										<input type="text" name="apellido" id="apellido" value="{{user.apellidos}}"
-											class="form-control campoLetras required" onchange="getVals(this, 'apellido_field');">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="email">Email</label>
-										<input type="email" name="email" id="email" value="{{user.email}}"
-											class="form-control required" onchange="getVals(this, 'email_field');">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="tel_Ficha">Teléfono</label>
-										<input type="text" name="telefono" value="{{ficha.telefono}}" id="tel_Ficha"
-											class="form-control required">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									{{!-- CAMPO FECHA DE NACIMIENTO --}}
-									<div class="form-group col-md-6 ">
-										{{!-- <label for="fecha_nacimiento">Fecha de Nacimiento</label> --}}
-										<duet-date-picker placeholder="Fecha de nacimiento" name="fecha_nacimiento" id="fecha_nacimiento" min="1932-01-01" max="{{fechaMaxima}}" value="{{ficha.fecha_nacimiento}}"></duet-date-picker>
-									</div>
-									<div class="form-group col-md-6">
-										{{!-- <label for="pais">País/Nacionalidad</label> --}}
-										<select name="pais" id="pais" 
-										class="form-control sltBox chosen-container chosen-container-single required">
-											{{#if ficha}}
-												<option value="{{ficha.pais}}">{{ficha.pais}}</option>
-											{{else}}
-												<option value=""></option>
-											{{/if}} 
-											{{#each datos.paises}}
-											<option value="{{name}} ({{isoCode}})">{{name}} ({{isoCode}})</option>
-											{{/each}}
-										</select>
-										{{!-- <input type="text" name="pais" id="pais" value="{{ficha.pais}}"
-											> --}}
-									</div>
-								</div>
-								<!-- / GRUPO DE CAMPOS REDES SOCIALES -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label class="mb-2">Redes Sociales</label>
-										<label for="twitter">Twitter</label>
-										<input type="url" name="twitter" id="twitter"
-											value="{{datos.redes_sociales.twitter}}" class="form-control mb-2 urlFields"
-											onchange="getVals(this, 'twitter_field');">
-										<label for="facebook">Facebook</label>
-										<input type="url" name="facebook" id="facebook"
-											value="{{datos.redes_sociales.facebook}}" class="form-control mb-2 urlFields"
-											onchange="getVals(this, 'twitter_field');">
-										<label for="instagram">Instagram</label>
-										<input type="url" name="instagram" id="instagram"
-											value="{{datos.redes_sociales.instagram}}" class="form-control mb-2 urlFields"
-											onchange="getVals(this, 'instagram_field');">
-										<label for="otra">Otra</label>
-										<input type="url" name="otra" id="otra" value="{{datos.redes_sociales.otra}}"
-											class="form-control mb-2 urlFields" onchange="getVals(this, 'otra_field');">
-									</div>
-								</div>
-
-								<!-- /Fila Grupo de campos -->
-							</div>
-							<!-- /Paso 1 -->
-
-							<!-- Paso 2 SOBRE LA EMPRESA ============================== -->
-							<div class="step">
-								<h2 class="section_title">SOBRE LA EMPRESA</h2>
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label>¿Eres dueño de negocio?</label>
-										<div class="form-group mb-3 radio_input">
-											<label class="container_radio mr-3">Si
-												<input type="radio" name="es_propietario" value="Si" class="required"
-													{{datos.prop1}}>
-												<span class="checkmark"></span>
-											</label>
-											<label class="container_radio">No
-												<input type="radio" name="es_propietario" value="No" class="required"
-													{{datos.prop2}}>
-												<span class="checkmark"></span>
-											</label>
-										</div>
-									</div>
-									<div class="form-group col-md-6">
-										<label>¿Tienes socios?</label>
-										<div class="form-group mb-3 radio_input">
-											<label class="container_radio mr-3">Si
-												<input type="radio" name="socios" value="Si" class="checkSocios required"
-													{{datos.socio1}}>
-												<span class="checkmark"></span>
-											</label>
-											<label class="container_radio">No
-												<input type="radio" name="socios" value="No" class="checkSocios required"
-													{{datos.socio2}}>
-												<span class="checkmark"></span>
-											</label>
-										</div>
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="nombre_empresa">Nombre de la empresa</label>
-										<input type="text" name="nombre_empresa" id="nombre_empresa"
-											value="{{ficha.nombre_empresa}}" class="form-control required"
-											onchange="getVals(this, 'nombre_empresa_field');">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="cantidad_socios">Cantidad de socios</label>
-										<input type="text" name="cantidad_socios" id="cantidad_socios"
-											value="{{ficha.cantidad_socios}}" class="campoNum form-control"
-											style="{{datos.estiloSocio}}" {{datos.socioNo}} 
-											min="{{datos.socioMin}}">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="porcentaje_accionario">¿Cuál es tu % accionario?</label>
-										<input type="text" name="porcentaje_accionario" id="porcentaje_accionario"
-											value="{{ficha.porcentaje_accionario}}" class="form-control campoNum required"
-											onchange="getVals(this, 'porcentaje_accionario_field');" maxlength="6">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="tiempo_fundacion">Tiempo de fundacion</label>
-										<input type="text" name="tiempo_fundacion" id="tiempo_fundacion"
-											value="{{ficha.tiempo_fundacion}}" class="form-control "
-											onchange="getVals(this, 'tiempo_fundacion_field');">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="tiempo_experiencia">Años de experiencia</label>
-										<input type="text" name="tiempo_experiencia" id="tiempo_experiencia"
-											value="{{ficha.tiempo_experiencia}}" class="form-control campoNum required"
-											onchange="getVals(this, 'tiempo_experiencia_field');" min="0">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="promedio_ingreso_anual">Promedio de ingreso anual*</label>
-										<input type="text" name="promedio_ingreso_anual" id="promedio_ingreso_anual"
-											value="{{ficha.promedio_ingreso_anual}}" class="form-control "
-											onchange="getVals(this, 'promedio_ingreso_anual_field');">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-6 ">
-										<label for="num_empleados">Número de empleados</label>
-										<input type="text" name="num_empleados" id="num_empleados"
-											value="{{ficha.num_empleados}}" class="form-control campoNum required"
-											onchange="getVals(this, 'num_empleados_field');" min="1">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="page_web">Página Web</label>
-										<input type="url" name="page_web" id="page_web" value="{{ficha.page_web}}"
-											class="form-control" onchange="getVals(this, 'page_web_field');">
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-							</div>
-							<!-- /Paso 2 -->
-
-							<!-- Paso 3 DESCRIPCIÓN DE TU NEGOCIO -->
-							<div class="step">
-								<h2 class="section_title">DESCRIPCIÓN DE TU NEGOCIO</h2>
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label for="descripcion">¿Qué hace tu negocio?</label>
-										<textarea name="descripcion" id="descripcion" class="form-control required"
-											style="height: 115px; min-height: 110px;">{{ficha.descripcion}}</textarea>
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label>¿En qué etapa se encuentra tu negocio?</label>
-										<div class="form-group mb-3 radio_input">
-											<label class="container_radio mr-3">En Proyecto
-												<input type="radio" name="etapa_actual" value="En Proyecto"
-													class="required" {{datos.etapa1}}>
-												<span class="checkmark"></span>
-											</label>
-											<label class="container_radio">Operativo
-												<input type="radio" name="etapa_actual" value="Operativo"
-													class="required" {{datos.etapa2}}>
-												<span class="checkmark"></span>
-											</label>
-											<label class="container_radio">En expansión
-												<input type="radio" name="etapa_actual" value="En expansión"
-													class="required" {{datos.etapa3}}>
-												<span class="checkmark"></span>
-											</label>
-											<label class="container_radio">Otro
-												<input type="radio" name="etapa_actual" value="Otro" class="required"
-													{{datos.etapa4}}>
-												<span class="checkmark"></span>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<!-- Campos Objetivos -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label>¿Cuáles son los 3 principales objetivos de tu negocio?</label>
-
-										<label for="objetivo1">1-</label>
-										<input type="text" name="objetivo1" id="objetivo1"
-											value="{{datos.objetivos.objetivo1}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'objetivo1_field');" placeholder="1-">
-
-										<label for="objetivo2">2-</label>
-										<input type="text" name="objetivo2" id="objetivo2"
-											value="{{datos.objetivos.objetivo2}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'objetivo2_field');" placeholder="2-">
-
-										<label for="objetivo3">3-</label>
-										<input type="text" name="objetivo3" id="objetivo3"
-											value="{{datos.objetivos.objetivo3}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'objetivo3_field');" placeholder="3-">
-									</div>
-								</div>
-								<!-- /Fin de Campos Objetivos -->
-
-							</div>
-							<!-- /Paso 3 -->
-
-							<!-- Paso 4 MOTIVO DE CONSULTORÍA -->
-							<div class="step">
-								<!-- Fortalezas de tu negocio -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label>¿Cuáles son las 3 principales fortalezas de tu negocio?</label>
-
-										<label for="fortaleza1">1-</label>
-										<input type="text" name="fortaleza1" id="fortaleza1"
-											value="{{datos.fortalezas.fortaleza1}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'fortaleza1_field');">
-
-										<label for="fortaleza2">2-</label>
-										<input type="text" name="fortaleza2" id="fortaleza2"
-											value="{{datos.fortalezas.fortaleza2}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'fortaleza2_field');">
-
-										<label for="fortaleza3">3-</label>
-										<input type="text" name="fortaleza3" id="fortaleza3"
-											value="{{datos.fortalezas.fortaleza3}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'fortaleza3_field');">
-									</div>
-								</div>
-								<!-- /Fin Fortalezas Grupo de campos -->
-
-								<!-- Problemas de tu negocio -->
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label>¿Cuáles son los 3 principales problemas de tu negocio?</label>
-
-										<label for="problema1">1-</label>
-										<input type="text" name="problema1" id="problema1"
-											value="{{datos.problemas.problema1}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'problema1_field');">
-
-										<label for="problema2">2-</label>
-										<input type="text" name="problema2" id="problema2"
-											value="{{datos.problemas.problema2}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'problema2_field');">
-
-										<label for="problema3">3-</label>
-										<input type="text" name="problema3" id="problema3"
-											value="{{datos.problemas.problema3}}" class="form-control mb-2 required"
-											onchange="getVals(this, 'problema3_field');">
-									</div>
-								</div>
-								<!-- /Fin Problemas Grupo de campos -->
-
-								<div class="row add_top_10">
-									<div class="form-group col-md-12">
-										<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta consultoría de negocio?</label>
-										<textarea name="motivo_consultoria" id="motivo_consultoria"
-											class="form-control required"
-											style="height: 115px; min-height: 110px; padding-top: 1.3em;">{{ficha.motivo_consultoria}}</textarea>
-									</div>
-								</div>
-								<!-- /Fila Grupo de campos -->
-							</div>
-
-							<!-- Último Paso ============================== -->
-							<div class="submit step" id="end">
-								<div class="summary">
-									<div class="wrapper">
-										<h3>Gracias por su tiempo<br>
-											{{#if ficha.nombre}}
-											{{ficha.nombre}}!
-											{{else}}
-											<span id="nameStepFinal"></span>!
-											{{/if}}
-										</h3>
-										<p>Al guardar los datos será redirigido al panel de diagnóstico de negocio</p>
-									</div>
-
-								</div>
-							</div>
-							<!-- /Último Paso-->
-
-							{{!-- FECHA DE EDICIÓN --}}
-							<input type="hidden" id="fecha_modificacion" name="fecha_modificacion">
-
-						</div>
-						<!-- /middle-wizard -->
-						<div id="bottom-wizard">
-							{{!-- <a class="btn btn-danger" href="#">Limpiar campos</a> --}}
-							<button type="button" name="backward" class="backward">Anterior</button>
-							<button type="button" name="forward" class="forward">Siguiente</button>
-							<button type="submit" name="process" class="submit">Guardar Datos</button>
-						</div>
-						<!-- /bottom-wizard -->
-					</form>
+				<!-- /social -->
+				<div>
+					<figure><img src="./img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
+					</figure>
+					<h2>Ficha Cliente</h2>
+					<p>Estos datos nos permiten conocerte y a tu empresa, para tener datos reales sobre el estado
+						actual
+						de la misma, y encontrar los puntos a mejorar para empezar juntos el proceso de crecimiento
+						corporativo.</p>
+					<a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
+						<i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+					</a>
+					{{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
 				</div>
-				<!-- /Wizard container -->
+				<div class="copy">© {{actualYear}} 3C Sigma</div>
 			</div>
-			<!-- /content-right-->
+			<!-- /content-left-wrapper -->
 		</div>
-		<!-- /row-->
-	</div>
-	<!-- /container-fluid -->
+		<!-- /content-left -->
+		<div class="col-xl-8 col-lg-8 content-right" id="start">
+			<div id="wizard_container">
+				<div id="top-wizard">
+					<span id="location"></span>
+					<div id="progressbar"></div>
+				</div>
+				<!-- /top-wizard -->
+				<form id="wrapped" method="POST">
+					<input id="website" name="website" type="text" value="">
+					<!-- Leave for security protection, read docs for details -->
+					<div id="middle-wizard">
+						<!-- Paso 1 DATOS PERSONALES -->
+						<div class="step">
+							<h2 class="section_title">DATOS PERSONALES</h2>
+							{{!-- <h3 class="main_question">Personal info</h3> --}}
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="name">Nombres</label>
+									<input type="text" name="nombre" id="name" value="{{user.nombres}}"
+										class="form-control campoLetras required"
+										onchange="getVals(this, 'name_field');">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="apellido">Apellido</label>
+									<input type="text" name="apellido" id="apellido" value="{{user.apellidos}}"
+										class="form-control campoLetras required"
+										onchange="getVals(this, 'apellido_field');">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="email">Email</label>
+									<input type="email" name="email" id="email" value="{{user.email}}"
+										class="form-control required" style="line-height:3;"
+										onchange="getVals(this, 'email_field');">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="tel_Ficha">Teléfono</label>
+									<input type="text" name="telefono" value="{{ficha.telefono}}" id="tel_Ficha"
+										class="form-control required">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								{{!-- CAMPO FECHA DE NACIMIENTO --}}
+								<div class="form-group col-md-6 ">
+									{{!-- <label for="fecha_nacimiento">Fecha de Nacimiento</label> --}}
+									<duet-date-picker placeholder="Fecha de nacimiento" name="fecha_nacimiento"
+										id="fecha_nacimiento" min="1932-01-01" max="{{fechaMaxima}}"
+										value="{{ficha.fecha_nacimiento}}"></duet-date-picker>
+								</div>
+								<div class="form-group col-md-6">
+									{{!-- <label for="pais">País/Nacionalidad</label> --}}
+									<select name="pais" id="pais"
+										class="form-control sltBox chosen-container chosen-container-single required">
+										{{#if ficha}}
+										<option value="{{ficha.pais}}">{{ficha.pais}}</option>
+										{{else}}
+										<option value=""></option>
+										{{/if}}
+										{{#each datos.paises}}
+										<option value="{{name}} ({{isoCode}})">{{name}} ({{isoCode}})</option>
+										{{/each}}
+									</select>
+									{{!-- <input type="text" name="pais" id="pais" value="{{ficha.pais}}"> --}}
+								</div>
+							</div>
+							<!-- / GRUPO DE CAMPOS REDES SOCIALES -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label class="mb-2">Redes Sociales</label>
+									<div class="input-group-prepend mb-2">
+										<span class="input-group-text">https://twitter.com/</span>
+										{{!-- <label for="twitter">Twitter</label> --}}
+										<input type="text" name="twitter" id="twitter"
+											value="{{datos.redes_sociales.twitter}}" class="form-control"
+											onchange="getVals(this, 'twitter_field');" placeholder="usuarioTwitter" >
+									</div>
+									<div class="input-group-prepend mb-2">
+										<span class="input-group-text">https://facebook.com/</span>
+										{{!-- <label for="facebook">Facebook</label> --}}
+										<input type="text" name="facebook" id="facebook"
+											value="{{datos.redes_sociales.facebook}}" class="form-control mb-2"
+											onchange="getVals(this, 'twitter_field');" placeholder="usuarioFacebok">
+									</div>
+									<div class="input-group-prepend mb-2">
+										<span class="input-group-text">https://instagram.com/</span>
+										{{!-- <label for="instagram">Instagram</label> --}}
+										<input type="text" name="instagram" id="instagram"
+											value="{{datos.redes_sociales.instagram}}" class="form-control mb-2"
+											onchange="getVals(this, 'instagram_field');" placeholder="usuarioInstagram">
+									</div>
+									<div class="input-group-prepend mb-2">
+										<span class="input-group-text">https://www.</span>
+										<input type="text" name="otra" value="{{datos.redes_sociales.otra}}"
+											class="form-control mb-2" placeholder="otra-red.com" onchange="getVals(this, 'otra_field');">
+									</div>
+								</div>
+							</div>
 
-	<a href="/diagnostico-de-negocio" class="close">
-	
+							<!-- /Fila Grupo de campos -->
+						</div>
+						<!-- /Paso 1 -->
+
+						<!-- Paso 2 SOBRE LA EMPRESA ============================== -->
+						<div class="step">
+							<h2 class="section_title">SOBRE LA EMPRESA</h2>
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label>¿Eres dueño de negocio?</label>
+									<div class="form-group mb-3 radio_input">
+										<label class="container_radio mr-3">Si
+											<input type="radio" name="es_propietario" value="Si" class="required"
+												{{datos.prop1}}>
+											<span class="checkmark"></span>
+										</label>
+										<label class="container_radio">No
+											<input type="radio" name="es_propietario" value="No" class="required"
+												{{datos.prop2}}>
+											<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+								<div class="form-group col-md-6">
+									<label>¿Tienes socios?</label>
+									<div class="form-group mb-3 radio_input">
+										<label class="container_radio mr-3">Si
+											<input type="radio" name="socios" value="Si" class="checkSocios required"
+												{{datos.socio1}}>
+											<span class="checkmark"></span>
+										</label>
+										<label class="container_radio">No
+											<input type="radio" name="socios" value="No" class="checkSocios required"
+												{{datos.socio2}}>
+											<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="nombre_empresa">Nombre de la empresa</label>
+									<input type="text" name="nombre_empresa" id="nombre_empresa"
+										value="{{ficha.nombre_empresa}}" class="form-control required"
+										onchange="getVals(this, 'nombre_empresa_field');">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="cantidad_socios">Cantidad de socios</label>
+									<input type="text" name="cantidad_socios" id="cantidad_socios"
+										value="{{ficha.cantidad_socios}}" class="campoNum form-control"
+										style="{{datos.estiloSocio}}" {{datos.socioNo}} min="{{datos.socioMin}}">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="porcentaje_accionario">¿Cuál es tu % accionario?</label>
+									<input type="text" name="porcentaje_accionario" id="porcentaje_accionario"
+										value="{{ficha.porcentaje_accionario}}" class="form-control campoNum required"
+										onchange="getVals(this, 'porcentaje_accionario_field');" maxlength="6">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="tiempo_fundacion">Tiempo de fundacion</label>
+									<input type="text" name="tiempo_fundacion" id="tiempo_fundacion"
+										value="{{ficha.tiempo_fundacion}}" class="form-control "
+										onchange="getVals(this, 'tiempo_fundacion_field');">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="tiempo_experiencia">Años de experiencia</label>
+									<input type="text" name="tiempo_experiencia" id="tiempo_experiencia"
+										value="{{ficha.tiempo_experiencia}}" class="form-control campoNum required"
+										onchange="getVals(this, 'tiempo_experiencia_field');" min="0">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="promedio_ingreso_anual">Promedio de ingreso anual*</label>
+									<input type="text" name="promedio_ingreso_anual" id="promedio_ingreso_anual"
+										value="{{ficha.promedio_ingreso_anual}}" class="form-control "
+										onchange="getVals(this, 'promedio_ingreso_anual_field');">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-6 ">
+									<label for="num_empleados">Número de empleados</label>
+									<input type="text" name="num_empleados" id="num_empleados"
+										value="{{ficha.num_empleados}}" class="form-control campoNum required"
+										onchange="getVals(this, 'num_empleados_field');" min="1">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="page_web">Página Web</label>
+									<input type="url" name="page_web" id="page_web" value="{{ficha.page_web}}"
+										class="form-control" onchange="getVals(this, 'page_web_field');">
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+						</div>
+						<!-- /Paso 2 -->
+
+						<!-- Paso 3 DESCRIPCIÓN DE TU NEGOCIO -->
+						<div class="step">
+							<h2 class="section_title">DESCRIPCIÓN DE TU NEGOCIO</h2>
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label for="descripcion">¿Qué hace tu negocio?</label>
+									<textarea name="descripcion" id="descripcion" class="form-control required"
+										style="height: 115px; min-height: 110px;">{{ficha.descripcion}}</textarea>
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label>¿En qué etapa se encuentra tu negocio?</label>
+									<div class="form-group mb-3 radio_input">
+										<label class="container_radio mr-3">En Proyecto
+											<input type="radio" name="etapa_actual" value="En Proyecto" class="required"
+												{{datos.etapa1}}>
+											<span class="checkmark"></span>
+										</label>
+										<label class="container_radio">Operativo
+											<input type="radio" name="etapa_actual" value="Operativo" class="required"
+												{{datos.etapa2}}>
+											<span class="checkmark"></span>
+										</label>
+										<label class="container_radio">En expansión
+											<input type="radio" name="etapa_actual" value="En expansión"
+												class="required" {{datos.etapa3}}>
+											<span class="checkmark"></span>
+										</label>
+										<label class="container_radio">Otro
+											<input type="radio" name="etapa_actual" value="Otro" class="required"
+												{{datos.etapa4}}>
+											<span class="checkmark"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+							<!-- Campos Objetivos -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label>¿Cuáles son los 3 principales objetivos de tu negocio?</label>
+
+									<label for="objetivo1">1-</label>
+									<input type="text" name="objetivo1" id="objetivo1"
+										value="{{datos.objetivos.objetivo1}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'objetivo1_field');" placeholder="1-">
+
+									<label for="objetivo2">2-</label>
+									<input type="text" name="objetivo2" id="objetivo2"
+										value="{{datos.objetivos.objetivo2}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'objetivo2_field');" placeholder="2-">
+
+									<label for="objetivo3">3-</label>
+									<input type="text" name="objetivo3" id="objetivo3"
+										value="{{datos.objetivos.objetivo3}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'objetivo3_field');" placeholder="3-">
+								</div>
+							</div>
+							<!-- /Fin de Campos Objetivos -->
+
+						</div>
+						<!-- /Paso 3 -->
+
+						<!-- Paso 4 MOTIVO DE CONSULTORÍA -->
+						<div class="step">
+							<!-- Fortalezas de tu negocio -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label>¿Cuáles son las 3 principales fortalezas de tu negocio?</label>
+
+									<label for="fortaleza1">1-</label>
+									<input type="text" name="fortaleza1" id="fortaleza1"
+										value="{{datos.fortalezas.fortaleza1}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'fortaleza1_field');">
+
+									<label for="fortaleza2">2-</label>
+									<input type="text" name="fortaleza2" id="fortaleza2"
+										value="{{datos.fortalezas.fortaleza2}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'fortaleza2_field');">
+
+									<label for="fortaleza3">3-</label>
+									<input type="text" name="fortaleza3" id="fortaleza3"
+										value="{{datos.fortalezas.fortaleza3}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'fortaleza3_field');">
+								</div>
+							</div>
+							<!-- /Fin Fortalezas Grupo de campos -->
+
+							<!-- Problemas de tu negocio -->
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label>¿Cuáles son los 3 principales problemas de tu negocio?</label>
+
+									<label for="problema1">1-</label>
+									<input type="text" name="problema1" id="problema1"
+										value="{{datos.problemas.problema1}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'problema1_field');">
+
+									<label for="problema2">2-</label>
+									<input type="text" name="problema2" id="problema2"
+										value="{{datos.problemas.problema2}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'problema2_field');">
+
+									<label for="problema3">3-</label>
+									<input type="text" name="problema3" id="problema3"
+										value="{{datos.problemas.problema3}}" class="form-control mb-2 required"
+										onchange="getVals(this, 'problema3_field');">
+								</div>
+							</div>
+							<!-- /Fin Problemas Grupo de campos -->
+
+							<div class="row add_top_10">
+								<div class="form-group col-md-12">
+									<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta
+										consultoría de negocio?</label>
+									<textarea name="motivo_consultoria" id="motivo_consultoria"
+										class="form-control required"
+										style="height: 115px; min-height: 110px; padding-top: 1.3em;">{{ficha.motivo_consultoria}}</textarea>
+								</div>
+							</div>
+							<!-- /Fila Grupo de campos -->
+						</div>
+
+						<!-- Último Paso ============================== -->
+						<div class="submit step" id="end">
+							<div class="summary">
+								<div class="wrapper">
+									<h3>Gracias por su tiempo<br>
+										{{#if ficha.nombre}}
+										{{ficha.nombre}}!
+										{{else}}
+										<span id="nameStepFinal"></span>!
+										{{/if}}
+									</h3>
+									<p>Al guardar los datos será redirigido al panel de diagnóstico de negocio</p>
+								</div>
+
+							</div>
+						</div>
+						<!-- /Último Paso-->
+
+						{{!-- FECHA DE EDICIÓN --}}
+						<input type="hidden" id="fecha_zh" name="fecha_zh">
+
+					</div>
+					<!-- /middle-wizard -->
+					<div id="bottom-wizard">
+						{{!-- <a class="btn btn-danger" href="#">Limpiar campos</a> --}}
+						<button type="button" name="backward" class="backward">Anterior</button>
+						<button type="button" name="forward" class="forward">Siguiente</button>
+						<button type="submit" name="process" class="submit">Guardar Datos</button>
+					</div>
+					<!-- /bottom-wizard -->
+				</form>
+			</div>
+			<!-- /Wizard container -->
+		</div>
+		<!-- /content-right-->
+	</div>
+	<!-- /row-->
+</div>
+<!-- /container-fluid -->
+
+<a href="/diagnostico-de-negocio" class="close">
+
 
 	{{!-- SCRIPT MASCARAS PARA INPUT --}}
 	<script src="https://unpkg.com/imask"></script>
@@ -456,8 +479,7 @@
 		// Asignando fecha de modificación al campo oculto
 		const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		console.log(tzLocal);
-		const fechaCliente = new Date().toLocaleString("en-US", {timeZone: tzLocal})
-		document.getElementById("fecha_modificacion").value = fechaCliente
+		document.getElementById("fecha_zh").value = tzLocal;
 
 		// Formato de número USA (+1)
 		document.addEventListener("DOMContentLoaded", function () {
@@ -465,29 +487,6 @@
 				mask: '+{1} (000) 000-0000'
 			});
 		});
-
-		// Formato https para URLs
-		const urlTW = document.getElementById('twitter')
-		const urlFB = document.getElementById('facebook')
-		const urlIG = document.getElementById('instagram')
-		const urlOT = document.getElementById('otra')
-		const urlPage = document.getElementById('page_web')
-
-		IMask(urlTW, {
-			mask: 'https://twitter.com/****[***************************************************]',
-		})
-		IMask(urlFB, {
-			mask: 'https://fb.com/****[***************************************************]',
-		})
-		IMask(urlIG, {
-			mask: '{https://**************[***************************************************]',
-		})
-		IMask(urlOT, {
-			mask: 'https://****[***************************************************]',
-		})
-		IMask(urlPage, {
-			mask: 'https://****[***************************************************]',
-		})
 
 		// Separación para cifras en millares
 		IMask(document.getElementById('promedio_ingreso_anual'), {

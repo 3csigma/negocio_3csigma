@@ -96,7 +96,7 @@
 
         jQuery(window).on('load', function () {
             dzSparkLine.load();
-            { { #if alertSuccess } }
+            {{#if alertSuccess}}
             Swal.fire({
                 icon: 'success',
                 title: '¡Pago exitoso!',
@@ -113,19 +113,15 @@
                 showCancelButton: false,
                 showConfirmButton: false,
             })
-            {
-                {
-                    /if}}
-                    { { #if alertCancel } }
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Pago Cancelado',
-                        text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
-                    })
-                    {
-                        {
-                            /if}}
-                        });
+            {{/if}}
+            {{#if alertCancel}}
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pago Cancelado',
+                    text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
+                })
+            {{/if}}
+        });
 
         jQuery(window).on('resize', function () {
             setTimeout(function () { dzSparkLine.resize(); }, 1000);

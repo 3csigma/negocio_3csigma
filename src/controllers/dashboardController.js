@@ -70,7 +70,7 @@ dashboardController.index = async (req, res) => {
 
 // CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
-    res.render('consultor/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
+    res.render('auth/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
 }
 
 dashboardController.addConsultores = (req, res, next) => {
@@ -95,15 +95,37 @@ dashboardController.mostrarConsultores = async (req, res) => {
 
 dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
-    console.log(codigo);
     let consultor = await pool.query('SELECT * FROM consultores WHERE codigo = ?', [codigo])
-    console.log("-----------");
-    consultor = consultor[0]
-    res.render('panel/editarConsultor', { adminDash: true, itemActivo: 2, consultor})
+    consultor = consultor[0];
+    res.render('panel/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true})
+}
+
+dashboardController.actualizarConsultor = async (req, res) => {
+    const {id, estado} = req.body;
+    const nuevoEstado = {estado}
+    const consultor = await pool.query('UPDATE consultores SET ? WHERE id = ?', [nuevoEstado, id])
+    let respuesta = false;
+    if (consultor) {
+        respuesta = true;
+    }
+    res.send(respuesta)
 }
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
     let empresas = await pool.query('SELECT * FROM users WHERE rol = "User" AND estado = 1')
     res.render('panel/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas })
+}
+
+dashboardController.editarEmpresa = async (req, res) => {
+    const codigo = req.params.codigo
+    let empresa = await pool.query('SELECT * FROM users e LEFT OUTER JOIN ficha_cliente f ON e.id = f.id_user AND e.codigo = ? LIMIT 1', [codigo])
+    console.log("-------")
+    console.log(empresa)
+    console.log("-------")
+    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true})
+}
+
+dashboardController.actualizarEmpresa = async (req, res) => {
+    console.log("Hola")
 }

@@ -167,7 +167,7 @@ empresaController.fichaCliente = async (req, res) => {
 }
 
 empresaController.addFichaCliente = async (req, res) => {
-    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_modificacion } = req.body
+    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
 
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
@@ -177,19 +177,22 @@ empresaController.addFichaCliente = async (req, res) => {
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
     const id_user = req.user.id;
-    // const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: tzx})
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
-    const newFichaCliente = {
+    const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: fecha_zh})
+
+    const nuevaFichaCliente = {
         nombre, apellido, email, telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
+
+    console.log(nuevaFichaCliente)
 
     // Consultar si ya existen datos en la Base de datos
     const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     if (ficha.length > 0) {
-        await pool.query('UPDATE ficha_cliente SET ? WHERE id_user = ?', [newFichaCliente, id_user])
+        await pool.query('UPDATE ficha_cliente SET ? WHERE id_user = ?', [nuevaFichaCliente, id_user])
     } else {
-        await pool.query('INSERT INTO ficha_cliente SET ?', [newFichaCliente])
+        await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
     }
     // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
     res.redirect('/diagnostico-de-negocio')
@@ -197,17 +200,6 @@ empresaController.addFichaCliente = async (req, res) => {
 
 empresaController.eliminarFicha = async (req, res) => {
     const { id } = req.body;
-    // await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id], (err, result) => {
-    //     if (err) throw err;
-    //     if (result.affectedRows > 1){
-    //         console.log("Eliminando ficha cliente", result)
-    //         res.send(true)
-    //     }else{
-    //         console.log("No hay datos")
-    //         res.send(false)
-    //     }
-    // })
-
     const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id])
     let respu = undefined;
     console.log(ficha.affectedRows)

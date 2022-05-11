@@ -79,7 +79,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email_consultor, clave_consultor, done) => {
     
-    const { nombres_consultor, apellidos_consultor, tel_consultor, direccion_consultor, experiencia_consultor, zh_consultor } = req.body
+    const { nombres_consultor, apellidos_consultor, tel_consultor, direccion_consultor, experiencia_years, zh_consultor } = req.body
     
     pool.query('SELECT * FROM consultores WHERE email_consultor = ?', [email_consultor], async (err, result) => {
 
@@ -100,7 +100,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             fecha_creacion = arrayFecha[0] + "-" + arrayFecha[2]
 
             // Objeto de Usuario
-            const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_consultor, fecha_creacion, codigo };
+            const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_years, fecha_creacion, codigo };
 
             // Encriptando la clave
             nuevoConsultor.clave_consultor = await helpers.encryptPass(clave_consultor);
@@ -157,7 +157,7 @@ passport.use('local.login', new LocalStrategy({
                 req.session.admin = true;
                 return done(null, consultor, req.flash('success', 'Bienvenido a la plataforma'))
             } else {
-                return done(null, false, req.flash('message', 'Tu cuenta aún no ha sido activada.'))
+                return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
             }
         } else {
             return done(null, false, req.flash('message', 'Contraseña inválida'))

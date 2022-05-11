@@ -1,5 +1,9 @@
 {{!-- COMMON SCRIPTS --}}
+{{#if formEdit}}
+<script src="../../js/jquery.js"></script>
+{{else}}
 <script src="./js/jquery.js"></script>
+{{/if}}
 <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
 <script src="https://3csigma.com/app_public_files/js/popper.min.js"></script>
 <script src="https://3csigma.com/app_public_files/js/loginMain.js"></script>
@@ -80,6 +84,29 @@
                     numS.removeAttribute("min");
                 }
             });
+
+            // Actualizar Estado del Consultor
+            $("#btnActualizarConsultor").click(function () {
+                const estado = $("#estado_consul option:selected").val()
+                const id = $("#id_consul").val()
+                fetch('/actualizarConsultor', {
+                    method: 'POST', // or 'PUT'
+                    body: JSON.stringify({ id, estado }),
+                    headers: { 'Content-Type': 'application/json' }
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response) {
+                            window.location.href = "/consultores";
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'Ocurrió un problema al guardar los cambios, comunicate con soporte',
+                                'error'
+                            )
+                        }
+                    });
+            })
 
 
         });
