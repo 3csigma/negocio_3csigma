@@ -4,17 +4,18 @@ const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const {getTemplate, sendEmail} = require('../lib/mail.config')
+let userEmpresa = false, userConsultor = false;
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id);
 })
 
 passport.deserializeUser(async (id, done) => { // Deserialización
-    const empresa = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
-    const consultor = await pool.query('SELECT * FROM consultores WHERE id = ?', [id]);
-    if (empresa.length > 0){
+    if (userEmpresa){
+        const empresa = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
         done(null, empresa[0])
     } else {
+        const consultor = await pool.query('SELECT * FROM consultores WHERE id = ?', [id]);
         done(null, consultor[0])
     }
 })
@@ -122,7 +123,7 @@ passport.use('local.login', new LocalStrategy({
     const usuarios = await pool.query('SELECT * FROM users WHERE email = ?', [email])
     const consultores = await pool.query('SELECT * FROM consultores WHERE email_consultor = ?', [email])
 
-    req.session.empresa = false;
+    userEmpresa = req.session.empresa = false;
     req.session.consultor = false;
     req.session.admin = false;
 
@@ -134,10 +135,10 @@ passport.use('local.login', new LocalStrategy({
         if (claveValida){
             req.userEmail = true;
             if (user.estado == 1) {
-                req.session.empresa = true;
+                userEmpresa = req.session.empresa = true;
                 req.session.consultor = false;
                 req.session.admin = false;
-                return done(null, user, req.flash('success', 'Bienvenido a la plataforma'))
+                return done(null, user, req.flash('success', 'Bienvenido Usuario Empresa'))
             } else {
                 return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
             }
@@ -147,7 +148,7 @@ passport.use('local.login', new LocalStrategy({
         }
 
     } else if (consultores.length > 0) {
-
+        userEmpresa = false;
         const consultor = consultores[0]
         const claveValida = await helpers.matchPass(clave, consultor.clave_consultor)
         if (claveValida){
@@ -155,7 +156,7 @@ passport.use('local.login', new LocalStrategy({
                 req.session.empresa = false;
                 req.session.consultor = false;
                 req.session.admin = true;
-                return done(null, consultor, req.flash('success', 'Bienvenido a la plataforma'))
+                return done(null, consultor, req.flash('success', 'Bienvenido Consultor'))
             } else {
                 return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
             }

@@ -73,7 +73,7 @@ empresaController.acuerdo = async (req, res) => {
             res.redirect('/acuerdo-de-confidencialidad')
         })
     }
-    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, companyUser, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
+    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -110,7 +110,7 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, companyUser, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear })
+    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
@@ -163,7 +163,7 @@ empresaController.fichaCliente = async (req, res) => {
     fm.setFullYear(max) // Asignando nuevo año
     const fechaMaxima = fm.toLocaleDateString("fr-CA"); // Colocando el formato yyyy-mm-dd
 
-    res.render('empresa/fichaCliente', { ficha, datos, companyUser, fechaMaxima, wizarx: true, user_dash: false })
+    res.render('empresa/fichaCliente', { ficha, datos, fechaMaxima, wizarx: true, user_dash: false })
 }
 
 empresaController.addFichaCliente = async (req, res) => {

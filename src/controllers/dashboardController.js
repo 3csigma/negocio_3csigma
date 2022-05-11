@@ -7,7 +7,6 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisi
 /** Función para mostrar Dashboard & validación dependiendo del usuario */
 dashboardController.index = async (req, res) => {
     const tipoUser = req.user.rol;
-
     console.log("\n<<<< ROL >>>> " + tipoUser + "\n");
 
     if (tipoUser == 'Admin') {
@@ -20,8 +19,6 @@ dashboardController.index = async (req, res) => {
         req.intentPay = undefined; // Intento de pago
         const id_user = req.user.id;
         req.pagoDiag = false, pagoDiag = false;
-
-        if (tipoUser == 'User') { companyUser = true; }
 
         /** Consultando que pagos ha realizado el usuario */
         const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])

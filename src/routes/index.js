@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { checkLogin, noLogueado, adminLogueado } = require('../lib/auth')
+const { checkLogin, activeLogin, noLogueado, adminLogueado } = require('../lib/auth')
 const dashboardController = require('../controllers/dashboardController');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 
 // Dashboard Principal
-router.get('/', checkLogin, dashboardController.index)
+router.get('/', checkLogin, activeLogin, dashboardController.index)
 
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.addConsultores)
