@@ -47,7 +47,7 @@ passport.use('local.registro', new LocalStrategy({
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", {timeZone: zh_empresa})
             const arrayFecha = fecha_creacion.split("/")
-            fecha_creacion = arrayFecha[0] + "-" + arrayFecha[2]
+            fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
             
             // Objeto de Usuario
             const newUser = { nombres, apellidos, nombre_empresa, username, email, clave, codigo, fecha_creacion }
@@ -98,7 +98,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", {timeZone: zh_consultor})
             const arrayFecha = fecha_creacion.split("/")
-            fecha_creacion = arrayFecha[0] + "-" + arrayFecha[2]
+            fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
 
             // Objeto de Usuario
             const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_years, fecha_creacion, codigo };

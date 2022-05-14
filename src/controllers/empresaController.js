@@ -137,7 +137,7 @@ empresaController.fichaCliente = async (req, res) => {
         ficha.etapa_actual === 'Operativo' ? datos.etapa2 = 'checked' : datos.etapa2 = ''
         ficha.etapa_actual === 'En expansión' ? datos.etapa3 = 'checked' : datos.etapa3 = ''
         ficha.etapa_actual === 'Otro' ? datos.etapa4 = 'checked' : datos.etapa4 = ''
-
+            
         datos.redes_sociales = JSON.parse(ficha.redes_sociales)
         datos.objetivos = JSON.parse(ficha.objetivos)
         datos.fortalezas = JSON.parse(ficha.fortalezas)
@@ -162,13 +162,17 @@ empresaController.fichaCliente = async (req, res) => {
     const max = fm.getFullYear() - 18; // Restando los años
     fm.setFullYear(max) // Asignando nuevo año
     const fechaMaxima = fm.toLocaleDateString("fr-CA"); // Colocando el formato yyyy-mm-dd
+    console.log(fechaMaxima);
 
     res.render('empresa/fichaCliente', { ficha, datos, fechaMaxima, wizarx: true, user_dash: false })
 }
 
 empresaController.addFichaCliente = async (req, res) => {
-    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
-
+    let { nombres, apellidos, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
+    // if (twitter != '') twitter = 'https://twitter.com/'+twitter;
+    // if (facebook != '') facebook = 'https://facebook.com/'+facebook;
+    // if (instagram != '') instagram = 'https://instagram.com/'+instagram;
+    // otra = 'https://'+otra;
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
     let fortalezas = JSON.stringify({ fortaleza1, fortaleza2, fortaleza3 })
@@ -182,10 +186,15 @@ empresaController.addFichaCliente = async (req, res) => {
     const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: fecha_zh})
 
     const nuevaFichaCliente = {
-        nombre, apellido, email, telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
+        telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
 
-    console.log(nuevaFichaCliente)
+    const userUpdate = {
+        nombres, apellidos, email
+    }
+
+    // Actualizando datos bases de la empresa
+    await pool.query('UPDATE users SET ? WHERE id = ?', [userUpdate, id_user])
 
     // Consultar si ya existen datos en la Base de datos
     const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])

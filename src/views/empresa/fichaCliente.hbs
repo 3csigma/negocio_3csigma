@@ -114,13 +114,12 @@
 							<div class="row add_top_10">
 								<div class="form-group col-md-6 ">
 									<label for="name">Nombres</label>
-									<input type="text" name="nombre" id="name" value="{{user.nombres}}"
-										class="form-control campoLetras required"
-										onchange="getVals(this, 'name_field');">
+									<input type="text" name="nombres" id="nombres" value="{{user.nombres}}"
+										class="form-control campoLetras required">
 								</div>
 								<div class="form-group col-md-6">
 									<label for="apellido">Apellido</label>
-									<input type="text" name="apellido" id="apellido" value="{{user.apellidos}}"
+									<input type="text" name="apellidos" id="apellidos" value="{{user.apellidos}}"
 										class="form-control campoLetras required"
 										onchange="getVals(this, 'apellido_field');">
 								</div>
@@ -142,14 +141,15 @@
 							<!-- /Fila Grupo de campos -->
 							<div class="row add_top_10">
 								{{!-- CAMPO FECHA DE NACIMIENTO --}}
-								<div class="form-group col-md-6 ">
-									{{!-- <label for="fecha_nacimiento">Fecha de Nacimiento</label> --}}
+
+								<div class="form-group col-md-6">
 									<duet-date-picker placeholder="Fecha de nacimiento" name="fecha_nacimiento"
 										id="fecha_nacimiento" min="1932-01-01" max="{{fechaMaxima}}"
-										value="{{ficha.fecha_nacimiento}}"></duet-date-picker>
+										value="{{ficha.fecha_nacimiento}}" class="required" required first-day-of-week="0"></duet-date-picker>
 								</div>
+
+								{{!-- CAMPO PAIS/NACIONALIDAD --}}
 								<div class="form-group col-md-6">
-									{{!-- <label for="pais">País/Nacionalidad</label> --}}
 									<select name="pais" id="pais"
 										class="form-control sltBox chosen-container chosen-container-single required">
 										{{#if ficha}}
@@ -161,7 +161,6 @@
 										<option value="{{name}} ({{isoCode}})">{{name}} ({{isoCode}})</option>
 										{{/each}}
 									</select>
-									{{!-- <input type="text" name="pais" id="pais" value="{{ficha.pais}}"> --}}
 								</div>
 							</div>
 							<!-- / GRUPO DE CAMPOS REDES SOCIALES -->
@@ -169,7 +168,7 @@
 								<div class="form-group col-md-12">
 									<label class="mb-2">Redes Sociales</label>
 									<div class="input-group-prepend mb-2">
-										<span class="input-group-text">https://twitter.com/</span>
+										<span class="input-group-text" style="padding-right: 32px;">https://twitter.com/</span>
 										{{!-- <label for="twitter">Twitter</label> --}}
 										<input type="text" name="twitter" id="twitter"
 											value="{{datos.redes_sociales.twitter}}" class="form-control"
@@ -190,7 +189,7 @@
 											onchange="getVals(this, 'instagram_field');" placeholder="usuarioInstagram">
 									</div>
 									<div class="input-group-prepend mb-2">
-										<span class="input-group-text">https://www.</span>
+										<span class="input-group-text" style="padding-right: 87px;">https://www.</span>
 										<input type="text" name="otra" value="{{datos.redes_sociales.otra}}"
 											class="form-control mb-2" placeholder="otra-red.com" onchange="getVals(this, 'otra_field');">
 									</div>
@@ -290,7 +289,7 @@
 										onchange="getVals(this, 'num_empleados_field');" min="1">
 								</div>
 								<div class="form-group col-md-6">
-									<label for="page_web">Página Web</label>
+									<label for="page_web">Página Web https://ejemplo.com</label>
 									<input type="url" name="page_web" id="page_web" value="{{ficha.page_web}}"
 										class="form-control" onchange="getVals(this, 'page_web_field');">
 								</div>
@@ -414,8 +413,7 @@
 
 							<div class="row add_top_10">
 								<div class="form-group col-md-12">
-									<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta
-										consultoría de negocio?</label>
+									<label for="motivo_consultoria">¿Cuál es el motivo por el que requiere esta consultoría de negocio?</label>
 									<textarea name="motivo_consultoria" id="motivo_consultoria"
 										class="form-control required"
 										style="height: 115px; min-height: 110px; padding-top: 1.3em;">{{ficha.motivo_consultoria}}</textarea>
@@ -429,11 +427,7 @@
 							<div class="summary">
 								<div class="wrapper">
 									<h3>Gracias por su tiempo<br>
-										{{#if ficha.nombre}}
-										{{ficha.nombre}}!
-										{{else}}
 										<span id="nameStepFinal"></span>!
-										{{/if}}
 									</h3>
 									<p>Al guardar los datos será redirigido al panel de diagnóstico de negocio</p>
 								</div>
@@ -444,6 +438,7 @@
 
 						{{!-- FECHA DE EDICIÓN --}}
 						<input type="hidden" id="fecha_zh" name="fecha_zh">
+						<input type="hidden" id="fechaDB" value="{{ficha.fecha_nacimiento}}">
 
 					</div>
 					<!-- /middle-wizard -->
@@ -473,8 +468,12 @@
 	<script>
 
 		//Capturando Campo Nombres para el paso Final
-		const nom1 = document.getElementById("name").value;
-		document.getElementById("nameStepFinal").innerHTML = nom1;
+		const nom1 = document.getElementById("nombres");
+		const nameFinal = document.getElementById("nameStepFinal");
+		nameFinal.innerHTML = nom1.value;
+		nom1.onchange = function () {
+			nameFinal.innerHTML = nom1.value
+		}
 
 		// Asignando fecha de modificación al campo oculto
 		const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -505,7 +504,7 @@
 			let int = e.target.value.slice(0, e.target.value.length - 1);
 
 			if (int.includes('%')) {
-				e.target.value = 0 + '';
+				e.target.value = int + '%';
 			} else if (int == 100 && !int.includes('.')) {
 				e.target.value = int + '%';
 			} else if (int.length >= 3 && int.length <= 4 && !int.includes('.')) {
@@ -516,11 +515,6 @@
 				let fraction = int.slice(3, 5);
 				e.target.value = whole + '.' + fraction + '%';
 			} else {
-				/*
-				if (int.length == 0) {
-					e.target.value = int;
-				} else {
-				}*/
 				e.target.value = int + '%';
 				e.target.setSelectionRange(e.target.value.length - 1, e.target.value.length - 1);
 			}
@@ -554,9 +548,15 @@
 			closeLabel: "Cerrar ventana",
 			calendarHeading: "Selecciona una fecha",
 			dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+			//dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
 			monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
 			monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
 			locale: "en-US",
 		}
+
+		// Asignando Fecha de la base de datos
+		const fna = document.getElementById("fecha_nacimiento");
+		const fechaDB = document.getElementById("fechaDB").value;
+		fna.value = fechaDB
 
 	</script>

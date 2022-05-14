@@ -116,10 +116,13 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
 dashboardController.editarEmpresa = async (req, res) => {
     const codigo = req.params.codigo
-    let empresa = await pool.query('SELECT * FROM users e LEFT OUTER JOIN ficha_cliente f ON e.id = f.id_user AND e.codigo = ? LIMIT 1', [codigo])
+    let user = await pool.query('SELECT * FROM users WHERE codigo = ? LIMIT 1', [codigo])
+    user = user[0]
+    let empresa = await pool.query('SELECT * FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = ? AND e.codigo = ? LIMIT 1', [user.id, codigo])
     console.log("-------")
     console.log(empresa)
     console.log("-------")
+    empresa = empresa[0]
     res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true})
 }
 

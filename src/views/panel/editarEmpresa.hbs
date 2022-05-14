@@ -34,7 +34,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Datos del Empresa</h4>
+                <h4 class="card-title">Datos de la Empresa</h4>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -83,6 +83,95 @@
                         <div class="form-group">
                             <label>País</label>
                             <input type="text" value="{{empresa.pais}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Redes Sociales</label>
+                            {{#if empresa.redes}}
+                                {{#if empresa.redes.twitter}}
+                                <input type="text" value="{{empresa.redes.twitter}}" class="form-control" disabled>
+                                {{/if}}
+                                {{#if empresa.redes.facebook}}
+                                <input type="text" value="{{empresa.redes.facebook}}" class="form-control" disabled>
+                                {{/if}}
+                                {{#if empresa.redes.instagram}}
+                                <input type="text" value="{{empresa.redes.instagram}}" class="form-control" disabled>
+                                {{/if}}
+                                {{#if empresa.redes.otra}}
+                                <input type="text" value="{{empresa.redes.otra}}" class="form-control" disabled>
+                                {{/if}}
+                            {{else}}
+                            <input type="text" value="N/A" class="form-control" disabled>
+                            {{/if}}
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>¿Es dueño del negocio?</label>
+                            <input type="text" value="{{empresa.propietario}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>¿Tiene socios?</label>
+                            <input type="text" value="{{empresa.socios}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Cantidad de socios</label>
+                            <input type="text" value="{{empresa.numSocios}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Porcentaje Accionario</label>
+                            <input type="text" value="{{empresa.porcentaje}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Tiempo de fundación</label>
+                            <input type="text" value="{{empresa.tiempoFundada}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Años de experiencia</label>
+                            <input type="text" value="{{empresa.experiencia}} años" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Promedio de ingreso anual</label>
+                            <input type="text" value="{{empresa.promIngresos}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Número de empleados</label>
+                            <input type="text" value="{{empresa.numEmpleados}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Página Web</label>
+                            {{#if empresa.pageWeb}}
+                            <input type="text" value="{{empresa.pageWeb}}" class="form-control" disabled>
+                            {{else}}
+                            <input type="text" value="N/A" class="form-control" disabled>
+                            {{/if}}
                         </div>
                     </div>
 
