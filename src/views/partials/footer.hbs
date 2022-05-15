@@ -48,8 +48,19 @@
                     width: '100%',
                 });
             }
-            const claseCajaPais = $('.sltBox')
+            const claseCajaPais = $('#pais')
             selectBuscarPais(claseCajaPais);
+
+            function selectBuscar(id) {
+                id.chosen({
+                    no_results_text: "Sin resultados para",
+                    allow_single_deselect: true,
+                    placeholder_text_single: "Selecciona una opción",
+                    width: '100%',
+                });
+            }
+            const claseCajaGeneral = $('.sltBuscar')
+            selectBuscar(claseCajaGeneral);
 
             // CAMPOS SOLO LETRAS
             $("input.campoLetras").bind('keypress', function (event) {

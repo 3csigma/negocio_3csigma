@@ -62,6 +62,12 @@
 	.fl-wrap.fl-wrap-input {
 		width: 100%;
 	}
+	.chosen-container .chosen-results li.highlighted {
+		background-color: #F4F5F9;
+		background-image: -webkit-gradient(linear,left top,left bottom,color-stop(20%,#f4f5f9),color-stop(90%,#f4f5f9));
+		background-image: #F4F5F9 !important;
+		color: #000;
+	}
 </style>
 
 <div class="container-fluid">
@@ -151,7 +157,7 @@
 								{{!-- CAMPO PAIS/NACIONALIDAD --}}
 								<div class="form-group col-md-6">
 									<select name="pais" id="pais"
-										class="form-control sltBox chosen-container chosen-container-single required">
+										class="form-control chosen-container chosen-container-single required">
 										{{#if ficha}}
 										<option value="{{ficha.pais}}">{{ficha.pais}}</option>
 										{{else}}

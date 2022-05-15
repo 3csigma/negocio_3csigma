@@ -115,15 +115,28 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 }
 
 dashboardController.editarEmpresa = async (req, res) => {
-    const codigo = req.params.codigo
+    const codigo = req.params.codigo, datos = {};
     let user = await pool.query('SELECT * FROM users WHERE codigo = ? LIMIT 1', [codigo])
     user = user[0]
     let empresa = await pool.query('SELECT * FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = ? AND e.codigo = ? LIMIT 1', [user.id, codigo])
-    console.log("-------")
-    console.log(empresa)
-    console.log("-------")
     empresa = empresa[0]
-    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true})
+
+    const fNac = new Date(empresa.fecha_nacimiento)
+    empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
+
+    if (empresa.redes_sociales){
+        datos.redes = JSON.parse(empresa.redes_sociales)
+        datos.redes.twitter != '' ? datos.redes.twitter = datos.redes.twitter : datos.redes.twitter = false
+        datos.redes.facebook != '' ? datos.redes.facebook = datos.redes.facebook : datos.redes.facebook = false
+        datos.redes.instagram != '' ? datos.redes.instagram = datos.redes.instagram : datos.redes.instagram = false
+        datos.redes.otra != '' ? datos.redes.otra = datos.redes.otra : datos.redes.otra = false
+    }
+    
+    datos.objetivos = JSON.parse(empresa.objetivos)
+    datos.fortalezas = JSON.parse(empresa.fortalezas)
+    datos.problemas = JSON.parse(empresa.problemas)
+
+    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true, datos})
 }
 
 dashboardController.actualizarEmpresa = async (req, res) => {
