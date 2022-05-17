@@ -1,14 +1,58 @@
-.form-completado {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
-    color: #fff;
+/* Barra scroll personalizada */
+.barra-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+    appearance: none;
+}
+.barra-scroll::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+.barra-scroll::-webkit-scrollbar-button:increment,
+.barra-scroll::-webkit-scrollbar-button {
+    display: none;
+}
+.barra-scroll::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+.barra-scroll::-webkit-scrollbar-thumb {
+    background-color: #50368c;
+    border-radius: 10px;
+    border: 1px solid rgba(155, 155, 155, 0.747);
+}
+.barra-scroll::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #eae6f4;
+}
+/* Fin Barra scroll personalizada */
+
+/* Clases generales */
+.overflow-y-auto {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.overflow-x-auto {
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
-.form-incompleto {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
-    color: #fff;
+.tabla-hfijo tbody {
+    display: block;
 }
-
-.form-pendiente {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+.tabla-hfijo thead,
+.tabla-hfijo tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.tabla-hfijo thead {
+    width: calc(100% - 10px)
+}
+.table-striped>tbody>tr:nth-child(odd) {
+    background-color: #e8f6ff;
+}
+.table-striped>tbody>tr:nth-child(even) {
+    background-color: #f5fbfd;
+}
+.table-striped>tbody>tr:hover {
+    background-color: #0c537ccb;
     color: #fff;
 }

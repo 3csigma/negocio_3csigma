@@ -80,7 +80,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email_consultor, clave_consultor, done) => {
     
-    const { nombres_consultor, apellidos_consultor, tel_consultor, direccion_consultor, experiencia_years, zh_consultor } = req.body
+    const { nombres_consultor, apellidos_consultor, tel_consultor, direccion_consultor, experiencia_years, certificadoConsul, zh_consultor } = req.body
     
     pool.query('SELECT * FROM consultores WHERE email_consultor = ?', [email_consultor], async (err, result) => {
 
@@ -101,7 +101,9 @@ passport.use('local.registroConsultores', new LocalStrategy({
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
 
             // Objeto de Usuario
-            const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_years, fecha_creacion, codigo };
+            const certificado = '../certificados_consultores/' + urlCertificado
+
+            const nuevoConsultor = { nombres_consultor, apellidos_consultor, email_consultor, clave_consultor, tel_consultor, direccion_consultor, experiencia_years, certificado, fecha_creacion, codigo };
 
             // Encriptando la clave
             nuevoConsultor.clave_consultor = await helpers.encryptPass(clave_consultor);

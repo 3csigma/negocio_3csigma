@@ -45,7 +45,8 @@
         height: 43px !important;
         padding-top: 7px;
     }
-    .custom-file-input:lang(en)~.custom-file-label::after{
+
+    .custom-file-input:lang(en)~.custom-file-label::after {
         content: "Seleccionar";
     }
 </style>
@@ -85,7 +86,7 @@
         {{!-- COLUMNA DERECHA --}}
         <div class="col-xl-8 col-lg-8 content-right" id="start">
             <div id="wizard_container">
-                <form class="sigmaWizard" id="frmConsultor" method="POST">
+                <form class="sigmaWizard" id="frmConsultor" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <div id="middle-wizard">
                         {{> message }}
@@ -129,12 +130,18 @@
                                     class="form-control campoNum mb-2 required">
                                 <input type="hidden" name="zh_consultor" id="zh_consultor">
                             </div>
+                            <div class="form-group col-md-12" style="margin-bottom: -3px">
+                                <label>Certificado de Consul International Group</label><br>
+                                <span id="txtFile"></span>
+                            </div>
                             <div class="form-group col-md-12 input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input">
-                                    <span class="custom-file-label">Certificado Consul International Group</span>
+                                    <input type="file" class="custom-file-input required" id="certificado" name="certificadoConsul"
+                                        accept="application/pdf">
+                                    <span class="custom-file-label" id="msgInput">Solo se admiten archivos PDF</span>
                                 </div>
                             </div>
+
                         </div>
                         <!-- /Fila Grupo de campos -->
                     </div>
@@ -171,5 +178,31 @@
         // Asignando Zona horaria
         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
         document.getElementById("zh_consultor").value = tzLocal
+
+        // Validando tipo de archivo solo pdf
+        document.getElementById("certificado").addEventListener('change', function () {
+
+            let fileName = this.files[0].name;
+            const txtFileMsg = document.getElementById("txtFile")
+            const msgInput = document.getElementById("msgInput")
+            //let fileSize = this.files[0].size;
+
+            let ext = fileName.split('.').pop();
+            ext = ext.toLowerCase(); // Convirtiendo el valor de la extensión en miníscula
+
+            //console.log(this.files[0])
+
+            switch (ext) {
+                case 'pdf':
+                    txtFileMsg.innerHTML = '';
+                    break;
+                default:
+                    txtFileMsg.style.fontWeight = "500";
+                    txtFileMsg.style.color = "red";
+                    txtFileMsg.innerHTML = 'Solo se admiten archivos .pdf';
+                    this.value = '';
+                    msgInput.innerHTML = 'Certificado Consul International Group (PDF)';
+            }
+        });
 
     </script>

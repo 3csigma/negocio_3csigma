@@ -8,13 +8,8 @@
     }
 
     .form-control:disabled {
-        /*text-align: center;*/
         background: #f9f9f9;
         color: #7E7E7E;
-    }
-
-    .form-group {
-        /*text-align: center;*/
     }
 
     .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
@@ -71,10 +66,20 @@
     .iconRed {
         max-width: 70px !important;
     }
+
     .nav-tabs .nav-item .nav-link:before {
-    background-color: transparent;
-}
+        background-color: transparent;
+    }
+
+    .profile-tab .nav-item .nav-link {
+        margin-right: 25px;
+    }
+
+    .nav-tabs .nav-item .nav-link.active:before {
+        background-color: #50368c;
+    }
 </style>
+<link rel="stylesheet" href="../css/estilosPersonales.css">
 <!--**********************************
         Content body start
 ***********************************-->
@@ -109,6 +114,8 @@
         {{!-- ./Fin Header Card --}}
 
         <div class="row">
+
+            {{!-- COLUNMA IZQUIERDA RESUMEN --}}
             <div class="col-xl-4">
                 <div class="card">
                     <div class="card-body">
@@ -135,18 +142,16 @@
                                             <label>Asignar consultor</label>
                                             <select name="id_consultor" id="id_consultor"
                                                 class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                {{#if empresa.id_consultorx}}
-                                                <option value="{{empresa.id_consultor}}">{{empresa.id_consultor}}
-                                                </option>
-                                                {{else}}
                                                 <option value=""></option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                {{/if}}
-                                                {{!-- {{#each datos.consultores}}
-                                                <option value="{{name}} ({{isoCode}})">{{name}} ({{isoCode}})</option>
-                                                {{/each}} --}}
+                                                {{#each consultores}}
+                                                {{#comparar id '==' idCon}}
+                                                <option value="{{id}}" selected>
+                                                    {{/comparar}}
+                                                    {{#comparar id '!=' idCon}}
+                                                <option value="{{id}}">
+                                                    {{/comparar}}
+                                                    {{nombres_consultor}} {{apellidos_consultor}}</option>
+                                                {{/each}}
                                             </select>
                                         </div>
                                         <div class="col">
@@ -180,12 +185,12 @@
                                         <div class="col">
                                             <div class="form-group" style="text-align: left !important">
                                                 <label
-                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Motivo
-                                                    de la consultoría</label>
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción
+                                                    del negocio</label>
                                                 <textarea
                                                     style="height: 400px; min-height: 400px; max-height: 400px; width: 100%; text-align: justify; background: transparent !important; border: none"
-                                                    class="form-control"
-                                                    disabled>{{empresa.motivo_consultoria}}</textarea>
+                                                    class="form-control barra-scroll overflow-y-auto"
+                                                    disabled>{{empresa.descripcion}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -342,156 +347,175 @@
 
                         </div>
 
-                        {{!-- <div class="profile-blog mb-5">
-                            <h5 class="text-primary d-inline">Today Highlights</h5><a href="javascript:void()"
-                                class="pull-right f-s-16">More</a>
-                            <img src="images/profile/1.jpg" alt="" class="img-fluid mt-4 mb-4 w-100">
-                            <h4><a href="post-details.html" class="text-black">Darwin Creative Agency Theme</a></h4>
-                            <p class="mb-0">A small river named Duden flows by their place and supplies it with the
-                                necessary regelialia. It is a paradisematic country, in which roasted parts of sentences
-                                fly into your mouth.</p>
-                        </div>
-                        <div class="profile-interest mb-5">
-                            <h5 class="text-primary d-inline">Interest</h5>
-                            <div class="row mt-4 sp4" id="lightgallery">
-                                <a href="images/profile/2.jpg" data-exthumbimage="images/profile/2.jpg"
-                                    data-src="images/profile/2.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/2.jpg" alt="" class="img-fluid">
-                                </a>
-                                <a href="images/profile/3.jpg" data-exthumbimage="images/profile/3.jpg"
-                                    data-src="images/profile/3.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/3.jpg" alt="" class="img-fluid">
-                                </a>
-                                <a href="images/profile/4.jpg" data-exthumbimage="images/profile/4.jpg"
-                                    data-src="images/profile/4.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/4.jpg" alt="" class="img-fluid">
-                                </a>
-                                <a href="images/profile/3.jpg" data-exthumbimage="images/profile/3.jpg"
-                                    data-src="images/profile/3.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/3.jpg" alt="" class="img-fluid">
-                                </a>
-                                <a href="images/profile/4.jpg" data-exthumbimage="images/profile/4.jpg"
-                                    data-src="images/profile/4.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/4.jpg" alt="" class="img-fluid">
-                                </a>
-                                <a href="images/profile/2.jpg" data-exthumbimage="images/profile/2.jpg"
-                                    data-src="images/profile/2.jpg" class="mb-1 col-lg-4 col-xl-4 col-sm-4 col-6">
-                                    <img src="images/profile/2.jpg" alt="" class="img-fluid">
-                                </a>
-                            </div>
-                        </div>
-                        <div class="profile-news">
-                            <h5 class="text-primary d-inline">Our Latest News</h5>
-                            <div class="media pt-3 pb-3">
-                                <img src="images/profile/5.jpg" alt="image" class="mr-3 rounded" width="75">
-                                <div class="media-body">
-                                    <h5 class="m-b-5"><a href="post-details.html" class="text-black">Collection of
-                                            textile samples</a></h5>
-                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
-                                </div>
-                            </div>
-                            <div class="media pt-3 pb-3">
-                                <img src="images/profile/6.jpg" alt="image" class="mr-3 rounded" width="75">
-                                <div class="media-body">
-                                    <h5 class="m-b-5"><a href="post-details.html" class="text-black">Collection of
-                                            textile samples</a></h5>
-                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
-                                </div>
-                            </div>
-                            <div class="media pt-3 pb-3">
-                                <img src="images/profile/7.jpg" alt="image" class="mr-3 rounded" width="75">
-                                <div class="media-body">
-                                    <h5 class="m-b-5"><a href="post-details.html" class="text-black">Collection of
-                                            textile samples</a></h5>
-                                    <p class="mb-0">I shared this on my fb wall a few months back, and I thought.</p>
-                                </div>
-                            </div>
-                        </div> --}}
-
                     </div>
                 </div>
             </div>
 
+            {{!-- COLUNMA DERECHA CON PESTAÑAS --}}
             <div class="col-xl-8">
                 <div class="card">
                     <div class="card-body">
+
+                        {{!-- Pestañas Fijas --}}
                         <div class="profile-tab">
                             <div class="custom-tab-1">
                                 <ul class="nav nav-tabs">
-                                    <li class="nav-item"><a href="#my-posts" data-toggle="tab"
-                                            class="nav-link active show">Posts</a>
-                                    </li>
-                                    <li class="nav-item"><a href="#about-me" data-toggle="tab" class="nav-link">About
-                                            Me</a>
-                                    </li>
-                                    <li class="nav-item"><a href="#profile-settings" data-toggle="tab"
-                                            class="nav-link">Setting</a>
-                                    </li>
+                                    <li class="nav-item"><a href="#representante" data-toggle="tab"
+                                            class="nav-link active show">Representante</a></li>
+                                    <li class="nav-item"><a href="#empresa" data-toggle="tab"
+                                            class="nav-link">Empresa</a></li>
+                                    <li class="nav-item"><a href="#settings" data-toggle="tab"
+                                            class="nav-link">Config</a></li>
                                 </ul>
+                            </div>
+                        </div>
+                        {{!-- ./ Fin de pestañas --}}
+
+                        {{!-- Contenido de pestañas --}}
+                        <div class="profile-tab barra-scroll overflow-y-auto" style="max-height: 110vh;">
+
+                            <div class="custom-tab-1">
+
                                 <div class="tab-content">
-                                    <div id="my-posts" class="tab-pane fade active show">
+                                    {{!-- PESTAÑA 1 --}}
+                                    <div id="representante" class="tab-pane fade active show">
                                         <div class="my-post-content pt-3">
-                                            <div class="post-input">
-                                                <textarea name="textarea" id="textarea" cols="30" rows="5"
-                                                    class="form-control bg-transparent"
-                                                    placeholder="Please type what you want...."></textarea>
-                                                <a href="javascript:void()" class="btn btn-primary light px-3"><i
-                                                        class="fa fa-link"></i> </a>
-                                                <a href="javascript:void()" class="btn btn-primary light mr-1 px-3"><i
-                                                        class="fa fa-camera"></i> </a><a href="javascript:void()"
-                                                    class="btn btn-primary">Post</a>
+                                            {{!-- Datos personales --}}
+                                            <div class="profile-personal-info">
+                                                <h4 class="text-primary mb-4">Datos personales</h4>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Email <span class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.email}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Fecha de Nacimiento <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7">
+                                                        <span>{{empresa.fecha_nacimiento}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">País/Nacionalidad <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.pais}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">¿Dueño del negocio? <span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.es_propietario}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">¿Tiene socios?<span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.socios}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Porcentaje Accionario<span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7">
+                                                        <span>{{empresa.porcentaje_accionario}}</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="profile-uoloaded-post border-bottom-1 pb-5">
-                                                <img src="images/profile/8.jpg" alt="" class="img-fluid">
-                                                <a class="post-title" href="post-details.html">
-                                                    <h3 class="text-black">Collection of textile samples lay spread</h3>
-                                                </a>
-                                                <p>A wonderful serenity has take possession of my entire soul like these
-                                                    sweet morning of spare which enjoy whole heart.A wonderful serenity
-                                                    has take possession of my entire soul like these sweet morning
-                                                    of spare which enjoy whole heart.</p>
-                                                <button class="btn btn-primary mr-2"><span class="mr-2"><i
-                                                            class="fa fa-heart"></i></span>Like</button>
-                                                <button class="btn btn-secondary" data-toggle="modal"
-                                                    data-target="#replyModal"><span class="mr-2"><i
-                                                            class="fa fa-reply"></i></span>Reply</button>
+
+                                            {{!-- Más Sobre la empresa --}}
+                                            <div class="profile-personal-info mt-5">
+                                                <h4 class="text-primary mb-3">Sobre la empresa</h4>
+
+                                                <div class="row mb-2">
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Tiempo de Fundación</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                                    </div>
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Promedio de ingreso anual</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
+                                                    </div>
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Etapa del negocio</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.etapa_actual}}</a>
+                                                    </div>
+
+                                                </div>
+
+                                                {{!-- OBJETIVOS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Objetivos</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.objetivos.objetivo1}}<br>
+                                                        2- {{datos.objetivos.objetivo2}}<br>
+                                                        3- {{datos.objetivos.objetivo3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- FORTALEZAS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Fortalezas</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.fortalezas.fortaleza1}}<br>
+                                                        2- {{datos.fortalezas.fortaleza2}}<br>
+                                                        3- {{datos.fortalezas.fortaleza3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- PROBLEMAS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Problemas</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.problemas.problema1}}<br>
+                                                        2- {{datos.problemas.problema2}}<br>
+                                                        3- {{datos.problemas.problema3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- MOTIVO DE LA CONSULTORÍA --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2 border-bottom-1">
+                                                        <h5 class="f-w-500">Motivo de la consultoría</h4>
+                                                        <p style="text-align: justify;"> {{empresa.motivo_consultoria}}</p>
+                                                    </div>
+                                                </div>
+
                                             </div>
-                                            <div class="profile-uoloaded-post border-bottom-1 pb-5">
-                                                <img src="images/profile/9.jpg" alt="" class="img-fluid">
-                                                <a class="post-title" href="post-details.html">
-                                                    <h3 class="text-black">Collection of textile samples lay spread</h3>
-                                                </a>
-                                                <p>A wonderful serenity has take possession of my entire soul like these
-                                                    sweet morning of spare which enjoy whole heart.A wonderful serenity
-                                                    has take possession of my entire soul like these sweet morning
-                                                    of spare which enjoy whole heart.</p>
-                                                <button class="btn btn-primary mr-2"><span class="mr-2"><i
-                                                            class="fa fa-heart"></i></span>Like</button>
-                                                <button class="btn btn-secondary" data-toggle="modal"
-                                                    data-target="#replyModal"><span class="mr-2"><i
-                                                            class="fa fa-reply"></i></span>Reply</button>
-                                            </div>
-                                            <div class="profile-uoloaded-post pb-3">
-                                                <img src="images/profile/8.jpg" alt="" class="img-fluid">
-                                                <a class="post-title" href="post-details.html">
-                                                    <h3 class="text-black">Collection of textile samples lay spread</h3>
-                                                </a>
-                                                <p>A wonderful serenity has take possession of my entire soul like these
-                                                    sweet morning of spare which enjoy whole heart.A wonderful serenity
-                                                    has take possession of my entire soul like these sweet morning
-                                                    of spare which enjoy whole heart.</p>
-                                                <button class="btn btn-primary mr-2"><span class="mr-2"><i
-                                                            class="fa fa-heart"></i></span>Like</button>
-                                                <button class="btn btn-secondary" data-toggle="modal"
-                                                    data-target="#replyModal"><span class="mr-2"><i
-                                                            class="fa fa-reply"></i></span>Reply</button>
-                                            </div>
+
+
+                                            {{!-- <div class="profile-uoloaded-post border-bottom-1 pb-5">
+                                                <img src="../img/profile/8.jpg" alt="" class="img-fluid">
+                                            </div> --}}
+
                                         </div>
                                     </div>
-                                    <div id="about-me" class="tab-pane fade">
+
+                                    {{!-- PESTAÑA 2 --}}
+                                    <div id="empresa" class="tab-pane fade">
                                         <div class="profile-about-me">
                                             <div class="pt-4 border-bottom-1 pb-3">
-                                                <h4 class="text-primary">About Me</h4>
+                                                <h4 class="text-primary"></h4>
                                                 <p class="mb-2">A wonderful serenity has taken possession of my entire
                                                     soul, like these sweet mornings of spring which I enjoy with my
                                                     whole heart. I am alone, and feel the charm of existence was created
@@ -504,30 +528,17 @@
                                                     nice, gilded frame.</p>
                                             </div>
                                         </div>
+
+                                        <div class="profile-lang mb-5">
+                                            <h4 class="text-primary mb-2">Tiempo de Fundación</h4>
+                                            <a class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                        </div>
+
                                         <div class="profile-skills mb-5">
-                                            <h4 class="text-primary mb-2">Skills</h4>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Admin</a>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Dashboard</a>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Photoshop</a>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Bootstrap</a>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Responsive</a>
-                                            <a href="javascript:void()"
-                                                class="btn btn-primary light btn-xs mb-1">Crypto</a>
+                                            <h4 class="text-primary mb-2">Promedio de ingreso anual</h4>
+                                            <a class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
                                         </div>
-                                        <div class="profile-lang  mb-5">
-                                            <h4 class="text-primary mb-2">Language</h4>
-                                            <a href="javascript:void()" class="text-muted pr-3 f-s-16"><i
-                                                    class="flag-icon flag-icon-us"></i> English</a>
-                                            <a href="javascript:void()" class="text-muted pr-3 f-s-16"><i
-                                                    class="flag-icon flag-icon-fr"></i> French</a>
-                                            <a href="javascript:void()" class="text-muted pr-3 f-s-16"><i
-                                                    class="flag-icon flag-icon-bd"></i> Bangla</a>
-                                        </div>
+
                                         <div class="profile-personal-info">
                                             <h4 class="text-primary mb-4">Personal Information</h4>
                                             <div class="row mb-2">
@@ -580,7 +591,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="profile-settings" class="tab-pane fade">
+
+                                    {{!-- PESTAÑA 2 --}}
+                                    <div id="settings" class="tab-pane fade">
                                         <div class="pt-3">
                                             <div class="settings-form">
                                                 <h4 class="text-primary">Account Setting</h4>
@@ -640,227 +653,15 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <!-- Modal -->
-                            <div class="modal fade" id="replyModal">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Post Reply</h5>
-                                            <button type="button" class="close"
-                                                data-dismiss="modal"><span>&times;</span></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <textarea class="form-control" rows="4">Message</textarea>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-danger light"
-                                                data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Reply</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        {{!-- <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Datos de la Empresa</h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Teléfono</label>
-                            <input type="text" value="{{empresa.telefono}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Fecha de Nacimiento</label>
-                            <input type="text" value="{{empresa.fecha_nacimiento}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>País</label>
-                            <input type="text" value="{{empresa.pais}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>¿Es dueño del negocio?</label>
-                            <input type="text" value="{{empresa.es_propietario}}" class="form-control" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label>Porcentaje Accionario</label>
-                            <input type="text" value="{{empresa.porcentaje_accionario}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>¿Tiene socios?</label>
-                            <input type="text" value="{{empresa.socios}}" class="form-control" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label>Cantidad de socios</label>
-                            <input type="text" value="{{empresa.cantidad_socios}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Tiempo de fundación</label>
-                            <input type="text" value="{{empresa.tiempo_fundacion}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Años de experiencia</label>
-                            <input type="text" value="{{empresa.tiempo_experiencia}} años" class="form-control"
-                                disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Promedio de ingreso anual</label>
-                            <input type="text" value="{{empresa.promedio_ingreso_anual}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Número de empleados</label>
-                            <input type="text" value="{{empresa.num_empleados}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Página Web</label>
-                            {{#if empresa.page_web}}
-                            <input type="text" value="{{empresa.page_web}}" class="form-control" disabled>
-                            {{else}}
-                            <input type="text" value="N/A" class="form-control" disabled>
-                            {{/if}}
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Etapa del negocio</label>
-                            <input type="text" value="{{empresa.etapa_actual}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Descripción del negocio</label>
-                            <textarea style="height: 147px; min-height: 147px; width: 100%" class="form-control"
-                                disabled>{{empresa.descripcion}}</textarea>
-                        </div>
-                    </div>
-
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Objetivos principales del negocio</label>
-                            <input type="text" value="{{datos.objetivos.objetivo1}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.objetivos.objetivo2}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.objetivos.objetivo3}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Fortalezas principales del negocio</label>
-                            <input type="text" value="{{datos.fortalezas.fortaleza1}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.fortalezas.fortaleza2}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.fortalezas.fortaleza3}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Problemas principales del negocio</label>
-                            <input type="text" value="{{datos.problemas.problema1}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.problemas.problema2}}" class="form-control" disabled>
-                            <input type="text" value="{{datos.problemas.problema3}}" class="form-control" disabled>
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Motivo de la consultoría</label>
-                            <textarea style="height: 150px; min-height: 150px; width: 100%" class="form-control"
-                                disabled>{{empresa.motivo_consultoria}}</textarea>
-                        </div>
-                    </div>
-
-
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label>Confirmación de email</label>
-                            {{#comparar empresa.estado '==' '1'}}
-                            <input type="text" value="Si" class="form-control" disabled>
-                            {{/comparar}}
-                            {{#comparar empresa.estado '!=' '1'}}
-                            <input type="text" value="No" class="form-control" disabled>
-                            {{/comparar}}
-                        </div>
-                        <div class="form-group">
-
-                        </div>
-                    </div>
-
-                    <div class="col-xl-4">
-                        <label>Estado de la cuenta</label>
-                        <select id="estado_consul" class="mr-sm-2 default-select text-center">
-                            {{#comparar empresa.estadoAdm '==' '1'}}
-                            <option value="1" selected>Activa</option>
-                            <option value="0">Bloqueada</option>
-                            {{/comparar}}
-                            {{#comparar empresa.estadoAdm '!=' '1'}}
-                            <option value="0" selected>Bloqueada</option>
-                            <option value="1">Activa</option>
-                            {{/comparar}}
-                        </select>
-                    </div>
-
-                </div>
-                <!-- ./Fin Fila 1 -->
-
-                <div class="row">
-                    <div class="col-xl-3 m-auto">
-                        <div class="form-group">
-                            <a type="button" class="add-menu-sidebar" id="btnActualizarEmpresa"
-                                style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; padding: 10px 15px;">
-                                <p class="font-w500 m-auto">Guardar cambios</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div> --}}
 
     </div>
 

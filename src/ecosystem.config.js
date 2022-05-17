@@ -5,7 +5,7 @@ module.exports = {
         watch: ["server", "client"],
         // Delay between restart
         watch_delay: 1000,
-        ignore_watch: ["node_modules", "public/algo_x"],
+        ignore_watch: ["node_modules", "public/certificado_consultores"],
         env_production: {
             NODE_ENV: "production"
         },

@@ -1,6 +1,18 @@
 const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
+const helpers = require('../lib/helpers')
+
+function delDuplicados(array) { // Eliminar elemetos duplicados de un Arreglo
+    resultado = [];
+    for (let i = 0; i < array.length; i++) {
+        const c = array[i];
+        if (!resultado.includes(array[i])) {
+            resultado.push(c);
+        }
+    }
+    return resultado;
+}
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
@@ -64,10 +76,10 @@ dashboardController.index = async (req, res) => {
 
 }
 
-
 // CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
     res.render('auth/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
+    // res.render('auth/registroConsultor', { wizarx: true })
 }
 
 dashboardController.addConsultores = (req, res, next) => {
@@ -94,6 +106,9 @@ dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
     let consultor = await pool.query('SELECT * FROM consultores WHERE codigo = ?', [codigo])
     consultor = consultor[0];
+    if (consultor.certificado){
+        consultor.txtCertificado = consultor.certificado.split('/')[2]
+    }
     res.render('panel/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true})
 }
 
@@ -136,7 +151,20 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.fortalezas = JSON.parse(empresa.fortalezas)
     datos.problemas = JSON.parse(empresa.problemas)
 
-    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true, datos})
+    const consulAsignado = await pool.query('SELECT * FROM consultores WHERE id = ?', [empresa.id_consultor])
+    let idConsultor = '';
+    if (consulAsignado.length > 0) {
+        idConsultor = consulAsignado[0].id;
+        empresa.nomConsul = consulAsignado[0].nombres_consultor + " " + consulAsignado[0].apellidos_consultor;
+    }
+    
+    let consultores = await pool.query('SELECT * FROM consultores')
+    consultores.ideEmpresa = empresa.id_consultor
+    consultores.forEach(cs => {
+        cs.idCon = idConsultor;
+    });
+
+    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores})
 }
 
 dashboardController.actualizarEmpresa = async (req, res) => {

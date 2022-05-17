@@ -22,29 +22,13 @@
                 <div class="form-items">
                     {{> message }}
                     <p class="msg-Login-Top">Preparate para ver crecer tu empresa</p>
-                    <h3 class="tituH3">Crea tu cuenta hoy</h3>
-                    {{!-- Autenticación Google & Facebook --}}
-                    {{!-- <div class="row" style="margin-top: 1.2em;">
-                        <div class="col-12 col-sm-6 mb-2 p-1">
-                            <a class="btn btn-lg btn-block btn-gg" href="/auth/google" role="button">
-                                <i class="fab fa-google gg-color"></i> Registrate con Google
-                            </a>
-                        </div>
-                        <div class="col-12 col-sm-6 mb-2 p-1">
-                            <a class="btn btn-lg btn-block btn-fb" href="#" role="button">
-                                <i class="fab fa-facebook"></i> Registrate con Facebook
-                            </a>
-                        </div>
-                    </div>
-                    <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu
-                            correo</p>
-                    </div> --}}
-                    {{!-- Referencia de Login o Registro --}}
-                    {{!-- <div class="page-links">
-                        <a href="#" class="active">Login</a><a href="#">Register</a>
-                    </div> --}}
-                    <br>
+                    <h3 class="tituH3" style="margin-bottom: 8px !important;">Crea tu cuenta hoy</h3>
+                    <span class="fw-bold msg-Login-Top" style="color:#000 !important;font-weight: 500;">
+                        ¿Deseas convertirte en consultor?
+                        <a href="/registro-de-consultores" style="color:#812082;font-weight: bold !important;">haz clic aquí.</a>
+                    </span>
+                    
+                    <br><br>
                     <form action="/registro" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <div class="row">
