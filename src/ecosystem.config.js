@@ -1,11 +1,11 @@
 module.exports = {
     apps: [{
-        name: "negocio-3csigma",
+        name: "App3csigma",
         script: "./app.js",
         watch: ["server", "client"],
         // Delay between restart
         watch_delay: 1000,
-        ignore_watch: ["node_modules", "public/certificado_consultores"],
+        ignore_watch: ["node_modules", "public/certificados_consultores"],
         env_production: {
             NODE_ENV: "production"
         },
