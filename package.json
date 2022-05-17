@@ -1,7 +1,7 @@
 {
   "name": "negocio-3csigma",
   "version": "1.0.0",
-  "description": "Plataforma de Automatización de documentos",
+  "description": "Plataforma para Automatización de Documentos",
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
@@ -31,12 +31,10 @@
     "memorystore": "^1.6.7",
     "moment": "^2.29.2",
     "morgan": "^1.10.0",
+    "multer": "^1.4.4",
     "mysql": "^2.18.1",
     "nodemailer": "^6.7.3",
     "passport": "^0.5.2",
-    "passport-facebook": "^3.0.0",
-    "passport-google-oauth": "^2.0.0",
-    "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "stripe": "^8.218.0",

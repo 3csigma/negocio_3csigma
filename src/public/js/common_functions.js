@@ -12,8 +12,8 @@
 	})
 	
 	// Submit loader mask 
-	$('form#wrapped').on('submit', function () {
-		var form = $("form#wrapped");
+	$('form.sigmaWizard').on('submit', function () {
+		var form = $("form.sigmaWizard");
 		form.validate();
 		if (form.valid()) {
 			$("#loader_form").fadeIn();

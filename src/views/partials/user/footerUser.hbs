@@ -1,0 +1,138 @@
+<!-- ****************** Required JS - DASHBOARD ****************** -->
+<script src="./vendor/js/Chart.bundle.min.js"></script>
+<script src="./vendor/js/owl.carousel.js"></script>
+<script src="./vendor/js/personalScripts.js"></script>
+<!-- Chart piety plugin files -->
+<script src="./vendor/js/jquery.peity.min.js"></script>
+<!-- Apex Chart -->
+<script src="./vendor/js/apexchart.js"></script>
+<!-- Dashboard EMPRESA -->
+<script src="./vendor/js/dashboard-1.js"></script>
+
+{{!-- Gráfica de Indicadores - Dashboard Principal --}}
+<script>
+
+    (function ($) {
+        var dzSparkLine = function () {
+            let draw = Chart.controllers.line.__super__.draw; //draw shadow
+            var screenWidth = $(window).width();
+
+            var barChart1 = function () {
+                if (jQuery('#barChart_1').length > 0) {
+                    const barChart_1 = document.getElementById("barChart_1").getContext('2d');
+
+                    barChart_1.height = 100;
+                    new Chart(barChart_1, {
+                        type: 'bar',
+                        data: {
+                            defaultFontFamily: 'Oblivian',
+                            labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+                            datasets: [{
+                                label: "Primer análisis",
+                                backgroundColor: "#50368C",
+                                borderColor: "#50368C",
+                                data: [
+                                    1, 5, 2, 4, 1, 7, 4, 3, 1, 2
+                                ],
+                                fill: false,
+                            }, {
+                                label: "Último análisis",
+                                fill: false,
+                                backgroundColor: "#FED061",
+                                borderColor: "#FED061",
+                                data: [
+                                    3, 7, 5, 10, 2, 3, 3, 5, 4, 6
+                                ],
+                            }]
+                        },
+                        options: {
+                            legend: false,
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // minimum value
+                                        max: 10 // maximum value
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontSize: 10
+                                    },
+                                    barPercentage: 0.5,
+                                    categoryPercentage: 1,
+                                    barThickness: 14,
+                                    maxBarThickness: 10,
+                                }]
+                            }
+                        }
+                    });
+                }
+            }
+
+            return {
+                init: function () {
+                },
+
+                load: function () {
+                    barChart1();
+                },
+
+                resize: function () {
+                    barChart1();
+                }
+            }
+
+        }();
+
+        jQuery(document).ready(function () {
+        });
+
+        jQuery(window).on('load', function () {
+            dzSparkLine.load();
+            {{#if alertSuccess}}
+            Swal.fire({
+                icon: 'success',
+                title: '¡Pago exitoso!',
+                html: '<p>Tu pago ha sido recibido, ahora puedes continuar con la firma del acuerdo de confidencialidad.</p>'
+                    + '<a href="/acuerdo-de-confidencialidad" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+                    + 'border-radius: 22px;'
+                    + 'color: #fff;'
+                    + 'width: 160px;'
+                    + 'height: 50px;'
+                    + 'text-align: center;'
+                    + 'padding: 14px;'
+                    + 'font-size: 17px;'
+                    + 'font-weight: 300;" id="checkout-button">Firmar acuerdo</a>',
+                showCancelButton: false,
+                showConfirmButton: false,
+            })
+            {{/if}}
+            {{#if alertCancel}}
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pago Cancelado',
+                    text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
+                })
+            {{/if}}
+        });
+
+        jQuery(window).on('resize', function () {
+            setTimeout(function () { dzSparkLine.resize(); }, 1000);
+        });
+
+    })(jQuery);
+
+</script>
+
+{{!-- Scripts Stripe --}}
+{{#if stripe}}
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+<script src="https://js.stripe.com/v3/"></script>
+{{/if}}

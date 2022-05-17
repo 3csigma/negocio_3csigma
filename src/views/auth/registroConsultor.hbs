@@ -1,0 +1,208 @@
+<div id="preloader">
+    <div data-loader="circle-side"></div>
+</div><!-- /Preload -->
+
+<div id="loader_form">
+    <div data-loader="circle-side-2"></div>
+</div><!-- /loader_form -->
+
+<style>
+    .cerrarWin {
+        position: absolute;
+        right: 32px;
+        top: 32px;
+        width: 45px;
+        height: 45px;
+        opacity: 0.5;
+        border-radius: 30px;
+        background-color: #ccc;
+    }
+
+    .cerrarWin:hover {
+        opacity: 1;
+    }
+
+    .cerrarWin:before,
+    .cerrarWin:after {
+        position: absolute;
+        top: 10.5px;
+        left: 22px;
+        content: ' ';
+        height: 24px;
+        width: 2px;
+        background-color: #000;
+    }
+
+    .cerrarWin:before {
+        transform: rotate(45deg);
+    }
+
+    .cerrarWin:after {
+        transform: rotate(-45deg);
+    }
+
+    .chosen-container-single .chosen-single {
+        height: 43px !important;
+        padding-top: 7px;
+    }
+
+    .custom-file-input:lang(en)~.custom-file-label::after {
+        content: "Seleccionar";
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row row-height">
+
+        {{!-- COLUMNA IZQUIERDA --}}
+        <div class="col-xl-4 col-lg-4 content-left">
+            <div class="content-left-wrapper">
+                <a href="#" id="logo"><img src="./img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75" height="75"></a>
+                <div id="social">
+                    <ul>
+                        <li><a href="#0"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="#0"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="#0"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li>
+                    </ul>
+                </div>
+                <!-- /social -->
+                <div>
+                    <figure><img src="./img/Registro-consultor.svg" alt="" class="img-fluid" width="270" height="270">
+                    </figure>
+                    <h2>Registro de Consultores</h2>
+                    <p>Completa tus datos para formar parte de nuestro equipo, recibirás la aprobación de un
+                        administrador si cumples con los requerimientos.</p>
+                    <a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
+                        <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+                    </a>
+                </div>
+                <div class="copy">© {{actualYear}} 3C Sigma</div>
+            </div>
+            <!-- /content-left-wrapper -->
+        </div>
+        <!-- /content-left -->
+
+        {{!-- COLUMNA DERECHA --}}
+        <div class="col-xl-8 col-lg-8 content-right" id="start">
+            <div id="wizard_container">
+                <form class="sigmaWizard" id="frmConsultor" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <div id="middle-wizard">
+                        {{> message }}
+                        <h2 class="section_title">DATOS PERSONALES</h2><br>
+                        <div class="row add_top_10">
+                            <div class="form-group col-md-6 ">
+                                <label for="nombres_consultor">Nombres</label>
+                                <input type="text" name="nombres_consultor" id="nombres_consultor"
+                                    class="form-control campoLetras required">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="apellidos_consultor">Apellidos</label>
+                                <input type="text" name="apellidos_consultor" id="apellidos_consultor"
+                                    class="form-control campoLetras required">
+                            </div>
+                        </div>
+                        <!-- /Fila Grupo de campos -->
+                        <div class="row add_top_10">
+                            <div class="form-group col-md-6 ">
+                                <label for="email_consultor">Email</label>
+                                <input type="email" name="email_consultor" id="email_consultor"
+                                    class="form-control required">
+                                <input type="hidden" name="clave_consultor" value="b7a445a81bc869e6e1a40218e52b2965">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="tel_consultor">Teléfono</label>
+                                <input type="text" name="tel_consultor" id="tel_consultor"
+                                    class="form-control campoNum required">
+                            </div>
+                        </div>
+                        <!-- /Fila Grupo de campos -->
+                        <div class="row add_top_10">
+                            <div class="form-group col-md-12">
+                                <label for="direccion_consultor">Dirección</label>
+                                <input type="text" name="direccion_consultor" id="direccion_consultor"
+                                    class="form-control mb-2 required">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label for="experiencia_consultor">Años de experiencia</label>
+                                <input type="text" name="experiencia_years" id="experiencia_consultor" maxlength="2"
+                                    class="form-control campoNum mb-2 required">
+                                <input type="hidden" name="zh_consultor" id="zh_consultor">
+                            </div>
+                            <div class="form-group col-md-12" style="margin-bottom: -3px">
+                                <label>Certificado de Consul International Group</label><br>
+                                <span id="txtFile"></span>
+                            </div>
+                            <div class="form-group col-md-12 input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input required" id="certificado" name="certificadoConsul"
+                                        accept="application/pdf">
+                                    <span class="custom-file-label" id="msgInput">Solo se admiten archivos PDF</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /Fila Grupo de campos -->
+                    </div>
+                    <!-- /middle-wizard -->
+                    <div id="bottom-wizard">
+                        <button type="submit" name="registrar_consultor" class="submit">Registrar</button>
+                    </div>
+                    <!-- /bottom-wizard -->
+                </form>
+            </div>
+            <!-- /Wizard container -->
+        </div>
+        <!-- /content-right-->
+    </div>
+    <!-- /row-->
+</div>
+<!-- /container-fluid -->
+
+<a href="/login" class="cerrarWin">
+
+
+    {{!-- SCRIPT MASCARAS PARA INPUT --}}
+    <script src="https://unpkg.com/imask"></script>
+
+    <script>
+
+        // Formato de número USA (+1)
+        document.addEventListener("DOMContentLoaded", function () {
+            IMask(document.getElementById('tel_consultor'), {
+                mask: '+{1} (000) 000-0000'
+            });
+        });
+
+        // Asignando Zona horaria
+        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        document.getElementById("zh_consultor").value = tzLocal
+
+        // Validando tipo de archivo solo pdf
+        document.getElementById("certificado").addEventListener('change', function () {
+
+            let fileName = this.files[0].name;
+            const txtFileMsg = document.getElementById("txtFile")
+            const msgInput = document.getElementById("msgInput")
+            //let fileSize = this.files[0].size;
+
+            let ext = fileName.split('.').pop();
+            ext = ext.toLowerCase(); // Convirtiendo el valor de la extensión en miníscula
+
+            //console.log(this.files[0])
+
+            switch (ext) {
+                case 'pdf':
+                    txtFileMsg.innerHTML = '';
+                    break;
+                default:
+                    txtFileMsg.style.fontWeight = "500";
+                    txtFileMsg.style.color = "red";
+                    txtFileMsg.innerHTML = 'Solo se admiten archivos .pdf';
+                    this.value = '';
+                    msgInput.innerHTML = 'Certificado Consul International Group (PDF)';
+            }
+        });
+
+    </script>

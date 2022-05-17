@@ -1,0 +1,183 @@
+<!--**********************************
+        Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+
+            {{!-- Nuevos consultores --}}
+            <div class="col-xl-4 col-lg-6">
+                <div class="card">
+                    <div class="card-header pb-0 border-0">
+                        <span class="p-3 mr-3 rounded bg-danger" style="background: #812082 !important;">
+                            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.9875 0.5C6.08755 0.5 0.487549 6.1 0.487549 13C0.487549 19.9 6.08755 25.5 12.9875 25.5C19.8875 25.5 25.4875 19.9 25.4875 13C25.4875 6.1 19.8875 0.5 12.9875 0.5ZM17.5 8.425C18.8375 8.425 19.9125 9.5 19.9125 10.8375C19.9125 12.175 18.8375 13.25 17.5 13.25C16.1625 13.25 15.0875 12.175 15.0875 10.8375C15.075 9.5 16.1625 8.425 17.5 8.425ZM10 6.45C11.625 6.45 12.95 7.775 12.95 9.4C12.95 11.025 11.625 12.35 10 12.35C8.37505 12.35 7.05005 11.025 7.05005 9.4C7.05005 7.7625 8.36255 6.45 10 6.45ZM10 17.8625V22.55C7.00005 21.6125 4.62505 19.3 3.57505 16.35C4.88755 14.95 8.16255 14.2375 10 14.2375C10.6625 14.2375 11.5 14.3375 12.375 14.5125C10.325 15.6 10 17.0375 10 17.8625ZM12.9875 23C12.65 23 12.325 22.9875 12 22.95V17.8625C12 16.0875 15.675 15.2 17.5 15.2C18.8375 15.2 21.15 15.6875 22.3 16.6375C20.8375 20.35 17.225 23 12.9875 23Z"
+                                    fill="white" />
+                            </svg>
+                        </span>
+                        <div class="mr-auto pr-3">
+                            <h4 class="text-black fs-20">Nuevos consultores</h4>
+                            <p class="fs-13 mb-0 text-black">Registros recientes</p>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div id="chartBar2"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Nuevas empresas --}}
+            <div class="col-xl-4 col-lg-6">
+                <div class="card">
+                    <div class="card-header pb-0 border-0">
+                        <span class="p-3 mr-3 rounded bg-secondary" style="background: #FED061 !important;">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <rect width="30" height="30" fill="url(#pattern0)" />
+                                <defs>
+                                    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                        <use xlink:href="#image0_234_6803" transform="scale(0.0104167)" />
+                                    </pattern>
+                                    <image id="image0_234_6803" width="96" height="96"
+                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAABI0lEQVR4nO3bwYqDQBQAwbjk/3/ZPS8EhsFZW2PV3WBoHji+5PUCAACeZpu9YN/3/T9uZJVt26a/U+mnvoGnEyAmQEyAmAAxAWICxN6rP/Buz+E1ExATICZATICYADEBYgLElp8DRuwT/jIBMQFiAsQEiAkQEyAmQOz0c8DI0/YJJiAmQEyAmAAxAWICxASIXe4cMPJt+wQTEBMgJkBMgJgAMQFiAsRudw4YGT2Hj84RR6+fZQJiAsQEiAkQEyAmQEyA2PQ54Oq/2zn6nH72vsEExASICRATICZATICYADH7gMXXzzIBMQFiAsQEiAkQEyAmQOzS7/Y/8f8AlhIgJkBMgJgAMQFiAsQetw84yj7gywgQEyAmQEyAmAAxAQAAAE72C3l/LLO35qJwAAAAAElFTkSuQmCC" />
+                                </defs>
+                            </svg>
+                        </span>
+                        <div class="mr-auto pr-3">
+                            <h4 class="text-black fs-20">Nuevas empresas</h4>
+                            <p class="fs-13 mb-0 text-black">Registros recientes</p>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div id="chartBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Informes generados --}}
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-header pb-0 border-0">
+                        <span class="p-3 mr-3 rounded bg-warning"  style="background: #50368C !important;">
+                            <svg width="24" height="30" viewBox="0 0 24 30" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3 0C1.35 0 0.0150003 1.35 0.0150003 3L0 27C0 28.65 1.335 30 2.985 30H21C22.65 30 24 28.65 24 27V9L15 0H3ZM13.5 10.5V2.25L21.75 10.5H13.5Z"
+                                    fill="white" />
+                            </svg>
+                        </span>
+                        <div class="mr-auto pr-3">
+                            <h4 class="text-black fs-20">Informes generados</h4>
+                            <p class="fs-13 mb-0 text-black">Registros recientes</p>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div id="chartBar3"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- TABLAS --}}
+
+            {{!-- ÚLTIMAS EMPRESAS REGISTRADAS --}}
+            <div class="col-xl-6 col-xxl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Últimas empresas registradas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>FECHA</th>
+                                                <th>EMPRESA</th>
+                                                <th>NOMBRE</th>
+                                                <th>CONSULTOR</th>
+                                                <th>ACCIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each empresas}}
+                                            <tr>
+                                                <td>{{fecha_creacion}}</td>
+                                                <td>{{nombre_empresa}}</td>
+                                                <td>{{nombres}} {{apellidos}}</td>
+                                                <td>{{#if consultor}}{{ consultor}}{{else}}N/A{{/if}}</td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <a href="/empresas/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- ÚTIMOS CONSULTORES REGISTRADOS --}}
+            <div class="col-xl-6 col-xxl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Últimos consultores registrados</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>NOMBRES</th>
+                                                <th>APELLIDOS</th>
+                                                <th>EMAIL</th>
+                                                <th>ACCIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each consultores}}
+                                            <tr>
+                                                <td>{{nombres_consultor}}</td>
+                                                <td>{{apellidos_consultor}}</td>
+                                                <td>{{email_consultor}}</td>
+                                                <td class="mx-auto">
+                                                    <div class="d-flex">
+                                                        <a href="/consultores/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+        </div>
+    </div>
+</div>
+
+<!--**********************************
+        Fin Content body end
+***********************************-->

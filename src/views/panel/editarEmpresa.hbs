@@ -1,0 +1,671 @@
+<style>
+    label {
+        color: black;
+    }
+
+    .form-control {
+        height: 50px;
+    }
+
+    .form-control:disabled {
+        background: #f9f9f9;
+        color: #7E7E7E;
+    }
+
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        width: 100%;
+    }
+
+    .bootstrap-select .btn {
+        font-size: 0.875rem;
+        height: 50px;
+    }
+
+    /* Selectores Consultor & Estado de la cuenta */
+    .chosen-container-single .chosen-single div {
+        top: 12px;
+    }
+
+    .chosen-container-single .chosen-single {
+        border: 1px solid #f0f1f5 !important;
+        background: transparent !important;
+        font-weight: 400 !important;
+        color: #7e7e7e !important;
+        height: 46px;
+        border-radius: 1.25rem;
+        padding-top: 11px;
+    }
+
+    .chosen-container-single .chosen-single abbr {
+        top: 17px;
+
+    }
+
+    .chosen-container-single .chosen-search input[type=text] {
+        border: 1px solid #f0f1f5 !important;
+        border-radius: 1.2rem;
+    }
+
+    .chosen-container-single .chosen-drop {
+        margin-top: -1px;
+        border: 1px solid #f0f1f5 !important;
+        border-radius: 0 0 1.25rem 1.25rem;
+    }
+
+    .chosen-container-active.chosen-with-drop .chosen-single {
+        background-image: none !important;
+    }
+
+    .chosen-container .chosen-results li.highlighted {
+        background-color: #F4F5F9;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f5f9), color-stop(90%, #f4f5f9));
+        background-image: #F4F5F9 !important;
+        color: #000;
+    }
+
+    .iconRed {
+        max-width: 70px !important;
+    }
+
+    .nav-tabs .nav-item .nav-link:before {
+        background-color: transparent;
+    }
+
+    .profile-tab .nav-item .nav-link {
+        margin-right: 25px;
+    }
+
+    .nav-tabs .nav-item .nav-link.active:before {
+        background-color: #50368c;
+    }
+</style>
+<link rel="stylesheet" href="../css/estilosPersonales.css">
+<!--**********************************
+        Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+
+        {{!-- Header Card --}}
+        <div class="col-lg-12">
+            <div class="profile card card-body px-3 pt-3 pb-0">
+                <div class="profile-head">
+                    <div class="profile-info">
+                        <div class="profile-photo">
+                            <img src="../img/avatar/1.jpg" class="img-fluid rounded-circle" alt="">
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name px-3 pt-2">
+                                <h4 class="text-primary mb-0">{{empresa.nombres}} {{empresa.apellidos}}</h4>
+                                <p>{{empresa.nombre_empresa}}</p>
+                            </div>
+                            <div class="profile px-2 pt-2">
+                                <h4 class="text-muted mb-0">{{empresa.telefono}}</h4>
+                                <p>Teléfono</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- ./Fin Header Card --}}
+
+        <div class="row">
+
+            {{!-- COLUNMA IZQUIERDA RESUMEN --}}
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="profile-statistics mb-5">
+                            <div class="text-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{empresa.cantidad_socios}}</h3><span>Cantidad de
+                                            Socios</span>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{empresa.tiempo_experiencia}}</h3><span>Años de
+                                            experiencia</span>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{empresa.num_empleados}}</h3><span>Número de Empleados</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                    <div class="row">
+                                        <div class="col">
+                                            <label>Asignar consultor</label>
+                                            <select name="id_consultor" id="id_consultor"
+                                                class="form-control sltBuscar chosen-container chosen-container-single required">
+                                                <option value=""></option>
+                                                {{#each consultores}}
+                                                {{#comparar id '==' idCon}}
+                                                <option value="{{id}}" selected>
+                                                    {{/comparar}}
+                                                    {{#comparar id '!=' idCon}}
+                                                <option value="{{id}}">
+                                                    {{/comparar}}
+                                                    {{nombres_consultor}} {{apellidos_consultor}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                        <div class="col">
+                                            <label>Estado de la cuenta</label>
+                                            <select id="estado_consul" class="mr-sm-2 default-select text-center">
+                                                {{#comparar empresa.estadoAdm '==' '1'}}
+                                                <option value="1" selected style="color: green">Activa</option>
+                                                <option value="0">Bloqueada</option>
+                                                {{/comparar}}
+                                                {{#comparar empresa.estadoAdm '!=' '1'}}
+                                                <option value="0" selected>Bloqueada</option>
+                                                <option value="1">Activa</option>
+                                                {{/comparar}}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {{!-- Boton actualizar empresa --}}
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <a type="button" class="btn btn-primary" id="btnActualizarEmpresa"
+                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Guardar cambios</p>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            <div class="form-group" style="text-align: left !important">
+                                                <label
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción
+                                                    del negocio</label>
+                                                <textarea
+                                                    style="height: 400px; min-height: 400px; max-height: 400px; width: 100%; text-align: justify; background: transparent !important; border: none"
+                                                    class="form-control barra-scroll overflow-y-auto"
+                                                    disabled>{{empresa.descripcion}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{#if datos.redes}}
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            <div class="form-group" style="text-align: left !important">
+                                                <label
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Links
+                                                    de la compañía</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-2">
+                                        {{#if datos.redes.twitter}}
+                                        <div class="col-4 iconRed">
+                                            <a href="htts://twitter.com/{{datos.redes.twitter}}">
+                                                <svg id="Layer_1" height="40px" width="40px"
+                                                    style="enable-background:new 0 0 1000 1000;" version="1.1"
+                                                    viewBox="0 0 1000 1000" xml:space="preserve"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <title />
+                                                    <g>
+                                                        <g id="Dark_Blue">
+                                                            <path class="st0" style="fill: #1DA1F2"
+                                                                d="M500,0L500,0c276.1,0,500,223.9,500,500v0c0,276.1-223.9,500-500,500h0C223.9,1000,0,776.1,0,500v0    C0,223.9,223.9,0,500,0z" />
+                                                        </g>
+                                                        <g id="Logo_FIXED">
+                                                            <path class="st1" style="fill: #FFFFFF;"
+                                                                d="M384,754c235.8,0,364.9-195.4,364.9-364.9c0-5.5,0-11.1-0.4-16.6c25.1-18.2,46.8-40.6,64-66.4    c-23.4,10.4-48.2,17.2-73.6,20.2c26.8-16,46.8-41.2,56.4-70.9c-25.2,14.9-52.7,25.5-81.4,31.1c-48.6-51.6-129.8-54.1-181.4-5.6    c-33.3,31.3-47.4,78-37.1,122.5c-103.1-5.2-199.2-53.9-264.3-134c-34,58.6-16.7,133.5,39.7,171.2c-20.4-0.6-40.4-6.1-58.2-16    c0,0.5,0,1.1,0,1.6c0,61,43,113.6,102.9,125.7c-18.9,5.1-38.7,5.9-57.9,2.2c16.8,52.2,64.9,88,119.8,89.1    c-45.4,35.7-101.5,55.1-159.2,55c-10.2,0-20.4-0.6-30.5-1.9C246.1,734,314.4,754,384,753.9" />
+                                                            <path class="st2" style="fill: none"
+                                                                d="M500,0L500,0c276.1,0,500,223.9,500,500v0c0,276.1-223.9,500-500,500h0C223.9,1000,0,776.1,0,500v0    C0,223.9,223.9,0,500,0z" />
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        {{/if}}
+
+                                        {{#if datos.redes.facebook}}
+                                        <div class="col-4 iconRed">
+                                            <a href="htts://facebook.com/{{datos.redes.facebook}}">
+                                                <svg height="40px" width="40px"
+                                                    style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
+                                                    version="1.1" viewBox="0 0 512 512" xml:space="preserve"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:serif="http://www.serif.com/"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <g>
+                                                        <path
+                                                            d="M512,256c0,-141.385 -114.615,-256 -256,-256c-141.385,0 -256,114.615 -256,256c0,127.777 93.616,233.685 216,252.89l0,-178.89l-65,0l0,-74l65,0l0,-56.4c0,-64.16 38.219,-99.6 96.695,-99.6c28.009,0 57.305,5 57.305,5l0,63l-32.281,0c-31.801,0 -41.719,19.733 -41.719,39.978l0,48.022l71,0l-11.35,74l-59.65,0l0,178.89c122.385,-19.205 216,-125.113 216,-252.89Z"
+                                                            style="fill:#1877f2;fill-rule:nonzero;" />
+                                                        <path
+                                                            d="M355.65,330l11.35,-74l-71,0l0,-48.022c0,-20.245 9.917,-39.978 41.719,-39.978l32.281,0l0,-63c0,0 -29.297,-5 -57.305,-5c-58.476,0 -96.695,35.44 -96.695,99.6l0,56.4l-65,0l0,74l65,0l0,178.89c13.033,2.045 26.392,3.11 40,3.11c13.608,0 26.966,-1.065 40,-3.11l0,-178.89l59.65,0Z"
+                                                            style="fill:#fff;fill-rule:nonzero;" />
+                                                    </g>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        {{/if}}
+
+                                        {{#if datos.redes.instagram}}
+                                        <div class="col-4 iconRed">
+                                            <a href="htts://instagram.com/{{datos.redes.instagram}}">
+                                                <svg height="40px" width="40px" id="Layer_1"
+                                                    style="enable-background:new 0 0 1000 1000;" version="1.1"
+                                                    viewBox="0 0 1000 1000" xml:space="preserve"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_"
+                                                        x1="146.4465" x2="853.5535" y1="853.5535" y2="146.4465">
+                                                        <stop offset="0" style="stop-color:#FFD521" />
+                                                        <stop offset="5.510481e-02" style="stop-color:#FFD020" />
+                                                        <stop offset="0.1241" style="stop-color:#FEC01E" />
+                                                        <stop offset="0.2004" style="stop-color:#FCA71B" />
+                                                        <stop offset="0.2821" style="stop-color:#FA8316" />
+                                                        <stop offset="0.3681" style="stop-color:#F85510" />
+                                                        <stop offset="0.4563" style="stop-color:#F51E09" />
+                                                        <stop offset="0.5" style="stop-color:#F30005" />
+                                                        <stop offset="0.5035" style="stop-color:#F20007" />
+                                                        <stop offset="0.5966" style="stop-color:#E1003B" />
+                                                        <stop offset="0.6879" style="stop-color:#D30067" />
+                                                        <stop offset="0.7757" style="stop-color:#C70088" />
+                                                        <stop offset="0.8589" style="stop-color:#BF00A0" />
+                                                        <stop offset="0.9357" style="stop-color:#BB00AF" />
+                                                        <stop offset="1" style="stop-color:#B900B4" />
+                                                    </linearGradient>
+                                                    <path class="st0" style="fill: url(#SVGID_1_);"
+                                                        d="M500,1000L500,1000C223.9,1000,0,776.1,0,500v0C0,223.9,223.9,0,500,0h0c276.1,0,500,223.9,500,500v0  C1000,776.1,776.1,1000,500,1000z" />
+                                                    <g>
+                                                        <path class="st1" style="fill: #FFFFFF;"
+                                                            d="M500,220.2c91.1,0,101.9,0.3,137.9,2c33.3,1.5,51.4,7.1,63.4,11.8c15.9,6.2,27.3,13.6,39.2,25.5   c11.9,11.9,19.3,23.3,25.5,39.2c4.7,12,10.2,30.1,11.8,63.4c1.6,36,2,46.8,2,137.9s-0.3,101.9-2,137.9   c-1.5,33.3-7.1,51.4-11.8,63.4c-6.2,15.9-13.6,27.3-25.5,39.2c-11.9,11.9-23.3,19.3-39.2,25.5c-12,4.7-30.1,10.2-63.4,11.8   c-36,1.6-46.8,2-137.9,2s-101.9-0.3-137.9-2c-33.3-1.5-51.4-7.1-63.4-11.8c-15.9-6.2-27.3-13.6-39.2-25.5   c-11.9-11.9-19.3-23.3-25.5-39.2c-4.7-12-10.2-30.1-11.8-63.4c-1.6-36-2-46.8-2-137.9s0.3-101.9,2-137.9   c1.5-33.3,7.1-51.4,11.8-63.4c6.2-15.9,13.6-27.3,25.5-39.2c11.9-11.9,23.3-19.3,39.2-25.5c12-4.7,30.1-10.2,63.4-11.8   C398.1,220.5,408.9,220.2,500,220.2 M500,158.7c-92.7,0-104.3,0.4-140.7,2.1c-36.3,1.7-61.1,7.4-82.9,15.9   C254,185.3,234.9,197,216,216c-19,19-30.6,38-39.4,60.5c-8.4,21.7-14.2,46.5-15.9,82.9c-1.7,36.4-2.1,48-2.1,140.7   c0,92.7,0.4,104.3,2.1,140.7c1.7,36.3,7.4,61.1,15.9,82.9C185.3,746,197,765.1,216,784c19,19,38,30.6,60.5,39.4   c21.7,8.4,46.5,14.2,82.9,15.9c36.4,1.7,48,2.1,140.7,2.1s104.3-0.4,140.7-2.1c36.3-1.7,61.1-7.4,82.9-15.9   C746,814.7,765.1,803,784,784c19-19,30.6-38,39.4-60.5c8.4-21.7,14.2-46.5,15.9-82.9c1.7-36.4,2.1-48,2.1-140.7   s-0.4-104.3-2.1-140.7c-1.7-36.3-7.4-61.1-15.9-82.9C814.7,254,803,234.9,784,216c-19-19-38-30.6-60.5-39.4   c-21.7-8.4-46.5-14.2-82.9-15.9C604.3,159.1,592.7,158.7,500,158.7L500,158.7z" />
+                                                        <path class="st1" style="fill: #FFFFFF;"
+                                                            d="M500,324.7c-96.8,0-175.3,78.5-175.3,175.3S403.2,675.3,500,675.3S675.3,596.8,675.3,500   S596.8,324.7,500,324.7z M500,613.8c-62.8,0-113.8-50.9-113.8-113.8S437.2,386.2,500,386.2c62.8,0,113.8,50.9,113.8,113.8   S562.8,613.8,500,613.8z" />
+                                                        <circle class="st1" style="fill: #FFFFFF;" cx="682.2" cy="317.8"
+                                                            r="41" />
+                                                    </g>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        {{/if}}
+
+                                        {{#if datos.redes.otra}}
+                                        <div class="col-4 iconRed">
+                                            <a href="htts://{{datos.redes.otra}}">
+                                                <svg height="40px" version="1.1" viewBox="0 0 519 519" width="40px"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                    <title />
+                                                    <desc />
+                                                    <defs>
+                                                        <radialGradient cx="50%" cy="21.9311119%" fx="50%"
+                                                            fy="21.9311119%" id="radialGradient-1" r="87.8884669%">
+                                                            <stop offset="0%" stop-color="#5C79E5" />
+                                                            <stop offset="100%" stop-color="#3F59CD" />
+                                                        </radialGradient>
+                                                    </defs>
+                                                    <g fill="none" fill-rule="evenodd" id="Page-1" stroke="none"
+                                                        stroke-width="1">
+                                                        <g id="Artboard"
+                                                            transform="translate(-1563.000000, -153.000000)">
+                                                            <g fill="url(#radialGradient-1)" id="Group-8"
+                                                                transform="translate(718.000000, 153.000000)">
+                                                                <circle cx="1104.5" cy="259.5" id="Oval" r="259.5" />
+                                                            </g>
+                                                            <path
+                                                                d="M1949,266 C1962.80712,266 1974,277.192881 1974,291 L1974,499.476352 C1974,513.283471 1962.80712,524.476352 1949,524.476352 L1835.456,524.476 L1753.37323,579.156663 C1751.07505,580.687611 1747.97092,580.065641 1746.43997,577.767454 C1745.89304,576.946425 1745.60121,575.98195 1745.60121,574.995429 L1745.601,524.476 L1699,524.476352 C1685.19288,524.476352 1674,513.283471 1674,499.476352 L1674,291 C1674,277.192881 1685.19288,266 1699,266 L1949,266 Z"
+                                                                fill="#FFFFFF" id="Rectangle-2" />
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                        {{/if}}
+
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col" style="text-align: left !important">
+                                            <a href="{{empresa.page_web}}">
+                                                {{empresa.page_web}}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    {{/if}}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{!-- COLUNMA DERECHA CON PESTAÑAS --}}
+            <div class="col-xl-8">
+                <div class="card">
+                    <div class="card-body">
+
+                        {{!-- Pestañas Fijas --}}
+                        <div class="profile-tab">
+                            <div class="custom-tab-1">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item"><a href="#representante" data-toggle="tab"
+                                            class="nav-link active show">Representante</a></li>
+                                    <li class="nav-item"><a href="#empresa" data-toggle="tab"
+                                            class="nav-link">Empresa</a></li>
+                                    <li class="nav-item"><a href="#settings" data-toggle="tab"
+                                            class="nav-link">Config</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        {{!-- ./ Fin de pestañas --}}
+
+                        {{!-- Contenido de pestañas --}}
+                        <div class="profile-tab barra-scroll overflow-y-auto" style="max-height: 110vh;">
+
+                            <div class="custom-tab-1">
+
+                                <div class="tab-content">
+                                    {{!-- PESTAÑA 1 --}}
+                                    <div id="representante" class="tab-pane fade active show">
+                                        <div class="my-post-content pt-3">
+                                            {{!-- Datos personales --}}
+                                            <div class="profile-personal-info">
+                                                <h4 class="text-primary mb-4">Datos personales</h4>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Email <span class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.email}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Fecha de Nacimiento <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7">
+                                                        <span>{{empresa.fecha_nacimiento}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">País/Nacionalidad <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.pais}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">¿Dueño del negocio? <span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.es_propietario}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">¿Tiene socios?<span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{empresa.socios}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Porcentaje Accionario<span
+                                                                class="pull-right">:</span></h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7">
+                                                        <span>{{empresa.porcentaje_accionario}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {{!-- Más Sobre la empresa --}}
+                                            <div class="profile-personal-info mt-5">
+                                                <h4 class="text-primary mb-3">Sobre la empresa</h4>
+
+                                                <div class="row mb-2">
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Tiempo de Fundación</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                                    </div>
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Promedio de ingreso anual</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
+                                                    </div>
+
+                                                    <div class="col-sm-4 col-4">
+                                                        <h5 class="f-w-500">Etapa del negocio</h4>
+                                                            <a
+                                                                class="text-muted pr-3 f-s-16">{{empresa.etapa_actual}}</a>
+                                                    </div>
+
+                                                </div>
+
+                                                {{!-- OBJETIVOS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Objetivos</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.objetivos.objetivo1}}<br>
+                                                        2- {{datos.objetivos.objetivo2}}<br>
+                                                        3- {{datos.objetivos.objetivo3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- FORTALEZAS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Fortalezas</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.fortalezas.fortaleza1}}<br>
+                                                        2- {{datos.fortalezas.fortaleza2}}<br>
+                                                        3- {{datos.fortalezas.fortaleza3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- PROBLEMAS --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2">
+                                                        <h5 class="f-w-500">Principales Problemas</h4>
+                                                        <p style="text-align: justify;"> 1- {{datos.problemas.problema1}}<br>
+                                                        2- {{datos.problemas.problema2}}<br>
+                                                        3- {{datos.problemas.problema3}}</p>
+                                                    </div>
+                                                </div>
+
+                                                {{!-- MOTIVO DE LA CONSULTORÍA --}}
+                                                <div class="row mb-2 mt-5">
+                                                    <div class="col-sm-11 col-10 pr-2 border-bottom-1">
+                                                        <h5 class="f-w-500">Motivo de la consultoría</h4>
+                                                        <p style="text-align: justify;"> {{empresa.motivo_consultoria}}</p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            {{!-- <div class="profile-uoloaded-post border-bottom-1 pb-5">
+                                                <img src="../img/profile/8.jpg" alt="" class="img-fluid">
+                                            </div> --}}
+
+                                        </div>
+                                    </div>
+
+                                    {{!-- PESTAÑA 2 --}}
+                                    <div id="empresa" class="tab-pane fade">
+                                        <div class="profile-about-me">
+                                            <div class="pt-4 border-bottom-1 pb-3">
+                                                <h4 class="text-primary"></h4>
+                                                <p class="mb-2">A wonderful serenity has taken possession of my entire
+                                                    soul, like these sweet mornings of spring which I enjoy with my
+                                                    whole heart. I am alone, and feel the charm of existence was created
+                                                    for the bliss of souls like mine.I am so happy, my dear friend, so
+                                                    absorbed in the exquisite sense of mere tranquil existence, that I
+                                                    neglect my talents.</p>
+                                                <p>A collection of textile samples lay spread out on the table - Samsa
+                                                    was a travelling salesman - and above it there hung a picture that
+                                                    he had recently cut out of an illustrated magazine and housed in a
+                                                    nice, gilded frame.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="profile-lang mb-5">
+                                            <h4 class="text-primary mb-2">Tiempo de Fundación</h4>
+                                            <a class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                        </div>
+
+                                        <div class="profile-skills mb-5">
+                                            <h4 class="text-primary mb-2">Promedio de ingreso anual</h4>
+                                            <a class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
+                                        </div>
+
+                                        <div class="profile-personal-info">
+                                            <h4 class="text-primary mb-4">Personal Information</h4>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Name <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>Mitchell C.Shay</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Email <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>example@examplel.com</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Availability <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>Full Time (Free Lancer)</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Age <span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>27</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Location <span class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>Rosemont Avenue Melbourne,
+                                                        Florida</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-3 col-5">
+                                                    <h5 class="f-w-500">Year Experience <span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-9 col-7"><span>07 Year Experiences</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{!-- PESTAÑA 2 --}}
+                                    <div id="settings" class="tab-pane fade">
+                                        <div class="pt-3">
+                                            <div class="settings-form">
+                                                <h4 class="text-primary">Account Setting</h4>
+                                                <form>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label>Email</label>
+                                                            <input type="email" placeholder="Email"
+                                                                class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label>Password</label>
+                                                            <input type="password" placeholder="Password"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Address</label>
+                                                        <input type="text" placeholder="1234 Main St"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Address 2</label>
+                                                        <input type="text" placeholder="Apartment, studio, or floor"
+                                                            class="form-control">
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            <label>City</label>
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                        <div class="form-group col-md-4">
+                                                            <label>State</label>
+                                                            <select class="form-control default-select" id="inputState">
+                                                                <option selected="">Choose...</option>
+                                                                <option>Option 1</option>
+                                                                <option>Option 2</option>
+                                                                <option>Option 3</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-md-2">
+                                                            <label>Zip</label>
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                id="gridCheck">
+                                                            <label class="custom-control-label" for="gridCheck"> Check
+                                                                me out</label>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn btn-primary" type="submit">Sign
+                                                        in</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+</script>

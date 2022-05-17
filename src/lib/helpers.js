@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-// const fs = require('fs');
 const fetch = require('cross-fetch');
 const dsConfig = require('../config/index.js').config;
 const pool = require('../database')
@@ -90,6 +89,18 @@ helpers.desencriptarTxt = (text) => {
    let decrypted = decipher.update(encryptedText);
    decrypted = Buffer.concat([decrypted, decipher.final()]);
    return decrypted.toString();
+}
+
+// Eliminar elemetos duplicados de un Arreglo
+helpers.delDuplicados = (array) => {
+    resultado = [];
+    for (let i = 0; i < array.length; i++) {
+        const c = array[i];
+        if (!resultado.includes(array[i])) {
+            resultado.push(c);
+        }
+    }
+    return resultado;
 }
 
 module.exports = helpers;

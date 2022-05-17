@@ -1,18 +1,21 @@
 const express = require('express')
 const router = express.Router()
-const { estaLogueado, validarIDFicha } = require('../lib/auth')
+const { checkLogin, empresaLogueada, validarIDFicha } = require('../lib/auth')
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
+const paymentController = require('../controllers/paymentController');
 
+/** Proceso de pago - API Stripe */
+router.post("/create-payment-intent", checkLogin, empresaLogueada, paymentController.createPayment)
 // Diagnóstico de Negocio
-router.get('/diagnostico-de-negocio', estaLogueado, empresaController.diagnostico)
+router.get('/diagnostico-de-negocio', checkLogin, empresaLogueada, empresaController.diagnostico)
 // Ficha de Cliente
-router.get('/ficha-cliente/:id', estaLogueado, empresaController.validarFichaCliente)
-router.get('/ficha-cliente', estaLogueado, validarIDFicha, empresaController.fichaCliente)
-router.post('/addficha', estaLogueado, empresaController.addFichaCliente)
-router.post('/eliminarFicha', estaLogueado, empresaController.eliminarFicha)
+router.get('/ficha-cliente/:id', checkLogin, empresaLogueada, empresaController.validarFichaCliente)
+router.get('/ficha-cliente', checkLogin, validarIDFicha, empresaLogueada, empresaController.fichaCliente)
+router.post('/addficha', checkLogin, empresaLogueada, empresaController.addFichaCliente)
+router.post('/eliminarFicha', checkLogin, empresaLogueada, empresaController.eliminarFicha)
 // Acuerdo de Confidencialidad
-router.get('/acuerdo-de-confidencialidad', estaLogueado, empresaController.acuerdo)
-router.post('/acuerdo-de-confidencialidad', estaLogueado, signingViaEmail.createController)
+router.get('/acuerdo-de-confidencialidad', checkLogin, empresaLogueada, empresaController.acuerdo)
+router.post('/acuerdo-de-confidencialidad', checkLogin, empresaLogueada, signingViaEmail.createController)
 
 module.exports = router

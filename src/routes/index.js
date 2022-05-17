@@ -1,18 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const { estaLogueado } = require('../lib/auth')
-const empresaController = require('../controllers/empresaController');
-const paymentController = require('../controllers/paymentController');
+const dashboardController = require('../controllers/dashboardController');
+const { checkLogin, activeLogin, noLogueado, adminLogueado } = require('../lib/auth')
+const csrf = require('csurf')
+const csrfProtection = csrf({ cookie: true })
+const multer = require('multer');
+const path = require('path');
 
-/** Dashboard Principal */
-router.get('/', estaLogueado, empresaController.dashboard)
+/** Subir Archivos */
+const rutaAlmacen = multer.diskStorage({
+    destination: function (req, file, callback) {
+        const rutaCertificado = path.join(__dirname, '../public/certificados_consultores')
+        callback(null, rutaCertificado);
+    },
 
-/** Proceso de pago - API Stripe */
-router.post("/create-payment-intent", estaLogueado, paymentController.createPayment)
+    filename: function (req, file, callback) {
+        const fechaActual = Math.floor(Date.now() / 1000)
+         urlCertificado = "Consul_International_Group_" + fechaActual + "_" + file.originalname;
+        console.log(urlCertificado)
+        callback(null, urlCertificado)
+    }
 
+});
 
-router.get('/perfil', estaLogueado, (req, res) => {
-    res.render('profile', {dashx: true, wizarx: false, login: false})
-})
+const subirArchivo = multer({ storage: rutaAlmacen })
+
+// Dashboard Principal
+router.get('/', checkLogin, activeLogin, dashboardController.index)
+
+router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
+router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)
+
+// Consultores Admin
+router.get('/consultores', checkLogin, adminLogueado, dashboardController.mostrarConsultores)
+router.get('/consultores/:codigo', checkLogin, adminLogueado, dashboardController.editarConsultor)
+router.post('/actualizarConsultor', checkLogin, adminLogueado, dashboardController.actualizarConsultor)
+
+// Empresas Admin
+router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
+router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
+router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 
 module.exports = router;

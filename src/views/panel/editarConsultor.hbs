@@ -1,0 +1,131 @@
+<style>
+    label {
+        color: black;
+    }
+
+    .form-control {
+        height: 50px;
+    }
+
+    .form-control:disabled {
+        text-align: center;
+        background: #f9f9f9;
+        color: #7E7E7E;
+    }
+
+    .form-group {
+        text-align: center;
+    }
+
+    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+        width: 100%;
+    }
+
+    .bootstrap-select .btn {
+        font-size: 0.875rem;
+        height: 50px;
+    }
+</style>
+<!--**********************************
+        Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Datos del Consultor</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-xl-4 mt-2">
+                        <div class="form-group text-center">
+                            <label>Nombres y Apellidos</label>
+                            <input type="text" value="{{consultor.nombres_consultor}} {{consultor.apellidos_consultor}}"
+                                class="form-control" disabled>
+                            <input type="hidden" id="id_consul" value="{{consultor.id}}">
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" value="{{consultor.email_consultor}}" class="form-control"
+                                style="line-height:4" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="text" value="{{consultor.tel_consultor}}" class="form-control" disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <textarea class="form-control" style="min-height: 45px; height: 45px; max-height: 108px"
+                                style="text-align: justify;" disabled>{{consultor.direccion_consultor}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Experiencia</label>
+                            <input type="text" value="{{consultor.experiencia_years}} años" class="form-control"
+                                disabled>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="estado_consul" class="mr-sm-2 default-select">
+                                {{#comparar consultor.estado '==' 0}}
+                                <option value="0" selected>Inactivo</option>
+                                <option value="1">Activo</option>
+                                {{/comparar}}
+                                {{#comparar consultor.estado '!=' 0}}
+                                <option value="1" selected>Activo</option>
+                                <option value="0">Inactivo</option>
+                                {{/comparar}}
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- ./Fin Fila 1 -->
+
+                <div class="row mt-2">
+                    <div class="col-xl-4 m-auto">
+                        <div class="form-group">
+                            <label>Certificado de Consul International Group</label>
+                            <div class="input-group input-primary">
+                                <input type="text" class="form-control" readonly value="{{consultor.txtCertificado}}">
+                                <div class="input-group-append">
+                                    <a class="input-group-text" target="_blank" href="{{consultor.certificado}}">Ver documento</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-3 m-auto">
+                        <div class="form-group">
+                            <a type="button" class="add-menu-sidebar" id="btnActualizarConsultor"
+                                style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; padding: 10px 15px;">
+                                <p class="font-w500 m-auto">Guardar cambios</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

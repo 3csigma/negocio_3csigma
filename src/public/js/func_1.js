@@ -2,6 +2,7 @@
 jQuery(function($) {
     "use strict";
     
+    $('form#frmConsultor').attr('action', '/registro-de-consultores');
     $('form#wrapped').attr('action', '/addficha');
     $("#wizard_container").wizard({
         stepsWrapper: "#wrapped",

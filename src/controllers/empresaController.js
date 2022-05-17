@@ -5,62 +5,7 @@ const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers')
 const { Country } = require('country-state-city')
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
-
-/** Función para mostrar Dashboard & validación dependiendo del usuario */
-empresaController.dashboard = async (req, res) => {
-    req.intentPay = undefined; // Intento de pago
-    // console.log("Signer Email Global >>>> ", dsConfig.envelopeId)
-    const tipoUser = req.user.rol;
-    const id_user = req.user.id;
-    req.pagoDiag = false, pagoDiag = false;
-
-    /** Consultando que pagos ha realizado el usuario */
-    const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
-    if (pagos.length == 0) {
-        const nuevoPago = { id_user }
-        // await pool.query('UPDATE pagos SET ? WHERE id_user', [nuevoPago], (err, result) => {
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-            if (err) throw err;
-            console.log("Registro exitoso en la tabla pagos -> ", result);
-            res.redirect('/')
-        })
-    } else {
-        if (pagos[0].diagnostico_negocio == '1') {
-            // Pago Diagnóstico
-            diagnosticoPagado = 1;
-            req.pagoDiag = true;
-            pagoDiag = req.pagoDiag;
-        }
-        if (pagos[0].analisis_negocio == '1') {
-            analisisPagado = 1; // Pago Análisis
-        }
-    }
-
-    if (diagnosticoPagado) {
-        /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-        const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
-        if (acuerdo.length > 0) {
-            if (acuerdo[0].estado == 2) {
-                acuerdoFirmado = true;
-                noPago = false;
-            }
-        }
-    }
-
-    console.log("** ¿ACUERDO FIRMADO? ==> ", acuerdoFirmado)
-    console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
-    console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
-    res.render('dashboard', {
-        dashx: true, wizarx: false, tipoUser, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado
-    })
-    // res.send("HOLA DESDE DASHBOARD")
-}
-
-// Función para validar el Pago del Diagnóstico de Negocio
-empresaController.pagoDiagnostico = async (req, res) => {
-    console.log("Pago para Activar Diagnóstico de Negocio")
-}
+let acuerdoFirmado = false;
 
 /** Creación & validación del proceso Acuerdo de Confidencialidad */
 empresaController.acuerdo = async (req, res) => {
@@ -128,13 +73,12 @@ empresaController.acuerdo = async (req, res) => {
             res.redirect('/acuerdo-de-confidencialidad')
         })
     }
-    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, dashx: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
+    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
     const id_user = req.user.id;
-    const tipoUser = req.user.rol;
     const formDiag = {}
     formDiag.id = id_user;
     formDiag.usuario = helpers.encriptarTxt('' + id_user)
@@ -166,7 +110,7 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { dashx: true, pagoDiag: true, tipoUser, itemActivo: 3, acuerdoFirmado, formDiag, actualYear: req.actualYear })
+    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
@@ -193,7 +137,7 @@ empresaController.fichaCliente = async (req, res) => {
         ficha.etapa_actual === 'Operativo' ? datos.etapa2 = 'checked' : datos.etapa2 = ''
         ficha.etapa_actual === 'En expansión' ? datos.etapa3 = 'checked' : datos.etapa3 = ''
         ficha.etapa_actual === 'Otro' ? datos.etapa4 = 'checked' : datos.etapa4 = ''
-
+            
         datos.redes_sociales = JSON.parse(ficha.redes_sociales)
         datos.objetivos = JSON.parse(ficha.objetivos)
         datos.fortalezas = JSON.parse(ficha.fortalezas)
@@ -218,13 +162,17 @@ empresaController.fichaCliente = async (req, res) => {
     const max = fm.getFullYear() - 18; // Restando los años
     fm.setFullYear(max) // Asignando nuevo año
     const fechaMaxima = fm.toLocaleDateString("fr-CA"); // Colocando el formato yyyy-mm-dd
+    console.log(fechaMaxima);
 
-    res.render('empresa/fichaCliente', { ficha, datos, fechaMaxima, wizarx: true, dashx: false })
+    res.render('empresa/fichaCliente', { ficha, datos, fechaMaxima, wizarx: true, user_dash: false })
 }
 
 empresaController.addFichaCliente = async (req, res) => {
-    let { nombre, apellido, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_modificacion } = req.body
-
+    let { nombres, apellidos, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
+    // if (twitter != '') twitter = 'https://twitter.com/'+twitter;
+    // if (facebook != '') facebook = 'https://facebook.com/'+facebook;
+    // if (instagram != '') instagram = 'https://instagram.com/'+instagram;
+    // otra = 'https://'+otra;
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
     let fortalezas = JSON.stringify({ fortaleza1, fortaleza2, fortaleza3 })
@@ -233,19 +181,27 @@ empresaController.addFichaCliente = async (req, res) => {
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
     const id_user = req.user.id;
-    // const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: tzx})
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
-    const newFichaCliente = {
-        nombre, apellido, email, telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
+    const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: fecha_zh})
+
+    const nuevaFichaCliente = {
+        telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
+
+    const userUpdate = {
+        nombres, apellidos, email
+    }
+
+    // Actualizando datos bases de la empresa
+    await pool.query('UPDATE users SET ? WHERE id = ?', [userUpdate, id_user])
 
     // Consultar si ya existen datos en la Base de datos
     const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     if (ficha.length > 0) {
-        await pool.query('UPDATE ficha_cliente SET ? WHERE id_user = ?', [newFichaCliente, id_user])
+        await pool.query('UPDATE ficha_cliente SET ? WHERE id_user = ?', [nuevaFichaCliente, id_user])
     } else {
-        await pool.query('INSERT INTO ficha_cliente SET ?', [newFichaCliente])
+        await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
     }
     // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
     res.redirect('/diagnostico-de-negocio')
@@ -253,17 +209,6 @@ empresaController.addFichaCliente = async (req, res) => {
 
 empresaController.eliminarFicha = async (req, res) => {
     const { id } = req.body;
-    // await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id], (err, result) => {
-    //     if (err) throw err;
-    //     if (result.affectedRows > 1){
-    //         console.log("Eliminando ficha cliente", result)
-    //         res.send(true)
-    //     }else{
-    //         console.log("No hay datos")
-    //         res.send(false)
-    //     }
-    // })
-
     const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_user = ?', [id])
     let respu = undefined;
     console.log(ficha.affectedRows)
@@ -274,9 +219,4 @@ empresaController.eliminarFicha = async (req, res) => {
         respu = false;
     }
     res.send(respu)
-}
-
-// Función para validar el Pago del Análisis de Negocio
-empresaController.pagoAnalisis = async (req, res) => {
-    console.log("Pago para Activar Análisis de Negocio")
 }
