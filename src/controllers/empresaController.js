@@ -169,10 +169,6 @@ empresaController.fichaCliente = async (req, res) => {
 
 empresaController.addFichaCliente = async (req, res) => {
     let { nombres, apellidos, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
-    // if (twitter != '') twitter = 'https://twitter.com/'+twitter;
-    // if (facebook != '') facebook = 'https://facebook.com/'+facebook;
-    // if (instagram != '') instagram = 'https://instagram.com/'+instagram;
-    // otra = 'https://'+otra;
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
     let fortalezas = JSON.stringify({ fortaleza1, fortaleza2, fortaleza3 })

@@ -60,7 +60,7 @@ userController.confirmarRegistro = async (req, res) => {
         });
        }
 
-       const updateEstado = {estado: 1}
+       const updateEstado = {estadoEmail: 1}
        // Actualizando el estado del usuario - Activo (1)
        await pool.query('UPDATE users SET ? WHERE codigo = ?', [updateEstado, codigo])
 

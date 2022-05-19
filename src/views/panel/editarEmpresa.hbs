@@ -101,7 +101,7 @@
                                 <p>{{empresa.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
-                                <h4 class="text-muted mb-0">{{empresa.telefono}}</h4>
+                                <h4 class="text-muted mb-0">{{#if empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
                                 <p>Teléfono</p>
                             </div>
 
@@ -123,63 +123,81 @@
                             <div class="text-center">
                                 <div class="row">
                                     <div class="col">
-                                        <h3 class="m-b-0">{{empresa.cantidad_socios}}</h3><span>Cantidad de
-                                            Socios</span>
+                                        <h3 class="m-b-0">{{#if empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
+                                        <span>Cantidad de Socios</span>
                                     </div>
                                     <div class="col">
-                                        <h3 class="m-b-0">{{empresa.tiempo_experiencia}}</h3><span>Años de
-                                            experiencia</span>
+                                        <h3 class="m-b-0">{{#if empresa.tiempo_experiencia}}
+                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de experiencia</span>
                                     </div>
                                     <div class="col">
-                                        <h3 class="m-b-0">{{empresa.num_empleados}}</h3><span>Número de Empleados</span>
+                                        <h3 class="m-b-0">{{#if empresa.num_empleados}}
+                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de Empleados</span>
                                     </div>
                                 </div>
 
                                 <div class="mt-4">
-                                    {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Asignar consultor</label>
-                                            <select name="id_consultor" id="id_consultor"
-                                                class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                <option value=""></option>
-                                                {{#each consultores}}
-                                                {{#comparar id '==' idCon}}
-                                                <option value="{{id}}" selected>
+                                    <form action="/actualizarEmpresa" method="post">
+                                        {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Asignar consultor</label>
+                                                <select name="id_consultor" id="id_consultor"
+                                                    class="form-control sltBuscar chosen-container chosen-container-single required">
+                                                    <option value=""></option>
+                                                    {{#each consultores}}
+                                                        {{#comparar id '==' idCon}}
+                                                        <option selected
+                                                        {{/comparar}}
+                                                        {{#comparar id '!=' idCon}}
+                                                        <option
+                                                        {{/comparar}}
+                                                        value="{{id}}">
+                                                        {{nombres_consultor}} {{apellidos_consultor}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label>Estado de la cuenta</label>
+                                                <select id="estadoAdm" name="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                    {{#comparar empresa.estadoAdm '==' '1'}}
+                                                    <option value="1" selected style="color: green">Activa</option>
+                                                    <option value="0">Bloqueada</option>
                                                     {{/comparar}}
-                                                    {{#comparar id '!=' idCon}}
-                                                <option value="{{id}}">
+                                                    {{#comparar empresa.estadoAdm '!=' '1'}}
+                                                    <option value="0" selected>Bloqueada</option>
+                                                    <option value="1">Activa</option>
                                                     {{/comparar}}
-                                                    {{nombres_consultor}} {{apellidos_consultor}}</option>
-                                                {{/each}}
-                                            </select>
-                                        </div>
-                                        <div class="col">
-                                            <label>Estado de la cuenta</label>
-                                            <select id="estado_consul" class="mr-sm-2 default-select text-center">
-                                                {{#comparar empresa.estadoAdm '==' '1'}}
-                                                <option value="1" selected style="color: green">Activa</option>
-                                                <option value="0">Bloqueada</option>
-                                                {{/comparar}}
-                                                {{#comparar empresa.estadoAdm '!=' '1'}}
-                                                <option value="0" selected>Bloqueada</option>
-                                                <option value="1">Activa</option>
-                                                {{/comparar}}
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    {{!-- Boton actualizar empresa --}}
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <a type="button" class="btn btn-primary" id="btnActualizarEmpresa"
-                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
-                                                    <p class="font-w500 m-auto">Guardar cambios</p>
-                                                </a>
+                                                </select>
                                             </div>
                                         </div>
-                                    </div>
+
+                                        {{!-- Boton actualizar empresa --}}
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <input type="hidden" value="{{datos.code}}" name="codigo">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        id="btnActualizarEmpresa"
+                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Guardar cambios</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 mt-3">
+                                                {{!-- Datos personales --}}
+                                                <div class="profile-personal-info">
+                                                    <div class="row mb-2">
+                                                        <div class="col-sm-12 col-12">
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{empresa.etapa}}</span>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
 
                                     <div class="row mt-4">
                                         <div class="col">
@@ -190,7 +208,7 @@
                                                 <textarea
                                                     style="height: 400px; min-height: 400px; max-height: 400px; width: 100%; text-align: justify; background: transparent !important; border: none"
                                                     class="form-control barra-scroll overflow-y-auto"
-                                                    disabled>{{empresa.descripcion}}</textarea>
+                                                    disabled>{{#if empresa.descripcion}}{{empresa.descripcion}}{{else}}N/A{{/if}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -372,7 +390,7 @@
                         {{!-- ./ Fin de pestañas --}}
 
                         {{!-- Contenido de pestañas --}}
-                        <div class="profile-tab barra-scroll overflow-y-auto" style="max-height: 110vh;">
+                        <div class="profile-tab barra-scroll overflow-y-auto" style="max-height: 100vh;">
 
                             <div class="custom-tab-1">
 
@@ -407,7 +425,7 @@
                                                                 class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{empresa.pais}}</span>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}} {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -415,7 +433,7 @@
                                                         <h5 class="f-w-500">¿Dueño del negocio? <span
                                                                 class="pull-right">:</span></h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{empresa.es_propietario}}</span>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.es_propietario}}{{empresa.es_propietario}} {{else}} N/A {{/if}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -423,7 +441,7 @@
                                                         <h5 class="f-w-500">¿Tiene socios?<span
                                                                 class="pull-right">:</span></h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{empresa.socios}}</span>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.socios}}{{empresa.socios}} {{else}} N/A {{/if}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -432,7 +450,7 @@
                                                                 class="pull-right">:</span></h5>
                                                     </div>
                                                     <div class="col-sm-8 col-7">
-                                                        <span>{{empresa.porcentaje_accionario}}</span>
+                                                        <span>{{#if empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}} {{else}} N/A {{/if}}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -445,20 +463,17 @@
 
                                                     <div class="col-sm-4 col-4">
                                                         <h5 class="f-w-500">Tiempo de Fundación</h4>
-                                                            <a
-                                                                class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}} {{else}} N/A {{/if}}</a>
                                                     </div>
 
                                                     <div class="col-sm-4 col-4">
                                                         <h5 class="f-w-500">Promedio de ingreso anual</h4>
-                                                            <a
-                                                                class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
+                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}} {{else}} N/A {{/if}}</a>
                                                     </div>
 
                                                     <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Etapa del negocio</h4>
-                                                            <a
-                                                                class="text-muted pr-3 f-s-16">{{empresa.etapa_actual}}</a>
+                                                        <h5 class="f-w-500">Etapa actual del negocio</h4>
+                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.etapa_actual}}{{empresa.etapa_actual}} {{else}} N/A {{/if}}</a>
                                                     </div>
 
                                                 </div>
@@ -467,9 +482,13 @@
                                                 <div class="row mb-2 mt-5">
                                                     <div class="col-sm-11 col-10 pr-2">
                                                         <h5 class="f-w-500">Principales Objetivos</h4>
-                                                        <p style="text-align: justify;"> 1- {{datos.objetivos.objetivo1}}<br>
-                                                        2- {{datos.objetivos.objetivo2}}<br>
-                                                        3- {{datos.objetivos.objetivo3}}</p>
+                                                            {{#if datos.objetivos}}
+                                                            <p style="text-align: justify;"> 1-
+                                                                {{datos.objetivos.objetivo1}}<br>
+                                                                2- {{datos.objetivos.objetivo2}}<br>
+                                                                3- {{datos.objetivos.objetivo3}}</p>
+                                                            {{else}}N/A
+                                                            {{/if}}
                                                     </div>
                                                 </div>
 
@@ -477,9 +496,13 @@
                                                 <div class="row mb-2 mt-5">
                                                     <div class="col-sm-11 col-10 pr-2">
                                                         <h5 class="f-w-500">Principales Fortalezas</h4>
-                                                        <p style="text-align: justify;"> 1- {{datos.fortalezas.fortaleza1}}<br>
-                                                        2- {{datos.fortalezas.fortaleza2}}<br>
-                                                        3- {{datos.fortalezas.fortaleza3}}</p>
+                                                            {{#if datos.fortalezas}}
+                                                            <p style="text-align: justify;"> 1-
+                                                                {{datos.fortalezas.fortaleza1}}<br>
+                                                                2- {{datos.fortalezas.fortaleza2}}<br>
+                                                                3- {{datos.fortalezas.fortaleza3}}</p>
+                                                            {{else}}N/A
+                                                            {{/if}}
                                                     </div>
                                                 </div>
 
@@ -487,28 +510,31 @@
                                                 <div class="row mb-2 mt-5">
                                                     <div class="col-sm-11 col-10 pr-2">
                                                         <h5 class="f-w-500">Principales Problemas</h4>
-                                                        <p style="text-align: justify;"> 1- {{datos.problemas.problema1}}<br>
-                                                        2- {{datos.problemas.problema2}}<br>
-                                                        3- {{datos.problemas.problema3}}</p>
+                                                            {{#if datos.problemas}}
+                                                            <p style="text-align: justify;"> 1-
+                                                                {{datos.problemas.problema1}}<br>
+                                                                2- {{datos.problemas.problema2}}<br>
+                                                                3- {{datos.problemas.problema3}}</p>
+                                                            {{else}}N/A
+                                                            {{/if}}
                                                     </div>
                                                 </div>
 
                                                 {{!-- MOTIVO DE LA CONSULTORÍA --}}
                                                 <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2 border-bottom-1">
+                                                    <div class="col-sm-11 col-10 pr-2">
                                                         <h5 class="f-w-500">Motivo de la consultoría</h4>
-                                                        <p style="text-align: justify;"> {{empresa.motivo_consultoria}}</p>
+                                                            <p style="text-align: justify;">
+                                                                {{#if empresa.motivo_consultoria}}
+                                                                {{empresa.motivo_consultoria}}
+                                                                {{else}}N/A
+                                                                {{/if}}
+                                                            </p>
                                                     </div>
                                                 </div>
 
                                             </div>
 
-
-                                            {{!-- <div class="profile-uoloaded-post border-bottom-1 pb-5">
-                                                <img src="../img/profile/8.jpg" alt="" class="img-fluid">
-                                            </div> --}}
-
-                                        </div>
                                     </div>
 
                                     {{!-- PESTAÑA 2 --}}

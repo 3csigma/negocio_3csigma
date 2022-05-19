@@ -5,6 +5,9 @@
     .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
         color: #fff !important;
     }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+        color: #fff !important;
+    }
 </style>
 <!--**********************************
           Content body start
@@ -26,12 +29,14 @@
                                 <thead>
                                     <tr>
                                         <th>Empresa</th>
-                                        <th>Fecha de registro</th>
+                                        <th>Registro</th>
                                         <th>Nombre</th>
                                         <th>Correo</th>
                                         <th>Teléfono</th>
                                         <th>Consultor</th>
-                                        <th>Action</th>
+                                        <th>Estado de la cuenta</th>
+                                        <th>Etapa de consultoría</th>
+                                        <th>Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -42,7 +47,9 @@
                                         <td>{{nombres}} {{apellidos}}</td>
                                         <td>{{email}}</td>
                                         <td>{{#if telefono}}{{telefono}}{{else}}N/A{{/if}}</td>
-                                        <td>{{#if consultor}}{{ consultor}}{{else}}N/A{{/if}}</td>
+                                        <td>{{#if nombres_consultor}}{{ nombres_consultor }} {{ apellidos_consultor }}{{else}}N/A{{/if}}</td>
+                                        <td>{{estadoCuenta}}</td>
+                                        <td>{{etapa}}</td>
                                         <td>
                                             <div class="d-flex">
                                                 <a  href="/empresas/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"

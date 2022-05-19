@@ -55,7 +55,7 @@ signingViaEmail.createController = (req, res) => {
                 const email = args.envelopeArgs.signerEmail
                 console.log("Result STATUS SIGN ==> ", statusSign)               
                 const id_user = req.user.id;
-                let estado = {}, noPago = true, acuerdoFirmado = false;
+                let estado = {}, noPago = true;
 
                 estado.valor = 1; // Documento enviado
                 estado.form = true; // Debe mostrar el formulario
@@ -65,7 +65,7 @@ signingViaEmail.createController = (req, res) => {
                     const newDatos = {
                         email_signer: req.session.email_user,
                         envelopeId: req.session.envelopeId,
-                        estado: estado.valor,
+                        estadoAcuerdo: estado.valor,
                         args: JSON.stringify(args)
                     }
                     await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [newDatos, id_user])
