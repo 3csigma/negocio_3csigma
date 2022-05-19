@@ -23,12 +23,12 @@ empresaController.acuerdo = async (req, res) => {
         // console.log("ARGS DATABASE >>>> ", JSON.parse(acuerdo[0].args))
         noPago = false;
         /** Validando si ya está firmado el documento y su estado de firmado (2) se encuentra en la base de datos */
-        if (acuerdo[0].estado == 2) {
+        if (acuerdo[0].estadoAcuerdo == 2) {
             acuerdoFirmado = true;
             estado.valor = 2; //Documento Firmado
             estado.firmado = true;
             dsConfig.envelopeId = ''
-        } else if (acuerdo[0].estado == 1) { // Validando desde Docusign
+        } else if (acuerdo[0].estadoAcuerdo == 1) { // Validando desde Docusign
             noPago = false;
             email = acuerdo[0].email_signer;
             const args = JSON.parse(acuerdo[0].args) // CONVERTIR  JSON A UN OBJETO

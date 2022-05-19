@@ -47,7 +47,7 @@ dashboardController.index = async (req, res) => {
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
             if (acuerdo.length > 0) {
-                if (acuerdo[0].estado == 2) {
+                if (acuerdo[0].estadoAcuerdo == 2) {
                     acuerdoFirmado = true;
                     noPago = false;
                 }
