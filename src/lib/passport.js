@@ -136,7 +136,7 @@ passport.use('local.login', new LocalStrategy({
 
         if (claveValida){
             req.userEmail = true;
-            if (user.estado == 1) {
+            if (user.estadoEmail == 1) {
                 userEmpresa = req.session.empresa = true;
                 req.session.consultor = false;
                 req.session.admin = false;
