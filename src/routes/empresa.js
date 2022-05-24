@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { checkLogin, empresaLogueada, validarIDFicha } = require('../lib/auth')
+const { checkLogin, empresaLogueada, validarIDFicha } = require('../lib/auth');
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
 const paymentController = require('../controllers/paymentController');

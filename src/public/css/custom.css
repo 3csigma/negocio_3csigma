@@ -4,6 +4,32 @@ body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
 }
 
+/* Barra scroll personalizada */
+body::-webkit-scrollbar {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+  body::-webkit-scrollbar:vertical {
+    width: 10px !important;
+  }
+  body::-webkit-scrollbar-button:increment,
+  body::-webkit-scrollbar-button {
+    display: none !important;
+  }
+  body::-webkit-scrollbar:horizontal {
+    height: 10px !important;
+  }
+  body::-webkit-scrollbar-thumb {
+    background-color: #50368c !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(155, 155, 155, 0.747) !important;
+  }
+  body::-webkit-scrollbar-track {
+    border-radius: 10px !important;
+    background-color: #eae6f4 !important;
+  }
+  /* Fin Barra scroll personalizada */
+
 /* ¡Bienvenido de vuelta! */
 .msg-Login-Top {
     font-size: 14px !important;

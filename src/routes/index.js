@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
-const { checkLogin, activeLogin, noLogueado, adminLogueado } = require('../lib/auth')
+const { checkLogin, noLogueado, adminLogueado, empresaLogueada } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
@@ -25,8 +25,10 @@ const rutaAlmacen = multer.diskStorage({
 
 const subirArchivo = multer({ storage: rutaAlmacen })
 
-// Dashboard Principal
-router.get('/', checkLogin, activeLogin, dashboardController.index)
+// Dashboard Principal Empresas
+router.get('/', checkLogin, empresaLogueada, dashboardController.index)
+// // Dashboard Principal Administrador
+router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
 
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)

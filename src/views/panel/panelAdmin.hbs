@@ -103,6 +103,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#unless empresas}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay empresas registrados.</td>
+                                            </tr>
+                                            {{/unless}}
                                             {{#each empresas}}
                                             <tr>
                                                 <td>{{fecha_creacion}}</td>
@@ -148,11 +153,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#unless consultores}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay consultores registrados.</td>
+                                            </tr>
+                                            {{/unless}}
                                             {{#each consultores}}
                                             <tr>
-                                                <td>{{nombres_consultor}}</td>
-                                                <td>{{apellidos_consultor}}</td>
-                                                <td>{{email_consultor}}</td>
+                                                <td>{{#if nombres}} {{nombres}} {{else}} N/A {{/if}}</td>
+                                                <td>{{#if apellidos}} {{apellidos}} {{else}} N/A {{/if}}</td>
+                                                <td>{{#if email}} {{email}} {{else}} N/A {{/if}}</td>
                                                 <td class="mx-auto">
                                                     <div class="d-flex">
                                                         <a href="/consultores/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"

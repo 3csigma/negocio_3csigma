@@ -28,13 +28,13 @@ userController.getLogin = (req, res) => {
     res.render('auth/login', { wizarx: false, user_dash: false, login: false, confirmarLogin: false, csrfToken: req.csrfToken()})
 }
 
-userController.postLogin = (req, res, next) => {
-    passport.authenticate('local.login', {
-        successRedirect: '/',
-        failureRedirect: '/login',
-        failureFlash: true,
-    })(req, res, next)
-}
+// userController.postLogin = (req, res, next) => {
+//     passport.authenticate('local.login', {
+//         successRedirect: '/', 
+//         failureRedirect: '/login',
+//         failureFlash: true,
+//     })(req, res, next)
+// }
 
 userController.confirmarRegistro = async (req, res) => {
     try {

@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { checkLogin, noLogueado, activeLogin } = require('../lib/auth')
+const { checkLogin, noLogueado } = require('../lib/auth')
 const userController = require('../controllers/userController');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
+const passport = require('passport')
 
 router.get('/registro', noLogueado, csrfProtection, userController.getRegistro)
 
@@ -13,9 +14,21 @@ router.get('/confirmar/:codigo', noLogueado, csrfProtection, userController.conf
 
 router.get('/login', noLogueado, csrfProtection, userController.getLogin)
 
-router.post('/login', noLogueado, csrfProtection, userController.postLogin)
+//router.post('/login', noLogueado, csrfProtection, userController.postLogin)
+
+router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.login', {
+    failureRedirect: '/login',
+    failureFlash: true,
+}), (req, res) => {
+    console.log(req.user)
+    if (req.user.rol == 'Empresa'){
+        res.redirect('/')
+    } else {
+        res.redirect('/admin')
+    }
+})
 
 /** Cerrar Sesión */
-router.get('/logout', checkLogin, activeLogin, userController.cerrarSesion)
+router.get('/logout', checkLogin, userController.cerrarSesion)
 
 module.exports = router;

@@ -16,7 +16,6 @@ empresaController.acuerdo = async (req, res) => {
     const id_user = req.user.id;
     const tipoUser = req.user.rol;
     let estado = {}, email, noPago = true, statusSign = '';
-    const pagoDiag = req.pagoDiag;
     const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
 
     if (acuerdo.length > 0) {
@@ -185,9 +184,7 @@ empresaController.addFichaCliente = async (req, res) => {
         telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
 
-    const userUpdate = {
-        nombres, apellidos, email
-    }
+    const userUpdate = { nombres, apellidos, email }
 
     // Actualizando datos bases de la empresa
     await pool.query('UPDATE users SET ? WHERE id = ?', [userUpdate, id_user])

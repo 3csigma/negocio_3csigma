@@ -9,14 +9,6 @@ module.exports = {
         }
     },
 
-    activeLogin(req, res, next) {
-        if (req.session.empresa || req.session.admin || req.session.consultor) { 
-            return next();
-        } else {
-            return res.redirect('/login')
-        }
-    },
-
     empresaLogueada(req, res, next) {
         // Método de passport que se ha poblado al objeto req & lo que devuelve true or false para saber si el usuario existe
         if (req.session.empresa && !req.session.admin && !req.session.consultor) { 
@@ -62,7 +54,7 @@ module.exports = {
         if (req.session.fichaCliente) { 
             return next();
         } else {
-            return res.redirect('/')
+            return res.redirect('/diagnostico-de-negocio')
         }
     },
 

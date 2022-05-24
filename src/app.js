@@ -24,7 +24,7 @@ app.engine('hbs', engine({
 }));
 app.set('view engine', 'hbs');
 
-app.set('trust proxy', 1) // Proxy de confianza
+// app.set('trust proxy', 1) // Proxy de confianza
 
 /******* Middlewares *******/
 app.use(morgan('dev'))
@@ -65,10 +65,10 @@ app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.message = req.flash('message');
   res.locals.registro = req.flash('registro');
-  res.locals.user = req.user; //Variable local de (suario
+  res.locals.user = req.user; //Variable local para Empresas
+  res.locals.consultor = req.consultor; //Variable local para Consultores
   res.locals.session = req.session;
   res.locals.pagoDiag = req.pagoDiag;
-  // res.locals.csrfToken = req.csrfToken();
   next();
 })
 

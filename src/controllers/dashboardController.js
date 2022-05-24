@@ -1,49 +1,41 @@
 const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
-const helpers = require('../lib/helpers')
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
-/** Función para mostrar Dashboard & validación dependiendo del usuario */
+dashboardController.admin = async (req, res) => {
+    const consultores = await pool.query('SELECT * FROM users WHERE rol = "Consultor" ORDER BY id DESC LIMIT 2')
+    const empresas = await pool.query('SELECT * FROM users WHERE rol = "Empresa" ORDER BY id DESC LIMIT 2')
+    console.log("///////////////");
+    console.log(req.user)
+    console.log("///////////////");
+    res.render('panel/panelAdmin', { adminDash: true, user_dash: false, itemActivo: 1, consultores, empresas });
+}
+
+/** Función para mostrar Dashboard de Empresas */
 dashboardController.index = async (req, res) => {
-    const tipoUser = req.user.rol;
-    console.log("\n<<<< ROL >>>> " + tipoUser + "\n");
+    diagnosticoPagado = 0;
+    req.intentPay = undefined; // Intento de pago
+    const id_user = req.user.empresa;
+    req.pagoDiag = false, pagoDiag = false;
 
-    if (tipoUser == 'Admin') {
-
-        const consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor" ORDER BY id DESC LIMIT 2')
-        const empresas = await pool.query('SELECT * FROM users ORDER BY id DESC LIMIT 2')
-        res.render('panel/panelAdmin', { adminDash: true, user_dash: false, itemActivo: 1, consultores, empresas });
-
+    /** Consultando que pagos ha realizado el usuario */
+    const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
+    if (pagos.length == 0) {
+        const nuevoPago = { id_user }
+        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
+            if (err) throw err;
+            console.log("Registro exitoso en la tabla pagos -> ", result);
+            res.redirect('/')
+        })
     } else {
-        req.intentPay = undefined; // Intento de pago
-        const id_user = req.user.id;
-        req.pagoDiag = false, pagoDiag = false;
+        if (pagos[0].diagnostico_negocio == '1') {
+            // Pago Diagnóstico
+            diagnosticoPagado = 1;
+            req.pagoDiag = true;
+            pagoDiag = req.pagoDiag;
 
-        /** Consultando que pagos ha realizado el usuario */
-        const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
-        if (pagos.length == 0) {
-            const nuevoPago = { id_user }
-            // await pool.query('UPDATE pagos SET ? WHERE id_user', [nuevoPago], (err, result) => {
-            await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-                if (err) throw err;
-                console.log("Registro exitoso en la tabla pagos -> ", result);
-                res.redirect('/')
-            })
-        } else {
-            if (pagos[0].diagnostico_negocio == '1') {
-                // Pago Diagnóstico
-                diagnosticoPagado = 1;
-                req.pagoDiag = true;
-                pagoDiag = req.pagoDiag;
-            }
-            if (pagos[0].analisis_negocio == '1') {
-                analisisPagado = 1; // Pago Análisis
-            }
-        }
-
-        if (diagnosticoPagado) {
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
             if (acuerdo.length > 0) {
@@ -52,13 +44,18 @@ dashboardController.index = async (req, res) => {
                     noPago = false;
                 }
             }
+
         }
 
-        // console.log("** ¿ACUERDO FIRMADO? ==> ", acuerdoFirmado)
-        // console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
-        // console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
+        if (pagos[0].analisis_negocio == '1') {
+            analisisPagado = 1; // Pago Análisis
+        }
+
+        console.log("** ¿ACUERDO FIRMADO? ==> ", acuerdoFirmado)
+        console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
+        console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
         res.render('pages/dashboard', {
-            user_dash: true, adminDash: false, wizarx: false, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado
+            user_dash: true, adminDash: false, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado
         })
 
     }
@@ -138,14 +135,14 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     empresa.etapa = 'Email sin confirmar';
     let c1, c2;
-    if (empresa){
+    if (empresa) {
         empresa.estadoEmail == 1 ? empresa.etapa = 'Email confirmado' : empresa.etapa = empresa.etapa;
         c1 = await pool.query('SELECT * FROM pagos WHERE id_user = ? LIMIT 1', [idUser])
         c2 = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ? LIMIT 1', [idUser])
         c1 = c1[0]; c2 = c2[0];
     }
-    
-    if (c1 || c2){
+
+    if (c1 || c2) {
         c1.diagnostico_negocio == 1 ? empresa.etapa = 'Diagnóstico pagado' : empresa.etapa = empresa.etapa;
         c1.analisis_negocio == 1 ? empresa.etapa = 'Análisis pagado' : empresa.etapa = empresa.etapa;
         c2.estadoAcuerdo == 2 ? empresa.etapa = 'Acuerdo firmado' : empresa.etapa = empresa.etapa;
