@@ -13,9 +13,9 @@ empresaController.acuerdo = async (req, res) => {
      * Estados (Acuerdo de Confidencialidad):
      * Sin enviar: 0, Enviado: 1, Firmado: 2
      */
-    const id_user = req.user.id;
+    const id_user = req.user.empresa;
     const tipoUser = req.user.rol;
-    let estado = {}, email, noPago = true, statusSign = '';
+    let estado = {}, email, noPago = true, statusSign = '', fechaExp;
     const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ?', [id_user])
 
     if (acuerdo.length > 0) {
@@ -28,9 +28,22 @@ empresaController.acuerdo = async (req, res) => {
             estado.firmado = true;
             dsConfig.envelopeId = ''
         } else if (acuerdo[0].estadoAcuerdo == 1) { // Validando desde Docusign
+            acuerdoFirmado = false;
+            fechaExp = acuerdo[0].serverDate
+
             noPago = false;
             email = acuerdo[0].email_signer;
             const args = JSON.parse(acuerdo[0].args) // CONVERTIR  JSON A UN OBJETO
+
+            // console.log("\nARGS DATABASE >>> ", args);
+
+            const newToken = await helpers.authToken() //Generando nuevo Token para enviar a Docusign
+            args.accessToken = newToken.access_token;
+
+            const new_args = {args: JSON.stringify(args)}
+
+            // console.log("\n<<<< NUEVO ARGS >>>>", args);
+            await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [new_args, id_user])
 
             /** Consultando el estado del documento en Docusign */
             await listEnvelope(args, acuerdo[0].envelopeId).then((values) => {
@@ -38,25 +51,27 @@ empresaController.acuerdo = async (req, res) => {
                 // console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
             })
 
+            estado.valor = 1; // Documento enviado
+            estado.form = true; // Debe mostrar el formulario
+            estado.enviado = true;
+
             /** Validando si el estado devuelto es enviado o firmado */
             if (statusSign == 'completed') { // Estado desde docusign (completed)
                 estado.valor = 2; //Documento Firmado
                 estado.firmado = true;
                 acuerdoFirmado = true;
-                const actualizarEstado = { estado: estado.valor }
+                const actualizarEstado = { estadoAcuerdo: estado.valor }
                 // Actualizando Estado del acuerdo a 2 (Firmado)
                 await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [actualizarEstado, id_user])
-            } else {
-                estado.valor = 1; // Documento enviado
-                estado.form = true; // Debe mostrar el formulario
-                estado.enviado = true;
             }
+
         } else {
-            console.log("No existe la variable de sesión email o No ha solicitado el documento a firmar")
+            console.log("\nNo existe la variable de sesión email o No ha solicitado el documento a firmar\n")
             estado.sinEnviar = true; // Documento sin enviar 
             estado.valor = 0;
             estado.form = true;
             dsConfig.envelopeId = ''
+            acuerdoFirmado = false;
         }
 
         // Si no se ha solicitado el documento a firmar desde el formulario Acuerdo de Confidencialidad
@@ -65,6 +80,7 @@ empresaController.acuerdo = async (req, res) => {
         estado.sinEnviar = true; // Documento sin enviar 
         estado.valor = 0;
         estado.form = true; // Debe mostrar el formulario
+        acuerdoFirmado = false;
         dsConfig.envelopeId = ''
         await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
             if (err) throw err;
@@ -72,12 +88,22 @@ empresaController.acuerdo = async (req, res) => {
             res.redirect('/acuerdo-de-confidencialidad')
         })
     }
-    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado })
+    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, noPago, itemActivo: 2, email, estado, acuerdoFirmado, fechaExp })
+}
+
+// Validar Acuerdo de Confidencialidad
+empresaController.validarAcuerdo = async (req, res) => {
+    const { id } = req.body;
+    const estado = {estadoAcuerdo: 0}
+    const update = await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [estado, id])
+    let isValid = false;
+    update.affectedRows > 0 ? isValid = true : isValid = isValid;
+    return isValid;
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
-    const id_user = req.user.id;
+    const id_user = req.user.empresa;
     const formDiag = {}
     formDiag.id = id_user;
     formDiag.usuario = helpers.encriptarTxt('' + id_user)
@@ -116,7 +142,7 @@ empresaController.diagnostico = async (req, res) => {
 empresaController.validarFichaCliente = async (req, res) => {
     const { id } = req.params;
     const id_user = helpers.desencriptarTxt(id)
-    if (req.user.id == id_user) {
+    if (req.user.empresa == id_user) {
         req.session.fichaCliente = true
     } else {
         req.session.fichaCliente = false
@@ -126,7 +152,7 @@ empresaController.validarFichaCliente = async (req, res) => {
 
 empresaController.fichaCliente = async (req, res) => {
     req.session.fichaCliente = false
-    const id_user = req.user.id, datos = {};
+    const id_user = req.user.empresa, datos = {};
     const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ?', [id_user])
     const ficha = fichaCliente[0]
     if (fichaCliente.length > 0) {
@@ -175,16 +201,16 @@ empresaController.addFichaCliente = async (req, res) => {
 
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
-    const id_user = req.user.id;
+    const id_user = req.user.empresa;
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
     const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: fecha_zh})
 
     const nuevaFichaCliente = {
-        telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
+        telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_user, fecha_modificacion
     }
 
-    const userUpdate = { nombres, apellidos, email }
+    const userUpdate = { nombres, apellidos, nombre_empresa, email }
 
     // Actualizando datos bases de la empresa
     await pool.query('UPDATE users SET ? WHERE id = ?', [userUpdate, id_user])

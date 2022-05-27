@@ -4,15 +4,6 @@ const passport = require('passport')
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
 
-dashboardController.admin = async (req, res) => {
-    const consultores = await pool.query('SELECT * FROM users WHERE rol = "Consultor" ORDER BY id DESC LIMIT 2')
-    const empresas = await pool.query('SELECT * FROM users WHERE rol = "Empresa" ORDER BY id DESC LIMIT 2')
-    console.log("///////////////");
-    console.log(req.user)
-    console.log("///////////////");
-    res.render('panel/panelAdmin', { adminDash: true, user_dash: false, itemActivo: 1, consultores, empresas });
-}
-
 /** Función para mostrar Dashboard de Empresas */
 dashboardController.index = async (req, res) => {
     diagnosticoPagado = 0;
@@ -62,6 +53,13 @@ dashboardController.index = async (req, res) => {
 
 }
 
+// Dashboard Administrativo
+dashboardController.admin = async (req, res) => {
+    const consultores = await pool.query('SELECT * FROM users WHERE rol = "Consultor" ORDER BY id DESC LIMIT 2')
+    const empresas = await pool.query('SELECT * FROM users WHERE rol = "Empresa" ORDER BY id DESC LIMIT 2')
+    res.render('panel/panelAdmin', { adminDash: true, user_dash: false, itemActivo: 1, consultores, empresas });
+}
+
 // CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
     res.render('auth/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
@@ -76,20 +74,19 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT * FROM consultores WHERE rol = "Consultor"')
+    let consultores = await pool.query('SELECT * FROM vista_consultores')
 
     consultores.forEach(async c => {
-        const id_consul = c.id;
-        const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM users WHERE id_consultor = ?', [id_consul])
-        console.log(num[0].numEmpresas)
+        const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM ficha_cliente WHERE userConsultor = ?', [c.ide_consultor])
         c.num_empresas = num[0].numEmpresas
     });
+
     res.render('panel/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores })
 }
 
 dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
-    let consultor = await pool.query('SELECT * FROM consultores WHERE codigo = ?', [codigo])
+    let consultor = await pool.query('SELECT * FROM vista_consultores WHERE codigo = ?', [codigo])
     consultor = consultor[0];
     if (consultor.certificado) {
         consultor.txtCertificado = consultor.certificado.split('/')[2]
@@ -99,8 +96,8 @@ dashboardController.editarConsultor = async (req, res) => {
 
 dashboardController.actualizarConsultor = async (req, res) => {
     const { id, estado } = req.body;
-    const nuevoEstado = { estado }
-    const consultor = await pool.query('UPDATE consultores SET ? WHERE id = ?', [nuevoEstado, id])
+    const nuevoEstado = { estadoAdm: estado }
+    const consultor = await pool.query('UPDATE users SET ? WHERE consultor = ?', [nuevoEstado, id])
     let respuesta = false;
     if (consultor) {
         respuesta = true;
@@ -110,8 +107,8 @@ dashboardController.actualizarConsultor = async (req, res) => {
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    // let empresas = await pool.query('SELECT e.*, f.telefono, f.id_user, c.nombres_consultor, c.apellidos_consultor FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = e.id LEFT OUTER JOIN consultores c ON c.id = e.id_consultor')
-    let empresas = await pool.query('SELECT e.*, f.telefono, f.id_user, c.nombres_consultor, c.apellidos_consultor, p.id_user, p.diagnostico_negocio, p.analisis_negocio, a.id_user, a.estadoAcuerdo FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = e.id LEFT OUTER JOIN consultores c ON c.id = e.id_consultor LEFT OUTER JOIN pagos p ON p.id_user = e.id LEFT OUTER JOIN acuerdo_confidencial a ON a.id_user = e.id;')
+    let empresas = await pool.query('SELECT e.*, f.telefono, f.id_user, p.id_user, p.diagnostico_negocio, p.analisis_negocio, a.id_user, a.estadoAcuerdo FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = e.id AND e.rol = "Empresa" INNER JOIN pagos p ON p.id_user = e.id LEFT OUTER JOIN acuerdo_confidencial a ON a.id_user = e.id;')
+    // let empresas = await pool.query('SELECT e.*, f.telefono, f.id_user, c.nombres_consultor, c.apellidos_consultor, p.id_user, p.diagnostico_negocio, p.analisis_negocio, a.id_user, a.estadoAcuerdo FROM users e LEFT OUTER JOIN ficha_cliente f ON f.id_user = e.id LEFT OUTER JOIN consultores c ON c.id = e.id_consultor LEFT OUTER JOIN pagos p ON p.id_user = e.id LEFT OUTER JOIN acuerdo_confidencial a ON a.id_user = e.id')
 
     empresas.forEach(e => {
         e.etapa = 'Email sin confirmar';
@@ -129,62 +126,77 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
 dashboardController.editarEmpresa = async (req, res) => {
     const codigo = req.params.codigo, datos = {};
-    let empresa = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
-    empresa = empresa[0];
-    const idUser = empresa.id;
+    let consultores = null;
+    // Empresa tabla Usuarios
+    let filas = await pool.query('SELECT * FROM users WHERE rol = "Empresa" AND codigo = ? LIMIT 1', [codigo])
+    filas = filas[0];
+    const idUser = filas.empresa;
+    // Empresa tabla Ficha Cliente
+    let empresa = await pool.query('SELECT * FROM ficha_cliente WHERE id_user = ? LIMIT 1', [idUser])
+    
+    datos.nombre_completo = filas.nombres + " " + filas.apellidos;
+    datos.nombre_empresa = filas.nombre_empresa;
+    datos.email = filas.email;
+    datos.estadoAdm = filas.estadoAdm;
 
-    empresa.etapa = 'Email sin confirmar';
     let c1, c2;
-    if (empresa) {
-        empresa.estadoEmail == 1 ? empresa.etapa = 'Email confirmado' : empresa.etapa = empresa.etapa;
+    if (filas) {
+        filas.estadoEmail == 1 ? datos.etapa = 'Email confirmado' : datos.etapa = datos.etapa;
         c1 = await pool.query('SELECT * FROM pagos WHERE id_user = ? LIMIT 1', [idUser])
         c2 = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_user = ? LIMIT 1', [idUser])
-        c1 = c1[0]; c2 = c2[0];
+        // c1 = c1[0]; c2 = c2[0];
     }
 
-    if (c1 || c2) {
-        c1.diagnostico_negocio == 1 ? empresa.etapa = 'Diagnóstico pagado' : empresa.etapa = empresa.etapa;
-        c1.analisis_negocio == 1 ? empresa.etapa = 'Análisis pagado' : empresa.etapa = empresa.etapa;
-        c2.estadoAcuerdo == 2 ? empresa.etapa = 'Acuerdo firmado' : empresa.etapa = empresa.etapa;
+    if (c1.length > 0) {
+        c1[0].diagnostico_negocio == 1 ? datos.etapa = 'Diagnóstico pagado' : datos.etapa = datos.etapa;
+        c1[0].analisis_negocio == 1 ? datos.etapa = 'Análisis pagado' : datos.etapa = datos.etapa;
     }
-    empresa.id_consultor != null ? empresa.etapa = 'Consultor asignado' : empresa.etapa = empresa.etapa;
-
-    const fNac = new Date(empresa.fecha_nacimiento)
-    empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
-
-    if (empresa.redes_sociales) {
-        datos.redes = JSON.parse(empresa.redes_sociales)
-        datos.redes.twitter != '' ? datos.redes.twitter = datos.redes.twitter : datos.redes.twitter = false
-        datos.redes.facebook != '' ? datos.redes.facebook = datos.redes.facebook : datos.redes.facebook = false
-        datos.redes.instagram != '' ? datos.redes.instagram = datos.redes.instagram : datos.redes.instagram = false
-        datos.redes.otra != '' ? datos.redes.otra = datos.redes.otra : datos.redes.otra = false
+    if (c2.length > 0) {
+        c2[0].estadoAcuerdo == 2 ? datos.etapa = 'Acuerdo firmado' : datos.etapa = datos.etapa;
     }
 
-    datos.objetivos = JSON.parse(empresa.objetivos)
-    datos.fortalezas = JSON.parse(empresa.fortalezas)
-    datos.problemas = JSON.parse(empresa.problemas)
-    datos.code = codigo;
+    if (empresa.length > 0) {
+        empresa.userConsultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
 
-    const consulAsignado = await pool.query('SELECT * FROM consultores WHERE id = ?', [empresa.id_consultor])
-    let idConsultor = '';
-    if (consulAsignado.length > 0) {
-        idConsultor = consulAsignado[0].id;
-        empresa.nomConsul = consulAsignado[0].nombres_consultor + " " + consulAsignado[0].apellidos_consultor;
+        const fNac = new Date(empresa.fecha_nacimiento)
+        empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
+
+        if (empresa.redes_sociales) {
+            datos.redes = JSON.parse(empresa.redes_sociales)
+            datos.redes.twitter != '' ? datos.redes.twitter = datos.redes.twitter : datos.redes.twitter = false
+            datos.redes.facebook != '' ? datos.redes.facebook = datos.redes.facebook : datos.redes.facebook = false
+            datos.redes.instagram != '' ? datos.redes.instagram = datos.redes.instagram : datos.redes.instagram = false
+            datos.redes.otra != '' ? datos.redes.otra = datos.redes.otra : datos.redes.otra = false
+        }
+
+        datos.objetivos = JSON.parse(empresa.objetivos)
+        datos.fortalezas = JSON.parse(empresa.fortalezas)
+        datos.problemas = JSON.parse(empresa.problemas)
+        datos.code = codigo;
+
+        const consulAsignado = await pool.query('SELECT * FROM vista_consultores WHERE ide_consultor = ?', [empresa.userConsultor])
+        let idConsultor = '';
+        if (consulAsignado.length > 0) {
+            idConsultor = consulAsignado[0].id;
+            empresa.nomConsul = consulAsignado[0].nombres + " " + consulAsignado[0].apellidos;
+        }
+
+        consultores = await pool.query('SELECT * FROM vista_consultores')
+        consultores.ideEmpresa = empresa.ide_consultor
+        consultores.forEach(cs => {
+            cs.idCon = idConsultor;
+        });
     }
-
-    let consultores = await pool.query('SELECT * FROM consultores')
-    consultores.ideEmpresa = empresa.id_consultor
-    consultores.forEach(cs => {
-        cs.idCon = idConsultor;
-    });
 
     res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores })
+
 }
 
 dashboardController.actualizarEmpresa = async (req, res) => {
     let { codigo, id_consultor, estadoAdm } = req.body;
     if (id_consultor == '' || id_consultor == null) { id_consultor = null }
-    const actualizarEmpresa = { id_consultor, estadoAdm }
+    const consultor = id_consultor
+    const actualizarEmpresa = { consultor, estadoAdm }
     await pool.query('UPDATE users SET ? WHERE codigo = ?', [actualizarEmpresa, codigo])
     res.redirect('/empresas')
 }

@@ -97,8 +97,8 @@
                         </div>
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">
-                                <h4 class="text-primary mb-0">{{empresa.nombres}} {{empresa.apellidos}}</h4>
-                                <p>{{empresa.nombre_empresa}}</p>
+                                <h4 class="text-primary mb-0">{{datos.nombre_completo}}</h4>
+                                <p>{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
                                 <h4 class="text-muted mb-0">{{#if empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
@@ -146,25 +146,25 @@
                                                     class="form-control sltBuscar chosen-container chosen-container-single required">
                                                     <option value=""></option>
                                                     {{#each consultores}}
-                                                        {{#comparar id '==' idCon}}
+                                                        {{#comparar consultor '==' idCon}}
                                                         <option selected
                                                         {{/comparar}}
-                                                        {{#comparar id '!=' idCon}}
+                                                        {{#comparar consultor '!=' idCon}}
                                                         <option
                                                         {{/comparar}}
                                                         value="{{id}}">
-                                                        {{nombres_consultor}} {{apellidos_consultor}}</option>
+                                                        {{nombres}} {{apellidos}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
                                             <div class="col">
                                                 <label>Estado de la cuenta</label>
                                                 <select id="estadoAdm" name="estadoAdm" class="mr-sm-2 default-select text-center">
-                                                    {{#comparar empresa.estadoAdm '==' '1'}}
-                                                    <option value="1" selected style="color: green">Activa</option>
+                                                    {{#comparar datos.estadoAdm '==' '1'}}
+                                                    <option value="1" selected>Activa</option>
                                                     <option value="0">Bloqueada</option>
                                                     {{/comparar}}
-                                                    {{#comparar empresa.estadoAdm '!=' '1'}}
+                                                    {{#comparar datos.estadoAdm '!=' '1'}}
                                                     <option value="0" selected>Bloqueada</option>
                                                     <option value="1">Activa</option>
                                                     {{/comparar}}
@@ -190,7 +190,7 @@
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{empresa.etapa}}</span>
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{datos.etapa}}</span>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -406,7 +406,7 @@
                                                         <h5 class="f-w-500">Email <span class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{empresa.email}}</span>
+                                                    <div class="col-sm-8 col-7"><span>{{datos.email}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -416,7 +416,7 @@
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-8 col-7">
-                                                        <span>{{empresa.fecha_nacimiento}}</span>
+                                                        <span>{{#if empresa.fecha_nacimiento}} {{empresa.fecha_nacimiento}} {{else}} N/A {{/if}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">

@@ -26,12 +26,15 @@ helpers.matchPass = async (password, passDB) => {
 
 // Generar Token de Autenticación en API Docusing
 helpers.authToken = async () => {
-    // Leyendo Clave Privada RSA emitida por Docusing
-    // const privateKey = fs.readFileSync('src/config/private.key');
-    // const privateKey = fs.readFileSync(dsConfig.privateKeyRSA);
+    
     try {
+        let fechaActual = Math.floor(Date.now()/1000) // Fecha Actual
+        let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
+        dsConfig.dsPayload.iat = fechaActual;
+        dsConfig.dsPayload.exp = fechaExp;
         //Generando Token de Autenticación para DocuSign
         dsConfig.authToken = jwt.sign(dsConfig.dsPayload, dsConfig.clavePrivada, { algorithm: 'RS256' })
+        console.log("\n<<<< TOKEN GENERADO PARA AUTH >>>>", dsConfig.authToken)
     } catch (error) {
         console.log(error)
     }
@@ -41,6 +44,7 @@ helpers.authToken = async () => {
         grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
         assertion: dsConfig.authToken
     }
+
     const responseTK = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,7 +52,7 @@ helpers.authToken = async () => {
     }).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
-            // console.log("RESPONSE TOKEN >>>", response)
+            console.log("\n<<<< RESPUESTA DESDE DOCUSIGN >>>", response)
             return response;
         });
 

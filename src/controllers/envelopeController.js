@@ -8,7 +8,9 @@ const signingViaEmail = exports;
 
 signingViaEmail.createController = (req, res) => {
     const { body } = req;
+
     helpers.authToken().then(async (values) => {
+
         const envelopeArgs = {
             signerEmail: validator.escape(body.signerEmail),
             signerName: validator.escape(body.signerName),
@@ -24,8 +26,8 @@ signingViaEmail.createController = (req, res) => {
         };
 
         dsConfig.args = args;
-        // console.log("dsConfig.args >>> ", dsConfig.args)
-        console.log("Cargando...\n")
+        console.log("\n<<<< ARGUMENTOS PARA DOCUSIGN >>> ", dsConfig.args)
+        console.log("\nCargando......\n")
 
         let results = null;
 
@@ -41,6 +43,7 @@ signingViaEmail.createController = (req, res) => {
             // res.render('pages/error', {err: error, errorCode, errorMessage});
             res.json({ err: error, errorCode, errorMessage });
         }
+
         if (results) {
             req.session.envelopeId = results.envelopeId; // Guardando el ID del Sobre
             dsConfig.envelopeId = results.envelopeId;
@@ -54,28 +57,34 @@ signingViaEmail.createController = (req, res) => {
                 const statusSign = values.envelopes[0].status;
                 const email = args.envelopeArgs.signerEmail
                 console.log("Result STATUS SIGN ==> ", statusSign)               
-                const id_user = req.user.id;
+                const id_user = req.user.empresa;
                 let estado = {}, noPago = true;
 
                 estado.valor = 1; // Documento enviado
                 estado.form = true; // Debe mostrar el formulario
                 estado.enviado = true;
-                
+
+                // Fecha Expiración del Temporizador - Acuerdo de Confidencialidad
+                const fechaExp = new Date()
+                fechaExp.setMinutes(fechaExp.getMinutes()+59)
+
                 if (req.session.email_user) {
-                    const newDatos = {
+                    const datos = {
                         email_signer: req.session.email_user,
                         envelopeId: req.session.envelopeId,
                         estadoAcuerdo: estado.valor,
-                        args: JSON.stringify(args)
+                        args: JSON.stringify(args),
+                        serverDate: fechaExp.toLocaleString("en-US")
                     }
-                    await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [newDatos, id_user])
-                    // console.log("<<< TABLA ACUERDO >>>", estado)
-                    // console.log("Email Signer => ", email)
-                    // console.log("** ACUERDO FIRMADO => ", acuerdoFirmado)
-                    // console.log("** NO HA PAGADO => ", noPago)
-                    res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado })
+
+                   await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [datos, id_user])
+                   res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado, fechaExp })
+                } else {
+                    res.redirect('/acuerdo-de-confidencialidad')
                 }
+
             }) 
         }
+        
     })
 }
