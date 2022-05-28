@@ -38,13 +38,14 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
   console.log("\nSuccess - Intent Payment >>> ", req.session.intentPay)
   req.session.intentPay = undefined; // Borrando info del Intento de pago 
   /** Actualizar info de que el usuario ya pagó el diagnostico de negocio */
-  const id_user = req.user.id;
+  const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+  const id_empresa = row[0].id_empresas;
   const actualizarEstado = {diagnostico_negocio: 1}
-  await pool.query('UPDATE pagos SET ? WHERE id_user = ?', [actualizarEstado, id_user])
+  await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarEstado, id_empresa])
   /** Consultando que pagos ha realizado el usuario */
-  const pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
+  const pagos = await pool.query('SELECT * FROM pagos WHERE id_empresa = ?', [id_empresa])
   if (pagos.length == 0) {
-      const nuevoPago = { id_user }
+      const nuevoPago = { id_empresa }
       await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
           if (err) throw err;
           // console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0");

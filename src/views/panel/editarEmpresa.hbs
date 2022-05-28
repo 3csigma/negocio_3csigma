@@ -146,13 +146,13 @@
                                                     class="form-control sltBuscar chosen-container chosen-container-single required">
                                                     <option value=""></option>
                                                     {{#each consultores}}
-                                                        {{#comparar consultor '==' idCon}}
+                                                        {{#comparar id_consultores '==' idCon}}
                                                         <option selected
                                                         {{/comparar}}
-                                                        {{#comparar consultor '!=' idCon}}
+                                                        {{#comparar id_consultores '!=' idCon}}
                                                         <option
                                                         {{/comparar}}
-                                                        value="{{id}}">
+                                                        value="{{id_consultores}}">
                                                         {{nombres}} {{apellidos}}</option>
                                                     {{/each}}
                                                 </select>
@@ -190,7 +190,7 @@
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{datos.etapa}}</span>
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
                                                             </h5>
                                                         </div>
                                                     </div>

@@ -6,11 +6,11 @@ const crypto = require('crypto');
 const { getTemplate, sendEmail } = require('../lib/mail.config')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
-    done(null, user.id);
+    done(null, user.id_usuarios);
 })
 
 passport.deserializeUser(async (id, done) => { // Deserialización
-    await pool.query('SELECT * FROM users WHERE id = ?', [id], (err, filas) => {
+    await pool.query('SELECT * FROM users WHERE id_usuarios = ?', [id], (err, filas) => {
         done(err, filas[0])
     });
 })
@@ -45,7 +45,7 @@ passport.use('local.registro', new LocalStrategy({
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
 
             // Objeto de Usuario
-            const newUser = { nombres, apellidos, nombre_empresa, username, email, clave, rol: 'Empresa', codigo, fecha_creacion }
+            const newUser = { nombres, apellidos, email, clave, rol: 'Empresa', codigo }
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave)
@@ -62,9 +62,9 @@ passport.use('local.registro', new LocalStrategy({
 
             // Guardar en la base de datos
             const fila = await pool.query('INSERT INTO users SET ?', [newUser])
-            const empresa = {empresa: fila.insertId}
+            const empresa = {nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion}
             if (fila.affectedRows > 0) {
-                await pool.query('UPDATE users SET ? WHERE id = ?', [empresa, fila.insertId])
+                await pool.query('INSERT INTO empresas SET ?', [empresa])
             }
             return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
         }
@@ -101,24 +101,20 @@ passport.use('local.registroConsultores', new LocalStrategy({
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
 
-            // Objeto de Usuario
+            // Capturando Certificado de Consul Group
             const certificado = '../certificados_consultores/' + urlCertificado
-
-            const newUser = { nombres, apellidos, username, email, clave, rol: 'Consultor', codigo, fecha_creacion };
-            const nuevoConsultor = { tel_consultor, direccion_consultor, experiencia_years, certificado };
+            
+            // Objeto de Usuario
+            const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
 
             // Guardar en la base de datos
             const fila1 = await pool.query('INSERT INTO users SET ?', [newUser]);
-            const ideConsultor = {consultor: fila1.insertId}
             if (fila1.affectedRows > 0) {
-                const fila2 = await pool.query('UPDATE users SET ? WHERE id = ?', [ideConsultor, fila1.insertId])
-                if (fila2.affectedRows) {
-                    nuevoConsultor.ide_consultor = fila1.insertId
-                    await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
-                }
+                await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
             }
 
             return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
@@ -146,7 +142,7 @@ passport.use('local.login', new LocalStrategy({
         if (claveValida) {
 
             if (user.rol == 'Empresa') { // Usuario Empresa
-                if (user.estadoEmail == 1) {
+                if (user.estadoEmail == 1 && user.estadoAdm == 1) {
                     req.session.empresa = true;
                     return done(null, user, req.flash('success', 'Bienvenido Usuario Empresa'))
                 } else if (user.estadoAdm == 0) {

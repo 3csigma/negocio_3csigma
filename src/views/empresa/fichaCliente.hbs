@@ -120,12 +120,12 @@
 							<div class="row add_top_10">
 								<div class="form-group col-md-6 ">
 									<label for="name">Nombres</label>
-									<input type="text" name="nombres" id="nombres" value="{{user.nombres}}"
+									<input type="text" name="nombres" id="nombres" value="{{empresa.nombres}}"
 										class="form-control campoLetras required">
 								</div>
 								<div class="form-group col-md-6">
 									<label for="apellido">Apellido</label>
-									<input type="text" name="apellidos" id="apellidos" value="{{user.apellidos}}"
+									<input type="text" name="apellidos" id="apellidos" value="{{empresa.apellidos}}"
 										class="form-control campoLetras required"
 										onchange="getVals(this, 'apellido_field');">
 								</div>
@@ -134,7 +134,7 @@
 							<div class="row add_top_10">
 								<div class="form-group col-md-6 ">
 									<label for="email">Email</label>
-									<input type="email" name="email" id="email" value="{{user.email}}"
+									<input type="email" name="email" id="email" value="{{empresa.email}}"
 										class="form-control required" style="line-height:3;"
 										onchange="getVals(this, 'email_field');">
 								</div>
@@ -246,7 +246,7 @@
 								<div class="form-group col-md-6 ">
 									<label for="nombre_empresa">Nombre de la empresa</label>
 									<input type="text" name="nombre_empresa" id="nombre_empresa"
-										value="{{user.nombre_empresa}}" class="form-control required"
+										value="{{empresa.nombre_empresa}}" class="form-control required"
 										onchange="getVals(this, 'nombre_empresa_field');">
 								</div>
 								<div class="form-group col-md-6">

@@ -17,6 +17,7 @@
 </head>
 
 <body>
+    {{!-- INICIO DE LA ETIQUETA DIV WRAPPER --}}
     {{#if user_dash}}
         {{> user/navigation }}
     {{/if}}
@@ -27,13 +28,9 @@
     
     {{{ body }}}
 
+    </div>
     <!-- ./FIN DEL MAIN WRAPPER -->
-    {{#if user_dash}}
-    </div>
-    {{/if}}
-    {{#if adminDash}}
-    </div>
-    {{/if}}
+    
 
     {{!-- FOOTER PARTIALS PRINCIPAL --}}
     {{> footer }}

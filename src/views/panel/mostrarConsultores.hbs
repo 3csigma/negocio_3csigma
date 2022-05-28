@@ -31,16 +31,16 @@
                                     {{#each consultores}}
                                     <tr>
                                         <td><img class="rounded-circle" width="35" src="./img/profile/small/pic1.jpg" alt="Perfil_Consultor"></td>
-                                        <td>{{nombres_consultor}} {{apellidos_consultor}}</td>
+                                        <td>{{nombres}} {{apellidos}}</td>
                                         <td>{{fecha_creacion}}</td>
-                                        <td>{{email_consultor}}</td>
+                                        <td>{{email}}</td>
                                         <td>{{tel_consultor}}</td>
                                         <td>{{num_empresas}}</td>
                                         <td>
-                                            {{#comparar estado '==' 0}}
+                                            {{#comparar estadoAdm '==' 0}}
                                             <span class="badge light badge-danger">Pendiente</span>
                                             {{/comparar}}
-                                            {{#comparar estado '!=' 0}}
+                                            {{#comparar estadoAdm '!=' 0}}
                                             <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF">Aprobado</span>
                                             {{/comparar}}
                                         </td>

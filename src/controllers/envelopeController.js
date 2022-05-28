@@ -57,8 +57,9 @@ signingViaEmail.createController = (req, res) => {
                 const statusSign = values.envelopes[0].status;
                 const email = args.envelopeArgs.signerEmail
                 console.log("Result STATUS SIGN ==> ", statusSign)               
-                const id_user = req.user.empresa;
-                let estado = {}, noPago = true;
+                const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+                const id_empresa = row[0].id_empresas;
+                let estado = {}
 
                 estado.valor = 1; // Documento enviado
                 estado.form = true; // Debe mostrar el formulario
@@ -74,17 +75,16 @@ signingViaEmail.createController = (req, res) => {
                         envelopeId: req.session.envelopeId,
                         estadoAcuerdo: estado.valor,
                         args: JSON.stringify(args),
-                        serverDate: fechaExp.toLocaleString("en-US")
                     }
 
-                   await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_user = ?', [datos, id_user])
-                   res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser: 'User', noPago, itemActivo: 2, email, estado, fechaExp })
+                   await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [datos, id_empresa])
+                   res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, pagoDiag: true, itemActivo: 2, email, estado })
                 } else {
                     res.redirect('/acuerdo-de-confidencialidad')
                 }
 
             }) 
         }
-        
+
     })
 }
