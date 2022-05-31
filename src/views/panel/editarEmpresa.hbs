@@ -101,7 +101,8 @@
                                 <p>{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
-                                <h4 class="text-muted mb-0">{{#if empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
+                                <h4 class="text-muted mb-0">{{#if
+                                    empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
                                 <p>Teléfono</p>
                             </div>
 
@@ -123,16 +124,19 @@
                             <div class="text-center">
                                 <div class="row">
                                     <div class="col">
-                                        <h3 class="m-b-0">{{#if empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
+                                        <h3 class="m-b-0">{{#if
+                                            empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
                                         <span>Cantidad de Socios</span>
                                     </div>
                                     <div class="col">
                                         <h3 class="m-b-0">{{#if empresa.tiempo_experiencia}}
-                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de experiencia</span>
+                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de
+                                            experiencia</span>
                                     </div>
                                     <div class="col">
                                         <h3 class="m-b-0">{{#if empresa.num_empleados}}
-                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de Empleados</span>
+                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de
+                                            Empleados</span>
                                     </div>
                                 </div>
 
@@ -146,20 +150,17 @@
                                                     class="form-control sltBuscar chosen-container chosen-container-single required">
                                                     <option value=""></option>
                                                     {{#each consultores}}
-                                                        {{#comparar id_consultores '==' idCon}}
-                                                        <option selected
-                                                        {{/comparar}}
-                                                        {{#comparar id_consultores '!=' idCon}}
-                                                        <option
-                                                        {{/comparar}}
-                                                        value="{{id_consultores}}">
+                                                    {{#comparar id_consultores '==' idCon}}
+                                                    <option selected {{/comparar}} {{#comparar id_consultores '!='
+                                                        idCon}} <option {{/comparar}} value="{{id_consultores}}">
                                                         {{nombres}} {{apellidos}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
                                             <div class="col">
                                                 <label>Estado de la cuenta</label>
-                                                <select id="estadoAdm" name="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                <select id="estadoAdm" name="estadoAdm"
+                                                    class="mr-sm-2 default-select text-center">
                                                     {{#comparar datos.estadoAdm '==' '1'}}
                                                     <option value="1" selected>Activa</option>
                                                     <option value="0">Bloqueada</option>
@@ -190,7 +191,8 @@
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if
+                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -378,12 +380,14 @@
                         <div class="profile-tab">
                             <div class="custom-tab-1">
                                 <ul class="nav nav-tabs">
-                                    <li class="nav-item"><a href="#representante" data-toggle="tab"
-                                            class="nav-link active show">Representante</a></li>
                                     <li class="nav-item"><a href="#empresa" data-toggle="tab"
-                                            class="nav-link">Empresa</a></li>
-                                    <li class="nav-item"><a href="#settings" data-toggle="tab"
-                                            class="nav-link">Config</a></li>
+                                            class="nav-link active show">Empresa</a></li>
+                                    <li class="nav-item"><a href="#diagnostico" data-toggle="tab"
+                                            class="nav-link">Diagnóstico</a></li>
+                                    <li class="nav-item"><a href="#analisis" data-toggle="tab"
+                                            class="nav-link">Análisis</a></li>
+                                    <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab"
+                                            class="nav-link">Plan Estrategico</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -395,8 +399,8 @@
                             <div class="custom-tab-1">
 
                                 <div class="tab-content">
-                                    {{!-- PESTAÑA 1 --}}
-                                    <div id="representante" class="tab-pane fade active show">
+                                    {{!-- PESTAÑA 1 - INFO DE LA EMPRESA --}}
+                                    <div id="empresa" class="tab-pane fade active show">
                                         <div class="my-post-content pt-3">
                                             {{!-- Datos personales --}}
                                             <div class="profile-personal-info">
@@ -416,7 +420,8 @@
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-8 col-7">
-                                                        <span>{{#if empresa.fecha_nacimiento}} {{empresa.fecha_nacimiento}} {{else}} N/A {{/if}}</span>
+                                                        <span>{{#if empresa.fecha_nacimiento}}
+                                                            {{empresa.fecha_nacimiento}} {{else}} N/A {{/if}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -425,147 +430,209 @@
                                                                 class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}} {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">¿Dueño del negocio? <span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.es_propietario}}{{empresa.es_propietario}} {{else}} N/A {{/if}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">¿Tiene socios?<span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.socios}}{{empresa.socios}} {{else}} N/A {{/if}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">Porcentaje Accionario<span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7">
-                                                        <span>{{#if empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}} {{else}} N/A {{/if}}</span>
-                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}}
+                                                            {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Dueño del negocio? <span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.es_propietario}}{{empresa.es_propietario}} {{else}} N/A
+                                                        {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Tiene socios?<span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.socios}}{{empresa.socios}} {{else}} N/A {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">Porcentaje Accionario<span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7">
+                                                    <span>{{#if
+                                                        empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}}
+                                                        {{else}} N/A {{/if}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                            {{!-- Más Sobre la empresa --}}
-                                            <div class="profile-personal-info mt-5">
-                                                <h4 class="text-primary mb-3">Sobre la empresa</h4>
+                                        {{!-- Más Sobre la empresa --}}
+                                        <div class="profile-personal-info mt-5">
+                                            <h4 class="text-primary mb-3">Sobre la empresa</h4>
 
-                                                <div class="row mb-2">
+                                            <div class="row mb-2">
 
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Tiempo de Fundación</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Promedio de ingreso anual</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Etapa actual del negocio</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.etapa_actual}}{{empresa.etapa_actual}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Tiempo de Fundación</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}}
+                                                            {{else}} N/A {{/if}}</a>
                                                 </div>
 
-                                                {{!-- OBJETIVOS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Objetivos</h4>
-                                                            {{#if datos.objetivos}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.objetivos.objetivo1}}<br>
-                                                                2- {{datos.objetivos.objetivo2}}<br>
-                                                                3- {{datos.objetivos.objetivo3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Promedio de ingreso anual</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}}
+                                                            {{else}} N/A {{/if}}</a>
                                                 </div>
 
-                                                {{!-- FORTALEZAS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Fortalezas</h4>
-                                                            {{#if datos.fortalezas}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.fortalezas.fortaleza1}}<br>
-                                                                2- {{datos.fortalezas.fortaleza2}}<br>
-                                                                3- {{datos.fortalezas.fortaleza3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
-                                                </div>
-
-                                                {{!-- PROBLEMAS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Problemas</h4>
-                                                            {{#if datos.problemas}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.problemas.problema1}}<br>
-                                                                2- {{datos.problemas.problema2}}<br>
-                                                                3- {{datos.problemas.problema3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
-                                                </div>
-
-                                                {{!-- MOTIVO DE LA CONSULTORÍA --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Motivo de la consultoría</h4>
-                                                            <p style="text-align: justify;">
-                                                                {{#if empresa.motivo_consultoria}}
-                                                                {{empresa.motivo_consultoria}}
-                                                                {{else}}N/A
-                                                                {{/if}}
-                                                            </p>
-                                                    </div>
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Etapa actual del negocio</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.etapa_actual}}{{empresa.etapa_actual}} {{else}} N/A
+                                                            {{/if}}</a>
                                                 </div>
 
                                             </div>
+
+                                            {{!-- OBJETIVOS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Objetivos</h4>
+                                                        {{#if datos.objetivos}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.objetivos.objetivo1}}<br>
+                                                            2- {{datos.objetivos.objetivo2}}<br>
+                                                            3- {{datos.objetivos.objetivo3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- FORTALEZAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Fortalezas</h4>
+                                                        {{#if datos.fortalezas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.fortalezas.fortaleza1}}<br>
+                                                            2- {{datos.fortalezas.fortaleza2}}<br>
+                                                            3- {{datos.fortalezas.fortaleza3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- PROBLEMAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Problemas</h4>
+                                                        {{#if datos.problemas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.problemas.problema1}}<br>
+                                                            2- {{datos.problemas.problema2}}<br>
+                                                            3- {{datos.problemas.problema3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- MOTIVO DE LA CONSULTORÍA --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Motivo de la consultoría</h4>
+                                                        <p style="text-align: justify;">
+                                                            {{#if empresa.motivo_consultoria}}
+                                                            {{empresa.motivo_consultoria}}
+                                                            {{else}}N/A
+                                                            {{/if}}
+                                                        </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
 
                                     </div>
 
-                                    {{!-- PESTAÑA 2 --}}
-                                    <div id="empresa" class="tab-pane fade">
+                                    {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
+                                    <div id="diagnostico" class="tab-pane fade">
                                         <div class="profile-about-me">
                                             <div class="pt-4 border-bottom-1 pb-3">
                                                 <h4 class="text-primary"></h4>
-                                                <p class="mb-2">A wonderful serenity has taken possession of my entire
-                                                    soul, like these sweet mornings of spring which I enjoy with my
-                                                    whole heart. I am alone, and feel the charm of existence was created
-                                                    for the bliss of souls like mine.I am so happy, my dear friend, so
-                                                    absorbed in the exquisite sense of mere tranquil existence, that I
-                                                    neglect my talents.</p>
-                                                <p>A collection of textile samples lay spread out on the table - Samsa
-                                                    was a travelling salesman - and above it there hung a picture that
-                                                    he had recently cut out of an illustrated magazine and housed in a
-                                                    nice, gilded frame.</p>
+
+                                                {{!-- Grafíco de indicadores --}}
+                                                <div class="col-xl-12">
+                                                    <div id="indicadores">
+                                                        <div id="btn-indicador1">Áreas Vitales</div>
+                                                        <div id="btn-indicador2">Por dimensiones</div>
+                                                    </div>
+                                                    <table border="0" id="tabla-indicadores">
+                                                        <tr>
+                                                            <td>
+                                                                <div class="info-analisis"><i class="fa-solid fa-square"
+                                                                        style="color: #50368C"></i>
+                                                                    Primer análisis</div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="info-analisis"><i class="fa-solid fa-square"
+                                                                        style="color: #FED061"></i>
+                                                                    Último análisis</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <div class="card-body">
+                                                        <canvas id="barChart_1"></canvas>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
 
-                                        <div class="profile-lang mb-5">
-                                            <h4 class="text-primary mb-2">Tiempo de Fundación</h4>
-                                            <a class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA REALIZACIÓN</th>
+                                                            <th>ETAPA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td id="fActual">5/30/2022</td>
+                                                            <td>Diagnóstico de negocio</td>
+                                                            <td>Formulario diagnóstico</td>
+                                                            <td>AQUÍ VA EL ESTADO
+                                                                {{!-- <span class="badge light {{formDiag.color}}"
+                                                                    style="background: {{formDiag.estilo}}">{{formDiag.texto}}</span>
+                                                                --}}
+                                                            </td>
+                                                            <td>
+                                                                <div class="d-flex">
+                                                                    <a href="/diagnostico-empresa/{{codigo_empresa}}"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #50368C">
+                                                                        <i class="fa fa-pencil"></i></a>
+                                                                    <a href=""
+                                                                        class="btn btn-danger shadow btn-xs sharp"
+                                                                        style="background: #FED061; border-color: #FED061; color: white">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
                                         </div>
 
-                                        <div class="profile-skills mb-5">
-                                            <h4 class="text-primary mb-2">Promedio de ingreso anual</h4>
-                                            <a class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
-                                        </div>
-
-                                        <div class="profile-personal-info">
+                                        {{!-- <div class="profile-personal-info">
                                             <h4 class="text-primary mb-4">Personal Information</h4>
                                             <div class="row mb-2">
                                                 <div class="col-sm-3 col-5">
@@ -615,69 +682,16 @@
                                                 <div class="col-sm-9 col-7"><span>07 Year Experiences</span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
 
-                                    {{!-- PESTAÑA 2 --}}
-                                    <div id="settings" class="tab-pane fade">
-                                        <div class="pt-3">
-                                            <div class="settings-form">
-                                                <h4 class="text-primary">Account Setting</h4>
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>Email</label>
-                                                            <input type="email" placeholder="Email"
-                                                                class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Password</label>
-                                                            <input type="password" placeholder="Password"
-                                                                class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Address</label>
-                                                        <input type="text" placeholder="1234 Main St"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Address 2</label>
-                                                        <input type="text" placeholder="Apartment, studio, or floor"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>City</label>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>State</label>
-                                                            <select class="form-control default-select" id="inputState">
-                                                                <option selected="">Choose...</option>
-                                                                <option>Option 1</option>
-                                                                <option>Option 2</option>
-                                                                <option>Option 3</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-2">
-                                                            <label>Zip</label>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input"
-                                                                id="gridCheck">
-                                                            <label class="custom-control-label" for="gridCheck"> Check
-                                                                me out</label>
-                                                        </div>
-                                                    </div>
-                                                    <button class="btn btn-primary" type="submit">Sign
-                                                        in</button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                    {{!-- PESTAÑA 3 - ANÁLISIS DE NEGOCIO --}}
+                                    <div id="analisis" class="tab-pane fade">
+
+                                    </div>
+
+                                    <div id="plan-estrategico" class="tab-pane fade">
+
                                     </div>
 
                                 </div>
