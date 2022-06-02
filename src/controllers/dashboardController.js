@@ -116,6 +116,25 @@ dashboardController.actualizarConsultor = async (req, res) => {
     res.send(respuesta)
 }
 
+dashboardController.bloquearConsultor = async (req, res) => {
+    const { id } = req.body
+    let respu = false;
+    const actualizar = {estadoAdm: 0}
+    const consultor = await pool.query('SELECT id_consultores, codigo FROM consultores WHERE id_consultores = ? LIMIT 1', [id])
+    if (consultor.length > 0) {
+        const c = await pool.query('SELECT * FROM users WHERE codigo = ?', [consultor[0].codigo])
+        if (c.length > 0 && c[0].estadoAdm == 0) {
+            res.send(respu)
+        } else{
+            await pool.query('UPDATE users SET ? WHERE codigo = ?', [actualizar, consultor[0].codigo], (err, result) => {
+                if (err) throw err;
+                if (result.affectedRows > 0){ respu = true }
+                res.send(respu)
+            })
+        }
+    }
+}
+
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
     let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo;')
@@ -234,4 +253,23 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         res.redirect('/empresas')
     })
 
+}
+
+dashboardController.bloquearEmpresa = async (req, res) => {
+    const { id } = req.body
+    let respu = false;
+    const actualizar = {estadoAdm: 0}
+    const empresa = await pool.query('SELECT id_empresas, codigo FROM empresas WHERE id_empresas = ? LIMIT 1', [id])
+    if (empresa.length > 0) {
+        const e = await pool.query('SELECT * FROM users WHERE codigo = ?', [empresa[0].codigo])
+        if (e.length > 0 && e[0].estadoAdm == 0) {
+            res.send(respu)
+        } else{
+            await pool.query('UPDATE users SET ? WHERE codigo = ?', [actualizar, empresa[0].codigo], (err, result) => {
+                if (err) throw err;
+                if (result.affectedRows > 0){ respu = true }
+                res.send(respu)
+            })
+        }
+    }
 }

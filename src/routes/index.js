@@ -38,9 +38,13 @@ router.get('/consultores', checkLogin, adminLogueado, dashboardController.mostra
 router.get('/consultores/:codigo', checkLogin, adminLogueado, dashboardController.editarConsultor)
 router.post('/actualizarConsultor', checkLogin, adminLogueado, dashboardController.actualizarConsultor)
 
+router.post('/bloquearConsultor', checkLogin, adminLogueado, dashboardController.bloquearConsultor)
+
 // Empresas Admin
 router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
 router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
+
+router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 
 module.exports = router;
