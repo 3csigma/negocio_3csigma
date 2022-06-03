@@ -1,3 +1,5 @@
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 <!--*******************
         Preloader start
     ********************-->
@@ -227,121 +229,133 @@
           style="cursor: auto; background: #585858 !important;pointer-events:none;">
           <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
           <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
-          {{else}}
-          <form action="/create-checkout-session" method="POST">
-            {{!-- <input type="hidden" name="_csrf" value="{{csrfToken}}"> --}}
-            <button type="submit" class="add-menu-sidebar">
-              <img src="./img/Pago-diagnostico de-negocio.png">
-              <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
-              {{/if}}
-            </button>
-          </form>
-          {{!-- <a href="#" class="add-menu-sidebar pagar-diagnostico">
-            <img src="/img/Pago-diagnostico de-negocio.png" alt="" class="mr-3">
-            <p class="	font-w500 mb-0">Pagar diagnóstico de negocio</p>
-          </a> --}}
-          <ul class="metismenu" id="menu">
-            {{#comparar itemActivo '==' 1}}
-            <li class="mm-active">
+        </button>
+      </form>
+      {{else}}
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" class="add-menu-sidebar">
+          <img src="./img/Pago-diagnostico de-negocio.png">
+          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
+          {{/if}}
+        </button>
+      </form>
+
+      <ul class="metismenu" id="menu">
+        {{#comparar itemActivo '==' 1}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 1}}
+        <li>
+          {{/comparar}}
+          <a href="/" aria-expanded="false">
+            <i class="zmdi zmdi-view-dashboard"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        {{#comparar itemActivo '==' 2}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 2}}
+        <li class="pagar-diagnostico">
+          {{/comparar}}
+          {{#comparar diagnosticoPagado '==' 0}}
+          <a style="cursor:pointer" aria-expanded="false">
             {{/comparar}}
-            {{#comparar itemActivo '!=' 1}}
-            <li>
-            {{/comparar}}
-              <a href="/" aria-expanded="false">
-                <i class="zmdi zmdi-view-dashboard"></i>
-                <span class="nav-text">Dashboard</span>
-              </a>
-            </li>
-            {{#comparar itemActivo '==' 2}}
-            <li class="mm-active">
-            {{/comparar}}
-            {{#comparar itemActivo '!=' 2}}
-            <li class="pagar-diagnostico">
-            {{/comparar}}
-              {{#comparar diagnosticoPagado '==' 0}}
-              <a style="cursor:pointer" aria-expanded="false">
-              {{/comparar}}
-              {{#comparar diagnosticoPagado '!=' 0}}
-              <a href="/acuerdo-de-confidencialidad" aria-expanded="false">
-              {{/comparar}}
-                {{#if acuerdoFirmado}}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M9.99996 1.6665C5.39996 1.6665 1.66663 5.39984 1.66663 9.99984C1.66663 14.5998 5.39996 18.3332 9.99996 18.3332C14.6 18.3332 18.3333 14.5998 18.3333 9.99984C18.3333 5.39984 14.6 1.6665 9.99996 1.6665ZM9.99996 16.6665C6.31663 16.6665 3.33329 13.6832 3.33329 9.99984C3.33329 6.3165 6.31663 3.33317 9.99996 3.33317C13.6833 3.33317 16.6666 6.3165 16.6666 9.99984C16.6666 13.6832 13.6833 16.6665 9.99996 16.6665Z"
-                    fill="#6EBB0B" />
-                  <path
-                    d="M8.24997 12.4324L5.81747 9.99991L4.98914 10.8224L8.24997 14.0832L15.25 7.08324L14.4275 6.26074L8.24997 12.4324Z"
-                    fill="#6EBB0B" />
-                </svg>
-                <span class="nav-text" style="color: #6EBB0B">Acuerdo de confidencialidad</span>
-                {{else}}
-                <i class="zmdi zmdi-circle-o"></i>
-                <span class="nav-text">Acuerdo de confidencialidad</span>
-                {{/if}}
-              </a>
-            </li>
-            {{#comparar itemActivo '==' 3}}
-            <li class="mm-active">
-              {{/comparar}}
-              {{#comparar itemActivo '!=' 3}}
-            <li class="firmar-acuerdo">
+            {{#comparar diagnosticoPagado '!=' 0}}
+            <a href="/acuerdo-de-confidencialidad" aria-expanded="false">
               {{/comparar}}
               {{#if acuerdoFirmado}}
-              <a id="item-link3" href="/diagnostico-de-negocio" aria-expanded="false">
-                {{else}}
-                <a style="cursor:pointer" aria-expanded="false">
-                  {{/if}}
-                  <i class="fa-solid fa-gauge-high"></i>
-                  <span class="nav-text">Diagnóstico de negocio</span>
-                </a>
-                {{!-- <ul aria-expanded="false">
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                </ul> --}}
-            </li>
-            {{#comparar itemActivo '==' 4}}
-            <li class="mm-active">
-              {{/comparar}}
-              {{#comparar itemActivo '!=' 4}}
-            <li class="activar-cuenta">
-              {{/comparar}}
-              <a href="#item4" aria-expanded="false">
-                <i class="fa-solid fa-magnifying-glass-dollar"></i>
-                <span class="nav-text">Análisis de negocio</span>
-              </a>
-            </li>
-            {{#comparar itemActivo '==' 5}}
-            <li class="mm-active">
-              {{/comparar}}
-              {{#comparar itemActivo '!=' 5}}
-            <li class="activar-cuenta">
-              {{/comparar}}
-              <a id="item-link5" href="#item5" aria-expanded="false">
-                {{!-- <a class="has-arrow ai-icon" id="item-link5" href="" aria-expanded="false"></a> --}}
-                <i class="fa-solid fa-lightbulb"></i>
-                <span class="nav-text">Plan estratégico de negocio</span>
-              </a>
-            </li>
-            {{!-- {{#comparar itemActivo '==' 6}}
-            <li class="mm-active">
-              {{/comparar}}
-              {{#comparar itemActivo '!=' 6}}
-            <li class="activar-cuenta">
-              {{/comparar}}
-              <a id="item-link6" href="/perfil#item6" aria-expanded="false">
-                <i class="fa-solid fa-envelope"></i>
-                <span class="nav-text">Correo</span>
-              </a>
-            </li> --}}
-          </ul>
-          <div class="add-menu-sidebar" style="background: #585858 !important; color:#fff !important; ">
-            <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em;filter: grayscale(1)">
-            <p class="font-w500 mb-0 text-center">Agendar cita</p>
-          </div>
-          <div class="copyright text-center">
-            <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
-          </div>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M9.99996 1.6665C5.39996 1.6665 1.66663 5.39984 1.66663 9.99984C1.66663 14.5998 5.39996 18.3332 9.99996 18.3332C14.6 18.3332 18.3333 14.5998 18.3333 9.99984C18.3333 5.39984 14.6 1.6665 9.99996 1.6665ZM9.99996 16.6665C6.31663 16.6665 3.33329 13.6832 3.33329 9.99984C3.33329 6.3165 6.31663 3.33317 9.99996 3.33317C13.6833 3.33317 16.6666 6.3165 16.6666 9.99984C16.6666 13.6832 13.6833 16.6665 9.99996 16.6665Z"
+                  fill="#6EBB0B" />
+                <path
+                  d="M8.24997 12.4324L5.81747 9.99991L4.98914 10.8224L8.24997 14.0832L15.25 7.08324L14.4275 6.26074L8.24997 12.4324Z"
+                  fill="#6EBB0B" />
+              </svg>
+              <span class="nav-text" style="color: #6EBB0B">Acuerdo de confidencialidad</span>
+              {{else}}
+              <i class="zmdi zmdi-circle-o"></i>
+              <span class="nav-text">Acuerdo de confidencialidad</span>
+              {{/if}}
+            </a>
+        </li>
+        {{#comparar itemActivo '==' 3}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 3}}
+        <li class="firmar-acuerdo">
+          {{/comparar}}
+          {{#if acuerdoFirmado}}
+          <a id="item-link3" href="/diagnostico-de-negocio" aria-expanded="false">
+            {{else}}
+            <a style="cursor:pointer" aria-expanded="false">
+              {{/if}}
+              <i class="fa-solid fa-gauge-high"></i>
+              <span class="nav-text">Diagnóstico de negocio</span>
+            </a>
+            {{!-- <ul aria-expanded="false">
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+            </ul> --}}
+        </li>
+        {{#comparar itemActivo '==' 4}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 4}}
+        <li class="activar-cuenta">
+          {{/comparar}}
+          <a href="#item4" aria-expanded="false">
+            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <span class="nav-text">Análisis de negocio</span>
+          </a>
+        </li>
+        {{#comparar itemActivo '==' 5}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 5}}
+        <li class="activar-cuenta">
+          {{/comparar}}
+          <a id="item-link5" href="#item5" aria-expanded="false">
+            {{!-- <a class="has-arrow ai-icon" id="item-link5" href="" aria-expanded="false"></a> --}}
+            <i class="fa-solid fa-lightbulb"></i>
+            <span class="nav-text">Plan estratégico de negocio</span>
+          </a>
+        </li>
+        {{!-- {{#comparar itemActivo '==' 6}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 6}}
+        <li class="activar-cuenta">
+          {{/comparar}}
+          <a id="item-link6" href="/perfil#item6" aria-expanded="false">
+            <i class="fa-solid fa-envelope"></i>
+            <span class="nav-text">Correo</span>
+          </a>
+        </li> --}}
+      </ul>
+
+      {{!-- BOTÓN AGENDAR CITA --}}
+      {{#if etapa1.lista}}
+      <a href=""
+        onclick="Calendly.initPopupWidget({url: 'https://calendly.com/{{etapa1.consultor}}/diagnostico?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=812082'});return false;">
+        <div class="add-menu-sidebar" style="background: #812082 !important; color:#fff !important; ">
+          <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em;">
+          <p class="font-w500 mb-0 text-center">Agendar cita</p>
+        </div>
+      </a>
+      {{else}}
+      <div class="add-menu-sidebar" style="background: #585858 !important; color:#fff !important; cursor: default">
+        <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em; filter: grayscale(1)">
+        <p class="font-w500 mb-0 text-center">Agendar cita</p>
+      </div>
+      {{/if}}
+
+
+      <div class="copyright text-center">
+        <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
+      </div>
     </div>
   </div>
   <!--**********************************

@@ -5,7 +5,65 @@ const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers')
 const { Country } = require('country-state-city')
 
-let acuerdoFirmado = false;
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1;
+
+/** Función para mostrar Dashboard de Empresas */
+empresaController.index = async (req, res) => {
+    diagnosticoPagado = 0;
+    req.intentPay = undefined; // Intento de pago
+    const empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const id_empresa = empresa[0].id_empresas;
+    req.pagoDiag = false, pagoDiag = false, etapa1 = {};
+
+    /** Consultando que pagos ha realizado el usuario */
+    const pagos = await pool.query('SELECT * FROM pagos WHERE id_empresa = ?', [id_empresa])
+    if (pagos.length == 0) {
+        const nuevoPago = { id_empresa }
+        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
+            if (err) throw err;
+            console.log("Registro exitoso en la tabla pagos -> ", result);
+            res.redirect('/')
+        })
+    } else {
+        if (pagos[0].diagnostico_negocio == '1') {
+            // PAGÓ EL DIAGNOSTICO
+            diagnosticoPagado = 1;
+            req.pagoDiag = true;
+            pagoDiag = req.pagoDiag;
+
+            /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+            const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
+            if (acuerdo.length > 0) {
+                if (acuerdo[0].estadoAcuerdo == 2) {
+                    acuerdoFirmado = true;
+                    noPago = false;
+                }
+            }
+
+        }
+
+        // PAGÓ EL ANÁLISIS
+        pagos[0].analisis_negocio == '1' ? analisisPagado = 1 : analisisPagado = analisisPagado;
+
+        // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
+        if (empresa[0].consultor != null) {
+            etapa1.lista = true;
+            let c = await pool.query('SELECT * FROM consultores WHERE id_consultores = ? LIMIT 1', [empresa[0].consultor]);
+            c = c[0];
+            let nom = c.email.split('@')
+            nom = nom[0]+''
+            etapa1.consultor = nom.replace(".", "-");
+            console.log("ETAPA AGENDAR CITA");
+            console.log(etapa1)
+
+        }
+
+        res.render('pages/dashboard', {
+            user_dash: true, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado, etapa1
+        })
+
+    }
+}
 
 /** Creación & validación del proceso Acuerdo de Confidencialidad */
 empresaController.acuerdo = async (req, res) => {
@@ -52,8 +110,6 @@ empresaController.acuerdo = async (req, res) => {
                 // console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
             })
 
-            
-
             /** Validando si el estado devuelto es enviado o firmado */
             if (statusSign == 'completed') { // Estado desde docusign (completed)
                 
@@ -94,17 +150,7 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
     
-    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado })
-}
-
-// Validar Acuerdo de Confidencialidad
-empresaController.validarAcuerdo = async (req, res) => {
-    const { id } = req.body;
-    const estado = {estadoAcuerdo: 0}
-    const update = await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [estado, id])
-    let isValid = false;
-    update.affectedRows > 0 ? isValid = true : isValid = isValid;
-    return isValid;
+    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -142,7 +188,7 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear })
+    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear, etapa1 })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */

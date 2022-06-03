@@ -2,56 +2,6 @@ const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0;
-
-/** Función para mostrar Dashboard de Empresas */
-dashboardController.index = async (req, res) => {
-    diagnosticoPagado = 0;
-    req.intentPay = undefined; // Intento de pago
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    const id_empresa = row[0].id_empresas;
-    req.pagoDiag = false, pagoDiag = false;
-
-    /** Consultando que pagos ha realizado el usuario */
-    const pagos = await pool.query('SELECT * FROM pagos WHERE id_empresa = ?', [id_empresa])
-    if (pagos.length == 0) {
-        const nuevoPago = { id_empresa }
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-            if (err) throw err;
-            console.log("Registro exitoso en la tabla pagos -> ", result);
-            res.redirect('/')
-        })
-    } else {
-        if (pagos[0].diagnostico_negocio == '1') {
-            // PAGÓ EL DIAGNOSTICO
-            diagnosticoPagado = 1;
-            req.pagoDiag = true;
-            pagoDiag = req.pagoDiag;
-
-            /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-            const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
-            if (acuerdo.length > 0) {
-                if (acuerdo[0].estadoAcuerdo == 2) {
-                    acuerdoFirmado = true;
-                    noPago = false;
-                }
-            }
-
-        }
-
-        // PAGÓ EL ANÁLISIS
-        pagos[0].analisis_negocio == '1' ? analisisPagado = 1 :
-
-            console.log("** ¿ACUERDO FIRMADO? ==> ", acuerdoFirmado)
-        console.log("** ¿USUARIO PAGÓ DIAGNOSTICO? ==> ", diagnosticoPagado)
-        console.log("** ¿USUARIO PAGÓ ANÁLISIS? ==> ", analisisPagado)
-        res.render('pages/dashboard', {
-            user_dash: true, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado
-        })
-
-    }
-}
-
 // Dashboard Administrativo
 dashboardController.admin = async (req, res) => {
     const consultores = await pool.query('SELECT * FROM consultores ORDER BY id_consultores DESC LIMIT 2')
@@ -143,17 +93,16 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
     empresas.forEach(e => {
         e.etapa = 'Email sin confirmar';
-        e.estadoCuenta = 'Activa';
         e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
         e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
         e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
         e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
         e.consultor ? e.etapa = 'Consultor asignado' : e.etapa = e.etapa;
-        e.estadoAdm == 0 ? e.estadoCuenta = 'Bloqueada' : e.estadoCuenta = e.estadoCuenta;
 
         consultor.forEach(c => {
             if (e.consultor == c.id_consultores){
                 e.nombre_consultor = c.nombres + " " + c.apellidos;
+                e.codigo_consultor = c.codigo
             }
         })
 

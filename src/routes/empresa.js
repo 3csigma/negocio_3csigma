@@ -5,6 +5,8 @@ const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
 const paymentController = require('../controllers/paymentController');
 
+// Dashboard Principal Empresas
+router.get('/', checkLogin, empresaLogueada, empresaController.index)
 /** Proceso de pago - API Stripe */
 router.post("/create-payment-intent", checkLogin, empresaLogueada, paymentController.createPayment)
 // Diagnóstico de Negocio

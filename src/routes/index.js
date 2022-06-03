@@ -25,8 +25,6 @@ const rutaAlmacen = multer.diskStorage({
 
 const subirArchivo = multer({ storage: rutaAlmacen })
 
-// Dashboard Principal Empresas
-router.get('/', checkLogin, empresaLogueada, dashboardController.index)
 // // Dashboard Principal Administrador
 router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
 
