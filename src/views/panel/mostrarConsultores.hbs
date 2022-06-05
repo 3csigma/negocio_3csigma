@@ -37,10 +37,13 @@
                                         <td>{{num_empresas}}</td>
                                         <td>
                                             {{#comparar estadoAdm '==' 0}}
-                                            <span class="badge light badge-danger">Pendiente</span>
+                                            <span class="badge light badge-warning">Pendiente</span>
                                             {{/comparar}}
-                                            {{#comparar estadoAdm '!=' 0}}
+                                            {{#comparar estadoAdm '==' 1}}
                                             <span class="badge light badge-success" >Aprobado</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 2}}
+                                            <span class="badge light badge-danger" >Bloqueado</span>
                                             {{/comparar}}
                                         </td>
                                         <td>

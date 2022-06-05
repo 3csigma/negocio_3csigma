@@ -101,8 +101,7 @@
                                 <p>{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
-                                <h4 class="text-muted mb-0">{{#if
-                                    empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
+                                <h4 class="text-muted mb-0">{{#if empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
                                 <p>Teléfono</p>
                             </div>
 
@@ -124,8 +123,7 @@
                             <div class="text-center">
                                 <div class="row">
                                     <div class="col">
-                                        <h3 class="m-b-0">{{#if
-                                            empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
+                                        <h3 class="m-b-0">{{#if empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
                                         <span>Cantidad de Socios</span>
                                     </div>
                                     <div class="col">
@@ -191,8 +189,7 @@
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if
-                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
                                                             </h5>
                                                         </div>
                                                     </div>
@@ -605,23 +602,19 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td id="fActual">5/30/2022</td>
+                                                            <td id="fActual">{{frmDiag.fecha}}</td>
                                                             <td>Diagnóstico de negocio</td>
                                                             <td>Formulario diagnóstico</td>
-                                                            <td>AQUÍ VA EL ESTADO
-                                                                {{!-- <span class="badge light {{formDiag.color}}"
-                                                                    style="background: {{formDiag.estilo}}">{{formDiag.texto}}</span>
-                                                                --}}
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
                                                                 <div class="d-flex">
-                                                                    <a href="/diagnostico-empresa/{{codigo_empresa}}"
+                                                                    <a href="/cuestionario-diagnostico/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #50368C">
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082">
                                                                         <i class="fa fa-pencil"></i></a>
-                                                                    <a href=""
-                                                                        class="btn btn-danger shadow btn-xs sharp"
-                                                                        style="background: #FED061; border-color: #FED061; color: white">
+                                                                    <a href="#" class="btn btn-info shadow btn-xs sharp"
+                                                                        style="color: white">
                                                                         <i class="fa fa-search"></i></a>
                                                                 </div>
                                                             </td>
@@ -708,4 +701,10 @@
 </div>
 
 <script>
+    {{#if frmDiag.fechaLocal}}
+    const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzLocal);
+    const fechaCliente = new Date().toLocaleString("en-US", { timeZone: tzLocal })
+    document.getElementById("fActual").innerHTML = fechaCliente
+    {{/if}}
 </script>

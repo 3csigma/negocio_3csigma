@@ -236,9 +236,9 @@
         <button type="submit" class="add-menu-sidebar">
           <img src="./img/Pago-diagnostico de-negocio.png">
           <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
-          {{/if}}
         </button>
       </form>
+      {{/if}}
 
       <ul class="metismenu" id="menu">
         {{#comparar itemActivo '==' 1}}
@@ -339,8 +339,8 @@
       {{!-- BOTÓN AGENDAR CITA --}}
       {{#if etapa1.lista}}
       <a href=""
-        onclick="Calendly.initPopupWidget({url: 'https://calendly.com/{{etapa1.consultor}}/diagnostico?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=812082'});return false;">
-        <div class="add-menu-sidebar" style="background: #812082 !important; color:#fff !important; ">
+        onclick="Calendly.initPopupWidget({url: '{{etapa1.consultor}}/diagnostico?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=812082'});return false;">
+        <div class="add-menu-sidebar" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; ">
           <img src="/img/agenda.png" alt="Agendar cita" class="mr-3" style="margin-left:1em;">
           <p class="font-w500 mb-0 text-center">Agendar cita</p>
         </div>
@@ -352,10 +352,18 @@
       </div>
       {{/if}}
 
+      <div class="text-center">
+        <li>
+          <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" aria-expanded="false">
+            <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+          </a>
+        </li>
+      </div>
 
       <div class="copyright text-center">
         <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
       </div>
+
     </div>
   </div>
   <!--**********************************

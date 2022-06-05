@@ -51,8 +51,8 @@
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="text" value="{{consultor.email}}" class="form-control"
-                                style="line-height:4" disabled>
+                            <input type="text" value="{{consultor.email}}" class="form-control" style="line-height:4"
+                                disabled>
                         </div>
                     </div>
 
@@ -86,10 +86,17 @@
                                 {{#comparar consultor.estadoAdm '==' 0}}
                                 <option value="0" selected>Inactivo</option>
                                 <option value="1">Activo</option>
+                                <option value="2">Bloqueado</option>
                                 {{/comparar}}
-                                {{#comparar consultor.estadoAdm '!=' 0}}
-                                <option value="1" selected>Activo</option>
+                                {{#comparar consultor.estadoAdm '==' 1}}
                                 <option value="0">Inactivo</option>
+                                <option value="1" selected>Activo</option>
+                                <option value="2">Bloqueado</option>
+                                {{/comparar}}
+                                {{#comparar consultor.estadoAdm '==' 2}}
+                                <option value="0">Inactivo</option>
+                                <option value="1" >Activo</option>
+                                <option value="2" selected>Bloqueado</option>
                                 {{/comparar}}
                             </select>
                         </div>
@@ -98,18 +105,33 @@
                 </div>
                 <!-- ./Fin Fila 1 -->
 
-                <div class="row mt-2">
-                    <div class="col-xl-4 m-auto">
+                <div class="row mt-2 ">
+
+                    <div class="col-xl-6 m-auto">
+                        <div class="form-group">
+                            <label>URL Calendly</label>
+                            <div class="input-group input-primary">
+                                <input type="text" name="usuario_calendly" id="urlCalendly" class="form-control" readonly value="{{consultor.usuario_calendly}}">
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="txtCalendly()">Editar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 m-auto">
                         <div class="form-group">
                             <label>Certificado de Consul International Group</label>
                             <div class="input-group input-primary">
                                 <input type="text" class="form-control" readonly value="{{consultor.txtCertificado}}">
                                 <div class="input-group-append">
-                                    <a class="input-group-text" target="_blank" href="{{consultor.certificado}}">Ver documento</a>
+                                    <a class="input-group-text" target="_blank" href="{{consultor.certificado}}">Ver
+                                        documento</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row">
@@ -129,3 +151,15 @@
     </div>
 
 </div>
+
+
+<!--******************************
+            SCRIPTS
+*******************************-->
+<script>
+    function txtCalendly() {
+        const urlCalendly = document.getElementById("urlCalendly");
+        urlCalendly.removeAttribute("readonly")
+        urlCalendly.focus()
+    }
+</script>

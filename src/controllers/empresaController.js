@@ -10,6 +10,7 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisi
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
     diagnosticoPagado = 0;
+    acuerdoFirmado = false;
     req.intentPay = undefined; // Intento de pago
     const empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const id_empresa = empresa[0].id_empresas;
@@ -18,51 +19,54 @@ empresaController.index = async (req, res) => {
     /** Consultando que pagos ha realizado el usuario */
     const pagos = await pool.query('SELECT * FROM pagos WHERE id_empresa = ?', [id_empresa])
     if (pagos.length == 0) {
+        diagnosticoPagado = 0;
         const nuevoPago = { id_empresa }
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-            if (err) throw err;
-            console.log("Registro exitoso en la tabla pagos -> ", result);
-            res.redirect('/')
-        })
-    } else {
-        if (pagos[0].diagnostico_negocio == '1') {
-            // PAGÓ EL DIAGNOSTICO
-            diagnosticoPagado = 1;
-            req.pagoDiag = true;
-            pagoDiag = req.pagoDiag;
+        await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
+    }
 
-            /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-            const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
-            if (acuerdo.length > 0) {
-                if (acuerdo[0].estadoAcuerdo == 2) {
-                    acuerdoFirmado = true;
-                    noPago = false;
-                }
+    if (pagos[0].diagnostico_negocio == 1) {
+        // PAGÓ EL DIAGNOSTICO
+        diagnosticoPagado = 1;
+        req.pagoDiag = true;
+        pagoDiag = req.pagoDiag;
+
+        /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+        const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
+        if (acuerdo.length > 0) {
+            if (acuerdo[0].estadoAcuerdo == 2) {
+                acuerdoFirmado = true;
+                noPago = false;
             }
-
         }
-
-        // PAGÓ EL ANÁLISIS
-        pagos[0].analisis_negocio == '1' ? analisisPagado = 1 : analisisPagado = analisisPagado;
-
-        // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
-        if (empresa[0].consultor != null) {
-            etapa1.lista = true;
-            let c = await pool.query('SELECT * FROM consultores WHERE id_consultores = ? LIMIT 1', [empresa[0].consultor]);
-            c = c[0];
-            let nom = c.email.split('@')
-            nom = nom[0]+''
-            etapa1.consultor = nom.replace(".", "-");
-            console.log("ETAPA AGENDAR CITA");
-            console.log(etapa1)
-
-        }
-
-        res.render('pages/dashboard', {
-            user_dash: true, pagoPendiente, diagnosticoPagado, analisisPagado, pagoDiag, itemActivo: 1, acuerdoFirmado, etapa1
-        })
 
     }
+
+    // PAGÓ EL ANÁLISIS
+    pagos[0].analisis_negocio == '1' ? analisisPagado = 1 : analisisPagado = analisisPagado;
+
+    // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
+    if (empresa[0].consultor != null) {
+        etapa1.lista = true;
+        let c = await pool.query('SELECT * FROM consultores WHERE id_consultores = ? LIMIT 1', [empresa[0].consultor]);
+        c = c[0];
+        // let nom = c.email.split('@')
+        // nom = nom[0] + ''
+        etapa1.consultor = c.usuario_calendly;
+        console.log("DATOS AGENDAR CITA");
+
+    }
+
+    res.render('pages/dashboard', {
+        user_dash: true,
+        pagoPendiente,
+        diagnosticoPagado,
+        analisisPagado,
+        pagoDiag,
+        itemActivo: 1,
+        acuerdoFirmado,
+        etapa1
+    })
+
 }
 
 /** Creación & validación del proceso Acuerdo de Confidencialidad */
@@ -100,7 +104,7 @@ empresaController.acuerdo = async (req, res) => {
             const args = JSON.parse(acuerdo[0].args) // CONVERTIR  JSON A UN OBJETO
             const newToken = await helpers.authToken() //Generando nuevo Token para enviar a Docusign
             args.accessToken = newToken.access_token;
-            const new_args = {args: JSON.stringify(args)}
+            const new_args = { args: JSON.stringify(args) }
 
             await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [new_args, id_empresa])
 
@@ -112,7 +116,7 @@ empresaController.acuerdo = async (req, res) => {
 
             /** Validando si el estado devuelto es enviado o firmado */
             if (statusSign == 'completed') { // Estado desde docusign (completed)
-                
+
                 estado.valor = 2; //Documento Firmado
                 estado.firmado = true;
                 acuerdoFirmado = true;
@@ -149,7 +153,7 @@ empresaController.acuerdo = async (req, res) => {
             res.redirect('/acuerdo-de-confidencialidad')
         })
     }
-    
+
     res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
 }
 
@@ -163,7 +167,7 @@ empresaController.diagnostico = async (req, res) => {
     formDiag.estado = false;
     const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_empresa = ?', [id_empresa])
     const ficha = fichaCliente[0]
-   
+
     if (fichaCliente.length == 0) {
         formDiag.color = 'badge-danger'
         formDiag.texto = 'Pendiente'
@@ -188,7 +192,15 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
-    res.render('empresa/diagnostico', { user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, actualYear: req.actualYear, etapa1 })
+    res.render('empresa/diagnostico', {
+        user_dash: true,
+        pagoDiag: true,
+        itemActivo: 3,
+        acuerdoFirmado: true,
+        formDiag,
+        actualYear: req.actualYear,
+        etapa1
+    })
 }
 
 /** Mostrar vista del formulario Ficha Cliente */
@@ -219,7 +231,7 @@ empresaController.fichaCliente = async (req, res) => {
         ficha.etapa_actual === 'Operativo' ? datos.etapa2 = 'checked' : datos.etapa2 = ''
         ficha.etapa_actual === 'En expansión' ? datos.etapa3 = 'checked' : datos.etapa3 = ''
         ficha.etapa_actual === 'Otro' ? datos.etapa4 = 'checked' : datos.etapa4 = ''
-            
+
         datos.redes_sociales = JSON.parse(ficha.redes_sociales)
         datos.objetivos = JSON.parse(ficha.objetivos)
         datos.fortalezas = JSON.parse(ficha.fortalezas)
@@ -262,7 +274,7 @@ empresaController.addFichaCliente = async (req, res) => {
     const id_empresa = row[0].id_empresas;
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
-    const fecha_modificacion = new Date().toLocaleString("en-US", {timeZone: fecha_zh})
+    const fecha_modificacion = new Date().toLocaleString("en-US", { timeZone: fecha_zh })
 
     const nuevaFichaCliente = {
         telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_empresa, fecha_modificacion

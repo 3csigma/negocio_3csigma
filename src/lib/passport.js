@@ -62,7 +62,7 @@ passport.use('local.registro', new LocalStrategy({
 
             // Guardar en la base de datos
             const fila = await pool.query('INSERT INTO users SET ?', [newUser])
-            const empresa = {nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion}
+            const empresa = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion }
             if (fila.affectedRows > 0) {
                 await pool.query('INSERT INTO empresas SET ?', [empresa])
             }
@@ -88,9 +88,11 @@ passport.use('local.registroConsultores', new LocalStrategy({
             return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
         } else {
 
-             // Capturando Nombre de usuario con base al email del usuario
-             let username = email.split('@')
-             username = username[0]
+            // Capturando Nombre de usuario con base al email del usuario
+            let usuario_calendly = email.split('@')
+            usuario_calendly = usuario_calendly[0]+''
+            usuario_calendly = usuario_calendly.replace(".", "-");
+            usuario_calendly = "https://calendly.com/"+usuario_calendly;
 
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(email).digest("hex");
@@ -103,10 +105,10 @@ passport.use('local.registroConsultores', new LocalStrategy({
 
             // Capturando Certificado de Consul Group
             const certificado = '../certificados_consultores/' + urlCertificado
-            
+
             // Objeto de Usuario
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion };
+            const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
@@ -151,7 +153,7 @@ passport.use('local.login', new LocalStrategy({
                     return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
                 }
             } else if (user.rol == 'Consultor') { // Usuario Consultor
-                if (user.estadoEmail == 1){
+                if (user.estadoEmail == 1) {
                     req.session.consultor = true;
                     req.session.empresa = false;
                     req.session.admin = false;
