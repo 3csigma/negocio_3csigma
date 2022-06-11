@@ -84,17 +84,17 @@
                             <label>Estado</label>
                             <select id="estado_consul" class="mr-sm-2 default-select">
                                 {{#comparar consultor.estadoAdm '==' 0}}
-                                <option value="0" selected>Inactivo</option>
+                                <option value="0" selected>Pendiente</option>
                                 <option value="1">Activo</option>
                                 <option value="2">Bloqueado</option>
                                 {{/comparar}}
                                 {{#comparar consultor.estadoAdm '==' 1}}
-                                <option value="0">Inactivo</option>
+                                <option value="0">Pendiente</option>
                                 <option value="1" selected>Activo</option>
                                 <option value="2">Bloqueado</option>
                                 {{/comparar}}
                                 {{#comparar consultor.estadoAdm '==' 2}}
-                                <option value="0">Inactivo</option>
+                                <option value="0">Pendiente</option>
                                 <option value="1" >Activo</option>
                                 <option value="2" selected>Bloqueado</option>
                                 {{/comparar}}

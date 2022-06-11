@@ -26,7 +26,7 @@ const sendEmail = async (email, subject, html) => {
 			from: `3C Sigma <${mail.user}>`, // sender address
 			to: email, // list of receivers
 			subject, // Subject line
-			text: "Saludos, bienvenido a la plataforma 3C Sigma", // plain text body
+			text: "Cordial saludo desde 3C Sigma", // plain text body
 			html, // html body
 		});
 	} catch (error) {
@@ -413,14 +413,14 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-image: url('images/Cuenta-aprobada_01.jpg'); background-repeat: no-repeat; background-size: cover; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-image: url('https://3csigma.com/app_public_files/emails_consultor/Cuenta-aprobada_01.jpg'); background-repeat: no-repeat; background-size: cover; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="width:100%;padding-right:0px;padding-left:0px;">
-<div align="center" style="line-height:10px"><img class="big" src="images/Cuenta-aprobada_01.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></div>
+<div align="center" style="line-height:10px"><img class="big" src="https://3csigma.com/app_public_files/emails_consultor/Cuenta-aprobada_01.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></div>
 </td>
 </tr>
 </table>
@@ -475,7 +475,7 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #50368c; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('images/Verificacion-de-correo_boton.jpg'); width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #50368c; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('https://3csigma.com/app_public_files/emails_consultor/Verificacion-de-correo_boton.jpg'); width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -501,7 +501,7 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #50368c; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('images/Verificacion-de-correo_redireccionamiento.jpg'); width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #50368c; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('https://3csigma.com/app_public_files/emails_consultor/Verificacion-de-correo_redireccionamiento.jpg'); width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -531,7 +531,7 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:30px;width:100%;">
-<div align="center" style="line-height:10px"><img src="images/Logo.png" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
+<div align="center" style="line-height:10px"><img src="https://3csigma.com/app_public_files/emails_consultor/Logo.png" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
 </td>
 </tr>
 </table>
@@ -574,9 +574,9 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <td>
 <table align="center" border="0" cellpadding="0" cellspacing="0" class="social-table" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="138px">
 <tr>
-<td style="padding:0 7px 0 7px;"><a href="https://facebook.com/carlosjramirezp" target="_blank"><img alt="Facebook" height="32" src="images/facebook2x.png" style="display: block; height: auto; border: 0;" title="Facebook" width="32"/></a></td>
-<td style="padding:0 7px 0 7px;"><a href="https://instagram.com/carlosjramirezp" target="_blank"><img alt="Instagram" height="32" src="images/instagram2x.png" style="display: block; height: auto; border: 0;" title="Instagram" width="32"/></a></td>
-<td style="padding:0 7px 0 7px;"><a href="https://3csigma.com" target="_blank"><img alt="Website 3C Sigma" height="32" src="images/Pagina-web.png" style="display: block; height: auto; border: 0;" title="Website" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://facebook.com/carlosjramirezp" target="_blank"><img alt="Facebook" height="32" src="https://3csigma.com/app_public_files/emails_consultor/facebook2x.png" style="display: block; height: auto; border: 0;" title="Facebook" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://instagram.com/carlosjramirezp" target="_blank"><img alt="Instagram" height="32" src="https://3csigma.com/app_public_files/emails_consultor/instagram2x.png" style="display: block; height: auto; border: 0;" title="Instagram" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://3csigma.com" target="_blank"><img alt="Website 3C Sigma" height="32" src="https://3csigma.com/app_public_files/emails_consultor/Pagina-web.png" style="display: block; height: auto; border: 0;" title="Website" width="32"/></a></td>
 </tr>
 </table>
 </td>
@@ -594,6 +594,14 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tbody>
 <tr>
 <td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ffffff; color: #000000; width: 600px;" width="600">
+<tbody>
+<tr>
+<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+</td>
+</tr>
+</tbody>
+</table>
 </td>
 </tr>
 </tbody>
@@ -651,7 +659,19 @@ const consultorAsignadoHTML = (nombre) => {
 			line-height: inherit
 		}
 
+		.desktop_hide,
+		.desktop_hide table {
+			mso-hide: all;
+			display: none;
+			max-height: 0px;
+			overflow: hidden;
+		}
+
 		@media (max-width:620px) {
+			.desktop_hide table.icons-inner {
+				display: inline-block !important;
+			}
+
 			.icons-inner {
 				text-align: center;
 			}
@@ -685,6 +705,12 @@ const consultorAsignadoHTML = (nombre) => {
 				overflow: hidden;
 				font-size: 0px;
 			}
+
+			.desktop_hide,
+			.desktop_hide table {
+				display: table !important;
+				max-height: none !important;
+			}
 		}
 	</style>
 </head>
@@ -697,38 +723,49 @@ const consultorAsignadoHTML = (nombre) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #50368c; color: #000000; background-image: url('images/Consultor-asignado_BG-01.jpg'); background-repeat: no-repeat; background-position: top center; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #50368c; background-image: url('https://3csigma.com/app_public_files/emails_consultor/Consultor-asignado_BG-01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
-<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="50%">
+<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td style="width:100%;text-align:center;padding-right:25px;padding-left:25px;padding-top:50px;">
-<h1 style="margin: 0; color: #ffffff; font-size: 20px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; line-height: 120%; text-align: left; direction: ltr; font-weight: 400; letter-spacing: normal; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Hola ${nombre}</span></h1>
+<td style="padding-left:15px;padding-right:25px;text-align:center;width:100%;padding-top:45px;">
+<h1 style="margin: 0; color: #ffffff; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 20px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Hola ${nombre}</span></h1>
 </td>
 </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td style="width:100%;text-align:center;padding-top:15px;padding-right:25px;padding-bottom:25px;padding-left:25px;">
-<h1 style="margin: 0; color: #ffffff; font-size: 36px; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; line-height: 120%; text-align: left; direction: ltr; font-weight: 700; letter-spacing: normal; margin-top: 0; margin-bottom: 0;"><strong><span class="tinyMce-placeholder">Tu consultor ha sido asignado</span></strong></h1>
+<td style="padding-left:15px;padding-right:15px;padding-top:15px;text-align:center;width:100%;">
+<h1 style="margin: 0; color: #ffffff; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><strong><span class="tinyMce-placeholder">Tu consultor</span></strong></h1>
+</td>
+</tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" class="heading_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<tr>
+<td style="padding-bottom:25px;padding-left:20px;padding-right:25px;text-align:center;width:100%;">
+<h1 style="margin: 0; color: #ffffff; direction: ltr; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; font-size: 36px; font-weight: 700; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><strong>ha sido asignado</strong></h1>
 </td>
 </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
 <tr>
-<td style="padding-right:25px;padding-bottom:185px;padding-left:25px;">
-<div style="color:#ffffff;font-size:19px;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-weight:400;line-height:120%;text-align:left;direction:ltr;letter-spacing:0px;">
-<p style="margin: 0;">Ahora puedes agendar una cita desde tu plataforma 3C Sigma</p>
+<td style="padding-left:25px;padding-right:25px;">
+<div style="color:#ffffff;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:19px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;">
+<p style="margin: 0;">Ahora puedes agendar una cita</p>
 </div>
 </td>
 </tr>
 </table>
+<table border="0" cellpadding="0" cellspacing="0" class="paragraph_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
+<tr>
+<td style="padding-bottom:180px;padding-left:25px;padding-right:25px;">
+<div style="color:#ffffff;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:19px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;">
+<p style="margin: 0;">desde tu plataforma 3C Sigma</p>
+</div>
 </td>
-<td class="column column-2" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="50%">
-<div class="spacer_block" style="height:5px;line-height:5px;font-size:1px;"> </div>
-<div class="spacer_block mobile_hide" style="height:105px;line-height:105px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:5px;line-height:5px;font-size:1px;"> </div>
+</tr>
+</table>
 </td>
 </tr>
 </tbody>
@@ -797,7 +834,7 @@ const consultorAsignadoHTML = (nombre) => {
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:30px;width:100%;">
-<div align="center" style="line-height:10px"><img src="images/Logo.png" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
+<div align="center" style="line-height:10px"><img src="https://3csigma.com/app_public_files/emails_consultor/Logo.png" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
 </td>
 </tr>
 </table>
@@ -840,9 +877,9 @@ const consultorAsignadoHTML = (nombre) => {
 <td>
 <table align="center" border="0" cellpadding="0" cellspacing="0" class="social-table" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="138px">
 <tr>
-<td style="padding:0 7px 0 7px;"><a href="https://facebook.com/carlosjramirezp" target="_blank"><img alt="Facebook" height="32" src="images/facebook2x.png" style="display: block; height: auto; border: 0;" title="Facebook" width="32"/></a></td>
-<td style="padding:0 7px 0 7px;"><a href="https://instagram.com/carlosjramirezp" target="_blank"><img alt="Instagram" height="32" src="images/instagram2x.png" style="display: block; height: auto; border: 0;" title="Instagram" width="32"/></a></td>
-<td style="padding:0 7px 0 7px;"><a href="https://3csigma.com" target="_blank"><img alt="Website 3C Sigma" height="32" src="images/Pagina-web.png" style="display: block; height: auto; border: 0;" title="Website" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://facebook.com/carlosjramirezp" target="_blank"><img alt="Facebook" height="32" src="https://3csigma.com/app_public_files/emails_consultor/facebook2x.png" style="display: block; height: auto; border: 0;" title="Facebook" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://instagram.com/carlosjramirezp" target="_blank"><img alt="Instagram" height="32" src="https://3csigma.com/app_public_files/emails_consultor/instagram2x.png" style="display: block; height: auto; border: 0;" title="Instagram" width="32"/></a></td>
+<td style="padding:0 7px 0 7px;"><a href="https://3csigma.com" target="_blank"><img alt="Website 3C Sigma" height="32" src="https://3csigma.com/app_public_files/emails_consultor/Pagina-web.png" style="display: block; height: auto; border: 0;" title="Website" width="32"/></a></td>
 </tr>
 </table>
 </td>
@@ -854,6 +891,10 @@ const consultorAsignadoHTML = (nombre) => {
 </table>
 </td>
 </tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-6" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<tbody>
 </tbody>
 </table>
 </td>

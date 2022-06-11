@@ -56,6 +56,72 @@ empresaController.index = async (req, res) => {
 
     }
 
+    /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
+    let dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa,id_empresa,id_empresa,empresa[0].codigo])
+    dataEmpresa = dataEmpresa[0]
+
+    let diagEmpresa = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    const diagPorcentaje = {}, anaPorcentaje = {};
+    
+    // Etapa 1
+    let porcentaje = 100/9
+    // porcentaje = porcentaje.toFixed(2)
+    porcentaje = porcentaje.toFixed(0)
+    diagPorcentaje.txt = 'Email sin confirmar';
+    diagPorcentaje.num = porcentaje
+
+    if (dataEmpresa.estadoEmail == 1){
+        diagPorcentaje.txt = 'Email confirmado';
+        diagPorcentaje.num = porcentaje*2
+    } 
+    if (dataEmpresa.diagnostico_negocio == 1){
+        diagPorcentaje.txt = 'Diagnóstico pagado'
+        diagPorcentaje.num = porcentaje*3
+    }
+    if (dataEmpresa.estadoAcuerdo == 1){
+        diagPorcentaje.txt = 'Acuerdo enviado'
+        diagPorcentaje.num = porcentaje*4
+    }
+    if (dataEmpresa.estadoAcuerdo == 2){
+        diagPorcentaje.txt = 'Acuerdo firmado'
+        diagPorcentaje.num = porcentaje*5
+    } 
+    if (dataEmpresa.telefono){
+        diagPorcentaje.txt = 'Ficha Cliente'
+        diagPorcentaje.num = porcentaje*6
+    }
+
+    if (diagEmpresa.length > 0){
+        diagPorcentaje.txt = 'Cuestionario diagnóstico'
+        diagPorcentaje.num = porcentaje*7
+    }
+
+    console.log("\n<<< Porcentaje actual >>>");
+    console.log(diagPorcentaje);
+    // Informe de la empresa subido
+    // diagEmpresa.length > 0 ? diagPorcentaje.txt = 'Informe diagnóstico' : diagPorcentaje.txt = diagPorcentaje.txt;
+
+    // Etapa 2
+    anaPorcentaje.txt = 'Análisis no pagado';
+    anaPorcentaje.num = 0;
+    if (dataEmpresa.analisis_negocio == 1){
+        anaPorcentaje.txt = 'Análisis pagado'
+        anaPorcentaje.num = 0;
+    }
+    
+    /************************************************************************** */
+
+    /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
+    let jsonAnalisis1, jsonAnalisis2;
+    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [empresa[0].id_empresas])
+
+    if (areasVitales.length > 0) {
+        jsonAnalisis1 = JSON.stringify(areasVitales[0]);
+        jsonAnalisis2 =JSON.stringify( areasVitales[1]);
+    }
+
+    /************************************************************************************* */
+
     res.render('pages/dashboard', {
         user_dash: true,
         pagoPendiente,
@@ -64,7 +130,8 @@ empresaController.index = async (req, res) => {
         pagoDiag,
         itemActivo: 1,
         acuerdoFirmado,
-        etapa1
+        etapa1,
+        diagPorcentaje, jsonAnalisis1, jsonAnalisis2
     })
 
 }

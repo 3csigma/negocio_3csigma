@@ -39237,7 +39237,7 @@ button:focus {
   position: relative;
   border: 0px solid transparent;
   border-radius: 1.25rem;
-  box-shadow: 0px 12px 23px 0px rgba(160, 44, 250, 0.04);
+  box-shadow: 0px 12px 23px 0px #ededed;
   height: calc(100% - 30px);
 }
 

@@ -1,0 +1,94 @@
+label {
+    color: black;
+}
+.form-control {
+    height: 50px;
+}
+.form-control:disabled {
+    background: #f9f9f9;
+    color: #7E7E7E;
+}
+.bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+    width: 100%;
+}
+.bootstrap-select .btn {
+    font-size: 0.875rem;
+    height: 50px;
+}
+/* Selectores Consultor & Estado de la cuenta */
+.chosen-container-single .chosen-single div {
+    top: 12px;
+}
+.chosen-container-single .chosen-single {
+    border: 1px solid #f0f1f5 !important;
+    background: transparent !important;
+    font-weight: 400 !important;
+    color: #7e7e7e !important;
+    height: 46px;
+    border-radius: 1.25rem;
+    padding-top: 11px;
+}
+.chosen-container-single .chosen-single abbr {
+    top: 17px;
+
+}
+.chosen-container-single .chosen-search input[type=text] {
+    border: 1px solid #f0f1f5 !important;
+    border-radius: 1.2rem;
+}
+.chosen-container-single .chosen-drop {
+    margin-top: -1px;
+    border: 1px solid #f0f1f5 !important;
+    border-radius: 0 0 1.25rem 1.25rem;
+}
+.chosen-container-active.chosen-with-drop .chosen-single {
+    background-image: none !important;
+}
+.chosen-container .chosen-results li.highlighted {
+    background-color: #F4F5F9;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f5f9), color-stop(90%, #f4f5f9));
+    background-image: #F4F5F9 !important;
+    color: #000;
+}
+.iconRed {
+    max-width: 70px !important;
+}
+.nav-tabs .nav-item .nav-link:before {
+    background-color: transparent;
+}
+.profile-tab .nav-item .nav-link {
+    margin-right: 25px;
+}
+.nav-tabs .nav-item .nav-link.active:before {
+    background-color: #50368c;
+}
+.tab-content {
+    margin-top: 1em;
+}
+
+/* ESTILOS NORMALES (para escritorios muy grandes) ========================================================================= */
+#altura_tabs{
+    max-height: 100vh;
+}
+/* RESPONSIVE 
+========================================================================= */
+
+/* Tablets en horizonal y escritorios normales
+------------------------------------------------------------------------- */
+@media (min-width: 768px) and (max-width: 1600px) {
+    #altura_tabs {
+        max-height: 67em;
+    }
+}
+
+/* Móviles en horizontal o tablets en vertical
+------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+
+}
+
+/* Móviles en vertical
+------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+
+}

@@ -43,8 +43,8 @@ router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 
 // Cuestionario Diagnóstico Consultor-Empresa
-router.get('/cuestionario-diagnostico/:id', checkLogin, adminLogueado, dashboardController.cuestionario)
+router.get('/cuestionario-diagnostico/:codigo', checkLogin, adminLogueado, dashboardController.cuestionario)
+router.post('/cuestionario-diagnostico', checkLogin, adminLogueado, dashboardController.enviarCuestionario)
 // router.get('/ficha-cliente', checkLogin, validarIDFicha, empresaLogueada, empresaController.fichaCliente)
-// router.post('/cuestionario-diagnostico', checkLogin, adminLogueado, dashboardController.enviarCuestionario)
 
 module.exports = router;

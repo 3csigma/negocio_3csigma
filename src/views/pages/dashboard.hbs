@@ -23,13 +23,13 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Diagnóstico de negocio</p>
-                                        <span class="title text-black font-w600">0%</span>
+                                        <span class="title text-black font-w600">{{diagPorcentaje.num}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-diagnostico" style="width: 5%; height:5px;"
+                                    <div class="progress-bar bg-diagnostico" style="width: {{diagPorcentaje.num}}%; height:5px;"
                                         role="progressbar">
-                                        <span class="sr-only">0% Completado</span>
+                                        <span class="sr-only">{{diagPorcentaje.num}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
@@ -120,9 +120,13 @@
                         </table>
 
                     </div>
+
                     <div class="card-body">
                         <canvas id="barChart_1"></canvas>
                     </div>
+
+                    <input type="hidden" id="jsonAnalisis1" value="{{jsonAnalisis1}}" />
+                    <input type="hidden" id="jsonAnalisis2" value="{{jsonAnalisis2}}" />
                 </div>
             </div>
             

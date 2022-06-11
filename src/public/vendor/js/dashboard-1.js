@@ -1,7 +1,6 @@
 (function($) {
     /* "use strict" */
 
-
  var dzChartlist = function(){
 	let draw = Chart.controllers.line.__super__.draw; //draw shadow
 	var screenWidth = $(window).width();

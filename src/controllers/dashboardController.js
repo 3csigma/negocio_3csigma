@@ -1,6 +1,9 @@
 const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
+const helpers = require('../lib/helpers')
+const crypto = require('crypto');
+const { consultorAsignadoHTML, consultorAprobadoHTML, sendEmail } = require('../lib/mail.config')
 
 let aprobarConsultor = false;
 
@@ -68,14 +71,48 @@ dashboardController.editarConsultor = async (req, res) => {
 
 dashboardController.actualizarConsultor = async (req, res) => {
     const { codigo, estado, usuario_calendly } = req.body;
-    const nuevoEstado = { estadoAdm: estado }
-    const urlCalendly = {usuario_calendly}
+    const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
+    const urlCalendly = {usuario_calendly} // URL Calendly
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
     const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [urlCalendly, codigo])
+    const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
-    if (c1.affectedRows > 0 || c2.affectedRows > 0) {
+
+    if (c1.affectedRows > 0){
+        
+        // Enviando Email - Consultor Aprobado
+        if (c.length > 0 && c[0].estadoAdm == 1){
+            const nombre = c[0].nombres + " " + c[0].apellidos;
+            const email = c[0].email
+
+            console.log("\nINFO CONSULTOR >>>\n", c);
+
+            // Generar código MD5 con base a su email (Esta es la clave del Consultor)
+            let codigo = crypto.createHash('md5').update(email).digest("hex");
+            const clave = codigo.slice(5, 13);
+
+            console.log("\n<<<< Clave del Consultor: ", clave);
+
+            // Obtener la plantilla de Email
+            const template = consultorAprobadoHTML(nombre, clave);
+        
+            // Enviar Email
+            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en 3C Sigma', template)
+
+            if (resultEmail == false){
+                res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+            } else {
+                console.log("\n>>>> Email de Consultor Aprobado - ENVIADO <<<<<\n")
+                respuesta = true;
+            }
+        }
+
+    } 
+
+    if(c2.affectedRows > 0) {
         respuesta = true;
     }
+
     res.send(respuesta)
 }
 
@@ -217,8 +254,32 @@ dashboardController.actualizarEmpresa = async (req, res) => {
 
     // Asignando y/o actualizando consultor a la empresa
     if (id_consultor == '' || id_consultor == null) { consul.consultor = null }
-
     const asignado = await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [consul, codigo])
+    const e = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigo])
+
+    // Proceso de email de consultor asignado
+    if (asignado.affectedRows > 0){
+        
+        if (e.length > 0 && e[0].consultor != null){
+
+            const nombre = e[0].nombre_empresa;
+            const email = e[0].email
+            
+            // Obtener la plantilla de Email
+            const template = consultorAsignadoHTML(nombre);
+    
+            // Enviar Email
+            const resultEmail = await sendEmail(email, 'Tu consultor ha sido asignado en 3C Sigma', template)
+
+            if (resultEmail == false){
+                res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+            } else {
+                console.log("Email de Consultor Asignado enviado")
+            }
+
+            
+        }
+    }
 
     // Cambiando estado de la cuenta de la empresa (Activa o Bloqueada)
     const estado = { estadoAdm }
@@ -255,5 +316,96 @@ dashboardController.cuestionario = async (req, res) => {
     const e = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
     let row = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [e.id_empresas])
     row = row[0]
-    res.render('consultor/cuestionario', {wizarx: true, user_dash: false, adminDash: false })
+    res.render('consultor/cuestionario', {wizarx: true, user_dash: false, adminDash: false, codigo })
+}
+
+dashboardController.enviarCuestionario = async (req, res) => {
+    // Capturar ID Empresa
+    
+
+    // Capturar ID Consultor
+
+    // Capturar Fecha de guardado
+
+
+    // Productos o Servicios
+    const { necesidad_producto, precio_producto, productos_coherentes, calidad_producto, presentacion_producto, calificacion_global_producto } = req.body
+    let productos_servicios = JSON.stringify({
+        necesidad_producto, precio_producto, productos_coherentes, calidad_producto, presentacion_producto, calificacion_global_producto 
+    })
+
+    // Administración
+    const { planeacion_estrategica, analisis_foda, estructura_organizativa, sistema_administrativo, facturacion_automatizada, calificacion_administracion } = req.body
+    let administracion = JSON.stringify({ 
+        planeacion_estrategica, analisis_foda, estructura_organizativa, sistema_administrativo, facturacion_automatizada, calificacion_administracion
+    })
+
+    // Talento Humano
+    const { principales_funciones_personal, programa_formacion_colab, habilidades_colab, medicion__personal, personal_capacitado, proceso_contratacion, calificacion_personal_laboral } = req.body
+    let talento_humano = JSON.stringify({
+        principales_funciones_personal, programa_formacion_colab, habilidades_colab, medicion__personal, personal_capacitado, proceso_contratacion, calificacion_personal_laboral
+    })
+
+    // Finanzas
+    const { proyeccion_ventas, estructura_costos, cuentas_pagar_cobrar, costos_fijos_variables, analisis_finanzas_anual, utilidad_neta, empresa_rentable, punto_equilibrio, recuperar_inversion, mejorar_rentabilidad, calificacion_finanzas } = req.body
+    let finanzas = JSON.stringify({
+        proyeccion_ventas, estructura_costos, cuentas_pagar_cobrar, costos_fijos_variables, analisis_finanzas_anual, utilidad_neta, empresa_rentable, punto_equilibrio, recuperar_inversion, mejorar_rentabilidad, calificacion_finanzas
+    })
+
+    // Servicio al Cliente
+    const { clientes_info_productos, satisfaccion_clientes_productos, necesidades_clientes_productos, mecanismo_quejas_reclamos, estrategias_fidelidad_clientes, calificacion_servicio_alcliente } = req.body
+    let servicio_alcliente = JSON.stringify({
+        clientes_info_productos, satisfaccion_clientes_productos, necesidades_clientes_productos, mecanismo_quejas_reclamos, estrategias_fidelidad_clientes, calificacion_servicio_alcliente
+    })
+
+    // Operaciones
+    const { instalaciones_adecuadas, permisos_requeridos, plan_detrabajo, tiempos_entrega_productos, estandarizacion_procesos_op, calificacion_operaciones_procesos } = req.body
+    let operaciones = JSON.stringify({
+        instalaciones_adecuadas, permisos_requeridos, plan_detrabajo, tiempos_entrega_productos, estandarizacion_procesos_op, calificacion_operaciones_procesos
+    })
+
+    // Ambiente Laboral
+    const { ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, califacion_ambienteLab } = req.body
+    let ambiente_laboral = JSON.stringify({
+        ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, califacion_ambienteLab
+    })
+
+    // Innovación
+    const { aportan_ideas, incrementar_ventas, procesos_innovadores, modelo_innovador, empresa_innovadora, calificacion_innovacion } = req.body
+    let innovacion = JSON.stringify({
+        aportan_ideas, incrementar_ventas, procesos_innovadores, modelo_innovador, empresa_innovadora, calificacion_innovacion
+    })
+
+    // Marketing
+    const { estudio_mercado, segmento_mercado, posicionamiento_mercado, estrategias_marketing, plan_marketing, pagina_web_promover, redes_sociales_promover, manual_identidad, tiene_eslogan, brochure_empresa, calificacion_marketing } = req.body
+    let marketing = JSON.stringify({
+        estudio_mercado, segmento_mercado, posicionamiento_mercado, estrategias_marketing, plan_marketing, pagina_web_promover, redes_sociales_promover, manual_identidad, tiene_eslogan, brochure_empresa, calificacion_marketing
+    })
+
+    // Ventas
+    const { ventas_conFacilidad, calificacion_productos_meses, plan_ventas, estrategia_ventas, canales_ventas, calificacion_ventas } = req.body
+    let ventas = JSON.stringify({
+        ventas_conFacilidad, calificacion_productos_meses, plan_ventas, estrategia_ventas, canales_ventas, calificacion_ventas
+    })
+
+    // Fortalezas
+    const { f1, f2, f3, f4, f5 } = req.body
+    let fortalezas = JSON.stringify({
+        f1, f2, f3, f4, f5
+    })
+
+    // Oportunidades de Mejora
+    const { o1, o2, o3, o4, o5 } = req.body
+    let oportunidades_mejoras = JSON.stringify({
+        o1, o2, o3, o4, o5
+    })
+
+    // Metas a corto plazo
+    const { m1, m2, m3, m4, m5 } = req.body
+    let metas_corto_plazo = JSON.stringify({
+        m1, m2, m3, m4, m5
+    })
+
+    // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
+    res.redirect('/empresas/'+codigo_empresa)
 }
