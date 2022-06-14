@@ -1826,7 +1826,7 @@
 
                         {{!-- FECHA DE EDICIÓN --}}
                         <input type="hidden" id="fecha_zh" name="fecha_zh">
-                        <input type="hidden" id="fechaDB" value="{{ficha.fecha_nacimiento}}">
+                        <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="{{codigo}}">
 
                     </div>
                     <!-- /middle-wizard -->
@@ -1863,10 +1863,5 @@
         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
         console.log(tzLocal);
         document.getElementById("fecha_zh").value = tzLocal;
-
-        // Asignando Fecha de la base de datos
-        const fna = document.getElementById("fecha_nacimiento");
-        const fechaDB = document.getElementById("fechaDB").value;
-        fna.value = fechaDB
 
     </script>

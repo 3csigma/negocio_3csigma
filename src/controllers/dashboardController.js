@@ -243,7 +243,21 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmDiag.estado = true;
     }
 
-    res.render('panel/editarEmpresa', { adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag })
+    /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
+    let jsonAnalisis1 = null, jsonAnalisis2 = null;
+    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [idUser])
+
+    if (areasVitales.length > 0) {
+        jsonAnalisis1 = JSON.stringify(areasVitales[0]);
+        jsonAnalisis2 = JSON.stringify( areasVitales[1]);
+    }
+
+    /************************************************************************************* */
+
+    res.render('panel/editarEmpresa', { 
+        adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag,
+        jsonAnalisis1, jsonAnalisis2
+    })
 
 }
 
@@ -313,20 +327,23 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL
 dashboardController.cuestionario = async (req, res) => {
     const { codigo } = req.params;
-    const e = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
-    let row = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [e.id_empresas])
-    row = row[0]
+    // const e = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
+    // let row = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [e.id_empresas])
+    // row = row[0]
     res.render('consultor/cuestionario', {wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 
 dashboardController.enviarCuestionario = async (req, res) => {
     // Capturar ID Empresa
-    
+    const { codigoEmpresa } = req.body;
+    const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
+    const id_empresa = infoEmp[0].id_empresas;
 
     // Capturar ID Consultor
+    const id_consultor = infoEmp[0].consultor;
 
     // Capturar Fecha de guardado
-
+    const fecha = new Date().toLocaleString("en-US", { timeZone: fecha_zh })
 
     // Productos o Servicios
     const { necesidad_producto, precio_producto, productos_coherentes, calidad_producto, presentacion_producto, calificacion_global_producto } = req.body
@@ -406,6 +423,28 @@ dashboardController.enviarCuestionario = async (req, res) => {
         m1, m2, m3, m4, m5
     })
 
-    // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
-    res.redirect('/empresas/'+codigo_empresa)
+    // Creando Objetos para guardar en la base de datos
+    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
+
+    const areasVitales = { id_empresa,
+        calificacion_global_producto, 
+        calificacion_administracion, 
+        calificacion_personal_laboral, 
+        calificacion_finanzas, 
+        calificacion_servicio_alcliente, calificacion_operaciones_procesos, 
+        califacion_ambienteLab, 
+        calificacion_innovacion, 
+        calificacion_marketing,
+        calificacion_ventas
+    }
+
+
+    // Guardando en la Base de datos
+    await pool.query('INSERT INTO diagnostico_empresas SET ?', [nuevoDiagnostico], (err, result) => {
+        if (err) throw err;
+        if (result.affectedRows > 0) {
+            res.redirect('/empresas/'+codigoEmpresa)
+        }
+    })
+
 }
