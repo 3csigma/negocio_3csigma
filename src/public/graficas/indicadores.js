@@ -36,13 +36,15 @@ if (valAnalisis2) {
                                 borderColor: "#50368C",
                                 data: chartAnalisis1,
                                 fill: false,
-                            }, {
-                                label: "Último análisis",
-                                fill: false,
-                                backgroundColor: "#FED061",
-                                borderColor: "#FED061",
-                                data: chartAnalisis2,
-                            }]
+                            }, 
+                            // {
+                            //     label: "Último análisis",
+                            //     fill: false,
+                            //     backgroundColor: "#FED061",
+                            //     borderColor: "#FED061",
+                            //     data: chartAnalisis2,
+                            // }
+                        ]
                         },
                         options: {
                             legend: false,

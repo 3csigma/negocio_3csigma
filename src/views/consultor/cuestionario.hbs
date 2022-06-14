@@ -100,7 +100,7 @@
                     <div id="progressbar"></div>
                 </div>
                 <!-- /top-wizard -->
-                <form id="wrapped" method="POST" action="/cuestionario-diagnostico">
+                <form method="POST" action="/cuestionario-diagnostico">
                     <input id="website" name="website" type="text" value="">
                     <!-- Leave for security protection, read docs for details -->
                     <div id="middle-wizard">
@@ -1166,54 +1166,45 @@
                                     <label>Del  1 al 10 ¿Cómo podría calificar el ambiente laboral del negocio? Siendo uno el nivel más bajo y diez el más alto.</label>
                                     <div class="form-group mb-3 radio_input">
                                         <label class="container_radio mr-3">1
-                                            <input type="radio" name="califacion_ambientelab" value="1"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="1" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">2
-                                            <input type="radio" name="califacion_ambientelab" value="2"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="2" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">3
-                                            <input type="radio" name="califacion_ambientelab" value="3"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="3" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">4
-                                            <input type="radio" name="califacion_ambientelab" value="4"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="4" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">5
-                                            <input type="radio" name="califacion_ambientelab" value="5"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="5" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
                                     <div class="form-group mb-3 radio_input">
                                         <label class="container_radio mr-3">6
-                                            <input type="radio" name="califacion_ambientelab" value="6"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="6" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">7
-                                            <input type="radio" name="califacion_ambientelab" value="7"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="7" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">8
-                                            <input type="radio" name="califacion_ambientelab" value="8"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="8" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">9
-                                            <input type="radio" name="califacion_ambientelab" value="9"
-                                                class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="9" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                         <label class="container_radio mr-3">10
-                                            <input type="radio" name="califacion_ambientelab" value="10" class="required">
+                                            <input type="radio" name="calificacion_ambiente" value="10" class="required">
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
@@ -1744,19 +1735,19 @@
 
 									<label for="f2">2-</label>
 									<input type="text" name="f2" id="f2"
-										value="{{datos.fortalezas.f2}}" class="form-control mb-2 required" placeholder="2-">
+										value="{{datos.fortalezas.f2}}" class="form-control mb-2" placeholder="2-">
 
 									<label for="f3">3-</label>
 									<input type="text" name="f3" id="f3"
-										value="{{datos.fortalezas.f3}}" class="form-control mb-2 required" placeholder="3-">
+										value="{{datos.fortalezas.f3}}" class="form-control mb-2" placeholder="3-">
 
                                     <label for="f4">4-</label>
 									<input type="text" name="f4" id="f4"
-										value="{{datos.fortalezas.f4}}" class="form-control mb-2 required" placeholder="4-">
+										value="{{datos.fortalezas.f4}}" class="form-control mb-2" placeholder="4-">
 
                                     <label for="f5">5-</label>
 									<input type="text" name="f5" id="f5"
-										value="{{datos.fortalezas.f5}}" class="form-control mb-2 required" placeholder="5-">
+										value="{{datos.fortalezas.f5}}" class="form-control mb-2" placeholder="5-">
 								</div>
 
                                 <!-- Oportunidades de Mejoras -->
@@ -1769,19 +1760,19 @@
 
 									<label for="o2">2-</label>
 									<input type="text" name="o2" id="o2"
-										value="{{datos.oportunidades.o2}}" class="form-control mb-2 required" placeholder="2-">
+										value="{{datos.oportunidades.o2}}" class="form-control mb-2" placeholder="2-">
 
 									<label for="o3">3-</label>
 									<input type="text" name="o3" id="o3"
-										value="{{datos.oportunidades.o3}}" class="form-control mb-2 required" placeholder="3-">
+										value="{{datos.oportunidades.o3}}" class="form-control mb-2" placeholder="3-">
 
                                     <label for="o4">4-</label>
 									<input type="text" name="o4" id="o4"
-										value="{{datos.oportunidades.o4}}" class="form-control mb-2 required" placeholder="4-">
+										value="{{datos.oportunidades.o4}}" class="form-control mb-2" placeholder="4-">
 
                                     <label for="o5">5-</label>
 									<input type="text" name="o5" id="o5"
-										value="{{datos.oportunidades.o5}}" class="form-control mb-2 required" placeholder="5-">
+										value="{{datos.oportunidades.o5}}" class="form-control mb-2" placeholder="5-">
 								</div>
 
                                 <!-- Metas a corto plazo -->
@@ -1794,19 +1785,19 @@
 
 									<label for="m2">2-</label>
 									<input type="text" name="m2" id="m2"
-										value="{{datos.metas.m2}}" class="form-control mb-2 required" placeholder="2-">
+										value="{{datos.metas.m2}}" class="form-control mb-2" placeholder="2-">
 
 									<label for="m3">3-</label>
 									<input type="text" name="m3" id="m3"
-										value="{{datos.metas.m3}}" class="form-control mb-2 required" placeholder="3-">
+										value="{{datos.metas.m3}}" class="form-control mb-2" placeholder="3-">
 
                                     <label for="m4">4-</label>
 									<input type="text" name="m4" id="m4"
-										value="{{datos.metas.m4}}" class="form-control mb-2 required" placeholder="4-">
+										value="{{datos.metas.m4}}" class="form-control mb-2" placeholder="4-">
 
                                     <label for="m5">5-</label>
 									<input type="text" name="m5" id="m5"
-										value="{{datos.metas.m5}}" class="form-control mb-2 required" placeholder="5-">
+										value="{{datos.metas.m5}}" class="form-control mb-2" placeholder="5-">
 								</div>
 							</div>
                         </div>
@@ -1825,7 +1816,7 @@
                         <!-- /Último Paso-->
 
                         {{!-- FECHA DE EDICIÓN --}}
-                        <input type="hidden" id="fecha_zh" name="fecha_zh">
+                        <input type="hidden" id="zhActualAdm" name="zhActualAdm">
                         <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="{{codigo}}">
 
                     </div>
@@ -1850,18 +1841,8 @@
 <a href="/empresas/{{codigo}}" class="close">
 
     <script>
-
-        //Capturando Campo Nombres para el paso Final
-        const nom1 = document.getElementById("nombres");
-        const nameFinal = document.getElementById("nameStepFinal");
-        nameFinal.innerHTML = nom1.value;
-        nom1.onchange = function () {
-            nameFinal.innerHTML = nom1.value
-        }
-
         // Asignando fecha de modificación al campo oculto
-        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log(tzLocal);
-        document.getElementById("fecha_zh").value = tzLocal;
-
+        const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tzLocalActual);
+        document.getElementById("zhActualAdm").value = tzLocalActual;
     </script>

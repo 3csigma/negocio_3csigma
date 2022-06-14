@@ -241,6 +241,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
+        frmDiag.fecha = diagnostico[0].fecha;
     }
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
@@ -252,11 +253,18 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonAnalisis2 = JSON.stringify( areasVitales[1]);
     }
 
+    let jsonDimensiones1 = null, jsonDimensiones2 = null;
+    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id LIMIT 2', [idUser])
+    if (xDimensiones.length > 0) {
+        jsonDimensiones1 = JSON.stringify(areasVitales[0]);
+        jsonDimensiones2 = JSON.stringify( areasVitales[1]);
+    }
+
     /************************************************************************************* */
 
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag,
-        jsonAnalisis1, jsonAnalisis2
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2
     })
 
 }
@@ -334,16 +342,15 @@ dashboardController.cuestionario = async (req, res) => {
 }
 
 dashboardController.enviarCuestionario = async (req, res) => {
-    // Capturar ID Empresa
-    const { codigoEmpresa } = req.body;
+    const { codigoEmpresa, zhActualAdm } = req.body;
+    // Capturar Fecha de guardado
+    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    
     const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
+    // Capturar ID Empresa
     const id_empresa = infoEmp[0].id_empresas;
-
     // Capturar ID Consultor
     const id_consultor = infoEmp[0].consultor;
-
-    // Capturar Fecha de guardado
-    const fecha = new Date().toLocaleString("en-US", { timeZone: fecha_zh })
 
     // Productos o Servicios
     const { necesidad_producto, precio_producto, productos_coherentes, calidad_producto, presentacion_producto, calificacion_global_producto } = req.body
@@ -382,9 +389,9 @@ dashboardController.enviarCuestionario = async (req, res) => {
     })
 
     // Ambiente Laboral
-    const { ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, califacion_ambienteLab } = req.body
+    const { ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, calificacion_ambiente } = req.body
     let ambiente_laboral = JSON.stringify({
-        ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, califacion_ambienteLab
+        ambienteLab_positivo, medicion_ambienteLab, agrado_empleados, comunicacion_efectiva, comunicar_buen_trabajo, calificacion_ambiente
     })
 
     // Innovación
@@ -427,24 +434,41 @@ dashboardController.enviarCuestionario = async (req, res) => {
     const nuevoDiagnostico = { id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
 
     const areasVitales = { id_empresa,
-        calificacion_global_producto, 
-        calificacion_administracion, 
-        calificacion_personal_laboral, 
-        calificacion_finanzas, 
-        calificacion_servicio_alcliente, calificacion_operaciones_procesos, 
-        califacion_ambienteLab, 
-        calificacion_innovacion, 
-        calificacion_marketing,
-        calificacion_ventas
+        producto: calificacion_global_producto, 
+        administracion: calificacion_administracion, 
+        talento_humano: calificacion_personal_laboral, 
+        finanzas: calificacion_finanzas, 
+        servicio_cliente: calificacion_servicio_alcliente, 
+        operaciones: calificacion_operaciones_procesos, 
+        ambiente_laboral: calificacion_ambiente, 
+        innovacion: calificacion_innovacion, 
+        marketing: calificacion_marketing,
+        ventas: calificacion_ventas, 
+        rendimiento_op: parseInt(calificacion_global_producto)+parseInt(calificacion_administracion)+parseInt(calificacion_personal_laboral)+parseInt(calificacion_finanzas)+parseInt(calificacion_servicio_alcliente)+parseInt(calificacion_operaciones_procesos)+parseInt(calificacion_ambiente)+parseInt(calificacion_innovacion)+parseInt(calificacion_marketing)+parseInt(calificacion_marketing)+parseInt(calificacion_ventas)
     }
+
+    const areasDimensiones = { id_empresa,
+        producto: parseInt(calificacion_global_producto),
+        administracion: (parseInt(calificacion_administracion)+parseInt(calificacion_personal_laboral)+parseInt(calificacion_finanzas))/3,
+        operaciones: (parseInt(calificacion_servicio_alcliente)+parseInt(calificacion_operaciones_procesos)+parseInt(calificacion_ambiente)+parseInt(calificacion_innovacion))/4,
+        marketing: (parseInt(calificacion_marketing)+parseInt(calificacion_ventas))/2
+    }
+
+    console.log("******************");
+    console.log("\nVITALES >>>>> ", areasVitales);
+    console.log("\nDIMENSIONES >>>>> ", areasDimensiones);
+    console.log("******************");
 
 
     // Guardando en la Base de datos
-    await pool.query('INSERT INTO diagnostico_empresas SET ?', [nuevoDiagnostico], (err, result) => {
-        if (err) throw err;
-        if (result.affectedRows > 0) {
+    const cuestionario = await pool.query('INSERT INTO diagnostico_empresas SET ?', [nuevoDiagnostico])
+    if (cuestionario.affectedRows > 0) {
+        const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
+        const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
+        if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0)) {
+            console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             res.redirect('/empresas/'+codigoEmpresa)
         }
-    })
+    }
 
 }
