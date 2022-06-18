@@ -22,7 +22,10 @@
           {{#if formDiag.estado}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Hemos recibido la información de tu empresa</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">De acuerdo al perfil de tu empresa asignaremos al mejor consultor disponible para ti, recibirás una notificación pronto al correo <strong>{{user.email}}</strong> para informarte que tu consultor está listo y podrás agendar tu cita en el botón de la izquierda para continuar el proceso del diagnóstico de negocio.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">De acuerdo al perfil de tu empresa asignaremos al
+              mejor consultor disponible para ti, recibirás una notificación pronto al correo
+              <strong>{{user.email}}</strong> para informarte que tu consultor está listo y podrás agendar tu cita en el
+              botón de la izquierda para continuar el proceso del diagnóstico de negocio.</p>
           </div>
           {{/if}}
         </div>
@@ -99,11 +102,23 @@
                       </tr>
                     </thead>
                     <tbody>
-
+                      {{#if informe.fecha}}
                       <tr>
-                        <td colspan="4">No hay informes aún</td>
+                        <td>{{informe.fecha}}</td>
+                        <td>Diagnóstico de negocio</td>
+                        <td>{{informe.nombre}}</td>
+                        <td>
+                          <a href="{{informe.url}}"
+                            style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                            target="_blank" class="btn btn-info shadow btn-xs sharp">
+                            <i class="fa fa-search"></i></a>
+                        </td>
                       </tr>
-
+                      {{else}}
+                      <tr>
+                        <td colspan="4">Aún no hay informes generados.</td>
+                      </tr>
+                      {{/if}}
                     </tbody>
                   </table>
                 </div>

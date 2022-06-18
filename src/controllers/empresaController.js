@@ -64,7 +64,7 @@ empresaController.index = async (req, res) => {
     const diagPorcentaje = {}, anaPorcentaje = {};
     
     // Etapa 1
-    let porcentaje = 100/9
+    let porcentaje = 100/8
     // porcentaje = porcentaje.toFixed(2)
     porcentaje = porcentaje.toFixed(0)
     diagPorcentaje.txt = 'Email sin confirmar';
@@ -96,10 +96,11 @@ empresaController.index = async (req, res) => {
         diagPorcentaje.num = porcentaje*7
     }
 
-    console.log("\n<<< Porcentaje actual >>>");
-    console.log(diagPorcentaje);
     // Informe de la empresa subido
-    // diagEmpresa.length > 0 ? diagPorcentaje.txt = 'Informe diagnóstico' : diagPorcentaje.txt = diagPorcentaje.txt;
+    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    informeEmpresa.length > 0 ? diagPorcentaje.num = 100 : diagPorcentaje.num = diagPorcentaje.num;
+    // console.log("\n<<< Porcentaje actual >>>");
+    // console.log(diagPorcentaje);
 
     // Etapa 2
     anaPorcentaje.txt = 'Análisis no pagado';
@@ -120,6 +121,14 @@ empresaController.index = async (req, res) => {
         jsonAnalisis2 =JSON.stringify( areasVitales[1]);
     }
 
+    let jsonDimensiones1, jsonDimensiones2;
+    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [empresa[0].id_empresas])
+    let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [empresa[0].id_empresas])
+    if (xDimensiones.length > 0) {
+        jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
+        jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
+    }
+
     /************************************************************************************* */
 
     res.render('pages/dashboard', {
@@ -131,7 +140,9 @@ empresaController.index = async (req, res) => {
         itemActivo: 1,
         acuerdoFirmado,
         etapa1,
-        diagPorcentaje, jsonAnalisis1, jsonAnalisis2
+        diagPorcentaje,
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
+        informe: informeEmpresa[0]
     })
 
 }
@@ -259,14 +270,13 @@ empresaController.diagnostico = async (req, res) => {
         }
     }
 
+    // Informe de la empresa subido
+    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? LIMIT 1', [id_empresa])
+
     res.render('empresa/diagnostico', {
-        user_dash: true,
-        pagoDiag: true,
-        itemActivo: 3,
-        acuerdoFirmado: true,
-        formDiag,
+        user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag,
         actualYear: req.actualYear,
-        etapa1
+        etapa1, informe: informeEmpresa[0]
     })
 }
 

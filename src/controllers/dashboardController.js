@@ -3,6 +3,9 @@ const pool = require('../database')
 const passport = require('passport')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
+const multer = require('multer');
+const path = require('path');
+
 const { consultorAsignadoHTML, consultorAprobadoHTML, sendEmail } = require('../lib/mail.config')
 
 let aprobarConsultor = false;
@@ -230,40 +233,60 @@ dashboardController.editarEmpresa = async (req, res) => {
         cs.idCon = idConsultor;
     });
 
+    // Tabla de Diagnóstico
     const frmDiag = {}
     let diagnostico = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
     if (diagnostico.length == 0){
         frmDiag.color = 'badge-danger'
         frmDiag.texto = 'Pendiente'
         frmDiag.fechaLocal = true;
+        frmDiag.tablasVacias = true;
     } else{
         frmDiag.color = 'badge-success'
         frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
         frmDiag.fecha = diagnostico[0].fecha;
+        frmDiag.tabla1 = true;
+    }
+
+    // Tabla de Informes
+    const frmInfo = {}
+    let informes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
+    if (informes.length > 0){
+        frmInfo.fecha = informes[0].fecha;
+        frmInfo.ver1 = 'block';
+        frmInfo.ver2 = 'none';
+        frmInfo.url = informes[0].url;
+    } else{
+        frmInfo.ver1 = 'none';
+        frmInfo.ver2 = 'block';
+        frmInfo.url = '#'
     }
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
-    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [idUser])
-
+    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ ASC LIMIT 1', [idUser])
+    let areasVitales2 = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ DESC LIMIT 1', [idUser])
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
-        jsonAnalisis2 = JSON.stringify( areasVitales[1]);
+        jsonAnalisis2 = JSON.stringify( areasVitales2[0]);
     }
 
     let jsonDimensiones1 = null, jsonDimensiones2 = null;
-    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id LIMIT 2', [idUser])
+    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [idUser])
+    let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [idUser])
     if (xDimensiones.length > 0) {
-        jsonDimensiones1 = JSON.stringify(areasVitales[0]);
-        jsonDimensiones2 = JSON.stringify( areasVitales[1]);
+        jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
+        jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
     }
+
+
 
     /************************************************************************************* */
 
     res.render('panel/editarEmpresa', { 
-        adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag,
+        adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2
     })
 
@@ -471,4 +494,47 @@ dashboardController.enviarCuestionario = async (req, res) => {
         }
     }
 
+}
+
+/** ====================================== SUBIR INFORMES EMPRESAS ============================================= */
+let urlInforme = "";
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        const rutaInforme = path.join(__dirname, '../public/informes_empresas')
+        cb(null, rutaInforme);
+    },
+
+    filename: function (req, file, cb) {
+        const fechaActual = Math.floor(Date.now() / 1000)
+        urlInforme = "Informe-Empresa-" + fechaActual + "-" + file.originalname;
+        console.log(urlInforme)
+        cb(null, urlInforme)
+    }
+
+});
+
+const subirInforme = multer({ storage })
+dashboardController.subirInforme = subirInforme.single('file')
+
+
+dashboardController.guardarInforme = async (req, res) => {
+    const r = {ok: false}
+    const { codigoEmpresa, nombreInforme, zonaHoraria }  = req.body
+    console.log(req.body)
+    const e = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigoEmpresa])
+    const nuevoInforme = {
+        id_empresa: e[0].id_empresas,
+        id_consultor: e[0].consultor,
+        nombre: nombreInforme,
+        url: '../informes_empresas/'+urlInforme,
+        fecha: new Date().toLocaleString("en-US", {timeZone: zonaHoraria})
+    }
+    const informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+    if (informe.affectedRows > 0) {
+        r.ok = true;
+        r.fecha = nuevoInforme.fecha;
+        const url = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [nuevoInforme.id_empresa, nuevoInforme.id_consultor])
+        r.url = url[0].url;
+    }
+    res.send(r)
 }

@@ -7,7 +7,7 @@ const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 
-/** Subir Archivos */
+/** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
     destination: function (req, file, callback) {
         const rutaCertificado = path.join(__dirname, '../public/certificados_consultores')
@@ -22,7 +22,6 @@ const rutaAlmacen = multer.diskStorage({
     }
 
 });
-
 const subirArchivo = multer({ storage: rutaAlmacen })
 
 // // Dashboard Principal Administrador
@@ -46,5 +45,9 @@ router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.b
 router.get('/cuestionario-diagnostico/:codigo', checkLogin, adminLogueado, dashboardController.cuestionario)
 router.post('/cuestionario-diagnostico', checkLogin, adminLogueado, dashboardController.enviarCuestionario)
 // router.get('/ficha-cliente', checkLogin, validarIDFicha, empresaLogueada, empresaController.fichaCliente)
+
+// Informe Diagnóstico
+router.post('/subirInforme', checkLogin, adminLogueado, dashboardController.subirInforme)
+router.post('/guardarInforme', checkLogin, adminLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 module.exports = router;

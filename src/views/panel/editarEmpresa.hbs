@@ -6,17 +6,23 @@
         color: #fff;
         text-align: center;
     }
+
     a.nav-link.btnIndicadoresAll.active {
         background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
         color: white !important;
         border-radius: 22px;
     }
-    .nav-link.btnIndicadoresAll:focus, .nav-link.btnIndicadoresAll:hover {
+
+    .nav-link.btnIndicadoresAll:focus,
+    .nav-link.btnIndicadoresAll:hover {
         background-color: #f2f2f2 !important;
         border-color: #50368c;
         border-radius: 22px !important;
         color: #50368c;
         border-width: 0 0px 3px 0;
+    }
+    .toast-success {
+        background-color: #50368D;
     }
 </style>
 <!--**********************************
@@ -116,7 +122,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <input type="hidden" value="{{datos.code}}" name="codigo">
+                                                    <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
                                                     <button type="submit" class="btn btn-primary"
                                                         id="btnActualizarEmpresa"
                                                         style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
@@ -525,10 +531,12 @@
                                                             <ul class="nav nav-pills justify-content-center mb-4">
                                                                 <li class="nav-item"><a href="#vitales"
                                                                         data-toggle="tab"
-                                                                        class="nav-link active show btnIndicadoresAll">Áreas Vitales</a>
+                                                                        class="nav-link active show btnIndicadoresAll">Áreas
+                                                                        Vitales</a>
                                                                 </li>
                                                                 <li class="nav-item"><a href="#dimensiones"
-                                                                        data-toggle="tab" class="nav-link btnIndicadoresAll">Por
+                                                                        data-toggle="tab"
+                                                                        class="nav-link btnIndicadoresAll">Por
                                                                         dimensiones</a>
                                                                 </li>
                                                             </ul>
@@ -536,14 +544,14 @@
                                                             <div class="tab-content">
 
                                                                 <div id="vitales" class="tab-pane fade active show">
-                                                                     <div class="card-body">
+                                                                    <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm1"></canvas>
                                                                     </div>
                                                                 </div>
 
                                                                 <div id="dimensiones" class="tab-pane fade">
-                                                                     <div class="card-body">
-                                                                       <canvas id="chartEmpresaAdm2"></canvas>
+                                                                    <div class="card-body">
+                                                                        <canvas id="chartEmpresaAdm2"></canvas>
                                                                     </div>
                                                                 </div>
 
@@ -564,6 +572,7 @@
                                     </div>
                                 </div>
 
+                                <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -583,26 +592,25 @@
                                                     </thead>
                                                     <tbody>
                                                         <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.tablasVacias}}
                                                         <tr id="newEmp">
-                                                            <td id="fActual">{{frmDiag.fecha}}</td>
+                                                            <td>{{#if frmDiag.fecha}}{{frmDiag.fecha}}{{else}}N/A{{/if}}
+                                                            </td>
                                                             <td>Nueva</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
-                                                                <a href="/cuestionario-diagnostico/{{datos.code}}"
+                                                                <a href="#"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
-                                                                <a href="#" class="btn btn-info shadow btn-xs sharp"
-                                                                    style="color: white;">
-                                                                    <i class="fa fa-search"></i></a>
                                                             </td>
                                                         </tr>
-
                                                         <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
                                                         <tr id="oldEmp">
-                                                            <td id="fActual2">{{frmDiag.fecha}}</td>
+                                                            <td>N/A</td>
                                                             <td>Establecida</td>
                                                             <td>Cuestionario diagnóstico</td>
                                                             <td><span
@@ -613,11 +621,43 @@
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- ============================= TABLAS LLENAS ============================= -->
+                                                        {{/if}}
+                                                        <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.table2}}
+                                                        <tr id="newEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Nueva</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
                                                                 <a href="#" class="btn btn-info shadow btn-xs sharp"
                                                                     style="color: white;">
                                                                     <i class="fa fa-search"></i></a>
                                                             </td>
                                                         </tr>
+                                                        {{/if}}
+                                                        {{#if frmDiag.tabla1}}
+                                                        <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
+                                                        <tr id="oldEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Establecida</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-info shadow btn-xs sharp"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        {{/if}}
+                                                        <!-- ========================================================================================== -->
 
                                                     </tbody>
                                                 </table>
@@ -626,6 +666,7 @@
                                     </div>
                                 </div>
 
+                                <!-- ======================== INFORMES DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -644,19 +685,49 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{#if frmInfo.fecha}}{{frmInfo.fecha}}{{else}}N/A{{/if}}
+                                                            <td>{{#if frmInfo.fecha}}{{frmInfo.fecha}}{{else}}
+                                                                <span id="spanFecha">N/A</span>
+                                                                {{/if}}
                                                             </td>
-                                                            <td>Informe diagnóstico</td>
-                                                            <td><span class="badge light badge-info">No Cargado</span>
+                                                            <td><span class="nombreInforme">Informe diagnóstico</span></td>
+                                                            <td>
+                                                                {{#if frmInfo.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
                                                             </td>
                                                             <td>
-                                                                <a href="/cuestionario-diagnostico/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                    <i class="fa fa-pencil"></i></a>
-                                                                <a href="#" class="btn btn-info shadow btn-xs sharp"
-                                                                    style="color: white;">
+                                                                {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeDiag" >
+                                                                    <div id="btnSubirInforme"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeDiag" class="probarXD" type="file" style="display:none"
+                                                                    name="informeDiag" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
                                                                     <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -666,6 +737,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- ========================================================================== -->
 
                             </div>
 
@@ -689,13 +761,3 @@
     </div>
 
 </div>
-
-<script>
-    {{#if frmDiag.fechaLocal}}
-    const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(tzLocal);
-    const fechaCliente = new Date().toLocaleString("en-US", { timeZone: tzLocal })
-    document.getElementById("fActual").innerHTML = fechaCliente
-    document.getElementById("fActual2").innerHTML = fechaCliente
-    {{/if}}
-</script>

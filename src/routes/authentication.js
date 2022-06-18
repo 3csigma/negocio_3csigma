@@ -20,7 +20,7 @@ router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.l
     failureRedirect: '/login',
     failureFlash: true,
 }), (req, res) => {
-    console.log(req.user)
+    console.log(req.user) // Datos de sesión del usuario actual.
     if (req.user.rol == 'Empresa'){
         res.redirect('/')
     } else {
