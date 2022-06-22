@@ -140,9 +140,10 @@ dashboardController.bloquearConsultor = async (req, res) => {
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa";')
+    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.id_diagnostico, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN diagnostico_empresas d ON d.id_empresa = e.id_empresas;')
 
     const consultor = await pool.query('SELECT * FROM consultores')
+    const informe = await pool.query('SELECT * FROM informes')
 
     empresas.forEach(e => {
         e.etapa = 'Email sin confirmar';
@@ -150,12 +151,19 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
         e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
         e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
-        e.consultor ? e.etapa = 'Consultor asignado' : e.etapa = e.etapa;
+        e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
+        e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
 
         consultor.forEach(c => {
             if (e.consultor == c.id_consultores){
                 e.nombre_consultor = c.nombres + " " + c.apellidos;
                 e.codigo_consultor = c.codigo
+            }
+        })
+
+        informe.forEach(i => {
+            if (i.id_empresa == e.id_empresas){
+                e.etapa = 'Informe diagnóstico';
             }
         })
 
@@ -201,7 +209,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     if (empresa.length > 0) {
         empresa = empresa[0]
-        // empresa.userConsultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
+        empresa.telefono != null ? datos.etapa = 'Ficha Cliente' : datos.etapa = datos.etapa;
 
         const fNac = new Date(empresa.fecha_nacimiento)
         empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
@@ -242,6 +250,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmDiag.fechaLocal = true;
         frmDiag.tablasVacias = true;
     } else{
+        datos.etapa = 'Cuestionario diagnóstico'
         frmDiag.color = 'badge-success'
         frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
@@ -249,6 +258,23 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmDiag.fecha = diagnostico[0].fecha;
         frmDiag.tabla1 = true;
     }
+
+    // Respuestas del Cuestionario Diagnóstico
+    const resDiag = {}
+    const r = diagnostico[0]
+    resDiag.producto = JSON.parse(r.productos_servicios)
+    resDiag.administracion = JSON.parse(r.administracion)
+    resDiag.talento = JSON.parse(r.talento_humano)
+    resDiag.finanzas = JSON.parse(r.finanzas)
+    resDiag.servicio = JSON.parse(r.servicio_alcliente)
+    resDiag.operaciones = JSON.parse(r.operaciones)
+    resDiag.ambiente = JSON.parse(r.ambiente_laboral)
+    resDiag.innovacion = JSON.parse(r.innovacion)
+    resDiag.marketing = JSON.parse(r.marketing)
+    resDiag.ventas = JSON.parse(r.ventas)
+    resDiag.fortalezas = JSON.parse(r.fortalezas)
+    resDiag.oportunidades = JSON.parse(r.oportunidades_mejoras)
+    resDiag.metas = JSON.parse(r.metas_corto_plazo)
 
     // Tabla de Informes
     const frmInfo = {}
@@ -258,6 +284,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
         frmInfo.url = informes[0].url;
+        datos.etapa = 'Informe diagnóstico'
     } else{
         frmInfo.ver1 = 'none';
         frmInfo.ver2 = 'block';
@@ -287,7 +314,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag
     })
 
 }

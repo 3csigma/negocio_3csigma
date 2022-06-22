@@ -330,7 +330,7 @@
 						defaultFontFamily: 'Oblivian',
 						labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
 						datasets: [{
-							label: "Primer análisis",
+							label: "Puntaje",
 							backgroundColor: "#50368C",
 							borderColor: "#50368C",
 							data: chartAnalisis1,
@@ -401,7 +401,7 @@
 						defaultFontFamily: 'Oblivian',
 						labels: ["Producto", "Administración", "Operaciones", "Marketing"],
 						datasets: [{
-							label: "Primer análisis",
+							label: "Puntaje",
 							backgroundColor: "#50368C",
 							borderColor: "#50368C",
 							data: chartDimensiones1,

@@ -21,8 +21,57 @@
         color: #50368c;
         border-width: 0 0px 3px 0;
     }
+
     .toast-success {
         background-color: #50368D;
+    }
+
+    .default-tab .nav-link:focus,
+    .default-tab .nav-link:hover,
+    .default-tab .nav-link.active {
+        color: #495057;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff #ebeef6;
+        border-radius: 1.25rem 1.25rem 0 0;
+        color: #0B2A97;
+    }
+
+    @media (min-width: 800px) and (max-width: 967px) {
+        .modal.show .modal-dialog {
+            max-width: 700px;
+        }
+    }
+
+    @media (min-width: 1000px) and (max-width: 1950px) {
+        .modal.show .modal-dialog {
+            max-width: 930px;
+        }
+    }
+
+    /* Barra Scroll Personalizada para el Modal */
+    .modal.open .modal::-webkit-scrollbar-track {
+        border-radius: 10px !important;
+        background-color: #eae6f4 !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar-thumb {
+        background-color: #50368c !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(155, 155, 155, 0.747) !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar-button:increment,
+    .modal-open .modal::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    .modal-open .modal::-webkit-scrollbar:vertical {
+        width: 10px !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar {
+        -webkit-appearance: none !important;
+        appearance: none !important;
     }
 </style>
 <!--**********************************
@@ -174,7 +223,7 @@
                                     <div class="row mt-2">
                                         {{#if datos.redes.twitter}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://twitter.com/{{datos.redes.twitter}}">
+                                            <a href="https://twitter.com/{{datos.redes.twitter}}" target="_blank">
                                                 <svg id="Layer_1" height="40px" width="40px"
                                                     style="enable-background:new 0 0 1000 1000;" version="1.1"
                                                     viewBox="0 0 1000 1000" xml:space="preserve"
@@ -200,7 +249,7 @@
 
                                         {{#if datos.redes.facebook}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://facebook.com/{{datos.redes.facebook}}">
+                                            <a href="https://facebook.com/{{datos.redes.facebook}}" target="_blank">
                                                 <svg height="40px" width="40px"
                                                     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
                                                     version="1.1" viewBox="0 0 512 512" xml:space="preserve"
@@ -222,7 +271,7 @@
 
                                         {{#if datos.redes.instagram}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://instagram.com/{{datos.redes.instagram}}">
+                                            <a href="https://instagram.com/{{datos.redes.instagram}}" target="_blank">
                                                 <svg height="40px" width="40px" id="Layer_1"
                                                     style="enable-background:new 0 0 1000 1000;" version="1.1"
                                                     viewBox="0 0 1000 1000" xml:space="preserve"
@@ -263,7 +312,7 @@
 
                                         {{#if datos.redes.otra}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://{{datos.redes.otra}}">
+                                            <a href="https://{{datos.redes.otra}}" target="_blank">
                                                 <svg height="40px" version="1.1" viewBox="0 0 519 519" width="40px"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -635,10 +684,11 @@
                                                                     class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
-                                                                <a href="#" class="btn btn-info shadow btn-xs sharp"
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target=".bd-example-modal-lg"
                                                                     style="color: white;">
                                                                     <i class="fa fa-search"></i></a>
-                                                            </td>
                                                         </tr>
                                                         {{/if}}
                                                         {{#if frmDiag.tabla1}}
@@ -651,7 +701,9 @@
                                                                     class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
-                                                                <a href="#" class="btn btn-info shadow btn-xs sharp"
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target=".bd-example-modal-lg"
                                                                     style="color: white; background: #FED061; border-color: #FED061">
                                                                     <i class="fa fa-search"></i></a>
                                                             </td>
@@ -757,6 +809,9 @@
 
             </div>
         </div>
+
+        <!-- MODAL RESPUESTAS DEL CUESTIONARIO DIAGNÓSTICO -->
+        {{> modalCuestionario}}
 
     </div>
 

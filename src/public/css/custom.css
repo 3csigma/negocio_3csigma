@@ -436,10 +436,6 @@ button.bg-plan:focus {
     .form-body{
         overflow: hidden;
     }
-    /* Modal Login */
-    .modal.show .modal-dialog {
-        max-width: 900px;
-    }
 }
 
 @media (min-width: 1369px) and (max-width: 1920px) {
@@ -449,10 +445,6 @@ button.bg-plan:focus {
     .form-holder {
         margin-left: 670px;
     }
-    /* Modal Login */
-    .modal.show .modal-dialog {
-        max-width: 900px;
-    }
 }
 
 @media (min-width: 1921px) and (max-width: 2560px) {
@@ -461,9 +453,5 @@ button.bg-plan:focus {
     }
     .form-holder {
         margin-left: 925px;
-    }
-    /* Modal Login */
-    .modal.show .modal-dialog {
-        max-width: 900px;
     }
 }
