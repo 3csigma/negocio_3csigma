@@ -41,10 +41,13 @@ router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.e
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 
-// Cuestionario Diagnóstico Consultor-Empresa
+// Cuestionario Diagnóstico Empresa Establecida
 router.get('/cuestionario-diagnostico/:codigo', checkLogin, adminLogueado, dashboardController.cuestionario)
 router.post('/cuestionario-diagnostico', checkLogin, adminLogueado, dashboardController.enviarCuestionario)
-// router.get('/ficha-cliente', checkLogin, validarIDFicha, empresaLogueada, empresaController.fichaCliente)
+
+// Cuestionario Diagnóstico Empresa Nueva
+router.get('/diagnostico-proyecto/:codigo', checkLogin, adminLogueado, dashboardController.dgNuevosProyectos)
+router.post('/diagnostico-proyecto/', checkLogin, adminLogueado, dashboardController.guardarRespuestas)
 
 // Informe Diagnóstico
 router.post('/subirInforme', checkLogin, adminLogueado, dashboardController.subirInforme)

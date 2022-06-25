@@ -175,6 +175,14 @@
                             <div class="card-body">
                                 <canvas id="chartEmpresa2"></canvas>
                             </div>
+                        
+                            {{#if rendimiento.num}}
+                            <div class="row justify-content-center mb-3">
+                                <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto:
+                                    {{rendimiento.num}}% </span>
+                                <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
+                            </div>
+                            {{/if}}
                         </div>
 
                     </div>
@@ -183,6 +191,7 @@
                     <input type="hidden" id="jsonAnalisis2" value="{{jsonAnalisis2}}" />
                     <input type="hidden" id="jsonDimensiones1" value="{{jsonDimensiones1}}" />
                     <input type="hidden" id="jsonDimensiones2" value="{{jsonDimensiones2}}" />
+                    <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
                 </div>
             </div>
 

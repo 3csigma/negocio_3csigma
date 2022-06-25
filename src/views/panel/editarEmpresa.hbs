@@ -599,10 +599,20 @@
                                                                 </div>
 
                                                                 <div id="dimensiones" class="tab-pane fade">
+
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm2"></canvas>
                                                                     </div>
+
+                                                                    {{#if rendimiento.num}}
+                                                                    <div class="row justify-content-center">
+                                                                        <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto: {{rendimiento.num}}% </span>
+                                                                        <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
+                                                                    </div>
+                                                                    {{/if}}
                                                                 </div>
+
+                                                                
 
                                                             </div>
                                                         </div>
@@ -611,8 +621,9 @@
 
                                                     <input type="hidden" id="jsonAnalisisAdm1" value="{{jsonAnalisis1}}" />
                                                     <input type="hidden" id="jsonAnalisisAdm2" value="{{jsonAnalisis2}}" />
-                                                    <input type="hidden" id="jsonDimensionesAdm1" value="{{jsonDimensiones1}}" />
+                                                    <input type="hidden" id="jsonDimensionesAdm1" value="{{jsonDimensiones}}" />
                                                     <input type="hidden" id="jsonDimensionesAdm2" value="{{jsonDimensiones2}}" />
+                                                    <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
 
                                                 </div>
 
@@ -651,7 +662,7 @@
                                                                     class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
-                                                                <a href="#"
+                                                                <a href="/diagnostico-proyecto/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
@@ -662,8 +673,7 @@
                                                             <td>N/A</td>
                                                             <td>Establecida</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span
-                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
                                                                 <a href="/cuestionario-diagnostico/{{datos.code}}"
@@ -675,7 +685,7 @@
                                                         <!-- ============================= TABLAS LLENAS ============================= -->
                                                         {{/if}}
                                                         <!-- CUESTIONARIO EMPRESA NUEVA  -->
-                                                        {{#if frmDiag.table2}}
+                                                        {{#if frmDiag.tabla2}}
                                                         <tr id="newEmp">
                                                             <td>{{frmDiag.fecha}}</td>
                                                             <td>Nueva</td>
@@ -686,8 +696,8 @@
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
                                                                 <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target=".bd-example-modal-lg"
-                                                                    style="color: white;">
+                                                                    data-toggle="modal" data-target="#modalNuevosProyectos"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
                                                                     <i class="fa fa-search"></i></a>
                                                         </tr>
                                                         {{/if}}
@@ -811,7 +821,11 @@
         </div>
 
         <!-- MODAL RESPUESTAS DEL CUESTIONARIO DIAGNÓSTICO -->
+        {{#if frmDiag.tabla1}}
         {{> modalCuestionario}}
+        {{else}}
+        {{> modalNuevosProyectos}}
+        {{/if}}
 
     </div>
 

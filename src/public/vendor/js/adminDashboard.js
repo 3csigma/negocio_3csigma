@@ -308,8 +308,9 @@
 		let chartIndicadores1 = function () {
 			let valAnalisis1 = document.getElementById('jsonAnalisisAdm1').value;
 			let valAnalisis2 = document.getElementById('jsonAnalisisAdm2').value;
-			let chartAnalisis1 = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-			let chartAnalisis2 = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+			let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+			let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+			let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 			if (valAnalisis1) {
 				valAnalisis1 = JSON.parse(valAnalisis1)
@@ -318,6 +319,11 @@
 			if (valAnalisis2) {
 				valAnalisis2 = JSON.parse(valAnalisis2)
 				chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
+			}
+
+			let valorMax = 10;
+			if (nuevosProyectos == 1) {
+				valorMax = 5;
 			}
 
 			if ($('#chartEmpresaAdm1').length > 0) {
@@ -350,12 +356,12 @@
 						scales: {
 							yAxes: [{
 								gridLines: {
-									display: false
+									display: true
 								},
 								ticks: {
 									beginAtZero: true,
 									min: 0, // minimum value
-									max: 10 // maximum value
+									max: valorMax // maximum value
 								}
 							}],
 							xAxes: [{
@@ -379,13 +385,22 @@
 		let chartIndicadores2 = function () {
 			let valDimensiones1 = document.getElementById('jsonDimensionesAdm1').value;
 			let valDimensiones2 = document.getElementById('jsonDimensionesAdm2').value;
-			let chartDimensiones1 = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
-			let chartDimensiones2 = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+			let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+			let chartDimensiones1 = [0, 0, 0, 0]
+			let chartDimensiones2 = [0, 0, 0, 0]
+			let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
 
 			if (valDimensiones1) {
 				valDimensiones1 = JSON.parse(valDimensiones1)
+			}
+			
+			if (nuevosProyectos == 1){
+				titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
+				chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
+			} else {
 				chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
 			}
+
 			if (valDimensiones2) {
 				valDimensiones2 = JSON.parse(valDimensiones2)
 				chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
@@ -399,7 +414,7 @@
 					type: 'bar',
 					data: {
 						defaultFontFamily: 'Oblivian',
-						labels: ["Producto", "Administración", "Operaciones", "Marketing"],
+						labels: titulos,
 						datasets: [{
 							label: "Puntaje",
 							backgroundColor: "#50368C",
@@ -421,12 +436,12 @@
 						scales: {
 							yAxes: [{
 								gridLines: {
-									display: false
+									display: true
 								},
 								ticks: {
 									beginAtZero: true,
 									min: 0, // minimum value
-									max: 10 // maximum value
+									//max: 10 // maximum value
 								}
 							}],
 							xAxes: [{

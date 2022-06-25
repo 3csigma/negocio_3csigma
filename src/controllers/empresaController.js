@@ -60,7 +60,8 @@ empresaController.index = async (req, res) => {
     let dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa,id_empresa,id_empresa,empresa[0].codigo])
     dataEmpresa = dataEmpresa[0]
 
-    let diagEmpresa = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    let diagEmpresa = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    let diagEmpresa2 = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
     const diagPorcentaje = {}, anaPorcentaje = {};
     
     // Etapa 1
@@ -91,7 +92,7 @@ empresaController.index = async (req, res) => {
         diagPorcentaje.num = porcentaje*6
     }
 
-    if (diagEmpresa.length > 0){
+    if (diagEmpresa.length > 0 || diagEmpresa2.length > 0){
         diagPorcentaje.txt = 'Cuestionario diagnóstico'
         diagPorcentaje.num = porcentaje*7
     }
@@ -121,12 +122,32 @@ empresaController.index = async (req, res) => {
         jsonAnalisis2 =JSON.stringify( areasVitales[1]);
     }
 
-    let jsonDimensiones1, jsonDimensiones2;
+    let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
+    // Si la empresa está Establecida
     let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [empresa[0].id_empresas])
     let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [empresa[0].id_empresas])
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
         jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
+    }
+
+    // Si la empresa es Nueva
+    let resCategorias = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    if (resCategorias.length > 0) {
+        jsonDimensiones1 = JSON.stringify(resCategorias[0]);
+        nuevosProyectos = 1;
+        // Rendimiento del Proyecto
+        rendimiento.num = resCategorias[0].rendimiento
+        if (rendimiento.num < 50){
+            rendimiento.txt = "Mejorable"
+            rendimiento.color = "badge-danger"
+        } else if (rendimiento.num > 51 && rendimiento.num < 74) {
+            rendimiento.txt = "Satisfactorio"
+            rendimiento.color = "badge-warning"
+        } else {
+            rendimiento.txt = "Óptimo"
+            rendimiento.color = "badge-success"
+        }
     }
 
     /************************************************************************************* */
@@ -142,7 +163,8 @@ empresaController.index = async (req, res) => {
         etapa1,
         diagPorcentaje,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
-        informe: informeEmpresa[0]
+        informe: informeEmpresa[0],
+        nuevosProyectos, rendimiento
     })
 
 }

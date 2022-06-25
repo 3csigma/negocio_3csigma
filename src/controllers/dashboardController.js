@@ -140,7 +140,7 @@ dashboardController.bloquearConsultor = async (req, res) => {
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.id_diagnostico, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN diagnostico_empresas d ON d.id_empresa = e.id_empresas;')
+    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.id_diagnostico, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;')
 
     const consultor = await pool.query('SELECT * FROM consultores')
     const informe = await pool.query('SELECT * FROM informes')
@@ -241,40 +241,74 @@ dashboardController.editarEmpresa = async (req, res) => {
         cs.idCon = idConsultor;
     });
 
-    // Tabla de Diagnóstico
+    // Tabla de Diagnóstico - Empresas Nuevas & Establecidas
     const frmDiag = {}
-    let diagnostico = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
-    if (diagnostico.length == 0){
+    let diagnostico = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
+    let dgNuevasEmpresas = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
+
+    if (diagnostico.length == 0 && dgNuevasEmpresas.length == 0){
         frmDiag.color = 'badge-danger'
         frmDiag.texto = 'Pendiente'
         frmDiag.fechaLocal = true;
         frmDiag.tablasVacias = true;
-    } else{
+    } else {
         datos.etapa = 'Cuestionario diagnóstico'
         frmDiag.color = 'badge-success'
         frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
-        frmDiag.fecha = diagnostico[0].fecha;
-        frmDiag.tabla1 = true;
+        
+        if (diagnostico.length > 0) {
+            frmDiag.fecha = diagnostico[0].fecha;
+            frmDiag.tabla1 = true;
+            frmDiag.tabla2 = false;
+        }else{
+            frmDiag.fecha = dgNuevasEmpresas[0].fecha;
+            frmDiag.tabla1 = false;
+            frmDiag.tabla2 = true;
+        }
+        
     }
 
-    // Respuestas del Cuestionario Diagnóstico
+    // Respuestas del Cuestionario Diagnóstico Empresa Establecida
     const resDiag = {}
-    const r = diagnostico[0]
-    resDiag.producto = JSON.parse(r.productos_servicios)
-    resDiag.administracion = JSON.parse(r.administracion)
-    resDiag.talento = JSON.parse(r.talento_humano)
-    resDiag.finanzas = JSON.parse(r.finanzas)
-    resDiag.servicio = JSON.parse(r.servicio_alcliente)
-    resDiag.operaciones = JSON.parse(r.operaciones)
-    resDiag.ambiente = JSON.parse(r.ambiente_laboral)
-    resDiag.innovacion = JSON.parse(r.innovacion)
-    resDiag.marketing = JSON.parse(r.marketing)
-    resDiag.ventas = JSON.parse(r.ventas)
-    resDiag.fortalezas = JSON.parse(r.fortalezas)
-    resDiag.oportunidades = JSON.parse(r.oportunidades_mejoras)
-    resDiag.metas = JSON.parse(r.metas_corto_plazo)
+    if (frmDiag.tabla1) {
+        const r = diagnostico[0]
+        resDiag.producto = JSON.parse(r.productos_servicios)
+        resDiag.administracion = JSON.parse(r.administracion)
+        resDiag.talento = JSON.parse(r.talento_humano)
+        resDiag.finanzas = JSON.parse(r.finanzas)
+        resDiag.servicio = JSON.parse(r.servicio_alcliente)
+        resDiag.operaciones = JSON.parse(r.operaciones)
+        resDiag.ambiente = JSON.parse(r.ambiente_laboral)
+        resDiag.innovacion = JSON.parse(r.innovacion)
+        resDiag.marketing = JSON.parse(r.marketing)
+        resDiag.ventas = JSON.parse(r.ventas)
+        resDiag.fortalezas = JSON.parse(r.fortalezas)
+        resDiag.oportunidades = JSON.parse(r.oportunidades_mejoras)
+        resDiag.metas = JSON.parse(r.metas_corto_plazo)
+    }
+    // Respuestas del Cuestionario Diagnóstico Empresa Nueva
+    if (frmDiag.tabla2) {
+        console.log("Info para Diagnóstico empresa nueva")
+        const r = dgNuevasEmpresas[0]
+        resDiag.rubro = r.rubro
+        resDiag.exp_rubro = JSON.parse(r.exp_rubro)
+        resDiag.mentalidad = JSON.parse(r.mentalidad_empresarial)
+        resDiag.viabilidad = JSON.parse(r.viabilidad)
+        resDiag.producto = JSON.parse(r.productos_servicios)
+        resDiag.administracion = JSON.parse(r.administracion)
+        resDiag.talento = JSON.parse(r.talento_humano)
+        resDiag.finanzas = JSON.parse(r.finanzas)
+        resDiag.servicio = JSON.parse(r.servicio_cliente)
+        resDiag.operaciones = JSON.parse(r.operaciones)
+        resDiag.ambiente = JSON.parse(r.ambiente_laboral)
+        resDiag.innovacion = JSON.parse(r.innovacion)
+        resDiag.marketing = JSON.parse(r.marketing)
+        resDiag.ventas = JSON.parse(r.ventas)
+        resDiag.metas = JSON.parse(r.metas)
+    }
+    
 
     // Tabla de Informes
     const frmInfo = {}
@@ -300,21 +334,41 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonAnalisis2 = JSON.stringify( areasVitales2[0]);
     }
 
-    let jsonDimensiones1 = null, jsonDimensiones2 = null;
+    let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
+
+    let resulCateg = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [idUser])
+    if (resulCateg.length > 0) {
+        jsonDimensiones1 = JSON.stringify(resulCateg[0]);
+        nuevosProyectos = 1;
+        // Rendimiento del Proyecto
+        rendimiento.num = resulCateg[0].rendimiento
+        if (rendimiento.num < 50){
+            rendimiento.txt = "Mejorable"
+            rendimiento.color = "badge-danger"
+        } else if (rendimiento.num > 51 && rendimiento.num < 74) {
+            rendimiento.txt = "Satisfactorio"
+            rendimiento.color = "badge-warning"
+        } else {
+            rendimiento.txt = "Óptimo"
+            rendimiento.color = "badge-success"
+        }
+    }
+
     let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [idUser])
     let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [idUser])
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
         jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
+        nuevosProyectos = 0;
     }
 
-
+    jsonDimensiones = jsonDimensiones1
 
     /************************************************************************************* */
 
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento
     })
 
 }
@@ -382,12 +436,9 @@ dashboardController.bloquearEmpresa = async (req, res) => {
     }
 }
 
-// CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL
+// CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
     const { codigo } = req.params;
-    // const e = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
-    // let row = await pool.query('SELECT * FROM diagnostico_empresas WHERE id_empresa = ? LIMIT 1', [e.id_empresas])
-    // row = row[0]
     res.render('consultor/cuestionario', {wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 
@@ -480,8 +531,16 @@ dashboardController.enviarCuestionario = async (req, res) => {
         m1, m2, m3, m4, m5
     })
 
+    // Guardando en la Tabla general de Diagnósticos (Capturar el Consecutivo)
+    let id_diagnostico = '000000';
+    const tablaDiagnostico = { tipo_empresa: 'Establecida', id_empresa: id_empresa }
+    const diagnostico = await pool.query('INSERT INTO diagnosticos SET ?', [tablaDiagnostico])
+    if (diagnostico.affectedRows > 0) {
+        id_diagnostico = diagnostico.insertId;
+    }
+
     // Creando Objetos para guardar en la base de datos
-    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
+    const nuevoDiagnostico = { id_diagnostico, id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
 
     const areasVitales = { id_empresa,
         producto: calificacion_global_producto, 
@@ -504,14 +563,8 @@ dashboardController.enviarCuestionario = async (req, res) => {
         marketing: (parseInt(calificacion_marketing)+parseInt(calificacion_ventas))/2
     }
 
-    console.log("******************");
-    console.log("\nVITALES >>>>> ", areasVitales);
-    console.log("\nDIMENSIONES >>>>> ", areasDimensiones);
-    console.log("******************");
-
-
     // Guardando en la Base de datos
-    const cuestionario = await pool.query('INSERT INTO diagnostico_empresas SET ?', [nuevoDiagnostico])
+    const cuestionario = await pool.query('INSERT INTO dg_empresa_establecida SET ?', [nuevoDiagnostico])
     if (cuestionario.affectedRows > 0) {
         const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
         const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
@@ -521,6 +574,206 @@ dashboardController.enviarCuestionario = async (req, res) => {
         }
     }
 
+}
+
+// CUESTIONARIO DIAGNÓSTICO (EMPRESAS NUEVAS)
+dashboardController.dgNuevosProyectos = async (req, res) => {
+    const { codigo } = req.params;
+    res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo })
+}
+
+dashboardController.guardarRespuestas = async (req, res) => {
+
+    const { codigoEmpresa, zhActualAdm } = req.body;
+    // Capturar Fecha de guardado con base a su Zona Horaria
+    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    // Consultando info de la empresa
+    const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
+    // Capturar ID Empresa
+    const id_empresa = infoEmp[0].id_empresas;
+    // Capturar ID Consultor
+    const id_consultor = infoEmp[0].consultor;
+
+    // EXPERIENCIA EN EL RUBRO
+    const { rubro, exp_previa, foda, unidades_rubro, actividades, vision } = req.body
+    let exp_rubro = JSON.stringify({ exp_previa, foda, unidades_rubro, actividades, vision })
+
+    // MENTALIDAD EMPRESARIAL
+    const { proposito_alineado, objetivos_claros, valores, foda_personal, tiempo_completo } = req.body
+    let mentalidad_empresarial = JSON.stringify({ proposito_alineado, objetivos_claros, valores, foda_personal, tiempo_completo })
+
+    // VIABILIDAD DEL NEGOCIO
+    const { socios, fondo_financiero, ubicacion_fisica, estudio_mercado, recursos_claves, posibles_proveedores } = req.body
+    let viabilidad = JSON.stringify({ socios, fondo_financiero, ubicacion_fisica, estudio_mercado, recursos_claves, posibles_proveedores })
+
+    // PRODUCTOS O SERVICIOS
+    const { problema_resolver, producto_principal, precio_venta, factor_diferenciador, modelo_negocio } = req.body
+    let productos_servicios = JSON.stringify({ problema_resolver, producto_principal, precio_venta, factor_diferenciador, modelo_negocio })
+
+    // ADMINISTRACIÓN
+    const { planeacion_estrategica, sistema_inventario, estructura_organizacional } = req.body
+    let administracion = JSON.stringify({ planeacion_estrategica, sistema_inventario, estructura_organizacional })
+
+    // TALENTO HUMANO
+    const { funciones_principales, formacion_inicial, tiempo_colaboradores, experiencia_liderando, importancia_equipo } = req.body
+    let talento_humano = JSON.stringify({ funciones_principales, formacion_inicial, tiempo_colaboradores, experiencia_liderando, importancia_equipo })
+
+    // FINANZAS
+    const { estructura_costos, gastos_fijos_variables, control_financiero, punto_equilibrio, recuperar_inversion  } = req.body
+    let finanzas = JSON.stringify({ estructura_costos, gastos_fijos_variables, control_financiero, punto_equilibrio, recuperar_inversion  })
+
+    // SERVICIO AL CLIENTE
+    const { canales_atencion, estrategia_fidelizar, exp_brindar, medir_satisfaccion, calidad_producto } = req.body
+    let servicio_cliente = JSON.stringify({ canales_atencion, estrategia_fidelizar, exp_brindar, medir_satisfaccion, calidad_producto })
+
+    // OPERACIONES
+    const { permisos, planificar_actividades, conocer_procesos, canales_comercial, proceso_devoluciones } = req.body
+    let operaciones = JSON.stringify({ permisos, planificar_actividades, conocer_procesos, canales_comercial, proceso_devoluciones })
+
+    // AMBIENTE LABORAL
+    const { crecimiento, comunicacion_efectiva, resaltar_habilidades, capacitar_crecimiento, buen_ambiente } = req.body
+    let ambiente_laboral = JSON.stringify({ crecimiento, comunicacion_efectiva, resaltar_habilidades, capacitar_crecimiento, buen_ambiente })
+
+    // INNOVACION
+    const { modelo_innovador, importancia_innovacion, gestion_datos } = req.body
+    let innovacion = JSON.stringify({ modelo_innovador, importancia_innovacion, gestion_datos })
+
+    // MARKETING
+    const { estrategia_marketing, dominio_web, segmento_cliente, tiene_logo, mercado_inicial } = req.body
+    let marketing = JSON.stringify({ estrategia_marketing, dominio_web, segmento_cliente, tiene_logo, mercado_inicial })
+
+    // VENTAS
+    const { captacion_clientes, medios_pago, proyeccion } = req.body
+    let ventas = JSON.stringify({ captacion_clientes, medios_pago, proyeccion })
+
+    // METAS A CORTO PLAZO
+    const { m1, m2, m3, m4, m5 } = req.body
+    let metas = JSON.stringify({ m1, m2, m3, m4, m5 })
+
+    // Guardando en la Tabla general de Diagnósticos (Capturar el Consecutivo)
+    let id_diagnostico = '000000';
+    const tablaDiagnostico = { tipo_empresa: 'Nueva', id_empresa: id_empresa }
+    const diagnostico = await pool.query('INSERT INTO diagnosticos SET ?', [tablaDiagnostico])
+    if (diagnostico.affectedRows > 0) {
+        id_diagnostico = diagnostico.insertId;
+    }
+
+    const nuevoDiagnostico = { id_diagnostico, id_empresa, id_consultor, fecha, rubro, exp_rubro, mentalidad_empresarial, viabilidad, productos_servicios, administracion, talento_humano, finanzas, servicio_cliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, metas }
+
+    /* ========================== Calculos del Diagnóstico ========================== */
+    // Categorías
+    const categorias = [
+        { nom: 'Experiencia en el Rubro',    peso: 25, cant: 5 },
+        { nom: 'Mentalidad Empresarial',     peso: 25, cant: 5 },
+        { nom: 'Viabilidad del Negocio',     peso: 25, cant: 6 },
+        { nom: 'Estructura del Negocio',     peso: 25, cant: 44 }
+    ]
+    categorias.forEach(c => {
+        c.valor = parseFloat(c.peso/c.cant)
+    });
+
+    // Estructura del Negocio
+    const eNegocio = [
+        { nom: 'Producto',               peso: 2.5, cant: 5  },
+        { nom: 'Administración',         peso: 2.5, cant: 3  },
+        { nom: 'Talento Humano',         peso: 2.5, cant: 5  },
+        { nom: 'Finanzas',               peso: 2.5, cant: 5  },
+        { nom: 'Serivicio al Cliente',   peso: 2.5, cant: 5  },
+        { nom: 'Operaciones',            peso: 2.5, cant: 5  },
+        { nom: 'Ambiente Laboral',       peso: 2.5, cant: 5  },
+        { nom: 'Innovación',             peso: 2.5, cant: 3  },
+        { nom: 'Marketing',              peso: 2.5, cant: 5  },
+        { nom: 'Ventas',                 peso: 2.5, cant: 3  },
+    ]
+    eNegocio.forEach(e => {
+        e.valor = parseFloat(e.peso/e.cant)
+        //e.valor = e.valor.toFixed(9)
+    });
+
+    // Resultado de Áreas Vitales
+    let cant0 = JSON.parse(productos_servicios)
+    cant0 = Object.values(cant0).filter(n => n == 'Si').length
+    let cant1 = JSON.parse(administracion)
+    cant1 = Object.values(cant1).filter(n => n == 'Si').length
+    let cant2 = JSON.parse(talento_humano)
+    cant2 = Object.values(cant2).filter(n => n == 'Si').length
+    let cant3 = JSON.parse(finanzas)
+    cant3 = Object.values(cant3).filter(n => n == 'Si').length
+    let cant4 = JSON.parse(servicio_cliente)
+    cant4 = Object.values(cant4).filter(n => n == 'Si').length
+    let cant5 = JSON.parse(operaciones)
+    cant5 = Object.values(cant5).filter(n => n == 'Si').length
+    let cant6 = JSON.parse(ambiente_laboral)
+    cant6 = Object.values(cant6).filter(n => n == 'Si').length
+    let cant7 = JSON.parse(innovacion)
+    cant7 = Object.values(cant7).filter(n => n == 'Si').length
+    let cant8 = JSON.parse(marketing)
+    cant8 = Object.values(cant8).filter(n => n == 'Si').length
+    let cant9 = JSON.parse(ventas)
+    cant9 = Object.values(cant9).filter(n => n == 'Si').length
+
+    // Grupo de Áreas Vitales
+
+    const areasVitales = { id_empresa,
+        producto: Math.round(cant0*eNegocio[0].valor),
+        administracion: Math.round(cant1*eNegocio[1].valor),
+        talento_humano: Math.round(cant2*eNegocio[2].valor),
+        finanzas: Math.round(cant3*eNegocio[3].valor),
+        servicio_cliente: Math.round(cant4*eNegocio[4].valor),
+        operaciones: Math.round(cant5*eNegocio[5].valor),
+        ambiente_laboral: Math.round(cant6*eNegocio[6].valor),
+        innovacion: Math.round(cant7*eNegocio[7].valor),
+        marketing: Math.round(cant8*eNegocio[8].valor),
+        ventas: Math.round(cant9*eNegocio[9].valor),
+    }
+
+    console.log("\n<<<<< ÁREAS VITALES >>>>> ", areasVitales)
+
+    // Resultado de Categorías
+    let c1 = JSON.parse(exp_rubro)
+    c1 = Object.values(c1).filter(n => n == 'Si').length
+    let c2 = JSON.parse(mentalidad_empresarial)
+    c2 = Object.values(c2).filter(n => n == 'Si').length
+    let c3 = JSON.parse(viabilidad)
+    c3 = Object.values(c3).filter(n => n == 'Si').length
+    let c4 = parseInt(cant0+cant1+cant2+cant3+cant4+cant5+cant6+cant7+cant8+cant9)
+    
+    let valoracion = [
+        Math.round(c1*categorias[0].valor),
+        Math.round(c2*categorias[1].valor),
+        Math.round(c3*categorias[2].valor),
+        Math.round(c4*categorias[3].valor)
+    ]
+
+    // Sumar Valoración de las Categorías
+    const suma = (acumulador, actual) => acumulador + actual;
+    const rendimiento = valoracion.reduce(suma)
+    console.log("RENDIMIENTO CATEGORIAS >>> ", rendimiento)
+    
+    const resulCategorias = { id_empresa,
+        experiencia_rubro: valoracion[0],
+        mentalidad: valoracion[1],
+        viabilidad_: valoracion[2],
+        estructura: valoracion[3],
+        rendimiento: rendimiento
+    }
+
+
+    console.log("\n<<<<< RESULTADO CATEGORIAS >>>>> ", resulCategorias)
+
+    //Falta rendimiento del proyecto
+
+    // Guardando en la Base de datos
+    const cuestionario = await pool.query('INSERT INTO dg_empresa_nueva SET ?', [nuevoDiagnostico])
+    if (cuestionario.affectedRows > 0) {
+
+        const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
+        const resultado_categorias = await pool.query('INSERT INTO resultado_categorias SET ?', [resulCategorias])
+        if ((aVitales.affectedRows > 0) && (resultado_categorias.affectedRows > 0)) {
+            console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
+            res.redirect('/empresas/'+codigoEmpresa)
+        }
+    }
 }
 
 /** ====================================== SUBIR INFORMES EMPRESAS ============================================= */
