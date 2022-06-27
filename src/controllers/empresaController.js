@@ -399,7 +399,7 @@ empresaController.eliminarFicha = async (req, res) => {
     const { id } = req.body;
     const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_empresa = ?', [id])
     let respu = undefined;
-    console.log(ficha.affectedRows)
+    // console.log(ficha.affectedRows)
     if (ficha.affectedRows > 0) {
         console.log("Eliminando ficha cliente")
         respu = true;

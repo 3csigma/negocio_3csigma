@@ -1,13 +1,16 @@
 <!-- ****************** Required JS - DASHBOARD ****************** -->
 <script src="../vendor/js/Chart.bundle.min.js"></script>
-<script src="../vendor/js/owl.carousel.js"></script>
-<script src="../vendor/js/personalScripts.js"></script>
+{{!-- <script src="../vendor/js/owl.carousel.js"></script> --}}
 <!-- Chart piety plugin files -->
 <script src="../vendor/js/jquery.peity.min.js"></script>
 <!-- Apex Chart -->
 <script src="../vendor/js/apexchart.js"></script>
-<!-- Dashboard EMPRESA -->
-<script src="../vendor/js/dashboard-1.js"></script>
+<!-- Dashboard ADMIN -->
+<script src="../vendor/js/adminDashboard.js"></script>
+<!-- DATATABLES ADMIN -->
+<script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="../vendor/js/datatables.init.js"></script>
+<script src="../vendor/js/personalScripts.js"></script>
 
 {{!-- Gráfica de Indicadores - Dashboard Principal --}}
 <script>
@@ -195,6 +198,87 @@
         }();
 
         jQuery(document).ready(function () {
+            {{#if frmDiag.tablasVacias}}
+            const btnCargarInforme = document.getElementById('btnInfDiag');
+            btnCargarInforme.addEventListener("click", function () {
+                Swal.fire(
+                    'Lo sentimos!',
+                    'Aún no sé ha llenado ningún cuestionario para subir un informe',
+                    'warning'
+                )
+            });
+            {{else}}
+
+            const btnSubirInforme = document.getElementById("btnSubirInforme");
+            const infoEstado = document.getElementById("infoEstado");
+            const btnVerInforme = document.getElementById('btnVerInforme');
+            const spanFecha = document.getElementById("spanFecha");
+            const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+            const informeDiag = document.querySelector('.probarXD');
+            const nombreInforme = document.querySelector('.nombreInforme').textContent;
+
+            /* ========================= COLOCAR HORA A LA FECHA DE LA TABLA INFORMES =================================== **/
+
+            informeDiag.addEventListener('change', (e) => {
+                console.log(e)
+                const file = e.target.files[0]
+                // Capturando Zona Horaria Local
+                const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('codigoEmpresa', codigoEmpresa);
+                formData.append('nombreInforme', nombreInforme);
+                formData.append('zonaHoraria', tzLocal);
+
+				console.log("!ALKSDHASKHDKASLHDKJASDHJKASHDKJASHDJKASDOASIDHASKDJHASKJDHASKJDHKAJSHDKJASHDKASDHAKSJDHKAJSDHAKSJDHKASJHDASKJDHASJKDHASKJDHASDJKAKJSDHASKJDHKASDHKASJDHKJASDHKASJDHKASJHDKJASDHJKASHDKJASHDJKASDKJASHD");
+
+                fetch('/guardarInforme', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response.ok) {
+                            btnVerInforme.style.display = 'block'
+                            infoEstado.classList.remove("badge-warning")
+                            infoEstado.classList.add("badge-success")
+                            infoEstado.innerHTML = "Cargado"
+                            spanFecha.innerHTML = response.fecha;
+                            btnVerInforme.href = response.url
+
+                            toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
+                                'error'
+                            )
+                        }
+                    });
+
+            });
+
+            {{/if}}
         });
 
         jQuery(window).on('load', function () {
@@ -233,9 +317,3 @@
     })(jQuery);
 
 </script>
-
-{{!-- Scripts Stripe --}}
-{{#if stripe}}
-<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
-<script src="https://js.stripe.com/v3/"></script>
-{{/if}}

@@ -439,7 +439,11 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
     const { codigo } = req.params;
-    res.render('consultor/cuestionario', {wizarx: true, user_dash: false, adminDash: false, codigo })
+    let volver = '/empresas/'
+    if (req.user.rol == 'Consultor') {
+        volver = '/empresas-asignadas/'+codigo;
+    }
+    res.render('consultor/cuestionario', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 
 dashboardController.enviarCuestionario = async (req, res) => {
@@ -570,6 +574,9 @@ dashboardController.enviarCuestionario = async (req, res) => {
         const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
         if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
+            if (req.user.rol == 'Consultor'){
+                res.redirect('/empresas-asignadas/'+codigoEmpresa)
+            }
             res.redirect('/empresas/'+codigoEmpresa)
         }
     }
@@ -579,7 +586,11 @@ dashboardController.enviarCuestionario = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO (EMPRESAS NUEVAS)
 dashboardController.dgNuevosProyectos = async (req, res) => {
     const { codigo } = req.params;
-    res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo })
+    let volver = '/empresas/'
+    if (req.user.rol == 'Consultor') {
+        volver = '/empresas-asignadas/'+codigo;
+    }
+    res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 
 dashboardController.guardarRespuestas = async (req, res) => {
@@ -758,11 +769,6 @@ dashboardController.guardarRespuestas = async (req, res) => {
         rendimiento: rendimiento
     }
 
-
-    console.log("\n<<<<< RESULTADO CATEGORIAS >>>>> ", resulCategorias)
-
-    //Falta rendimiento del proyecto
-
     // Guardando en la Base de datos
     const cuestionario = await pool.query('INSERT INTO dg_empresa_nueva SET ?', [nuevoDiagnostico])
     if (cuestionario.affectedRows > 0) {
@@ -771,6 +777,9 @@ dashboardController.guardarRespuestas = async (req, res) => {
         const resultado_categorias = await pool.query('INSERT INTO resultado_categorias SET ?', [resulCategorias])
         if ((aVitales.affectedRows > 0) && (resultado_categorias.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
+            if (req.user.rol == 'Consultor'){
+                res.redirect('/empresas-asignadas/'+codigoEmpresa)
+            }
             res.redirect('/empresas/'+codigoEmpresa)
         }
     }
@@ -786,7 +795,7 @@ const storage = multer.diskStorage({
 
     filename: function (req, file, cb) {
         const fechaActual = Math.floor(Date.now() / 1000)
-        urlInforme = "Informe-Empresa-" + fechaActual + "-" + file.originalname;
+        urlInforme = "Informe-Diagnóstico-Empresa-" + file.originalname;
         console.log(urlInforme)
         cb(null, urlInforme)
     }
@@ -798,7 +807,7 @@ dashboardController.subirInforme = subirInforme.single('file')
 
 
 dashboardController.guardarInforme = async (req, res) => {
-    const r = {ok: false}
+    const r = { ok: false }
     const { codigoEmpresa, nombreInforme, zonaHoraria }  = req.body
     console.log(req.body)
     const e = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigoEmpresa])
@@ -809,12 +818,28 @@ dashboardController.guardarInforme = async (req, res) => {
         url: '../informes_empresas/'+urlInforme,
         fecha: new Date().toLocaleString("en-US", {timeZone: zonaHoraria})
     }
-    const informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+
+    const actualizar = {
+        url: '../informes_empresas/'+urlInforme,
+        fecha: new Date().toLocaleString("en-US", {timeZone: zonaHoraria})
+    }
+    
+    // Validando si ya tiene un informe montado
+    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [e[0].id_empresas, e[0].consultor, nombreInforme])
+    let informe = null;
+
+    if (tieneInforme.length > 0) {
+        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND id_consultor = ? AND nombre = ?', [actualizar, e[0].id_empresas, e[0].consultor, nombreInforme])
+    } else {
+        informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+    }
+
     if (informe.affectedRows > 0) {
         r.ok = true;
         r.fecha = nuevoInforme.fecha;
         const url = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [nuevoInforme.id_empresa, nuevoInforme.id_consultor])
         r.url = url[0].url;
     }
+   
     res.send(r)
 }

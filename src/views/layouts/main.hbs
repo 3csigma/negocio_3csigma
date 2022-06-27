@@ -5,14 +5,16 @@
     {{!-- HEADER GENERAL --}}
     {{> header }}
 
-    <!-- DASHBOARD USUARIO EMPRESA -->
+    {{!-- <!-- DASHBOARD USUARIO EMPRESA -->
     {{#if user_dash}}
         {{> user/headerUser }}
-    {{/if}}
+    {{/if}} --}}
     {{!-- DASHBOARD ADMINISTRADOR --}}
-    {{#if adminDash}}
+    {{!-- {{#if adminDash}}
+        <!-- Datatable -->
+        
         {{> admin/headerAdmin }}
-    {{/if}}
+    {{/if}} --}}
 
 </head>
 
@@ -24,7 +26,9 @@
     {{#if adminDash}}
         {{> admin/navigationAdmin }}
     {{/if}}
-    
+    {{#if consultorDash}}
+        {{> consultor/navigationConsultor}}
+    {{/if}}
     
     {{{ body }}}
 
@@ -40,6 +44,10 @@
     {{/if}}
     {{!-- FOOTER ADMINISTRADOR --}}
     {{#if adminDash}}
+        {{> admin/footerAdmin }}
+    {{/if}}
+    {{!-- FOOTER CONSULTOR --}}
+    {{#if consultorDash}}
         {{> admin/footerAdmin }}
     {{/if}}
 

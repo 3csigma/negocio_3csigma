@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
-const { checkLogin, noLogueado, adminLogueado, empresaLogueada } = require('../lib/auth')
+const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
@@ -42,15 +42,15 @@ router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 
 // Cuestionario Diagnóstico Empresa Establecida
-router.get('/cuestionario-diagnostico/:codigo', checkLogin, adminLogueado, dashboardController.cuestionario)
-router.post('/cuestionario-diagnostico', checkLogin, adminLogueado, dashboardController.enviarCuestionario)
+router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
+router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboardController.enviarCuestionario)
 
 // Cuestionario Diagnóstico Empresa Nueva
-router.get('/diagnostico-proyecto/:codigo', checkLogin, adminLogueado, dashboardController.dgNuevosProyectos)
-router.post('/diagnostico-proyecto/', checkLogin, adminLogueado, dashboardController.guardarRespuestas)
+router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashboardController.dgNuevosProyectos)
+router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
 
 // Informe Diagnóstico
-router.post('/subirInforme', checkLogin, adminLogueado, dashboardController.subirInforme)
-router.post('/guardarInforme', checkLogin, adminLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
+router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
+router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 module.exports = router;

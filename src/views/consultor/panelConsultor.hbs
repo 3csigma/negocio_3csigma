@@ -1,0 +1,153 @@
+<!--**********************************
+        Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+
+            {{!-- Empresas Asignadas --}}
+            <div class="col-xl-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header pb-0 border-0">
+                        <span class="p-3 mr-3 rounded bg-secondary" style="background: #FED061 !important;">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <rect width="30" height="30" fill="url(#pattern0)" />
+                                <defs>
+                                    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                        <use xlink:href="#image0_234_6803" transform="scale(0.0104167)" />
+                                    </pattern>
+                                    <image id="image0_234_6803" width="96" height="96"
+                                        xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAABmJLR0QA/wD/AP+gvaeTAAABI0lEQVR4nO3bwYqDQBQAwbjk/3/ZPS8EhsFZW2PV3WBoHji+5PUCAACeZpu9YN/3/T9uZJVt26a/U+mnvoGnEyAmQEyAmAAxAWICxN6rP/Buz+E1ExATICZATICYADEBYgLElp8DRuwT/jIBMQFiAsQEiAkQEyAmQOz0c8DI0/YJJiAmQEyAmAAxAWICxASIXe4cMPJt+wQTEBMgJkBMgJgAMQFiAsRudw4YGT2Hj84RR6+fZQJiAsQEiAkQEyAmQEyA2PQ54Oq/2zn6nH72vsEExASICRATICZATICYADH7gMXXzzIBMQFiAsQEiAkQEyAmQOzS7/Y/8f8AlhIgJkBMgJgAMQFiAsQetw84yj7gywgQEyAmQEyAmAAxAQAAAE72C3l/LLO35qJwAAAAAElFTkSuQmCC" />
+                                </defs>
+                            </svg>
+                        </span>
+                        <div class="mr-auto pr-3">
+                            <h4 class="text-black fs-20">Empresas</h4>
+                            <p class="fs-13 mb-0 text-black">Asignadas por mes</p>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div id="chartBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- Informes generados --}}
+            <div class="col-xl-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header pb-0 border-0">
+                        <span class="p-3 mr-3 rounded bg-warning"  style="background: #50368C !important;">
+                            <svg width="24" height="30" viewBox="0 0 24 30" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M3 0C1.35 0 0.0150003 1.35 0.0150003 3L0 27C0 28.65 1.335 30 2.985 30H21C22.65 30 24 28.65 24 27V9L15 0H3ZM13.5 10.5V2.25L21.75 10.5H13.5Z"
+                                    fill="white" />
+                            </svg>
+                        </span>
+                        <div class="mr-auto pr-3">
+                            <h4 class="text-black fs-20">Informes generados</h4>
+                            <p class="fs-13 mb-0 text-black">Subidos por mes</p>
+                        </div>
+                    </div>
+                    <div class="card-body pb-0">
+                        <div id="chartBar3"></div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- TABLAS --}}
+
+            {{!-- ÚLTIMAS EMPRESAS ASIGNADAS --}}
+            <div class="col-xl-6 col-xxl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Últimas empresas asignadas</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>FECHA</th>
+                                                <th>EMPRESA</th>
+                                                <th>NOMBRE</th>
+                                                <th>ACCIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#unless empresas}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay empresas registrados.</td>
+                                            </tr>
+                                            {{/unless}}
+                                            {{#each empresas}}
+                                            <tr>
+                                                <td>{{fecha_creacion}}</td>
+                                                <td>{{nombre_empresa}}</td>
+                                                <td>{{nombres}} {{apellidos}}</td>
+                                                <td>
+                                                    <div style="margin: 0 auto">
+                                                        <a href="/empresas-asignadas/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- ÚTIMOS INFORMES CARGADOS --}}
+            <div class="col-xl-6 col-xxl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Últimos informes cargados</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>NOMBRE</th>
+                                                <th>TIPO</th>
+                                                <th>EMPRESA</th>
+                                                <th>ACCIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#unless consultores}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay informes cargados.</td>
+                                            </tr>
+                                            {{/unless}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+        </div>
+    </div>
+</div>
+
+<!--**********************************
+        Fin Content body end
+***********************************-->
