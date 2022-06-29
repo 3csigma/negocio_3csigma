@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 
-const { consultorAsignadoHTML, consultorAprobadoHTML, sendEmail } = require('../lib/mail.config')
+const { consultorAsignadoHTML, consultorAprobadoHTML, informeDiagnosticoHTML, sendEmail } = require('../lib/mail.config')
 
 let aprobarConsultor = false;
 
@@ -30,7 +30,7 @@ dashboardController.admin = async (req, res) => {
         })
     });
 
-    res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor });
+    res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true });
 }
 
 // CONSULTORES
@@ -368,7 +368,8 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
+        graficas2: true
     })
 
 }
@@ -779,8 +780,9 @@ dashboardController.guardarRespuestas = async (req, res) => {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             if (req.user.rol == 'Consultor'){
                 res.redirect('/empresas-asignadas/'+codigoEmpresa)
+            } else{
+                res.redirect('/empresas/'+codigoEmpresa)
             }
-            res.redirect('/empresas/'+codigoEmpresa)
         }
     }
 }
@@ -835,6 +837,22 @@ dashboardController.guardarInforme = async (req, res) => {
     }
 
     if (informe.affectedRows > 0) {
+
+        const nombre = e[0].nombre_empresa;
+        const email = e[0].email
+            
+        // Obtener la plantilla de Email
+        const template = informeDiagnosticoHTML(nombre);
+
+        // Enviar Email
+        const resultEmail = await sendEmail(email, 'Se ha cargado el informe de Diagnóstico de negocio', template)
+
+        if (resultEmail == false){
+            res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+        } else {
+            console.log("\n<<<<< Email de Consultor Asignado enviado >>>>>\n")
+        }
+
         r.ok = true;
         r.fecha = nuevoInforme.fecha;
         const url = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [nuevoInforme.id_empresa, nuevoInforme.id_consultor])

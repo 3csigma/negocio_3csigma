@@ -153,13 +153,15 @@ passport.use('local.login', new LocalStrategy({
                     return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
                 }
             } else if (user.rol == 'Consultor') { // Usuario Consultor
-                if (user.estadoEmail == 1) {
+                if (user.estadoEmail == 1 && user.estadoAdm == 1) {
                     req.session.consultor = true;
                     req.session.empresa = false;
                     req.session.admin = false;
                     return done(null, user, req.flash('success', 'Bienvenido Consultor'))
-                } else if (user.estadoAdm == 0) {
+                } else if (user.estadoAdm == 2) {
                     return done(null, false, req.flash('message', 'Tu cuenta esta bloqueada. Contacta a un administrador.'))
+                } else if (user.estadoAdm == 3) {
+                    return done(null, false, req.flash('message', 'Tu cuenta fue rechazada.'))
                 } else {
                     return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
                 }

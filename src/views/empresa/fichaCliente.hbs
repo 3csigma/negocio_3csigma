@@ -68,6 +68,12 @@
 		background-image: #F4F5F9 !important;
 		color: #000;
 	}
+	.input-group-text {
+    	padding: 0 32px;
+	}
+	.form-control {
+		color: #495057;
+	}
 </style>
 
 <div class="container-fluid">
@@ -173,7 +179,7 @@
 								<div class="form-group col-md-12">
 									<label class="mb-2">Redes Sociales de la Compañía</label>
 									<div class="input-group-prepend mb-2">
-										<span class="input-group-text" style="padding-right: 32px;">https://twitter.com/</span>
+										<span class="input-group-text">https://twitter.com/</span>
 										{{!-- <label for="twitter">Twitter</label> --}}
 										<input type="text" name="twitter" id="twitter"
 											value="{{datos.redes_sociales.twitter}}" class="form-control"
@@ -194,7 +200,7 @@
 											onchange="getVals(this, 'instagram_field');" placeholder="usuarioInstagram">
 									</div>
 									<div class="input-group-prepend mb-2">
-										<span class="input-group-text" style="padding-right: 87px;">https://www.</span>
+										<span class="input-group-text" style="padding-right: 82px;">https://www.</span>
 										<input type="text" name="otra" value="{{datos.redes_sociales.otra}}"
 											class="form-control mb-2" placeholder="otra-red.com" onchange="getVals(this, 'otra_field');">
 									</div>

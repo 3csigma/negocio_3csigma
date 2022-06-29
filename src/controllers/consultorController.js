@@ -9,8 +9,8 @@ consultorController.index = async (req, res) => {
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
 
     const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
-
-    res.render('consultor/panelConsultor', { consultorDash: true, itemActivo: 1, empresas });
+    
+    res.render('consultor/panelConsultor', { consultorDash: true, itemActivo: 1, empresas, graficas1: true });
 }
 
 // EMPRESAS
@@ -226,7 +226,8 @@ consultorController.empresaInterna = async (req, res) => {
 
     res.render('consultor/empresaInterna', { 
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
+        graficas2: true
     })
 
 }

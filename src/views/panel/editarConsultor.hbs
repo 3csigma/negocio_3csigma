@@ -87,16 +87,25 @@
                                 <option value="0" selected>Pendiente</option>
                                 <option value="1">Activo</option>
                                 <option value="2">Bloqueado</option>
+                                <option value="3">Rechazado</option>
                                 {{/comparar}}
                                 {{#comparar consultor.estadoAdm '==' 1}}
                                 <option value="0">Pendiente</option>
                                 <option value="1" selected>Activo</option>
                                 <option value="2">Bloqueado</option>
+                                <option value="3">Rechazado</option>
                                 {{/comparar}}
                                 {{#comparar consultor.estadoAdm '==' 2}}
                                 <option value="0">Pendiente</option>
-                                <option value="1" >Activo</option>
+                                <option value="1">Activo</option>
                                 <option value="2" selected>Bloqueado</option>
+                                <option value="3">Rechazado</option>
+                                {{/comparar}}
+                                {{#comparar consultor.estadoAdm '==' 3}}
+                                <option value="0">Pendiente</option>
+                                <option value="1">Activo</option>
+                                <option value="2">Bloqueado</option>
+                                <option value="3" selected>Rechazado</option>
                                 {{/comparar}}
                             </select>
                         </div>
