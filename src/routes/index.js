@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
-const { checkLogin, noLogueado, adminLogueado, empresaLogueada } = require('../lib/auth')
+const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 
-/** Subir Archivos */
+/** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
     destination: function (req, file, callback) {
         const rutaCertificado = path.join(__dirname, '../public/certificados_consultores')
@@ -22,14 +22,10 @@ const rutaAlmacen = multer.diskStorage({
     }
 
 });
-
 const subirArchivo = multer({ storage: rutaAlmacen })
 
-// Dashboard Principal Empresas
-router.get('/', checkLogin, empresaLogueada, dashboardController.index)
 // // Dashboard Principal Administrador
 router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
-
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)
 
@@ -37,10 +33,24 @@ router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certifi
 router.get('/consultores', checkLogin, adminLogueado, dashboardController.mostrarConsultores)
 router.get('/consultores/:codigo', checkLogin, adminLogueado, dashboardController.editarConsultor)
 router.post('/actualizarConsultor', checkLogin, adminLogueado, dashboardController.actualizarConsultor)
+router.post('/bloquearConsultor', checkLogin, adminLogueado, dashboardController.bloquearConsultor)
 
 // Empresas Admin
 router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
 router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
+router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
+
+// Cuestionario Diagnóstico Empresa Establecida
+router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
+router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboardController.enviarCuestionario)
+
+// Cuestionario Diagnóstico Empresa Nueva
+router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashboardController.dgNuevosProyectos)
+router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
+
+// Informe Diagnóstico
+router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
+router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 module.exports = router;

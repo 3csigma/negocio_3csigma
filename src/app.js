@@ -66,7 +66,6 @@ app.use((req, res, next) => {
   res.locals.message = req.flash('message');
   res.locals.registro = req.flash('registro');
   res.locals.user = req.user; //Variable local para Empresas
-  res.locals.consultor = req.consultor; //Variable local para Consultores
   res.locals.session = req.session;
   res.locals.pagoDiag = req.pagoDiag;
   next();
@@ -76,6 +75,7 @@ app.use((req, res, next) => {
 // Rutas
 app.use(require('./routes'));
 app.use(require('./routes/empresa'));
+app.use(require('./routes/consultor'));
 app.use(require('./routes/authentication'));
 app.use(require('./routes/pagos'));
 

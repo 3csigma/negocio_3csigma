@@ -1,8 +1,31 @@
+<style>
+    @media (min-width: 1000px) and (max-width: 1368px) {
+        /* Modal Login */
+        .modal.show .modal-dialog {
+            max-width: 900px;
+        }
+    }
+
+    @media (min-width: 1369px) and (max-width: 1920px) {
+        /* Modal Login */
+        .modal.show .modal-dialog {
+            max-width: 1200px;
+        }
+    }
+
+    @media (min-width: 1921px) and (max-width: 2560px) {
+        /* Modal Login */
+        .modal.show .modal-dialog {
+            max-width: 1500px;
+        }
+    }
+</style>
 <div class="form-body">
     <div class="top_logo">
         <a href="/">
-            <div class="logo-Login" >
-                <img class="logo-size-Login" src="https://3csigma.com/app_public_files/img/3C-sigma-logo-full.png" alt="Logo 3CSigma">
+            <div class="logo-Login">
+                <img class="logo-size-Login" src="https://3csigma.com/app_public_files/img/3C-sigma-logo-full.png"
+                    alt="Logo 3CSigma">
             </div>
         </a>
     </div>
@@ -14,7 +37,8 @@
         </div>
         {{!-- Banner para Móvil --}}
         <div class="loginBanner">
-            <img class="loginBanner-size" src="https://3csigma.com/app_public_files/img/Login_Banner_movil.jpg" alt="Banner Móvil">
+            <img class="loginBanner-size" src="https://3csigma.com/app_public_files/img/Login_Banner_movil.jpg"
+                alt="Banner Móvil">
         </div>
         {{!-- Fin Banner Móvil --}}
         <div class="form-holder form-abajo">
@@ -25,9 +49,10 @@
                     <h3 class="tituH3" style="margin-bottom: 8px !important;">Crea tu cuenta hoy</h3>
                     <span class="fw-bold msg-Login-Top" style="color:#000 !important;font-weight: 500;">
                         ¿Deseas convertirte en consultor?
-                        <a href="/registro-de-consultores" style="color:#812082;font-weight: bold !important;">haz clic aquí.</a>
+                        <a href="/registro-de-consultores" style="color:#812082;font-weight: bold !important;">haz clic
+                            aquí.</a>
                     </span>
-                    
+
                     <br><br>
                     <form action="/registro" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
@@ -57,7 +82,7 @@
                                     placeholder="Introduce tus apellidos" required required>
                             </div>
                         </div>
-                        
+
                         <div class="col-12">
                             <label style="color:#000;font-weight: bold !important;">Empresa*</label>
                             <input class="form-control" type="text" name="nombre_empresa"
@@ -66,7 +91,9 @@
                         <div class="row d-flex align-items-center">
                             <div class="col-12 text-center fw-bold mx-auto mb-4">
                                 <input class="form-control" id="politicas" name="politicas" type="checkbox" required>
-                                <label for="politicas"> Acepto las <a href="#" data-toggle="modal" data-target="#terms-txt" style="color:#812082;font-weight: bold !important;"> politicas de privacidad</a></label>
+                                <label for="politicas"> Acepto las <a href="#" data-toggle="modal"
+                                        data-target="#terms-txt" style="color:#812082;font-weight: bold !important;">
+                                        politicas de privacidad</a></label>
                             </div>
                         </div>
                         <div class="form-button d-flex align-items-center">
@@ -85,7 +112,8 @@
                     {{!-- Copyright --}}
                     <div class="d-flex align-items-center my-4">
                         <br><br>
-                        <span class="text-center fw-bold mx-auto mb-0 mt-4">{{actualYear}} Copyright &copy; 3C Sigma</span>
+                        <span class="text-center fw-bold mx-auto mb-0 mt-4">{{actualYear}} Copyright &copy; 3C
+                            Sigma</span>
                     </div>
                 </div>
 
@@ -94,40 +122,57 @@
     </div>
 </div>
 
+<!-- MODAL POLITICAS DE PRIVACIDAD -->
 {{> politicas }}
 
-	{{!-- <!-- Modal Terminos & Condiciones -->
-	<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 class="modal-title" id="termsLabel">Privacy Policy</h4>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				</div>
-				<div class="modal-body" style="text-align: justify;">
-					<p><strong>3C SIGMA HOLDING</strong> is committed to safeguarding your privacy. This Privacy Policy (this <strong>“Policy”</strong>) describes how <strong>3C SIGMA HOLDING</strong> may collect, use, share, and keep information about you and what choices you have. This Policy applies to <strong>3C SIGMA HOLDING's</strong> websites, apps, software <strong>platforms</strong>, or online offerings (collectively, the “Platform”), and will be available by link on all sites and offerings which it covers. You should review the applicable privacy policy available. <strong>By using or accessing the Platform in any manner, you acknowledge that you accept the practices and policies outlined in this Policy, and you hereby consent that we will collect, use, and share your information in accordance with this Policy.</strong></p>
+{{!--
+<!-- Modal Terminos & Condiciones -->
+<div class="modal fade" id="terms-txt" tabindex="-1" role="dialog" aria-labelledby="termsLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="termsLabel">Privacy Policy</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: justify;">
+                <p><strong>3C SIGMA HOLDING</strong> is committed to safeguarding your privacy. This Privacy Policy
+                    (this <strong>“Policy”</strong>) describes how <strong>3C SIGMA HOLDING</strong> may collect, use,
+                    share, and keep information about you and what choices you have. This Policy applies to <strong>3C
+                        SIGMA HOLDING's</strong> websites, apps, software <strong>platforms</strong>, or online
+                    offerings (collectively, the “Platform”), and will be available by link on all sites and offerings
+                    which it covers. You should review the applicable privacy policy available. <strong>By using or
+                        accessing the Platform in any manner, you acknowledge that you accept the practices and policies
+                        outlined in this Policy, and you hereby consent that we will collect, use, and share your
+                        information in accordance with this Policy.</strong></p>
 
-                    <p>Your continued use of <strong>3C SIGMA HOLDING’s Platform</strong> is at all times subject to the Terms of Use, which incorporate this, Policy. Any terms not defined in this Policy shall have the same definitions given to them in the Terms of Use.</p>
+                <p>Your continued use of <strong>3C SIGMA HOLDING’s Platform</strong> is at all times subject to the
+                    Terms of Use, which incorporate this, Policy. Any terms not defined in this Policy shall have the
+                    same definitions given to them in the Terms of Use.</p>
 
-                    <p><strong>3C SIGMA HOLDING</strong> reevaluates this Policy on an ongoing basis and reserves the right to change its Policy at any time in its sole discretion. All changes to the terms of this Policy shall be effective as of the date on which they are posted on the Platform. It is your responsibility to check this page periodically for any such changes or updates. Your continued use of or access to the Platform or our services following the posting of any changes, modifications, or updates constitutes your express acceptance thereof.</p>
+                <p><strong>3C SIGMA HOLDING</strong> reevaluates this Policy on an ongoing basis and reserves the right
+                    to change its Policy at any time in its sole discretion. All changes to the terms of this Policy
+                    shall be effective as of the date on which they are posted on the Platform. It is your
+                    responsibility to check this page periodically for any such changes or updates. Your continued use
+                    of or access to the Platform or our services following the posting of any changes, modifications, or
+                    updates constitutes your express acceptance thereof.</p>
 
 
 
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn_1" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
-	<!-- /.modal --> --}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_1" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal --> --}}
 
 <script>
-    function validarFormRegistro(){
+    function validarFormRegistro() {
         const a = document.getElementById("politicas").checked
-        if(a == false){
+        if (a == false) {
             Swal.fire({
                 icon: 'warning',
                 title: 'Advertencia',
@@ -140,6 +185,6 @@
     }
 
     // Asignando Zona horaria
-	const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	document.getElementById("zh_empresa").value = tzLocal
+    const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById("zh_empresa").value = tzLocal
 </script>

@@ -34,7 +34,7 @@
     overflow-y: hidden;
 }
 
-.tabla-hfijo tbody {
+/* .tabla-hfijo tbody {
     display: block;
 }
 .tabla-hfijo thead,
@@ -55,4 +55,4 @@
 .table-striped>tbody>tr:hover {
     background-color: #0c537ccb;
     color: #fff;
-}
+} */

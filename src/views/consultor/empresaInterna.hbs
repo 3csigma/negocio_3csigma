@@ -1,0 +1,834 @@
+<link rel="stylesheet" href="../css/editarEmpresa.css">
+<style>
+    a.nav-link.btnIndicadoresAll {
+        background: #f2f2f2;
+        border-radius: 22px;
+        color: #fff;
+        text-align: center;
+    }
+
+    a.nav-link.btnIndicadoresAll.active {
+        background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
+        color: white !important;
+        border-radius: 22px;
+    }
+
+    .nav-link.btnIndicadoresAll:focus,
+    .nav-link.btnIndicadoresAll:hover {
+        background-color: #f2f2f2 !important;
+        border-color: #50368c;
+        border-radius: 22px !important;
+        color: #50368c;
+        border-width: 0 0px 3px 0;
+    }
+
+    .toast-success {
+        background-color: #50368D;
+    }
+
+    .default-tab .nav-link:focus,
+    .default-tab .nav-link:hover,
+    .default-tab .nav-link.active {
+        color: #495057;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff #ebeef6;
+        border-radius: 1.25rem 1.25rem 0 0;
+        color: #0B2A97;
+    }
+
+    @media (min-width: 800px) and (max-width: 967px) {
+        .modal.show .modal-dialog {
+            max-width: 700px;
+        }
+    }
+
+    @media (min-width: 1000px) and (max-width: 1950px) {
+        .modal.show .modal-dialog {
+            max-width: 930px;
+        }
+    }
+
+    /* Barra Scroll Personalizada para el Modal */
+    .modal.open .modal::-webkit-scrollbar-track {
+        border-radius: 10px !important;
+        background-color: #eae6f4 !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar-thumb {
+        background-color: #50368c !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(155, 155, 155, 0.747) !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar-button:increment,
+    .modal-open .modal::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    .modal-open .modal::-webkit-scrollbar:vertical {
+        width: 10px !important;
+    }
+
+    .modal-open .modal::-webkit-scrollbar {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+</style>
+<!--**********************************
+        Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+
+        {{!-- Header Card --}}
+        <div class="col-lg-12">
+            <div class="profile card card-body px-3 pt-3 pb-0">
+                <div class="profile-head">
+                    <div class="profile-info">
+                        <div class="profile-photo">
+                            <img src="../img/avatar/1.jpg" class="img-fluid rounded-circle" alt="">
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name px-3 pt-2">
+                                <h4 class="text-primary mb-0">{{datos.nombre_completo}}</h4>
+                                <p>{{datos.nombre_empresa}}</p>
+                            </div>
+                            <div class="profile px-2 pt-2">
+                                <h4 class="text-muted mb-0">{{#if
+                                    empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
+                                <p>Teléfono</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{!-- ./Fin Header Card --}}
+
+        <div class="row">
+
+            {{!-- COLUNMA IZQUIERDA RESUMEN --}}
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="profile-statistics">
+                            <div class="text-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{#if
+                                            empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
+                                        <span>Cantidad de Socios</span>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{#if empresa.tiempo_experiencia}}
+                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de
+                                            experiencia</span>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="m-b-0">{{#if empresa.num_empleados}}
+                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de
+                                            Empleados</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <form action="/actualizarEmpresa" method="post">
+                                        {{#if adminDash}}
+                                        {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                        <div class="row">
+                                            <div class="col">
+                                                <label>Consultor</label>
+                                                <select name="id_consultor" id="id_consultor"
+                                                    class="form-control sltBuscar chosen-container chosen-container-single required">
+                                                    <option value=""></option>
+                                                    {{#each consultores}}
+                                                    {{#comparar id_consultores '==' idCon}}
+                                                    <option selected {{/comparar}} {{#comparar id_consultores '!='
+                                                        idCon}} <option {{/comparar}} value="{{id_consultores}}">
+                                                        {{nombres}} {{apellidos}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <label>Estado</label>
+                                                <select id="estadoAdm" name="estadoAdm"
+                                                    class="mr-sm-2 default-select text-center">
+                                                    {{#comparar datos.estadoAdm '==' '1'}}
+                                                    <option value="1" selected>Activa</option>
+                                                    <option value="0">Bloqueada</option>
+                                                    {{/comparar}}
+                                                    {{#comparar datos.estadoAdm '!=' '1'}}
+                                                    <option value="0" selected>Bloqueada</option>
+                                                    <option value="1">Activa</option>
+                                                    {{/comparar}}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        {{/if}}
+
+                                        {{!-- Boton actualizar empresa --}}
+                                        <div class="row">
+                                            <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
+
+                                            <div class="col-12 mt-3">
+                                                {{!-- Datos personales --}}
+                                                <div class="profile-personal-info">
+                                                    <div class="row mb-2">
+                                                        <div class="col-sm-12 col-12">
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if
+                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+
+                                    </form>
+
+                                    <div class="row mt-4">
+                                        <div class="col">
+                                            <div class="form-group" style="text-align: left !important">
+                                                <label
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción
+                                                    del negocio</label>
+                                                <textarea
+                                                    style="height: 400px; min-height: 400px; max-height: 400px; width: 100%; text-align: justify; background: transparent !important; border: none"
+                                                    class="form-control barra-scroll overflow-y-auto"
+                                                    disabled>{{#if empresa.descripcion}}{{empresa.descripcion}}{{else}}N/A{{/if}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{#if datos.redes}}
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <div class="form-group" style="text-align: left !important">
+                                                    <label
+                                                        style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Links
+                                                        de la compañía</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{#if datos.redes.twitter}}
+                                        <div class="row mt-2 mb-4">
+                                            <div class="col-4 iconRed">
+                                                <a href="https://twitter.com/{{datos.redes.twitter}}" target="_blank">
+                                                    <svg id="Layer_1" height="40px" width="40px"
+                                                        style="enable-background:new 0 0 1000 1000;" version="1.1"
+                                                        viewBox="0 0 1000 1000" xml:space="preserve"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <title />
+                                                        <g>
+                                                            <g id="Dark_Blue">
+                                                                <path class="st0" style="fill: #1DA1F2"
+                                                                    d="M500,0L500,0c276.1,0,500,223.9,500,500v0c0,276.1-223.9,500-500,500h0C223.9,1000,0,776.1,0,500v0    C0,223.9,223.9,0,500,0z" />
+                                                            </g>
+                                                            <g id="Logo_FIXED">
+                                                                <path class="st1" style="fill: #FFFFFF;"
+                                                                    d="M384,754c235.8,0,364.9-195.4,364.9-364.9c0-5.5,0-11.1-0.4-16.6c25.1-18.2,46.8-40.6,64-66.4    c-23.4,10.4-48.2,17.2-73.6,20.2c26.8-16,46.8-41.2,56.4-70.9c-25.2,14.9-52.7,25.5-81.4,31.1c-48.6-51.6-129.8-54.1-181.4-5.6    c-33.3,31.3-47.4,78-37.1,122.5c-103.1-5.2-199.2-53.9-264.3-134c-34,58.6-16.7,133.5,39.7,171.2c-20.4-0.6-40.4-6.1-58.2-16    c0,0.5,0,1.1,0,1.6c0,61,43,113.6,102.9,125.7c-18.9,5.1-38.7,5.9-57.9,2.2c16.8,52.2,64.9,88,119.8,89.1    c-45.4,35.7-101.5,55.1-159.2,55c-10.2,0-20.4-0.6-30.5-1.9C246.1,734,314.4,754,384,753.9" />
+                                                                <path class="st2" style="fill: none"
+                                                                    d="M500,0L500,0c276.1,0,500,223.9,500,500v0c0,276.1-223.9,500-500,500h0C223.9,1000,0,776.1,0,500v0    C0,223.9,223.9,0,500,0z" />
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            {{/if}}
+
+                                            {{#if datos.redes.facebook}}
+                                            <div class="col-4 iconRed">
+                                                <a href="https://facebook.com/{{datos.redes.facebook}}" target="_blank">
+                                                    <svg height="40px" width="40px"
+                                                        style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
+                                                        version="1.1" viewBox="0 0 512 512" xml:space="preserve"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:serif="http://www.serif.com/"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <g>
+                                                            <path
+                                                                d="M512,256c0,-141.385 -114.615,-256 -256,-256c-141.385,0 -256,114.615 -256,256c0,127.777 93.616,233.685 216,252.89l0,-178.89l-65,0l0,-74l65,0l0,-56.4c0,-64.16 38.219,-99.6 96.695,-99.6c28.009,0 57.305,5 57.305,5l0,63l-32.281,0c-31.801,0 -41.719,19.733 -41.719,39.978l0,48.022l71,0l-11.35,74l-59.65,0l0,178.89c122.385,-19.205 216,-125.113 216,-252.89Z"
+                                                                style="fill:#1877f2;fill-rule:nonzero;" />
+                                                            <path
+                                                                d="M355.65,330l11.35,-74l-71,0l0,-48.022c0,-20.245 9.917,-39.978 41.719,-39.978l32.281,0l0,-63c0,0 -29.297,-5 -57.305,-5c-58.476,0 -96.695,35.44 -96.695,99.6l0,56.4l-65,0l0,74l65,0l0,178.89c13.033,2.045 26.392,3.11 40,3.11c13.608,0 26.966,-1.065 40,-3.11l0,-178.89l59.65,0Z"
+                                                                style="fill:#fff;fill-rule:nonzero;" />
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            {{/if}}
+
+                                            {{#if datos.redes.instagram}}
+                                            <div class="col-4 iconRed">
+                                                <a href="https://instagram.com/{{datos.redes.instagram}}" target="_blank">
+                                                    <svg height="40px" width="40px" id="Layer_1"
+                                                        style="enable-background:new 0 0 1000 1000;" version="1.1"
+                                                        viewBox="0 0 1000 1000" xml:space="preserve"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_"
+                                                            x1="146.4465" x2="853.5535" y1="853.5535" y2="146.4465">
+                                                            <stop offset="0" style="stop-color:#FFD521" />
+                                                            <stop offset="5.510481e-02" style="stop-color:#FFD020" />
+                                                            <stop offset="0.1241" style="stop-color:#FEC01E" />
+                                                            <stop offset="0.2004" style="stop-color:#FCA71B" />
+                                                            <stop offset="0.2821" style="stop-color:#FA8316" />
+                                                            <stop offset="0.3681" style="stop-color:#F85510" />
+                                                            <stop offset="0.4563" style="stop-color:#F51E09" />
+                                                            <stop offset="0.5" style="stop-color:#F30005" />
+                                                            <stop offset="0.5035" style="stop-color:#F20007" />
+                                                            <stop offset="0.5966" style="stop-color:#E1003B" />
+                                                            <stop offset="0.6879" style="stop-color:#D30067" />
+                                                            <stop offset="0.7757" style="stop-color:#C70088" />
+                                                            <stop offset="0.8589" style="stop-color:#BF00A0" />
+                                                            <stop offset="0.9357" style="stop-color:#BB00AF" />
+                                                            <stop offset="1" style="stop-color:#B900B4" />
+                                                        </linearGradient>
+                                                        <path class="st0" style="fill: url(#SVGID_1_);"
+                                                            d="M500,1000L500,1000C223.9,1000,0,776.1,0,500v0C0,223.9,223.9,0,500,0h0c276.1,0,500,223.9,500,500v0  C1000,776.1,776.1,1000,500,1000z" />
+                                                        <g>
+                                                            <path class="st1" style="fill: #FFFFFF;"
+                                                                d="M500,220.2c91.1,0,101.9,0.3,137.9,2c33.3,1.5,51.4,7.1,63.4,11.8c15.9,6.2,27.3,13.6,39.2,25.5   c11.9,11.9,19.3,23.3,25.5,39.2c4.7,12,10.2,30.1,11.8,63.4c1.6,36,2,46.8,2,137.9s-0.3,101.9-2,137.9   c-1.5,33.3-7.1,51.4-11.8,63.4c-6.2,15.9-13.6,27.3-25.5,39.2c-11.9,11.9-23.3,19.3-39.2,25.5c-12,4.7-30.1,10.2-63.4,11.8   c-36,1.6-46.8,2-137.9,2s-101.9-0.3-137.9-2c-33.3-1.5-51.4-7.1-63.4-11.8c-15.9-6.2-27.3-13.6-39.2-25.5   c-11.9-11.9-19.3-23.3-25.5-39.2c-4.7-12-10.2-30.1-11.8-63.4c-1.6-36-2-46.8-2-137.9s0.3-101.9,2-137.9   c1.5-33.3,7.1-51.4,11.8-63.4c6.2-15.9,13.6-27.3,25.5-39.2c11.9-11.9,23.3-19.3,39.2-25.5c12-4.7,30.1-10.2,63.4-11.8   C398.1,220.5,408.9,220.2,500,220.2 M500,158.7c-92.7,0-104.3,0.4-140.7,2.1c-36.3,1.7-61.1,7.4-82.9,15.9   C254,185.3,234.9,197,216,216c-19,19-30.6,38-39.4,60.5c-8.4,21.7-14.2,46.5-15.9,82.9c-1.7,36.4-2.1,48-2.1,140.7   c0,92.7,0.4,104.3,2.1,140.7c1.7,36.3,7.4,61.1,15.9,82.9C185.3,746,197,765.1,216,784c19,19,38,30.6,60.5,39.4   c21.7,8.4,46.5,14.2,82.9,15.9c36.4,1.7,48,2.1,140.7,2.1s104.3-0.4,140.7-2.1c36.3-1.7,61.1-7.4,82.9-15.9   C746,814.7,765.1,803,784,784c19-19,30.6-38,39.4-60.5c8.4-21.7,14.2-46.5,15.9-82.9c1.7-36.4,2.1-48,2.1-140.7   s-0.4-104.3-2.1-140.7c-1.7-36.3-7.4-61.1-15.9-82.9C814.7,254,803,234.9,784,216c-19-19-38-30.6-60.5-39.4   c-21.7-8.4-46.5-14.2-82.9-15.9C604.3,159.1,592.7,158.7,500,158.7L500,158.7z" />
+                                                            <path class="st1" style="fill: #FFFFFF;"
+                                                                d="M500,324.7c-96.8,0-175.3,78.5-175.3,175.3S403.2,675.3,500,675.3S675.3,596.8,675.3,500   S596.8,324.7,500,324.7z M500,613.8c-62.8,0-113.8-50.9-113.8-113.8S437.2,386.2,500,386.2c62.8,0,113.8,50.9,113.8,113.8   S562.8,613.8,500,613.8z" />
+                                                            <circle class="st1" style="fill: #FFFFFF;" cx="682.2" cy="317.8"
+                                                                r="41" />
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                            {{/if}}
+
+                                            {{#if datos.redes.otra}}
+                                            <div class="col-4 iconRed">
+                                                <a href="https://{{datos.redes.otra}}" target="_blank">
+                                                    <svg height="40px" version="1.1" viewBox="0 0 519 519" width="40px"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                        <title />
+                                                        <desc />
+                                                        <defs>
+                                                            <radialGradient cx="50%" cy="21.9311119%" fx="50%"
+                                                                fy="21.9311119%" id="radialGradient-1" r="87.8884669%">
+                                                                <stop offset="0%" stop-color="#5C79E5" />
+                                                                <stop offset="100%" stop-color="#3F59CD" />
+                                                            </radialGradient>
+                                                        </defs>
+                                                        <g fill="none" fill-rule="evenodd" id="Page-1" stroke="none"
+                                                            stroke-width="1">
+                                                            <g id="Artboard"
+                                                                transform="translate(-1563.000000, -153.000000)">
+                                                                <g fill="url(#radialGradient-1)" id="Group-8"
+                                                                    transform="translate(718.000000, 153.000000)">
+                                                                    <circle cx="1104.5" cy="259.5" id="Oval" r="259.5" />
+                                                                </g>
+                                                                <path
+                                                                    d="M1949,266 C1962.80712,266 1974,277.192881 1974,291 L1974,499.476352 C1974,513.283471 1962.80712,524.476352 1949,524.476352 L1835.456,524.476 L1753.37323,579.156663 C1751.07505,580.687611 1747.97092,580.065641 1746.43997,577.767454 C1745.89304,576.946425 1745.60121,575.98195 1745.60121,574.995429 L1745.601,524.476 L1699,524.476352 C1685.19288,524.476352 1674,513.283471 1674,499.476352 L1674,291 C1674,277.192881 1685.19288,266 1699,266 L1949,266 Z"
+                                                                    fill="#FFFFFF" id="Rectangle-2" />
+                                                            </g>
+                                                        </g>
+                                                    </svg>
+                                                </a>
+                                            </div>
+
+                                        </div>
+                                        {{/if}}
+
+                                        <div class="row">
+                                            <div class="col" style="text-align: left !important">
+                                                <a href="{{empresa.page_web}}">
+                                                    {{empresa.page_web}}
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                    {{/if}}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{!-- COLUNMA DERECHA CON PESTAÑAS --}}
+            <div class="col-xl-8">
+
+                {{!-- Pestañas Fijas --}}
+                <div class="profile-tab mb-2" style="
+                        background-color: #fff;
+                        padding: 2em 1.5em;
+                        border-radius: 1.25em;
+                        box-shadow: 0px 12px 23px 0px #ededed">
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a href="#empresa" data-toggle="tab"
+                                    class="nav-link active show">Empresa</a></li>
+                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab"
+                                    class="nav-link">Diagnóstico</a></li>
+                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link">Análisis</a>
+                            </li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link">Plan
+                                    Estrategico</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {{!-- ./ Fin de pestañas --}}
+
+                {{!-- Contenido de pestañas --}}
+                <div class="profile-tab barra-scroll overflow-y-auto" id="altura_tabs">
+
+                    <div class="custom-tab-1">
+
+                        <div class="tab-content">
+                            {{!-- PESTAÑA 1 - INFO DE LA EMPRESA --}}
+                            <div id="empresa" class="tab-pane fade active show">
+
+                                <div class="card">
+                                    <div class="card-body">
+
+                                        <div class="my-post-content pt-3">
+                                            {{!-- Datos personales --}}
+                                            <div class="profile-personal-info">
+                                                <h4 class="text-primary mb-4">Datos personales</h4>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Email <span class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{datos.email}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">Fecha de Nacimiento <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7">
+                                                        <span>{{#if empresa.fecha_nacimiento}}
+                                                            {{empresa.fecha_nacimiento}} {{else}} N/A
+                                                            {{/if}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-4 col-5">
+                                                        <h5 class="f-w-500">País/Nacionalidad <span
+                                                                class="pull-right">:</span>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}}
+                                                            {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Dueño del negocio? <span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.es_propietario}}{{empresa.es_propietario}}
+                                                        {{else}} N/A
+                                                        {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Tiene socios?<span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.socios}}{{empresa.socios}} {{else}} N/A
+                                                        {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">Porcentaje Accionario<span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7">
+                                                    <span>{{#if
+                                                        empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}}
+                                                        {{else}} N/A {{/if}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{!-- Más Sobre la empresa --}}
+                                        <div class="profile-personal-info mt-5">
+                                            <h4 class="text-primary mb-3">Sobre la empresa</h4>
+
+                                            <div class="row mb-2">
+
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Tiempo de Fundación</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}}
+                                                            {{else}} N/A {{/if}}</a>
+                                                </div>
+
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Promedio de ingreso anual</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}}
+                                                            {{else}} N/A {{/if}}</a>
+                                                </div>
+
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Etapa actual del negocio</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.etapa_actual}}{{empresa.etapa_actual}}
+                                                            {{else}} N/A
+                                                            {{/if}}</a>
+                                                </div>
+
+                                            </div>
+
+                                            {{!-- OBJETIVOS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Objetivos</h4>
+                                                        {{#if datos.objetivos}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.objetivos.objetivo1}}<br>
+                                                            2- {{datos.objetivos.objetivo2}}<br>
+                                                            3- {{datos.objetivos.objetivo3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- FORTALEZAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Fortalezas</h4>
+                                                        {{#if datos.fortalezas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.fortalezas.fortaleza1}}<br>
+                                                            2- {{datos.fortalezas.fortaleza2}}<br>
+                                                            3- {{datos.fortalezas.fortaleza3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- PROBLEMAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Problemas</h4>
+                                                        {{#if datos.problemas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.problemas.problema1}}<br>
+                                                            2- {{datos.problemas.problema2}}<br>
+                                                            3- {{datos.problemas.problema3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- MOTIVO DE LA CONSULTORÍA --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Motivo de la consultoría</h4>
+                                                        <p style="text-align: justify;">
+                                                            {{#if empresa.motivo_consultoria}}
+                                                            {{empresa.motivo_consultoria}}
+                                                            {{else}}N/A
+                                                            {{/if}}
+                                                        </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
+                            <div id="diagnostico" class="tab-pane fade">
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="profile-about-me">
+                                            <div class="pt-4 border-bottom-1 pb-3">
+                                                <h4 class="text-primary"></h4>
+
+                                                {{!-- Grafíco de indicadores --}}
+                                                <div class="col-xl-12">
+
+                                                    <!-- PESTAÑAS DE LAS GRÁFICAS -->
+                                                    <div class="profile-tab mb-2">
+                                                        <div class="custom-tab-1">
+                                                            <ul class="nav nav-pills justify-content-center mb-4">
+                                                                <li class="nav-item"><a href="#vitales"
+                                                                        data-toggle="tab"
+                                                                        class="nav-link active show btnIndicadoresAll">Áreas
+                                                                        Vitales</a>
+                                                                </li>
+                                                                <li class="nav-item"><a href="#dimensiones"
+                                                                        data-toggle="tab"
+                                                                        class="nav-link btnIndicadoresAll">Por
+                                                                        dimensiones</a>
+                                                                </li>
+                                                            </ul>
+
+                                                            <div class="tab-content">
+
+                                                                <div id="vitales" class="tab-pane fade active show">
+                                                                    <div class="card-body">
+                                                                        <canvas id="chartEmpresaAdm1"></canvas>
+                                                                    </div>
+
+                                                                    {{#if rendimiento.op}}
+                                                                    <div class="row justify-content-center">
+                                                                        <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto: {{rendimiento.op}}% </span>
+                                                                    </div>
+                                                                    {{/if}}
+
+                                                                </div>
+
+                                                                <div id="dimensiones" class="tab-pane fade">
+
+                                                                    <div class="card-body">
+                                                                        <canvas id="chartEmpresaAdm2"></canvas>
+                                                                    </div>
+
+                                                                    {{#if rendimiento.num}}
+                                                                    <div class="row justify-content-center">
+                                                                        <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto: {{rendimiento.num}}% </span>
+                                                                        <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
+                                                                    </div>
+                                                                    {{/if}}
+                                                                </div>
+
+                                                                
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- ./ Fin de pestañas -->
+
+                                                    <input type="hidden" id="jsonAnalisisAdm1" value="{{jsonAnalisis1}}" />
+                                                    <input type="hidden" id="jsonAnalisisAdm2" value="{{jsonAnalisis2}}" />
+                                                    <input type="hidden" id="jsonDimensionesAdm1" value="{{jsonDimensiones}}" />
+                                                    <input type="hidden" id="jsonDimensionesAdm2" value="{{jsonDimensiones2}}" />
+                                                    <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA REALIZACIÓN</th>
+                                                            <th>TIPO DE EMPRESA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.tablasVacias}}
+                                                        <tr id="newEmp">
+                                                            <td>{{#if frmDiag.fecha}}{{frmDiag.fecha}}{{else}}N/A{{/if}}
+                                                            </td>
+                                                            <td>Nueva</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/diagnostico-proyecto/{{datos.code}}"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
+                                                        <tr id="oldEmp">
+                                                            <td>N/A</td>
+                                                            <td>Establecida</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/cuestionario-diagnostico/{{datos.code}}"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- ============================= TABLAS LLENAS ============================= -->
+                                                        {{/if}}
+                                                        <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.tabla2}}
+                                                        <tr id="newEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Nueva</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target="#modalNuevosProyectos"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                        </tr>
+                                                        {{/if}}
+                                                        {{#if frmDiag.tabla1}}
+                                                        <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
+                                                        <tr id="oldEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Establecida</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target=".bd-example-modal-lg"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        {{/if}}
+                                                        <!-- ========================================================================================== -->
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ======================== INFORMES DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informes</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if frmInfo.fecha}}{{frmInfo.fecha}}{{else}}
+                                                                <span id="spanFecha">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span id="nameDiag">Informe diagnóstico</span></td>
+                                                            <td>
+                                                                {{#if frmInfo.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeDiag">
+                                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informeDiag" class="consulInformeDiag" type="file" style="display:none" name="informeDiag"
+                                                                                accept="application/pdf" />
+                                                                        </td>
+                                                                
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}"
+                                                                                style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{/if}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
+                            </div>
+
+                            {{!-- PESTAÑA 3 - ANÁLISIS DE NEGOCIO --}}
+                            <div id="analisis" class="tab-pane fade">
+
+                            </div>
+
+                            <div id="plan-estrategico" class="tab-pane fade">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MODAL RESPUESTAS DEL CUESTIONARIO DIAGNÓSTICO -->
+        {{#if frmDiag.tabla1}}
+        {{> modals/cuestionario}}
+        {{else}}
+        {{> modals/nuevosProyectos}}
+        {{/if}}
+
+    </div>
+
+</div>

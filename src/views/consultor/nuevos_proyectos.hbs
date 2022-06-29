@@ -1,0 +1,1207 @@
+<link rel="stylesheet" href="../css/estilosPersonales.css">
+<style>
+    .section_title{
+        margin-bottom: 1.5em !important;
+    }
+    .add_top_10{
+        max-height: 60vh !important; padding-right: 3em !important;
+    }
+</style>
+<div id="preloader">
+    <div data-loader="circle-side"></div>
+</div><!-- /Preload -->
+
+<div id="loader_form">
+    <div data-loader="circle-side-2"></div>
+</div><!-- /loader_form -->
+
+<style>
+    .close {
+        position: absolute;
+        right: 32px;
+        top: 32px;
+        width: 45px;
+        height: 45px;
+        opacity: 0.5;
+        border-radius: 30px;
+        background-color: #ccc;
+    }
+
+    .close:hover {
+        opacity: 1;
+    }
+
+    .close:before,
+    .close:after {
+        position: absolute;
+        top: 10.5px;
+        left: 22px;
+        content: ' ';
+        height: 24px;
+        width: 2px;
+        background-color: #000;
+    }
+
+    .close:before {
+        transform: rotate(45deg);
+    }
+
+    .close:after {
+        transform: rotate(-45deg);
+    }
+
+    .input-group-prepend {
+        height: 45px;
+    }
+
+    .fl-wrap.fl-wrap-input {
+        width: 100%;
+    }
+
+    label {
+        text-align: justify !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row row-height">
+        <div class="col-xl-4 col-lg-4 content-left">
+            <div class="content-left-wrapper">
+                <a href="#" id="logo"><img src="../img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75"
+                        height="75"></a>
+                <div id="social">
+                    <ul>
+                        <li><a href="https://facebook.com/carlosjramirezp" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="https://instagram.com/carlosjramirezp" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="mailto:hello@3csigma.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        {{!-- <li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li> --}}
+                    </ul>
+                </div>
+                <!-- /social -->
+                <div>
+                    <figure><img src="../img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
+                    </figure>
+                    <h2>Diagnóstico de Nuevos Proyectos</h2>
+                    <p>Bienvenido al Nivel N° 1, donde podrá obtener información valiosa sobre su nuevo proyecto y cómo manejar todo a su favor.</p>
+                    <a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
+                        <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+                    </a>
+                    {{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
+                </div>
+                <div class="copy">© {{actualYear}} 3C Sigma</div>
+            </div>
+            <!-- /content-left-wrapper -->
+        </div>
+        <!-- /content-left -->
+        <div class="col-xl-8 col-lg-8 content-right" id="start">
+            <div id="wizard_container">
+                <div id="top-wizard">
+                    <span id="location"></span>
+                    <div id="progressbar"></div>
+                </div>
+                <!-- /top-wizard -->
+                <form method="POST" action="/diagnostico-proyecto">
+                    
+                    <input id="website" name="website" type="hidden" value="">
+
+                    <div id="middle-wizard">
+                        <!-- Paso 1. EXPERIENCIA EN EL RUBRO -->
+                        <div class="step">
+                            
+                            <h2 class="section_title">EXPERIENCIA EN EL RUBRO</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 mt-2">
+                                    <label for="rubro">Rubro del Negocio</label>
+                                    <input type="text" name="rubro" id="rubro"class="form-control mt-2 required">
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label>¿Tienes experiencia previa en el rubro?</label>
+                                    <div class="form-group mb-3 radio_input mx-auto">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="exp_previa" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="exp_previa" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has realizado un análisis FODA al negocio que deseas desarrollar?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="foda" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="foda" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has pensando las diferentes unidades de negocio que se podrían implementar en este rubro?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="unidades_rubro" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="unidades_rubro" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces las actividades claves que se requieren en tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="actividades" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="actividades" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces tu visión con este proyecto?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="vision" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio mr-3">No
+                                            <input type="radio" name="vision" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 1 -->
+
+                        <!-- Paso 2. MENTALIDAD EMPRESARIAL -->
+                        <div class="step">
+                            <h2 class="section_title">MENTALIDAD EMPRESARIAL</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label> ¿Tu propósito personal está alineado al propósito del negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="proposito_alineado" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="proposito_alineado" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes claro los objetivos a nivel personal y empresarial?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="objetivos_claros" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="objetivos_claros" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido tus valores?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="valores" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="valores" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Te has realizado un FODA personal para que identifiques las herramientas necesarias a implementar en tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="foda_personal" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="foda_personal" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Dedicarías el 100% de tu tiempo a este negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="tiempo_completo" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="tiempo_completo" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 2 -->
+
+                        <!-- Paso 3. VIABILIDAD DEL NEGOCIO -->
+                        <div class="step">
+                            <h2 class="section_title">VIABILIDAD DEL NEGOCIO</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Cuentas con algún socio para desarrollar tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="socios" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="socios" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Dispones de algún fondo financiero personal?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="fondo_financiero" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="fondo_financiero" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿El negocio requiere ubicación física?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="ubicacion_fisica" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="ubicacion_fisica" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has realizado algún estudio de mercado con respecto a tu producto o tu servicio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="estudio_mercado" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="estudio_mercado" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces los recursos claves para el funcionamiento de tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="recursos_claves" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="recursos_claves" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes identificado los posibles proveedores del negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="posibles_proveedores" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="posibles_proveedores" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 3 -->
+
+                        <!-- Paso 4 PRODUCTO -->
+                        <div class="step">
+                            <h2 class="section_title">PRODUCTO</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes identificado el problema que resolverá tu producto o servicio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="problema_resolver" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="problema_resolver" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Sabes cuál es será el producto principal del negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="producto_principal" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="producto_principal" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido el precio de venta de tu producto o servicio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="precio_venta" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="precio_venta" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces cuál es el factor diferenciador del producto o servicio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="factor_diferenciador" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="factor_diferenciador" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido el modelo de negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="modelo_negocio" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="modelo_negocio" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 5 ADMINISTRACION -->
+                        <div class="step">
+                            <h2 class="section_title">ADMINISTRACION</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes una planeación estratégica de tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="planeacion_estrategica" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="planeacion_estrategica" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Se requiere de algún sistema de inventario para tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="sistema_inventario" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="sistema_inventario" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido una estructura organizacional para el negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="estructura_organizacional" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="estructura_organizacional" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 6 TALENTO HUMANO -->
+                        <div class="step">
+                            <h2 class="section_title">TALENTO HUMANO</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definidas las funciones principales, la de tus socios y colaboradores en caso de tenerlas?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="funciones_principales" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="funciones_principales" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label> ¿Cuentas con algún programa de formación inicial para operar tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="formacion_inicial" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="formacion_inicial" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido en cuánto tiempo vas a necesitar colaboradores?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="tiempo_colaboradores" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="tiempo_colaboradores" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes experiencia liderando equipos de trabajo?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="experiencia_liderando" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="experiencia_liderando" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Consideras importante la creación de un equipo de trabajo para el desarrollo y sostenibilidad de la empresa en el tiempo?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="importancia_equipo" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="importancia_equipo" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 7 FINANZAS -->
+                        <div class="step">
+                            <h2 class="section_title">FINANZAS</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has realizado alguna estructura de costos para tu producto o servicio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="estructura_costos" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="estructura_costos" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Sabes cuáles serán los gastos fijos y variables de tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="gastos_fijos_variables" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="gastos_fijos_variables" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definidas las herramientas a utilizar para tu control administrativo y financiero?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="control_financiero" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="control_financiero" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoce cuál es su punto de equilibrio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="punto_equilibrio" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="punto_equilibrio" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces cuál será tu inversión inicial y en cuánto tiempo la recuperarás?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="recuperar_inversion" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="recuperar_inversion" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 8 SERVICIO AL CLIENTE -->
+                        <div class="step">
+                            <h2 class="section_title">SERVICIO AL CLIENTE</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has pensado cuáles serán tus principales canales de atención al cliente?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="canales_atencion" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="canales_atencion" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definida una estrategia para fidelizar a tus futuros clientes?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="estrategia_fidelizar" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="estrategia_fidelizar" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces qué experiencias quieres darles a tus clientes?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="exp_brindar" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="exp_brindar" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has considerado tener alguna herramienta para la medición de la satisfacción del cliente?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="medir_satisfaccion " value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="medir_satisfaccion " value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Crees que un buen servicio se basa solo en la calidad de tu producto?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="calidad_producto" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="calidad_producto" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 9 OPERACIONES -->
+                        <div class="step">
+                            <h2 class="section_title">OPERACIONES</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces los permisos que necesitas para comenzar a operar el negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="permisos" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="permisos" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes idea de cómo planificar las actividades de tu negocio? </label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="planificar_actividades" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="planificar_actividades" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces al 100% los procesos de este negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="conocer_procesos" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="conocer_procesos" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has definido cuáles son los canales de comercialización de tus productos?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="canales_comercial" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="canales_comercial" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has considerado cómo sería el proceso de devoluciones y reclamaciones en tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="proceso_devoluciones" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="proceso_devoluciones" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 10 AMBIENTE LABORAL -->
+                        <div class="step">
+                            <h2 class="section_title">AMBIENTE LABORAL</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Consideras que tu ambiente actual contribuye a tu crecimiento?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="crecimiento" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="crecimiento" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Crees que tu comunicación es efectiva?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="comunicacion_efectiva" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="comunicacion_efectiva" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Se te hace sencillo resaltar las habilidades de las personas?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="resaltar_habilidades" value="Si"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="resaltar_habilidades" value="No"
+                                                class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Estarías dispuesto a capacitarte en crecimiento personal para el desarrollo de tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="capacitar_crecimiento" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="capacitar_crecimiento" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Crees que tienes las herramientas necesarias para crear un buen ambiente laboral?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="buen_ambiente" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="buen_ambiente" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 11 INNOVACIÓN -->
+                        <div class="step">
+                            <h2 class="section_title">INNOVACIÓN</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Crees que tienes un modelo de negocio innovador?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="modelo_innovador" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="modelo_innovador" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Sabes la importancia de utilizar metodologías de innovación a la hora de crear nuevos productos?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="importancia_innovacion" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="importancia_innovacion" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces el proceso para la gestión correcta de los datos de los clientes?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="gestion_datos" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="gestion_datos" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 12 MARKETING -->
+                        <div class="step">
+                            <h2 class="section_title">MARKETING</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Cuentas con una estrategia de Marketing definida?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="estrategia_marketing" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="estrategia_marketing" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes un dominio de sitio web reservado?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="dominio_web" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="dominio_web" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Sabes a qué segmento de cliente te quieres dirigir?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="segmento_cliente" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="segmento_cliente" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Cuentas con un logo y branding de tu negocio?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="tiene_logo" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="tiene_logo" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Has identificado qué mercado quieres abarcar inicialmente?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="mercado_inicial" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="mercado_inicial" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 13 VENTAS -->
+                        <div class="step">
+                            <h2 class="section_title">VENTAS</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Conoces cuáles son tus canales de captación de tus clientes potenciales?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="captacion_clientes" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="captacion_clientes" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes definido los medios de pago disponibles para tus clientes?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="medios_pago" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="medios_pago" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Tienes alguna proyección de ventas?</label>
+                                    <div class="form-group mb-3 radio_input">
+                                        <label class="container_radio mr-3">Si
+                                            <input type="radio" name="proyeccion" value="Si" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="container_radio">No
+                                            <input type="radio" name="proyeccion" value="No" class="required">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+
+                        <!-- Paso 14 METAS A CORTO PLAZO -->
+                        <div class="step">
+                            <h2 class="section_title">METAS A CORTO PLAZO</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+                                
+								<div class="form-group col-md-12 mt-2">
+									<label for="m1">1-</label>
+									<input type="text" name="m1" id="m1" class="form-control mb-2 mt-2 required" placeholder="1-">
+
+									<label for="m2">2-</label>
+									<input type="text" name="m2" id="m2" class="form-control mb-2" placeholder="2-">
+
+									<label for="m3">3-</label>
+									<input type="text" name="m3" id="m3" class="form-control mb-2" placeholder="3-">
+
+                                    <label for="m4">4-</label>
+									<input type="text" name="m4" id="m4" class="form-control mb-2" placeholder="4-">
+
+                                    <label for="m5">5-</label>
+									<input type="text" name="m5" id="m5" class="form-control mb-2" placeholder="5-">
+								</div>
+							</div>
+                        </div>
+
+                        <!-- Último Paso ============================== -->
+                        <div class="submit step" id="end">
+                            <div class="summary">
+                                <div class="wrapper">
+                                    <h3>Cuestionario Finalizado
+                                    </h3>
+                                    <p>Al guardar los datos será redirigido al perfil de la empresa</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /Último Paso-->
+
+                        {{!-- FECHA DE EDICIÓN --}}
+                        <input type="hidden" id="zhActualAdm" name="zhActualAdm">
+                        <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="{{codigo}}">
+
+                    </div>
+                    <!-- /middle-wizard -->
+                    <div id="bottom-wizard">
+                        {{!-- <a class="btn btn-danger" href="#">Limpiar campos</a> --}}
+                        <button type="button" name="backward" class="backward">Anterior</button>
+                        <button type="button" name="forward" class="forward">Siguiente</button>
+                        <button type="submit" name="guardarRespuestas" class="submit">Guardar Datos</button>
+                    </div>
+                    <!-- /bottom-wizard -->
+                </form>
+            </div>
+            <!-- /Wizard container -->
+        </div>
+        <!-- /content-right-->
+    </div>
+    <!-- /row-->
+</div>
+<!-- /container-fluid -->
+
+<a href="{{volver}}" class="close">
+
+    <script>
+        // Capturando Zona Horaria Local
+        const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(tzLocalActual);
+        document.getElementById("zhActualAdm").value = tzLocalActual;
+    </script>

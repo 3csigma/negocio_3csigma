@@ -27,7 +27,7 @@ module.exports = {
     },
 
     consultorLogueado(req, res, next) {
-        if (req.session.consultor && !req.session.empresa && !req.session.admin) { 
+        if (req.session.consultor && !req.session.empresa || req.session.admin) { 
             return next();
         } else {
             return res.redirect('/login')

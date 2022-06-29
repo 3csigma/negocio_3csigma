@@ -1,0 +1,682 @@
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="default-tab">
+                    <ul class="nav nav-tabs" role="tablist" style="border-bottom: none;">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#productos">
+                                <?xml version="1.0" ?><svg height="20" id="icon" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;}</style></defs><title/><rect height="2" width="6" x="8" y="18"/><rect height="2" width="10" x="8" y="22"/><path d="M26,4H6A2.0025,2.0025,0,0,0,4,6V26a2.0025,2.0025,0,0,0,2,2H26a2.0025,2.0025,0,0,0,2-2V6A2.0025,2.0025,0,0,0,26,4ZM18,6v4H14V6ZM6,26V6h6v6h8V6h6l.0012,20Z"/><rect class="cls-1" data-name="&lt;Transparent Rectangle&gt;" height="32" id="Transparent_Rectangle" width="32"/></svg>
+                                Producto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#admin">
+                                <?xml version="1.0" ?><svg height="20" version="1.1" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g id="layer1"><path d="M 12.5 0 A 0.50005 0.50005 0 0 0 12 0.5 L 12 2 L 0 2 L 0 3 L 12 3 L 12 4 A 0.50005 0.50005 0 0 0 12.146484 4.3535156 L 13.646484 5.8535156 A 0.50005 0.50005 0 0 0 14.353516 5.8535156 L 15.853516 4.3535156 A 0.50005 0.50005 0 0 0 16 4 L 16 3 L 20 3 L 20 2 L 16 2 L 16 0.5 A 0.50005 0.50005 0 0 0 15.5 0 L 12.5 0 z M 13 1 L 15 1 L 15 3.7929688 L 14 4.7929688 L 13 3.7929688 L 13 1 z M 3.5 7 A 0.50005 0.50005 0 0 0 3 7.5 L 3 9 L 0 9 L 0 10 L 3 10 L 3 11 A 0.50005 0.50005 0 0 0 3.1464844 11.353516 L 4.6464844 12.853516 A 0.50005 0.50005 0 0 0 5.3535156 12.853516 L 6.8535156 11.353516 A 0.50005 0.50005 0 0 0 7 11 L 7 10 L 20 10 L 20 9 L 7 9 L 7 7.5 A 0.50005 0.50005 0 0 0 6.5 7 L 3.5 7 z M 4 8 L 6 8 L 6 10.792969 L 5 11.792969 L 4 10.792969 L 4 8 z M 8.5 14 A 0.50005 0.50005 0 0 0 8 14.5 L 8 16 L 0 16 L 0 17 L 8 17 L 8 18 A 0.50005 0.50005 0 0 0 8.1464844 18.353516 L 9.6464844 19.853516 A 0.50005 0.50005 0 0 0 10.353516 19.853516 L 11.853516 18.353516 A 0.50005 0.50005 0 0 0 12 18 L 12 17 L 20 17 L 20 16 L 12 16 L 12 14.5 A 0.50005 0.50005 0 0 0 11.5 14 L 8.5 14 z M 9 15 L 11 15 L 11 17.792969 L 10 18.792969 L 9 17.792969 L 9 15 z " style="fill:#222222; fill-opacity:1; stroke:none; stroke-width:0px;"/></g></svg> 
+                                Administración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#operaciones">
+                                <?xml version="1.0" ?><svg height="20" width="20" data-name="Livello 1" id="Livello_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><title/><path d="M64,39A25,25,0,1,0,89,64,25,25,0,0,0,64,39Zm0,44A19,19,0,1,1,83,64,19,19,0,0,1,64,83Z"/><path d="M121,48h-8.93a1,1,0,0,1-.94-.68,49.9,49.9,0,0,0-2-4.85,1,1,0,0,1,.18-1.15L115.62,35a7,7,0,0,0,0-9.9L102.89,12.38a7,7,0,0,0-9.9,0l-6.31,6.31a1,1,0,0,1-1.15.18,49.76,49.76,0,0,0-4.85-2,1,1,0,0,1-.68-.94V7a7,7,0,0,0-7-7H55a7,7,0,0,0-7,7v8.93a1,1,0,0,1-.68.94,49.9,49.9,0,0,0-4.85,2,1,1,0,0,1-1.15-.18L35,12.38a7,7,0,0,0-9.9,0L12.38,25.11a7,7,0,0,0,0,9.9l6.31,6.31a1,1,0,0,1,.18,1.15,49.76,49.76,0,0,0-2,4.85,1,1,0,0,1-.94.68H7a7,7,0,0,0-7,7V73a7,7,0,0,0,7,7h8.93a1,1,0,0,1,.94.68,49.9,49.9,0,0,0,2,4.85,1,1,0,0,1-.18,1.15L12.38,93a7,7,0,0,0,0,9.9l12.73,12.73a7,7,0,0,0,9.9,0l6.31-6.31a1,1,0,0,1,1.15-.18,49.76,49.76,0,0,0,4.85,2,1,1,0,0,1,.68.94V121a7,7,0,0,0,7,7H73a7,7,0,0,0,7-7v-8.93a1,1,0,0,1,.68-.94,49.9,49.9,0,0,0,4.85-2,1,1,0,0,1,1.15.18L93,115.62a7,7,0,0,0,9.9,0l12.73-12.73a7,7,0,0,0,0-9.9l-6.31-6.31a1,1,0,0,1-.18-1.15,49.76,49.76,0,0,0,2-4.85,1,1,0,0,1,.94-.68H121a7,7,0,0,0,7-7V55A7,7,0,0,0,121,48Zm1,25a1,1,0,0,1-1,1h-8.93a7,7,0,0,0-6.6,4.69,43.9,43.9,0,0,1-1.76,4.26,7,7,0,0,0,1.35,8l6.31,6.31a1,1,0,0,1,0,1.41L98.65,111.38a1,1,0,0,1-1.41,0l-6.31-6.31a7,7,0,0,0-8-1.35,43.88,43.88,0,0,1-4.27,1.76,7,7,0,0,0-4.68,6.6V121a1,1,0,0,1-1,1H55a1,1,0,0,1-1-1v-8.93a7,7,0,0,0-4.69-6.6,43.9,43.9,0,0,1-4.26-1.76,7,7,0,0,0-8,1.35l-6.31,6.31a1,1,0,0,1-1.41,0L16.62,98.65a1,1,0,0,1,0-1.41l6.31-6.31a7,7,0,0,0,1.35-8,43.88,43.88,0,0,1-1.76-4.27A7,7,0,0,0,15.93,74H7a1,1,0,0,1-1-1V55a1,1,0,0,1,1-1h8.93a7,7,0,0,0,6.6-4.69,43.9,43.9,0,0,1,1.76-4.26,7,7,0,0,0-1.35-8l-6.31-6.31a1,1,0,0,1,0-1.41L29.35,16.62a1,1,0,0,1,1.41,0l6.31,6.31a7,7,0,0,0,8,1.35,43.88,43.88,0,0,1,4.27-1.76A7,7,0,0,0,54,15.93V7a1,1,0,0,1,1-1H73a1,1,0,0,1,1,1v8.93a7,7,0,0,0,4.69,6.6,43.9,43.9,0,0,1,4.26,1.76,7,7,0,0,0,8-1.35l6.31-6.31a1,1,0,0,1,1.41,0l12.73,12.73a1,1,0,0,1,0,1.41l-6.31,6.31a7,7,0,0,0-1.35,8,43.88,43.88,0,0,1,1.76,4.27,7,7,0,0,0,6.6,4.68H121a1,1,0,0,1,1,1Z"/></svg>
+                                    Operaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#marketing">
+                                <?xml version="1.0" ?><svg height="20" width="20" id="svg8" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs2"><rect height="7.0346723" id="rect2504" width="7.9207187" x="-1.1008456" y="289.81766"/></defs><g id="g2869" transform="translate(0.00925556)"><path d="m 18.902166,9.4538173 c 0,0.3334126 0,0.6668247 0,1.0002377 1.215368,0 2.430737,0 3.646105,0 0,-0.333413 0,-0.6668251 0,-1.0002377 -1.215368,0 -2.430737,0 -3.646105,0 z" id="path1597" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 19.325651,11.787018 c -0.150802,0.297592 -0.301604,0.595183 -0.452406,0.892775 1.08501,0.547423 2.166531,1.101732 3.251541,1.649154 0.150802,-0.297592 0.301604,-0.595183 0.452406,-0.892775 C 21.492183,12.88875 20.41066,12.33444 19.325651,11.787018 Z" id="path1601" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 22.124786,5.5789262 c -1.08501,0.547421 -2.166531,1.1017329 -3.251541,1.6491537 0.150802,0.2975916 0.301604,0.5951833 0.452406,0.8927749 C 20.408689,7.5688574 21.494154,7.0216321 22.577192,6.4696345 22.42639,6.1727317 22.275588,5.875829 22.124786,5.5789262 Z" id="path1605" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 13.753906,45.109375 c -2.960651,0.959865 -5.922005,1.917568 -8.8828122,2.876953 -0.056311,-0.0091 -0.107435,-0.0332 -0.1660157,-0.0332 H 2.5117188 c -0.6043789,0 -1.1074219,0.503043 -1.1074219,1.107422 v 3.917969 c 0,0.604378 0.503043,1.10742 1.1074219,1.107422 h 0.3535156 l 2.390625,6.697265 H 8.7851562 L 6.6542969,54.423828 c 2.365928,0.49068 4.7318251,0.981507 7.0976561,1.472656 v 0.02148 c 0,1.064702 0.903868,1.914062 1.994139,1.914062 1.090271,0 1.994138,-0.84936 1.994138,-1.914062 V 45.132812 c 0,-1.064702 -0.903867,-1.916015 -1.99009,-1.916015 -1.086223,0 -1.982782,0.839103 -1.996234,1.892578 z m 1.992186,-0.892578 c 0.577131,0 0.994138,0.41266 0.994138,0.916015 v 10.785157 c 0,0.503355 -0.417007,0.914062 -0.994138,0.914062 -0.577131,0 -0.994139,-0.410707 -0.994139,-0.914062 V 45.132812 c 0,-0.503355 0.417008,-0.916015 0.994139,-0.916015 z m -1.994139,1.943359 V 54.875 C 11.109396,54.32672 8.4668249,53.77851 5.8242188,53.230469 v -4.501953 c 2.642577,-0.856123 5.2852822,-1.71185 7.9277342,-2.56836 z M 2.5117188,48.953125 h 2.1933593 c 0.067682,0 0.1074219,0.03974 0.1074219,0.107422 v 1.458984 H 2.4042969 v -1.458984 c 0,-0.06768 0.03974,-0.107422 0.1074219,-0.107422 z M 2.4042969,51.519531 H 4.8125 v 1.458985 c 0,0.06768 -0.03974,0.107422 -0.1074219,0.107422 H 2.5117188 c -0.067682,0 -0.1074219,-0.03974 -0.1074219,-0.107422 z m 2.4609375,2.533203 c 0.2180343,0.04523 0.4362614,0.08954 0.6542968,0.134766 l 1.875,5.595703 H 5.9609375 L 3.9257812,54.085938 h 0.7792969 c 0.056595,0 0.1056685,-0.02471 0.1601563,-0.0332 z" id="path1609" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.999993;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1" transform="translate(-2.5821961e-8,-40)"/></g></svg>
+                                Marketing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#fomm">
+                                <?xml version="1.0" ?><svg enable-background="new 0 0 32 32" height="20" width="20" id="svg2" version="1.1" viewBox="0 0 32 32"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"><g id="background"><rect fill="none" height="32" width="32"/></g><g id="document_x5F_text_x5F_information"><path d="M24,14.059V5.584L18.414,0H0v32h24v-0.059c4.499-0.5,7.998-4.309,8-8.941C31.998,18.366,28.499,14.556,24,14.059z    M17.998,2.413L21.586,6h-3.588V2.413z M2,30V1.998h14v6.001h6v6.06c-1.752,0.194-3.352,0.89-4.652,1.941H4v2h11.517   c-0.412,0.616-0.743,1.289-0.994,2H4v2h10.059C14.022,22.329,14,22.661,14,23c0,2.829,1.308,5.351,3.349,7H2z M23,29.883   c-3.801-0.009-6.876-3.084-6.884-6.883c0.008-3.801,3.083-6.876,6.884-6.885c3.799,0.009,6.874,3.084,6.883,6.885   C29.874,26.799,26.799,29.874,23,29.883z M20,12H4v2h16V12z"/><path d="M22,28h2v-6h-2V28z M22,18v2h2v-2H22z"/></g></svg>
+                            FOMM</a>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="default-tab">
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="productos" role="tabpanel">
+                            <h4>Productos o servicios</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Sabe exactamente la necesidad que cubre su producto en el mercado?</td>
+                                        <td>{{resDiag.producto.necesidad_producto}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Sabe cuál es el nivel del precio de su producto con respecto al mercado?</td>
+                                        <td>{{resDiag.producto.precio_producto}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Los productos de su empresa son coherentes entre sí?</td>
+                                        <td>{{resDiag.producto.productos_coherentes}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>La calidad de su producto es</td>
+                                        <td>{{resDiag.producto.calidad_producto}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>La presentación de su producto es</td>
+                                        <td>{{resDiag.producto.presentacion_producto}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>En una escala del 1 al 10 ¿Cómo calificaría de forma global a sus productos con respecto al mercado? Siendo uno el nivel más bajo, y diez el más alto.</td>
+                                        <td>{{resDiag.producto.calificacion_global_producto}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+
+                        <div class="tab-pane fade" id="admin">
+                            
+                            <h4>Administración</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Cuenta con una planeación estratégica del negocio?</td>
+                                        <td>{{resDiag.administracion.planeacion_estrategica}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Ha realizado un análisis FODA de su negocio?</td>
+                                        <td>{{resDiag.administracion.analisis_foda}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tiene definida la estructura organizativa?</td>
+                                        <td>{{resDiag.administracion.estructura_organizativa}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Dispone de un sistema administrativo?</td>
+                                        <td>{{resDiag.administracion.sistema_administrativo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿La facturación de la empresa es automatizada?</td>
+                                        <td>{{resDiag.administracion.facturacion_automatizada}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>Del 1 al 10 ¿Cómo calificaría la gestión de Administración del negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.administracion.calificacion_administracion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Talento humano</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tiene definidas las principales funciones del personal según su puesto de trabajo?</td>
+                                        <td>{{resDiag.talento.principales_funciones_personal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Cuenta con un programa de formación para sus colaboradores?</td>
+                                        <td>{{resDiag.talento.programa_formacion_colab}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienen algún cuadro de habilidades a desarrollar para sus colaboradores?</td>
+                                        <td>{{resDiag.talento.habilidades_colab}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Realiza alguna medición de desempeño del personal?</td>
+                                        <td>{{resDiag.talento.medicion__personal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Requiere personal capacitado para su empresa?</td>
+                                        <td>{{resDiag.talento.personal_capacitado}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Dispone de algún proceso de contratación?</td>
+                                        <td>{{resDiag.talento.proceso_contratacion}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">7</td>
+                                        <td>En una escala del 1 al 10 ¿Cómo calificaría al personal que labora para el negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.talento.calificacion_personal_laboral }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Finanzas</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Dispone de una proyección de ventas?</td>
+                                        <td>{{resDiag.finanzas.proyeccion_ventas}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Tienen una estructura de Costos implementada?</td>
+                                        <td>{{resDiag.finanzas.estructura_costos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Se tienen establecidas claramente las cuentas por pagar y cobrar del Negocio? </td>
+                                        <td>{{resDiag.finanzas.cuentas_pagar_cobrar }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Conoce cuáles son los costos fijos y variables de su empresa?</td>
+                                        <td>{{resDiag.finanzas.costos_fijos_variables }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Ha realizado un análisis y evaluación básico de las finanzas de los últimos 12 meses?  </td>
+                                        <td>{{resDiag.finanzas.analisis_finanzas_anual }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Conoce cuál es su utilidad neta?</td>
+                                        <td>{{resDiag.finanzas.utilidad_neta }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">7</td>
+                                        <td>¿La empresa ya ha conseguido ser rentable?</td>
+                                        <td>{{resDiag.finanzas.empresa_rentable}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">8</td>
+                                        <td>¿Conoce cuál es su punto de equilibrio?</td>
+                                        <td>{{resDiag.finanzas.punto_equilibrio}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">9</td>
+                                        <td>¿Conoce en cuanto tiempo recuperará la inversión total de su negocio?</td>
+                                        <td>{{resDiag.finanzas.recuperar_inversion}}</td>
+                                    </tr>
+                                       <td scope="row">10</td>
+                                        <td>¿Cree usted que la manera en que se está administrando las finanzas en su empresa, pueda contribuir mantener o mejorar la rentabilidad en el tiempo? </td>
+                                        <td>{{resDiag.finanzas.mejorar_rentabilidad}}</td>
+                                    </tr>
+                                       <td scope="row">11</td>
+                                        <td>Del 1 al 10 ¿Cómo calificaría la gestión de Finanzas del negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.finanzas.calificacion_finanzas}}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="operaciones">
+
+                            <h4>Servicio al cliente</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Pueden sus clientes tener información rápida y efectiva de sus Productos?  </td>
+                                        <td>{{resDiag.servicio.clientes_info_productos }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Mide la Satisfacción de sus clientes con respecto a sus productos? </td>
+                                        <td>{{resDiag.servicio.satisfaccion_clientes_productos }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Conoce las necesidades de potenciales clientes con respecto a sus productos?</td>
+                                        <td>{{resDiag.servicio.necesidades_clientes_productos }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Dispone de algún mecanismo para quejas y reclamaciones?</td>
+                                        <td>{{resDiag.servicio.mecanismo_quejas_reclamos }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Maneja estrategias para mantener la fidelidad de sus clientes? </td>
+                                        <td>{{resDiag.servicio.estrategias_fidelidad_clientes }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>En una escala del 1 al 10 ¿Cómo calificaría la gestión de Servicio al Cliente del negocio? Siendo uno el nivel más bajo y diez el más alto. </td>
+                                        <td>{{resDiag.servicio.calificacion_servicio_alcliente }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Operaciones</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Cuenta con las instalaciones adecuadas para realizar sus operaciones?</td>
+                                        <td>{{resDiag.operaciones.instalaciones_adecuadas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Cuenta con todos los permisos requeridos por su localidad para realizar sus operaciones? </td>
+                                        <td>{{resDiag.operaciones.permisos_requeridos  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tiene un plan de trabajo diario, semanal o mensual para las operaciones de su negocio? </td>
+                                        <td>{{resDiag.operaciones.plan_detrabajo  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Cumple con los tiempos de entrega de sus productos ?</td>
+                                        <td>{{resDiag.operaciones.tiempos_entrega_productos  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Cuenta con una estandarización para sus procesos operativos?</td>
+                                        <td>{{resDiag.operaciones.estandarizacion_procesos_op  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Cómo calificaría las operaciones y procesos de su empresa en una escala del 1 al 10? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.operaciones.calificacion_operaciones_procesos  }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Ambiente laboral</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Considera positivo el ambiente laboral dentro de su empresa? </td>
+                                        <td>{{resDiag.ambiente.ambienteLab_positivo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Realiza alguna medición del ambiente laboral de la empresa?</td>
+                                        <td>{{resDiag.ambiente.medicion_ambienteLab }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Conoce el grado de satisfacción e insatisfacción de sus empleados?</td>
+                                        <td>{{resDiag.ambiente.agrado_empleados}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿La comunicación dentro de su empresa es efectiva?  </td>
+                                        <td>{{resDiag.ambiente.comunicacion_efectiva}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Le comunica a su personal que ha estado o está realizando un buen trabajo?   </td>
+                                        <td>{{resDiag.ambiente.comunicar_buen_trabajo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>Del  1 al 10 ¿Cómo podría calificar el ambiente laboral del negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.ambiente.calificacion_ambiente}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Innovación</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Sus trabajadores aportan ideas para la mejora dentro de la empresa?</td>
+                                        <td>{{resDiag.innovacion.aportan_ideas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Considera que a través de la innovación de sus productos puede incrementar tus ventas?</td>
+                                        <td>{{resDiag.innovacion.incrementar_ventas}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Considera que los procesos operativos para desarrollar sus productos son Innovadores?</td>
+                                        <td>{{resDiag.innovacion.procesos_innovadores }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Calificaría su modelo de negocio como Innovador?</td>
+                                        <td>{{resDiag.innovacion.modelo_innovador }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Calificaría la gestión de su empresa como Innovadora?</td>
+                                        <td>{{resDiag.innovacion.empresa_innovadora }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>Del 1 al 10 ¿Cómo se calificaría la gestión de Innovación de los productos y/o servicios del negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.innovacion.calificacion_innovacion }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="marketing">
+
+                            <h4>Marketing</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Realiza estudios de mercado sobre las características y precios de sus productos?</td>
+                                        <td>{{resDiag.marketing.estudio_mercado }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Conoce el segmento que representan sus productos en el mercado? </td>
+                                        <td>{{resDiag.marketing.segmento_mercado }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Sus productos tienen posicionamiento en el mercado (Su localidad)? </td>
+                                        <td>{{resDiag.marketing.posicionamiento_mercado  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Cuenta con estrategias de Marketing para impulsar sus productos  en el mercado o localidad?</td>
+                                        <td>{{resDiag.marketing.estrategias_marketing  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Cuenta con un Plan de Marketing? </td>
+                                        <td>{{resDiag.marketing.plan_marketing  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Cuenta con página web para promover los productos de su empresa?</td>
+                                        <td>{{resDiag.marketing.pagina_web_promover  }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">7</td>
+                                        <td>¿Utiliza redes sociales para promover los productos de su empresa?</td>
+                                        <td>{{resDiag.marketing.redes_sociales_promover }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">8</td>
+                                        <td>¿Cuenta con un Manual de Identidad Corporativa?</td>
+                                        <td>{{resDiag.marketing.manual_identidad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">9</td>
+                                        <td>¿Su producto, servicio o marca, cuentan con un eslogan que los identifique con facilidad?</td>
+                                        <td>{{resDiag.marketing.tiene_eslogan }}</td>
+                                    </tr>
+                                       <td scope="row">10</td>
+                                        <td>¿Cuenta con un Brochure de presentación de su empresa?</td>
+                                        <td>{{resDiag.marketing.brochure_empresa }}</td>
+                                    </tr>
+                                       <td scope="row">11</td>
+                                        <td>En una escala del 1 al 10 ¿Cómo calificaría la gestión de Marketing del negocio?  Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.marketing.calificacion_marketing }}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Ventas</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Cree que los productos y/o servicios del negocio se venden con facilidad?</td>
+                                        <td>{{resDiag.ventas.ventas_conFacilidad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Cómo calificaría las ventas de los productos del negocio en los últimos 6 meses?</td>
+                                        <td>{{resDiag.ventas.calificacion_productos_meses }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Realiza algún plan de ventas?</td>
+                                        <td>{{resDiag.ventas.plan_ventas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Cuenta con estrategias de ventas para los productos de su negocio?</td>
+                                        <td>{{resDiag.ventas.estrategia_ventas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Tiene definido sus canales de venta para comercializar sus productos?</td>
+                                        <td>{{resDiag.ventas.canales_ventas }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>Del  1 al 10 ¿Cómo calificaría la gestión de ventas de los productos y/o servicios del negocio? Siendo uno el nivel más bajo y diez el más alto.</td>
+                                        <td>{{resDiag.ventas.calificacion_ventas }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="fomm">
+
+                            <h4>Fortalezas</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>{{resDiag.fortalezas.f1}}</td>
+                                    </tr>
+                                    {{#if resDiag.fortalezas.f2}}
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>{{resDiag.fortalezas.f2}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.fortalezas.f3}}
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>{{resDiag.fortalezas.f3}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.fortalezas.f4}}
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>{{resDiag.fortalezas.f4}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.fortalezas.f5}}
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>{{resDiag.fortalezas.f5}}</td>
+                                    </tr>
+                                    {{/if}}
+                                </tbody>
+                            </table>
+                            
+
+                            <hr class="my-5">
+                            <h4>Oportunidades de mejoras</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>{{resDiag.oportunidades.o1}}</td>
+                                    </tr>
+                                    {{#if resDiag.oportunidades.o2}}
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>{{resDiag.oportunidades.o2}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.oportunidades.o3}}
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>{{resDiag.oportunidades.o3}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.oportunidades.o4}}
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>{{resDiag.oportunidades.o4}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.oportunidades.o5}}
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>{{resDiag.oportunidades.o5}}</td>
+                                    </tr>
+                                    {{/if}}
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Metas a corto plazo</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>{{resDiag.metas.m1}}</td>
+                                    </tr>
+                                    {{#if resDiag.metas.m2}}
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>{{resDiag.metas.m2}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m3}}
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>{{resDiag.metas.m3}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m4}}
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>{{resDiag.metas.m4}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m5}}
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>{{resDiag.metas.m5}}</td>
+                                    </tr>
+                                    {{/if}}
+                                </tbody>
+                            </table>
+                            
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info light" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

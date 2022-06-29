@@ -1,85 +1,79 @@
+<link rel="stylesheet" href="../css/editarEmpresa.css">
 <style>
-    label {
-        color: black;
+    a.nav-link.btnIndicadoresAll {
+        background: #f2f2f2;
+        border-radius: 22px;
+        color: #fff;
+        text-align: center;
     }
 
-    .form-control {
-        height: 50px;
+    a.nav-link.btnIndicadoresAll.active {
+        background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
+        color: white !important;
+        border-radius: 22px;
     }
 
-    .form-control:disabled {
-        background: #f9f9f9;
-        color: #7E7E7E;
+    .nav-link.btnIndicadoresAll:focus,
+    .nav-link.btnIndicadoresAll:hover {
+        background-color: #f2f2f2 !important;
+        border-color: #50368c;
+        border-radius: 22px !important;
+        color: #50368c;
+        border-width: 0 0px 3px 0;
     }
 
-    .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
-        width: 100%;
+    .toast-success {
+        background-color: #50368D;
     }
 
-    .bootstrap-select .btn {
-        font-size: 0.875rem;
-        height: 50px;
+    .default-tab .nav-link:focus,
+    .default-tab .nav-link:hover,
+    .default-tab .nav-link.active {
+        color: #495057;
+        background-color: #fff;
+        border-color: #dee2e6 #dee2e6 #fff #ebeef6;
+        border-radius: 1.25rem 1.25rem 0 0;
+        color: #0B2A97;
     }
 
-    /* Selectores Consultor & Estado de la cuenta */
-    .chosen-container-single .chosen-single div {
-        top: 12px;
+    @media (min-width: 800px) and (max-width: 967px) {
+        .modal.show .modal-dialog {
+            max-width: 700px;
+        }
     }
 
-    .chosen-container-single .chosen-single {
-        border: 1px solid #f0f1f5 !important;
-        background: transparent !important;
-        font-weight: 400 !important;
-        color: #7e7e7e !important;
-        height: 46px;
-        border-radius: 1.25rem;
-        padding-top: 11px;
+    @media (min-width: 1000px) and (max-width: 1950px) {
+        .modal.show .modal-dialog {
+            max-width: 930px;
+        }
     }
 
-    .chosen-container-single .chosen-single abbr {
-        top: 17px;
-
+    /* Barra Scroll Personalizada para el Modal */
+    .modal.open .modal::-webkit-scrollbar-track {
+        border-radius: 10px !important;
+        background-color: #eae6f4 !important;
     }
 
-    .chosen-container-single .chosen-search input[type=text] {
-        border: 1px solid #f0f1f5 !important;
-        border-radius: 1.2rem;
+    .modal-open .modal::-webkit-scrollbar-thumb {
+        background-color: #50368c !important;
+        border-radius: 10px !important;
+        border: 1px solid rgba(155, 155, 155, 0.747) !important;
     }
 
-    .chosen-container-single .chosen-drop {
-        margin-top: -1px;
-        border: 1px solid #f0f1f5 !important;
-        border-radius: 0 0 1.25rem 1.25rem;
+    .modal-open .modal::-webkit-scrollbar-button:increment,
+    .modal-open .modal::-webkit-scrollbar-button {
+        display: none;
     }
 
-    .chosen-container-active.chosen-with-drop .chosen-single {
-        background-image: none !important;
+    .modal-open .modal::-webkit-scrollbar:vertical {
+        width: 10px !important;
     }
 
-    .chosen-container .chosen-results li.highlighted {
-        background-color: #F4F5F9;
-        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(20%, #f4f5f9), color-stop(90%, #f4f5f9));
-        background-image: #F4F5F9 !important;
-        color: #000;
-    }
-
-    .iconRed {
-        max-width: 70px !important;
-    }
-
-    .nav-tabs .nav-item .nav-link:before {
-        background-color: transparent;
-    }
-
-    .profile-tab .nav-item .nav-link {
-        margin-right: 25px;
-    }
-
-    .nav-tabs .nav-item .nav-link.active:before {
-        background-color: #50368c;
+    .modal-open .modal::-webkit-scrollbar {
+        -webkit-appearance: none !important;
+        appearance: none !important;
     }
 </style>
-<link rel="stylesheet" href="../css/estilosPersonales.css">
 <!--**********************************
         Content body start
 ***********************************-->
@@ -101,7 +95,8 @@
                                 <p>{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
-                                <h4 class="text-muted mb-0">{{#if empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
+                                <h4 class="text-muted mb-0">{{#if
+                                    empresa.telefono}}{{empresa.telefono}}{{else}}N/A{{/if}}</h4>
                                 <p>Teléfono</p>
                             </div>
 
@@ -119,47 +114,48 @@
             <div class="col-xl-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="profile-statistics mb-5">
+                        <div class="profile-statistics">
                             <div class="text-center">
                                 <div class="row">
                                     <div class="col">
-                                        <h3 class="m-b-0">{{#if empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
+                                        <h3 class="m-b-0">{{#if
+                                            empresa.cantidad_socios}}{{empresa.cantidad_socios}}{{else}}N/A{{/if}}</h3>
                                         <span>Cantidad de Socios</span>
                                     </div>
                                     <div class="col">
                                         <h3 class="m-b-0">{{#if empresa.tiempo_experiencia}}
-                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de experiencia</span>
+                                            {{empresa.tiempo_experiencia}}{{else}}N/A{{/if}} </h3><span>Años de
+                                            experiencia</span>
                                     </div>
                                     <div class="col">
                                         <h3 class="m-b-0">{{#if empresa.num_empleados}}
-                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de Empleados</span>
+                                            {{empresa.num_empleados}}{{else}}N/A{{/if}} </h3><span>Número de
+                                            Empleados</span>
                                     </div>
                                 </div>
 
                                 <div class="mt-4">
                                     <form action="/actualizarEmpresa" method="post">
+                                        {{#if adminDash}}
                                         {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
                                         <div class="row">
                                             <div class="col">
-                                                <label>Asignar consultor</label>
+                                                <label>Consultor</label>
                                                 <select name="id_consultor" id="id_consultor"
                                                     class="form-control sltBuscar chosen-container chosen-container-single required">
                                                     <option value=""></option>
                                                     {{#each consultores}}
-                                                        {{#comparar id_consultores '==' idCon}}
-                                                        <option selected
-                                                        {{/comparar}}
-                                                        {{#comparar id_consultores '!=' idCon}}
-                                                        <option
-                                                        {{/comparar}}
-                                                        value="{{id_consultores}}">
+                                                    {{#comparar id_consultores '==' idCon}}
+                                                    <option selected {{/comparar}} {{#comparar id_consultores '!='
+                                                        idCon}} <option {{/comparar}} value="{{id_consultores}}">
                                                         {{nombres}} {{apellidos}}</option>
                                                     {{/each}}
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <label>Estado de la cuenta</label>
-                                                <select id="estadoAdm" name="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                <label>Estado</label>
+                                                <select id="estadoAdm" name="estadoAdm"
+                                                    class="mr-sm-2 default-select text-center">
                                                     {{#comparar datos.estadoAdm '==' '1'}}
                                                     <option value="1" selected>Activa</option>
                                                     <option value="0">Bloqueada</option>
@@ -171,12 +167,14 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        {{/if}}
 
                                         {{!-- Boton actualizar empresa --}}
                                         <div class="row">
+                                            {{#if adminDash}}
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <input type="hidden" value="{{datos.code}}" name="codigo">
+                                                    <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
                                                     <button type="submit" class="btn btn-primary"
                                                         id="btnActualizarEmpresa"
                                                         style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
@@ -184,19 +182,24 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            {{/if}}
+
 
                                             <div class="col-12 mt-3">
                                                 {{!-- Datos personales --}}
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if
+                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
                                                             </h5>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                         </div>
+
                                     </form>
 
                                     <div class="row mt-4">
@@ -227,7 +230,7 @@
                                     <div class="row mt-2">
                                         {{#if datos.redes.twitter}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://twitter.com/{{datos.redes.twitter}}">
+                                            <a href="https://twitter.com/{{datos.redes.twitter}}" target="_blank">
                                                 <svg id="Layer_1" height="40px" width="40px"
                                                     style="enable-background:new 0 0 1000 1000;" version="1.1"
                                                     viewBox="0 0 1000 1000" xml:space="preserve"
@@ -253,7 +256,7 @@
 
                                         {{#if datos.redes.facebook}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://facebook.com/{{datos.redes.facebook}}">
+                                            <a href="https://facebook.com/{{datos.redes.facebook}}" target="_blank">
                                                 <svg height="40px" width="40px"
                                                     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
                                                     version="1.1" viewBox="0 0 512 512" xml:space="preserve"
@@ -275,7 +278,7 @@
 
                                         {{#if datos.redes.instagram}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://instagram.com/{{datos.redes.instagram}}">
+                                            <a href="https://instagram.com/{{datos.redes.instagram}}" target="_blank">
                                                 <svg height="40px" width="40px" id="Layer_1"
                                                     style="enable-background:new 0 0 1000 1000;" version="1.1"
                                                     viewBox="0 0 1000 1000" xml:space="preserve"
@@ -316,7 +319,7 @@
 
                                         {{#if datos.redes.otra}}
                                         <div class="col-4 iconRed">
-                                            <a href="htts://{{datos.redes.otra}}">
+                                            <a href="https://{{datos.redes.otra}}" target="_blank">
                                                 <svg height="40px" version="1.1" viewBox="0 0 519 519" width="40px"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -371,32 +374,40 @@
 
             {{!-- COLUNMA DERECHA CON PESTAÑAS --}}
             <div class="col-xl-8">
-                <div class="card">
-                    <div class="card-body">
 
-                        {{!-- Pestañas Fijas --}}
-                        <div class="profile-tab">
-                            <div class="custom-tab-1">
-                                <ul class="nav nav-tabs">
-                                    <li class="nav-item"><a href="#representante" data-toggle="tab"
-                                            class="nav-link active show">Representante</a></li>
-                                    <li class="nav-item"><a href="#empresa" data-toggle="tab"
-                                            class="nav-link">Empresa</a></li>
-                                    <li class="nav-item"><a href="#settings" data-toggle="tab"
-                                            class="nav-link">Config</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        {{!-- ./ Fin de pestañas --}}
+                {{!-- Pestañas Fijas --}}
+                <div class="profile-tab mb-2" style="
+                        background-color: #fff;
+                        padding: 2em 1.5em;
+                        border-radius: 1.25em;
+                        box-shadow: 0px 12px 23px 0px #ededed">
+                    <div class="custom-tab-1">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item"><a href="#empresa" data-toggle="tab"
+                                    class="nav-link active show">Empresa</a></li>
+                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab"
+                                    class="nav-link">Diagnóstico</a></li>
+                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link">Análisis</a>
+                            </li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link">Plan
+                                    Estrategico</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {{!-- ./ Fin de pestañas --}}
 
-                        {{!-- Contenido de pestañas --}}
-                        <div class="profile-tab barra-scroll overflow-y-auto" style="max-height: 100vh;">
+                {{!-- Contenido de pestañas --}}
+                <div class="profile-tab barra-scroll overflow-y-auto" id="altura_tabs">
 
-                            <div class="custom-tab-1">
+                    <div class="custom-tab-1">
 
-                                <div class="tab-content">
-                                    {{!-- PESTAÑA 1 --}}
-                                    <div id="representante" class="tab-pane fade active show">
+                        <div class="tab-content">
+                            {{!-- PESTAÑA 1 - INFO DE LA EMPRESA --}}
+                            <div id="empresa" class="tab-pane fade active show">
+
+                                <div class="card">
+                                    <div class="card-body">
+
                                         <div class="my-post-content pt-3">
                                             {{!-- Datos personales --}}
                                             <div class="profile-personal-info">
@@ -416,7 +427,9 @@
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-8 col-7">
-                                                        <span>{{#if empresa.fecha_nacimiento}} {{empresa.fecha_nacimiento}} {{else}} N/A {{/if}}</span>
+                                                        <span>{{#if empresa.fecha_nacimiento}}
+                                                            {{empresa.fecha_nacimiento}} {{else}} N/A
+                                                            {{/if}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -425,273 +438,769 @@
                                                                 class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}} {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">¿Dueño del negocio? <span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.es_propietario}}{{empresa.es_propietario}} {{else}} N/A {{/if}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">¿Tiene socios?<span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.socios}}{{empresa.socios}} {{else}} N/A {{/if}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-4 col-5">
-                                                        <h5 class="f-w-500">Porcentaje Accionario<span
-                                                                class="pull-right">:</span></h5>
-                                                    </div>
-                                                    <div class="col-sm-8 col-7">
-                                                        <span>{{#if empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}} {{else}} N/A {{/if}}</span>
-                                                    </div>
+                                                    <div class="col-sm-8 col-7"><span>{{#if empresa.pais}}
+                                                            {{empresa.pais}} {{else}} N/A {{/if}} </span></div>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Dueño del negocio? <span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.es_propietario}}{{empresa.es_propietario}}
+                                                        {{else}} N/A
+                                                        {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">¿Tiene socios?<span class="pull-right">:</span>
+                                                    </h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7"><span>{{#if
+                                                        empresa.socios}}{{empresa.socios}} {{else}} N/A
+                                                        {{/if}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-sm-4 col-5">
+                                                    <h5 class="f-w-500">Porcentaje Accionario<span
+                                                            class="pull-right">:</span></h5>
+                                                </div>
+                                                <div class="col-sm-8 col-7">
+                                                    <span>{{#if
+                                                        empresa.porcentaje_accionario}}{{empresa.porcentaje_accionario}}
+                                                        {{else}} N/A {{/if}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                            {{!-- Más Sobre la empresa --}}
-                                            <div class="profile-personal-info mt-5">
-                                                <h4 class="text-primary mb-3">Sobre la empresa</h4>
+                                        {{!-- Más Sobre la empresa --}}
+                                        <div class="profile-personal-info mt-5">
+                                            <h4 class="text-primary mb-3">Sobre la empresa</h4>
 
-                                                <div class="row mb-2">
+                                            <div class="row mb-2">
 
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Tiempo de Fundación</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Promedio de ingreso anual</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
-                                                    <div class="col-sm-4 col-4">
-                                                        <h5 class="f-w-500">Etapa actual del negocio</h4>
-                                                            <a class="text-muted pr-3 f-s-16">{{#if empresa.etapa_actual}}{{empresa.etapa_actual}} {{else}} N/A {{/if}}</a>
-                                                    </div>
-
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Tiempo de Fundación</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.tiempo_fundacion}}{{empresa.tiempo_fundacion}}
+                                                            {{else}} N/A {{/if}}</a>
                                                 </div>
 
-                                                {{!-- OBJETIVOS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Objetivos</h4>
-                                                            {{#if datos.objetivos}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.objetivos.objetivo1}}<br>
-                                                                2- {{datos.objetivos.objetivo2}}<br>
-                                                                3- {{datos.objetivos.objetivo3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Promedio de ingreso anual</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.promedio_ingreso_anual}}{{empresa.promedio_ingreso_anual}}
+                                                            {{else}} N/A {{/if}}</a>
                                                 </div>
 
-                                                {{!-- FORTALEZAS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Fortalezas</h4>
-                                                            {{#if datos.fortalezas}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.fortalezas.fortaleza1}}<br>
-                                                                2- {{datos.fortalezas.fortaleza2}}<br>
-                                                                3- {{datos.fortalezas.fortaleza3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
-                                                </div>
-
-                                                {{!-- PROBLEMAS --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Principales Problemas</h4>
-                                                            {{#if datos.problemas}}
-                                                            <p style="text-align: justify;"> 1-
-                                                                {{datos.problemas.problema1}}<br>
-                                                                2- {{datos.problemas.problema2}}<br>
-                                                                3- {{datos.problemas.problema3}}</p>
-                                                            {{else}}N/A
-                                                            {{/if}}
-                                                    </div>
-                                                </div>
-
-                                                {{!-- MOTIVO DE LA CONSULTORÍA --}}
-                                                <div class="row mb-2 mt-5">
-                                                    <div class="col-sm-11 col-10 pr-2">
-                                                        <h5 class="f-w-500">Motivo de la consultoría</h4>
-                                                            <p style="text-align: justify;">
-                                                                {{#if empresa.motivo_consultoria}}
-                                                                {{empresa.motivo_consultoria}}
-                                                                {{else}}N/A
-                                                                {{/if}}
-                                                            </p>
-                                                    </div>
+                                                <div class="col-sm-4 col-4">
+                                                    <h5 class="f-w-500">Etapa actual del negocio</h4>
+                                                        <a class="text-muted pr-3 f-s-16">{{#if
+                                                            empresa.etapa_actual}}{{empresa.etapa_actual}}
+                                                            {{else}} N/A
+                                                            {{/if}}</a>
                                                 </div>
 
                                             </div>
+
+                                            {{!-- OBJETIVOS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Objetivos</h4>
+                                                        {{#if datos.objetivos}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.objetivos.objetivo1}}<br>
+                                                            2- {{datos.objetivos.objetivo2}}<br>
+                                                            3- {{datos.objetivos.objetivo3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- FORTALEZAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Fortalezas</h4>
+                                                        {{#if datos.fortalezas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.fortalezas.fortaleza1}}<br>
+                                                            2- {{datos.fortalezas.fortaleza2}}<br>
+                                                            3- {{datos.fortalezas.fortaleza3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- PROBLEMAS --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Principales Problemas</h4>
+                                                        {{#if datos.problemas}}
+                                                        <p style="text-align: justify;"> 1-
+                                                            {{datos.problemas.problema1}}<br>
+                                                            2- {{datos.problemas.problema2}}<br>
+                                                            3- {{datos.problemas.problema3}}</p>
+                                                        {{else}}N/A
+                                                        {{/if}}
+                                                </div>
+                                            </div>
+
+                                            {{!-- MOTIVO DE LA CONSULTORÍA --}}
+                                            <div class="row mb-2 mt-5">
+                                                <div class="col-sm-11 col-10 pr-2">
+                                                    <h5 class="f-w-500">Motivo de la consultoría</h4>
+                                                        <p style="text-align: justify;">
+                                                            {{#if empresa.motivo_consultoria}}
+                                                            {{empresa.motivo_consultoria}}
+                                                            {{else}}N/A
+                                                            {{/if}}
+                                                        </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
 
                                     </div>
+                                </div>
 
-                                    {{!-- PESTAÑA 2 --}}
-                                    <div id="empresa" class="tab-pane fade">
+
+                            </div>
+
+                            {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
+                            <div id="diagnostico" class="tab-pane fade">
+
+                                <div class="card">
+                                    <div class="card-body">
                                         <div class="profile-about-me">
                                             <div class="pt-4 border-bottom-1 pb-3">
                                                 <h4 class="text-primary"></h4>
-                                                <p class="mb-2">A wonderful serenity has taken possession of my entire
-                                                    soul, like these sweet mornings of spring which I enjoy with my
-                                                    whole heart. I am alone, and feel the charm of existence was created
-                                                    for the bliss of souls like mine.I am so happy, my dear friend, so
-                                                    absorbed in the exquisite sense of mere tranquil existence, that I
-                                                    neglect my talents.</p>
-                                                <p>A collection of textile samples lay spread out on the table - Samsa
-                                                    was a travelling salesman - and above it there hung a picture that
-                                                    he had recently cut out of an illustrated magazine and housed in a
-                                                    nice, gilded frame.</p>
-                                            </div>
-                                        </div>
 
-                                        <div class="profile-lang mb-5">
-                                            <h4 class="text-primary mb-2">Tiempo de Fundación</h4>
-                                            <a class="text-muted pr-3 f-s-16">{{empresa.tiempo_fundacion}}</a>
-                                        </div>
+                                                {{!-- Grafíco de indicadores --}}
+                                                <div class="col-xl-12">
 
-                                        <div class="profile-skills mb-5">
-                                            <h4 class="text-primary mb-2">Promedio de ingreso anual</h4>
-                                            <a class="text-muted pr-3 f-s-16">{{empresa.promedio_ingreso_anual}}</a>
-                                        </div>
+                                                    <!-- PESTAÑAS DE LAS GRÁFICAS -->
+                                                    <div class="profile-tab mb-2">
+                                                        <div class="custom-tab-1">
+                                                            <ul class="nav nav-pills justify-content-center mb-4">
+                                                                <li class="nav-item"><a href="#vitales"
+                                                                        data-toggle="tab"
+                                                                        class="nav-link active show btnIndicadoresAll">Áreas
+                                                                        Vitales</a>
+                                                                </li>
+                                                                <li class="nav-item"><a href="#dimensiones"
+                                                                        data-toggle="tab"
+                                                                        class="nav-link btnIndicadoresAll">Por
+                                                                        dimensiones</a>
+                                                                </li>
+                                                            </ul>
 
-                                        <div class="profile-personal-info">
-                                            <h4 class="text-primary mb-4">Personal Information</h4>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Name <span class="pull-right">:</span>
-                                                    </h5>
+                                                            <div class="tab-content">
+
+                                                                <div id="vitales" class="tab-pane fade active show">
+                                                                    <div class="card-body">
+                                                                        <canvas id="chartEmpresaAdm1"></canvas>
+                                                                    </div>
+
+                                                                    {{#if rendimiento.op}}
+                                                                    <div class="row justify-content-center">
+                                                                        <span style="padding-top: 6px; padding-right: 8px;">Rendimiento Operativo del Negocio: <strong>{{rendimiento.op}}% </strong></span>
+                                                                    </div>
+                                                                    {{/if}}
+                                                                </div>
+
+                                                                <div id="dimensiones" class="tab-pane fade">
+
+                                                                    <div class="card-body">
+                                                                        <canvas id="chartEmpresaAdm2"></canvas>
+                                                                    </div>
+
+                                                                    {{#if rendimiento.num}}
+                                                                    <div class="row justify-content-center">
+                                                                        <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto: {{rendimiento.num}}% </span>
+                                                                        <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
+                                                                    </div>
+                                                                    {{/if}}
+                                                                </div>
+
+                                                                
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- ./ Fin de pestañas -->
+
+                                                    <input type="hidden" id="jsonAnalisisAdm1" value="{{jsonAnalisis1}}" />
+                                                    <input type="hidden" id="jsonAnalisisAdm2" value="{{jsonAnalisis2}}" />
+                                                    <input type="hidden" id="jsonDimensionesAdm1" value="{{jsonDimensiones}}" />
+                                                    <input type="hidden" id="jsonDimensionesAdm2" value="{{jsonDimensiones2}}" />
+                                                    <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
+
                                                 </div>
-                                                <div class="col-sm-9 col-7"><span>Mitchell C.Shay</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Email <span class="pull-right">:</span>
-                                                    </h5>
-                                                </div>
-                                                <div class="col-sm-9 col-7"><span>example@examplel.com</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Availability <span class="pull-right">:</span>
-                                                    </h5>
-                                                </div>
-                                                <div class="col-sm-9 col-7"><span>Full Time (Free Lancer)</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Age <span class="pull-right">:</span>
-                                                    </h5>
-                                                </div>
-                                                <div class="col-sm-9 col-7"><span>27</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Location <span class="pull-right">:</span></h5>
-                                                </div>
-                                                <div class="col-sm-9 col-7"><span>Rosemont Avenue Melbourne,
-                                                        Florida</span>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-2">
-                                                <div class="col-sm-3 col-5">
-                                                    <h5 class="f-w-500">Year Experience <span
-                                                            class="pull-right">:</span></h5>
-                                                </div>
-                                                <div class="col-sm-9 col-7"><span>07 Year Experiences</span>
-                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
-
-                                    {{!-- PESTAÑA 2 --}}
-                                    <div id="settings" class="tab-pane fade">
-                                        <div class="pt-3">
-                                            <div class="settings-form">
-                                                <h4 class="text-primary">Account Setting</h4>
-                                                <form>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>Email</label>
-                                                            <input type="email" placeholder="Email"
-                                                                class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Password</label>
-                                                            <input type="password" placeholder="Password"
-                                                                class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Address</label>
-                                                        <input type="text" placeholder="1234 Main St"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label>Address 2</label>
-                                                        <input type="text" placeholder="Apartment, studio, or floor"
-                                                            class="form-control">
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>City</label>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                        <div class="form-group col-md-4">
-                                                            <label>State</label>
-                                                            <select class="form-control default-select" id="inputState">
-                                                                <option selected="">Choose...</option>
-                                                                <option>Option 1</option>
-                                                                <option>Option 2</option>
-                                                                <option>Option 3</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group col-md-2">
-                                                            <label>Zip</label>
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input"
-                                                                id="gridCheck">
-                                                            <label class="custom-control-label" for="gridCheck"> Check
-                                                                me out</label>
-                                                        </div>
-                                                    </div>
-                                                    <button class="btn btn-primary" type="submit">Sign
-                                                        in</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </div>
+
+                                <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>TIPO DE EMPRESA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.tablasVacias}}
+                                                        <tr id="newEmp">
+                                                            <td>{{#if frmDiag.fecha}}{{frmDiag.fecha}}{{else}}N/A{{/if}}
+                                                            </td>
+                                                            <td>Nueva</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/diagnostico-proyecto/{{datos.code}}"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
+                                                        <tr id="oldEmp">
+                                                            <td>N/A</td>
+                                                            <td>Establecida</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="/cuestionario-diagnostico/{{datos.code}}"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- ============================= TABLAS LLENAS ============================= -->
+                                                        {{/if}}
+                                                        <!-- CUESTIONARIO EMPRESA NUEVA  -->
+                                                        {{#if frmDiag.tabla2}}
+                                                        <tr id="newEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Nueva</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target="#modalNuevosProyectos"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                        </tr>
+                                                        {{/if}}
+                                                        {{#if frmDiag.tabla1}}
+                                                        <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
+                                                        <tr id="oldEmp">
+                                                            <td>{{frmDiag.fecha}}</td>
+                                                            <td>Establecida</td>
+                                                            <td>Cuestionario diagnóstico</td>
+                                                            <td><span
+                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target=".bd-example-modal-lg"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        {{/if}}
+                                                        <!-- ========================================================================================== -->
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ======================== INFORMES DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informes</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if frmInfo.fecha}}{{frmInfo.fecha}}{{else}}
+                                                                <span id="spanFecha">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nombreInforme">Informe diagnóstico</span></td>
+                                                            <td>
+                                                                {{#if frmInfo.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeDiag" >
+                                                                    <div id="btnSubirInforme"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeDiag" class="inputInformeDiag" type="file" style="display:none"
+                                                                    name="informeDiag" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{/if}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
+                            </div>
+
+                            {{!-- PESTAÑA 3 - ANÁLISIS DE NEGOCIO --}}
+                            <div id="analisis" class="tab-pane fade">
+
+                                 <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión producto</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión administración</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión operación</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión marketing</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{!-- PRODUCTO --}}
+                                                        <tr>
+                                                            <td>{{#if informes.prod.fecha}}{{informes.prod.fecha}}{{else}}
+                                                                <span id="spanFechaProd">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomProducto">Informe de dimensión producto</span></td>
+                                                            <td>
+                                                                {{#if informes.prod.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeProd">
+                                                                                <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
+                                                                                accept="application/pdf" />
+                                                                        </td>
+                                                                
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a id="btnVerInformeProd" href="{{informes.prod.url}}"
+                                                                                style="display:{{informes.prod.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- ADMINISTRACIÓN --}}
+                                                        <tr>
+                                                            <td>{{#if informes.adm.fecha}}{{informes.adm.fecha}}{{else}}
+                                                                <span id="spanFechaAdmin">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomAdmin">Informe de dimensión administración</span></td>
+                                                            <td>
+                                                                {{#if informes.adm.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeAdmin" >
+                                                                    <div id="btnSubirInformeAdmin"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
+                                                                    name="informeAdmin" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeAdmin" href="{{informes.adm.url}}" style="display:{{informes.adm.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- OPERACIONES --}}
+                                                        <tr>
+                                                            <td>{{#if informes.op.fecha}}{{informes.op.fecha}}{{else}}
+                                                                <span id="spanFechaOpe">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomOperacion">Informe de dimensión operaciones</span></td>
+                                                            <td>
+                                                                {{#if informes.op.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if informes.op.fecha}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeOpe" >
+                                                                    <div id="btnSubirInformeOpe"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
+                                                                    name="informeOpe" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeOpe" href="{{informes.op.url}}" style="display:{{informes.op.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- MARKETING --}}
+                                                        <tr>
+                                                            <td>{{#if informes.marketing.fecha}}{{informes.marketing.fecha}}{{else}}
+                                                                <span id="spanFechaMarketing">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomMarketing">Informe de dimensión marketing</span></td>
+                                                            <td>
+                                                                {{#if informes.marketing.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeMarketing" >
+                                                                    <div id="btnSubirInformeMarketing"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
+                                                                    name="informeMarketing" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeMarketing" href="{{informes.marketing.url}}" style="display:{{informes.marketing.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
+                                <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if informes.general.fecha}}{{informes.general.fecha}}{{else}}
+                                                                <span id="spanFecha">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nombreInforme">Informe de análisis</span></td>
+                                                            <td>
+                                                                {{#if informes.general.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeDiag" >
+                                                                    <div id="btnSubirInforme"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeDiag" class="probarXD" type="file" style="display:none"
+                                                                    name="informeDiag" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInforme" href="{{informes.general.url}}" style="display:{{informes.general.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
+                            </div>
+
+                            <div id="plan-estrategico" class="tab-pane fade">
+
                             </div>
 
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
+
+        <!-- MODAL RESPUESTAS DEL CUESTIONARIO DIAGNÓSTICO -->
+        {{#if frmDiag.tabla1}}
+        {{> modals/cuestionario}}
+        {{else}}
+        {{> modals/nuevosProyectos}}
+        {{/if}}
 
     </div>
 
 </div>
-
-<script>
-</script>

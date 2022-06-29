@@ -54,7 +54,7 @@
           <ul class="navbar-nav header-right">
 
             {{!-- Notificaciones --}}
-            <li class="nav-item dropdown notification_dropdown activar-cuenta">
+            {{!-- <li class="nav-item dropdown notification_dropdown activar-cuenta">
               <a class="nav-link  ai-icon" href="javascript:void(0)" role="button" data-toggle="dropdown">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -65,7 +65,7 @@
               </a>
               <div class="dropdown-menu rounded dropdown-menu-right">
                 <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3 height380">
-                  {{!-- <ul class="timeline">
+                  <ul class="timeline">
                     <li>
                       <div class="timeline-panel">
                         <div class="media mr-2">
@@ -132,10 +132,10 @@
                         </div>
                       </div>
                     </li>
-                  </ul> --}}
+                  </ul>
                 </div>
               </div>
-            </li>
+            </li> --}}
 
             {{!-- Mensajes nuevos --}}
             {{!-- <li class="nav-item dropdown notification_dropdown">
@@ -258,11 +258,21 @@
           </a>
         </li>
       </ul>
-      <a href="#" class="add-menu-sidebar"
+
+      {{#if aprobarConsultor}}
+      <a href="/consultores/{{aprobarConsultor}}" class="add-menu-sidebar"
         style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); color:#fff !important; padding: 10px 15px;">
         <img src="/img/icon_consultor.png" alt="Aprobar consultor" class="mr-2">
         <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
       </a>
+      {{else}}
+      <a class="add-menu-sidebar"
+        style="background: #585858 !important; color:#fff !important; cursor: default; padding: 10px 15px;">
+        <img src="/img/icon_consultor.png" alt="Aprobar consultor" class="mr-2" style="filter: grayscale(1)">
+        <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
+      </a>
+      {{/if}}
+
       <div class="copyright text-center">
         <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
       </div>

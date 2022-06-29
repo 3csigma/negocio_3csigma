@@ -13,8 +13,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="consultoresTabla" class="table table-striped display min-w850 text-center"
-                                style="width: 100%">
+                            <table id="consultoresTabla" class="table table-striped text-center" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <th></th>
@@ -38,20 +37,27 @@
                                         <td>{{num_empresas}}</td>
                                         <td>
                                             {{#comparar estadoAdm '==' 0}}
-                                            <span class="badge light badge-danger">Pendiente</span>
+                                            <span class="badge light badge-warning">Pendiente</span>
                                             {{/comparar}}
-                                            {{#comparar estadoAdm '!=' 0}}
-                                            <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF">Aprobado</span>
+                                            {{#comparar estadoAdm '==' 1}}
+                                            <span class="badge light badge-success" >Aprobado</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 2}}
+                                            <span class="badge light badge-danger" >Bloqueado</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 3}}
+                                            <span class="badge light badge-danger" >Rechazado</span>
                                             {{/comparar}}
                                         </td>
                                         <td>
-                                            <div class="d-flex">
+                                            <div style="margin: 0 auto">
                                                 <a href="/consultores/{{codigo}}" class="btn btn-primary shadow btn-xs sharp mr-1"
                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                                                    <i class="fa fa-pencil"></i></a>
-                                                <a href="#" class="btn btn-danger shadow btn-xs sharp"
-                                                    style="background: #DC0000; color: white"><i
-                                                        class="fa fa-trash"></i></a>
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a onclick="bloquearConsultor({{id_consultores}})" class="btn btn-danger shadow btn-xs sharp" 
+                                                    style="background: #DC0000; color: white;"><i class="fa fa-ban"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -67,3 +73,43 @@
         </div>
     </div>
 </div>
+
+<!--**********************************
+            Scripts
+***********************************-->
+<script>
+    function bloquearConsultor(id) {
+        console.log(id)
+        Swal.fire({
+            title: '¿Deseas bloquear este consultor?',
+            text: "Podrás activarlo nuevamente más adelante.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, bloquear!'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/bloquearConsultor', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'El consultor ya está bloqueado/inactivo.',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
+</script>

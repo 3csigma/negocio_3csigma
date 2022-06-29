@@ -8158,19 +8158,18 @@ Copyright (c) 2014 Daniel Eden
    */
   /*
    *  Owl Carousel - Core
-   */
+   *
   .owl-carousel {
     display: none;
     width: 100%;
     -webkit-tap-highlight-color: transparent;
-    /* position relative and z-index fix webkit rendering fonts issue */
     position: relative;
     z-index: 1; }
     .owl-carousel .owl-stage {
       position: relative;
       -ms-touch-action: pan-Y;
       -moz-backface-visibility: hidden;
-      /* fix firefox animation glitch */ }
+      }
     .owl-carousel .owl-stage:after {
       content: ".";
       display: block;
@@ -8181,7 +8180,6 @@ Copyright (c) 2014 Daniel Eden
     .owl-carousel .owl-stage-outer {
       position: relative;
       overflow: hidden;
-      /* fix for flashing background */
       -webkit-transform: translate3d(0px, 0px, 0px); }
     .owl-carousel .owl-wrapper,
     .owl-carousel .owl-item {
@@ -8235,14 +8233,16 @@ Copyright (c) 2014 Daniel Eden
       direction: rtl; }
     .owl-carousel.owl-rtl .owl-item {
       float: right; }
+      */
   
-  /* No Js */
+  /* No Js *
   .no-js .owl-carousel {
     display: block; }
+    */
   
   /*
    *  Owl Carousel - Animate Plugin
-   */
+   *
   .owl-carousel .animated {
     animation-duration: 1000ms;
     animation-fill-mode: both; }
@@ -8255,6 +8255,7 @@ Copyright (c) 2014 Daniel Eden
   
   .owl-carousel .fadeOut {
     animation-name: fadeOut; }
+  */
   
   @keyframes fadeOut {
     0% {
@@ -8264,23 +8265,24 @@ Copyright (c) 2014 Daniel Eden
   
   /*
    *  Owl Carousel - Auto Height Plugin
-   */
+   *
   .owl-height {
     transition: height 500ms ease-in-out; }
-  
+  */
   /*
    *  Owl Carousel - Lazy Load Plugin
-   */
+   *
   .owl-carousel .owl-item .owl-lazy {
     opacity: 0;
     transition: opacity 400ms ease; }
   
   .owl-carousel .owl-item img.owl-lazy {
     transform-style: preserve-3d; }
+    */
   
   /*
    *  Owl Carousel - Video Plugin
-   */
+   *
   .owl-carousel .owl-video-wrapper {
     position: relative;
     height: 100%;
@@ -8321,6 +8323,7 @@ Copyright (c) 2014 Daniel Eden
     z-index: 1;
     height: 100%;
     width: 100%; }
+    */
   
   /**
    * Owl Carousel v2.2.1
@@ -8329,7 +8332,7 @@ Copyright (c) 2014 Daniel Eden
    */
   /*
    *  Default theme - Owl Carousel CSS File
-   */
+   *
   .owl-theme .owl-nav {
     margin-top: 10px;
     text-align: center;
@@ -8372,5 +8375,5 @@ Copyright (c) 2014 Daniel Eden
         border-radius: 30px; }
       .owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
         background: #869791; }
-  
+  */
   

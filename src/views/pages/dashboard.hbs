@@ -1,3 +1,29 @@
+<style>
+    a.nav-link.btnIndicadoresAll {
+        background: #f2f2f2;
+        border-radius: 22px;
+        color: #fff;
+        text-align: center;
+    }
+
+    a.nav-link.btnIndicadoresAll.active {
+        background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
+        color: white !important;
+        border-radius: 22px;
+    }
+
+    .nav-link.btnIndicadoresAll:focus,
+    .nav-link.btnIndicadoresAll:hover {
+        background-color: #f2f2f2 !important;
+        border-color: #50368c;
+        border-radius: 22px !important;
+        color: #50368c;
+        border-width: 0 0px 3px 0;
+    }
+    .apexcharts-text tspan {
+        font-family: 'Oblivian Text' !important;
+    }
+</style>
 <!--**********************************
         Content body start
 ***********************************-->
@@ -23,13 +49,13 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Diagnóstico de negocio</p>
-                                        <span class="title text-black font-w600">0%</span>
+                                        <span class="title text-black font-w600">{{diagPorcentaje.num}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-diagnostico" style="width: 5%; height:5px;"
-                                        role="progressbar">
-                                        <span class="sr-only">0% Completado</span>
+                                    <div class="progress-bar bg-diagnostico"
+                                        style="width: {{diagPorcentaje.num}}%; height:5px;" role="progressbar">
+                                        <span class="sr-only">{{diagPorcentaje.num}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
@@ -94,47 +120,76 @@
                 </div>
                 {{!-- Fin de Cuadros principales --}}
             </div>
+
             {{!-- Grafíco de indicadores --}}
             <div class="col-xl-6 col-xxl-12">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header" style="margin: 0 auto; border-color: transparent">
                         <h4 class="card-title" id="titu-indicador">Indicadores</h4>
-                        <div id="indicadores">
-                            <div id="btn-indicador1">Áreas Vitales</div>
-                            <div id="btn-indicador2">Por dimensiones</div>
+                    </div>
+                    {{!-- Grafíco de indicadores --}}
+                
+                    <!-- PESTAÑAS DE LAS GRÁFICAS -->
+                    <div class="profile-tab mb-2">
+                        <div class="custom-tab-1">
+                            <ul class="nav nav-pills justify-content-center mb-4">
+                                <li class="nav-item"><a href="#vitales" data-toggle="tab"
+                                        class="nav-link active show btnIndicadoresAll" style="width: 168.83px;">Áreas
+                                        Vitales</a>
+                                </li>
+                                <li class="nav-item"><a href="#dimensiones" data-toggle="tab" style="margin: 0" class="nav-link btnIndicadoresAll">Por
+                                        dimensiones</a>
+                                </li>
+                            </ul>
                         </div>
-                        <table border="0" id="tabla-indicadores">
-                            <tr>
-                                <td>
-                                    <div class="info-analisis"><i class="fa-solid fa-square" style="color: #50368C"></i>
-                                        Primer análisis</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="info-analisis"><i class="fa-solid fa-square" style="color: #FED061"></i>
-                                        Último análisis</div>
-                                </td>
-                            </tr>
-                        </table>
+                    </div>
+                    <!-- ./ Fin de pestañas -->
+                
+                
+                
+                    <div class="tab-content">
+
+                        <div id="vitales" class="tab-pane fade active show">
+                            <div class="card-body">
+                                <canvas id="chartEmpresa1"></canvas>
+                            </div>
+                        </div>
+
+                        <div id="dimensiones" class="tab-pane fade">
+                            <div class="card-body">
+                                <canvas id="chartEmpresa2"></canvas>
+                            </div>
+                        
+                            {{#if rendimiento.num}}
+                            <div class="row justify-content-center mb-3">
+                                <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto:
+                                    {{rendimiento.num}}% </span>
+                                <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
+                            </div>
+                            {{/if}}
+                        </div>
 
                     </div>
-                    <div class="card-body">
-                        <canvas id="barChart_1"></canvas>
-                    </div>
+
+                    <input type="hidden" id="jsonAnalisis1" value="{{jsonAnalisis1}}" />
+                    <input type="hidden" id="jsonAnalisis2" value="{{jsonAnalisis2}}" />
+                    <input type="hidden" id="jsonDimensiones1" value="{{jsonDimensiones1}}" />
+                    <input type="hidden" id="jsonDimensiones2" value="{{jsonDimensiones2}}" />
+                    <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
                 </div>
             </div>
+
             {{!-- Últimas tareas realizadas --}}
             <div class="col-xl-6 col-xxl-6">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Últimas tareas realizadas</h4>
+                                <h4 class="card-title">Últimas tareas</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-responsive-md">
+                                    <table class="table table-responsive-md text-center">
                                         <thead>
                                             <tr>
                                                 <th>FECHA</th>
@@ -145,6 +200,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#if tareas}}
                                             <tr>
                                                 <td>xx/xx/xxxx</td>
                                                 <td>xxxxxxxx</td>
@@ -161,7 +217,12 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            {{else}}
                                             <tr>
+                                                <td colspan="5">Aún no hay tareas asignadas.</td>
+                                            </tr>
+                                            {{/if}}
+                                            {{!-- <tr>
                                                 <td>xx/xx/xxxx</td>
                                                 <td>xxxxxxxx</td>
                                                 <td>xxxxxxxx</td>
@@ -176,7 +237,7 @@
                                                             style="background: #DC0000"><i class="fa fa-trash"></i></a>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -185,6 +246,7 @@
                     </div>
                 </div>
             </div>
+
             {{!-- Últimos informes generados --}}
             <div class="col-xl-6 col-xxl-6">
                 <div class="row">
@@ -195,7 +257,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-responsive-md">
+                                    <table class="table table-responsive-md text-center">
                                         <thead>
                                             <tr>
                                                 <th>FECHA</th>
@@ -205,20 +267,23 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {{#if informe.fecha}}
                                             <tr>
-                                                <td>xx/xx/xxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
+                                                <td>{{informe.fecha}}</td>
+                                                <td>Diagnóstico de negocio</td>
+                                                <td>{{informe.nombre}}</td>
                                                 <td>
-                                                    <div class="d-flex">
-                                                        <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                                                            <i class="fa fa-pencil"></i></a>
-                                                        <a href="#" class="btn btn-danger shadow btn-xs sharp"
-                                                            style="background: #DC0000"><i class="fa fa-trash"></i></a>
-                                                    </div>
+                                                    <a href="{{informe.url}}"
+                                                        style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                        target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                        <i class="fa fa-search"></i></a>
                                                 </td>
                                             </tr>
+                                            {{else}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay informes generados.</td>
+                                            </tr>
+                                            {{/if}}
                                         </tbody>
                                     </table>
                                 </div>

@@ -1,0 +1,491 @@
+<!-- ****************** Required JS - DASHBOARD ****************** -->
+<script src="../vendor/js/Chart.bundle.min.js"></script>
+{{!-- <script src="../vendor/js/owl.carousel.js"></script> --}}
+<!-- Chart piety plugin files -->
+<script src="../vendor/js/jquery.peity.min.js"></script>
+<!-- Apex Chart -->
+<script src="../vendor/js/apexchart.js"></script>
+<!-- DATATABLES ADMIN -->
+<script src="../vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="../vendor/js/datatables.init.js"></script>
+<script src="../vendor/js/personalScripts.js"></script>
+
+{{!-- SCRIPTS - VALIDACIONES PARA SUBIR INFORMES --}}
+<script>
+	(function () {
+
+		let dzChartlist = function () {
+			let draw = Chart.controllers.line.__super__.draw; //draw shadow
+			let screenWidth = $(window).width();
+
+			let chartBar = function () {
+				var optionsArea = {
+					series: [{
+						name: "Empresas",
+						data: [1, 3, 20, 5, 7, 8, 6, 5, 16, 18, 11, 7]
+					}
+					],
+					chart: {
+						height: 400,
+						type: 'area',
+						group: 'social',
+						toolbar: {
+							show: false
+						},
+						zoom: {
+							enabled: false
+						},
+					},
+					dataLabels: {
+						enabled: false
+					},
+					stroke: {
+						width: [4],
+						colors: ['#FED061'],
+						curve: 'smooth'
+					},
+					legend: {
+						show: false,
+						tooltipHoverFormatter: function (val, opts) {
+							return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+						},
+						markers: {
+							fillColors: ['#FED061'],
+							width: 19,
+							height: 19,
+							strokeWidth: 0,
+							radius: 19
+						}
+					},
+					markers: {
+						strokeWidth: [4],
+						strokeColors: ['#FED061'],
+						border: 0,
+						colors: ['#fff'],
+						hover: {
+							size: 6,
+						}
+					},
+					xaxis: {
+						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+						labels: {
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					yaxis: {
+						labels: {
+							offsetX: -16,
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					fill: {
+						colors: ['#FED061'],
+						type: 'solid',
+						opacity: 0.7
+					},
+					colors: ['#FED061'],
+					grid: {
+						borderColor: '#f1f1f1',
+						xaxis: {
+							lines: {
+								show: true
+							}
+						}
+					},
+					responsive: [{
+						breakpoint: 575,
+						options: {
+							chart: {
+								height: 250,
+							}
+						}
+					}]
+				};
+				var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+				chartArea.render();
+
+			}
+			
+			let chartBar2 = function () {
+				var optionsArea = {
+					series: [{
+						name: "Informes generados",
+						data: [20, 15, 50, 20, 50, 30, 18, 25, 60, 15, 20, 45]
+					}
+					],
+					chart: {
+						height: 400,
+						type: 'area',
+						group: 'social',
+						toolbar: {
+							show: false
+						},
+						zoom: {
+							enabled: false
+						},
+					},
+					dataLabels: {
+						enabled: false
+					},
+					stroke: {
+						width: [4],
+						colors: ['#50368C'],
+						curve: 'smooth'
+					},
+					legend: {
+						show: false,
+						tooltipHoverFormatter: function (val, opts) {
+							return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+						},
+						markers: {
+							fillColors: ['#50368C'],
+							width: 19,
+							height: 19,
+							strokeWidth: 0,
+							radius: 19
+						}
+					},
+					markers: {
+						strokeWidth: [4],
+						strokeColors: ['#50368C'],
+						border: 0,
+						colors: ['#fff'],
+						hover: {
+							size: 12,
+						}
+					},
+					xaxis: {
+						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+						labels: {
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					yaxis: {
+						labels: {
+							offsetX: -16,
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					fill: {
+						colors: ['#50368C'],
+						type: 'solid',
+						opacity: 0.7
+					},
+					colors: ['#50368C'],
+					grid: {
+						borderColor: '#f1f1f1',
+						xaxis: {
+							lines: {
+								show: true
+							}
+						}
+					},
+					responsive: [{
+						breakpoint: 575,
+						options: {
+							chart: {
+								height: 250,
+							}
+						}
+					}]
+				};
+				var chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
+				chartArea.render();
+
+			}
+
+			/** GRÁFICA PARA INDICADORES */
+
+			let chartIndicadores1 = function () {
+				let valAnalisis1 = document.getElementById('jsonAnalisisAdm1').value;
+				let valAnalisis2 = document.getElementById('jsonAnalisisAdm2').value;
+				let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+				let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+				let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+				if (valAnalisis1) {
+					valAnalisis1 = JSON.parse(valAnalisis1)
+					chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
+				}
+				if (valAnalisis2) {
+					valAnalisis2 = JSON.parse(valAnalisis2)
+					chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
+				}
+
+				let valorMax = 10;
+				if (nuevosProyectos == 1) {
+					valorMax = 5;
+				}
+
+				if ($('#chartEmpresaAdm1').length > 0) {
+					const chartEmpresaAdm1 = document.getElementById("chartEmpresaAdm1").getContext('2d')
+
+					chartEmpresaAdm1.height = 100;
+					new Chart(chartEmpresaAdm1, {
+						type: 'bar',
+						data: {
+							defaultFontFamily: 'Oblivian',
+							labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+							datasets: [{
+								label: "Puntaje",
+								backgroundColor: "#50368C",
+								borderColor: "#50368C",
+								data: chartAnalisis1,
+								fill: false,
+							},
+								// {
+								// 	label: "Último análisis",
+								// 	fill: false,
+								// 	backgroundColor: "#FED061",
+								// 	borderColor: "#FED061",
+								// 	data: chartAnalisis2,
+								// }
+							]
+						},
+						options: {
+							legend: false,
+							scales: {
+								yAxes: [{
+									gridLines: {
+										display: true
+									},
+									ticks: {
+										beginAtZero: true,
+										min: 0, // minimum value
+										max: valorMax // maximum value
+									}
+								}],
+								xAxes: [{
+									gridLines: {
+										display: false
+									},
+									ticks: {
+										fontSize: 10
+									},
+									barPercentage: 0.5,
+									categoryPercentage: 1,
+									barThickness: 14,
+									maxBarThickness: 10,
+								}]
+							}
+						}
+					});
+				}
+			}
+
+			let chartIndicadores2 = function () {
+				let valDimensiones1 = document.getElementById('jsonDimensionesAdm1').value;
+				let valDimensiones2 = document.getElementById('jsonDimensionesAdm2').value;
+				let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+				let chartDimensiones1 = [0, 0, 0, 0]
+				let chartDimensiones2 = [0, 0, 0, 0]
+				let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
+
+				if (valDimensiones1) {
+					valDimensiones1 = JSON.parse(valDimensiones1)
+				}
+
+				if (nuevosProyectos == 1) {
+					titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
+					chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
+				} else {
+					chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
+				}
+
+				if (valDimensiones2) {
+					valDimensiones2 = JSON.parse(valDimensiones2)
+					chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
+				}
+
+				if ($('#chartEmpresaAdm2').length > 0) {
+					const chartEmpresaAdm2 = document.getElementById("chartEmpresaAdm2").getContext('2d')
+
+					chartEmpresaAdm2.height = 100;
+					new Chart(chartEmpresaAdm2, {
+						type: 'bar',
+						data: {
+							defaultFontFamily: 'Oblivian',
+							labels: titulos,
+							datasets: [{
+								label: "Puntaje",
+								backgroundColor: "#50368C",
+								borderColor: "#50368C",
+								data: chartDimensiones1,
+								fill: false,
+							},
+								// {
+								// 	label: "Último análisis",
+								// 	fill: false,
+								// 	backgroundColor: "#FED061",
+								// 	borderColor: "#FED061",
+								// 	data: chartDimensiones2,
+								// }
+							]
+						},
+						options: {
+							legend: false,
+							scales: {
+								yAxes: [{
+									gridLines: {
+										display: true
+									},
+									ticks: {
+										beginAtZero: true,
+										min: 0, // minimum value
+										//max: 10 // maximum value
+									}
+								}],
+								xAxes: [{
+									gridLines: {
+										display: false
+									},
+									ticks: {
+										fontSize: 10
+									},
+									barPercentage: 0.5,
+									categoryPercentage: 1,
+									barThickness: 14,
+									maxBarThickness: 10,
+								}]
+							}
+						}
+					});
+				}
+			}
+
+			/*************************** FIN GRÁFICA INDICADORES *******************************/
+
+			/* Function ============ */
+			return {
+				load: function () {
+					{{#if graficas1}}
+					chartBar();
+					chartBar2();
+					{{/if}}
+					{{#if graficas2}}
+					chartIndicadores1();
+					chartIndicadores2();
+					{{/if}}
+				},
+			}
+
+		}();
+
+		jQuery(window).on('load', function () {
+			setTimeout(function () {
+				dzChartlist.load();
+			}, 1000);
+		});
+
+
+		$(document).ready(function () {
+			{{#if frmDiag.tablasVacias}}
+			const btnCargarInforme = document.getElementById('btnInfDiag');
+			btnCargarInforme.addEventListener("click", function () {
+				Swal.fire(
+					'Lo sentimos!',
+					'Aún no sé ha llenado ningún cuestionario para subir un informe',
+					'warning'
+				)
+			});
+			{{else}}
+			
+				{{#if graficas2}}
+				const infoEstado = document.getElementById("infoEstado");
+				const btnVerInforme = document.getElementById('btnVerInforme');
+				const spanFecha = document.getElementById("spanFecha");
+				const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+				const informeDiag = document.querySelector('.consulInformeDiag');
+				const nombreInforme = document.querySelector('#nameDiag').textContent;
+
+				/* ========================= COLOCAR HORA A LA FECHA DE LA TABLA INFORMES =================================== **/
+
+				informeDiag.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nombreInforme);
+					formData.append('zonaHoraria', tzLocal);
+
+
+					fetch('/guardarInforme', {
+						method: 'POST',
+						body: formData,
+					})
+						.then(res => res.json())
+						.catch(error => console.error('Error:', error))
+						.then(response => {
+							if (response.ok) {
+								btnVerInforme.style.display = 'block'
+								infoEstado.classList.remove("badge-warning")
+								infoEstado.classList.add("badge-success")
+								infoEstado.innerHTML = "Cargado"
+								spanFecha.innerHTML = response.fecha;
+								btnVerInforme.href = response.url
+
+								toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+									positionClass: "toast-top-center",
+									timeOut: 5e3,
+									closeButton: !0,
+									debug: !1,
+									newestOnTop: !0,
+									progressBar: !0,
+									preventDuplicates: !0,
+									onclick: null,
+									showDuration: "300",
+									hideDuration: "1000",
+									extendedTimeOut: "1000",
+									showEasing: "swing",
+									hideEasing: "linear",
+									showMethod: "fadeIn",
+									hideMethod: "fadeOut",
+									tapToDismiss: !1
+								})
+
+							} else {
+								Swal.fire(
+									'Error!',
+									'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
+									'error'
+								)
+							}
+						});
+
+				});
+				{{/if}}
+
+			{{/if}}
+
+		});
+
+	})();
+</script>

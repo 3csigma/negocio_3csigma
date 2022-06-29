@@ -5,17 +5,26 @@
 <script src="../js/jquery.js"></script>
 {{/if}}
 <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
-<script src="https://3csigma.com/app_public_files/js/popper.min.js"></script>
+{{!-- <script src="https://3csigma.com/app_public_files/js/popper.min.js"></script>
 <script src="https://3csigma.com/app_public_files/js/loginMain.js"></script>
 <script src="https://3csigma.com/app_public_files/js/bootstrap.min.js"></script>
 <script src="https://3csigma.com/app_public_files/js/bootstrap.bundle.min.js"></script>
 <script src="https://3csigma.com/app_public_files/vendor/js/global.min.js"></script>
 <script src="https://3csigma.com/app_public_files/vendor/js/bootstrap-select.min.js"></script>
 <script src="https://3csigma.com/app_public_files/vendor/js/custom.min.js"></script>
-<script src="https://3csigma.com/app_public_files/vendor/js/deznav-init.js"></script>
+<script src="https://3csigma.com/app_public_files/vendor/js/deznav-init.js"></script> --}}
+<script src="../js/popper.min.js"></script>
+<script src="../js/loginMain.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../vendor/js/global.min.js"></script>
+<script src="../vendor/js/bootstrap-select.min.js"></script>
+<script src="../vendor/js/custom.min.js"></script>
+<script src="../vendor/js/deznav-init.js"></script>
 
 {{!-- SWEET ALERT 2 --}}
 <script src="https://3csigma.com/app_public_files/js/sweetalert2.min.js"></script>
+
 {{!-- SELECTOR CON BUSCADOR --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 
@@ -26,12 +35,14 @@
 
 {{#if wizarx}}
 {{!-- Wizard Formularios Scripts --}}
-<script src="./js/common_scripts.min.js"></script>
-<script src="./js/velocity.min.js"></script>
-<script src="./js/common_functions.js"></script>
-<script src="./js/file-validator.js"></script>
-<script src="./js/func_1.js"></script>
+<script src="../js/common_scripts.min.js"></script>
+<script src="../js/velocity.min.js"></script>
+<script src="../js/common_functions.js"></script>
+<script src="../js/file-validator.js"></script>
+<script src="../js/func_1.js"></script>
 {{/if}}
+
+<script src="../vendor/js/toastr.min.js"></script>
 
 
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
@@ -102,9 +113,10 @@
             $("#btnActualizarConsultor").click(function () {
                 const estado = $("#estado_consul option:selected").val()
                 const codigo = $("#codigo_consultor").val()
+                const usuario_calendly = $("#urlCalendly").val()
                 fetch('/actualizarConsultor', {
                     method: 'POST',
-                    body: JSON.stringify({ codigo, estado }),
+                    body: JSON.stringify({ codigo, estado, usuario_calendly }),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))

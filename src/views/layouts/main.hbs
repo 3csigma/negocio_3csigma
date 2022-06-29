@@ -5,18 +5,20 @@
     {{!-- HEADER GENERAL --}}
     {{> header }}
 
-    <!-- DASHBOARD USUARIO EMPRESA -->
+    {{!-- <!-- DASHBOARD USUARIO EMPRESA -->
     {{#if user_dash}}
         {{> user/headerUser }}
-    {{/if}}
+    {{/if}} --}}
     {{!-- DASHBOARD ADMINISTRADOR --}}
-    {{#if adminDash}}
+    {{!-- {{#if adminDash}}
+        <!-- Datatable -->
+        
         {{> admin/headerAdmin }}
-    {{/if}}
+    {{/if}} --}}
 
 </head>
 
-<body>
+<body class="barra-scroll overflow-y-auto">
     {{!-- INICIO DE LA ETIQUETA DIV WRAPPER --}}
     {{#if user_dash}}
         {{> user/navigation }}
@@ -24,7 +26,9 @@
     {{#if adminDash}}
         {{> admin/navigationAdmin }}
     {{/if}}
-    
+    {{#if consultorDash}}
+        {{> consultor/navigationConsultor}}
+    {{/if}}
     
     {{{ body }}}
 
@@ -41,6 +45,10 @@
     {{!-- FOOTER ADMINISTRADOR --}}
     {{#if adminDash}}
         {{> admin/footerAdmin }}
+    {{/if}}
+    {{!-- FOOTER CONSULTOR --}}
+    {{#if consultorDash}}
+        {{> consultor/footerConsultor }}
     {{/if}}
 
     {{!-- SCRIPTS PARA EL LOGIN --}}

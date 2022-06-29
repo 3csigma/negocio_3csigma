@@ -1,0 +1,599 @@
+<div class="modal fade bd-example-modal-lg" id="modalNuevosProyectos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="default-tab">
+                    <ul class="nav nav-tabs" role="tablist" style="border-bottom: none;">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#categorias">
+                                <i class="fa-solid fa-tags" style="font-size: 14px; padding-right: 4px;"></i>
+                                Categorías</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#productos">
+                                <?xml version="1.0" ?><svg height="20" id="icon" viewBox="0 0 32 32" width="20" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;}</style></defs><title/><rect height="2" width="6" x="8" y="18"/><rect height="2" width="10" x="8" y="22"/><path d="M26,4H6A2.0025,2.0025,0,0,0,4,6V26a2.0025,2.0025,0,0,0,2,2H26a2.0025,2.0025,0,0,0,2-2V6A2.0025,2.0025,0,0,0,26,4ZM18,6v4H14V6ZM6,26V6h6v6h8V6h6l.0012,20Z"/><rect class="cls-1" data-name="&lt;Transparent Rectangle&gt;" height="32" id="Transparent_Rectangle" width="32"/></svg>
+                                Producto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#admin">
+                                <?xml version="1.0" ?><svg height="20" version="1.1" viewBox="0 0 20 20" width="20" xmlns="http://www.w3.org/2000/svg"><g id="layer1"><path d="M 12.5 0 A 0.50005 0.50005 0 0 0 12 0.5 L 12 2 L 0 2 L 0 3 L 12 3 L 12 4 A 0.50005 0.50005 0 0 0 12.146484 4.3535156 L 13.646484 5.8535156 A 0.50005 0.50005 0 0 0 14.353516 5.8535156 L 15.853516 4.3535156 A 0.50005 0.50005 0 0 0 16 4 L 16 3 L 20 3 L 20 2 L 16 2 L 16 0.5 A 0.50005 0.50005 0 0 0 15.5 0 L 12.5 0 z M 13 1 L 15 1 L 15 3.7929688 L 14 4.7929688 L 13 3.7929688 L 13 1 z M 3.5 7 A 0.50005 0.50005 0 0 0 3 7.5 L 3 9 L 0 9 L 0 10 L 3 10 L 3 11 A 0.50005 0.50005 0 0 0 3.1464844 11.353516 L 4.6464844 12.853516 A 0.50005 0.50005 0 0 0 5.3535156 12.853516 L 6.8535156 11.353516 A 0.50005 0.50005 0 0 0 7 11 L 7 10 L 20 10 L 20 9 L 7 9 L 7 7.5 A 0.50005 0.50005 0 0 0 6.5 7 L 3.5 7 z M 4 8 L 6 8 L 6 10.792969 L 5 11.792969 L 4 10.792969 L 4 8 z M 8.5 14 A 0.50005 0.50005 0 0 0 8 14.5 L 8 16 L 0 16 L 0 17 L 8 17 L 8 18 A 0.50005 0.50005 0 0 0 8.1464844 18.353516 L 9.6464844 19.853516 A 0.50005 0.50005 0 0 0 10.353516 19.853516 L 11.853516 18.353516 A 0.50005 0.50005 0 0 0 12 18 L 12 17 L 20 17 L 20 16 L 12 16 L 12 14.5 A 0.50005 0.50005 0 0 0 11.5 14 L 8.5 14 z M 9 15 L 11 15 L 11 17.792969 L 10 18.792969 L 9 17.792969 L 9 15 z " style="fill:#222222; fill-opacity:1; stroke:none; stroke-width:0px;"/></g></svg> 
+                                Administración</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#operaciones">
+                                <?xml version="1.0" ?><svg height="20" width="20" data-name="Livello 1" id="Livello_1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg"><title/><path d="M64,39A25,25,0,1,0,89,64,25,25,0,0,0,64,39Zm0,44A19,19,0,1,1,83,64,19,19,0,0,1,64,83Z"/><path d="M121,48h-8.93a1,1,0,0,1-.94-.68,49.9,49.9,0,0,0-2-4.85,1,1,0,0,1,.18-1.15L115.62,35a7,7,0,0,0,0-9.9L102.89,12.38a7,7,0,0,0-9.9,0l-6.31,6.31a1,1,0,0,1-1.15.18,49.76,49.76,0,0,0-4.85-2,1,1,0,0,1-.68-.94V7a7,7,0,0,0-7-7H55a7,7,0,0,0-7,7v8.93a1,1,0,0,1-.68.94,49.9,49.9,0,0,0-4.85,2,1,1,0,0,1-1.15-.18L35,12.38a7,7,0,0,0-9.9,0L12.38,25.11a7,7,0,0,0,0,9.9l6.31,6.31a1,1,0,0,1,.18,1.15,49.76,49.76,0,0,0-2,4.85,1,1,0,0,1-.94.68H7a7,7,0,0,0-7,7V73a7,7,0,0,0,7,7h8.93a1,1,0,0,1,.94.68,49.9,49.9,0,0,0,2,4.85,1,1,0,0,1-.18,1.15L12.38,93a7,7,0,0,0,0,9.9l12.73,12.73a7,7,0,0,0,9.9,0l6.31-6.31a1,1,0,0,1,1.15-.18,49.76,49.76,0,0,0,4.85,2,1,1,0,0,1,.68.94V121a7,7,0,0,0,7,7H73a7,7,0,0,0,7-7v-8.93a1,1,0,0,1,.68-.94,49.9,49.9,0,0,0,4.85-2,1,1,0,0,1,1.15.18L93,115.62a7,7,0,0,0,9.9,0l12.73-12.73a7,7,0,0,0,0-9.9l-6.31-6.31a1,1,0,0,1-.18-1.15,49.76,49.76,0,0,0,2-4.85,1,1,0,0,1,.94-.68H121a7,7,0,0,0,7-7V55A7,7,0,0,0,121,48Zm1,25a1,1,0,0,1-1,1h-8.93a7,7,0,0,0-6.6,4.69,43.9,43.9,0,0,1-1.76,4.26,7,7,0,0,0,1.35,8l6.31,6.31a1,1,0,0,1,0,1.41L98.65,111.38a1,1,0,0,1-1.41,0l-6.31-6.31a7,7,0,0,0-8-1.35,43.88,43.88,0,0,1-4.27,1.76,7,7,0,0,0-4.68,6.6V121a1,1,0,0,1-1,1H55a1,1,0,0,1-1-1v-8.93a7,7,0,0,0-4.69-6.6,43.9,43.9,0,0,1-4.26-1.76,7,7,0,0,0-8,1.35l-6.31,6.31a1,1,0,0,1-1.41,0L16.62,98.65a1,1,0,0,1,0-1.41l6.31-6.31a7,7,0,0,0,1.35-8,43.88,43.88,0,0,1-1.76-4.27A7,7,0,0,0,15.93,74H7a1,1,0,0,1-1-1V55a1,1,0,0,1,1-1h8.93a7,7,0,0,0,6.6-4.69,43.9,43.9,0,0,1,1.76-4.26,7,7,0,0,0-1.35-8l-6.31-6.31a1,1,0,0,1,0-1.41L29.35,16.62a1,1,0,0,1,1.41,0l6.31,6.31a7,7,0,0,0,8,1.35,43.88,43.88,0,0,1,4.27-1.76A7,7,0,0,0,54,15.93V7a1,1,0,0,1,1-1H73a1,1,0,0,1,1,1v8.93a7,7,0,0,0,4.69,6.6,43.9,43.9,0,0,1,4.26,1.76,7,7,0,0,0,8-1.35l6.31-6.31a1,1,0,0,1,1.41,0l12.73,12.73a1,1,0,0,1,0,1.41l-6.31,6.31a7,7,0,0,0-1.35,8,43.88,43.88,0,0,1,1.76,4.27,7,7,0,0,0,6.6,4.68H121a1,1,0,0,1,1,1Z"/></svg>
+                                    Operaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#marketing">
+                                <?xml version="1.0" ?><svg height="20" width="20" id="svg8" version="1.1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"><defs id="defs2"><rect height="7.0346723" id="rect2504" width="7.9207187" x="-1.1008456" y="289.81766"/></defs><g id="g2869" transform="translate(0.00925556)"><path d="m 18.902166,9.4538173 c 0,0.3334126 0,0.6668247 0,1.0002377 1.215368,0 2.430737,0 3.646105,0 0,-0.333413 0,-0.6668251 0,-1.0002377 -1.215368,0 -2.430737,0 -3.646105,0 z" id="path1597" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 19.325651,11.787018 c -0.150802,0.297592 -0.301604,0.595183 -0.452406,0.892775 1.08501,0.547423 2.166531,1.101732 3.251541,1.649154 0.150802,-0.297592 0.301604,-0.595183 0.452406,-0.892775 C 21.492183,12.88875 20.41066,12.33444 19.325651,11.787018 Z" id="path1601" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 22.124786,5.5789262 c -1.08501,0.547421 -2.166531,1.1017329 -3.251541,1.6491537 0.150802,0.2975916 0.301604,0.5951833 0.452406,0.8927749 C 20.408689,7.5688574 21.494154,7.0216321 22.577192,6.4696345 22.42639,6.1727317 22.275588,5.875829 22.124786,5.5789262 Z" id="path1605" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000"/><path d="m 13.753906,45.109375 c -2.960651,0.959865 -5.922005,1.917568 -8.8828122,2.876953 -0.056311,-0.0091 -0.107435,-0.0332 -0.1660157,-0.0332 H 2.5117188 c -0.6043789,0 -1.1074219,0.503043 -1.1074219,1.107422 v 3.917969 c 0,0.604378 0.503043,1.10742 1.1074219,1.107422 h 0.3535156 l 2.390625,6.697265 H 8.7851562 L 6.6542969,54.423828 c 2.365928,0.49068 4.7318251,0.981507 7.0976561,1.472656 v 0.02148 c 0,1.064702 0.903868,1.914062 1.994139,1.914062 1.090271,0 1.994138,-0.84936 1.994138,-1.914062 V 45.132812 c 0,-1.064702 -0.903867,-1.916015 -1.99009,-1.916015 -1.086223,0 -1.982782,0.839103 -1.996234,1.892578 z m 1.992186,-0.892578 c 0.577131,0 0.994138,0.41266 0.994138,0.916015 v 10.785157 c 0,0.503355 -0.417007,0.914062 -0.994138,0.914062 -0.577131,0 -0.994139,-0.410707 -0.994139,-0.914062 V 45.132812 c 0,-0.503355 0.417008,-0.916015 0.994139,-0.916015 z m -1.994139,1.943359 V 54.875 C 11.109396,54.32672 8.4668249,53.77851 5.8242188,53.230469 v -4.501953 c 2.642577,-0.856123 5.2852822,-1.71185 7.9277342,-2.56836 z M 2.5117188,48.953125 h 2.1933593 c 0.067682,0 0.1074219,0.03974 0.1074219,0.107422 v 1.458984 H 2.4042969 v -1.458984 c 0,-0.06768 0.03974,-0.107422 0.1074219,-0.107422 z M 2.4042969,51.519531 H 4.8125 v 1.458985 c 0,0.06768 -0.03974,0.107422 -0.1074219,0.107422 H 2.5117188 c -0.067682,0 -0.1074219,-0.03974 -0.1074219,-0.107422 z m 2.4609375,2.533203 c 0.2180343,0.04523 0.4362614,0.08954 0.6542968,0.134766 l 1.875,5.595703 H 5.9609375 L 3.9257812,54.085938 h 0.7792969 c 0.056595,0 0.1056685,-0.02471 0.1601563,-0.0332 z" id="path1609" style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.999993;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1" transform="translate(-2.5821961e-8,-40)"/></g></svg>
+                                Marketing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#metas">
+                                <?xml version="1.0" ?><svg enable-background="new 0 0 32 32" height="20" width="20" id="svg2" version="1.1" viewBox="0 0 32 32"  xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg"><g id="background"><rect fill="none" height="32" width="32"/></g><g id="document_x5F_text_x5F_information"><path d="M24,14.059V5.584L18.414,0H0v32h24v-0.059c4.499-0.5,7.998-4.309,8-8.941C31.998,18.366,28.499,14.556,24,14.059z    M17.998,2.413L21.586,6h-3.588V2.413z M2,30V1.998h14v6.001h6v6.06c-1.752,0.194-3.352,0.89-4.652,1.941H4v2h11.517   c-0.412,0.616-0.743,1.289-0.994,2H4v2h10.059C14.022,22.329,14,22.661,14,23c0,2.829,1.308,5.351,3.349,7H2z M23,29.883   c-3.801-0.009-6.876-3.084-6.884-6.883c0.008-3.801,3.083-6.876,6.884-6.885c3.799,0.009,6.874,3.084,6.883,6.885   C29.874,26.799,26.799,29.874,23,29.883z M20,12H4v2h16V12z"/><path d="M22,28h2v-6h-2V28z M22,18v2h2v-2H22z"/></g></svg>
+                            Metas</a>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="default-tab">
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="categorias" role="tabpanel">
+                            <h4>Experiencia en el Rubro - ({{resDiag.rubro}})</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tienes experiencia previa en el rubro?</td>
+                                        <td>{{resDiag.exp_rubro.exp_previa}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Has realizado un análisis FODA al negocio que deseas desarrollar?</td>
+                                        <td>{{resDiag.exp_rubro.foda}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Has pensando las diferentes unidades de negocio que se podrían implementar en este rubro?</td>
+                                        <td>{{resDiag.exp_rubro.unidades_rubro}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Conoces las actividades claves que se requieren en tu negocio?</td>
+                                        <td>{{resDiag.exp_rubro.actividades}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Conoces tu visión con este proyecto?</td>
+                                        <td>{{resDiag.exp_rubro.vision}}</td>
+                                    </tr>
+                                   
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Mentalidad Empresarial</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tu propósito personal está alineado al propósito del negocio?</td>
+                                        <td>{{resDiag.mentalidad.proposito_alineado}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Tienes claro los objetivos a nivel personal y empresarial?</td>
+                                        <td>{{resDiag.mentalidad.objetivos_claros}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes definido tus valores?</td>
+                                        <td>{{resDiag.mentalidad.valores}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Te has realizado un FODA personal para que identifiques las herramientas necesarias a implementar en tu negocio?</td>
+                                        <td>{{resDiag.mentalidad.foda_personal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Dedicarías el 100% de tu tiempo a este negocio?</td>
+                                        <td>{{resDiag.mentalidad.tiempo_completo}}</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Viabilidad del Negocio</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Cuentas con algún socio para desarrollar tu negocio?</td>
+                                        <td>{{resDiag.viabilidad.socios}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Dispones de algún fondo financiero personal?</td>
+                                        <td>{{resDiag.viabilidad.fondo_financiero}}</td>                                    
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿El negocio requiere ubicación física?</td>
+                                        <td>{{resDiag.viabilidad.ubicacion_fisica}}</td>                                    
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Has realizado algún estudio de mercado con respecto a tu producto o tu servicio?</td>
+                                        <td>{{resDiag.viabilidad.estudio_mercado}}</td>                                    
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Conoces los recursos claves para el funcionamiento de tu negocio?</td>
+                                        <td>{{resDiag.viabilidad.recursos_claves}}</td>                                    
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Tienes identificado los posibles proveedores del negocio?</td>
+                                        <td>{{resDiag.viabilidad.posibles_proveedores}}</td>                                    
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+                            
+                        </div>
+
+                        <div class="tab-pane fade" id="productos">
+                            <h4>Productos o servicios</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tienes identificado el problema que resolverá tu producto o servicio?</td>
+                                        <td>{{resDiag.producto.problema_resolver}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Sabes cuál es será el producto principal del negocio?</td>
+                                        <td>{{resDiag.producto.producto_principal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes definido el precio de venta de tu producto o servicio?</td>
+                                        <td>{{resDiag.producto.precio_venta}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Conoces cuál es el factor diferenciador del producto o servicio?</td>
+                                        <td>{{resDiag.producto.factor_diferenciador}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Tienes definido el modelo de negocio?</td>
+                                        <td>{{resDiag.producto.modelo_negocio}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+
+                        <div class="tab-pane fade" id="admin">
+                            
+                            <h4>Administración</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tienes una planeación estratégica de tu negocio?</td>
+                                        <td>{{resDiag.administracion.planeacion_estrategica}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Se requiere de algún sistema de inventario para tu negocio?</td>
+                                        <td>{{resDiag.administracion.sistema_inventario}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes definido una estructura organizacional para el negocio?</td>
+                                        <td>{{resDiag.administracion.estructura_organizacional}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Talento humano</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Tienes definidas las funciones principales, la de tus socios y colaboradores en caso de tenerlas?</td>
+                                        <td>{{resDiag.talento.funciones_principales}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Cuentas con algún programa de formación inicial para operar tu negocio?</td>
+                                        <td>{{resDiag.talento.formacion_inicial}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes definido en cuánto tiempo vas a necesitar colaboradores?</td>
+                                        <td>{{resDiag.talento.tiempo_colaboradores}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Realiza alguna medición de desempeño del personal?</td>
+                                        <td>{{resDiag.talento.medicion__personal}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Tienes experiencia liderando equipos de trabajo?</td>
+                                        <td>{{resDiag.talento.experiencia_liderando}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">6</td>
+                                        <td>¿Consideras importante la creación de un equipo de trabajo para el desarrollo y sostenibilidad de la empresa en el tiempo?</td>
+                                        <td>{{resDiag.talento.importancia_equipo}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Finanzas</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Has realizado alguna estructura de costos para tu producto o servicio?</td>
+                                        <td>{{resDiag.finanzas.estructura_costos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Sabes cuáles serán los gastos fijos y variables de tu negocio?</td>
+                                        <td>{{resDiag.finanzas.gastos_fijos_variables}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes definidas las herramientas a utilizar para tu control administrativo y financiero? </td>
+                                        <td>{{resDiag.finanzas.control_financiero}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Conoce cuál es su punto de equilibrio?</td>
+                                        <td>{{resDiag.finanzas.punto_equilibrio}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Conoces cuál será tu inversión inicial y en cuánto tiempo la recuperarás?</td>
+                                        <td>{{resDiag.finanzas.recuperar_inversion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="operaciones">
+
+                            <h4>Servicio al cliente</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Has pensado cuáles serán tus principales canales de atención al cliente?</td>
+                                        <td>{{resDiag.servicio.canales_atencion}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Mide la Satisfacción de sus clientes con respecto a sus productos? </td>
+                                        <td>{{resDiag.servicio.satisfaccion_clientes_productos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Conoces qué experiencias quieres darles a tus clientes?</td>
+                                        <td>{{resDiag.servicio.exp_brindar}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Has considerado tener alguna herramienta para la medición de la satisfacción del cliente?</td>
+                                        <td>{{resDiag.servicio.medir_satisfaccion}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Crees que un buen servicio se basa solo en la calidad de tu producto?</td>
+                                        <td>{{resDiag.servicio.calidad_producto}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Operaciones</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Conoces los permisos que necesitas para comenzar a operar el negocio?</td>
+                                        <td>{{resDiag.operaciones.permisos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Tienes idea de cómo planificar las actividades de tu negocio?</td>
+                                        <td>{{resDiag.operaciones.planificar_actividades}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Conoces al 100% los procesos de este negocio?</td>
+                                        <td>{{resDiag.operaciones.conocer_procesos}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Has definido cuáles son los canales de comercialización de tus productos?</td>
+                                        <td>{{resDiag.operaciones.canales_comercial}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Has considerado cómo sería el proceso de devoluciones y reclamaciones en tu negocio?</td>
+                                        <td>{{resDiag.operaciones.proceso_devoluciones}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Ambiente laboral</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Crees que tu comunicación es efectiva?</td>
+                                        <td>{{resDiag.ambiente.comunicacion_efectiva}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Se te hace sencillo resaltar las habilidades de las personas?</td>
+                                        <td>{{resDiag.ambiente.resaltar_habilidades}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Estarías dispuesto a capacitarte en crecimiento personal para el desarrollo de tu negocio?</td>
+                                        <td>{{resDiag.ambiente.capacitar_crecimiento}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Crees que tienes las herramientas necesarias para crear un buen ambiente laboral?</td>
+                                        <td>{{resDiag.ambiente.buen_ambiente}}</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Innovación</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Crees que tienes un modelo de negocio innovador?</td>
+                                        <td>{{resDiag.innovacion.modelo_innovador}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Sabes la importancia de utilizar metodologías de innovación a la hora de crear nuevos productos?</td>
+                                        <td>{{resDiag.innovacion.importancia_innovacion}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Conoces el proceso para la gestión correcta de los datos de los clientes?</td>
+                                        <td>{{resDiag.innovacion.gestion_datos}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="marketing">
+
+                            <h4>Marketing</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Cuentas con una estrategia de Marketing definida?</td>
+                                        <td>{{resDiag.marketing.estrategia_marketing}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Tienes un dominio de sitio web reservado?</td>
+                                        <td>{{resDiag.marketing.dominio_web}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Sabes a qué segmento de cliente te quieres dirigir?</td>
+                                        <td>{{resDiag.marketing.segmento_cliente}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>¿Cuentas con un logo y branding de tu negocio?</td>
+                                        <td>{{resDiag.marketing.tiene_logo}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>¿Has identificado qué mercado quieres abarcar inicialmente?</td>
+                                        <td>{{resDiag.marketing.mercado_inicial}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <hr class="my-5">
+                            <h4>Ventas</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pregunta</th>
+                                        <th>Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>¿Conoces cuáles son tus canales de captación de tus clientes potenciales?</td>
+                                        <td>{{resDiag.ventas.captacion_clientes}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>¿Tienes definido los medios de pago disponibles para tus clientes?</td>
+                                        <td>{{resDiag.ventas.medios_pago}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>¿Tienes alguna proyección de ventas?</td>
+                                        <td>{{resDiag.ventas.proyeccion}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                        <div class="tab-pane fade" id="metas">
+
+                            <h4>Metas a corto plazo</h4>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">1</td>
+                                        <td>{{resDiag.metas.m1}}</td>
+                                    </tr>
+                                    {{#if resDiag.metas.m2}}
+                                    <tr>
+                                        <td scope="row">2</td>
+                                        <td>{{resDiag.metas.m2}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m3}}
+                                    <tr>
+                                        <td scope="row">3</td>
+                                        <td>{{resDiag.metas.m3}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m4}}
+                                    <tr>
+                                        <td scope="row">4</td>
+                                        <td>{{resDiag.metas.m4}}</td>
+                                    </tr>
+                                    {{/if}}
+                                    {{#if resDiag.metas.m5}}
+                                    <tr>
+                                        <td scope="row">5</td>
+                                        <td>{{resDiag.metas.m5}}</td>
+                                    </tr>
+                                    {{/if}}
+                                </tbody>
+                            </table>
+                            
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info light" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: #50368C; color: #fff" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
