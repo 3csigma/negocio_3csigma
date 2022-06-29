@@ -46,7 +46,7 @@
                 var optionsArea = {
                     series: [{
                         name: "Nuevas Empresas",
-                        data: [20, 40, 20, 80, 40, 40, 65, 5, 32, 72, 50, 20]
+                        data: [20, 40, 20, 80, 40, 40]
                     }
                     ],
                     chart: {
@@ -91,7 +91,7 @@
                         }
                     },
                     xaxis: {
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
                         labels: {
                             style: {
                                 colors: '#3E4954',
@@ -146,7 +146,7 @@
                 var optionsArea = {
                     series: [{
                         name: "Nuevos Consultores",
-                        data: [40, 40, 30, 90, 10, 80, 40, 40, 30, 90, 10, 80]
+                        data: [40, 40, 30, 90, 10, 80]
                     }
                     ],
                     chart: {
@@ -191,7 +191,7 @@
                         }
                     },
                     xaxis: {
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
                         labels: {
                             style: {
                                 colors: '#3E4954',
@@ -246,7 +246,7 @@
                 var optionsArea = {
                     series: [{
                         name: "Informes generados",
-                        data: [20, 15, 50, 20, 50, 30, 18, 25, 60, 15, 20, 45]
+                        data: [20, 15, 105, 20, 50, 30]
                     }
                     ],
                     chart: {
@@ -291,7 +291,8 @@
                         }
                     },
                     xaxis: {
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+/*                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], */
+                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
                         labels: {
                             style: {
                                 colors: '#3E4954',
@@ -308,9 +309,7 @@
                             style: {
                                 colors: '#3E4954',
                                 fontSize: '14px',
-                                fontFamily: 'Poppins',
                                 fontWeight: 100,
-
                             },
                         },
                     },
@@ -541,16 +540,62 @@
 			
 				{{#if graficas2}}
 
-            const infoEstado = document.getElementById("infoEstado");
-            const btnVerInforme = document.getElementById('btnVerInforme');
-            const spanFecha = document.getElementById("spanFecha");
-            const codigoEmpresa = document.getElementById("codigoEmpresa").value;
-            const informeDiag = document.querySelector('.probarXD');
-            const nombreInforme = document.querySelector('.nombreInforme').textContent;
+                function guardarInforme(formData, estado, fecha, boton){
+                    fetch('/guardarInforme', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response.ok) {
+                                boton.style.display = 'block'
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                fecha.innerHTML = response.fecha;
+                                boton.href = response.url
 
-            /* ========================= COLOCAR HORA A LA FECHA DE LA TABLA INFORMES =================================== **/
+                                toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
 
-            informeDiag.addEventListener('change', (e) => {
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
+                                    'error'
+                                )
+                                boton.style.display = 'block'
+                            }
+                        });
+                }
+
+                /* Etapa 1 - Informe Diagnóstico */
+
+                const infoEstado = document.getElementById("infoEstado");
+                const btnVerInforme = document.getElementById('btnVerInforme');
+                const spanFecha = document.getElementById("spanFecha");
+                const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+                const informeDiag = document.querySelector('.inputInformeDiag');
+                const nombreInforme = document.querySelector('.nombreInforme').textContent;
+
+                informeDiag.addEventListener('change', (e) => {
 					console.log(e)
 					const file = e.target.files[0]
 					// Capturando Zona Horaria Local
@@ -562,7 +607,8 @@
 					formData.append('nombreInforme', nombreInforme);
 					formData.append('zonaHoraria', tzLocal);
 
-
+                    guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+/*
 					fetch('/guardarInforme', {
 						method: 'POST',
 						body: formData,
@@ -605,13 +651,110 @@
 								)
 							}
 						});
+*/
+				});
+				
+                /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+                // Dimensión Producto
+                const infoEstadoProd = document.getElementById("infoEstadoProd");
+                const btnVerInformeProd = document.getElementById('btnVerInformeProd');
+                const spanFechaProd = document.getElementById("spanFechaProd");
+                const informeProd = document.querySelector('.inputInformeProducto');
+                const nomProducto = document.querySelector('.nomProducto').textContent;
+
+                informeProd.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomProducto);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
 				});
-				{{/if}}
+
+                // Dimensión Administración
+                const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
+                const btnVerInformeAdmin = document.getElementById('btnVerInformeAdmin');
+                const spanFechaAdmin = document.getElementById("spanFechaAdmin");
+                const informeAdmin = document.querySelector('.inputInformeAdmin');
+                const nomAdmin = document.querySelector('.nomAdmin').textContent;
+
+                informeAdmin.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomAdmin);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                // Dimensión Operaciones
+                const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+                const btnVerInformeOpe = document.getElementById('btnVerInformeOpe');
+                const spanFechaOpe = document.getElementById("spanFechaOpe");
+                const informeOpe = document.querySelector('.inputInformeOperaciones');
+                const nomOperacion = document.querySelector('.nomOperacion').textContent;
+
+                informeOpe.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomOperacion);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                // Dimensión Marketing
+                const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
+                const btnVerInformeMarketing = document.getElementById('btnVerInformeMarketing');
+                const spanFechaMarketing = document.getElementById("spanFechaMarketing");
+                const informeMarketing = document.querySelector('.inputInformeMarketing');
+                const nomMarketing = document.querySelector('.nomMarketing').textContent;
+
+                informeMarketing.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomMarketing);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                {{/if}}
 
 			{{/if}}
 
-		});
+		}); /* Fin del $(document).ready */
+
+        /* FUNCIONES DE BOTONES */
+        
 
 	})();
 </script>
