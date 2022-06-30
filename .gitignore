@@ -3,3 +3,4 @@ src/keys.js
 src/private.key
 info.txt
 src/public/informes_empresas
+package-lock.json
