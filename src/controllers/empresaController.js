@@ -65,36 +65,31 @@ empresaController.index = async (req, res) => {
     const diagPorcentaje = {}, anaPorcentaje = {};
     
     // Etapa 1
-    let porcentaje = 100/8
+    let porcentaje = 100/6
     // porcentaje = porcentaje.toFixed(2)
-    porcentaje = porcentaje.toFixed(0)
-    diagPorcentaje.txt = 'Email sin confirmar';
-    diagPorcentaje.num = porcentaje
+    porcentaje = Math.round(porcentaje)
+    diagPorcentaje.num = 0
 
-    if (dataEmpresa.estadoEmail == 1){
-        diagPorcentaje.txt = 'Email confirmado';
-        diagPorcentaje.num = porcentaje*2
-    } 
     if (dataEmpresa.diagnostico_negocio == 1){
         diagPorcentaje.txt = 'Diagnóstico pagado'
-        diagPorcentaje.num = porcentaje*3
+        diagPorcentaje.num = porcentaje
     }
     if (dataEmpresa.estadoAcuerdo == 1){
         diagPorcentaje.txt = 'Acuerdo enviado'
-        diagPorcentaje.num = porcentaje*4
+        diagPorcentaje.num = porcentaje*2
     }
     if (dataEmpresa.estadoAcuerdo == 2){
         diagPorcentaje.txt = 'Acuerdo firmado'
-        diagPorcentaje.num = porcentaje*5
+        diagPorcentaje.num = porcentaje*3
     } 
     if (dataEmpresa.telefono){
         diagPorcentaje.txt = 'Ficha Cliente'
-        diagPorcentaje.num = porcentaje*6
+        diagPorcentaje.num = porcentaje*4
     }
 
     if (diagEmpresa.length > 0 || diagEmpresa2.length > 0){
         diagPorcentaje.txt = 'Cuestionario diagnóstico'
-        diagPorcentaje.num = porcentaje*7
+        diagPorcentaje.num = porcentaje*5
     }
 
     // Informe de la empresa subido

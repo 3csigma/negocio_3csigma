@@ -189,7 +189,12 @@ consultorController.empresaInterna = async (req, res) => {
     let areasVitales2 = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ DESC LIMIT 1', [idUser])
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
-        jsonAnalisis2 = JSON.stringify( areasVitales2[0]);
+        jsonAnalisis2 = JSON.stringify( areasVitales2[0])
+        if (areasVitales[0].rendimiento_op >= 1){
+            rendimiento.op = areasVitales[0].rendimiento_op
+        } else {
+            rendimiento.op = false;
+        }
     }
 
     let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
