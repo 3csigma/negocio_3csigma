@@ -166,96 +166,25 @@ consultorController.empresaInterna = async (req, res) => {
         resDiag.ventas = JSON.parse(r.ventas)
         resDiag.metas = JSON.parse(r.metas)
     }
+    
 
     // Tabla de Informes
-    const frmInfo = {};
-    const informes = {
-        prod : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        adm : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        op : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        marketing : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        general : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        }
-    };
-
-    frmInfo.ver1 = 'none';
-    frmInfo.ver2 = 'block';
-    frmInfo.url = '#'
-
-    // Informes de Diagnóstico de Negocio
-    let informesDiag = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe diagnóstico'])
-    // Informes de Diagnóstico de Negocio
-    let informesProd = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión producto'])
-    // Informes de Diagnóstico de Negocio
-    let informesAdmin = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión administración'])
-    // Informes de Diagnóstico de Negocio
-    let informesOperaciones = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión operaciones'])
-    // Informes de Diagnóstico de Negocio
-    let informesMarketing = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión marketing'])
-
-    if (informesDiag.length > 0) {
-        frmInfo.fecha = informesDiag[0].fecha;
+    const frmInfo = {}
+    let informes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
+    if (informes.length > 0){
+        frmInfo.fecha = informes[0].fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
-        frmInfo.url = informesDiag[0].url;
+        frmInfo.url = informes[0].url;
         datos.etapa = 'Informe diagnóstico'
-    }
-
-    if (informesProd.length > 0) {
-        informes.prod.fecha = informesProd[0].fecha;
-        informes.prod.ver1 = 'block';
-        informes.prod.ver2 = 'none';
-        informes.prod.url = informesProd[0].url;
-        datos.etapa = 'Informe análisis dimensión producto'
-    }
-
-    if (informesAdmin.length > 0) {
-        informes.adm.fecha = informesAdmin[0].fecha;
-        informes.adm.ver1 = 'block';
-        informes.adm.ver2 = 'none';
-        informes.adm.url = informesAdmin[0].url;
-        datos.etapa = 'Informe análisis dimensión administración'
-    }
-
-    if (informesOperaciones.length > 0) {
-        informes.op.fecha = informesOperaciones[0].fecha;
-        informes.op.ver1 = 'block';
-        informes.op.ver2 = 'none';
-        informes.op.url = informesOperaciones[0].url;
-        datos.etapa = 'Informe análisis dimensión operaciones'
-    }
-
-    if (informesMarketing.length > 0) {
-        informes.marketing.fecha = informesMarketing[0].fecha;
-        informes.marketing.ver1 = 'block';
-        informes.marketing.ver2 = 'none';
-        informes.marketing.url = informesMarketing[0].url;
-        datos.etapa = 'Informe análisis dimensión marketing'
+    } else{
+        frmInfo.ver1 = 'none';
+        frmInfo.ver2 = 'block';
+        frmInfo.url = '#'
     }
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
-    let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
-
     let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ ASC LIMIT 1', [idUser])
     let areasVitales2 = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ DESC LIMIT 1', [idUser])
     if (areasVitales.length > 0) {
@@ -268,6 +197,7 @@ consultorController.empresaInterna = async (req, res) => {
         }
     }
 
+    let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
 
     let resulCateg = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [idUser])
     if (resulCateg.length > 0) {
@@ -302,7 +232,7 @@ consultorController.empresaInterna = async (req, res) => {
     res.render('consultor/empresaInterna', { 
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, informes
+        graficas2: true
     })
 
 }

@@ -319,7 +319,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     // Tabla de Informes
     const frmInfo = {};
-    const informes = {
+    let informes = {
         prod : {
             ver1: 'none',
             ver2: 'block',
@@ -401,6 +401,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         informes.marketing.url = informesMarketing[0].url;
         datos.etapa = 'Informe análisis dimensión marketing'
     }
+    
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
@@ -417,6 +418,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             rendimiento.op = false;
         }
     }
+
 
     let resulCateg = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [idUser])
     if (resulCateg.length > 0) {

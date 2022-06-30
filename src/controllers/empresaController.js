@@ -124,11 +124,6 @@ empresaController.index = async (req, res) => {
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
         jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
-        if (areasVitales[0].rendimiento_op >= 1){
-            rendimiento.op = areasVitales[0].rendimiento_op
-        } else {
-            rendimiento.op = false;
-        }
     }
 
     // Si la empresa es Nueva
