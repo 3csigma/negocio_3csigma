@@ -750,15 +750,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{#if frmInfo.fecha}}{{frmInfo.fecha}}{{else}}
-                                                                <span id="spanFecha">N/A</span>
+                                                                <span id="spanFechaDiag_Consultor">N/A</span>
                                                                 {{/if}}
                                                             </td>
-                                                            <td><span id="nameDiag">Informe diagnóstico</span></td>
+                                                            <td><span class="nomInformeDiag_Consultor">Informe diagnóstico</span></td>
                                                             <td>
                                                                 {{#if frmInfo.fecha}}
                                                                 <span class="badge light badge-success">Cargado</span>
                                                                 {{else}}
-                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                <span id="infoEstadoDiag_Consultor" class="badge light badge-warning">No cargado</span>
                                                                 {{/if}}
                                                             </td>
                                                             <td>
@@ -773,18 +773,18 @@
                                                                 <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                     <tr>
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeDiag">
+                                                                            <label for="informeDiag_Consultor">
                                                                                 <div class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                                     <i class="fa fa-upload"></i>
                                                                                 </div>
                                                                             </label>
-                                                                            <input id="informeDiag" class="consulInformeDiag" type="file" style="display:none" name="informeDiag"
+                                                                            <input id="informeDiag_Consultor" class="inputInformeDiag_Consultor" type="file" style="display:none" name="informeDiag"
                                                                                 accept="application/pdf" />
                                                                         </td>
                                                                 
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}"
+                                                                            <a id="btnVerInformeDiag_Consultor" href="{{frmInfo.url}}"
                                                                                 style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
                                                                                 target="_blank" class="btn btn-info shadow btn-xs sharp">
                                                                                 <i class="fa fa-search"></i></a>
@@ -807,6 +807,332 @@
 
                             {{!-- PESTAÑA 3 - ANÁLISIS DE NEGOCIO --}}
                             <div id="analisis" class="tab-pane fade">
+                                 <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión producto</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión administración</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión operación</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td>N/A</td>
+                                                            <td>Cuestionario dimensión marketing</td>
+                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            </td>
+                                                            <td>
+                                                                <a href="#"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    <i class="fa fa-pencil"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{!-- PRODUCTO --}}
+                                                        <tr>
+                                                            <td>{{#if informes.prod.fecha}}{{informes.prod.fecha}}{{else}}
+                                                                <span id="spanFechaProd_Consultor">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomProducto_Consultor">Informe de dimensión producto</span></td>
+                                                            <td>
+                                                                {{#if informes.prod.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoProd_Consultor" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeProd">
+                                                                                <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informeProd" class="inputInformeProducto_Consultor" type="file" style="display:none" name="informeProd"
+                                                                                accept="application/pdf" />
+                                                                        </td>
+                                                                
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a id="btnVerInformeProd_Consultor" href="{{informes.prod.url}}"
+                                                                                style="display:{{informes.prod.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- ADMINISTRACIÓN --}}
+                                                        <tr>
+                                                            <td>{{#if informes.adm.fecha}}{{informes.adm.fecha}}{{else}}
+                                                                <span id="spanFechaAdmin_Consultor">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomAdmin_Consultor">Informe de dimensión administración</span></td>
+                                                            <td>
+                                                                {{#if informes.adm.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoAdmin_Consultor" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeAdmin" >
+                                                                    <div id="btnSubirInformeAdmin"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeAdmin" class="inputInformeAdmin_Consultor" type="file" style="display:none"
+                                                                    name="informeAdmin" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeAdmin_Consultor" href="{{informes.adm.url}}" style="display:{{informes.adm.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- OPERACIONES --}}
+                                                        <tr>
+                                                            <td>{{#if informes.op.fecha}}{{informes.op.fecha}}{{else}}
+                                                                <span id="spanFechaOpe_Consultor">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomOperacion_Consultor">Informe de dimensión operaciones</span></td>
+                                                            <td>
+                                                                {{#if informes.op.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoOpe_Consultor" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeOpe" >
+                                                                    <div id="btnSubirInformeOpe"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeOpe" class="inputInformeOperaciones_Consultor" type="file" style="display:none"
+                                                                    name="informeOpe" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeOpe_Consultor" href="{{informes.op.url}}" style="display:{{informes.op.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        {{!-- MARKETING --}}
+                                                        <tr>
+                                                            <td>{{#if informes.marketing.fecha}}{{informes.marketing.fecha}}{{else}}
+                                                                <span id="spanFechaMarketing_Consultor">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomMarketing_Consultor">Informe de dimensión marketing</span></td>
+                                                            <td>
+                                                                {{#if informes.marketing.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoMarketing_Consultor" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeMarketing" >
+                                                                    <div id="btnSubirInformeMarketing"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeMarketing" class="inputInformeMarketing_Consultor" type="file" style="display:none"
+                                                                    name="informeMarketing" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeMarketing_Consultor" href="{{informes.marketing.url}}" style="display:{{informes.marketing.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
+                                <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if informes.general.fecha}}{{informes.general.fecha}}{{else}}
+                                                                <span id="spanFechaAnalisis_Consultor">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomAnalisis_General">Informe de análisis</span></td>
+                                                            <td>
+                                                                {{#if informes.general.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoAnalisis_General" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                {{!-- {{#if frmDiag.tablasVacias}}
+                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    id="btnInfDiag">
+                                                                    <i class="fa fa-upload"></i>
+                                                                </div>
+                                                                {{else}} --}}
+
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informeAnalisis" >
+                                                                    <div id="btnSubirInforme"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                </label>
+                                                                <input id="informeAnalisis" class="inputInformeAnalisis_General" type="file" style="display:none"
+                                                                    name="informeAnalisis" accept="application/pdf" />
+                                                                        </td>
+
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a  id="btnVerInformeAnalisis_Consultor" href="{{informes.general.url}}" style="display:{{informes.general.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                    class="btn btn-info shadow btn-xs sharp">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                {{!-- {{/if}} --}}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
 
                             </div>
 

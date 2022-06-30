@@ -414,17 +414,64 @@
 			});
 			{{else}}
 			
-				{{#if graficas2}}
-				const infoEstado = document.getElementById("infoEstado");
-				const btnVerInforme = document.getElementById('btnVerInforme');
-				const spanFecha = document.getElementById("spanFecha");
-				const codigoEmpresa = document.getElementById("codigoEmpresa").value;
-				const informeDiag = document.querySelector('.consulInformeDiag');
-				const nombreInforme = document.querySelector('#nameDiag').textContent;
+				//{{#if graficas2}}
 
-				/* ========================= COLOCAR HORA A LA FECHA DE LA TABLA INFORMES =================================== **/
+                function guardarInforme_Consultor(formData, estado, fecha, boton){
+                    fetch('/guardarInforme', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response.ok) {
+                                boton.style.display = 'block'
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                fecha.innerHTML = response.fecha;
+                                boton.href = response.url
 
-				informeDiag.addEventListener('change', (e) => {
+                                toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
+                                    'error'
+                                )
+                                boton.style.display = 'block'
+                            }
+                        });
+                }
+
+                /* Etapa 1 - Informe Diagnóstico */
+                const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+
+                const spanFechaDiag_Consultor = document.getElementById("spanFechaDiag_Consultor");
+                const nomInformeDiag_Consultor = document.querySelector('.nomInformeDiag_Consultor').textContent;
+                const infoEstadoDiag_Consultor = document.getElementById("infoEstadoDiag_Consultor");
+                const inputInformeDiag_Consultor = document.querySelector('.inputInformeDiag_Consultor');
+                const btnVerInformeDiag_Consultor = document.getElementById('btnVerInformeDiag_Consultor');
+
+                inputInformeDiag_Consultor.addEventListener('change', (e) => {
 					console.log(e)
 					const file = e.target.files[0]
 					// Capturando Zona Horaria Local
@@ -433,55 +480,132 @@
 					const formData = new FormData();
 					formData.append('file', file);
 					formData.append('codigoEmpresa', codigoEmpresa);
-					formData.append('nombreInforme', nombreInforme);
+					formData.append('nombreInforme', nomInformeDiag_Consultor);
 					formData.append('zonaHoraria', tzLocal);
 
+                    guardarInforme_Consultor(formData, infoEstadoDiag_Consultor, spanFechaDiag_Consultor, btnVerInformeDiag_Consultor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+				});
 
-					fetch('/guardarInforme', {
-						method: 'POST',
-						body: formData,
-					})
-						.then(res => res.json())
-						.catch(error => console.error('Error:', error))
-						.then(response => {
-							if (response.ok) {
-								btnVerInforme.style.display = 'block'
-								infoEstado.classList.remove("badge-warning")
-								infoEstado.classList.add("badge-success")
-								infoEstado.innerHTML = "Cargado"
-								spanFecha.innerHTML = response.fecha;
-								btnVerInforme.href = response.url
+                //{{/if}}
 
-								toastr.success("El informe ha sido cargado exitosamente", "Atención", {
-									positionClass: "toast-top-center",
-									timeOut: 5e3,
-									closeButton: !0,
-									debug: !1,
-									newestOnTop: !0,
-									progressBar: !0,
-									preventDuplicates: !0,
-									onclick: null,
-									showDuration: "300",
-									hideDuration: "1000",
-									extendedTimeOut: "1000",
-									showEasing: "swing",
-									hideEasing: "linear",
-									showMethod: "fadeIn",
-									hideMethod: "fadeOut",
-									tapToDismiss: !1
-								})
+			{{/if}}
 
-							} else {
-								Swal.fire(
-									'Error!',
-									'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
-									'error'
-								)
-							}
-						});
+			{{#if graficas2}}
+			 /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+                // Dimensión Producto
+                const infoEstadoProd_Consultor = document.getElementById("infoEstadoProd_Consultor");
+                const btnVerInformeProd_Consultor = document.getElementById('btnVerInformeProd_Consultor');
+                const spanFechaProd_Consultor = document.getElementById("spanFechaProd_Consultor");
+                const inputInformeProducto_Consultor = document.querySelector('.inputInformeProducto_Consultor');
+                const nomProducto_Consultor = document.querySelector('.nomProducto_Consultor').textContent;
+
+                informeProd.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomProducto_Consultor);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme_Consultor(formData, infoEstadoProd_Consultor, spanFechaProd_Consultor, btnVerInformeProd_Consultor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
 				});
-				{{/if}}
+
+                // Dimensión Administración
+                const infoEstadoAdmin_Consultor = document.getElementById("infoEstadoAdmin_Consultor");
+                const btnVerInformeAdmin_Consultor = document.getElementById('btnVerInformeAdmin_Consultor');
+                const spanFechaAdmin_Consultor = document.getElementById("spanFechaAdmin_Consultor");
+                const inputInformeAdmin_Consultor = document.querySelector('.inputInformeAdmin_Consultor');
+                const nomAdmin_Consultor = document.querySelector('.nomAdmin_Consultor').textContent;
+
+                inputInformeAdmin_Consultor.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomAdmin_Consultor);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme_Consultor(formData, infoEstadoAdmin_Consultor, spanFechaAdmin_Consultor, btnVerInformeAdmin_Consultor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                // Dimensión Operaciones
+                const infoEstadoOpe_Consultor = document.getElementById("infoEstadoOpe_Consultor");
+                const btnVerInformeOpe_Consultor = document.getElementById('btnVerInformeOpe_Consultor');
+                const spanFechaOpe_Consultor = document.getElementById("spanFechaOpe_Consultor");
+                const inputInformeOperaciones_Consultor = document.querySelector('.inputInformeOperaciones_Consultor');
+                const nomOperacion_Consultor = document.querySelector('.nomOperacion_Consultor').textContent;
+
+                inputInformeOperaciones_Consultor.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomOperacion_Consultor);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme_Consultor(formData, infoEstadoOpe_Consultor, spanFechaOpe_Consultor, infoEstadoOpe_Consultor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                // Dimensión Marketing
+                const infoEstadoMarketing_Consultor = document.getElementById("infoEstadoMarketing_Consultor");
+                const btnVerInformeMarketing_Consultor = document.getElementById('btnVerInformeMarketing_Consultor');
+                const spanFechaMarketing_Consultor = document.getElementById("spanFechaMarketing_Consultor");
+                const informeMarketing = document.querySelector('.inputInformeMarketing_Consultor');
+                const nomMarketing_Consultor = document.querySelector('.nomMarketing_Consultor').textContent;
+
+                informeMarketing.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomMarketing_Consultor);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme_Consultor(formData, infoEstadoMarketing_Consultor, spanFechaMarketing_Consultor, btnVerInformeMarketing_Consultor)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+				// Informe Análisis General
+                const spanFechaAnalisis_General = document.getElementById("spanFechaAnalisis_Consultor");
+                const nomAnalisis_General = document.querySelector('.nomAnalisis_General').textContent;
+                const infoEstado_General = document.getElementById("infoEstadoAnalisis_General");
+                const informeAnalisisGeneral = document.querySelector('.inputInformeAnalisis_General');
+                const btnVerInformeAnalisis_General = document.getElementById('btnVerInformeAnalisis_Consultor');
+
+                informeAnalisisGeneral.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomAnalisis_General);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme_Consultor(formData, infoEstado_General, spanFechaAnalisis_General, btnVerInformeAnalisis_General)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
 
 			{{/if}}
 

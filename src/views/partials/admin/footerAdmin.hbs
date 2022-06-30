@@ -527,6 +527,7 @@
 
 
 		$(document).ready(function () {
+
 			{{#if frmDiag.tablasVacias}}
 			const btnCargarInforme = document.getElementById('btnInfDiag');
 			btnCargarInforme.addEventListener("click", function () {
@@ -538,7 +539,7 @@
 			});
 			{{else}}
 			
-				{{#if graficas2}}
+				//{{#if graficas2}}
 
                 function guardarInforme(formData, estado, fecha, boton){
                     fetch('/guardarInforme', {
@@ -654,7 +655,14 @@
 */
 				});
 				
-                /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+                
+
+                //{{/if}}
+
+			{{/if}}
+
+            {{#if graficas2}}
+            /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
                 // Dimensión Producto
                 const infoEstadoProd = document.getElementById("infoEstadoProd");
                 const btnVerInformeProd = document.getElementById('btnVerInformeProd');
@@ -748,8 +756,6 @@
 				});
 
                 {{/if}}
-
-			{{/if}}
 
 		}); /* Fin del $(document).ready */
 
