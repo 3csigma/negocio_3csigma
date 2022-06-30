@@ -576,18 +576,31 @@
                                 })
 
                             } else {
-                                Swal.fire(
-                                    'Error!',
-                                    'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
-                                    'error'
-                                )
-                                boton.style.display = 'block'
+
+                                toastr.danger("No sé pudo subir el informe, contacte a soporte", "Error", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
                             }
                         });
                 }
 
                 /* Etapa 1 - Informe Diagnóstico */
-
                 const infoEstado = document.getElementById("infoEstado");
                 const btnVerInforme = document.getElementById('btnVerInforme');
                 const spanFecha = document.getElementById("spanFecha");
@@ -608,50 +621,7 @@
 					formData.append('zonaHoraria', tzLocal);
 
                     guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-/*
-					fetch('/guardarInforme', {
-						method: 'POST',
-						body: formData,
-					})
-						.then(res => res.json())
-						.catch(error => console.error('Error:', error))
-						.then(response => {
-							if (response.ok) {
-								btnVerInforme.style.display = 'block'
-								infoEstado.classList.remove("badge-warning")
-								infoEstado.classList.add("badge-success")
-								infoEstado.innerHTML = "Cargado"
-								spanFecha.innerHTML = response.fecha;
-								btnVerInforme.href = response.url
 
-								toastr.success("El informe ha sido cargado exitosamente", "Atención", {
-									positionClass: "toast-top-center",
-									timeOut: 5e3,
-									closeButton: !0,
-									debug: !1,
-									newestOnTop: !0,
-									progressBar: !0,
-									preventDuplicates: !0,
-									onclick: null,
-									showDuration: "300",
-									hideDuration: "1000",
-									extendedTimeOut: "1000",
-									showEasing: "swing",
-									hideEasing: "linear",
-									showMethod: "fadeIn",
-									hideMethod: "fadeOut",
-									tapToDismiss: !1
-								})
-
-							} else {
-								Swal.fire(
-									'Error!',
-									'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
-									'error'
-								)
-							}
-						});
-*/
 				});
 				
                 /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
@@ -744,6 +714,29 @@
 					formData.append('zonaHoraria', tzLocal);
 
                     guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+				});
+
+                // Informe Análisis General
+                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+                const nomInformeAnalisis = document.querySelector('.nomInformeAnalisis').textContent;
+                const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
+                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
+                const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
+
+                inputInformeGeneral.addEventListener('change', (e) => {
+					console.log(e)
+					const file = e.target.files[0]
+					// Capturando Zona Horaria Local
+					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+					const formData = new FormData();
+					formData.append('file', file);
+					formData.append('codigoEmpresa', codigoEmpresa);
+					formData.append('nombreInforme', nomInformeAnalisis);
+					formData.append('zonaHoraria', tzLocal);
+
+                    guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
 				});
 

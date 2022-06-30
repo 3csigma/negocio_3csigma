@@ -675,8 +675,9 @@ dashboardController.enviarCuestionario = async (req, res) => {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             if (req.user.rol == 'Consultor'){
                 res.redirect('/empresas-asignadas/'+codigoEmpresa)
+            } else {
+                res.redirect('/empresas/'+codigoEmpresa)
             }
-            res.redirect('/empresas/'+codigoEmpresa)
         }
     }
 

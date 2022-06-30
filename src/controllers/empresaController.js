@@ -92,8 +92,8 @@ empresaController.index = async (req, res) => {
         diagPorcentaje.num = porcentaje*5
     }
 
-    // Informe de la empresa subido
-    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    // Informe de diagnóstico de empresa subido
+    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? LIMIT 1', [empresa[0].id_empresas, 'Informe diagnóstico'])
     informeEmpresa.length > 0 ? diagPorcentaje.num = 100 : diagPorcentaje.num = diagPorcentaje.num;
     // console.log("\n<<< Porcentaje actual >>>");
     // console.log(diagPorcentaje);
@@ -109,15 +109,21 @@ empresaController.index = async (req, res) => {
     /************************************************************************** */
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
+    let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1, jsonAnalisis2;
+    
     let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [empresa[0].id_empresas])
 
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
         jsonAnalisis2 =JSON.stringify( areasVitales[1]);
+        if (areasVitales[0].rendimiento_op >= 1){
+            rendimiento.op = areasVitales[0].rendimiento_op
+        } else {
+            rendimiento.op = false;
+        }
     }
 
-    let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
     // Si la empresa está Establecida
     let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [empresa[0].id_empresas])
     let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [empresa[0].id_empresas])

@@ -1127,15 +1127,15 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{#if informes.general.fecha}}{{informes.general.fecha}}{{else}}
-                                                                <span id="spanFecha">N/A</span>
+                                                                <span id="spanFechaGeneral">N/A</span>
                                                                 {{/if}}
                                                             </td>
-                                                            <td><span class="nombreInforme">Informe de análisis</span></td>
+                                                            <td><span class="nomInformeAnalisis">Informe de análisis</span></td>
                                                             <td>
                                                                 {{#if informes.general.fecha}}
                                                                 <span class="badge light badge-success">Cargado</span>
                                                                 {{else}}
-                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
                                                                 {{/if}}
                                                             </td>
                                                             <td>
@@ -1150,19 +1150,19 @@
                                                                 <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                     <tr>
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeDiag" >
+                                                                            <label for="informeAnalisisGeneral" >
                                                                     <div id="btnSubirInforme"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-upload"></i>
                                                                     </div>
                                                                 </label>
-                                                                <input id="informeDiag" class="probarXD" type="file" style="display:none"
-                                                                    name="informeDiag" accept="application/pdf" />
+                                                                <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
+                                                                    name="informeAnalisisGeneral" accept="application/pdf" />
                                                                         </td>
 
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInforme" href="{{informes.general.url}}" style="display:{{informes.general.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                            <a  id="btnVerInformeGeneral" href="{{informes.general.url}}" style="display:{{informes.general.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
                                                                     class="btn btn-info shadow btn-xs sharp">
                                                                     <i class="fa fa-search"></i></a>
                                                                         </td>
