@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
+const consultorController = require('../controllers/consultorController');
 const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
@@ -49,7 +50,23 @@ router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboar
 router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashboardController.dgNuevosProyectos)
 router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
 
-// Informe Diagnóstico
+// Cuestionario Análisis dimensión Producto 
+router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorLogueado, consultorController.analisisProducto)
+router.post('/analisis-dimension-producto/',checkLogin, consultorLogueado, consultorController.guardarAnalisisProducto)
+
+// // Cuestionario Análisis dimensión Administración 
+// router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorLogueado, consultorController.analisisAdministracion)
+// router.post('/analisis-dimension-administracion/', checkLogin, consultorLogueado, consultorController.guardarAnalisisAdministracion)
+
+// // Cuestionario Análisis dimensión Operación 
+// router.get('/analisis-dimension-operacion/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)
+// router.post('/analisis-dimension-operacion/', checkLogin, consultorLogueado, consultorController.guardar_AnalisisOperacion)
+
+// // Cuestionario Análisis dimensión Marketing  
+// router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.AnalisisMarketing)
+// router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardar_AnalisisMarketing)
+
+// Informes Diagnóstico & Análisis 
 router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
 router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 

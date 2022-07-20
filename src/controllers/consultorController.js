@@ -237,3 +237,61 @@ consultorController.empresaInterna = async (req, res) => {
     })
 
 }
+
+consultorController.analisisProducto = async (req, res) => {
+    const { codigo } = req.params;
+    // let volver = '/empresas/'
+    // if (req.user.rol == 'Consultor') {
+    //     volver = '/empresas-asignadas/'+codigo;
+    // }
+    res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver: '#' })
+}
+
+consultorController.guardarAnalisisProducto = async (req, res) => {
+    const { codigoEmpresa, zhActualAdm } = req.body;
+    // Capturar Fecha de guardado
+    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+
+    // Verificando si existen registros Análisis de empresa en la Base de datos
+    let empresa = await pool.query('SELECT * FROM empresas')
+    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+
+    empresa = empresa.find(item => item.codigo == codigoEmpresa)
+   
+    let id_empresa, id_consultor;
+
+    // Consultor que realizó el análisis
+    const consultores = await pool.query('SELECT * FROM consultores');
+    const c = consultores.find(item => item.codigo == req.user.codigo)
+    c ? id_consultor = c.id_consultores : id_consultor = 0; 
+
+    if(empresa) {
+        id_empresa = empresa.id_empresas;
+
+        // Capturando datos del formulario - Analisis dimensión Producto
+        const { publico_objetivo, beneficios, tipo_producto, nivel_precio, mas_vendidos, razon_venta, utilizacion, integracion_gama, calidad, aceptacion } = req.body
+        let producto = JSON.stringify({
+            fecha, publico_objetivo, beneficios, tipo_producto, nivel_precio, mas_vendidos, razon_venta, utilizacion, integracion_gama, calidad, aceptacion
+        })
+
+        // Guardando en la Base de datos
+        const tablaAnalisis = analisis_empresa.find(item => item.id_empresa == id_empresa)
+        if (tablaAnalisis) {
+            const actualizarAnalisis = { producto }
+            await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        } else {
+            // Creando Objetos para guardar en la base de datos
+            const nuevoAnalisis = { id_empresa, id_consultor, producto }
+            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+        }
+
+        if (req.user.rol == 'Consultor'){
+            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        } else {
+            res.redirect('/empresas/'+codigoEmpresa)
+        }
+
+    }
+
+    
+}

@@ -1,0 +1,263 @@
+<link rel="stylesheet" href="../css/estilosPersonales.css">
+<style>
+    .section_title{
+        margin-bottom: 1.5em !important;
+    }
+    .add_top_10{
+        max-height: 60vh !important; padding-right: 3em !important;
+    }
+    .close {
+        position: absolute;
+        right: 32px;
+        top: 32px;
+        width: 45px;
+        height: 45px;
+        opacity: 0.5;
+        border-radius: 30px;
+        background-color: #ccc;
+    }
+
+    .close:hover {
+        opacity: 1;
+    }
+
+    .close:before,
+    .close:after {
+        position: absolute;
+        top: 10.5px;
+        left: 22px;
+        content: ' ';
+        height: 24px;
+        width: 2px;
+        background-color: #000;
+    }
+
+    .close:before {
+        transform: rotate(45deg);
+    }
+
+    .close:after {
+        transform: rotate(-45deg);
+    }
+
+    .input-group-prepend {
+        height: 45px;
+    }
+
+    .fl-wrap.fl-wrap-input {
+        width: 100%;
+    }
+
+    label {
+        text-align: justify !important;
+    }
+</style>
+<div id="preloader">
+    <div data-loader="circle-side"></div>
+</div><!-- /Preload -->
+
+<div id="loader_form">
+    <div data-loader="circle-side-2"></div>
+</div><!-- /loader_form -->
+
+<div class="container-fluid">
+    <div class="row row-height">
+        <div class="col-xl-4 col-lg-4 content-left">
+            <div class="content-left-wrapper">
+                <a href="#" id="logo"><img src="../img/3C-Sigma-White.svg" alt="Logo 3CSigma" width="75"
+                        height="75"></a>
+                <div id="social">
+                    <ul>
+                        <li><a href="https://facebook.com/carlosjramirezp" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="https://instagram.com/carlosjramirezp" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                        <li><a href="mailto:hello@3csigma.com" target="_blank"><i class="fa fa-envelope"></i></a></li>
+                        {{!-- <li><a href="#0"><i class="fab fa-linkedin-in"></i></a></li> --}}
+                    </ul>
+                </div>
+                <!-- /social -->
+                <div>
+                    <figure><img src="../img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
+                    </figure>
+                    <h2>Análisis dimensión producto</h2>
+                    <p>Bienvenido al Nivel N° 2, donde podremos ayudarle a analizar y entender el comportamiento de su negocio en el
+                        mercado actual.</p>
+                    <a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
+                        <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+                    </a>
+                    {{!-- <a href="#start" class="btn_1 rounded mobile_btn yellow">xxxxxxx</a> --}}
+                </div>
+                <div class="copy">© {{actualYear}} 3C Sigma</div>
+            </div>
+            <!-- /content-left-wrapper -->
+        </div>
+        <!-- /content-left -->
+        <div class="col-xl-8 col-lg-8 content-right" id="start">
+            <div id="wizard_container">
+                <div id="top-wizard">
+                    <span id="location"></span>
+                    <div id="progressbar"></div>
+                </div>
+                <!-- /top-wizard -->
+                <form method="POST" action="/analisis-dimension-producto">
+                    <input id="website" name="website" type="text" value="">
+                    <!-- Leave for security protection, read docs for details -->
+                    <div id="middle-wizard">
+                        <!-- SECCIÓN 1 -->
+                        <div class="step">
+                            <h2 class="section_title">SECCIÓN 1</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>El público objetivo</strong></label>
+                                    <label>¿A cuál segmento del mercado va dirigido su producto: hombres,
+                                    mujeres, pequeñas empresas, etc.? </label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="publico_objetivo" id="publico_objetivo" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Beneficios</strong></label>
+                                    <label>¿Qué Beneficios aporta su producto? Y ¿Qué necesidad de este público satisface?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="beneficios" id="beneficios" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Tipo de producto</strong></label>
+                                    <label class="mb-3">¿Cuál es su tipo de producto específicamente? Ejemplo:</label>
+                                    <label><span><span style="text-decoration: underline black;"> Productos de consumo</span>, perecederos y no perecederos o de larga duración.</span></label>
+                                    <label><span><span style="text-decoration: underline black;">Productos tangibles</span> que se consumen rápidamente: comida preparada.</span></label>
+                                    <label><span><span style="text-decoration: underline black;">Bienes de consumo duraderos.</span> Tangibles y que se usan muchas veces: electrodomésticos, mercadería, ropa, bisuterías, etc</span></label>
+                                    <label><span><span style="text-decoration: underline black;">Servicios.</span> Intangibles</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="tipo_producto" id="tipo_producto" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Nivel de precio</strong></label>
+                                    <label>Explique ¿Cómo es el precio de su producto en relación al sector de mercado en el que se encuentra?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="nivel_precio" id="nivel_precio" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Cuáles son los Productos y/o Servicios que más vende?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="mas_vendidos" id="mas_vendidos" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 1 -->
+
+                        <!-- SECCIÓN 2 ============================== -->
+                        <div class="step">
+                            <h2 class="section_title">SECCIÓN 2</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Cuál es la razón por la que considera que estos Productos que describió anteriormente se venden más?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="razon_venta" id="razon_venta" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Utilización</strong></label>
+                                    <label>¿Cómo se utiliza o consume su producto? ¿En qué ocasiones? ¿Por quién? ¿En dónde?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="utilizacion" id="utilizacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Integración en la gama de productos </strong></label>
+                                    <label>Explique ¿Qué coherencia tienen sus productos dentro de la empresa?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="integracion_gama" id="integracion_gama" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Calidad</strong></label>
+                                    <label>¿Cómo es la calidad de su producto? Y ¿Qué tiene su producto para disponer de la calidad a que hace referencia?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="calidad" id="calidad" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label>¿Qué aceptación tiene su producto?</label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="aceptacion" id="aceptacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 2 -->
+
+                        <!-- Último Paso ============================== -->
+                        <div class="submit step" id="end">
+                            <div class="summary">
+                                <div class="wrapper">
+                                    <h3>Cuestionario Finalizado
+                                    </h3>
+                                    <p>Al guardar los datos será redirigido al perfil de la empresa</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /Último Paso-->
+
+                        {{!-- FECHA DE EDICIÓN --}}
+                        <input type="hidden" id="zhActualAdm" name="zhActualAdm">
+                        <input type="hidden" id="codigoEmpresa" name="codigoEmpresa" value="{{codigo}}">
+
+                    </div>
+                    <!-- /middle-wizard -->
+                    <div id="bottom-wizard">
+                        {{!-- <a class="btn btn-danger" href="#">Limpiar campos</a> --}}
+                        <button type="button" name="backward" class="backward">Anterior</button>
+                        <button type="button" name="forward" class="forward">Siguiente</button>
+                        <button type="submit" name="enviarCuestionario" class="submit">Guardar Datos</button>
+                    </div>
+                    <!-- /bottom-wizard -->
+                </form>
+            </div>
+            <!-- /Wizard container -->
+        </div>
+        <!-- /content-right-->
+    </div>
+    <!-- /row-->
+</div>
+<!-- /container-fluid -->
+<a href="{{volver}}" class="close"></a>
+
+<script>
+    // Capturando Zona Horaria Local
+    const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzLocalActual);
+    document.getElementById("zhActualAdm").value = tzLocalActual;
+</script>

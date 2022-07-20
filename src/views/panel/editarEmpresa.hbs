@@ -838,15 +838,27 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>N/A</td>
+                                                            <td>{{#if dim_producto}}{{dim_producto.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Cuestionario dimensión producto</td>
-                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            <td>
+                                                                {{#if dim_producto}}
+                                                                <span class="badge light badge-success">Completo</span>
+                                                                {{else}}
+                                                                <span class="badge light badge-warning">Pendiente</span>
+                                                                {{/if}}
                                                             </td>
                                                             <td>
-                                                                <a href="#"
+                                                                {{#if dim_producto}}
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target="#modalDimProducto"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                {{else}}
+                                                                <a href="/analisis-dimension-producto/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                          <tr>
@@ -910,6 +922,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+
                                                         {{!-- PRODUCTO --}}
                                                         <tr>
                                                             <td>{{#if informes.prod.fecha}}{{informes.prod.fecha}}{{else}}
@@ -957,6 +970,7 @@
                                                                 {{!-- {{/if}} --}}
                                                             </td>
                                                         </tr>
+
                                                         {{!-- ADMINISTRACIÓN --}}
                                                         <tr>
                                                             <td>{{#if informes.adm.fecha}}{{informes.adm.fecha}}{{else}}
@@ -1004,6 +1018,7 @@
                                                                 {{!-- {{/if}} --}}
                                                             </td>
                                                         </tr>
+
                                                         {{!-- OPERACIONES --}}
                                                         <tr>
                                                             <td>{{#if informes.op.fecha}}{{informes.op.fecha}}{{else}}

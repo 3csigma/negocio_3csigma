@@ -162,18 +162,33 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
         e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
 
+        /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
+         * ****************************
+         * * ****************************
+         * * ****************************
+         * * ****************************
+         * * ****************************
+        */
         consultor.forEach(c => {
             if (e.consultor == c.id_consultores){
                 e.nombre_consultor = c.nombres + " " + c.apellidos;
                 e.codigo_consultor = c.codigo
             }
         })
+        
 
         informe.forEach(i => {
             if (i.id_empresa == e.id_empresas){
                 e.etapa = 'Informe diagnóstico';
             }
         })
+        /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
+         * ****************************
+         * * ****************************
+         * * ****************************
+         * * ****************************
+         * * ****************************
+        */
 
     });
 
@@ -352,6 +367,8 @@ dashboardController.editarEmpresa = async (req, res) => {
     frmInfo.url = '#'
 
     // Informes de Diagnóstico de Negocio
+    /** **************************************************************** */
+    /** Corregir Consulta.. Usar -> funcionInformes(params1, params2, params3) **/
     let informesDiag = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe diagnóstico'])
     // Informes de Diagnóstico de Negocio
     let informesProd = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión producto'])
@@ -361,6 +378,8 @@ dashboardController.editarEmpresa = async (req, res) => {
     let informesOperaciones = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión operaciones'])
     // Informes de Diagnóstico de Negocio
     let informesMarketing = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión marketing'])
+    /** Corregir Consulta.. Usar -> funcionInformes(params1, params2, params3) **/
+    /** **************************************************************** */
 
     if (informesDiag.length > 0) {
         frmInfo.fecha = informesDiag[0].fecha;
@@ -450,10 +469,20 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /************************************************************************************* */
 
+    /** Análisis de negocio por dimensiones */
+    let dim_producto = false
+    const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
+    if (analisisDimensiones.length > 0){
+        const dimProd = JSON.parse(analisisDimensiones[0].producto)
+        dim_producto = {}
+        dim_producto.fecha = dimProd.fecha
+    }
+
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, informes
+        graficas2: true, informes,
+        dim_producto
     })
 
 }
@@ -620,16 +649,8 @@ dashboardController.enviarCuestionario = async (req, res) => {
         m1, m2, m3, m4, m5
     })
 
-    // Guardando en la Tabla general de Diagnósticos (Capturar el Consecutivo)
-    let id_diagnostico = '000000';
-    const tablaDiagnostico = { tipo_empresa: 'Establecida', id_empresa: id_empresa }
-    const diagnostico = await pool.query('INSERT INTO diagnosticos SET ?', [tablaDiagnostico])
-    if (diagnostico.affectedRows > 0) {
-        id_diagnostico = diagnostico.insertId;
-    }
-
     // Creando Objetos para guardar en la base de datos
-    const nuevoDiagnostico = { id_diagnostico, id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
+    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
 
     const areasVitales = { id_empresa,
         producto: calificacion_global_producto, 
@@ -761,15 +782,7 @@ dashboardController.guardarRespuestas = async (req, res) => {
     const { m1, m2, m3, m4, m5 } = req.body
     let metas = JSON.stringify({ m1, m2, m3, m4, m5 })
 
-    // Guardando en la Tabla general de Diagnósticos (Capturar el Consecutivo)
-    let id_diagnostico = '000000';
-    const tablaDiagnostico = { tipo_empresa: 'Nueva', id_empresa: id_empresa }
-    const diagnostico = await pool.query('INSERT INTO diagnosticos SET ?', [tablaDiagnostico])
-    if (diagnostico.affectedRows > 0) {
-        id_diagnostico = diagnostico.insertId;
-    }
-
-    const nuevoDiagnostico = { id_diagnostico, id_empresa, id_consultor, fecha, rubro, exp_rubro, mentalidad_empresarial, viabilidad, productos_servicios, administracion, talento_humano, finanzas, servicio_cliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, metas }
+    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, rubro, exp_rubro, mentalidad_empresarial, viabilidad, productos_servicios, administracion, talento_humano, finanzas, servicio_cliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, metas }
 
     /* ========================== Calculos del Diagnóstico ========================== */
     // Categorías
