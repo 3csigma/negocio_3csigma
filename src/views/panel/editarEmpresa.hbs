@@ -838,17 +838,17 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td>{{#if dim_producto}}{{dim_producto.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>{{#if dimProducto}}{{dimProducto.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Cuestionario dimensión producto</td>
                                                             <td>
-                                                                {{#if dim_producto}}
+                                                                {{#if dimProducto}}
                                                                 <span class="badge light badge-success">Completo</span>
                                                                 {{else}}
                                                                 <span class="badge light badge-warning">Pendiente</span>
                                                                 {{/if}}
                                                             </td>
                                                             <td>
-                                                                {{#if dim_producto}}
+                                                                {{#if dimProducto}}
                                                                 <a class="btn btn-info shadow btn-xs sharp"
                                                                     data-toggle="modal" data-target="#modalDimProducto"
                                                                     style="color: white; background: #FED061; border-color: #FED061">
@@ -1214,6 +1214,10 @@
         {{> modals/cuestionario}}
         {{else}}
         {{> modals/nuevosProyectos}}
+        {{/if}}
+
+        {{#if dimProducto}}
+        {{> modals/dimensionProducto}}
         {{/if}}
 
     </div>

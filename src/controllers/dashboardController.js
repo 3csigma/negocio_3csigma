@@ -470,19 +470,31 @@ dashboardController.editarEmpresa = async (req, res) => {
     /************************************************************************************* */
 
     /** Análisis de negocio por dimensiones */
-    let dim_producto = false
+    let dimProducto = false
     const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
     if (analisisDimensiones.length > 0){
-        const dimProd = JSON.parse(analisisDimensiones[0].producto)
-        dim_producto = {}
-        dim_producto.fecha = dimProd.fecha
+        const prod = JSON.parse(analisisDimensiones[0].producto)
+        dimProducto = {}
+        dimProducto.fecha = prod.fecha
+        dimProducto.publico_objetivo = prod.publico_objetivo
+        dimProducto.beneficios = prod.beneficios
+        dimProducto.tipo_producto = prod.tipo_producto
+        dimProducto.nivel_precio = prod.nivel_precio
+        dimProducto.mas_vendidos = prod.mas_vendidos
+        dimProducto.razon_venta = prod.razon_venta
+        dimProducto.integracion_gama = prod.integracion_gama
+        dimProducto.calidad = prod.calidad
+        dimProducto.aceptacion = prod.aceptacion
     }
+
+    /* --------------------------------------------------------------------------------------- */
+
 
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, informes,
-        dim_producto
+        dimProducto
     })
 
 }
