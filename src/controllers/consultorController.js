@@ -240,11 +240,11 @@ consultorController.empresaInterna = async (req, res) => {
 
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    // let volver = '/empresas/'
-    // if (req.user.rol == 'Consultor') {
-    //     volver = '/empresas-asignadas/'+codigo;
-    // }
-    res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver: '#' })
+    let volver = '/empresas/'
+    if (req.user.rol == 'Consultor') {
+        volver = '/empresas-asignadas/'+codigo;
+    }
+    res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 
 consultorController.guardarAnalisisProducto = async (req, res) => {
@@ -294,4 +294,13 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
     }
 
     
+}
+
+consultorController.analisisAdministracion = async (req, res) => {
+    const { codigo } = req.params;
+    // let volver = '/empresas/'
+    // if (req.user.rol == 'Consultor') {
+    //     volver = '/empresas-asignadas/'+codigo;
+    // }
+    res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver: '#' })
 }
