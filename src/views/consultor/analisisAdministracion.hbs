@@ -98,11 +98,11 @@
                     <div id="progressbar"></div>
                 </div>
                 <!-- /top-wizard -->
-                <form method="POST" action="/analisis-dimension-producto">
+                <form method="POST" action="/analisis-dimension-administracion">
                     <input id="website" name="website" type="text" value="">
                     <!-- Leave for security protection, read docs for details -->
                     <div id="middle-wizard">
-                        <!-- SECCIÓN 1 -->
+                        <!-- SECCIÓN 1 ============================== -->
                         <div class="step">
                             <h2 class="section_title">SECCIÓN 1</h2>
 
@@ -147,7 +147,7 @@
 
                                 <div class="form-group col-md-12 ">
                                     <label>Ahora Analice junto al Cliente las respuestas y escoja las palabras que más se conecten con el negocio, luego proceda a diseñar su visión con esas palabras que seleccionó.</label>
-                                    <label><span>Ej. Consolidar consumidores fieles, a través de nuestros servicios y variedades exclusivas.></span></label>
+                                    <label><span>Ej. Consolidar consumidores fieles, a través de nuestros servicios y variedades exclusivas.</span></label>
                                     <label><strong>Declare su VISIÓN </strong></label>
                                     <div class="form-group mb-3 mx-auto">
                                         <textarea name="vision5" id="vision5" class="form-control required"
@@ -269,7 +269,7 @@
                                     <label><strong>Tipo de sistema administrativo</strong></label>
                                     <label><span>Describa su sistema administrativo actual</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="sistema_admin" class="form-control required"
+                                        <textarea name="tipo_sistema" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
@@ -283,12 +283,428 @@
                                     </div>
                                 </div>
 
+                                <!-- ÁREA DE TALENTO HUMANO -->
+                                <div class="form-group col-md-12 ">
+                                    <center><label><strong>Área vital de Talento Humano</strong></label>
+                                    <label><span>Principales funciones del personal</span></label></center>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <table class="table table-responsive">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">Identifique cada puesto de trabajo y sus principales funciones</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>PUESTO</th>
+                                                    <th>PRINCIPALES FUNCIONES</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto1" class="form-control required" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion1" class="form-control required" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto2" class="form-control " cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion2" class="form-control " cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto3" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion3" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto4" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion4" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto5" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion5" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px;  min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="puesto6" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="funcion6" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- HABILIDADES DE LOS COLABORADORES -->
+                                <div class="form-group col-md-12">
+                                    <label><strong>Habilidades de los colaboradores</strong></label>
+                                    <label><span>¿Qué habilidades se requieren para los distintos puestos?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2" style="padding: 4px 8px;">
+                                                        <input type="text" name="h_puesto1" class="form-control required" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px" style="padding: 4px 8px;">
+                                                        <textarea name="habilidad_interp1" class="form-control required" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica1" class="form-control required" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <input type="text" name="h_puesto2" class="form-control" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_interp2" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica2" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <input type="text" name="h_puesto3" class="form-control" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_interp3" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica3" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <input type="text" name="h_puesto4" class="form-control" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_interp4" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica4" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <input type="text" name="h_puesto5" class="form-control" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_interp5" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica5" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table table-responsive table-bordered">
+                                            <thead class="text-center">
+                                                <tr>
+                                                    <th colspan="2">
+                                                        <input type="text" name="h_puesto6" class="form-control" placeholder="Puesto">
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Habilidades interpersonales</th>
+                                                    <th>Habilidades técnicas</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_interp6" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                    <td style="padding: 1px 2px">
+                                                        <textarea name="habilidad_tecnica6" class="form-control" cols="50" rows="5"
+                                                            style="border-radius: 0px; min-height: 50px;"></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+
                             </div>
 
 
                             <!-- /Fila Grupo de campos -->
                         </div>
                         <!-- /Paso 2 -->
+
+                        <!-- SECCIÓN 3 ============================== -->
+                        <div class="step">
+                            <h2 class="section_title">SECCIÓN 3</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué habilidades interpersonales considera que deberían desarrollar sus colaboradores?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="habilidad1" id="habilidad1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué habilidades técnicas considera que deberían desarrollar sus colaboradores?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="habilidad2" id="habilidad2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <center><label><strong>Necesidades de contratación</strong></label></center>
+                                    <label><span>¿Qué personal considera que requiere en este momento para su empresa? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="necesidad_contratacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cuál es el motivo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="motivo_contratacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <center><label><strong>Proceso de contratación</strong></label></center>
+                                    <label><span>¿Cuál es el criterio que utiliza para contratar al personal?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="proceso_contratacion1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cuál sería la información más importante que debería obtener de un futuro trabajador para ser contratado?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="proceso_contratacion2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Evaluación de desempeño </strong></label>
+                                    <label><span>¿Cómo mide actualmente el desempeño de los trabajadores en su puesto de trabajo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="evaluacion_cargo" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- ÁREA DE FINANZAS -->
+                                <div class="form-group col-md-12 ">
+                                    <center><label><strong>Área vital de Finanzas</strong></label></center>
+                                    <label><strong>La proyección de ventas</strong></label>
+                                    <label for=""><span>¿Cuál sería su proyección de ventas para los próximos meses?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="proyeccion_ventas" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>El costo de ventas</strong></label>
+                                    <label><span>¿Cómo es la estructura de costos de sus productos?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="costo_ventas" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Las cuentas por pagar y cobrar de la empresa</strong></label>
+                                    <label><span>¿A cuánto equivalen las cuentas por pagar de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="cuentas_pagar" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿A cuánto equivalen las cuentas por cobrar de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="cuentas_cobrar" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Los costos fijos y variables de la empresa </strong></label>
+                                    <label><span>¿Cuáles son los costos fijos y variables de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="costos_fijos_variables" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>El Estado de Resultados de la empresa</strong></label>
+                                    <label><span>¿Qué información muestra el Estado de Resultados de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estado_resultados_empresa" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Utilidad neta </strong></label>
+                                    <label><span>¿Cuál es la utilidad neta de la empresa? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="utilidad_neta" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Rentabilidad </strong></label>
+                                    <label><span>¿Cuál es la rentabilidad de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="rentabilidad" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Punto de equilibrio</strong></label>
+                                    <label><span>¿Cuál es el punto de equilibrio de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="punto_equilibrio" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cómo ha sido el Flujo de Caja de la empresa en los últimos 6 meses? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="flujo_caja" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Retorno de inversión</strong></label>
+                                    <label><span>¿Cuál es el retorno de inversión de la empresa? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="retorno_inversion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 3 -->
 
                         <!-- Último Paso ============================== -->
                         <div class="submit step" id="end">

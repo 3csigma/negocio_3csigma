@@ -13,8 +13,8 @@ router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorLogueado
 router.post('/analisis-dimension-producto/',checkLogin, consultorLogueado, consultorController.guardarAnalisisProducto)
 
 // Cuestionario Análisis dimensión Administración 
-router.get('/analisis-dimension-administracion/:codigo', consultorController.analisisAdministracion)
-// router.post('/analisis-dimension-administracion/', checkLogin, consultorLogueado, consultorController.guardarAnalisisAdministracion)
+router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorLogueado, consultorController.analisisAdministracion)
+router.post('/analisis-dimension-administracion', checkLogin, consultorLogueado, consultorController.guardarAnalisisAdministracion)
 
 // // Cuestionario Análisis dimensión Operación 
 // router.get('/analisis-dimension-operacion/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)

@@ -148,7 +148,12 @@ dashboardController.bloquearConsultor = async (req, res) => {
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.id_diagnostico, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas')
+    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa"')
+
+    const dg_nueva = await pool.query('SELECT * FROM dg_empresa_nueva')
+    const dg_establecida = await pool.query('SELECT * FROM dg_empresa_establecida')
+    
+    const dg_analisis = await pool.query('SELECT * FROM analisis_empresa')
 
     const consultor = await pool.query('SELECT * FROM consultores')
     const informe = await pool.query('SELECT * FROM informes')
@@ -160,7 +165,28 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
         e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
         e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
-        e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+
+        if (dg_nueva.length > 0) {
+            const _diag = dg_nueva.find(i => i.id_empresa == e.id_empresas)
+            if (_diag)
+                _diag.consecutivo ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+            
+        }  
+        
+        if (dg_establecida.length > 0) {
+            const _diag = dg_establecida.find(i => i.id_empresa == e.id_empresas)
+            if (_diag)
+                _diag.consecutivo ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+            
+        }
+        
+        if (dg_analisis.length > 0) {
+            const _diag = dg_analisis.find(i => i.id_empresa == e.id_empresas)
+            if (_diag) 
+                _diag.consecutivo ? e.etapa = 'Cuestionario análisis' : e.etapa = e.etapa;
+        }
+
+        // e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
 
         /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
          * ****************************
@@ -169,19 +195,27 @@ dashboardController.mostrarEmpresas = async (req, res) => {
          * * ****************************
          * * ****************************
         */
-        consultor.forEach(c => {
-            if (e.consultor == c.id_consultores){
-                e.nombre_consultor = c.nombres + " " + c.apellidos;
-                e.codigo_consultor = c.codigo
-            }
-        })
+        const consultor_empresa = consultor.find(item => item.id_consultores == e.consultor)
+        if (consultor_empresa) {
+            e.nombre_consultor = consultor_empresa.nombres + " " + consultor_empresa.apellidos;
+            e.codigo_consultor = consultor_empresa.codigo
+        }
+        // consultor.forEach(c => {
+        //     if (e.consultor == c.id_consultores){
+        //         e.nombre_consultor = c.nombres + " " + c.apellidos;
+        //         e.codigo_consultor = c.codigo
+        //     }
+        // })
         
-
-        informe.forEach(i => {
-            if (i.id_empresa == e.id_empresas){
-                e.etapa = 'Informe diagnóstico';
-            }
-        })
+        const informe_empresa = informe.find(i => i.id_empresa == e.id_empresas)
+        if (informe_empresa) {
+            e.etapa = 'Informe(s) cargado(s)';
+        }
+        // informe.forEach(i => {
+        //     if (i.id_empresa == e.id_empresas){
+        //         e.etapa = 'Informe diagnóstico';
+        //     }
+        // })
         /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
          * ****************************
          * * ****************************
