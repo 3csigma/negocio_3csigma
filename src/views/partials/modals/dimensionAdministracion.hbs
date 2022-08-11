@@ -1,99 +1,430 @@
-<div class="modal fade bd-example-modal-lg" id="modalDimProducto" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modalDimAdministracion" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Análisis dimensión administración</h2>
+                <h2 style="color: #000 !important">Análisis dimensión administración</h2>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
 
+            <div class="modal-header">
+                <ul class="nav nav-pills justify-content-end">
+                    <li class=" nav-item">
+                        <a href="#av-admin" class="nav-link active" data-toggle="tab" aria-expanded="false">Área vital administración</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#av-talento" class="nav-link" data-toggle="tab" aria-expanded="false">Área vital talento humano</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#av-finanzas" class="nav-link" data-toggle="tab" aria-expanded="true">Área vital finanzas</a>
+                    </li>
+                </ul>
+            </div>
+
             <div class="modal-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Pregunta</th>
-                            <th>Respuesta</th>
+
+                <div class="tab-content">
+                    
+                    <div id="av-admin" class="tab-pane active">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>¿Qué queremos conseguir como Negocio?</td>
+                                    <td>{{dimAdmin.v.vision1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>¿Cómo se enfrentará el negocio a los cambios?</td>
+                                    <td>{{dimAdmin.v.vision2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">3</td>
+                                    <td>¿Cómo se diferenciará del resto?</td>
+                                    <td>{{dimAdmin.v.vision3}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">4</td>
+                                    <td>¿Cómo logrará ser competitivo?</td>
+                                    <td>{{dimAdmin.v.vision4}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">5</td>
+                                    <td>Visión</td>
+                                    <td>{{dimAdmin.v.vision5}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">6</td>
+                                    <td>Misión</td>
+                                    <td>{{dimAdmin.mision}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">7</td>
+                                    <td>¿Cuáles son los valores que rigen a su empresa?</td>
+                                    <td>{{dimAdmin.valores}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Análisis FODA</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">8</td>
+                                    <td>¿Cuáles son las oportunidades que puede identificar en su mercado para su negocio?</td>
+                                    <td>{{dimAdmin.f.foda1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">9</td>
+                                    <td>¿Cuáles son las amenazas que puede identificar en su mercado para su negocio?</td>
+                                    <td>{{dimAdmin.f.foda2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10</td>
+                                    <td>¿Cuáles son las fortalezas de su negocio?</td>
+                                    <td>{{dimAdmin.f.foda3}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">11</td>
+                                    <td>¿Cuáles son los aspectos a mejorar que puede identificar de su negocio?</td>
+                                    <td>{{dimAdmin.f.foda4}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Toma de conciencia para determinar estrategias</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">12</td>
+                                    <td>¿Qué oportunidades de las que identificó puede aprovechar en este momento con las fortalezas que tiene?</td>
+                                    <td>{{dimAdmin.f.foda5}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">13</td>
+                                    <td>¿Qué oportunidades puede aprovechar si mejora los aspectos (debilidades) que identificó?</td>
+                                    <td>{{dimAdmin.f.foda6}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">14</td>
+                                    <td>¿Qué amenazas puede evitar en este momento utilizando las fortalezas que tiene?</td>
+                                    <td>{{dimAdmin.f.foda7}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">15</td>
+                                    <td>¿Qué amenazas puede evitar en este momento minimizando los aspectos a mejorar (debilidades) que identificó?</td>
+                                    <td>{{dimAdmin.f.foda8}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Estructura Organizativa</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">16</td>
+                                    <td>Describa como es la estructura organizativa de la empresa. (Puede representarlo en forma de organigrama)</td>
+                                    <td>{{dimAdmin.estructura_organizativa}}</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Tipo de sistema administrativo</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">17</td>
+                                    <td>Describa su sistema administrativo actual</td>
+                                    <td>{{dimAdmin.tipo_sistema}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Sistema de facturación </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">18</td>
+                                    <td>¿Describa el tipo de sistema que está utilizando para la facturación de su empresa?</td>
+                                    <td>{{dimAdmin.sistema_facturacion}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="av-talento" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <th>Puesto</th>
+                                    <th>Principales funciones</th>
+                                </tr>
+                                <tr>
+                                    <td>19</td>
+                                    <td>{{dimAdmin.av_th.puesto1}}</td>
+                                    <td>{{dimAdmin.av_th.funcion1}}</td>
+                                </tr>
+                                <tr>
+                                    <td>20</td>
+                                    <td>{{dimAdmin.av_th.puesto2}}</td>
+                                    <td>{{dimAdmin.av_th.funcion2}}</td>
+                                </tr>
+                                <tr>
+                                    <td>21</td>
+                                    <td>{{dimAdmin.av_th.puesto3}}</td>
+                                    <td>{{dimAdmin.av_th.funcion3}}</td>
+                                </tr>
+                                <tr>
+                                    <td>22</td>
+                                    <td>{{dimAdmin.av_th.puesto4}}</td>
+                                    <td>{{dimAdmin.av_th.funcion4}}</td>
+                                </tr>
+                                <tr>
+                                    <td>23</td>
+                                    <td>{{dimAdmin.av_th.puesto5}}</td>
+                                    <td>{{dimAdmin.av_th.funcion5}}</td>
+                                </tr>
+                                <tr>
+                                    <td>24</td>
+                                    <td>{{dimAdmin.av_th.puesto6}}</td>
+                                    <td>{{dimAdmin.av_th.funcion6}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table">
+                            <tr>
+                                <td></td>
+                                <td colspan="3" style="font-weight: 700;">Habilidades de los colaboradores</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td colspan="3" style="font-weight: 500;">¿Qué habilidades se requieren para los distintos puestos?</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="font-weight: 500;">Puesto</td>
+                                <td style="font-weight: 500;">Habilidades interpersonales</td>
+                                <td style="font-weight: 500;">Habilidades técnicas</td>
+                            </tr>
+                            <tr>
+                                <td>25</td>
+                                <td>{{dimAdmin.av_th.h_puesto1}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp1}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica1}}</td>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td>{{dimAdmin.av_th.h_puesto2}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp2}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica2}}</td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td>{{dimAdmin.av_th.h_puesto3}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp3}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica3}}</td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td>{{dimAdmin.av_th.h_puesto4}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp4}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica4}}</td>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td>{{dimAdmin.av_th.h_puesto5}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp5}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica5}}</td>
+                            </tr>
+                            <tr>
+                                <td>30</td>
+                                <td>{{dimAdmin.av_th.h_puesto6}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_interp6}}</td>
+                                <td>{{dimAdmin.av_th.habilidad_tecnica6}}</td>
+                            </tr>
+
+                            <tr>
+                            <td>31</td>
+                            <td>¿Qué habilidades interpersonales considera que deberían desarrollar sus colaboradores?</td>
+                            <td>{{dimAdmin.av_th.habilidad1}}</td>
                         </tr>
-                    </thead>
-                    <tbody>
                         <tr>
-                            <td></td>
-                            <td colspan="2" style="font-weight: 700;">El público objetivo</td></tr>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>¿A cuál segmento del mercado va dirigido su producto: hombres, mujeres, pequeñas empresas, etc.?</td>
-                            <td>{{dimProducto.publico_objetivo}}</td>
-                        </tr>
-            
-                        <tr>
-                            <td></td>
-                            <td colspan="2" style="font-weight: 700;">Beneficios</td></tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>¿Qué Beneficios aporta su producto? Y ¿Qué necesidad de este público satisface?</td>
-                            <td>{{dimProducto.beneficios}}</td>
+                            <td>32</td>
+                            <td>¿Qué habilidades técnicas considera que deberían desarrollar sus colaboradores?</td>
+                            <td>{{dimAdmin.av_th.habilidad2}}</td>
                         </tr>
 
                         <tr>
                             <td></td>
-                            <td colspan="2" style="font-weight: 700;">Tipo de producto</td></tr>
+                            <td colspan="2" style="font-weight: 500;">Necesidades de contratación</td>
+                        </tr>
                         <tr>
-                            <td scope="row">3</td>
-                            <td>¿Cuál es su tipo de producto específicamente?</td>
-                            <td>{{dimProducto.tipo_producto}}</td>
+                            <td>33</td>
+                            <td>¿Qué personal considera que requiere en este momento para su empresa?</td>
+                            <td>{{dimAdmin.av_th.necesidad_contratacion}}</td>
+                        </tr>
+                        <tr>
+                            <td>34</td>
+                            <td>¿Cuál es el motivo?</td>
+                            <td>{{dimAdmin.av_th.motivo_contratacion}}</td>
                         </tr>
 
                         <tr>
                             <td></td>
-                            <td colspan="2" style="font-weight: 700;">Nivel de precio</td></tr>
-                        <tr>
-                            <td scope="row">4</td>
-                            <td>Explique ¿Cómo es el precio de su producto en relación al sector de mercado en el que se encuentra?</td>
-                            <td>{{dimProducto.nivel_precio}}</td>
+                            <td colspan="2" style="font-weight: 500;">Proceso de contratación</td>
                         </tr>
                         <tr>
-                            <td scope="row">5</td>
-                            <td>¿Cuáles son los Productos y/o Servicios que más vende? </td>
-                            <td>{{dimProducto.mas_vendidos}}</td>
+                            <td>35</td>
+                            <td>¿Cuál es el criterio que utiliza para contratar al personal?</td>
+                            <td>{{dimAdmin.av_th.proceso_contratacion1}}</td>
                         </tr>
                         <tr>
-                            <td scope="row">6</td>
-                            <td>¿Cuál es la razón por la que considera que estos Productos que describió anteriormente se venden más?</td>
-                            <td>{{dimProducto.razon_venta}}</td>
+                            <td>36</td>
+                            <td>¿Cuál sería la información más importante que debería obtener de un futuro trabajador para ser contratado?</td>
+                            <td>{{dimAdmin.av_th.proceso_contratacion2}}</td>
                         </tr>
 
                         <tr>
                             <td></td>
-                            <td colspan="2" style="font-weight: 700;">Integración en la gama de productos</td></tr>
-                        <tr>
-                            <td scope="row">7</td>
-                            <td>Explique ¿Qué coherencia tienen sus productos dentro de la empresa?</td>
-                            <td>{{dimProducto.integracion_gama}}</td>
+                            <td colspan="2" style="font-weight: 500;">Evaluación de desempeño</td>
                         </tr>
+                        <tr>
+                            <td>37</td>
+                            <td>¿Cómo mide actualmente el desempeño de los trabajadores en su puesto de trabajo?</td>
+                            <td>{{dimAdmin.av_th.evaluacion_cargo}}</td>
+                        </tr>
+                        </table>
+                    </div>
 
-                        <tr>
-                            <td></td>
-                            <td colspan="2" style="font-weight: 700;">Calidad</td></tr>
-                        <tr>
-                            <td scope="row">8</td>
-                            <td>¿Cómo es la calidad de su producto? Y ¿Qué tiene su producto para disponer de la calidad a que hace referencia?</td>
-                            <td>{{dimProducto.calidad}}</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">9</td>
-                            <td>¿Qué aceptación tiene su producto?</td>
-                            <td>{{dimProducto.aceptacion}}</td>
-                        </tr>
-                        
-                    </tbody>
-                </table>
-            
-            
+                    <div id="av-finanzas" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">La proyección de ventas</td>
+                                </tr>
+                                <tr>
+                                    <td>38</td>
+                                    <td>¿Cuál sería su proyección de ventas para los próximos meses?</td>
+                                    <td>{{dimAdmin.av_fz.proyeccion_ventas}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">El costo de ventas </td>
+                                </tr>
+                                <tr>
+                                    <td>39</td>
+                                    <td>¿Cómo es la estructura de costos de sus productos? </td>
+                                    <td>{{dimAdmin.av_fz.costo_ventas}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Las cuentas por pagar y cobrar de la empresa</td>
+                                </tr>
+                                <tr>
+                                    <td>40</td>
+                                    <td>¿A cuánto equivalen las cuentas por pagar de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.cuentas_pagar}}</td>
+                                </tr>
+                                <tr>
+                                    <td>41</td>
+                                    <td>¿A cuánto equivalen las cuentas por cobrar de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.cuentas_cobrar}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Los costos fijos y variables de la empresa</td>
+                                </tr>
+                                <tr>
+                                    <td>42</td>
+                                    <td>¿Cuáles son los costos fijos y variables de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.costos_fijos_variables}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">El Estado de Resultados de la empresa</td>
+                                </tr>
+                                <tr>
+                                    <td>43</td>
+                                    <td>¿Qué información muestra el Estado de Resultados de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.estado_resultados_empresa}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Utilidad neta</td>
+                                </tr>
+                                <tr>
+                                    <td>44</td>
+                                    <td>¿Cuál es la utilidad neta de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.utilidad_neta}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Rentabilidad</td>
+                                </tr>
+                                <tr>
+                                    <td>45</td>
+                                    <td>¿Cuál es la rentabilidad de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.rentabilidad}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Punto de equilibrio</td>
+                                </tr>
+                                <tr>
+                                    <td>46</td>
+                                    <td>¿Cuál es el punto de equilibrio de la empresa?</td>
+                                    <td>{{dimAdmin.av_fz.punto_equilibrio}}</td>
+                                </tr>
+                                <tr>
+                                    <td>47</td>
+                                    <td>¿Cómo ha sido el Flujo de Caja de la empresa en los últimos 6 meses? </td>
+                                    <td>{{dimAdmin.av_fz.flujo_caja}}</td>
+                                </tr>
+                            
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Retorno de inversión</td>
+                                </tr>
+                                <tr>
+                                    <td>48</td>
+                                    <td>¿Cuál es el retorno de inversión de la empresa? </td>
+                                    <td>{{dimAdmin.av_fz.retorno_inversion}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                </div>
+
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-info light" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-info light" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: #50368C; color: #fff" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

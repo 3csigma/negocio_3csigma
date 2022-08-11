@@ -504,31 +504,45 @@ dashboardController.editarEmpresa = async (req, res) => {
     /************************************************************************************* */
 
     /** Análisis de negocio por dimensiones */
-    let dimProducto = false
+    let dimProducto = false, dimAdmin = false, dimOperacion = false, dimMarketing = false;
     const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
     if (analisisDimensiones.length > 0){
         const prod = JSON.parse(analisisDimensiones[0].producto)
-        dimProducto = {}
-        dimProducto.fecha = prod.fecha
-        dimProducto.publico_objetivo = prod.publico_objetivo
-        dimProducto.beneficios = prod.beneficios
-        dimProducto.tipo_producto = prod.tipo_producto
-        dimProducto.nivel_precio = prod.nivel_precio
-        dimProducto.mas_vendidos = prod.mas_vendidos
-        dimProducto.razon_venta = prod.razon_venta
-        dimProducto.integracion_gama = prod.integracion_gama
-        dimProducto.calidad = prod.calidad
-        dimProducto.aceptacion = prod.aceptacion
+        const admin = JSON.parse(analisisDimensiones[0].administracion)
+        const op = JSON.parse(analisisDimensiones[0].operacion)
+        const mark = JSON.parse(analisisDimensiones[0].marketing)
+        dimProducto = {
+            fecha : prod.fecha,
+            publico_objetivo : prod.publico_objetivo,
+            beneficios : prod.beneficios,
+            tipo_producto : prod.tipo_producto,
+            nivel_precio : prod.nivel_precio,
+            mas_vendidos : prod.mas_vendidos,
+            razon_venta : prod.razon_venta,
+            integracion_gama : prod.integracion_gama,
+            calidad : prod.calidad,
+            aceptacion : prod.aceptacion,
+        }
+        dimAdmin = {
+            fecha : admin.fecha,
+            v: admin.vision,
+            mision: admin.mision,
+            valores: admin.valores,
+            f: admin.foda,
+            estructura_organizativa: admin.estructura_organizativa,
+            tipo_sistema: admin.tipo_sistema,
+            sistema_facturacion : admin.sistema_facturacion,
+            av_th : admin.av_talento_humano,
+            av_fz : admin.av_finanzas,
+        }
     }
 
     /* --------------------------------------------------------------------------------------- */
-
-
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, informes,
-        dimProducto
+        dimProducto, dimAdmin
     })
 
 }

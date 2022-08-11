@@ -862,15 +862,27 @@
                                                             </td>
                                                         </tr>
                                                          <tr>
-                                                            <td>N/A</td>
+                                                            <td>{{#if dimAdmin}}{{dimAdmin.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Cuestionario dimensión administración</td>
-                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            <td>
+                                                                {{#if dimAdmin}}
+                                                                <span class="badge light badge-success">Completo</span>
+                                                                {{else}}
+                                                                <span class="badge light badge-warning">Pendiente</span>
+                                                                {{/if}}
                                                             </td>
                                                             <td>
+                                                                {{#if dimAdmin}}
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target="#modalDimAdministracion"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                {{else}}
                                                                 <a href="/analisis-dimension-administracion/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                          <tr>
@@ -1218,6 +1230,9 @@
 
         {{#if dimProducto}}
         {{> modals/dimensionProducto}}
+        {{/if}}
+        {{#if dimAdmin}}
+        {{> modals/dimensionAdministracion}}
         {{/if}}
 
     </div>
