@@ -238,6 +238,8 @@ consultorController.empresaInterna = async (req, res) => {
 
 }
 
+/* ------------------------------------------------------------------------------------------------ */
+// ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
     let volver = '/empresas/'
@@ -246,7 +248,6 @@ consultorController.analisisProducto = async (req, res) => {
     }
     res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
-
 consultorController.guardarAnalisisProducto = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
@@ -296,6 +297,7 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
     
 }
 
+// ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
     let volver = '/empresas/'
@@ -304,7 +306,6 @@ consultorController.analisisAdministracion = async (req, res) => {
     }
     res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
-
 consultorController.guardarAnalisisAdministracion = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
@@ -358,3 +359,128 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
 
     }
 }
+
+// ANÁLISIS DIMENSIÓN OPERACION
+consultorController.analisisOperacion = async (req, res) => {
+    const { codigo } = req.params;
+    let volver = '/empresas/'+codigo
+    if (req.user.rol == 'Consultor') {
+        volver = '/empresas-asignadas/'+codigo;
+    }
+    res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+}
+consultorController.guardarAnalisisOperacion = async (req, res) => {
+    const { codigoEmpresa, zhActualAdm } = req.body;
+    // Capturar Fecha de guardado
+    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+
+    // Verificando si existen registros Análisis de empresa en la Base de datos
+    let empresa = await pool.query('SELECT * FROM empresas')
+    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+    empresa = empresa.find(item => item.codigo == codigoEmpresa)
+   
+    // Consultor que realizó el análisis
+    let id_consultor;
+    const consultores = await pool.query('SELECT * FROM consultores');
+    const c = consultores.find(item => item.codigo == req.user.codigo)
+    c ? id_consultor = c.id_consultores : id_consultor = false; 
+
+    if (empresa && id_consultor) {
+        let id_empresa = empresa.id_empresas;
+
+        // Capturando datos del formulario - Analisis dimensión Producto
+        const { info_productos, satisfaccion, encuesta_clientes, informacion_deClientes, utilidad_libro_quejas, beneficio_libro_quejas, estrategia__libro_quejas, fidelizacion_clientes, instalaciones_op, areas_op, influencia_op, permisos1, permisos2, plan_trabajo1, plan_trabajo2, plan_trabajo3, procesos_estandarizados1, procesos_estandarizados2, ambiente_laboral, comunicacion, reconocimiento1, reconocimiento2, innovacion_inidividual1, innovacion_inidividual2, innovacion_productos, innovacion_procesos, innovacion_modelo, innovacion_gestion } = req.body
+
+        const av_operaciones = {instalaciones_op, areas_op, influencia_op, permisos1, permisos2, plan_trabajo1, plan_trabajo2, plan_trabajo3, procesos_estandarizados1, procesos_estandarizados2}
+        const av_ambiente_laboral = {ambiente_laboral, comunicacion, reconocimiento1, reconocimiento2}
+        const av_innovacion = {innovacion_inidividual1, innovacion_inidividual2, innovacion_productos, innovacion_procesos, innovacion_modelo, innovacion_gestion};
+
+        const operacion = JSON.stringify({
+            fecha, info_productos, satisfaccion, encuesta_clientes, informacion_deClientes, utilidad_libro_quejas, beneficio_libro_quejas, estrategia__libro_quejas, fidelizacion_clientes, av_operaciones, av_ambiente_laboral, av_innovacion
+        })
+
+        // Guardando en la Base de datos
+        const tablaAnalisis = analisis_empresa.find(item => item.id_empresa == id_empresa)
+        if (tablaAnalisis) {
+            const actualizarAnalisis = { operacion }
+            await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        } else {
+            // Creando Objetos para guardar en la base de datos
+            const nuevoAnalisis = { id_empresa, id_consultor, operacion }
+            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+        }
+
+        if (req.user.rol == 'Consultor'){
+            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        } else {
+            res.redirect('/empresas/'+codigoEmpresa)
+        }
+
+    } else {
+        console.log("Error no sé encontró la empresa y el consultor ligado..")
+    }
+}
+
+// ANÁLISIS DIMENSIÓN MARKETING
+consultorController.analisisMarketing = async (req, res) => {
+    const { codigo } = req.params;
+    let volver = '/empresas/'
+    if (req.user.rol == 'Consultor') {
+        volver = '/empresas-asignadas/'+codigo;
+    }
+    res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+}
+consultorController.guardarAnalisisMarketing = async (req, res) => {
+    const { codigoEmpresa, zhActualAdm } = req.body;
+    // Capturar Fecha de guardado
+    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+
+    // Verificando si existen registros Análisis de empresa en la Base de datos
+    let empresa = await pool.query('SELECT * FROM empresas')
+    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+
+    empresa = empresa.find(item => item.codigo == codigoEmpresa)
+   
+    let id_consultor;
+
+    // Consultor que realizó el análisis
+    const consultores = await pool.query('SELECT * FROM consultores');
+    const c = consultores.find(item => item.codigo == req.user.codigo)
+    c ? id_consultor = c.id_consultores : id_consultor = false; 
+
+    if (empresa && id_consultor) {
+        let id_empresa = empresa.id_empresas;
+
+        // Capturando datos del formulario - Analisis dimensión Producto
+        const { vision1, vision2, vision3, vision4, vision5, mision, valores, foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8, estructura_organizativa, tipo_sistema, sistema_facturacion, puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6, h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo, proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion} = req.body
+
+        const vision = { vision1, vision2, vision3, vision4, vision5 };
+        const foda = { foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8 }
+        const av_talento_humano = { puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6,
+            h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo }
+        const av_finanzas = { proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion }
+
+        let administracion = JSON.stringify({
+            fecha, vision, mision, valores, foda, estructura_organizativa, tipo_sistema, sistema_facturacion, av_talento_humano, av_finanzas
+        })
+
+        // Guardando en la Base de datos
+        const tablaAnalisis = analisis_empresa.find(item => item.id_empresa == id_empresa)
+        if (tablaAnalisis) {
+            const actualizarAnalisis = { administracion }
+            await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        } else {
+            // Creando Objetos para guardar en la base de datos
+            const nuevoAnalisis = { id_empresa, id_consultor, administracion }
+            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+        }
+
+        if (req.user.rol == 'Consultor'){
+            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        } else {
+            res.redirect('/empresas/'+codigoEmpresa)
+        }
+
+    }
+}
+/* ------------------------------------------------------------------------------------------------ */

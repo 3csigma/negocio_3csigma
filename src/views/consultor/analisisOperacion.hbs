@@ -78,7 +78,7 @@
                 <div>
                     <figure><img src="../img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
                     </figure>
-                    <h2>Análisis dimensión producto</h2>
+                    <h2>Análisis dimensión operaciones</h2>
                     <p>Bienvenido al Nivel N° 2, donde podremos ayudarle a analizar y entender el comportamiento de su negocio en el
                         mercado actual.</p>
                     <a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
@@ -98,61 +98,80 @@
                     <div id="progressbar"></div>
                 </div>
                 <!-- /top-wizard -->
-                <form method="POST" action="/analisis-dimension-producto">
+                <form method="POST" action="/analisis-dimension-operaciones">
                     <input id="website" name="website" type="text" value="">
                     <!-- Leave for security protection, read docs for details -->
                     <div id="middle-wizard">
-                        <!-- SECCIÓN 1 -->
+                        <!-- SECCIÓN 1 - SERVICIO AL CLIENTE -->
                         <div class="step">
-                            <h2 class="section_title">SECCIÓN 1</h2>
+                            <h2 class="section_title">Servicio al Cliente</h2>
 
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>El público objetivo</strong></label>
-                                    <label>¿A cuál segmento del mercado va dirigido su producto: hombres,
-                                    mujeres, pequeñas empresas, etc.? </label>
+                                    <label><strong>Rapidez en la entrega de información sobre los Productos</strong></label>
+                                    <label><span>¿Cómo hace actualmente para facilitarle a sus clientes información rápida y efectiva de sus Productos y/o Servicios?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="public_objetivo" id="public_objetivo" class="form-control required"
+                                        <textarea name="info_productos" id="info_productos" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Beneficios</strong></label>
-                                    <label>¿Qué Beneficios aporta su producto? Y ¿Qué necesidad de este público satisface?</label>
+                                    <label><strong>Encuesta de satisfacción</strong></label>
+                                    <label><span>¿Cómo mide actualmente la satisfacción de sus clientes con respecto a sus Productos y/o Servicios?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="beneficios" id="beneficios" class="form-control required"
+                                        <textarea name="satisfaccion " id="satisfaccion " class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Tipo de producto</strong></label>
-                                    <label class="mb-3">¿Cuál es su tipo de producto específicamente? Ejemplo:</label>
-                                    <label><span><span style="text-decoration: underline black;"> Productos de consumo</span>, perecederos y no perecederos o de larga duración.</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Productos tangibles</span> que se consumen rápidamente: comida preparada.</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Bienes de consumo duraderos.</span> Tangibles y que se usan muchas veces: electrodomésticos, mercadería, ropa, bisuterías, etc</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Servicios.</span> Intangibles</span></label>
+                                    <label><span>¿Qué le preguntaría a sus clientes con respecto a sus Productos y/ o Servicios?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="tipo_producto" id="tipo_producto" class="form-control required"
+                                        <textarea name="encuesta_clientes" id="encuesta_clientes" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Nivel de precio</strong></label>
-                                    <label>Explique ¿Cómo es el precio de su producto en relación al sector de mercado en el que se encuentra?</label>
+                                    <label><strong>Encuestas para supera las expectativas</strong></label>
+                                    <label><span>¿Qué información le interesaría conocer de sus clientes?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="nivel_precio" id="nivel_precio" class="form-control required"
+                                        <textarea name="informacion_deClientes" id="informacion_deClientes" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Cuáles son los Productos y/o Servicios que más vende?</label>
+                                    <label><strong>Libro de quejas y reclamaciones</strong></label>
+                                    <label><span>¿Qué utilidad le ve a un Libro de quejas y reclamaciones?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="mas_vendidos" id="mas_vendidos" class="form-control required"
+                                        <textarea name="utilidad_libro_quejas" id="utilidad_libro_quejas" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿En qué se puede beneficiar la empresa de un Libro de quejas y reclamaciones?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="beneficio_libro_quejas" id="beneficio_libro_quejas" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>En caso de querer incorporar el libro de quejas y reclamaciones ¿Qué estrategia puede utilizar para activar su usabilidad?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia__libro_quejas " id="estrategia__libro_quejas " class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Fidelización de clientes</strong></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="fidelizacion_clientes " id="fidelizacion_clientes " class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
@@ -163,51 +182,92 @@
                         </div>
                         <!-- /Paso 1 -->
 
-                        <!-- SECCIÓN 2 ============================== -->
+                        <!-- SECCIÓN 2 - Área vital de Operaciones ============================== -->
                         <div class="step">
-                            <h2 class="section_title">SECCIÓN 2</h2>
+                            <h2 class="section_title">Área vital de Operaciones</h2>
 
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Cuál es la razón por la que considera que estos Productos que describió anteriormente se venden más?</label>
+                                    <label><strong>Instalaciones adecuadas</strong></label>
+                                    <label><span>¿Qué tan adecuadas están las instalaciones donde opera el negocio? Explique lo más posible..</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="razon_venta" id="razon_venta" class="form-control required"
+                                        <textarea name="instalaciones_op" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Utilización</strong></label>
-                                    <label>¿Cómo se utiliza o consume su producto? ¿En qué ocasiones? ¿Por quién? ¿En dónde?</label>
+                                    <label for=""><span>¿Cómo están distribuidas las áreas del negocio? </span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="utilizacion" id="utilizacion" class="form-control required"
+                                        <textarea name="areas_op" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Integración en la gama de productos </strong></label>
-                                    <label>Explique ¿Qué coherencia tienen sus productos dentro de la empresa?</label>
+                                    <label for=""><span>¿Qué influencia tienen las instalaciones en general hacia el éxito del negocio? </span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="integracion_gama" id="integracion_gama" class="form-control required"
+                                        <textarea name="influencia_op" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Calidad</strong></label>
-                                    <label>¿Cómo es la calidad de su producto? Y ¿Qué tiene su producto para disponer de la calidad a que hace referencia?</label>
+                                    <label><strong>Permisos de operaciones</strong></label>
+                                    <label for=""><span>¿Cuáles son los permisos necesarios que requiere para la correcta operación del negocio? </span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="calidad" id="calidad" class="form-control required"
+                                        <textarea name="permisos1" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Qué aceptación tiene su producto?</label>
+                                    <label for=""><span>¿Qué tipo de permisos requiere actualmente o podría necesitar?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="aceptacion" id="aceptacion" class="form-control required"
+                                        <textarea name="permisos2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Plan de Trabajo</strong></label>
+                                    <label for=""><span>¿Cómo está elaborado el plan de trabajo de cada trabajador dentro de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="plan_trabajo1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label for=""><span>¿Cuál es la información más relevante que debe contener el plan de trabajo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="plan_trabajo2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label for=""><span>¿Qué podría ayudar a que el plan de trabajo se cumpla?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="plan_trabajo3" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>La estandarización de tareas y procesos</strong></label>
+                                    <label for=""><span>¿Qué tareas y procesos tiene actualmente estandarizados?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="procesos_estandarizados1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label for=""><span>¿Cuáles tareas y procesos le gustaría estandarizar?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="procesos_estandarizados2" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
@@ -219,7 +279,121 @@
                         </div>
                         <!-- /Paso 2 -->
 
-                        <!-- Último Paso ============================== -->
+                        <!-- SECCIÓN 3 - Área vital Ambiente laboral ============================== -->
+                        <div class="step">
+                            <h2 class="section_title">Área vital Ambiente laboral</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Ambiente Laboral</strong></label>
+                                    <label><span>¿Qué hace actualmente para contribuir a generar un buen ambiente de trabajo dentro de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="ambiente_laboral" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Comunicación empresarial</strong></label>
+                                    <label><span>¿De qué manera se llevan a cabo las comunicaciones dentro de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="comunicacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Reconocimiento laboral</strong></label>
+                                    <label><span>¿De qué manera le reconoce a sus colaboradores que están haciendo un buen trabajo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="reconocimiento1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>Generando nuevas opciones, ¿Cómo puede brindar reconocimiento a sus colaboradores cuando están haciendo un buen trabajo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="reconocimiento2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 3 -->
+
+                        <!-- SECCIÓN 4 - Área vital de Innovación ============================== -->
+                        <div class="step">
+                            <h2 class="section_title">Área vital de Innovación</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Innovación Individual</strong></label>
+                                    <label><span>¿Qué importancia le ve a la posibilidad de que sus trabajadores aportan ideas para la mejora dentro de la empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_inidividual1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué tipo de ideas le gustaría recibir por parte de sus trabajadores?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_inidividual2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Innovación basada en el producto/servicio </strong></label>
+                                    <label><span>¿Qué mejora en sus productos y/o servicios pueden incrementar tus ventas?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_productos" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Innovación en los procesos de un producto y servicios</strong></label>
+                                    <label><span>¿Qué cambios podrían mejorar los procesos operativos para desarrollarsus Productos y/o Servicios?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_procesos" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Innovación en el modelo de negocio</strong></label>
+                                    <label><span>¿Qué considera que podría innovar en su modelo de negocio?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_modelo" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Innovación en la gestión</strong></label>
+                                    <label><span>¿Qué podría mejorar dentro de los sistemas de gestión que tiene actualmente?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="innovacion_gestion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 4 -->
+
+                        <!-- Último Paso - Confirmación de guardar información ============================== -->
                         <div class="submit step" id="end">
                             <div class="summary">
                                 <div class="wrapper">
@@ -242,7 +416,7 @@
                         {{!-- <a class="btn btn-danger" href="#">Limpiar campos</a> --}}
                         <button type="button" name="backward" class="backward">Anterior</button>
                         <button type="button" name="forward" class="forward">Siguiente</button>
-                        <button type="submit" name="enviarCuestionario" class="submit">Guardar Datos</button>
+                        <button type="submit" name="enviarAnalisis3" class="submit">Guardar Datos</button>
                     </div>
                     <!-- /bottom-wizard -->
                 </form>

@@ -507,33 +507,57 @@ dashboardController.editarEmpresa = async (req, res) => {
     let dimProducto = false, dimAdmin = false, dimOperacion = false, dimMarketing = false;
     const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
     if (analisisDimensiones.length > 0){
-        const prod = JSON.parse(analisisDimensiones[0].producto)
-        const admin = JSON.parse(analisisDimensiones[0].administracion)
-        const op = JSON.parse(analisisDimensiones[0].operacion)
-        const mark = JSON.parse(analisisDimensiones[0].marketing)
-        dimProducto = {
-            fecha : prod.fecha,
-            publico_objetivo : prod.publico_objetivo,
-            beneficios : prod.beneficios,
-            tipo_producto : prod.tipo_producto,
-            nivel_precio : prod.nivel_precio,
-            mas_vendidos : prod.mas_vendidos,
-            razon_venta : prod.razon_venta,
-            integracion_gama : prod.integracion_gama,
-            calidad : prod.calidad,
-            aceptacion : prod.aceptacion,
+        const dimension = analisisDimensiones[0]
+        if (dimension.producto) {
+            const prod = JSON.parse(dimension.producto)
+            dimProducto = {
+                fecha : prod.fecha,
+                publico_objetivo : prod.publico_objetivo,
+                beneficios : prod.beneficios,
+                tipo_producto : prod.tipo_producto,
+                nivel_precio : prod.nivel_precio,
+                mas_vendidos : prod.mas_vendidos,
+                razon_venta : prod.razon_venta,
+                integracion_gama : prod.integracion_gama,
+                calidad : prod.calidad,
+                aceptacion : prod.aceptacion,
+            }
         }
-        dimAdmin = {
-            fecha : admin.fecha,
-            v: admin.vision,
-            mision: admin.mision,
-            valores: admin.valores,
-            f: admin.foda,
-            estructura_organizativa: admin.estructura_organizativa,
-            tipo_sistema: admin.tipo_sistema,
-            sistema_facturacion : admin.sistema_facturacion,
-            av_th : admin.av_talento_humano,
-            av_fz : admin.av_finanzas,
+        if (dimension.administracion) {
+            const admin = JSON.parse(dimension.administracion)
+            dimAdmin = {
+                fecha : admin.fecha,
+                v: admin.vision,
+                mision: admin.mision,
+                valores: admin.valores,
+                f: admin.foda,
+                estructura_organizativa: admin.estructura_organizativa,
+                tipo_sistema: admin.tipo_sistema,
+                sistema_facturacion : admin.sistema_facturacion,
+                av_th : admin.av_talento_humano,
+                av_fz : admin.av_finanzas,
+            }
+        }
+        if (dimension.operacion) {
+            const op = JSON.parse(dimension.operacion)
+            dimOperacion = {
+                fecha : op.fecha,
+                info_productos : op.info_productos,
+                satisfaccion: op.satisfaccion,
+                encuesta_clientes : op.encuesta_clientes,
+                informacion_deClientes : op.informacion_deClientes,
+                utilidad_libro_quejas : op.utilidad_libro_quejas,
+                beneficio_libro_quejas : op.beneficio_libro_quejas,
+                estrategia__libro_quejas : op.estrategia__libro_quejas,
+                fidelizacion_clientes : op.fidelizacion_clientes,
+                av_op : op.av_operaciones,
+                av_ambiente : op.av_ambiente_laboral,
+                av_innovacion : op.av_innovacion,
+            }
+        }
+        if (dimension.marketing) {
+            const mark = JSON.parse(dimension.marketing)
+            dimMarketing = {}
         }
     }
 
@@ -542,7 +566,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, informes,
-        dimProducto, dimAdmin
+        dimProducto, dimAdmin, dimOperacion, dimMarketing
     })
 
 }

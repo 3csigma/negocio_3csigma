@@ -16,12 +16,12 @@ router.post('/analisis-dimension-producto/',checkLogin, consultorLogueado, consu
 router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorLogueado, consultorController.analisisAdministracion)
 router.post('/analisis-dimension-administracion', checkLogin, consultorLogueado, consultorController.guardarAnalisisAdministracion)
 
-// // Cuestionario Análisis dimensión Operación 
-// router.get('/analisis-dimension-operacion/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)
-// router.post('/analisis-dimension-operacion/', checkLogin, consultorLogueado, consultorController.guardar_AnalisisOperacion)
+// Cuestionario Análisis dimensión Operación 
+router.get('/analisis-dimension-operaciones/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)
+router.post('/analisis-dimension-operaciones', checkLogin, consultorLogueado, consultorController.guardarAnalisisOperacion)
 
 // // Cuestionario Análisis dimensión Marketing  
 // router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.AnalisisMarketing)
-// router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardar_AnalisisMarketing)
+// router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
 
 module.exports = router
