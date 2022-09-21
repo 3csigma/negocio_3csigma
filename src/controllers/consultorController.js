@@ -242,7 +242,7 @@ consultorController.empresaInterna = async (req, res) => {
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'
+    let volver = '/empresas/'+codigo
     if (req.user.rol == 'Consultor') {
         volver = '/empresas-asignadas/'+codigo;
     }
@@ -300,7 +300,7 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
 // ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'
+    let volver = '/empresas/'+codigo
     if (req.user.rol == 'Consultor') {
         volver = '/empresas-asignadas/'+codigo;
     }
@@ -424,7 +424,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN MARKETING
 consultorController.analisisMarketing = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'
+    let volver = '/empresas/'+codigo
     if (req.user.rol == 'Consultor') {
         volver = '/empresas-asignadas/'+codigo;
     }
@@ -452,26 +452,24 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
-        const { vision1, vision2, vision3, vision4, vision5, mision, valores, foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8, estructura_organizativa, tipo_sistema, sistema_facturacion, puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6, h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo, proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion} = req.body
+        const {objetivo_principal, cliente, posicionamiento, beneficios, mensaje, oferta1, oferta2, seguimiento, presupuesto, atraccion, fidelizacion, sitioWeb1, sitioWeb2, sitioWeb3, sitioWeb4, sitioWeb5, sitioWeb6, sitioWeb7, identidadC1, identidadC2, identidadC3, identidadC4, identidadC5, identidadC6, identidadC7, eslogan, estrategia1, estrategia2, estrategia3, estrategia4, estrategia5, estrategia6} = req.body
 
-        const vision = { vision1, vision2, vision3, vision4, vision5 };
-        const foda = { foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8 }
-        const av_talento_humano = { puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6,
-            h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo }
-        const av_finanzas = { proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion }
+        const sitioWeb = {s1:sitioWeb1, s2:sitioWeb2, s3:sitioWeb3, s4:sitioWeb4, s5:sitioWeb5, s6:sitioWeb6, s7:sitioWeb7}
+        const identidadC = {ic1:identidadC1, ic2:identidadC2, ic3:identidadC3, ic4:identidadC4, ic5:identidadC5, ic6:identidadC6, ic7:identidadC7}
+        const estrategias = {e1:estrategia1, e2:estrategia2, e3:estrategia3, e4:estrategia4, e5:estrategia5, e6:estrategia6}
 
-        let administracion = JSON.stringify({
-            fecha, vision, mision, valores, foda, estructura_organizativa, tipo_sistema, sistema_facturacion, av_talento_humano, av_finanzas
+        const marketing = JSON.stringify({
+            fecha, objetivo_principal, cliente, posicionamiento, beneficios, mensaje, oferta1, oferta2, seguimiento, presupuesto, atraccion, fidelizacion, sitioWeb, identidadC, eslogan, estrategias
         })
 
         // Guardando en la Base de datos
         const tablaAnalisis = analisis_empresa.find(item => item.id_empresa == id_empresa)
         if (tablaAnalisis) {
-            const actualizarAnalisis = { administracion }
+            const actualizarAnalisis = { marketing }
             await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         } else {
             // Creando Objetos para guardar en la base de datos
-            const nuevoAnalisis = { id_empresa, id_consultor, administracion }
+            const nuevoAnalisis = { id_empresa, id_consultor, marketing }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 

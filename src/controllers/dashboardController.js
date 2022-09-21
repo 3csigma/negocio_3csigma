@@ -557,7 +557,24 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
         if (dimension.marketing) {
             const mark = JSON.parse(dimension.marketing)
-            dimMarketing = {}
+            dimMarketing = {
+                fecha: mark.fecha,
+                objetivo_principal: mark.objetivo_principal, 
+                cliente: mark.cliente, 
+                posicionamiento: mark.posicionamiento, 
+                beneficios: mark.beneficios, 
+                mensaje: mark.mensaje, 
+                oferta1: mark.oferta1,
+                oferta2: mark.oferta2,
+                seguimiento: mark.seguimiento,
+                presupuesto: mark.presupuesto,
+                atraccion: mark.atraccion,
+                fidelizacion: mark.fidelizacion,
+                sitioWeb: mark.sitioWeb,
+                identidadC: mark.identidadC,
+                eslogan: mark.eslogan,
+                estrategias: mark.estrategias
+            }
         }
     }
 

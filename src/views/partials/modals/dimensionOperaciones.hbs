@@ -1,0 +1,314 @@
+<div class="modal fade bd-example-modal-lg" id="modalDimOperaciones" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: #000 !important">Análisis dimensión operaciones</h2>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-header">
+                <ul class="nav nav-pills justify-content-start">
+                    <li class=" nav-item">
+                        <a href="#servicioCliente" class="nav-link active" data-toggle="tab" aria-expanded="false">Servicio al cliente</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#av-operaciones" class="nav-link" data-toggle="tab" aria-expanded="false">Área Operaciones</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#av-ambienteLab" class="nav-link" data-toggle="tab" aria-expanded="true">Área Ambiente laboral</a>
+                    </li>
+                    <li class=" nav-item">
+                        <a href="#av-innovacion" class="nav-link" data-toggle="tab" aria-expanded="false">Área de Innovación</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-body">
+                <div class="tab-content">
+                    
+                    <div id="servicioCliente" class="tab-pane active">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Rapidez en la entrega de información sobre los Productos</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>¿Cómo hace actualmente para facilitarle a sus clientes información rápida y efectiva de sus Productos y/o Servicios? </td>
+                                    <td>{{dimOperacion.info_productos}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Encuesta de satisfacción</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>¿Cómo mide actualmente la satisfacción de sus clientes con respecto a sus Productos y/o Servicios?</td>
+                                    <td>{{dimOperacion.satisfaccion}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">3</td>
+                                    <td>¿Qué le preguntaría a sus clientes con respecto a sus Productos y/ o Servicios?</td>
+                                    <td>{{dimOperacion.encuesta_clientes}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Encuestas para supera las expectativas</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">4</td>
+                                    <td>¿Qué información le interesaría conocer de sus clientes?</td>
+                                    <td>{{dimOperacion.informacion_deClientes}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Libro de quejas y reclamaciones </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">5</td>
+                                    <td>¿Qué utilidad le ve a un Libro de quejas y reclamaciones?</td>
+                                    <td>{{dimOperacion.utilidad_libro_quejas}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">6</td>
+                                    <td>¿En qué se puede beneficiar la empresa de un Libro de quejas y reclamaciones?</td>
+                                    <td>{{dimOperacion.beneficio_libro_quejas}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">7</td>
+                                    <td>En caso de querer incorporar el libro de quejas y reclamaciones ¿Qué estrategia puede utilizar para activar su usabilidad?</td>
+                                    <td>{{dimOperacion.estrategia__libro_quejas}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Fidelización de clientes</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">8</td>
+                                    <td>¿Qué es lo que hace en la actualidad para fidelizar a sus clientes?</td>
+                                    <td>{{dimOperacion.fidelizacion_clientes}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="av-operaciones" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Instalaciones adecuadas</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">9</td>
+                                    <td>¿Qué tan adecuadas están las instalaciones donde opera el negocio?</td>
+                                    <td>{{dimOperacion.av_op.instalaciones_op}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10</td>
+                                    <td>¿Cómo están distribuidas las áreas del negocio?</td>
+                                    <td>{{dimOperacion.av_op.areas_op}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">11</td>
+                                    <td>¿Qué influencia tienen las instalaciones en general hacia el éxito del negocio?</td>
+                                    <td>{{dimOperacion.av_op.influencia_op}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Permisos de operaciones</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">12</td>
+                                    <td>¿Cuáles son los permisos necesarios que requiere para la correcta operación del negocio?</td>
+                                    <td>{{dimOperacion.av_op.permisos1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">13</td>
+                                    <td>¿Qué tipo de permisos requiere actualmente o podría necesitar?</td>
+                                    <td>{{dimOperacion.av_op.permisos2}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Plan de Trabajo</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">14</td>
+                                    <td>¿Cómo está elaborado el plan de trabajo de cada trabajador dentro de la empresa?</td>
+                                    <td>{{dimOperacion.av_op.plan_trabajo1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">15</td>
+                                    <td>¿Cuál es la información más relevante que debe contener el plan de trabajo?</td>
+                                    <td>{{dimOperacion.av_op.plan_trabajo2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">16</td>
+                                    <td>¿Qué podría ayudar a que el plan de trabajo se cumpla?</td>
+                                    <td>{{dimOperacion.av_op.plan_trabajo3}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">La estandarización de tareas y procesos </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">17</td>
+                                    <td>¿Qué tareas y procesos tiene actualmente estandarizados?</td>
+                                    <td>{{dimOperacion.av_op.procesos_estandarizados1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">18</td>
+                                    <td>¿Cuáles tareas y procesos le gustaría estandarizar?</td>
+                                    <td>{{dimOperacion.av_op.procesos_estandarizados2}}</td>
+                                </tr>
+                            </tbody>
+                        
+                        </table>
+                    </div>
+
+                    <div id="av-ambienteLab" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Ambiente Laboral</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">19</td>
+                                    <td>¿Qué hace actualmente para contribuir a generar un buen ambiente de trabajo dentro de la empresa?</td>
+                                    <td>{{dimOperacion.av_ambiente.ambiente_laboral}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Comunicación empresarial</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">20</td>
+                                    <td>¿De qué manera se llevan a cabo las comunicaciones dentro de la empresa?</td>
+                                    <td>{{dimOperacion.av_ambiente.comunicacion}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Reconocimiento laboral</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">21</td>
+                                    <td>¿De qué manera le reconoce a sus colaboradores que están haciendo un buen trabajo?</td>
+                                    <td>{{dimOperacion.av_ambiente.reconocimiento1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">22</td>
+                                    <td>Generando nuevas opciones, ¿Cómo puede brindar reconocimiento a sus colaboradores cuando están haciendo un buen trabajo?</td>
+                                    <td>{{dimOperacion.av_ambiente.reconocimiento2}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="av-innovacion" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Innovación Individual</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">23</td>
+                                    <td>¿Qué importancia le ve a la posibilidad de que sus trabajadores aportan ideas para la mejora dentro de la empresa?</td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_inidividual1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">24</td>
+                                    <td>¿Qué tipo de ideas le gustaría recibir por parte de sus trabajadores?</td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_inidividual2}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Innovación basada en el producto/servicio </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">25</td>
+                                    <td>¿Qué mejora en sus productos y/o servicios pueden incrementar tus ventas?</td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_productos}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Innovación en los procesos de un producto y servicios </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">26</td>
+                                    <td>¿Qué cambios podrían mejorar los procesos operativos para desarrollar sus Productos y/o Servicios? </td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_procesos}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Innovación en el modelo de negocio</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">27</td>
+                                    <td>¿Qué considera que podría innovar en su modelo de negocio?</td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_modelo}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Innovación en la gestión </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">28</td>
+                                    <td>¿Qué podría mejorar dentro de los sistemas de gestión que tiene actualmente?</td>
+                                    <td>{{dimOperacion.av_innovacion.innovacion_gestion}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info light" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: #50368C; color: #fff" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

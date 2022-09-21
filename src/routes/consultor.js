@@ -20,8 +20,8 @@ router.post('/analisis-dimension-administracion', checkLogin, consultorLogueado,
 router.get('/analisis-dimension-operaciones/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)
 router.post('/analisis-dimension-operaciones', checkLogin, consultorLogueado, consultorController.guardarAnalisisOperacion)
 
-// // Cuestionario Análisis dimensión Marketing  
-// router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.AnalisisMarketing)
-// router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
+// Cuestionario Análisis dimensión Marketing  
+router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.analisisMarketing)
+router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
 
 module.exports = router

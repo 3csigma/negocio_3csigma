@@ -78,7 +78,7 @@
                 <div>
                     <figure><img src="../img/info_graphic_1.svg" alt="" class="img-fluid" width="270" height="270">
                     </figure>
-                    <h2>Análisis dimensión producto</h2>
+                    <h2>Análisis dimensión marketing</h2>
                     <p>Bienvenido al Nivel N° 2, donde podremos ayudarle a analizar y entender el comportamiento de su negocio en el
                         mercado actual.</p>
                     <a href="https://wa.me/+17863548822" target="_blank" class="btn_1 rounded yellow my-auto">
@@ -98,61 +98,127 @@
                     <div id="progressbar"></div>
                 </div>
                 <!-- /top-wizard -->
-                <form method="POST" action="/analisis-dimension-producto">
+                <form method="POST" action="/analisis-dimension-marketing">
                     <input id="website" name="website" type="text" value="">
                     <!-- Leave for security protection, read docs for details -->
                     <div id="middle-wizard">
-                        <!-- SECCIÓN 1 -->
+                        <!-- SECCIÓN 1 - Plan de Marketing -->
                         <div class="step">
-                            <h2 class="section_title">SECCIÓN 1</h2>
+                            <h2 class="section_title">Plan de Marketing</h2>
 
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>El público objetivo</strong></label>
-                                    <label>¿A cuál segmento del mercado va dirigido su producto: hombres,
-                                    mujeres, pequeñas empresas, etc.? </label>
+                                    <label><strong>Tu objetivo principal y métrica</strong></label>
+                                    <label><span>¿Cuál es el objetivo principal que quisieras conseguir con una estrategia de marketing? y ¿Cómo lo vas a medir?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="public_objetivo" id="public_objetivo" class="form-control required"
+                                        <textarea name="objetivo_principal" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Tu cliente</strong></label><br>
+                                    <label><span>¿Quién es el cliente al que te diriges?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="cliente" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Posicionamiento</strong></label>
+                                    <label><span>¿Cuál será tu factor de diferenciación frente a la competencia?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="posicionamiento" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
                                     <label><strong>Beneficios</strong></label>
-                                    <label>¿Qué Beneficios aporta su producto? Y ¿Qué necesidad de este público satisface?</label>
+                                    <label><span>¿Qué beneficios le aporta tu propuesta a quien adquiere tu producto?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="beneficios" id="beneficios" class="form-control required"
+                                        <textarea name="beneficios" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Tipo de producto</strong></label>
-                                    <label class="mb-3">¿Cuál es su tipo de producto específicamente? Ejemplo:</label>
-                                    <label><span><span style="text-decoration: underline black;"> Productos de consumo</span>, perecederos y no perecederos o de larga duración.</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Productos tangibles</span> que se consumen rápidamente: comida preparada.</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Bienes de consumo duraderos.</span> Tangibles y que se usan muchas veces: electrodomésticos, mercadería, ropa, bisuterías, etc</span></label>
-                                    <label><span><span style="text-decoration: underline black;">Servicios.</span> Intangibles</span></label>
+                                    <label><strong>Mensaje</strong></label>
+                                    <label>¿Cuál es el mensaje con el que vas a captar la atención de tus clientes?</label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="tipo_producto" id="tipo_producto" class="form-control required"
+                                        <textarea name="mensaje" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Nivel de precio</strong></label>
-                                    <label>Explique ¿Cómo es el precio de su producto en relación al sector de mercado en el que se encuentra?</label>
+                                    <label><strong>Oferta</strong></label><br>
+                                    <label><span>¿Cuál es la oferta de productos que tienes?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="nivel_precio" id="nivel_precio" class="form-control required"
+                                        <textarea name="oferta1" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Cuáles son los Productos y/o Servicios que más vende?</label>
+                                    <label><span>¿Cuál es tu producto de entrada? si tienes un producto Premium.</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="mas_vendidos" id="mas_vendidos" class="form-control required"
+                                        <textarea name="oferta2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Seguimiento de etapas del cliente</strong></label>
+                                    <label><span>¿Cuáles pueden ser los problemas a resolver más importantes en cada fase del proceso de compra del cliente?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="seguimiento" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Presupuesto</strong></label><br>
+                                    <label><span>¿Cuál podría ser tu presupuesto máximo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="presupuesto" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Atracción</strong></label>
+                                    <label><span>¿Qué acciones de atracción a clientes puedes realizar?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="atraccion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Fidelización</strong></label>
+                                    <label><span>¿Qué acciones puedes proponer para para conseguir fidelizar a los clientes, y que vuelvan a comprar y que recomienden los productos?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="fidelizacion" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Sitio Web y Redes sociales</strong></label>
+                                    <label><span>¿Quieres trabajar sobre lo que está, o buscas algo totalmente nuevo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="sitioWeb1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cómo quieres que se vea tu página Web? da ejemplo</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="sitioWeb2" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
@@ -163,51 +229,115 @@
                         </div>
                         <!-- /Paso 1 -->
 
-                        <!-- SECCIÓN 2 ============================== -->
+                        <!-- SECCIÓN 2 - Plan de Marketing ============================== -->
                         <div class="step">
-                            <h2 class="section_title">SECCIÓN 2</h2>
-
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Cuál es la razón por la que considera que estos Productos que describió anteriormente se venden más?</label>
+                                    <label><span>¿Te gusta el diseño/funcionalidad de alguna página Web? Ejemplos</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="razon_venta" id="razon_venta" class="form-control required"
+                                        <textarea name="sitioWeb3" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Utilización</strong></label>
-                                    <label>¿Cómo se utiliza o consume su producto? ¿En qué ocasiones? ¿Por quién? ¿En dónde?</label>
+                                    <label><span>¿Qué incluirías de ese diseño en la tuya/qué no incluirías?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="utilizacion" id="utilizacion" class="form-control required"
+                                        <textarea name="sitioWeb4" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Integración en la gama de productos </strong></label>
-                                    <label>Explique ¿Qué coherencia tienen sus productos dentro de la empresa?</label>
+                                    <label><span>¿Cuál podría ser tu presupuesto máximo?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="integracion_gama" id="integracion_gama" class="form-control required"
+                                        <textarea name="sitioWeb5" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label><strong>Calidad</strong></label>
-                                    <label>¿Cómo es la calidad de su producto? Y ¿Qué tiene su producto para disponer de la calidad a que hace referencia?</label>
+                                    <label><span>¿Cuál es el estado de tu marca en el mundo digital de las redes sociales?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="calidad" id="calidad" class="form-control required"
+                                        <textarea name="sitioWeb6" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-md-12 ">
-                                    <label>¿Qué aceptación tiene su producto?</label>
+                                    <label><span>¿Cuáles son tus redes sociales?</span></label>
                                     <div class="form-group mb-3 mx-auto">
-                                        <textarea name="aceptacion" id="aceptacion" class="form-control required"
+                                        <textarea name="sitioWeb7" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Manual de Identidad Corporativa</strong></label>
+                                    <label><span>Solicitar al cliente inicialmente para su creación:<br>
+                                    Logo, Paleta de color, Tipografía.
+                                    </span></label>
+                                    <label><span>¿Quisieras cambiar algo sobre lo que ya tienes?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Hay algún elemento que quieras que aparezca en el logo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>En tu opinión, ¿qué define un logotipo bien diseñado?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC3" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cuál es tu preferencia, en referencia a los iconos, tipografía, colores etc?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC4" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué palabras o iconos se deben incluir en el logo?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC5" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué logos te gustan y por qué? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC6" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué logos no te gustan y por qué?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="identidadC7" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Presentación de su empresa </strong></label>
+                                    <label><span>¿Cuál es el eslogan que podría definir a tu empresa?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="eslogan" class="form-control required"
 										style="height: 115px; min-height: 110px;"></textarea>
                                     </div>
                                 </div>
@@ -218,6 +348,68 @@
                             <!-- /Fila Grupo de campos -->
                         </div>
                         <!-- /Paso 2 -->
+
+                        <!-- SECCIÓN 3 - Área vital de Ventas  ============================== -->
+                        <div class="step">
+                            <h2 class="section_title">Área vital de Ventas</h2>
+
+                            <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
+
+                                <div class="form-group col-md-12 ">
+                                    <label><strong>Estrategias de ventas </strong></label>
+                                    <label><span>¿Como haces para proyectar las ventas que esperas conseguir?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia1" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Qué haces para vender tus productos?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia2" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cuáles son los canales que utilizas para vender?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia3" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cómo organizas tus canales de ventas? </span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia4" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cómo es tu plan de ventas actual?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia5" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12 ">
+                                    <label><span>¿Cómo le haces seguimiento al proceso de venta?</span></label>
+                                    <div class="form-group mb-3 mx-auto">
+                                        <textarea name="estrategia6" class="form-control required"
+										style="height: 115px; min-height: 110px;"></textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <!-- /Fila Grupo de campos -->
+                        </div>
+                        <!-- /Paso 3 -->
 
                         <!-- Último Paso ============================== -->
                         <div class="submit step" id="end">

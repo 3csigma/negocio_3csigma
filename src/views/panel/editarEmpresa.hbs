@@ -898,7 +898,7 @@
                                                             <td>
                                                                 {{#if dimOperacion}}
                                                                 <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target="#modalOperaciones"
+                                                                    data-toggle="modal" data-target="#modalDimOperaciones"
                                                                     style="color: white; background: #FED061; border-color: #FED061">
                                                                     <i class="fa fa-search"></i></a>
                                                                 {{else}}
@@ -910,15 +910,27 @@
                                                             </td>
                                                         </tr>
                                                          <tr>
-                                                            <td>N/A</td>
+                                                            <td>{{#if dimMarketing}}{{dimMarketing.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Cuestionario dimensión marketing</td>
-                                                            <td><span class="badge light badge-warning">Pendiente</span>
+                                                            <td>
+                                                                {{#if dimMarketing}}
+                                                                <span class="badge light badge-success">Completo</span>
+                                                                {{else}}
+                                                                <span class="badge light badge-warning">Pendiente</span>
+                                                                {{/if}}
                                                             </td>
                                                             <td>
-                                                                <a href="#"
+                                                                {{#if dimMarketing}}
+                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                    data-toggle="modal" data-target="#modalDimMarketing"
+                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    <i class="fa fa-search"></i></a>
+                                                                {{else}}
+                                                                <a href="/analisis-dimension-marketing/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -1245,6 +1257,12 @@
         {{/if}}
         {{#if dimAdmin}}
         {{> modals/dimensionAdministracion}}
+        {{/if}}
+        {{#if dimOperacion}}
+        {{> modals/dimensionOperaciones}}
+        {{/if}}
+        {{#if dimMarketing}}
+        {{> modals/dimensionMarketing}}
         {{/if}}
 
     </div>

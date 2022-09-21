@@ -1,0 +1,307 @@
+<div class="modal fade bd-example-modal-lg" id="modalDimMarketing" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: #000 !important">Análisis dimensión marketing</h2>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-header">
+                <ul class="nav nav-pills justify-content-start">
+                    <li class=" nav-item">
+                        <a href="#plan" class="nav-link active" data-toggle="tab" aria-expanded="false">Plan de Marketing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#manual-ide" class="nav-link" data-toggle="tab" aria-expanded="false">Manual de Identidad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#av-ventas" class="nav-link" data-toggle="tab" aria-expanded="false">Área vital de Ventas</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-body">
+                <div class="tab-content">
+                    
+                    <div id="plan" class="tab-pane active">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Tu objetivo principal y métrica</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">1</td>
+                                    <td>¿Cuál es el objetivo principal que quisieras conseguir con una estrategia de marketing? y ¿Cómo lo vas a medir?</td>
+                                    <td>{{dimMarketing.objetivo_principal}}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Encuesta de satisfacción</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Tu cliente</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">2</td>
+                                    <td>¿Quién es el cliente al que te diriges?</td>
+                                    <td>{{dimMarketing.cliente}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Posicionamiento</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">3</td>
+                                    <td>¿Cuál será tu factor de diferenciación frente a la competencia?</td>
+                                    <td>{{dimMarketing.posicionamiento}}</td>
+                                </tr>
+
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Beneficios</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">4</td>
+                                    <td>¿Qué beneficios le aporta tu propuesta a quien adquiere tu producto?</td>
+                                    <td>{{dimMarketing.beneficios}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Mensaje</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">5</td>
+                                    <td>¿Cuál es el mensaje con el que vas a captar la atención de tus clientes?</td>
+                                    <td>{{dimMarketing.mensaje}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Oferta</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">6</td>
+                                    <td>¿Cuál es la oferta de productos que tienes?</td>
+                                    <td>{{dimMarketing.oferta1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">7</td>
+                                    <td>¿Cuál es tu producto de entrada? si tienes un producto Premium.</td>
+                                    <td>{{dimMarketing.oferta2}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Seguimiento de etapas del cliente</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">8</td>
+                                    <td>¿Cuáles pueden ser los problemas a resolver más importantes en cada fase del proceso de compra del cliente?</td>
+                                    <td>{{dimMarketing.seguimiento}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Presupuesto</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">9</td>
+                                    <td>¿Cuál podría ser tu presupuesto máximo?</td>
+                                    <td>{{dimMarketing.presupuesto}}</td>
+                                </tr>
+
+                                 <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Atracción</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">10</td>
+                                    <td>¿Qué acciones de atracción a clientes puedes realizar?</td>
+                                    <td>{{dimMarketing.atraccion}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Fidelización</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">11</td>
+                                    <td>¿Qué acciones puedes proponer para para conseguir fidelizar a los clientes, y que vuelvan a comprar y que recomienden los productos?</td>
+                                    <td>{{dimMarketing.fidelizacion}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Sitio Web y Redes sociales</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">12</td>
+                                    <td>¿Quieres trabajar sobre lo que está, o buscas algo totalmente nuevo?</td>
+                                    <td>{{dimMarketing.sitioWeb.s1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">13</td>
+                                    <td>¿Cómo quieres que se vea tu página Web? da ejemplo</td>
+                                    <td>{{dimMarketing.sitioWeb.s2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">14</td>
+                                    <td>¿Te gusta el diseño/funcionalidad de alguna página Web? Ejemplos</td>
+                                    <td>{{dimMarketing.sitioWeb.s3}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">15</td>
+                                    <td>¿Qué incluirías de ese diseño en la tuya/qué no incluirías?</td>
+                                    <td>{{dimMarketing.sitioWeb.s4}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">16</td>
+                                    <td>¿Cuál podría ser tu presupuesto máximo?</td>
+                                    <td>{{dimMarketing.sitioWeb.s5}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">17</td>
+                                    <td>¿Cuál es el estado de tu marca en el mundo digital de las redes sociales?</td>
+                                    <td>{{dimMarketing.sitioWeb.s6}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">18</td>
+                                    <td>¿Cuáles son tus redes sociales?</td>
+                                    <td>{{dimMarketing.sitioWeb.s7}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="manual-ide" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td scope="row">19</td>
+                                    <td>¿Quisieras cambiar algo sobre lo que ya tienes?</td>
+                                    <td>{{dimMarketing.identidadC.ic1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">20</td>
+                                    <td>¿Hay algún elemento que quieras que aparezca en el logo?</td>
+                                    <td>{{dimMarketing.identidadC.ic2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">21</td>
+                                    <td>En tu opinión, ¿qué define un logotipo bien diseñado?</td>
+                                    <td>{{dimMarketing.identidadC.ic3}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">22</td>
+                                    <td>¿Cuál es tu preferencia, en referencia a los iconos, tipografía, colores etc?</td>
+                                    <td>{{dimMarketing.identidadC.ic4}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">23</td>
+                                    <td>¿Qué palabras o iconos se deben incluir en el logo?</td>
+                                    <td>{{dimMarketing.identidadC.ic5}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">24</td>
+                                    <td>¿Qué logos te gustan y por qué? </td>
+                                    <td>{{dimMarketing.identidadC.ic6}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">25</td>
+                                    <td>¿Qué logos no te gustan y por qué? </td>
+                                    <td>{{dimMarketing.identidadC.ic7}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 500;">Presentación de su empresa </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">26</td>
+                                    <td>¿Cuál es el eslogan que podría definir a tu empresa?</td>
+                                    <td>{{dimMarketing.eslogan}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="av-ventas" class="tab-pane">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="2" style="font-weight: 700;">Estrategias de ventas </td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">27</td>
+                                    <td>¿Como haces para proyectar las ventas que esperas conseguir?</td>
+                                    <td>{{dimMarketing.estrategias.e1}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">28</td>
+                                    <td>¿Qué haces para vender tus productos?</td>
+                                    <td>{{dimMarketing.estrategias.e2}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">29</td>
+                                    <td>¿Cuáles son los canales que utilizas para vender?</td>
+                                    <td>{{dimMarketing.estrategias.e3}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">30</td>
+                                    <td>¿Cómo organizas tus canales de ventas?</td>
+                                    <td>{{dimMarketing.estrategias.e4}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">31</td>
+                                    <td>¿Cómo es tu plan de ventas actual?</td>
+                                    <td>{{dimMarketing.estrategias.e5}}</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row">32</td>
+                                    <td>¿Cómo le haces seguimiento al proceso de venta?</td>
+                                    <td>{{dimMarketing.estrategias.e6}}</td>
+                                </tr>
+                            </tbody>
+                        
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info light" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: #50368C; color: #fff" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
