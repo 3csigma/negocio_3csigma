@@ -23,6 +23,8 @@ helpers.comparar = (lvalue, operator, rvalue, options) => {
         '>': function (l, r) { return l > r; },
         '<=': function (l, r) { return l <= r; },
         '>=': function (l, r) { return l >= r; },
+        'or': function(l, r) { return l || r; },
+        'and': function(l, r) { return l && r; },
         'typeof': function (l, r) { return typeof l == r; }
     };
 

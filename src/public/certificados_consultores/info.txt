@@ -1,0 +1,1 @@
+Esta carpeta es para los certificados de Consul Group por cada consultor registrado.

@@ -1,8 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
-const crypto = require('crypto');
-const multer = require('multer');
-const path = require('path');
+const { etapa1FinalizadaHTML, sendEmail } = require('../lib/mail.config')
+const { consultarInformes } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -18,7 +17,7 @@ consultorController.empresasAsignadas = async (req, res) => {
     
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
 
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.id_diagnostico, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.consultor = ? LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;', [con[0].id_consultores])
+    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.consultor = ? LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;', [con[0].id_consultores])
 
     const informe = await pool.query('SELECT * FROM informes')
 
@@ -86,11 +85,16 @@ consultorController.empresaInterna = async (req, res) => {
         empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
 
         if (empresa.redes_sociales) {
+            datos.redesOK = false;
             datos.redes = JSON.parse(empresa.redes_sociales)
             datos.redes.twitter != '' ? datos.redes.twitter = datos.redes.twitter : datos.redes.twitter = false
             datos.redes.facebook != '' ? datos.redes.facebook = datos.redes.facebook : datos.redes.facebook = false
             datos.redes.instagram != '' ? datos.redes.instagram = datos.redes.instagram : datos.redes.instagram = false
             datos.redes.otra != '' ? datos.redes.otra = datos.redes.otra : datos.redes.otra = false
+
+            if (datos.redes.twitter || datos.redes.facebook || datos.redes.instagram || datos.redes.otra) {
+                datos.redesOK = true;
+            }
         }
 
         datos.objetivos = JSON.parse(empresa.objetivos)
@@ -168,14 +172,21 @@ consultorController.empresaInterna = async (req, res) => {
     }
     
 
-    // Tabla de Informes
-    const frmInfo = {}
-    let informes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
-    if (informes.length > 0){
-        frmInfo.fecha = informes[0].fecha;
+    /***************** Tabla de Informes ******************* */ 
+    const frmInfo = {};
+    const info = {
+        prod : {ver: 'none'},
+        adm : {ver: 'none'},
+        op : {ver: 'none'},
+        marketing : {ver: 'none'},
+        analisis : {ver: 'none'}
+    }
+    let tablaInformes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
+    if (tablaInformes.length > 0){
+        frmInfo.fecha = tablaInformes[0].fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
-        frmInfo.url = informes[0].url;
+        frmInfo.url = tablaInformes[0].url;
         datos.etapa = 'Informe diagnóstico'
     } else{
         frmInfo.ver1 = 'none';
@@ -183,7 +194,63 @@ consultorController.empresaInterna = async (req, res) => {
         frmInfo.url = '#'
     }
 
-    /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
+    // Informe de diagnóstico
+    const informeDiag = await consultarInformes(idUser, idConsultor, "Informe diagnóstico")
+    // Informe de dimensión producto
+    const informeProd = await consultarInformes(idUser, idConsultor, "Informe de dimensión producto")
+    // Informe de dimensión administración
+    const informeAdmin = await consultarInformes(idUser, idConsultor, "Informe de dimensión administración")
+    // Informe de dimensión operaciones
+    const informeOperaciones = await consultarInformes(idUser, idConsultor, "Informe de dimensión operaciones")
+    // Informe de dimensión marketing
+    const informeMarketing = await consultarInformes(idUser, idConsultor, "Informe de dimensión marketing")
+    // Informe de análisis
+    const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe de análisis")
+
+    if (informeDiag.length > 0) {
+        frmInfo.fecha = informeDiag[0].fecha;
+        frmInfo.ver1 = 'block';
+        frmInfo.ver2 = 'none';
+        frmInfo.url = informeDiag[0].url;
+        datos.etapa = 'Informe diagnóstico general'
+    }
+
+    if (informeProd.length > 0) {
+        info.prod.fecha = informeProd[0].fecha;
+        info.prod.ver = 'block';
+        info.prod.url = informeProd[0].url;
+        datos.etapa = 'Informe análisis dimensión producto'
+    }
+
+    if (informeAdmin.length > 0) {
+        info.adm.fecha = informeAdmin[0].fecha;
+        info.adm.ver = 'block';
+        info.adm.url = informeAdmin[0].url;
+        datos.etapa = 'Informe análisis dimensión administración'
+    }
+
+    if (informeOperaciones.length > 0) {
+        info.op.fecha = informeOperaciones[0].fecha;
+        info.op.ver = 'block';
+        info.op.url = informeOperaciones[0].url;
+        datos.etapa = 'Informe análisis dimensión operaciones'
+    }
+
+    if (informeMarketing.length > 0) {
+        info.marketing.fecha = informeMarketing[0].fecha;
+        info.marketing.ver = 'block';
+        info.marketing.url = informeMarketing[0].url;
+        datos.etapa = 'Informe análisis dimensión marketing'
+    }
+
+    if (informeAnalisis.length > 0) {
+        info.analisis.fecha = informeAnalisis[0].fecha;
+        info.analisis.ver = 'block';
+        info.analisis.url = informeAnalisis[0].url;
+        datos.etapa = 'Informe análisis general'
+    }
+
+    /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
     
@@ -229,16 +296,158 @@ consultorController.empresaInterna = async (req, res) => {
     jsonDimensiones = jsonDimensiones1
 
     /************************************************************************************* */
+    /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
+    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const propuesta = propuestas.find(i => i.empresa == idUser)
+    if (propuesta) {
+        datos.etapa = 'Propuesta de análisis enviada'
+        const pagos = await pool.query('SELECT * FROM pagos')
+        const pay = pagos.find(i => i.id_empresa == idUser)
+        if (pay.analisis_negocio == 1){
+            datos.etapa = 'Propuesta de análisis pagada'
+            propuesta.pago = true;
+        }
+    }
 
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = false;
+    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    analisis = analisis.find(i => i.id_empresa == idUser)
+    if (analisis) {
+        if (analisis.archivos){
+            archivos = JSON.parse(analisis.archivos)
+        }
+    }
+
+    /************************************************************************************* */
+    /** ANÁLISIS DE NEGOCIO POR DIMENSIONES - RESPUESTAS DE CUESTIONARIOS */
+    let dimProducto = false, dimAdmin = false, dimOperacion = false, dimMarketing = false;
+    const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
+    if (analisisDimensiones.length > 0) {
+        const dimension = analisisDimensiones[0]
+        if (dimension.producto) {
+            const prod = JSON.parse(dimension.producto)
+            dimProducto = {
+                fecha : prod.fecha,
+                publico_objetivo : prod.publico_objetivo,
+                beneficios : prod.beneficios,
+                tipo_producto : prod.tipo_producto,
+                nivel_precio : prod.nivel_precio,
+                mas_vendidos : prod.mas_vendidos,
+                razon_venta : prod.razon_venta,
+                integracion_gama : prod.integracion_gama,
+                calidad : prod.calidad,
+                aceptacion : prod.aceptacion,
+            }
+        }
+        if (dimension.administracion) {
+            const admin = JSON.parse(dimension.administracion)
+            dimAdmin = {
+                fecha : admin.fecha,
+                v: admin.vision,
+                mision: admin.mision,
+                valores: admin.valores,
+                f: admin.foda,
+                estructura_organizativa: admin.estructura_organizativa,
+                tipo_sistema: admin.tipo_sistema,
+                sistema_facturacion : admin.sistema_facturacion,
+                av_th : admin.av_talento_humano,
+                av_fz : admin.av_finanzas,
+            }
+        }
+        if (dimension.operacion) {
+            const op = JSON.parse(dimension.operacion)
+            dimOperacion = {
+                fecha : op.fecha,
+                info_productos : op.info_productos,
+                satisfaccion: op.satisfaccion,
+                encuesta_clientes : op.encuesta_clientes,
+                informacion_deClientes : op.informacion_deClientes,
+                utilidad_libro_quejas : op.utilidad_libro_quejas,
+                beneficio_libro_quejas : op.beneficio_libro_quejas,
+                estrategia__libro_quejas : op.estrategia__libro_quejas,
+                fidelizacion_clientes : op.fidelizacion_clientes,
+                av_op : op.av_operaciones,
+                av_ambiente : op.av_ambiente_laboral,
+                av_innovacion : op.av_innovacion,
+            }
+        }
+        if (dimension.marketing) {
+            const mark = JSON.parse(dimension.marketing)
+            dimMarketing = {
+                fecha: mark.fecha,
+                objetivo_principal: mark.objetivo_principal, 
+                cliente: mark.cliente, 
+                posicionamiento: mark.posicionamiento, 
+                beneficios: mark.beneficios, 
+                mensaje: mark.mensaje, 
+                oferta1: mark.oferta1,
+                oferta2: mark.oferta2,
+                seguimiento: mark.seguimiento,
+                presupuesto: mark.presupuesto,
+                atraccion: mark.atraccion,
+                fidelizacion: mark.fidelizacion,
+                sitioWeb: mark.sitioWeb,
+                identidadC: mark.identidadC,
+                eslogan: mark.eslogan,
+                estrategias: mark.estrategias
+            }
+        }
+    }
+    let divInformes = false
+    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
+    /* --------------------------------------------------------------------------------------- */
+    
     res.render('consultor/empresaInterna', { 
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true
+        graficas2: true, propuesta, archivos, divInformes,
+        info, dimProducto, dimAdmin, dimOperacion, dimMarketing
     })
 
 }
 
 /* ------------------------------------------------------------------------------------------------ */
+// PROPUESTA DE ANÁLISIS DE NEGOCIO
+consultorController.enviarPropuesta = async (req, res) => {
+    const {precioPropuesta, idEmpresa, codigo} = req.body
+    const empresa = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigo])
+    const email = empresa[0].email
+    const nombre = empresa[0].nombre_empresa
+    const propuestasDB = await pool.query('SELECT * FROM propuesta_analisis');
+    const fila = propuestasDB.find(i => i.empresa == idEmpresa)
+    const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
+    const fecha = new Date().toLocaleDateString("en-US")
+    if (fila) {
+        const actualizarPropuesta = {precio: precioPropuesta, fecha, link_propuesta}
+        await pool.query('UPDATE propuesta_analisis SET ? WHERE empresa = ?', [actualizarPropuesta, idEmpresa]);
+    } else {
+        const nuevaPropuesta = {empresa:idEmpresa, precio: precioPropuesta, fecha, link_propuesta}
+        await pool.query('INSERT INTO propuesta_analisis SET ?', [nuevaPropuesta]);
+    }
+    /** INFO PARA ENVÍO DE EMAIL */
+    const asunto = "¡Felicitaciones!, Etapa 1 finalizada"
+        
+    // Obtener la plantilla de Email
+    const template = etapa1FinalizadaHTML(nombre);
+
+    // Enviar Email
+    const resultEmail = await sendEmail(email, asunto, template)
+
+    if (resultEmail == false) {
+        res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+    } else {
+        console.log("\n<<<<< Email de Etapa 1 Finalizada - Enviado >>>>>\n")
+    }
+
+    let redireccionar = '/empresas/'+codigo
+    if (req.user.rol == 'Consultor') {
+        redireccionar = '/empresas-asignadas/'+codigo;
+    }
+    res.redirect(redireccionar)
+}
+
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
@@ -482,3 +691,4 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
     }
 }
 /* ------------------------------------------------------------------------------------------------ */
+

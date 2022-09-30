@@ -223,7 +223,15 @@
     ***********************************-->
   <div class="deznav">
     <div class="deznav-scroll">
-      {{#if pagoDiag}}
+      {{#if btnPagar.etapa1}}
+      {{#if btnPagar.activar1}}
+      <form action="/create-checkout-session" method="POST">
+        <button type="submit" class="add-menu-sidebar">
+          <img src="./img/Pago-diagnostico de-negocio.png">
+          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
+        </button>
+      </form>
+      {{else}}
       <form>
         <button type="submit" class="add-menu-sidebar"
           style="cursor: auto; background: #585858 !important;pointer-events:none;">
@@ -231,13 +239,25 @@
           <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
         </button>
       </form>
-      {{else}}
-      <form action="/create-checkout-session" method="POST">
+      {{/if}}
+      {{/if}}
+      {{#if btnPagar.etapa2}}
+      {{#if btnPagar.activar2}}
+      <form action="/checkout-etapa2" method="POST">
         <button type="submit" class="add-menu-sidebar">
           <img src="./img/Pago-diagnostico de-negocio.png">
-          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
+          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago único de análisis de negocio</p>
         </button>
       </form>
+      {{else}}
+      <form>
+        <button type="submit" class="add-menu-sidebar"
+          style="cursor: auto; background: #585858 !important;pointer-events:none;">
+          <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
+          <p class="mb-0" style="text-align: left;padding-left: 11px;">Análisis de negocio pagado</p>
+        </button>
+      </form>
+      {{/if}}
       {{/if}}
 
       <ul class="metismenu" id="menu">
@@ -282,58 +302,46 @@
         </li>
         {{#comparar itemActivo '==' 3}}
         <li class="mm-active">
-          {{/comparar}}
-          {{#comparar itemActivo '!=' 3}}
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 3}}
         <li class="firmar-acuerdo">
-          {{/comparar}}
+        {{/comparar}}
           {{#if acuerdoFirmado}}
           <a id="item-link3" href="/diagnostico-de-negocio" aria-expanded="false">
-            {{else}}
-            <a style="cursor:pointer" aria-expanded="false">
-              {{/if}}
-              <i class="fa-solid fa-gauge-high"></i>
-              <span class="nav-text">Diagnóstico de negocio</span>
-            </a>
-            {{!-- <ul aria-expanded="false">
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-            </ul> --}}
+          {{else}}
+          <a style="cursor:pointer" aria-expanded="false">
+          {{/if}}
+            <i class="fa-solid fa-gauge-high"></i>
+            <span class="nav-text">Diagnóstico de negocio</span>
+          </a>
         </li>
         {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
-          {{/comparar}}
-          {{#comparar itemActivo '!=' 4}}
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 4}}
         <li class="activar-cuenta">
-          {{/comparar}}
-          <a href="#item4" aria-expanded="false">
+        {{/comparar}}
+
+          {{#if btnPagar.etapa2}}
+          <a href="/analisis-de-negocio" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" id="analisis-sin-pagar" aria-expanded="false">
+          {{/if}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
           </a>
         </li>
         {{#comparar itemActivo '==' 5}}
         <li class="mm-active">
-          {{/comparar}}
-          {{#comparar itemActivo '!=' 5}}
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 5}}
         <li class="activar-cuenta">
-          {{/comparar}}
+        {{/comparar}}
           <a id="item-link5" href="#item5" aria-expanded="false">
-            {{!-- <a class="has-arrow ai-icon" id="item-link5" href="" aria-expanded="false"></a> --}}
             <i class="fa-solid fa-lightbulb"></i>
             <span class="nav-text">Plan estratégico de negocio</span>
           </a>
         </li>
-        {{!-- {{#comparar itemActivo '==' 6}}
-        <li class="mm-active">
-          {{/comparar}}
-          {{#comparar itemActivo '!=' 6}}
-        <li class="activar-cuenta">
-          {{/comparar}}
-          <a id="item-link6" href="/perfil#item6" aria-expanded="false">
-            <i class="fa-solid fa-envelope"></i>
-            <span class="nav-text">Correo</span>
-          </a>
-        </li> --}}
       </ul>
 
       {{!-- BOTÓN AGENDAR CITA --}}

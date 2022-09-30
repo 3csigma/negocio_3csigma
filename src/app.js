@@ -38,7 +38,7 @@ app.use(cookieParser())
 app.use(session({
   secret: 'secretNegocio_3CSigma',
   name: '3C-launcher-session',
-  cookie: { maxAge: 180 * 60000 },
+  cookie: { maxAge: 20000 },
   saveUninitialized: true,
   resave: true,
   cookie: { secure: false },
@@ -68,6 +68,7 @@ app.use((req, res, next) => {
   res.locals.user = req.user; //Variable local para Empresas
   res.locals.session = req.session;
   res.locals.pagoDiag = req.pagoDiag;
+  global.urlPropuestaNegocio = '';
   next();
 })
 

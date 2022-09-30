@@ -1,10 +1,10 @@
 const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
-const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
+const { consultarInformes } = require('../lib/helpers')
 
 const { consultorAsignadoHTML, consultorAprobadoHTML, informeDiagnosticoHTML, sendEmail } = require('../lib/mail.config')
 
@@ -158,6 +158,9 @@ dashboardController.mostrarEmpresas = async (req, res) => {
     const consultor = await pool.query('SELECT * FROM consultores')
     const informe = await pool.query('SELECT * FROM informes')
 
+    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const pagos = await pool.query('SELECT * FROM pagos')
+
     empresas.forEach(e => {
         e.etapa = 'Email sin confirmar';
         e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
@@ -186,44 +189,28 @@ dashboardController.mostrarEmpresas = async (req, res) => {
                 _diag.consecutivo ? e.etapa = 'Cuestionario análisis' : e.etapa = e.etapa;
         }
 
-        // e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
-
-        /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
-         * ****************************
-         * * ****************************
-         * * ****************************
-         * * ****************************
-         * * ****************************
-        */
         const consultor_empresa = consultor.find(item => item.id_consultores == e.consultor)
         if (consultor_empresa) {
             e.nombre_consultor = consultor_empresa.nombres + " " + consultor_empresa.apellidos;
             e.codigo_consultor = consultor_empresa.codigo
         }
-        // consultor.forEach(c => {
-        //     if (e.consultor == c.id_consultores){
-        //         e.nombre_consultor = c.nombres + " " + c.apellidos;
-        //         e.codigo_consultor = c.codigo
-        //     }
-        // })
+
+         /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
+        const propuesta = propuestas.find(i => i.empresa == e.id_empresas)
+        if (propuesta) {
+            e.etapa = 'Propuesta de análisis enviada'
+            const pay = pagos.find(i => i.id_empresa == e.id_empresas)
+            if (pay.analisis_negocio == 1){
+                e.etapa = 'Propuesta de análisis pagada'
+                propuesta.pago = true;
+            }
+        }
         
         const informe_empresa = informe.find(i => i.id_empresa == e.id_empresas)
         if (informe_empresa) {
             e.etapa = 'Informe(s) cargado(s)';
         }
-        // informe.forEach(i => {
-        //     if (i.id_empresa == e.id_empresas){
-        //         e.etapa = 'Informe diagnóstico';
-        //     }
-        // })
-        /********* Corregir consulta  -> Usar consultor.find(item => item.id_consultores == e.consultor) **************** 
-         * ****************************
-         * * ****************************
-         * * ****************************
-         * * ****************************
-         * * ****************************
-        */
-
+       
     });
 
     res.render('panel/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas, aprobarConsultor })
@@ -247,6 +234,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.email = filas.email;
     datos.estadoAdm = userEmpresa[0].estadoAdm;
     datos.code = codigo;
+    datos.idEmpresa = idUser
 
 
     if (filas) {
@@ -272,11 +260,16 @@ dashboardController.editarEmpresa = async (req, res) => {
         empresa.fecha_nacimiento = fNac.toLocaleDateString("en-US")
 
         if (empresa.redes_sociales) {
+            datos.redesOK = false;
             datos.redes = JSON.parse(empresa.redes_sociales)
             datos.redes.twitter != '' ? datos.redes.twitter = datos.redes.twitter : datos.redes.twitter = false
             datos.redes.facebook != '' ? datos.redes.facebook = datos.redes.facebook : datos.redes.facebook = false
             datos.redes.instagram != '' ? datos.redes.instagram = datos.redes.instagram : datos.redes.instagram = false
             datos.redes.otra != '' ? datos.redes.otra = datos.redes.otra : datos.redes.otra = false
+
+            if (datos.redes.twitter || datos.redes.facebook || datos.redes.instagram || datos.redes.otra) {
+                datos.redesOK = true;
+            }
         }
 
         datos.objetivos = JSON.parse(empresa.objetivos)
@@ -285,7 +278,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     }
 
-    // CAPTURANDO CONSULTOR ASIGNADO A LA EMPRESA DE
+    // CAPTURANDO CONSULTOR ASIGNADO A LA EMPRESA
     const consulAsignado = await pool.query('SELECT * FROM consultores WHERE id_consultores = ?', [filas.consultor])
     let idConsultor = '';
     if (consulAsignado.length > 0) {
@@ -298,6 +291,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         cs.idCon = idConsultor;
     });
 
+    /************************************************************************************************************* */
     // Tabla de Diagnóstico - Empresas Nuevas & Establecidas
     const frmDiag = {}
     let diagnostico = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
@@ -366,97 +360,87 @@ dashboardController.editarEmpresa = async (req, res) => {
         resDiag.metas = JSON.parse(r.metas)
     }
 
-    // Tabla de Informes
-    const frmInfo = {};
-    let informes = {
-        prod : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        adm : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        op : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        marketing : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        },
-        general : {
-            ver1: 'none',
-            ver2: 'block',
-            url: '#'
-        }
-    };
-
-    frmInfo.ver1 = 'none';
-    frmInfo.ver2 = 'block';
-    frmInfo.url = '#'
-
-    // Informes de Diagnóstico de Negocio
-    /** **************************************************************** */
-    /** Corregir Consulta.. Usar -> funcionInformes(params1, params2, params3) **/
-    let informesDiag = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe diagnóstico'])
-    // Informes de Diagnóstico de Negocio
-    let informesProd = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión producto'])
-    // Informes de Diagnóstico de Negocio
-    let informesAdmin = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión administración'])
-    // Informes de Diagnóstico de Negocio
-    let informesOperaciones = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión operaciones'])
-    // Informes de Diagnóstico de Negocio
-    let informesMarketing = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [idUser, idConsultor, 'Informe de dimensión marketing'])
-    /** Corregir Consulta.. Usar -> funcionInformes(params1, params2, params3) **/
-    /** **************************************************************** */
-
-    if (informesDiag.length > 0) {
-        frmInfo.fecha = informesDiag[0].fecha;
+    /***************** Tabla de Informes ******************* */ 
+    const frmInfo = {}
+    const info = {
+        prod : {ver: 'none'},
+        adm : {ver: 'none'},
+        op : {ver: 'none'},
+        marketing : {ver: 'none'},
+        analisis : {ver: 'none'}
+    }
+    let tablaInformes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
+    if (tablaInformes.length > 0){
+        frmInfo.fecha = tablaInformes[0].fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
-        frmInfo.url = informesDiag[0].url;
+        frmInfo.url = tablaInformes[0].url;
         datos.etapa = 'Informe diagnóstico'
+    } else{
+        frmInfo.ver1 = 'none';
+        frmInfo.ver2 = 'block';
+        frmInfo.url = '#'
     }
 
-    if (informesProd.length > 0) {
-        informes.prod.fecha = informesProd[0].fecha;
-        informes.prod.ver1 = 'block';
-        informes.prod.ver2 = 'none';
-        informes.prod.url = informesProd[0].url;
+    /** **************************************************************** */
+    // Informe de diagnóstico
+    const informeDiag = await consultarInformes(idUser, idConsultor, "Informe diagnóstico")
+    // Informe de dimensión producto
+    const informeProd = await consultarInformes(idUser, idConsultor, "Informe de dimensión producto")
+    // Informe de dimensión administración
+    const informeAdmin = await consultarInformes(idUser, idConsultor, "Informe de dimensión administración")
+    // Informe de dimensión operaciones
+    const informeOperaciones = await consultarInformes(idUser, idConsultor, "Informe de dimensión operaciones")
+    // Informe de dimensión marketing
+    const informeMarketing = await consultarInformes(idUser, idConsultor, "Informe de dimensión marketing")
+    // Informe de análisis
+    const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe análisis")
+
+    if (informeDiag.length > 0) {
+        frmInfo.fecha = informeDiag[0].fecha;
+        frmInfo.ver1 = 'block';
+        frmInfo.ver2 = 'none';
+        frmInfo.url = informeDiag[0].url;
+        datos.etapa = 'Informe diagnóstico general'
+    }
+
+    if (informeProd.length > 0) {
+        info.prod.fecha = informeProd[0].fecha;
+        info.prod.ver = 'block';
+        info.prod.url = informeProd[0].url;
         datos.etapa = 'Informe análisis dimensión producto'
     }
 
-    if (informesAdmin.length > 0) {
-        informes.adm.fecha = informesAdmin[0].fecha;
-        informes.adm.ver1 = 'block';
-        informes.adm.ver2 = 'none';
-        informes.adm.url = informesAdmin[0].url;
+    if (informeAdmin.length > 0) {
+        info.adm.fecha = informeAdmin[0].fecha;
+        info.adm.ver = 'block';
+        info.adm.url = informeAdmin[0].url;
         datos.etapa = 'Informe análisis dimensión administración'
     }
 
-    if (informesOperaciones.length > 0) {
-        informes.op.fecha = informesOperaciones[0].fecha;
-        informes.op.ver1 = 'block';
-        informes.op.ver2 = 'none';
-        informes.op.url = informesOperaciones[0].url;
+    if (informeOperaciones.length > 0) {
+        info.op.fecha = informeOperaciones[0].fecha;
+        info.op.ver = 'block';
+        info.op.url = informeOperaciones[0].url;
         datos.etapa = 'Informe análisis dimensión operaciones'
     }
 
-    if (informesMarketing.length > 0) {
-        informes.marketing.fecha = informesMarketing[0].fecha;
-        informes.marketing.ver1 = 'block';
-        informes.marketing.ver2 = 'none';
-        informes.marketing.url = informesMarketing[0].url;
+    if (informeMarketing.length > 0) {
+        info.marketing.fecha = informeMarketing[0].fecha;
+        info.marketing.ver = 'block';
+        info.marketing.url = informeMarketing[0].url;
         datos.etapa = 'Informe análisis dimensión marketing'
+    }
+
+    if (informeAnalisis.length > 0) {
+        info.analisis.fecha = informeAnalisis[0].fecha;
+        info.analisis.ver = 'block';
+        info.analisis.url = informeAnalisis[0].url;
+        datos.etapa = 'Informe análisis general'
     }
     
 
-    /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
+    /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
 
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
@@ -503,10 +487,34 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /************************************************************************************* */
 
-    /** Análisis de negocio por dimensiones */
+    /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
+    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const propuesta = propuestas.find(i => i.empresa == idUser)
+    if (propuesta) {
+        datos.etapa = 'Propuesta de análisis enviada'
+        const pagos = await pool.query('SELECT * FROM pagos')
+        const pay = pagos.find(i => i.id_empresa == idUser)
+        if (pay.analisis_negocio == 1){
+            datos.etapa = 'Propuesta de análisis pagada'
+            propuesta.pago = true;
+        }
+    }
+
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = false;
+    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    analisis = analisis.find(i => i.id_empresa == idUser)
+    if (analisis) {
+        if (analisis.archivos){
+            archivos = JSON.parse(analisis.archivos)
+        }
+    }
+
+    /** ANÁLISIS DE NEGOCIO POR DIMENSIONES - RESPUESTAS DE CUESTIONARIOS */
     let dimProducto = false, dimAdmin = false, dimOperacion = false, dimMarketing = false;
     const analisisDimensiones = await pool.query('SELECT * FROM analisis_empresa WHERE id_empresa = ? LIMIT 1', [idUser])
-    if (analisisDimensiones.length > 0){
+    if (analisisDimensiones.length > 0) {
         const dimension = analisisDimensiones[0]
         if (dimension.producto) {
             const prod = JSON.parse(dimension.producto)
@@ -577,13 +585,15 @@ dashboardController.editarEmpresa = async (req, res) => {
             }
         }
     }
-
+    let divInformes = false
+    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
     /* --------------------------------------------------------------------------------------- */
+
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, informes,
-        dimProducto, dimAdmin, dimOperacion, dimMarketing
+        graficas2: true, propuesta, archivos, divInformes,
+        info, dimProducto, dimAdmin, dimOperacion, dimMarketing
     })
 
 }
@@ -650,6 +660,7 @@ dashboardController.bloquearEmpresa = async (req, res) => {
         }
     }
 }
+
 
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
@@ -1010,7 +1021,7 @@ const storage = multer.diskStorage({
 
     filename: function (req, file, cb) {
         const fechaActual = Math.floor(Date.now() / 1000)
-        urlInforme = "Informe-Diagnóstico-Empresa-" + file.originalname;
+        urlInforme = "Informe-3C-Sigma-Empresa-" + file.originalname;
         console.log(urlInforme)
         cb(null, urlInforme)
     }
@@ -1069,18 +1080,13 @@ dashboardController.guardarInforme = async (req, res) => {
         const resultEmail = await sendEmail(email, asunto, template)
 
         if (resultEmail == false){
-            res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+            res.json("Ocurrio un error inesperado al enviar el email de informe subido")
         } else {
-            console.log("\n<<<<< Email de Consultor Asignado enviado >>>>>\n")
+            console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
         }
 
         r.ok = true;
         r.fecha = nuevoInforme.fecha;
-        // const url = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ', [nuevoInforme.id_empresa, nuevoInforme.id_consultor])
-
-        // if (url.nombre == 'Informe diagnóstico') {
-        //     r.url0 = url[0].url;
-        // }
         r.url = nuevoInforme.url
     }
    

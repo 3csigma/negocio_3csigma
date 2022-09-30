@@ -7,6 +7,8 @@ const crypto = require('crypto');
 const algorithm = 'aes-256-cbc'; //Using AES encryption
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
+const multer = require('multer');
+const path = require('path');
 const helpers = {}
 
 // Encriptar clave
@@ -60,23 +62,23 @@ helpers.authToken = async () => {
 }
 
 // Consultar en la base de datos los estados de pago del usuario
-helpers.consultarPagos = async (id_user) => {
-    const tabla_pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
-    if (tabla_pagos.length == 0) {
-        const nuevoPago = { id_user }
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-            if (err) throw err;
-            // return console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0 >>>>\n");
-        })
-    } else {
-        if (tabla_pagos[0].diagnostico_negocio == '1') {
-            diagnostico_pagado = 1;
-        }
-        if (tabla_pagos[0].analisis_negocio == '1') {
-            analisis_pagado = 1;
-        }
-    }
-}
+// helpers.consultarPagos = async (id_user) => {
+//     const tabla_pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
+//     if (tabla_pagos.length == 0) {
+//         const nuevoPago = { id_user }
+//         await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
+//             if (err) throw err;
+//             // return console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0 >>>>\n");
+//         })
+//     } else {
+//         if (tabla_pagos[0].diagnostico_negocio == '1') {
+//             diagnostico_pagado = 1;
+//         }
+//         if (tabla_pagos[0].analisis_negocio == '1') {
+//             analisis_pagado = 1;
+//         }
+//     }
+// }
 
 // Encriptando texto
 helpers.encriptarTxt = (text) => {
@@ -105,6 +107,31 @@ helpers.delDuplicados = (array) => {
         }
     }
     return resultado;
+}
+/************************************************************************************************************** */
+/** CARGA DE ARCHIVOS */
+helpers.uploadFiles = (preNombre, inputName, carpeta) => {
+    const rutaAlmacen = multer.diskStorage({
+        destination: (_req, file, cb) => {
+            const ruta = path.join(__dirname, '../public/'+carpeta)
+            cb(null, ruta);
+        },
+    
+        filename: (_req, file, cb) => {
+            const nomFile = preNombre + file.originalname;
+            cb(null, nomFile)
+        }
+    });
+
+    const upload = multer({ storage: rutaAlmacen }).array(inputName)
+    return upload;
+}
+
+/************************************************************************************************************** */
+/** CONSULTAS MYSQL */
+helpers.consultarInformes = async (empresa, consultor, nombreInforme) => {
+    const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? `, [empresa, consultor, nombreInforme])
+    return informe;
 }
 
 module.exports = helpers;

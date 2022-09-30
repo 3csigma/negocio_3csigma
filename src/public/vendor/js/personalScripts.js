@@ -5,10 +5,10 @@
      * MODAL PAGAR - ACTIVAR CUENTA
     *************************************/
    const menuLateral = document.querySelector(".pagar-diagnostico");
+   const itemAnalisis = document.getElementById("analisis-sin-pagar")
 
    if (menuLateral) {
         menuLateral.onclick = function () {
-            console.log("Paga el diagnóstico")
             const pagoDiagnostico = document.getElementById('diagnosticoPagado').value;
             const token = document.getElementById('tokenForm').value;
             console.log(pagoDiagnostico);
@@ -33,6 +33,15 @@
                 })
             } 
         };
+    }
+
+    if (itemAnalisis) {
+        itemAnalisis.onclick = function () {
+            Swal.fire({
+                title: 'Análisis de negocio',
+                text: 'Aun no hay una propuesta técnica para continuar con esta etapa',
+            })
+        }
     }
 
 })(jQuery);

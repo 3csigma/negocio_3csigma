@@ -136,6 +136,7 @@ passport.use('local.login', new LocalStrategy({
     req.session.empresa = false;
     req.session.consultor = false;
     req.session.admin = false;
+    req.session.etapa2 = false;
 
     if (usuarios.length > 0) {
         const user = usuarios[0]

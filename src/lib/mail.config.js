@@ -26,7 +26,6 @@ const sendEmail = async (email, subject, html) => {
 			from: `3C Sigma <${mail.user}>`, // sender address
 			to: email, // list of receivers
 			subject, // Subject line
-			text: "Cordial saludo desde 3C Sigma", // plain text body
 			html, // html body
 		});
 	} catch (error) {
@@ -36,6 +35,8 @@ const sendEmail = async (email, subject, html) => {
 }
 
 /* --------------- PLANTILLAS DE CORREOS HTML ----------------- */
+
+// Confirmación de Registro de empresa nueva
 const getTemplate = (nombre, empresa, codigo) => {
 	return `
 	<!DOCTYPE html>
@@ -1319,7 +1320,7 @@ const etapa1FinalizadaHTML = (nombre) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:60px;line-height:60px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:55px;line-height:60px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1377,7 +1378,7 @@ const etapa1FinalizadaHTML = (nombre) => {
 <tr>
 <td>
 <div style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:28px;">
-<p style="margin: 0;">Ingresa a tu plataforma 3C Sigma para seguir</p>
+<p style="margin: 0;">Tenemos una propuesta para que continúes con tu proceso en 3C Sigma</p>
 </div>
 </td>
 </tr>
@@ -1402,7 +1403,7 @@ const etapa1FinalizadaHTML = (nombre) => {
 <tr>
 <td>
 <div align="center">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://negocio.3csigma.com/login" style="height:54px;width:466px;v-text-anchor:middle;" arcsize="15%" strokeweight="0.75pt" strokecolor="#fed061" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="https://negocio.3csigma.com/login" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%; width:calc(80% - 2px);border-top:1px solid #fed061;font-weight:700;border-right:1px solid #fed061;border-bottom:1px solid #fed061;border-left:1px solid #fed061;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 14px; line-height: 28px;" style="font-size: 14px; line-height: 28px;"><strong>Ir a mi cuenta</strong></span></span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://negocio.3csigma.com/analisis-de-negocio" style="height:54px;width:466px;v-text-anchor:middle;" arcsize="15%" strokeweight="0.75pt" strokecolor="#fed061" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="https://negocio.3csigma.com/login" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%; width:calc(80% - 2px);border-top:1px solid #fed061;font-weight:700;border-right:1px solid #fed061;border-bottom:1px solid #fed061;border-left:1px solid #fed061;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span data-mce-style="font-size: 14px; line-height: 28px;" style="font-size: 14px; line-height: 28px;"><strong>Revisar la propuesta</strong></span></span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>

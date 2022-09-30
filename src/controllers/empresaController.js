@@ -5,44 +5,64 @@ const { listEnvelope } = require('./listEnvelopes');
 const helpers = require('../lib/helpers')
 const { Country } = require('country-state-city')
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1;
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
-    diagnosticoPagado = 0;
+    diagnosticoPagado = 0, analisisPagado = 0;
     acuerdoFirmado = false;
     req.intentPay = undefined; // Intento de pago
     const empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const id_empresa = empresa[0].id_empresas;
-    req.pagoDiag = false, pagoDiag = false, etapa1 = {};
-
+    req.pagoDiag = false, btnPagar = {}, pagoAnalisis = false, etapa1 = {};
     /** Consultando que pagos ha realizado el usuario */
-    const pagos = await pool.query('SELECT * FROM pagos WHERE id_empresa = ?', [id_empresa])
-    if (pagos.length == 0) {
+    btnPagar.etapa1 = true;
+    btnPagar.activar1 = true;
+    const pagos = await pool.query('SELECT * FROM pagos')
+    const pay = pagos.find(i => i.id_empresa == id_empresa);
+    if (!pay) {
         diagnosticoPagado = 0;
         const nuevoPago = { id_empresa }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
-    }
+    } else {
+        if (pay.diagnostico_negocio == 1) {
+            // PAGÓ EL DIAGNOSTICO
+            diagnosticoPagado = 1;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = false;
+            btnPagar.activar2 = false;
+            /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+            const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
+            if (acuerdo.length > 0) {
+                if (acuerdo[0].estadoAcuerdo == 2) {
+                    acuerdoFirmado = true;
+                    noPago = false;
+                }
+            }
 
-    if (pagos[0].diagnostico_negocio == 1) {
-        // PAGÓ EL DIAGNOSTICO
-        diagnosticoPagado = 1;
-        req.pagoDiag = true;
-        pagoDiag = req.pagoDiag;
+            /************************************************************************************* */
+            // PROPUESTA DE ANÁLISIS DE NEGOCIO
+            const propuesta_analisis = await pool.query('SELECT * FROM propuesta_analisis')
+            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa);
+            if (propuesta) {
+                btnPagar.etapa1 = false;
+                btnPagar.activar1 = false;
+                btnPagar.etapa2 = true;
+                btnPagar.activar2 = true;
+            }
+            /************************************************************************************* */
 
-        /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-        const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
-        if (acuerdo.length > 0) {
-            if (acuerdo[0].estadoAcuerdo == 2) {
-                acuerdoFirmado = true;
-                noPago = false;
+            // PAGÓ EL ANÁLISIS
+            if (pay.analisis_negocio == 1 ) {
+                btnPagar.etapa1 = false;
+                btnPagar.activar1 = false;
+                btnPagar.etapa2 = true;
+                btnPagar.activar2 = false;
+                analisisPagado = 1
             }
         }
 
     }
-
-    // PAGÓ EL ANÁLISIS
-    pagos[0].analisis_negocio == '1' ? analisisPagado = 1 : analisisPagado = analisisPagado;
 
     // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
     if (empresa[0].consultor != null) {
@@ -53,7 +73,6 @@ empresaController.index = async (req, res) => {
         // nom = nom[0] + ''
         etapa1.consultor = c.usuario_calendly;
         console.log("DATOS AGENDAR CITA");
-
     }
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
@@ -158,7 +177,7 @@ empresaController.index = async (req, res) => {
         pagoPendiente,
         diagnosticoPagado,
         analisisPagado,
-        pagoDiag,
+        btnPagar,
         itemActivo: 1,
         acuerdoFirmado,
         etapa1,
@@ -255,7 +274,7 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
 
-    res.render('empresa/acuerdoConfidencial', { pagoDiag: true, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
+    res.render('empresa/acuerdoConfidencial', { btnPagar, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -299,7 +318,8 @@ empresaController.diagnostico = async (req, res) => {
     res.render('empresa/diagnostico', {
         user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag,
         actualYear: req.actualYear,
-        etapa1, informe: informeEmpresa[0]
+        etapa1, informe: informeEmpresa[0],
+        btnPagar
     })
 }
 
@@ -408,4 +428,85 @@ empresaController.eliminarFicha = async (req, res) => {
         respu = false;
     }
     res.send(respu)
+}
+
+/** Mostrar vista del Panel Análisis de Negocio */
+empresaController.analisis = async (req, res) => {
+    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const id_empresa = row[0].id_empresas;
+    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa)
+    const pagos = await pool.query('SELECT * FROM pagos')
+    const pay = pagos.find(i => i.id_empresa == id_empresa)
+    const etapa1 = {lista: true}
+    /************************************************************************************* */
+    // PROPUESTA DE ANÁLISIS DE NEGOCIO
+    if (propuesta) {
+        btnPagar.etapa1 = false;
+        btnPagar.activar1 = false;
+        btnPagar.etapa2 = true;
+        btnPagar.activar2 = true;
+    }
+    
+    /************************************************************************************* */
+    // PAGÓ EL ANÁLISIS
+    if (pay.analisis_negocio == 1 ) {
+        btnPagar.etapa1 = false;
+        btnPagar.activar1 = false;
+        btnPagar.etapa2 = true;
+        btnPagar.activar2 = false;
+        analisisPagado = 1
+        propuesta.pago = true;
+    }
+
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = false;
+    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    analisis = analisis.find(i => i.id_empresa == id_empresa)
+    if (analisis) {
+        if (analisis.archivos){
+            archivos = JSON.parse(analisis.archivos)
+        }
+    }
+
+    res.render('empresa/analisis', {
+        user_dash: true, pagoDiag: true, itemActivo: 4, acuerdoFirmado: true,
+        actualYear: req.actualYear,
+        informe: false, propuesta, btnPagar,
+        etapa1, archivos
+    })
+}
+
+/** GUARDAR ARCHIVOS SOLICITADOS POR EL CONSULTOR */
+empresaController.guardarArchivos = async (req, res) => {
+    const nom = req.body.nombreArchivo
+    let colArchivos = []
+    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const id_empresa = row[0].id_empresas;
+    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    analisis = analisis.find(i => i.id_empresa == id_empresa)
+    if (analisis) {
+        // const n = nombreArchivo.filter(i => i != '')
+        req.files.forEach((x, i) => {
+            colArchivos.push({
+                nombre: nom[i],
+                link: '../archivos_analisis_empresa/'+x.filename,
+            })
+        })
+
+        if (analisis.archivos){
+            const datos = JSON.parse(analisis.archivos)
+            datos.forEach(x => {
+                colArchivos.push(x)
+            });
+        }
+
+        console.log("\nCOLUMNA ARCHIVOS >> ", colArchivos)
+        colArchivos = JSON.stringify(colArchivos)
+        const updateCol = {archivos: colArchivos}
+        await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [updateCol, id_empresa])
+    }
+    console.log("\nARHIVOS >> ", req.files)
+    res.redirect('/analisis-de-negocio');
 }

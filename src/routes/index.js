@@ -17,7 +17,7 @@ const rutaAlmacen = multer.diskStorage({
 
     filename: function (req, file, callback) {
         const fechaActual = Math.floor(Date.now() / 1000)
-         urlCertificado = "Consul_International_Group_" + fechaActual + "_" + file.originalname;
+        urlCertificado = "Consul_International_Group_" + fechaActual + "_" + file.originalname;
         console.log(urlCertificado)
         callback(null, urlCertificado)
     }
@@ -51,7 +51,7 @@ router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashb
 router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
 
 // Informes Diagnóstico & Análisis 
-router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
+// router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
 router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 module.exports = router;

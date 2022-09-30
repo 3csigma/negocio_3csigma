@@ -620,9 +620,8 @@
 					formData.append('nombreInforme', nombreInforme);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-
-				});
+                    guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)
+                });
 				
                 /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
                 // Dimensión Producto
@@ -644,7 +643,7 @@
 					formData.append('nombreInforme', nomProducto);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                    guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)
 
 				});
 
@@ -667,7 +666,7 @@
 					formData.append('nombreInforme', nomAdmin);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                    guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)
 
 				});
 
@@ -690,7 +689,7 @@
 					formData.append('nombreInforme', nomOperacion);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                    guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)
 
 				});
 
@@ -713,16 +712,16 @@
 					formData.append('nombreInforme', nomMarketing);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                    guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)
 
 				});
 
                 // Informe Análisis General
-                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
-                const nomInformeAnalisis = document.querySelector('.nomInformeAnalisis').textContent;
                 const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
-                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
                 const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
+                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
+                const nomInformeAnalisis = document.querySelector('.nomInformeAnalisis').textContent;
 
                 inputInformeGeneral.addEventListener('change', (e) => {
 					console.log(e)
@@ -736,7 +735,7 @@
 					formData.append('nombreInforme', nomInformeAnalisis);
 					formData.append('zonaHoraria', tzLocal);
 
-                    guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                    guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)
 
 				});
 

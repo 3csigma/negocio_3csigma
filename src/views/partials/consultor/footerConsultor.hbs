@@ -1,6 +1,5 @@
 <!-- ****************** Required JS - DASHBOARD ****************** -->
 <script src="../vendor/js/Chart.bundle.min.js"></script>
-{{!-- <script src="../vendor/js/owl.carousel.js"></script> --}}
 <!-- Chart piety plugin files -->
 <script src="../vendor/js/jquery.peity.min.js"></script>
 <!-- Apex Chart -->
@@ -403,89 +402,202 @@
 
 
 		$(document).ready(function () {
-			{{#if frmDiag.tablasVacias}}
-			const btnCargarInforme = document.getElementById('btnInfDiag');
-			btnCargarInforme.addEventListener("click", function () {
-				Swal.fire(
-					'Lo sentimos!',
-					'Aún no sé ha llenado ningún cuestionario para subir un informe',
-					'warning'
-				)
+			function guardarInforme(formData, estado, fecha, boton){
+                fetch('/guardarInforme', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response.ok) {
+                            boton.style.display = 'block'
+                            estado.classList.remove("badge-warning")
+                            estado.classList.add("badge-success")
+                            estado.innerHTML = "Cargado"
+                            fecha.innerHTML = response.fecha;
+                            boton.href = response.url
+
+                            toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+						} else {
+                        	toastr.danger("No sé pudo subir el informe, contacte a soporte", "Error", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+							})
+                        }
+                    });
+            }
+
+            /* Etapa 1 - Informe Diagnóstico */
+            const infoEstado = document.getElementById("infoEstado");
+            const btnVerInforme = document.getElementById('btnVerInforme');
+            const spanFecha = document.getElementById("spanFecha");
+            const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+            const informeDiag = document.querySelector('.informeDiag-Consul');
+            const nombreInforme = document.querySelector('.nombreInforme-Consul').textContent;
+
+            informeDiag.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nombreInforme);
+				formData.append('zonaHoraria', tzLocal);
+
+                guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
 			});
-			{{else}}
+				
+            /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+            // Dimensión Producto
+            const infoEstadoProd = document.getElementById("infoEstadoProd");
+            const btnVerInformeProd = document.getElementById('btnVerInformeProd');
+            const spanFechaProd = document.getElementById("spanFechaProd");
+            const informeProd = document.querySelector('.inputInformeProducto-Consul');
+            const nomProducto = document.querySelector('.nomProducto-Consul').textContent;
+
+            informeProd.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nomProducto);
+				formData.append('zonaHoraria', tzLocal);
+
+                guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
+			});
+
+            // Dimensión Administración
+            const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
+            const btnVerInformeAdmin = document.getElementById('btnVerInformeAdmin');
+            const spanFechaAdmin = document.getElementById("spanFechaAdmin");
+            const informeAdmin = document.querySelector('.inputInformeAdmin-Consul');
+            const nomAdmin = document.querySelector('.nomAdmin-Consul').textContent;
 			
-				{{#if graficas2}}
-				const infoEstado = document.getElementById("infoEstado");
-				const btnVerInforme = document.getElementById('btnVerInforme');
-				const spanFecha = document.getElementById("spanFecha");
-				const codigoEmpresa = document.getElementById("codigoEmpresa").value;
-				const informeDiag = document.querySelector('.consulInformeDiag');
-				const nombreInforme = document.querySelector('#nameDiag').textContent;
+			console.log(informeAdmin)
 
-				/* ========================= COLOCAR HORA A LA FECHA DE LA TABLA INFORMES =================================== **/
+            informeAdmin.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-				informeDiag.addEventListener('change', (e) => {
-					console.log(e)
-					const file = e.target.files[0]
-					// Capturando Zona Horaria Local
-					const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nomAdmin);
+				formData.append('zonaHoraria', tzLocal);
 
-					const formData = new FormData();
-					formData.append('file', file);
-					formData.append('codigoEmpresa', codigoEmpresa);
-					formData.append('nombreInforme', nombreInforme);
-					formData.append('zonaHoraria', tzLocal);
+                guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
+			});
 
-					fetch('/guardarInforme', {
-						method: 'POST',
-						body: formData,
-					})
-						.then(res => res.json())
-						.catch(error => console.error('Error:', error))
-						.then(response => {
-							if (response.ok) {
-								btnVerInforme.style.display = 'block'
-								infoEstado.classList.remove("badge-warning")
-								infoEstado.classList.add("badge-success")
-								infoEstado.innerHTML = "Cargado"
-								spanFecha.innerHTML = response.fecha;
-								btnVerInforme.href = response.url
+            // Dimensión Operaciones
+            const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+            const btnVerInformeOpe = document.getElementById('btnVerInformeOpe');
+            const spanFechaOpe = document.getElementById("spanFechaOpe");
+            const informeOpe = document.querySelector('.inputInformeOperaciones-Consul');
+            const nomOperacion = document.querySelector('.nomOperacion-Consul').textContent;
 
-								toastr.success("El informe ha sido cargado exitosamente", "Atención", {
-									positionClass: "toast-top-center",
-									timeOut: 5e3,
-									closeButton: !0,
-									debug: !1,
-									newestOnTop: !0,
-									progressBar: !0,
-									preventDuplicates: !0,
-									onclick: null,
-									showDuration: "300",
-									hideDuration: "1000",
-									extendedTimeOut: "1000",
-									showEasing: "swing",
-									hideEasing: "linear",
-									showMethod: "fadeIn",
-									hideMethod: "fadeOut",
-									tapToDismiss: !1
-								})
+            informeOpe.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-							} else {
-								Swal.fire(
-									'Error!',
-									'No sé pudo subir el informe, intente nuevamente o contacte al soporte.',
-									'error'
-								)
-							}
-						});
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nomOperacion);
+				formData.append('zonaHoraria', tzLocal);
 
-				});
-				{{/if}}
+                guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			});
 
-			{{/if}}
+            // Dimensión Marketing
+            const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
+            const btnVerInformeMarketing = document.getElementById('btnVerInformeMarketing');
+            const spanFechaMarketing = document.getElementById("spanFechaMarketing");
+            const informeMarketing = document.querySelector('.inputInformeMarketing-Consul');
+            const nomMarketing = document.querySelector('.nomMarketing-Consul').textContent;
 
+            informeMarketing.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nomMarketing);
+				formData.append('zonaHoraria', tzLocal);
+
+                guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			});
+
+            // Informe Análisis General
+            const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
+            const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
+            const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+            const inputInformeGeneral = document.querySelector('.inputInformeGeneral-Consul');
+            const nomInformeAnalisis = document.querySelector('.nomInformeAnalisis-Consul').textContent;
+
+            inputInformeGeneral.addEventListener('change', (e) => {
+				console.log(e)
+				const file = e.target.files[0]
+				// Capturando Zona Horaria Local
+				const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+				const formData = new FormData();
+				formData.append('file', file);
+				formData.append('codigoEmpresa', codigoEmpresa);
+				formData.append('nombreInforme', nomInformeAnalisis);
+				formData.append('zonaHoraria', tzLocal);
+
+                guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+			});
 		});
 
-	})();
+	}) ();
 </script>

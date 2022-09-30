@@ -1,6 +1,11 @@
 node_modules
 src/keys.js
 src/private.key
-info.txt
-src/public/informes_empresas
 package-lock.json
+src/public/archivos_analisis_empresa/*.jpg
+src/public/archivos_analisis_empresa/*.jpeg
+src/public/archivos_analisis_empresa/*.png
+src/public/archivos_analisis_empresa/*.pdf
+src/public/archivos_analisis_empresa/*.xlsx
+src/public/archivos_analisis_empresa/*.pdf
+src/public/archivos_analisis_empresa/*.docx
