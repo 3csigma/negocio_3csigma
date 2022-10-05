@@ -9,6 +9,7 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 const multer = require('multer');
 const path = require('path');
+const { sendEmail, pagoAnalisisPendienteHTML } = require('../lib/mail.config')
 const helpers = {}
 
 // Encriptar clave
@@ -61,25 +62,6 @@ helpers.authToken = async () => {
     return responseTK;
 }
 
-// Consultar en la base de datos los estados de pago del usuario
-// helpers.consultarPagos = async (id_user) => {
-//     const tabla_pagos = await pool.query('SELECT * FROM pagos WHERE id_user = ?', [id_user])
-//     if (tabla_pagos.length == 0) {
-//         const nuevoPago = { id_user }
-//         await pool.query('INSERT INTO pagos SET ?', [nuevoPago], (err, result) => {
-//             if (err) throw err;
-//             // return console.log("Se ha registrado un usuario en la tabla Pagos - Estados 0 >>>>\n");
-//         })
-//     } else {
-//         if (tabla_pagos[0].diagnostico_negocio == '1') {
-//             diagnostico_pagado = 1;
-//         }
-//         if (tabla_pagos[0].analisis_negocio == '1') {
-//             analisis_pagado = 1;
-//         }
-//     }
-// }
-
 // Encriptando texto
 helpers.encriptarTxt = (text) => {
    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
@@ -128,6 +110,91 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 }
 
 /************************************************************************************************************** */
+// ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
+helpers.enabled_nextPay = async () => {
+    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const pagos = await pool.query("SELECT * FROM pagos");
+    const empresas = await pool.query('SELECT * FROM empresas')
+
+    if (propuestas.length > 0) {
+        propuestas.forEach(async (x) => {
+            const isFound = pagos.find(p => p.id_empresa == x.empresa)
+            console.log();
+
+            if (isFound) {
+                console.log("HAY COINCIDENCIAS PROPUESTA / PAGOS")
+                const fechaActual = new Date().toLocaleDateString("en-US")
+                console.log("FECHA SGTE: " + fechaActual);
+                const obj1 = JSON.parse(isFound.analisis_negocio1)
+                const obj2 = JSON.parse(isFound.analisis_negocio2)
+                const obj3 = JSON.parse(isFound.analisis_negocio3)
+
+                if (obj1.fecha && obj2.estado == 0) {
+                    console.log("ENTRANDO A LA FECHA 1 ", obj1.fecha)
+                    let fechaDB = new Date(obj1.fecha)
+                    fechaDB.setDate(fechaDB.getDate() + 30);
+                    fechaDB = fechaDB.toLocaleDateString("en-US")
+
+                    if (fechaDB == fechaActual) {
+                        const actualizar = {analisis_negocio2: JSON.stringify({estado: 1})}
+                        const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+
+                        if (estadoDB.affectedRows > 0) {
+                            const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                            const email = empresa.email
+                            const nombre_empresa = empresa.nombre_empresa
+                            const texto = 'primera cuota de tu análisis de negocio en 3C Sigma, tu segundo'
+                            
+                            // Obtener la plantilla de Email
+                            const template = pagoAnalisisPendienteHTML(nombre_empresa, texto);
+                    
+                            // Enviar Email
+                            const resultEmail = await sendEmail(email, 'Tu segundo cobro de análisis de negocio está listo', template)
+                
+                            if (resultEmail == false){
+                                console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de análisis de negocio")
+                            } else {
+                                console.log("Email del 2do cobro enviado satisfactoriamente")
+                            }
+                        }
+                    }
+                } else if (obj2.fecha && obj3.estado == 0) {
+                    console.log("ENTRANDO A LA FECHA 2")
+                    let fechaDB = new Date(obj2.fecha)
+                    fechaDB.setDate(fechaDB.getDate() + 30);
+                    fechaDB = fechaDB.toLocaleDateString("en-US")
+                    if (fechaDB == fechaActual) {
+                        const actualizar = {analisis_negocio3: JSON.stringify({estado: 1})}
+                        const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+                        
+                        if (estadoDB.affectedRows > 0) {
+                            const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                            const email = empresa.email
+                            const nombre_empresa = empresa.nombre_empresa
+                            const texto = 'segunda cuota de tu análisis de negocio en 3C Sigma, tu tercer y último'
+                            
+                            // Obtener la plantilla de Email
+                            const template = pagoAnalisisPendienteHTML(nombre_empresa, texto);
+                    
+                            // Enviar Email
+                            const resultEmail = await sendEmail(email, 'Tu último cobro de análisis de negocio está listo', template)
+                
+                            if (resultEmail == false){
+                                console.log("Ocurrio un error inesperado al enviar el email del último Cobro de análisis de negocio")
+                            } else {
+                                console.log("Email del último cobro enviado satisfactoriamente")
+                            }
+                        }
+                    }
+                }
+
+            } 
+
+        })
+    }
+    return "EJECUCIÓN CRON JOB FINALIZADA..!";
+}
+
 /** CONSULTAS MYSQL */
 helpers.consultarInformes = async (empresa, consultor, nombreInforme) => {
     const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? `, [empresa, consultor, nombreInforme])

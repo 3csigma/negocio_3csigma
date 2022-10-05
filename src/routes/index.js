@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
-const consultorController = require('../controllers/consultorController');
 const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })

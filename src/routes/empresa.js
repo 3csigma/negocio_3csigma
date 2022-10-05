@@ -4,7 +4,8 @@ const { checkLogin, empresaLogueada, validarIDFicha } = require('../lib/auth');
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
 const paymentController = require('../controllers/paymentController');
-const { uploadFiles } = require('../lib/helpers')
+const { uploadFiles, enabled_nextPay } = require('../lib/helpers')
+const cron = require('node-cron');
 
 // Dashboard Principal Empresas
 router.get('/', checkLogin, empresaLogueada, empresaController.index)
@@ -29,5 +30,16 @@ router.post('/acuerdo-de-confidencialidad', checkLogin, empresaLogueada, signing
 router.get('/analisis-de-negocio', checkLogin, empresaLogueada, empresaController.analisis)
 // uploadFiles(preNombre, inputName, carpeta)
 router.post('/guardar-archivos-analisis', checkLogin, empresaLogueada, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'), empresaController.guardarArchivos)
+
+/*******************************************************************************************************/
+// Ejecución Diaria (12pm)
+cron.schedule('0 12 * * 0-6',() => {
+    enabled_nextPay()
+});
+
+// router.get('/update-pay2', (req, res) => {
+//     enabled_nextPay()
+//     res.send("TODO OK -> END")
+// });
 
 module.exports = router

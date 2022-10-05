@@ -223,42 +223,45 @@
     ***********************************-->
   <div class="deznav">
     <div class="deznav-scroll">
-      {{#if btnPagar.etapa1}}
-      {{#if btnPagar.activar1}}
-      <form action="/create-checkout-session" method="POST">
-        <button type="submit" class="add-menu-sidebar">
-          <img src="./img/Pago-diagnostico de-negocio.png">
-          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
-        </button>
-      </form>
-      {{else}}
-      <form>
-        <button type="submit" class="add-menu-sidebar"
-          style="cursor: auto; background: #585858 !important;pointer-events:none;">
-          <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
-          <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
-        </button>
-      </form>
-      {{/if}}
-      {{/if}}
-      {{#if btnPagar.etapa2}}
-      {{#if btnPagar.activar2}}
-      <form action="/checkout-etapa2" method="POST">
-        <button type="submit" class="add-menu-sidebar">
-          <img src="./img/Pago-diagnostico de-negocio.png">
-          <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago único de análisis de negocio</p>
-        </button>
-      </form>
-      {{else}}
-      <form>
-        <button type="submit" class="add-menu-sidebar"
-          style="cursor: auto; background: #585858 !important;pointer-events:none;">
-          <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
-          <p class="mb-0" style="text-align: left;padding-left: 11px;">Análisis de negocio pagado</p>
-        </button>
-      </form>
-      {{/if}}
-      {{/if}}
+      {{#unless btnPagar.analisisPer}}
+        {{#if btnPagar.etapa1}}
+        {{#if btnPagar.activar1}}
+        <form action="/create-checkout-session" method="POST">
+          <button type="submit" class="add-menu-sidebar">
+            <img src="./img/Pago-diagnostico de-negocio.png">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
+          </button>
+        </form>
+        {{else}}
+        <form>
+          <button type="submit" class="add-menu-sidebar"
+            style="cursor: auto; background: #585858 !important;pointer-events:none;">
+            <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
+          </button>
+        </form>
+        {{/if}}
+        {{/if}}
+      
+        {{#if btnPagar.etapa2}}
+        {{#if btnPagar.activar2}}
+        <form action="/checkout-etapa2" method="POST">
+          <button type="submit" class="add-menu-sidebar">
+            <img src="./img/Pago-diagnostico de-negocio.png">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago único de análisis de negocio</p>
+          </button>
+        </form>
+        {{else}}
+        <form>
+          <button type="submit" class="add-menu-sidebar"
+            style="cursor: auto; background: #585858 !important;pointer-events:none;">
+            <img src="./img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Análisis de negocio pagado</p>
+          </button>
+        </form>
+        {{/if}}
+        {{/if}}
+      {{/unless}}
 
       <ul class="metismenu" id="menu">
         {{#comparar itemActivo '==' 1}}

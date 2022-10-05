@@ -7,6 +7,10 @@
     padding: 8px;
     height: 40px;
   }
+  body.swal2-shown > [aria-hidden="true"] {
+    transition: 0.1s filter;
+    filter: blur(10px);
+  }
 </style>
 <!--**********************************
                     Content body start
@@ -20,21 +24,29 @@
           style="background: transparent !important;border: none !important; box-shadow: none !important">
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Analicemos tu empresa en 4 dimensiones</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa, a través de las dimensiones: producto, administración, operaciones y marketing. Si estas deacuerdo haz clic en el botón <strong>"Pago único de análisis de negocio"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna plan de pagos.
-            <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa, a través de las dimensiones:</p>
+            <p style="color: #000; font-weight: bold;">
+              <i class="fa-solid fa-box"></i> Producto</li></br>
+              <i class="fa-solid fa-user-tie"></i> Administración</br>
+              <i class="fa-solid fa-gear"></i> Operaciones</br>
+              <i class="fa-solid fa-bullhorn"></i> Marketing</br>
+            </p>
           </div>
         </div>
       </div>
       <div class="col-md-12 col-xl-6 col-xxl-6">
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
-          {{#if formDiag.estado}}
+          {{#if btnPagar.analisisPer}}
           <div class="card-body">
-            <h2 style="color: #000; font-weight: bold;">Hemos recibido la información de tu empresa</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">De acuerdo al perfil de tu empresa asignaremos al
-              mejor consultor disponible para ti, recibirás una notificación pronto al correo
-              <strong>{{user.email}}</strong> para informarte que tu consultor está listo y podrás agendar tu cita en el
-              botón de la izquierda para continuar el proceso del diagnóstico de negocio.</p>
+            <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Agenda una cita con tu consultor si tienes alguna duda.</p>
+          </div>
+          {{else}}
+          <div class="card-body">
+            {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
+            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pago único de análisis de negocio"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna plan de pagos.
+            <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
           {{/if}}
         </div>
@@ -57,45 +69,77 @@
                   <table class="table table-responsive-md text-center">
                     <thead>
                       <tr>
-                        <th>FECHA</th>
+                        <th>FECHA DE PROPUESTA</th>
                         <th>ESTADO DE PAGO</th>
+                        {{#unless propuesta.pago}}
                         <th>PLAN DE PAGOS</th>
+                        {{/unless}}
                         <th>VALOR TOTAL</th>
-                        <th>REVISAR</th>
+                        <th>REVISAR PROPUESTA</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
                         <td>
-                          {{#if propuesta.pago}}
-                            <span class="badge light badge-success">Pagada</span>
+                          {{#if propuesta.porcentaje}}
+                            <span class="badge light badge-success">Pagado {{propuesta.porcentaje}}</span>
                           {{else}}
                             <span class="badge light badge-warning">Pendiente</span>
                           {{/if}}
                         </td>
+                        {{#unless propuesta.pago}}
                         <td>
                           <div class="d-flex">
-                            {{#unless propuesta.pago}}
-                            <form action="/checkout-etapa2" method="POST">
-                              <button type="submit" class="btn btn-primary shadow btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                              <i class="fa fa-usd"></i>
-                              </button>
-                            </form>
-                            <form>
-                            <button type="submit" class="btn btn-primary shadow btn-xs sharp" style="background: GRAY;margin: 0 auto;border-color: #85bb65;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            </form>
-                            <form>
-                            <button type="submit" class="btn btn-primary shadow btn-xs sharp" style="background: gray;margin: 0 auto;border-color: #85bb65;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            </form>
-                            {{/unless}}
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj1 "!=" 1}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj1 "==" 1}}
+                              <form action="/pagar-analisis-per1" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                            </div>
+
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj2 "==" 0}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj2 "==" 1}}
+                              <form action="/pagar-analisis-per2" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj2 "==" 2}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
+                              {{/comparar}}
+                            </div>
+
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj3 "==" 0}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj3 "==" 1}}
+                              <form action="/pagar-analisis-per3" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj3 "==" 2}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                            </div>
+                            
                           </div>
                         </td>
-                        <td>${{propuesta.precio}}</td>
+                        {{/unless}}
+                        <td>${{propuesta.precio_total}}</td>
                         <td>
                           <a href="{{propuesta.link_propuesta}}" target="_blank"
                               class="btn btn-primary shadow btn-xs sharp"
@@ -422,11 +466,14 @@
     }
   }
 
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+
   {{#if alertSuccess}}
   Swal.fire({
     icon: 'success',
     title: '¡Pago exitoso!',
-    html: '<p>Tu pago ha sido recibido, ahora puedes agendar una nueva cita con tu consultor.</p>'
+    html: '<p>Tu pago ha sido recibido, ahora puedes continuar con tu proceso.</p>'
         + '<a href="/analisis-de-negocio" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
         + 'border-radius: 22px;'
         + 'color: #fff;'
@@ -445,7 +492,19 @@
   Swal.fire({
     icon: 'error',
     title: 'Pago Cancelado',
-    text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
+    html: '<p>Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.</p>'
+        + '<a href="/analisis-de-negocio" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+        + 'border-radius: 22px;'
+        + 'color: #fff;'
+        + 'width: 160px;'
+        + 'height: 50px;'
+        + 'text-align: center;'
+        + 'padding: 14px;'
+        + 'font-size: 17px;'
+        + 'font-weight: 300;" id="checkout-button">Ok</a>',
+    showCancelButton: false,
+    showConfirmButton: false,
+    allowOutsideClick: false,
   })
   {{/if}}
 </script>

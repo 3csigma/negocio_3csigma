@@ -419,11 +419,14 @@ consultorController.enviarPropuesta = async (req, res) => {
     const fila = propuestasDB.find(i => i.empresa == idEmpresa)
     const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
+    const precio_per1 = parseFloat(precioPropuesta)*0.6
+    const precio_per2 = parseFloat(precioPropuesta)*0.2
+    const precio_per3 = parseFloat(precioPropuesta)*0.2
     if (fila) {
-        const actualizarPropuesta = {precio: precioPropuesta, fecha, link_propuesta}
+        const actualizarPropuesta = {precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta}
         await pool.query('UPDATE propuesta_analisis SET ? WHERE empresa = ?', [actualizarPropuesta, idEmpresa]);
     } else {
-        const nuevaPropuesta = {empresa:idEmpresa, precio: precioPropuesta, fecha, link_propuesta}
+        const nuevaPropuesta = {empresa:idEmpresa, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta}
         await pool.query('INSERT INTO propuesta_analisis SET ?', [nuevaPropuesta]);
     }
     /** INFO PARA ENVÍO DE EMAIL */
@@ -691,4 +694,3 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
     }
 }
 /* ------------------------------------------------------------------------------------------------ */
-

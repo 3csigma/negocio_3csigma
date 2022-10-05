@@ -21,24 +21,29 @@
             /** GRÁFICA PARA INDICADORES */
 
 		let chartIndicadores1 = function () {
-			let valAnalisis1 = document.getElementById('jsonAnalisis1').value;
-			let valAnalisis2 = document.getElementById('jsonAnalisis2').value;
-			let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+			let valAnalisis1 = document.getElementById('jsonAnalisis1');
+			let valAnalisis2 = document.getElementById('jsonAnalisis2');
+			let nuevosProyectos = document.getElementById('nuevosProyectos');
 			let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 			if (valAnalisis1) {
-				valAnalisis1 = JSON.parse(valAnalisis1)
+				valAnalisis1 = valAnalisis1.value;
+				if (valAnalisis1) { valAnalisis1 = JSON.parse(valAnalisis1) }
 				chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
 			}
 			if (valAnalisis2) {
-				valAnalisis2 = JSON.parse(valAnalisis2)
+				valAnalisis2 = valAnalisis2.value;
+				if (valAnalisis2) { valAnalisis2 = JSON.parse(valAnalisis2) }
 				chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
 			}
 
 			let valorMax = 10;
-			if (nuevosProyectos == 1) {
-				valorMax = 5;
+			if (nuevosProyectos) {
+				nuevosProyectos = nuevosProyectos.value;
+				if (nuevosProyectos == 1) {
+					valorMax = 5;
+				}
 			}
 
 			if ($('#chartEmpresa1').length > 0) {
@@ -98,25 +103,30 @@
 		}
 
 		let chartIndicadores2 = function () {
-			let valDimensiones1 = document.getElementById('jsonDimensiones1').value;
-			let valDimensiones2 = document.getElementById('jsonDimensiones2').value;
-			let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+			let valDimensiones1 = document.getElementById('jsonDimensiones1');
+			let valDimensiones2 = document.getElementById('jsonDimensiones2');
+			let nuevosProyectos = document.getElementById('nuevosProyectos');
 			let chartDimensiones1 = [0, 0, 0, 0]
 			let chartDimensiones2 = [0, 0, 0, 0]
 			let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
 
 			if (valDimensiones1) {
+				valDimensiones1 = valDimensiones1.value
 				valDimensiones1 = JSON.parse(valDimensiones1)
 			}
 			
-			if (nuevosProyectos == 1){
-				titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
-				chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
-			} else {
-				chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
+			if (nuevosProyectos) {
+				nuevosProyectos = nuevosProyectos.value
+				if (nuevosProyectos == 1){
+					titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
+					chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
+				} else {
+					chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
+				}
 			}
 
 			if (valDimensiones2) {
+				valDimensiones2 = valDimensiones2.value
 				valDimensiones2 = JSON.parse(valDimensiones2)
 				chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
 			}
@@ -195,7 +205,6 @@
         }();
 
         jQuery(document).ready(function () {
-			
         });
 
         jQuery(window).on('load', function () {

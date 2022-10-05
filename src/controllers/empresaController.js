@@ -2,7 +2,7 @@ const pool = require('../database')
 const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
-const helpers = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt } = require('../lib/helpers')
 const { Country } = require('country-state-city')
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
@@ -19,13 +19,14 @@ empresaController.index = async (req, res) => {
     btnPagar.etapa1 = true;
     btnPagar.activar1 = true;
     const pagos = await pool.query('SELECT * FROM pagos')
-    const pay = pagos.find(i => i.id_empresa == id_empresa);
-    if (!pay) {
+    let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
+    if (!pago_empresa) {
         diagnosticoPagado = 0;
         const nuevoPago = { id_empresa }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
     } else {
-        if (pay.diagnostico_negocio == 1) {
+        const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
+        if (objDiagnostico.estado == 1) {
             // PAGÓ EL DIAGNOSTICO
             diagnosticoPagado = 1;
             btnPagar.activar1 = false;
@@ -52,13 +53,26 @@ empresaController.index = async (req, res) => {
             }
             /************************************************************************************* */
 
+            const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
+            const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+            // const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
+            // const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
+
             // PAGÓ EL ANÁLISIS
-            if (pay.analisis_negocio == 1 ) {
+            if (objAnalisis.estado == 1) {
                 btnPagar.etapa1 = false;
                 btnPagar.activar1 = false;
                 btnPagar.etapa2 = true;
                 btnPagar.activar2 = false;
                 analisisPagado = 1
+            }
+            if (objAnalisis1.estado == 2) {
+                btnPagar.etapa1 = false;
+                btnPagar.activar1 = false;
+                btnPagar.etapa2 = true;
+                btnPagar.activar2 = true;
+                btnPagar.obj1 = parseInt(objAnalisis1.estado)
+                btnPagar.analisisPer = true;
             }
         }
 
@@ -222,7 +236,7 @@ empresaController.acuerdo = async (req, res) => {
 
             email = acuerdo[0].email_signer;
             const args = JSON.parse(acuerdo[0].args) // CONVERTIR  JSON A UN OBJETO
-            const newToken = await helpers.authToken() //Generando nuevo Token para enviar a Docusign
+            const newToken = await authToken() //Generando nuevo Token para enviar a Docusign
             args.accessToken = newToken.access_token;
             const new_args = { args: JSON.stringify(args) }
 
@@ -283,7 +297,7 @@ empresaController.diagnostico = async (req, res) => {
     const id_empresa = row[0].id_empresas;
     const formDiag = {}
     formDiag.id = id_empresa;
-    formDiag.usuario = helpers.encriptarTxt('' + id_empresa)
+    formDiag.usuario = encriptarTxt('' + id_empresa)
     formDiag.estado = false;
     const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_empresa = ?', [id_empresa])
     const ficha = fichaCliente[0]
@@ -328,7 +342,7 @@ empresaController.validarFichaCliente = async (req, res) => {
     const { id } = req.params;
     let row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     row = row[0]
-    const id_empresa = helpers.desencriptarTxt(id)
+    const id_empresa = desencriptarTxt(id)
     if (row.id_empresas == id_empresa) {
         req.session.fichaCliente = true
     } else {
@@ -437,7 +451,7 @@ empresaController.analisis = async (req, res) => {
     const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
     const propuesta = propuestas.find(i => i.empresa == id_empresa)
     const pagos = await pool.query('SELECT * FROM pagos')
-    const pay = pagos.find(i => i.id_empresa == id_empresa)
+    const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa1 = {lista: true}
     /************************************************************************************* */
     // PROPUESTA DE ANÁLISIS DE NEGOCIO
@@ -449,15 +463,37 @@ empresaController.analisis = async (req, res) => {
     }
     
     /************************************************************************************* */
+    const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
+    const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+    const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
+    const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
     // PAGÓ EL ANÁLISIS
-    if (pay.analisis_negocio == 1 ) {
+    if (objAnalisis.estado == 1 ) {
         btnPagar.etapa1 = false;
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
         btnPagar.activar2 = false;
         analisisPagado = 1
-        propuesta.pago = true;
+        propuesta.porcentaje = "100%";
+        btnPagar.analisisPer = true
     }
+
+    btnPagar.obj1 = parseInt(objAnalisis1.estado)
+    btnPagar.obj2 = parseInt(objAnalisis2.estado)
+    btnPagar.obj3 = parseInt(objAnalisis3.estado)
+    
+    if (objAnalisis1.estado == 2) {
+        btnPagar.etapa1 = false;
+        btnPagar.activar1 = false;
+        btnPagar.etapa2 = true;
+        btnPagar.activar2 = true;
+        btnPagar.analisisPer = true;
+        propuesta.porcentaje = "60%";
+    }
+    if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
+    if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
+
+    
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
