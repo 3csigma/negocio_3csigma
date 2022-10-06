@@ -44,7 +44,7 @@ router.post('/checkout-etapa2', checkLogin, async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Análisis de negocio',
+            name: 'Pago Único - Análisis de negocio',
             images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
           },
           unit_amount: precio,
@@ -72,8 +72,15 @@ router.post('/pagar-analisis-per1', checkLogin, async (req, res) => {
   const pay = propuesta.find(i => i.empresa == id_empresa)
   let precio = 0;
   if (pay) {
-    precio = pay.precio_per1 + '00'
-    precio = parseFloat(precio)
+    precio = pay.precio_per1 + ''
+    if (precio.includes('.')) {
+      precio = precio.split('.')
+      precio = precio[0] + '' + precio[1]
+      precio = precio+'0'
+    } else {
+        precio = precio+'00'
+    }
+    precio = parseInt(precio)
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -84,7 +91,7 @@ router.post('/pagar-analisis-per1', checkLogin, async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Análisis de negocio',
+            name: 'Pago 1 - Análisis de negocio',
             images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
           },
           unit_amount: precio,
@@ -113,8 +120,15 @@ router.post('/pagar-analisis-per2', checkLogin, async (req, res) => {
   const pay = propuesta.find(i => i.empresa == id_empresa)
   let precio = 0;
   if (pay) {
-    precio = pay.precio_per2 + '00'
-    precio = parseFloat(precio)
+    precio = pay.precio_per2 + ''
+    if (precio.includes('.')) {
+      precio = precio.split('.')
+      precio = precio[0] + '' + precio[1]
+      precio = precio+'0'
+    } else {
+        precio = precio+'00'
+    }
+    precio = parseInt(precio)
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -125,7 +139,7 @@ router.post('/pagar-analisis-per2', checkLogin, async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Análisis de negocio',
+            name: 'Pago 2 - Análisis de negocio',
             images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
           },
           unit_amount: precio,
@@ -154,8 +168,15 @@ router.post('/pagar-analisis-per3', checkLogin, async (req, res) => {
   const pay = propuesta.find(i => i.empresa == id_empresa)
   let precio = 0;
   if (pay) {
-    precio = pay.precio_per3 + '00'
-    precio = parseFloat(precio)
+    precio = pay.precio_per3 + ''
+    if (precio.includes('.')) {
+      precio = precio.split('.')
+      precio = precio[0] + '' + precio[1]
+      precio = precio+'0'
+    } else {
+        precio = precio+'00'
+    }
+    precio = parseInt(precio)
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -166,7 +187,7 @@ router.post('/pagar-analisis-per3', checkLogin, async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Análisis de negocio',
+            name: 'Pago 3 - Análisis de negocio',
             images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
           },
           unit_amount: precio,
@@ -187,7 +208,7 @@ router.post('/pagar-analisis-per3', checkLogin, async (req, res) => {
 });
 
 router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
-  let destino = 'pages/dashboard', itemActivo = 1
+  let destino = 'pages/dashboard', itemActivo = 1, alertSuccess = false, pagoExitoso = false;
   // Borrando info del Intento de pago
   req.session.intentPay = undefined; 
   req.session.etapa2 = undefined;
@@ -195,6 +216,9 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
   if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
     destino = 'empresa/analisis'
     itemActivo = 4
+    pagoExitoso = true
+  } else {
+    alertSuccess = true
   }
   
   /** Actualizar info de que el usuario ya pagó el diagnostico de negocio */
@@ -215,8 +239,11 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
     let pagoAnalisis = {estado: 1, fecha}
     let actualizarAnalisis = {}
     if (req.session.analisis0) { 
-      pagoAnalisis.estado = 2; 
-      actualizarAnalisis = {analisis_negocio: JSON.stringify(pagoAnalisis)}
+      pagoAnalisis.estado = 1; 
+      actualizarAnalisis = {
+        analisis_negocio: JSON.stringify(pagoAnalisis),
+        analisis_negocio1: JSON.stringify({estado: 0})
+      }
     } else if (req.session.analisis1) {
       pagoAnalisis.estado = 2;
       actualizarAnalisis = {analisis_negocio1: JSON.stringify(pagoAnalisis)}
@@ -232,22 +259,25 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
   }
 
   res.render(destino, {
-    alertSuccess: true,
+    alertSuccess, pagoExitoso,
     user_dash: true, wizarx: false, login: false,
     itemActivo,
   })
 })
 
 router.get('/pago-cancelado', checkLogin, validarURLPagar, async (req, res) => {
-  let destino = 'pages/dashboard', itemActivo = 1;
+  let destino = 'pages/dashboard', itemActivo = 1, alertCancel = false, pagoCancelado = false;
   req.session.intentPay = undefined;
   if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
     destino = 'empresa/analisis';
+    pagoCancelado = true;
     itemActivo = 4;
+  } else {
+    alertCancel = true;
   }
 
   res.render(destino, {
-    alertCancel: true,
+    alertCancel, pagoCancelado,
     user_dash: true, wizarx: false, login: false, 
     itemActivo
   })

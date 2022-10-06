@@ -28,8 +28,10 @@ router.post('/acuerdo-de-confidencialidad', checkLogin, empresaLogueada, signing
 
 // Análisis de Negocio
 router.get('/analisis-de-negocio', checkLogin, empresaLogueada, empresaController.analisis)
+router.post('/guardar-archivos-analisis', checkLogin, empresaLogueada, 
 // uploadFiles(preNombre, inputName, carpeta)
-router.post('/guardar-archivos-analisis', checkLogin, empresaLogueada, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'), empresaController.guardarArchivos)
+uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'),
+empresaController.guardarArchivos)
 
 /*******************************************************************************************************/
 // Ejecución Diaria (12pm)

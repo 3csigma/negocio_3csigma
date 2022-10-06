@@ -9,3 +9,5 @@ src/public/archivos_analisis_empresa/*.pdf
 src/public/archivos_analisis_empresa/*.xlsx
 src/public/archivos_analisis_empresa/*.pdf
 src/public/archivos_analisis_empresa/*.docx
+src/public/archivos_analisis_empresa/*.zip
+src/public/propuestas_analisis/*.pdf

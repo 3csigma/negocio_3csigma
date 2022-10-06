@@ -90,32 +90,31 @@ empresaController.index = async (req, res) => {
     }
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
-    let dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa,id_empresa,id_empresa,empresa[0].codigo])
-    dataEmpresa = dataEmpresa[0]
-
-    let diagEmpresa = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
-    let diagEmpresa2 = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
-    const diagPorcentaje = {}, anaPorcentaje = {};
+    const dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa, id_empresa, id_empresa, empresa[0].codigo])
+    const diagEmpresa = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? LIMIT 1', [id_empresa])
+    const diagEmpresa2 = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? LIMIT 1', [id_empresa])
     
-    // Etapa 1
+    /**************************************************************************** */
+    // PORCENTAJE ETAPA 1
     let porcentaje = 100/6
-    // porcentaje = porcentaje.toFixed(2)
     porcentaje = Math.round(porcentaje)
-    diagPorcentaje.num = 0
+    const diagPorcentaje = { num : 0 }
 
-    if (dataEmpresa.diagnostico_negocio == 1){
+    const e = dataEmpresa[0];
+    const diagnosticoPago = JSON.parse(e.diagnostico_negocio)
+    if (diagnosticoPago.estado == 1){
         diagPorcentaje.txt = 'Diagnóstico pagado'
         diagPorcentaje.num = porcentaje
     }
-    if (dataEmpresa.estadoAcuerdo == 1){
+    if (e.estadoAcuerdo == 1){
         diagPorcentaje.txt = 'Acuerdo enviado'
         diagPorcentaje.num = porcentaje*2
     }
-    if (dataEmpresa.estadoAcuerdo == 2){
+    if (e.estadoAcuerdo == 2){
         diagPorcentaje.txt = 'Acuerdo firmado'
         diagPorcentaje.num = porcentaje*3
     } 
-    if (dataEmpresa.telefono){
+    if (e.telefono){
         diagPorcentaje.txt = 'Ficha Cliente'
         diagPorcentaje.num = porcentaje*4
     }
@@ -128,15 +127,19 @@ empresaController.index = async (req, res) => {
     // Informe de diagnóstico de empresa subido
     let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? LIMIT 1', [empresa[0].id_empresas, 'Informe diagnóstico'])
     informeEmpresa.length > 0 ? diagPorcentaje.num = 100 : diagPorcentaje.num = diagPorcentaje.num;
-    // console.log("\n<<< Porcentaje actual >>>");
-    // console.log(diagPorcentaje);
 
-    // Etapa 2
-    anaPorcentaje.txt = 'Análisis no pagado';
-    anaPorcentaje.num = 0;
-    if (dataEmpresa.analisis_negocio == 1){
-        anaPorcentaje.txt = 'Análisis pagado'
-        anaPorcentaje.num = 0;
+    /****************************************************************************** */
+    // PORCENTAJE ETAPA 2
+    // let porcentaje2 = 100/4
+    // porcentaje2 = Math.round(porcentaje2)
+    let analisisEmpresa = await pool.query('SELECT * FROM analisis_empresa')
+    analisisEmpresa = analisisEmpresa.find(i => i.id_empresa == id_empresa)
+    const analisisPorcentaje = { num: 0 }
+    if (analisisEmpresa) {
+        if (analisisEmpresa.producto){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
+        if (analisisEmpresa.administracion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
+        if (analisisEmpresa.operacion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
+        if (analisisEmpresa.marketing){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
     }
     
     /************************************************************************** */
@@ -149,7 +152,7 @@ empresaController.index = async (req, res) => {
 
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
-        jsonAnalisis2 =JSON.stringify( areasVitales[1]);
+        jsonAnalisis2 = JSON.stringify(areasVitales[1]);
         if (areasVitales[0].rendimiento_op >= 1){
             rendimiento.op = areasVitales[0].rendimiento_op
         } else {
@@ -162,7 +165,7 @@ empresaController.index = async (req, res) => {
     let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [empresa[0].id_empresas])
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
-        jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
+        jsonDimensiones2 = JSON.stringify(xDimensiones2[0]);
     }
 
     // Si la empresa es Nueva
@@ -196,6 +199,7 @@ empresaController.index = async (req, res) => {
         acuerdoFirmado,
         etapa1,
         diagPorcentaje,
+        analisisPorcentaje,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         informe: informeEmpresa[0],
         nuevosProyectos, rendimiento
@@ -468,6 +472,15 @@ empresaController.analisis = async (req, res) => {
     const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
     const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
     // PAGÓ EL ANÁLISIS
+    // PAGÓ EL ANÁLISIS
+    // if (objAnalisis.estado == 1) {
+    //     btnPagar.etapa1 = false;
+    //     btnPagar.activar1 = false;
+    //     btnPagar.etapa2 = true;
+    //     btnPagar.activar2 = false;
+    //     analisisPagado = 1
+    // }
+
     if (objAnalisis.estado == 1 ) {
         btnPagar.etapa1 = false;
         btnPagar.activar1 = false;
@@ -475,7 +488,7 @@ empresaController.analisis = async (req, res) => {
         btnPagar.activar2 = false;
         analisisPagado = 1
         propuesta.porcentaje = "100%";
-        btnPagar.analisisPer = true
+        btnPagar.analisisPer = false
     }
 
     btnPagar.obj1 = parseInt(objAnalisis1.estado)

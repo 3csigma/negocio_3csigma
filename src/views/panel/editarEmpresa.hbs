@@ -856,8 +856,8 @@
                                                     <tr>
                                                         <th>FECHA</th>
                                                         <th>NOMBRE</th>
-                                                        <th>ESTADO DEL PAGO</th>
-                                                        <th>ACCIÓN</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -865,13 +865,7 @@
                                                         {{#if propuesta.link_propuesta}}
                                                         <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Análisis de negocio</td>
-                                                        <td>
-                                                            {{#if propuesta.pago}}
-                                                                <span class="badge light badge-success">Pagada</span>
-                                                            {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                            {{/if}}
-                                                        </td>
+                                                        <td>${{propuesta.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.link_propuesta}}" target="_blank"
@@ -891,6 +885,62 @@
 
                                     </div>
                                 </div>
+
+                                {{#if pagos_analisis.ok}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>FECHA DE PAGO</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>PAGO DE ANÁLISIS</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#if pagos_analisis.unico.fecha}}
+                                                        <tr>
+                                                            <td>{{pagos_analisis.unico.fecha}}</td>
+                                                            <td>Pago Único</td>
+                                                            <td>${{pagos_analisis.unico.precio}}</td>
+                                                            <td><span class="badge light badge-success">Pagado 100%</span></td>
+                                                        </tr>
+                                                        {{else}}
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Primer Pago</td>
+                                                            <td>${{pagos_analisis.uno.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Segundo Pago</td>
+                                                            <td>${{pagos_analisis.dos.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Tercer Pago</td>
+                                                            <td>${{pagos_analisis.tres.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
+                                                        </tr>
+                                                        {{/if}}
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
 
                                 {{#if archivos}}
                                 <div class="card">
@@ -930,394 +980,394 @@
                                 {{/if}}
                                 
                                 {{#if propuesta.pago}}
-                                <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA</th>
-                                                            <th>NOMBRE</th>
-                                                            <th>ESTADO</th>
-                                                            <th>ACCIÓN</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{#if dimProducto}}{{dimProducto.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Cuestionario dimensión producto</td>
-                                                            <td>
-                                                                {{#if dimProducto}}
-                                                                <span class="badge light badge-success">Completo</span>
-                                                                {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{#if dimProducto}}
-                                                                <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target="#modalDimProducto"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                {{else}}
-                                                                <a href="/analisis-dimension-producto/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                    <i class="fa fa-pencil"></i></a>
-                                                                {{/if}}
-                                                            </td>
-                                                        </tr>
-                                                         <tr>
-                                                            <td>{{#if dimAdmin}}{{dimAdmin.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Cuestionario dimensión administración</td>
-                                                            <td>
-                                                                {{#if dimAdmin}}
-                                                                <span class="badge light badge-success">Completo</span>
-                                                                {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{#if dimAdmin}}
-                                                                <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target="#modalDimAdministracion"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                {{else}}
-                                                                <a href="/analisis-dimension-administracion/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                    <i class="fa fa-pencil"></i></a>
-                                                                {{/if}}
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>{{#if dimOperacion}}{{dimOperacion.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Cuestionario dimensión operación</td>
-                                                            <td>
-                                                                {{#if dimOperacion}}
-                                                                <span class="badge light badge-success">Completo</span>
-                                                                {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{#if dimOperacion}}
-                                                                <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target="#modalDimOperaciones"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                {{else}}
-                                                                <a href="/analisis-dimension-operaciones/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                    <i class="fa fa-pencil"></i></a>
-                                                                {{/if}}
-                                                            </td>
-                                                        </tr>
-                                                         <tr>
-                                                            <td>{{#if dimMarketing}}{{dimMarketing.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Cuestionario dimensión marketing</td>
-                                                            <td>
-                                                                {{#if dimMarketing}}
-                                                                <span class="badge light badge-success">Completo</span>
-                                                                {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{#if dimMarketing}}
-                                                                <a class="btn btn-info shadow btn-xs sharp"
-                                                                    data-toggle="modal" data-target="#modalDimMarketing"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                {{else}}
-                                                                <a href="/analisis-dimension-marketing/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                    <i class="fa fa-pencil"></i></a>
-                                                                {{/if}}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                    <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Cuestionarios</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>ESTADO</th>
+                                                                <th>ACCIÓN</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{#if dimProducto}}{{dimProducto.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Cuestionario dimensión producto</td>
+                                                                <td>
+                                                                    {{#if dimProducto}}
+                                                                    <span class="badge light badge-success">Completo</span>
+                                                                    {{else}}
+                                                                    <span class="badge light badge-warning">Pendiente</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{#if dimProducto}}
+                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                        data-toggle="modal" data-target="#modalDimProducto"
+                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                    {{else}}
+                                                                    <a href="/analisis-dimension-producto/{{datos.code}}"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-pencil"></i></a>
+                                                                    {{/if}}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{#if dimAdmin}}{{dimAdmin.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Cuestionario dimensión administración</td>
+                                                                <td>
+                                                                    {{#if dimAdmin}}
+                                                                    <span class="badge light badge-success">Completo</span>
+                                                                    {{else}}
+                                                                    <span class="badge light badge-warning">Pendiente</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{#if dimAdmin}}
+                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                        data-toggle="modal" data-target="#modalDimAdministracion"
+                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                    {{else}}
+                                                                    <a href="/analisis-dimension-administracion/{{datos.code}}"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-pencil"></i></a>
+                                                                    {{/if}}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{#if dimOperacion}}{{dimOperacion.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Cuestionario dimensión operación</td>
+                                                                <td>
+                                                                    {{#if dimOperacion}}
+                                                                    <span class="badge light badge-success">Completo</span>
+                                                                    {{else}}
+                                                                    <span class="badge light badge-warning">Pendiente</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{#if dimOperacion}}
+                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                        data-toggle="modal" data-target="#modalDimOperaciones"
+                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                    {{else}}
+                                                                    <a href="/analisis-dimension-operaciones/{{datos.code}}"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-pencil"></i></a>
+                                                                    {{/if}}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>{{#if dimMarketing}}{{dimMarketing.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Cuestionario dimensión marketing</td>
+                                                                <td>
+                                                                    {{#if dimMarketing}}
+                                                                    <span class="badge light badge-success">Completo</span>
+                                                                    {{else}}
+                                                                    <span class="badge light badge-warning">Pendiente</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{#if dimMarketing}}
+                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                        data-toggle="modal" data-target="#modalDimMarketing"
+                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                    {{else}}
+                                                                    <a href="/analisis-dimension-marketing/{{datos.code}}"
+                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        <i class="fa fa-pencil"></i></a>
+                                                                    {{/if}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                {{#if divInformes}}
-                                <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA</th>
-                                                            <th>NOMBRE</th>
-                                                            <th>ESTADO</th>
-                                                            <th>ACCIÓN</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-
-                                                        {{!-- PRODUCTO --}}
-                                                        <tr>
-                                                            <td>{{#if info.prod.fecha}}{{info.prod.fecha}}{{else}}
-                                                                <span id="spanFechaProd">N/A</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td><span class="nomProducto">Informe de dimensión producto</span></td>
-                                                            <td>
-                                                                {{#if info.prod.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
-                                                                {{else}}
-                                                                <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeProd">
-                                                                                <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                                    <i class="fa fa-upload"></i>
-                                                                                </div>
-                                                                            </label>
-                                                                            <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
-                                                                                accept="application/pdf" />
-                                                                        </td>
-                                                                
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInformeProd" href="{{info.prod.url}}"
-                                                                                style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
-                                                                                <i class="fa fa-search"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-
-                                                        {{!-- ADMINISTRACIÓN --}}
-                                                        <tr>
-                                                            <td>{{#if info.adm.fecha}}{{info.adm.fecha}}{{else}}
-                                                                <span id="spanFechaAdmin">N/A</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td><span class="nomAdmin">Informe de dimensión administración</span></td>
-                                                            <td>
-                                                                {{#if info.adm.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
-                                                                {{else}}
-                                                                <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeAdmin" >
-                                                                    <div id="btnSubirInformeAdmin"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                </label>
-                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
-                                                                    name="informeAdmin" accept="application/pdf" />
-                                                                        </td>
-
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                {{!-- {{/if}} --}}
-                                                            </td>
-                                                        </tr>
-
-                                                        {{!-- OPERACIONES --}}
-                                                        <tr>
-                                                            <td>{{#if info.op.fecha}}{{info.op.fecha}}{{else}}
-                                                                <span id="spanFechaOpe">N/A</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td><span class="nomOperacion">Informe de dimensión operaciones</span></td>
-                                                            <td>
-                                                                {{#if info.op.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
-                                                                {{else}}
-                                                                <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeOpe" >
-                                                                    <div id="btnSubirInformeOpe"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                </label>
-                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
-                                                                    name="informeOpe" accept="application/pdf" />
-                                                                        </td>
-
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                {{!-- {{/if}} --}}
-                                                            </td>
-                                                        </tr>
-                                                        {{!-- MARKETING --}}
-                                                        <tr>
-                                                            <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
-                                                                <span id="spanFechaMarketing">N/A</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td><span class="nomMarketing">Informe de dimensión marketing</span></td>
-                                                            <td>
-                                                                {{#if info.marketing.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
-                                                                {{else}}
-                                                                <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{!-- {{#if frmDiag.tablasVacias}}
-                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                    id="btnInfDiag">
-                                                                    <i class="fa fa-upload"></i>
-                                                                </div>
-                                                                {{else}} --}}
-
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeMarketing" >
-                                                                    <div id="btnSubirInformeMarketing"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                </label>
-                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
-                                                                    name="informeMarketing" accept="application/pdf" />
-                                                                        </td>
-
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                {{!-- {{/if}} --}}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                    {{#if divInformes}}
+                                    <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
                                             </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>ESTADO</th>
+                                                                <th>ACCIÓN</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
 
+                                                            {{!-- PRODUCTO --}}
+                                                            <tr>
+                                                                <td>{{#if info.prod.fecha}}{{info.prod.fecha}}{{else}}
+                                                                    <span id="spanFechaProd">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomProducto">Informe de dimensión producto</span></td>
+                                                                <td>
+                                                                    {{#if info.prod.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeProd">
+                                                                                    <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
+                                                                                    accept="application/pdf" />
+                                                                            </td>
+                                                                    
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a id="btnVerInformeProd" href="{{info.prod.url}}"
+                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                    target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+
+                                                            {{!-- ADMINISTRACIÓN --}}
+                                                            <tr>
+                                                                <td>{{#if info.adm.fecha}}{{info.adm.fecha}}{{else}}
+                                                                    <span id="spanFechaAdmin">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomAdmin">Informe de dimensión administración</span></td>
+                                                                <td>
+                                                                    {{#if info.adm.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeAdmin" >
+                                                                        <div id="btnSubirInformeAdmin"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
+                                                                        name="informeAdmin" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+
+                                                            {{!-- OPERACIONES --}}
+                                                            <tr>
+                                                                <td>{{#if info.op.fecha}}{{info.op.fecha}}{{else}}
+                                                                    <span id="spanFechaOpe">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomOperacion">Informe de dimensión operaciones</span></td>
+                                                                <td>
+                                                                    {{#if info.op.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeOpe" >
+                                                                        <div id="btnSubirInformeOpe"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
+                                                                        name="informeOpe" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                            {{!-- MARKETING --}}
+                                                            <tr>
+                                                                <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
+                                                                    <span id="spanFechaMarketing">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomMarketing">Informe de dimensión marketing</span></td>
+                                                                <td>
+                                                                    {{#if info.marketing.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{!-- {{#if frmDiag.tablasVacias}}
+                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                        id="btnInfDiag">
+                                                                        <i class="fa fa-upload"></i>
+                                                                    </div>
+                                                                    {{else}} --}}
+
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeMarketing" >
+                                                                        <div id="btnSubirInformeMarketing"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
+                                                                        name="informeMarketing" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- ========================================================================== -->
+                                    <!-- ========================================================================== -->
 
-                                <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA</th>
-                                                            <th>NOMBRE</th>
-                                                            <th>ESTADO</th>
-                                                            <th>ACCIÓN</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{#if info.analisis.fecha}}{{info.analisis.fecha}}{{else}}
-                                                                <span id="spanFechaGeneral">N/A</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td><span class="nomInformeAnalisis">Informe de análisis</span></td>
-                                                            <td>
-                                                                {{#if info.analisis.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
-                                                                {{else}}
-                                                                <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
-                                                                {{/if}}
-                                                            </td>
-                                                            <td>
-                                                                {{!-- {{#if frmDiag.tablasVacias}}
-                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                    id="btnInfDiag">
-                                                                    <i class="fa fa-upload"></i>
-                                                                </div>
-                                                                {{else}} --}}
-
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeAnalisisGeneral" >
-                                                                    <div id="btnSubirInforme"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                    <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>ESTADO</th>
+                                                                <th>ACCIÓN</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{#if info.analisis.fecha}}{{info.analisis.fecha}}{{else}}
+                                                                    <span id="spanFechaGeneral">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomInformeAnalisis">Informe de análisis</span></td>
+                                                                <td>
+                                                                    {{#if info.analisis.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    {{!-- {{#if frmDiag.tablasVacias}}
+                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                        id="btnInfDiag">
                                                                         <i class="fa fa-upload"></i>
                                                                     </div>
-                                                                </label>
-                                                                <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
-                                                                    name="informeAnalisisGeneral" accept="application/pdf" />
-                                                                        </td>
+                                                                    {{else}} --}}
 
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                                {{!-- {{/if}} --}}
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeAnalisisGeneral" >
+                                                                        <div id="btnSubirInforme"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
+                                                                        name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
-                                <!-- ========================================================================== -->
-                                {{/if}}
+                                    <!-- ========================================================================== -->
+                                    {{/if}}
                                 {{/if}}
 
                             </div>

@@ -490,15 +490,57 @@ dashboardController.editarEmpresa = async (req, res) => {
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
     const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
     const propuesta = propuestas.find(i => i.empresa == idUser)
+    let pagos_analisis = {ok:false};
     if (propuesta) {
         datos.etapa = 'Propuesta de análisis enviada'
         const pagos = await pool.query('SELECT * FROM pagos')
+
+        /** PAGOS DE ANÁLISIS DE NEGOCIO (ÚNICO o DIVIDIDO*/
         const pay = pagos.find(i => i.id_empresa == idUser)
-        if (pay.analisis_negocio == 1){
-            datos.etapa = 'Propuesta de análisis pagada'
+        pagos_analisis.unico = JSON.parse(pay.analisis_negocio)
+        pagos_analisis.uno = JSON.parse(pay.analisis_negocio1)
+        pagos_analisis.dos = JSON.parse(pay.analisis_negocio2)
+        pagos_analisis.tres = JSON.parse(pay.analisis_negocio3)
+        pagos_analisis.unico.precio = propuesta.precio_total
+        pagos_analisis.uno.precio = propuesta.precio_per1
+        pagos_analisis.dos.precio = propuesta.precio_per2
+        pagos_analisis.tres.precio = propuesta.precio_per3
+
+        if (pagos_analisis.unico.estado == 1){
+            datos.etapa = 'Análisis de negocio pago único'
             propuesta.pago = true;
+            pagos_analisis.ok = true;
         }
+        if (pagos_analisis.uno.estado == 2){
+            datos.etapa = 'Análisis de negocio - Pagado 60%'
+            pagos_analisis.uno.color = 'success'
+            pagos_analisis.uno.txt = 'Pagado 60%'
+            pagos_analisis.ok = true;
+            propuesta.pago = true;
+        } else {
+            pagos_analisis.uno.color = 'warning'
+            pagos_analisis.uno.txt = 'Pendiente'
+        }
+        if (pagos_analisis.dos.estado == 2){
+            datos.etapa = 'Análisis de negocio - Pagado 80%'
+            pagos_analisis.dos.color = 'success'
+            pagos_analisis.dos.txt = 'Pagado 80%'
+        } else {
+            pagos_analisis.dos.color = 'warning'
+            pagos_analisis.dos.txt = 'Pendiente'
+        }
+        if (pagos_analisis.tres.estado == 2){
+            datos.etapa = 'Análisis de negocio - Pagado 100%'
+            pagos_analisis.tres.color = 'success'
+            pagos_analisis.tres.txt = 'Pagado 100%'
+        } else {
+            pagos_analisis.tres.color = 'warning'
+            pagos_analisis.tres.txt = 'Pendiente'
+        }
+
     }
+
+    
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
@@ -592,7 +634,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     res.render('panel/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, propuesta, archivos, divInformes,
+        graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing
     })
 

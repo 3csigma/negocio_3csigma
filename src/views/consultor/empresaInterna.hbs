@@ -820,8 +820,8 @@
                                                     <tr>
                                                         <th>FECHA</th>
                                                         <th>NOMBRE</th>
-                                                        <th>ESTADO DEL PAGO</th>
-                                                        <th>ACCIÓN</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -829,13 +829,7 @@
                                                         {{#if propuesta.link_propuesta}}
                                                         <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Análisis de negocio</td>
-                                                        <td>
-                                                            {{#if propuesta.pago}}
-                                                                <span class="badge light badge-success">Pagada</span>
-                                                            {{else}}
-                                                                <span class="badge light badge-warning">Pendiente</span>
-                                                            {{/if}}
-                                                        </td>
+                                                        <td>${{propuesta.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.link_propuesta}}" target="_blank"
@@ -855,6 +849,62 @@
 
                                     </div>
                                 </div>
+
+                                {{#if pagos_analisis.ok}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>FECHA DE PAGO</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>PAGO DE ANÁLISIS</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#if pagos_analisis.unico.fecha}}
+                                                        <tr>
+                                                            <td>{{pagos_analisis.unico.fecha}}</td>
+                                                            <td>Pago Único</td>
+                                                            <td>${{pagos_analisis.unico.precio}}</td>
+                                                            <td><span class="badge light badge-success">Pagado 100%</span></td>
+                                                        </tr>
+                                                        {{else}}
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Primer Pago</td>
+                                                            <td>${{pagos_analisis.uno.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Segundo Pago</td>
+                                                            <td>${{pagos_analisis.dos.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Tercer Pago</td>
+                                                            <td>${{pagos_analisis.tres.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
+                                                        </tr>
+                                                        {{/if}}
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
 
                                 {{#if archivos}}
                                 <div class="card">
