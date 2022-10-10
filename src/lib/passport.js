@@ -78,7 +78,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => {
 
-    const { nombres, apellidos, tel_consultor, direccion_consultor, experiencia_years, zh_consultor } = req.body
+    const { nombres, apellidos, countryCode, telConsul, direccion_consultor, experiencia_years, zh_consultor } = req.body
     const rol = 'Consultor'
     pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
 
@@ -107,6 +107,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             const certificado = '../certificados_consultores/' + urlCertificado
 
             // Objeto de Usuario
+            const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
             const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion };
 

@@ -1,5 +1,29 @@
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+<style>
+  [data-sidebar-position="fixed"][data-layout="vertical"] .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgGrande {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgToggle_ {
+    display: block;
+  }
+
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgGrande {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: block;
+  }
+
+</style>
+
 <!--*******************
         Preloader start
     ********************-->
@@ -24,9 +48,9 @@
 
   <div class="nav-header">
     <a href="/" class="brand-logo">
-      <img class="logo-abbr" src="/img/3C-Sigma-Icon-menu.png" alt="">
-      <img class="logo-compact" src="/img/3C-sigma-logo-full.png" alt="">
-      <img class="brand-title mx-auto" src="/img/3C-sigma-logo-full.png" alt="">
+      <img class="logo-abbr" src="/img/Favicon-3C-Sigma_Favicon.svg" alt="">
+      <img class="logo-compact" src="/img/3C-sigma-logo.svg" alt="" style="padding-top: 1em !important;">
+      <img class="brand-title mx-auto" src="/img/3C-sigma-logo.svg" alt="" style="padding-top: 1em !important;">
     </a>
 
     <div class="nav-control">
@@ -356,7 +380,8 @@
           <p class="font-w500 mb-0 text-center">Agendar cita</p> 
         </div>  --}}
         <center style="margin: 20px 0;">
-          <img src="../img/Boton-Agendar-cita.png" alt="Agendar Cita" width="245" >
+          <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+          <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
         </center>
 
       </a>
@@ -366,13 +391,14 @@
         <p class="font-w500 mb-0 text-center">Agendar cita</p>
       </div> --}}
       <div style="background: none;padding: 0;margin: 20px 50px; filter: grayscale(1)">
-          <img src="../img/Boton-Agendar-cita.png" alt="Agendar Cita" width="245" >
+          <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+          <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
         </div>
       {{/if}}
 
       <div class="text-center">
         <li>
-          <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" aria-expanded="false">
+          <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" style="padding: 2px;" aria-expanded="false">
             <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
           </a>
         </li>
