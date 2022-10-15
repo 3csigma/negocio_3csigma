@@ -98,7 +98,7 @@
                 <form class="sigmaWizard" id="frmConsultor" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <div id="middle-wizard">
-                        {{> message }}
+                        {{> general/message }}
                         <h2 class="section_title">DATOS PERSONALES</h2><br>
                         <div class="row add_top_10">
                             <div class="form-group col-md-6 ">
@@ -124,7 +124,7 @@
                         <!-- /Fila Grupo de campos -->
                         <div class="row add_top_10">
                             <div class="form-group col-md-6">
-                                {{> countryCodes}}
+                                {{> general/countryCodes}}
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="tel_consultor">Teléfono</label>

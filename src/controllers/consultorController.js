@@ -43,6 +43,7 @@ consultorController.empresasAsignadas = async (req, res) => {
 
 consultorController.empresaInterna = async (req, res) => {
     const codigo = req.params.codigo, datos = {};
+    console.log(codigo)
     let consultores = null, c1, c2;
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
     const idConsultor = con[0].id_consultores
@@ -207,51 +208,51 @@ consultorController.empresaInterna = async (req, res) => {
     // Informe de análisis
     const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe de análisis")
 
-    if (informeDiag.length > 0) {
-        frmInfo.fecha = informeDiag[0].fecha;
+    if (informeDiag) {
+        frmInfo.fecha = informeDiag.fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
-        frmInfo.url = informeDiag[0].url;
+        frmInfo.url = informeDiag.url;
         datos.etapa = 'Informe diagnóstico general'
     }
 
-    if (informeProd.length > 0) {
-        info.prod.fecha = informeProd[0].fecha;
+    if (informeProd) {
+        info.prod.fecha = informeProd.fecha;
         info.prod.ver = 'block';
-        info.prod.url = informeProd[0].url;
+        info.prod.url = informeProd.url;
         datos.etapa = 'Informe análisis dimensión producto'
     }
 
-    if (informeAdmin.length > 0) {
-        info.adm.fecha = informeAdmin[0].fecha;
+    if (informeAdmin) {
+        info.adm.fecha = informeAdmin.fecha;
         info.adm.ver = 'block';
-        info.adm.url = informeAdmin[0].url;
+        info.adm.url = informeAdmin.url;
         datos.etapa = 'Informe análisis dimensión administración'
     }
 
-    if (informeOperaciones.length > 0) {
-        info.op.fecha = informeOperaciones[0].fecha;
+    if (informeOperaciones) {
+        info.op.fecha = informeOperaciones.fecha;
         info.op.ver = 'block';
-        info.op.url = informeOperaciones[0].url;
+        info.op.url = informeOperaciones.url;
         datos.etapa = 'Informe análisis dimensión operaciones'
     }
 
-    if (informeMarketing.length > 0) {
-        info.marketing.fecha = informeMarketing[0].fecha;
+    if (informeMarketing) {
+        info.marketing.fecha = informeMarketing.fecha;
         info.marketing.ver = 'block';
-        info.marketing.url = informeMarketing[0].url;
+        info.marketing.url = informeMarketing.url;
         datos.etapa = 'Informe análisis dimensión marketing'
     }
 
-    if (informeAnalisis.length > 0) {
-        info.analisis.fecha = informeAnalisis[0].fecha;
+    if (informeAnalisis) {
+        info.analisis.fecha = informeAnalisis.fecha;
         info.analisis.ver = 'block';
-        info.analisis.url = informeAnalisis[0].url;
+        info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe análisis general'
     }
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
-    let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
+    let jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
     
     let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ ASC LIMIT 1', [idUser])
@@ -292,8 +293,6 @@ consultorController.empresaInterna = async (req, res) => {
         jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
         nuevosProyectos = 0;
     }
-
-    jsonDimensiones = jsonDimensiones1
 
     /************************************************************************************* */
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
@@ -438,11 +437,13 @@ consultorController.empresaInterna = async (req, res) => {
     if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
     /* --------------------------------------------------------------------------------------- */
     
-    res.render('consultor/empresaInterna', { 
+    //res.render('consultor/empresaInterna', { 
+    res.render('admin/editarEmpresa', { 
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
-        info, dimProducto, dimAdmin, dimOperacion, dimMarketing
+        info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
+        fechaActual: new Date().toLocaleDateString('fr-CA')
     })
 
 }
@@ -733,3 +734,26 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
     }
 }
 /* ------------------------------------------------------------------------------------------------ */
+
+/********************************************************************************/
+// Etapa 3 - Plan Estratégico de Negocio
+/********************************************************************************/
+// AGREGAR NUEVAS TAREAS x EMPRESA
+consultorController.agregarTarea = async (req, res) => {
+    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa } = req.body
+    // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
+    const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
+    console.log("INFO TAREA DB >>> ", tarea)
+    res.send(tarea)
+}
+
+// ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
+consultorController.actualizarTarea = async (req, res) => {
+    const actualizarTarea = { 
+        actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado
+    } = req.body
+    const { idTarea } = req.body
+    const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
+    console.log("INFO TAREA DB >>> ", tarea)
+    res.send(tarea)
+}

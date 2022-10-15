@@ -38,7 +38,7 @@ dashboardController.admin = async (req, res) => {
         });
     });
 
-    res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true });
+    res.render('admin/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true });
 }
 
 // CONSULTORES
@@ -67,7 +67,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
     const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
 
-    res.render('panel/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
+    res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
 }
 
 dashboardController.editarConsultor = async (req, res) => {
@@ -77,7 +77,7 @@ dashboardController.editarConsultor = async (req, res) => {
     if (consultor.certificado) {
         consultor.txtCertificado = consultor.certificado.split('/')[2]
     }
-    res.render('panel/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor })
+    res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor })
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
@@ -213,7 +213,7 @@ dashboardController.mostrarEmpresas = async (req, res) => {
        
     });
 
-    res.render('panel/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas, aprobarConsultor })
+    res.render('admin/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas, aprobarConsultor })
 }
 
 dashboardController.editarEmpresa = async (req, res) => {
@@ -224,6 +224,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     // Empresa tabla Usuarios
     let filas = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigo])
+    console.log("FILAS >> ", filas)
     filas = filas[0];
     const idUser = filas.id_empresas;
     // Empresa tabla Ficha Cliente
@@ -367,7 +368,8 @@ dashboardController.editarEmpresa = async (req, res) => {
         adm : {ver: 'none'},
         op : {ver: 'none'},
         marketing : {ver: 'none'},
-        analisis : {ver: 'none'}
+        analisis : {ver: 'none'},
+        plan : {ver: 'none'}
     }
     let tablaInformes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
     if (tablaInformes.length > 0){
@@ -395,55 +397,66 @@ dashboardController.editarEmpresa = async (req, res) => {
     const informeMarketing = await consultarInformes(idUser, idConsultor, "Informe de dimensión marketing")
     // Informe de análisis
     const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe análisis")
+    // Informe de Plan estratégico
+    const informePlan = await consultarInformes(idUser, idConsultor, "Informe Plan estratégico")
 
-    if (informeDiag.length > 0) {
-        frmInfo.fecha = informeDiag[0].fecha;
+    if (informeDiag) {
+        frmInfo.fecha = informeDiag.fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
-        frmInfo.url = informeDiag[0].url;
+        frmInfo.url = informeDiag.url;
         datos.etapa = 'Informe diagnóstico general'
     }
 
-    if (informeProd.length > 0) {
-        info.prod.fecha = informeProd[0].fecha;
+    if (informeProd) {
+        info.prod.fecha = informeProd.fecha;
         info.prod.ver = 'block';
         info.prod.url = informeProd[0].url;
         datos.etapa = 'Informe análisis dimensión producto'
     }
 
-    if (informeAdmin.length > 0) {
-        info.adm.fecha = informeAdmin[0].fecha;
+    if (informeAdmin) {
+        info.adm.fecha = informeAdmin.fecha;
         info.adm.ver = 'block';
-        info.adm.url = informeAdmin[0].url;
+        info.adm.url = informeAdmin.url;
         datos.etapa = 'Informe análisis dimensión administración'
     }
 
-    if (informeOperaciones.length > 0) {
-        info.op.fecha = informeOperaciones[0].fecha;
+    if (informeOperaciones) {
+        info.op.fecha = informeOperaciones.fecha;
         info.op.ver = 'block';
-        info.op.url = informeOperaciones[0].url;
+        info.op.url = informeOperaciones.url;
         datos.etapa = 'Informe análisis dimensión operaciones'
     }
 
-    if (informeMarketing.length > 0) {
-        info.marketing.fecha = informeMarketing[0].fecha;
+    if (informeMarketing) {
+        info.marketing.fecha = informeMarketing.fecha;
         info.marketing.ver = 'block';
-        info.marketing.url = informeMarketing[0].url;
+        info.marketing.url = informeMarketing.url;
         datos.etapa = 'Informe análisis dimensión marketing'
     }
 
-    if (informeAnalisis.length > 0) {
-        info.analisis.fecha = informeAnalisis[0].fecha;
+    if (informeAnalisis) {
+        info.analisis.fecha = informeAnalisis.fecha;
         info.analisis.ver = 'block';
-        info.analisis.url = informeAnalisis[0].url;
+        info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe análisis general'
+    }
+
+    console.log("INFORME DEL PLAN >>> ", informePlan)
+    if (informePlan) {
+        info.plan.ok = true;
+        info.plan.fecha = informePlan.fecha;
+        info.plan.ver = 'block';
+        info.plan.url = informePlan.url;
+        datos.etapa = 'Informe Plan estratégico'
     }
     
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
-    let jsonDimensiones, jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
+    let jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {},
+    jsonAnalisis1 = null, jsonAnalisis2 = null;
 
-    let jsonAnalisis1 = null, jsonAnalisis2 = null;
     let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ ASC LIMIT 1', [idUser])
     let areasVitales2 = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ DESC LIMIT 1', [idUser])
     if (areasVitales.length > 0) {
@@ -482,8 +495,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
         nuevosProyectos = 0;
     }
-
-    jsonDimensiones = jsonDimensiones1
 
     /************************************************************************************* */
 
@@ -539,8 +550,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
 
     }
-
-    
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
@@ -631,11 +640,34 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
     /* --------------------------------------------------------------------------------------- */
 
-    res.render('panel/editarEmpresa', { 
+    /************************************************************************************* */
+    // PLAN ESTRATÉGICO DE NEGOCIO
+    const tareas = {}
+    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ?', [idUser])
+    tareas.todas.forEach(x => {
+        if (x.estado == 0) x.estado = 'Pendiente'
+        if (x.estado == 1) x.estado = 'En Proceso'
+        if (x.estado == 2) x.estado = 'Completada'
+        const dateObj = new Date(x.fecha_entrega);
+        const mes = dateObj.toLocaleString("es-US", { month: "short" });
+        x.dia = dateObj.getDate()+1
+        x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+        if (x.dimension == 'Producto') x.icono = 'fa-box'
+        if (x.dimension == 'Administración') x.icono = 'fa-user-tie'
+        if (x.dimension == 'Operaciones') x.icono = 'fa-gear'
+        if (x.dimension == 'Marketing') x.icono = 'fa-bullhorn'
+    })
+    tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
+    tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
+    tareas.completadas = tareas.todas.filter(i => i.estado == 'Completada')
+
+    res.render('admin/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
-        jsonAnalisis1, jsonAnalisis2, jsonDimensiones, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
+        jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
-        info, dimProducto, dimAdmin, dimOperacion, dimMarketing
+        info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
+        fechaActual: new Date().toLocaleDateString('fr-CA'),
+        tareas
     })
 
 }
@@ -743,6 +775,8 @@ dashboardController.enviarCuestionario = async (req, res) => {
         principales_funciones_personal, programa_formacion_colab, habilidades_colab, medicion__personal, personal_capacitado, proceso_contratacion, calificacion_personal_laboral
     })
 
+    // RENDIMIENTO EMPRESA
+    let { total_ventas, total_compras, total_gastos } = req.body
     // Finanzas
     const { proyeccion_ventas, estructura_costos, cuentas_pagar_cobrar, costos_fijos_variables, analisis_finanzas_anual, utilidad_neta, empresa_rentable, punto_equilibrio, recuperar_inversion, mejorar_rentabilidad, calificacion_finanzas } = req.body
     let finanzas = JSON.stringify({
@@ -844,9 +878,21 @@ dashboardController.enviarCuestionario = async (req, res) => {
     // Guardando en la Base de datos
     const cuestionario = await pool.query('INSERT INTO dg_empresa_establecida SET ?', [nuevoDiagnostico])
     if (cuestionario.affectedRows > 0) {
+        /************************************************************************************************* */
+        // RENDIMIENTO DE LA EMPRESA
+        total_ventas = total_ventas.replace(/[$ ]/g, '');
+        total_ventas = total_ventas.replace(/[,]/g, '.');
+        total_compras = total_compras.replace(/[$ ]/g, '');
+        total_compras = total_compras.replace(/[,]/g, '.');
+        total_gastos = total_gastos.replace(/[$ ]/g, '');
+        total_gastos = total_gastos.replace(/[,]/g, '.');
+        const utilidad = parseFloat(total_ventas)-parseFloat(total_compras)-parseFloat(total_gastos)
+        const nuevoRendimiento = {empresa: id_empresa, total_ventas, total_compras, total_gastos, utilidad}
+        const rendimiento = await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+        /************************************************************************************************* */
         const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
         const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
-        if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0)) {
+        if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0) && (rendimiento.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             if (req.user.rol == 'Consultor'){
                 res.redirect('/empresas-asignadas/'+codigoEmpresa)

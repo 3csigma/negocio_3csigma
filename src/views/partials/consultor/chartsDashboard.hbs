@@ -1,0 +1,229 @@
+<script>
+	(function () {
+
+		const dzChartlist = function () {
+
+			const chartBar = function () {
+				const optionsArea = {
+					series: [{
+						name: "Empresas",
+						data: [1, 3, 20, 5, 7, 8, 6, 5, 16, 18, 11, 7]
+					}
+					],
+					chart: {
+						height: 400,
+						type: 'area',
+						group: 'social',
+						toolbar: {
+							show: false
+						},
+						zoom: {
+							enabled: false
+						},
+					},
+					dataLabels: {
+						enabled: false
+					},
+					stroke: {
+						width: [4],
+						colors: ['#FED061'],
+						curve: 'smooth'
+					},
+					legend: {
+						show: false,
+						tooltipHoverFormatter: function (val, opts) {
+							return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+						},
+						markers: {
+							fillColors: ['#FED061'],
+							width: 19,
+							height: 19,
+							strokeWidth: 0,
+							radius: 19
+						}
+					},
+					markers: {
+						strokeWidth: [4],
+						strokeColors: ['#FED061'],
+						border: 0,
+						colors: ['#fff'],
+						hover: {
+							size: 6,
+						}
+					},
+					xaxis: {
+						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+						labels: {
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					yaxis: {
+						labels: {
+							offsetX: -16,
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					fill: {
+						colors: ['#FED061'],
+						type: 'solid',
+						opacity: 0.7
+					},
+					colors: ['#FED061'],
+					grid: {
+						borderColor: '#f1f1f1',
+						xaxis: {
+							lines: {
+								show: true
+							}
+						}
+					},
+					responsive: [{
+						breakpoint: 575,
+						options: {
+							chart: {
+								height: 250,
+							}
+						}
+					}]
+				};
+				const chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+				chartArea.render();
+
+			}
+			
+			const chartBar2 = function () {
+				const optionsArea = {
+					series: [{
+						name: "Informes generados",
+						data: [20, 15, 50, 20, 50, 30, 18, 25, 60, 15, 20, 45]
+					}
+					],
+					chart: {
+						height: 400,
+						type: 'area',
+						group: 'social',
+						toolbar: {
+							show: false
+						},
+						zoom: {
+							enabled: false
+						},
+					},
+					dataLabels: {
+						enabled: false
+					},
+					stroke: {
+						width: [4],
+						colors: ['#50368C'],
+						curve: 'smooth'
+					},
+					legend: {
+						show: false,
+						tooltipHoverFormatter: function (val, opts) {
+							return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+						},
+						markers: {
+							fillColors: ['#50368C'],
+							width: 19,
+							height: 19,
+							strokeWidth: 0,
+							radius: 19
+						}
+					},
+					markers: {
+						strokeWidth: [4],
+						strokeColors: ['#50368C'],
+						border: 0,
+						colors: ['#fff'],
+						hover: {
+							size: 12,
+						}
+					},
+					xaxis: {
+						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+						labels: {
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					yaxis: {
+						labels: {
+							offsetX: -16,
+							style: {
+								colors: '#3E4954',
+								fontSize: '14px',
+								fontFamily: 'Poppins',
+								fontWeight: 100,
+
+							},
+						},
+					},
+					fill: {
+						colors: ['#50368C'],
+						type: 'solid',
+						opacity: 0.7
+					},
+					colors: ['#50368C'],
+					grid: {
+						borderColor: '#f1f1f1',
+						xaxis: {
+							lines: {
+								show: true
+							}
+						}
+					},
+					responsive: [{
+						breakpoint: 575,
+						options: {
+							chart: {
+								height: 250,
+							}
+						}
+					}]
+				};
+				const chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
+				chartArea.render();
+
+			}
+
+			/* Function ============ */
+			return {
+				load: function () {
+					{{#if graficas1}}
+					chartBar();
+					chartBar2();
+					{{/if}}
+				},
+			}
+
+		}();
+
+		jQuery(window).on('load', function () {
+			setTimeout(function () {
+				dzChartlist.load();
+			}, 1000);
+		});
+
+
+		$(document).ready(function () {
+		});
+
+	}) ();
+</script>

@@ -189,7 +189,7 @@ empresaController.index = async (req, res) => {
 
     /************************************************************************************* */
 
-    res.render('pages/dashboard', {
+    res.render('empresa/dashboard', {
         user_dash: true,
         pagoPendiente,
         diagnosticoPagado,
@@ -465,49 +465,41 @@ empresaController.analisis = async (req, res) => {
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
         btnPagar.activar2 = true;
-    }
-    
-    /************************************************************************************* */
-    const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
-    const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
-    const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
-    const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
-    // PAGÓ EL ANÁLISIS
-    // PAGÓ EL ANÁLISIS
-    // if (objAnalisis.estado == 1) {
-    //     btnPagar.etapa1 = false;
-    //     btnPagar.activar1 = false;
-    //     btnPagar.etapa2 = true;
-    //     btnPagar.activar2 = false;
-    //     analisisPagado = 1
-    // }
+        propuesta.porcentaje = "0%";
+        
+        /************************************************************************************* */
+        const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
+        const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+        const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
+        const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
+        
+        // PAGÓ EL ANÁLISIS
+        if (objAnalisis.estado == 1 ) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = false;
+            analisisPagado = 1
+            propuesta.porcentaje = "100%";
+            btnPagar.analisisPer = false
+        }
 
-    if (objAnalisis.estado == 1 ) {
-        btnPagar.etapa1 = false;
-        btnPagar.activar1 = false;
-        btnPagar.etapa2 = true;
-        btnPagar.activar2 = false;
-        analisisPagado = 1
-        propuesta.porcentaje = "100%";
-        btnPagar.analisisPer = false
-    }
+        btnPagar.obj1 = parseInt(objAnalisis1.estado)
+        btnPagar.obj2 = parseInt(objAnalisis2.estado)
+        btnPagar.obj3 = parseInt(objAnalisis3.estado)
+        
+        if (objAnalisis1.estado == 2) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = true;
+            btnPagar.analisisPer = true;
+            propuesta.porcentaje = "60%";
+        }
+        if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
+        if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
 
-    btnPagar.obj1 = parseInt(objAnalisis1.estado)
-    btnPagar.obj2 = parseInt(objAnalisis2.estado)
-    btnPagar.obj3 = parseInt(objAnalisis3.estado)
-    
-    if (objAnalisis1.estado == 2) {
-        btnPagar.etapa1 = false;
-        btnPagar.activar1 = false;
-        btnPagar.etapa2 = true;
-        btnPagar.activar2 = true;
-        btnPagar.analisisPer = true;
-        propuesta.porcentaje = "60%";
     }
-    if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
-    if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
-
-    
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
