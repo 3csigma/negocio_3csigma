@@ -575,7 +575,26 @@
 
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
 
-                                <div class="form-group col-md-12 ">
+                                <div class="form-group col-md-12">
+                                    <div class="form-floating mt-3">
+                                        <input type="text" class="form-control" id="total-ventas" name="total_ventas">
+                                        <label for="total-ventas">Total de Ventas</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="total-compras" name="total_compras">
+                                        <label for="total-compras">Total de Compras</label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="total-gastos" name="total_gastos">
+                                        <label for="total-gastos">Total de Gastos</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
                                     <label>¿Dispone de una proyección de ventas?</label>
                                     <div class="form-group mb-3 radio_input">
                                         <label class="container_radio mr-3">Si
@@ -1838,9 +1857,47 @@
 <!-- /container-fluid -->
 <a href="{{volver}}" class="close"></a>
 
-    <script>
-        // Capturando Zona Horaria Local
-        const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log(tzLocalActual);
-        document.getElementById("zhActualAdm").value = tzLocalActual;
-    </script>
+{{!-- SCRIPT MASCARAS PARA INPUT --}}
+<script src="https://unpkg.com/imask"></script>
+
+<script>
+    // Capturando Zona Horaria Local
+    const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzLocalActual);
+    document.getElementById("zhActualAdm").value = tzLocalActual;
+
+    // Separación para cifras en millares
+    IMask(document.getElementById('total-ventas'), {
+        mask: '$num',
+        blocks: {
+            num: {
+                // nested masks are available!
+                mask: Number,
+                thousandsSeparator: ' ',
+                decimalMarker: '.'
+            }
+        }
+    });
+    IMask(document.getElementById('total-compras'), {
+        mask: '$num',
+        blocks: {
+            num: {
+                // nested masks are available!
+                mask: Number,
+                thousandsSeparator: ' ',
+                decimalMarker: '.'
+            }
+        }
+    });
+    IMask(document.getElementById('total-gastos'), {
+        mask: '$num',
+        blocks: {
+            num: {
+                // nested masks are available!
+                mask: Number,
+                thousandsSeparator: ' ',
+                decimalMarker: '.'
+            }
+        }
+    });
+</script>

@@ -19,25 +19,9 @@
         <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
-                    {{> message }}
+                    {{> general/message }}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
                     <h3 class="tituH3">Inicia sesión en tu cuenta</h3>
-                    {{!-- Autenticación Google & Facebook --}}
-                    {{!-- <div class="row" style="margin-top: 1.2em;">
-                        <div class="col-12 col-sm-6 mb-2 p-1">
-                            <a class="btn btn-lg btn-block btn-gg" href="/auth/google" role="button">
-                                <i class="fab fa-google gg-color"></i> Continuar con Google
-                            </a>
-                        </div>
-                        <div class="col-12 col-sm-6 mb-2 p-1">
-                            <a class="btn btn-lg btn-block btn-fb" href="#" role="button">
-                                <i class="fab fa-facebook"></i> Continuar con Facebook
-                            </a>
-                        </div>
-                    </div> --}}
-                    {{!-- <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0 text-muted" style="font-size: 15px;">o inicia con tu correo</p>
-                    </div> --}}
                     <br>
                     <form action="/login" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">

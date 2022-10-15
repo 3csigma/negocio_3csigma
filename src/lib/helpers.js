@@ -119,10 +119,8 @@ helpers.enabled_nextPay = async () => {
     if (propuestas.length > 0) {
         propuestas.forEach(async (x) => {
             const isFound = pagos.find(p => p.id_empresa == x.empresa)
-            console.log();
-
             if (isFound) {
-                console.log("HAY COINCIDENCIAS PROPUESTA / PAGOS")
+                console.log("\nHAY COINCIDENCIAS DE EMPRESAS REGISTRADAS EN LA TABLA PAGOS CON LA TABLA PROPUESTA_ANALISIS\n")
                 const fechaActual = new Date().toLocaleDateString("en-US")
                 console.log("FECHA SGTE: " + fechaActual);
                 const obj1 = JSON.parse(isFound.analisis_negocio1)
@@ -130,7 +128,7 @@ helpers.enabled_nextPay = async () => {
                 const obj3 = JSON.parse(isFound.analisis_negocio3)
 
                 if (obj1.fecha && obj2.estado == 0) {
-                    console.log("ENTRANDO A LA FECHA 1 ", obj1.fecha)
+                    console.log("COMPARACIÓN DE ANÁLISIS 1 PAGADO", obj1.fecha)
                     let fechaDB = new Date(obj1.fecha)
                     fechaDB.setDate(fechaDB.getDate() + 30);
                     fechaDB = fechaDB.toLocaleDateString("en-US")
@@ -159,7 +157,7 @@ helpers.enabled_nextPay = async () => {
                         }
                     }
                 } else if (obj2.fecha && obj3.estado == 0) {
-                    console.log("ENTRANDO A LA FECHA 2")
+                    console.log("COMPARACIÓN DE ANÁLISIS 2 PAGADO")
                     let fechaDB = new Date(obj2.fecha)
                     fechaDB.setDate(fechaDB.getDate() + 30);
                     fechaDB = fechaDB.toLocaleDateString("en-US")
@@ -186,19 +184,25 @@ helpers.enabled_nextPay = async () => {
                             }
                         }
                     }
+                } else{
+                    console.log("\nLA FECHA ACTUAL NO ES IGUAL A LA DEL PAGO\n")     
                 }
 
-            } 
+            } else {
+                console.log("\nALGUNAS EMPRESAS NO TIENEN PROPUESTA_ANALISIS\n") 
+            }
 
         })
     }
-    return "EJECUCIÓN CRON JOB FINALIZADA..!";
+    console.log("\n***************\nEJECUCIÓN CRON JOB FINALIZADA - PAGO ANÁLISIS\n***************\n");
 }
 
 /** CONSULTAS MYSQL */
 helpers.consultarInformes = async (empresa, consultor, nombreInforme) => {
     const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? `, [empresa, consultor, nombreInforme])
-    return informe;
+    // const informes = await pool.query('SELECT * FROM informes')
+    // const informe = informes.find(i => i.id_empresa == empresa && i.nombre == nombreInforme && i.id_consultor == consultor)
+    return informe[0];
 }
 
 module.exports = helpers;

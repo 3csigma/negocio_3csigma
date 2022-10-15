@@ -123,8 +123,14 @@
                         }
                     });
             })
-
+            {{#if confirmarLogin}}
+            Swal.fire({
+                icon: 'success',
+                title: 'Correo verificado',
+                text: 'Has confirmado satisfactoriamente tu cuenta, ahora puedes iniciar sesión',
+                
+            })
+            {{/if}}
         });
-
     })();
 </script>

@@ -1,0 +1,496 @@
+<script>
+    function agregarTarea() {
+        const actividad = $("#actividad").val();
+        const fecha_inicio = $("#fecha_inicio").val();
+        const fecha_entrega = $("#fecha_entrega").val();
+        const dimension = $("#dimension").val();
+
+        if (actividad == '' || fecha_entrega == '' || dimension == '') {
+            toastr.warning("Hay campos vacíos", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            // Activar Sidebar
+            $('.chatbox').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden');
+            // Enviar info a la base de datos
+            const empresa = $("#idEmpresa").val();
+            const data = JSON.stringify({actividad, fecha_inicio, fecha_entrega, dimension, empresa})
+            fetch('/agregarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(r => {
+                if (r) {
+                    console.log("** GUARDADO EXITOSO >> ", r)
+                    $('#idTarea').val(r.insertId)
+                    $('#tituloSidebar').text(actividad)
+                    $('#fechaIni-sidebar').val(fecha_inicio)
+                    $('#fechaFin-sidebar').val(fecha_entrega)
+                    $('#dimension-sidebar').val(dimension)
+                } else {
+                    console.log("Ocurrió un error inesperado al agregar la tarea")
+                }
+            });
+        }
+    }
+
+    function cerrarSidebar() {
+        $('.chatbox').removeClass('active');
+    }
+
+    (function () {
+
+        const dzChartlist = function () {
+
+            /** GRÁFICA PARA INDICADORES */
+
+            const chartIndicadores1 = function () {
+                let valAnalisis1 = document.getElementById('jsonAnalisisAdm1').value;
+                let valAnalisis2 = document.getElementById('jsonAnalisisAdm2').value;
+                let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+                let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+                if (valAnalisis1) {
+                    valAnalisis1 = JSON.parse(valAnalisis1) 
+                    chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
+                }
+                if (valAnalisis2) {
+                    valAnalisis2 = JSON.parse(valAnalisis2)
+                    chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
+                }
+
+                let valorMax = 10;
+                if (nuevosProyectos == 1) {
+                    valorMax = 5;
+                }
+
+                if ($('#chartEmpresaAdm1').length > 0) {
+                    const chartEmpresaAdm1 = document.getElementById("chartEmpresaAdm1").getContext('2d')
+
+                    chartEmpresaAdm1.height = 100;
+                    new Chart(chartEmpresaAdm1, {
+                        type: 'bar',
+                        data: {
+                            defaultFontFamily: 'Oblivian',
+                            labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+                            datasets: [{
+                                label: "Puntaje",
+                                backgroundColor: "#50368C",
+                                borderColor: "#50368C",
+                                data: chartAnalisis1,
+                                fill: false,
+                            },
+                                // {
+                                // 	label: "Último análisis",
+                                // 	fill: false,
+                                // 	backgroundColor: "#FED061",
+                                // 	borderColor: "#FED061",
+                                // 	data: chartAnalisis2,
+                                // }
+                            ]
+                        },
+                        options: {
+                            legend: false,
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // minimum value
+                                        max: valorMax // maximum value
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontSize: 10
+                                    },
+                                    barPercentage: 0.5,
+                                    categoryPercentage: 1,
+                                    barThickness: 14,
+                                    maxBarThickness: 10,
+                                }]
+                            }
+                        }
+                    });
+                }
+            }
+
+            const chartIndicadores2 = function () {
+                let valDimensiones1 = document.getElementById('jsonDimensionesAdm1').value;
+                let valDimensiones2 = document.getElementById('jsonDimensionesAdm2').value;
+                let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+                let chartDimensiones1 = [0, 0, 0, 0]
+                let chartDimensiones2 = [0, 0, 0, 0]
+                let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
+
+                if (valDimensiones1) {
+                    valDimensiones1 = JSON.parse(valDimensiones1)
+                }
+
+                if (nuevosProyectos) {
+                    chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
+                    if (nuevosProyectos == 1) {
+                        titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
+                        chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
+                    }
+                }
+
+                if (valDimensiones2) {
+                    valDimensiones2 = JSON.parse(valDimensiones2)
+                    chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
+                }
+
+                if ($('#chartEmpresaAdm2').length > 0) {
+                    const chartEmpresaAdm2 = document.getElementById("chartEmpresaAdm2").getContext('2d')
+
+                    chartEmpresaAdm2.height = 100;
+                    new Chart(chartEmpresaAdm2, {
+                        type: 'bar',
+                        data: {
+                            defaultFontFamily: 'Oblivian',
+                            labels: titulos,
+                            datasets: [{
+                                label: "Puntaje",
+                                backgroundColor: "#50368C",
+                                borderColor: "#50368C",
+                                data: chartDimensiones1,
+                                fill: false,
+                            },
+                                // {
+                                // 	label: "Último análisis",
+                                // 	fill: false,
+                                // 	backgroundColor: "#FED061",
+                                // 	borderColor: "#FED061",
+                                // 	data: chartDimensiones2,
+                                // }
+                            ]
+                        },
+                        options: {
+                            legend: false,
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // minimum value
+                                        //max: 10 // maximum value
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontSize: 10
+                                    },
+                                    barPercentage: 0.5,
+                                    categoryPercentage: 1,
+                                    barThickness: 14,
+                                    maxBarThickness: 10,
+                                }]
+                            }
+                        }
+                    });
+                }
+            }
+
+            /*************************** FIN GRÁFICA INDICADORES *******************************/
+
+            /* Function ============ */
+            return {
+                load: function () {
+                    {{#if graficas2}}
+                    chartIndicadores1();
+                    chartIndicadores2();
+                    {{/if}}
+                },
+            }
+
+        } ();
+
+        jQuery(window).on('load', function () {
+			setTimeout(function () {
+				dzChartlist.load();
+			}, 1000);
+		});
+
+
+		$(document).ready(function () {
+
+			{{#if frmDiag.tablasVacias}}
+                const btnCargarInforme = document.getElementById('btnInfDiag');
+                btnCargarInforme.addEventListener("click", function () {
+                    Swal.fire(
+                        'Lo sentimos!',
+                        'Aún no sé ha llenado ningún cuestionario para subir un informe',
+                        'warning'
+                    )
+                });
+			{{else}}
+			
+				{{#if graficas2}}
+
+                function guardarInforme(formData, estado, fecha, boton){
+                    fetch('/guardarInforme', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response.ok) {
+                                boton.style.display = 'block'
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                fecha.innerHTML = response.fecha;
+                                boton.href = response.url
+
+                                toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+                            } else {
+                                toastr.danger("No sé pudo subir el informe, contacte a soporte", "Error", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+                            }
+                        });
+                }
+
+                /* Etapa 1 - Informe Diagnóstico */
+                const infoEstado = document.getElementById("infoEstado");
+                const btnVerInforme = document.getElementById('btnVerInforme');
+                const spanFecha = document.getElementById("spanFecha");
+                const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+                const informeDiag = document.querySelector('.inputInformeDiag');
+                const nombreInforme = document.querySelector('.nombreInformeConsul').textContent;
+
+                if (informeDiag) {
+                    informeDiag.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nombreInforme);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)
+                    });
+                }
+				
+                /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+                // Dimensión Producto
+                const infoEstadoProd = document.getElementById("infoEstadoProd");
+                const btnVerInformeProd = document.getElementById('btnVerInformeProd');
+                const spanFechaProd = document.getElementById("spanFechaProd");
+                //const informeProd = document.querySelector('.inputInformeProducto');
+                const informeProd = document.getElementById('informeProd');
+                const nomProducto = 'Informe de dimensión producto'
+
+                if (informeProd) {
+                    informeProd.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomProducto);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)
+
+                    });
+                }
+
+                // Dimensión Administración
+                const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
+                const btnVerInformeAdmin = document.getElementById('btnVerInformeAdmin');
+                const spanFechaAdmin = document.getElementById("spanFechaAdmin");
+                const informeAdmin = document.querySelector('.inputInformeAdmin');
+                const nomAdmin = 'Informe de dimensión administración';
+
+                if (informeAdmin) {
+                    informeAdmin.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomAdmin);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)
+                    });
+                }
+
+                // Dimensión Operaciones
+                const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+                const btnVerInformeOpe = document.getElementById('btnVerInformeOpe');
+                const spanFechaOpe = document.getElementById("spanFechaOpe");
+                const informeOpe = document.querySelector('.inputInformeOperaciones');
+                const nomOperacion = 'Informe de dimensión operaciones'
+
+                if (informeOpe) {
+                    informeOpe.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomOperacion);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)
+                    });
+                }
+
+                // Dimensión Marketing
+                const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
+                const btnVerInformeMarketing = document.getElementById('btnVerInformeMarketing');
+                const spanFechaMarketing = document.getElementById("spanFechaMarketing");
+                const informeMarketing = document.querySelector('.inputInformeMarketing');
+                const nomMarketing = 'Informe de dimensión marketing'
+
+                if (informeMarketing) {
+                    informeMarketing.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomMarketing);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)
+                    });
+                }
+
+                // Informe Análisis General
+                const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
+                const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
+                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
+                const nomInformeAnalisis = 'Informe de análisis'
+
+                if (inputInformeGeneral) {
+                    inputInformeGeneral.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomInformeAnalisis);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)
+                    });
+                }
+
+                // Informe Plan Estratégico
+                const infoEstadoPlan = document.getElementById("infoEstadoPlan");
+                const btnVerInformePlan = document.getElementById('btnVerInformePlan');
+                const spanFechaPlan = document.getElementById("spanFechaPlan");
+                const inputInformePlan = document.querySelector('.inputInformePlan');
+                const nomInformePlan = 'Informe Plan estratégico'
+
+                if (inputInformePlan) {
+                    inputInformePlan.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomInformePlan);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoPlan, spanFechaPlan, btnVerInformePlan)
+                    });
+                }
+
+                {{/if}}
+
+			{{/if}}
+
+		});
+
+	})();
+</script>
