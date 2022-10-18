@@ -48,7 +48,7 @@
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
               {{#comparar itemActivo '==' 2}}Consultores registrados{{/comparar}}
               {{#comparar itemActivo '==' 3}}Empresas registradas{{/comparar}}
-              {{#comparar itemActivo '==' 4}}Informes generales{{/comparar}}
+              {{!-- {{#comparar itemActivo '==' 4}}Informes generales{{/comparar}} --}}
             </div>
           </div>
           <ul class="navbar-nav header-right">
@@ -246,7 +246,7 @@
             <span class="nav-text">Empresas registradas</span>
           </a>
         </li>
-        {{#comparar itemActivo '==' 4}}
+        {{!-- {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 4}}
@@ -256,7 +256,7 @@
             <i class="fas fa-file-invoice"></i>
             <span class="nav-text">Informes generales</span>
           </a>
-        </li>
+        </li> --}}
       </ul>
 
       {{#if aprobarConsultor}}

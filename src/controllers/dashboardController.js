@@ -642,12 +642,20 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /************************************************************************************* */
     // PLAN ESTRATÉGICO DE NEGOCIO
-    const tareas = {}
-    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ?', [idUser])
+    const tareas = {}, fechaActual = new Date().toLocaleDateString('fr-CA');
+    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY fecha_entrega ASC', [idUser])
     tareas.todas.forEach(x => {
-        if (x.estado == 0) x.estado = 'Pendiente'
-        if (x.estado == 1) x.estado = 'En Proceso'
-        if (x.estado == 2) x.estado = 'Completada'
+        if (x.estado == 0) { 
+            x.estado = 'Pendiente'; x.color = 'primary';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 1) { 
+            x.estado = 'En Proceso'; x.color = 'warning';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
         const dateObj = new Date(x.fecha_entrega);
         const mes = dateObj.toLocaleString("es-US", { month: "short" });
         x.dia = dateObj.getDate()+1
@@ -666,7 +674,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        fechaActual: new Date().toLocaleDateString('fr-CA'),
+        fechaActual,
         tareas
     })
 

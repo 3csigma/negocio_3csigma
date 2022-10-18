@@ -253,8 +253,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --white: #fff;
   --gray: #6c757d;
   --gray-dark: #343a40;
-  --primary: #50368c;
-  --secondary: #A02CFA;
+  --primary: #812082;
+  --secondary: #50368c;
   --success: #2BC155;
   --info: #1EA7C5;
   --warning: #FFBC11;
@@ -3129,8 +3129,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #50368c;
-  border-color: #50368c;
+  background-color: #812082;
+  border-color: #812082;
 }
 
 .btn-primary:hover {
@@ -3150,8 +3150,8 @@ fieldset:disabled a.btn {
 .btn-primary.disabled,
 .btn-primary:disabled {
   color: #fff;
-  background-color: #50368c;
-  border-color: #50368c;
+  background-color: #812082;
+  border-color: #812082;
 }
 
 .btn-primary:not(:disabled):not(.disabled):active,
@@ -3170,8 +3170,8 @@ fieldset:disabled a.btn {
 
 .btn-secondary {
   color: #fff;
-  background-color: #A02CFA;
-  border-color: #A02CFA;
+  background-color: #50368c;
+  border-color: #50368c;
 }
 
 .btn-secondary:hover {
@@ -3191,8 +3191,8 @@ fieldset:disabled a.btn {
 .btn-secondary.disabled,
 .btn-secondary:disabled {
   color: #fff;
-  background-color: #A02CFA;
-  border-color: #A02CFA;
+  background-color: #50368c;
+  border-color: #50368c;
 }
 
 .btn-secondary:not(:disabled):not(.disabled):active,
@@ -11828,7 +11828,7 @@ button.bg-dark:focus {
 }
 
 .text-primary {
-  color: #50368c !important;
+  color: #812082 !important;
 }
 
 a.text-primary:hover,
@@ -11837,7 +11837,7 @@ a.text-primary:focus {
 }
 
 .text-secondary {
-  color: #A02CFA !important;
+  color: #50368c !important;
 }
 
 a.text-secondary:hover,

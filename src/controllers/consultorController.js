@@ -747,13 +747,27 @@ consultorController.agregarTarea = async (req, res) => {
     res.send(tarea)
 }
 
+consultorController.editarTarea = async (req, res) => {
+    const { idTarea } = req.body
+    const infoTarea = await pool.query('SELECT * FROM plan_estrategico WHERE id = ?', [idTarea])
+    res.send(infoTarea[0])
+}
+
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const actualizarTarea = { 
-        actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado
-    } = req.body
+    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado } = req.body
+    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado }
     const { idTarea } = req.body
+    console.log("ID TAREA >> ", idTarea)
     const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
     console.log("INFO TAREA DB >>> ", tarea)
     res.send(tarea)
+}
+
+// ELIMINAR TAREA x EMPRESA CON BASE A SU ID
+consultorController.eliminarTarea = async (req, res) => {
+    const { idTarea } = req.body
+    const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
+    console.log("INFO ELIMINAR >> ", infoTarea)
+    res.send(true)
 }

@@ -402,7 +402,7 @@
                                     class="nav-link">Diagnóstico</a></li>
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link">Análisis</a>
                             </li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link">Plan
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link planItem">Plan
                                     Estrategico</a></li>
                         </ul>
                     </div>
@@ -1456,10 +1456,7 @@
 											<p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
 										</div>
 										<div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
-											<ul class="nav nav-tabs tabs-Task" role="tablist">
-												<li class="nav-item">
-													<a class="nav-link" data-toggle="tab" href="#Todas" role="tab" aria-selected="false">Todas</a>
-												</li>
+											<ul class="nav nav-tabs" role="tablist">
 												<li class="nav-item">
 													<a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab" aria-selected="true">Pendientes</a>
 												</li>
@@ -1469,6 +1466,9 @@
                                                 <li class="nav-item">
 													<a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas</a>
 												</li>
+                                                {{!-- <li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#Todas" role="tab" aria-selected="false">Todas</a>
+												</li> --}}
 											</ul>
 										</div>
 										
@@ -1482,33 +1482,29 @@
 											<div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
 												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
 													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-primary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-primary">{{mes}}</span>
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
 													</div>
 													<div class="info mb-3">
-														<h4 class="fs-20 "><a href="workout-statistic.html" class="text-black">{{actividad}}</a></h4>
-														<span class="text-danger font-w600">{{estado}}</span>
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
 													</div>
 												</div>
-												<div class="col-xl-2 col-xxl-4 col-lg-2 col-sm-4 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
 													<i class="fa-solid {{icono}}"></i>
-													<span class="text-warning ml-2">{{dimension}}</span>
+													<span class="text-gray ml-2">{{dimension}}</span>
 												</div>
-												<div class="col-xl-5 col-xxl-12 col-lg-4 col-sm-12 d-flex align-items-center">
-													<a href="javascript:void(0);" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea</a>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
 													<div class="dropdown mb-3">
-														<a href="javascript:void(0)" class="more-button" data-toggle="dropdown" aria-expanded="false">
-															<svg width="6" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M6 3C6 4.65685 4.65685 6 3 6C1.34315 6 0 4.65685 0 3C0 1.34315 1.34315 0 3 0C4.65685 0 6 1.34315 6 3Z" fill="#585858"></path>
-																<path d="M6 13C6 14.6569 4.65685 16 3 16C1.34315 16 0 14.6569 0 13C0 11.3431 1.34315 10 3 10C4.65685 10 6 11.3431 6 13Z" fill="#585858"></path>
-																<path d="M6 23C6 24.6569 4.65685 26 3 26C1.34315 26 0 24.6569 0 23C0 21.3431 1.34315 20 3 20C4.65685 20 6 21.3431 6 23Z" fill="#585858"></path>
-															</svg>
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
 														</a>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="javascript:void(0);">Completada</a>
-															<a class="dropdown-item" href="javascript:void(0);">Eliminar</a>
-														</div>
 													</div>
 												</div>
 											</div>
@@ -1526,33 +1522,31 @@
                                             <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
 												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
 													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-primary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-primary">{{mes}}</span>
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
 													</div>
 													<div class="info mb-3">
-														<h4 class="fs-20 "><a href="workout-statistic.html" class="text-black">{{actividad}}</a></h4>
-														<span class="text-danger font-w600">{{estado}}</span>
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        {{#unless tareaOk}}
+                                                            <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                        {{/unless}}
 													</div>
 												</div>
-												<div class="col-xl-2 col-xxl-4 col-lg-2 col-sm-4 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
 													<i class="fa-solid {{icono}}"></i>
-													<span class="text-warning ml-2">{{dimension}}</span>
+													<span class="text-gray ml-2">{{dimension}}</span>
 												</div>
-												<div class="col-xl-5 col-xxl-12 col-lg-4 col-sm-12 d-flex align-items-center">
-													<a href="javascript:void(0);" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea</a>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
 													<div class="dropdown mb-3">
-														<a href="javascript:void(0)" class="more-button" data-toggle="dropdown" aria-expanded="false">
-															<svg width="6" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M6 3C6 4.65685 4.65685 6 3 6C1.34315 6 0 4.65685 0 3C0 1.34315 1.34315 0 3 0C4.65685 0 6 1.34315 6 3Z" fill="#585858"></path>
-																<path d="M6 13C6 14.6569 4.65685 16 3 16C1.34315 16 0 14.6569 0 13C0 11.3431 1.34315 10 3 10C4.65685 10 6 11.3431 6 13Z" fill="#585858"></path>
-																<path d="M6 23C6 24.6569 4.65685 26 3 26C1.34315 26 0 24.6569 0 23C0 21.3431 1.34315 20 3 20C4.65685 20 6 21.3431 6 23Z" fill="#585858"></path>
-															</svg>
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
 														</a>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="javascript:void(0);">Completada</a>
-															<a class="dropdown-item" href="javascript:void(0);">Eliminar</a>
-														</div>
 													</div>
 												</div>
 											</div>
@@ -1566,33 +1560,29 @@
                                             <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
 												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
 													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-primary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-primary">{{mes}}</span>
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
 													</div>
 													<div class="info mb-3">
-														<h4 class="fs-20 "><a href="workout-statistic.html" class="text-black">{{actividad}}</a></h4>
-														<span class="text-danger font-w600">{{estado}}</span>
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
 													</div>
 												</div>
-												<div class="col-xl-2 col-xxl-4 col-lg-2 col-sm-4 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-													<i class="{{icono}}"></i>
-													<span class="text-warning ml-2">{{dimension}}</span>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
 												</div>
-												<div class="col-xl-5 col-xxl-12 col-lg-4 col-sm-12 d-flex align-items-center">
-													<a href="javascript:void(0);" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea</a>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
 													<div class="dropdown mb-3">
-														<a href="javascript:void(0)" class="more-button" data-toggle="dropdown" aria-expanded="false">
-															<svg width="6" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M6 3C6 4.65685 4.65685 6 3 6C1.34315 6 0 4.65685 0 3C0 1.34315 1.34315 0 3 0C4.65685 0 6 1.34315 6 3Z" fill="#585858"></path>
-																<path d="M6 13C6 14.6569 4.65685 16 3 16C1.34315 16 0 14.6569 0 13C0 11.3431 1.34315 10 3 10C4.65685 10 6 11.3431 6 13Z" fill="#585858"></path>
-																<path d="M6 23C6 24.6569 4.65685 26 3 26C1.34315 26 0 24.6569 0 23C0 21.3431 1.34315 20 3 20C4.65685 20 6 21.3431 6 23Z" fill="#585858"></path>
-															</svg>
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
 														</a>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="javascript:void(0);">Completada</a>
-															<a class="dropdown-item" href="javascript:void(0);">Eliminar</a>
-														</div>
 													</div>
 												</div>
 											</div>
@@ -1609,36 +1599,19 @@
                                             {{#if tareas.completadas}}
                                             {{#each tareas.completadas}}
                                             <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+												<div class="col-xl-7 col-xxl-9 col-lg-8 col-sm-9 d-flex align-items-center">
 													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-primary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-primary">{{mes}}</span>
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
 													</div>
 													<div class="info mb-3">
-														<h4 class="fs-20 "><a href="workout-statistic.html" class="text-black">{{actividad}}</a></h4>
-														<span class="text-danger font-w600">{{estado}}</span>
+														<h4 class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
 													</div>
 												</div>
-												<div class="col-xl-2 col-xxl-4 col-lg-2 col-sm-4 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-													<i class="{{icono}}"></i>
-													<span class="text-warning ml-2">{{dimension}}</span>
-												</div>
-												<div class="col-xl-5 col-xxl-12 col-lg-4 col-sm-12 d-flex align-items-center">
-													<a href="javascript:void(0);" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea</a>
-													<div class="dropdown mb-3">
-														<a href="javascript:void(0)" class="more-button" data-toggle="dropdown" aria-expanded="false">
-															<svg width="6" height="26" viewBox="0 0 6 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-																<path d="M6 3C6 4.65685 4.65685 6 3 6C1.34315 6 0 4.65685 0 3C0 1.34315 1.34315 0 3 0C4.65685 0 6 1.34315 6 3Z" fill="#585858"></path>
-																<path d="M6 13C6 14.6569 4.65685 16 3 16C1.34315 16 0 14.6569 0 13C0 11.3431 1.34315 10 3 10C4.65685 10 6 11.3431 6 13Z" fill="#585858"></path>
-																<path d="M6 23C6 24.6569 4.65685 26 3 26C1.34315 26 0 24.6569 0 23C0 21.3431 1.34315 20 3 20C4.65685 20 6 21.3431 6 23Z" fill="#585858"></path>
-															</svg>
-														</a>
-														<div class="dropdown-menu dropdown-menu-right">
-															<a class="dropdown-item" href="javascript:void(0);">Completada</a>
-															<a class="dropdown-item" href="javascript:void(0);">Eliminar</a>
-														</div>
-													</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-2 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
 												</div>
 											</div>
                                             {{/each}}
