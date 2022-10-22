@@ -49,8 +49,9 @@ router.post('/analisis-dimension-marketing', checkLogin, consultorLogueado, cons
 /********************************************************************************/
 // Nuevas Tareas
 router.post('/agregarTarea', checkLogin, consultorLogueado, consultorController.agregarTarea)
-router.post('/editarTarea', checkLogin, consultorLogueado, consultorController.editarTarea)
+router.post('/editarTarea', checkLogin, consultorController.editarTarea)
 router.post('/actualizarTarea', checkLogin, consultorLogueado, consultorController.actualizarTarea)
 router.post('/eliminarTarea', checkLogin, consultorLogueado, consultorController.eliminarTarea)
+router.post('/nuevoRendimiento', checkLogin, consultorLogueado, consultorController.nuevoRendimiento)
 
 module.exports = router

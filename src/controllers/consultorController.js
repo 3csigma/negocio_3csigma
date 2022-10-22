@@ -1,7 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
 const { etapa1FinalizadaHTML, sendEmail } = require('../lib/mail.config')
-const { consultarInformes } = require('../lib/helpers')
+const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -196,17 +196,17 @@ consultorController.empresaInterna = async (req, res) => {
     }
 
     // Informe de diagnóstico
-    const informeDiag = await consultarInformes(idUser, idConsultor, "Informe diagnóstico")
+    const informeDiag = await consultarInformes(idUser, "Informe diagnóstico")
     // Informe de dimensión producto
-    const informeProd = await consultarInformes(idUser, idConsultor, "Informe de dimensión producto")
+    const informeProd = await consultarInformes(idUser, "Informe de dimensión producto")
     // Informe de dimensión administración
-    const informeAdmin = await consultarInformes(idUser, idConsultor, "Informe de dimensión administración")
+    const informeAdmin = await consultarInformes(idUser, "Informe de dimensión administración")
     // Informe de dimensión operaciones
-    const informeOperaciones = await consultarInformes(idUser, idConsultor, "Informe de dimensión operaciones")
+    const informeOperaciones = await consultarInformes(idUser, "Informe de dimensión operaciones")
     // Informe de dimensión marketing
-    const informeMarketing = await consultarInformes(idUser, idConsultor, "Informe de dimensión marketing")
+    const informeMarketing = await consultarInformes(idUser, "Informe de dimensión marketing")
     // Informe de análisis
-    const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe de análisis")
+    const informeAnalisis = await consultarInformes(idUser, "Informe de análisis")
 
     if (informeDiag) {
         frmInfo.fecha = informeDiag.fecha;
@@ -436,6 +436,34 @@ consultorController.empresaInterna = async (req, res) => {
     let divInformes = false
     if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
     /* --------------------------------------------------------------------------------------- */
+
+    /************************************************************************************* */
+    // PLAN ESTRATÉGICO DE NEGOCIO
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareas(idUser, fechaActual)
+
+    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+    const listo = [
+        (estado1.length*100)/dim1, (estado2.length*100)/dim2, (estado3.length*100)/dim3, (estado4.length*100)/dim4
+    ]
+    const jsonDim = JSON.stringify([
+        { ok: Math.round(listo[0]), pendiente: Math.round(100-listo[0]) },
+        { ok: Math.round(listo[1]), pendiente: Math.round(100-listo[1]) },
+        { ok: Math.round(listo[2]), pendiente: Math.round(100-listo[2]) },
+        { ok: Math.round(listo[3]), pendiente: Math.round(100-listo[3]) }
+    ])
+
+    let datosTabla = await consultarDatos('rendimiento_empresa')
+    datosTabla = datosTabla.filter(x => x.empresa == idUser)
+    const jsonRendimiento = JSON.stringify(datosTabla)
     
     //res.render('consultor/empresaInterna', { 
     res.render('admin/editarEmpresa', { 
@@ -443,7 +471,8 @@ consultorController.empresaInterna = async (req, res) => {
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        fechaActual: new Date().toLocaleDateString('fr-CA')
+        fechaActual, tareas,
+        jsonDim, jsonRendimiento
     })
 
 }
@@ -770,4 +799,28 @@ consultorController.eliminarTarea = async (req, res) => {
     const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
     console.log("INFO ELIMINAR >> ", infoTarea)
     res.send(true)
+}
+
+/************************************************************************************************* */
+consultorController.nuevoRendimiento = async (req, res) => {
+    let { total_ventas, total_compras, total_gastos, codigo } = req.body
+    let datosTabla = await consultarDatos('empresas')
+    datosTabla = datosTabla.find(item => item.codigo == codigo)
+    const empresa = datosTabla.id_empresas
+    const fecha = new Date().toLocaleDateString('en-US')
+    // RENDIMIENTO DE LA EMPRESA
+    total_ventas = total_ventas.replace(/[$ ]/g, '');
+    total_ventas = total_ventas.replace(/[,]/g, '.');
+    total_compras = total_compras.replace(/[$ ]/g, '');
+    total_compras = total_compras.replace(/[,]/g, '.');
+    total_gastos = total_gastos.replace(/[$ ]/g, '');
+    total_gastos = total_gastos.replace(/[,]/g, '.');
+    const utilidad = parseFloat(total_ventas)-parseFloat(total_compras)-parseFloat(total_gastos)
+    const nuevoRendimiento = {empresa, total_ventas, total_compras, total_gastos, utilidad, fecha}
+    await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+    let redireccionar = '/empresas/'+codigo
+    if (req.user.rol == 'Consultor') {
+        redireccionar = '/empresas-asignadas/'+codigo;
+    }
+    res.redirect(redireccionar)
 }

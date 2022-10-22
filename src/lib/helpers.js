@@ -198,11 +198,49 @@ helpers.enabled_nextPay = async () => {
 }
 
 /** CONSULTAS MYSQL */
-helpers.consultarInformes = async (empresa, consultor, nombreInforme) => {
-    const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? `, [empresa, consultor, nombreInforme])
+helpers.consultarInformes = async (empresa, nombreInforme) => {
+    const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? `, [empresa, nombreInforme])
     // const informes = await pool.query('SELECT * FROM informes')
-    // const informe = informes.find(i => i.id_empresa == empresa && i.nombre == nombreInforme && i.id_consultor == consultor)
+    // const informe = informes.find(i => i.id_empresa == empresa && i.nombre == nombreInforme)
     return informe[0];
+}
+
+helpers.consultarTareas = async (empresa, fechaActual) => {
+    const tareas = {};
+    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY fecha_entrega ASC', [empresa])
+    tareas.todas.forEach(x => {
+        if (x.estado == 0) { 
+            x.estado = 'Pendiente'; x.color = 'primary';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 1) { 
+            x.estado = 'En Proceso'; x.color = 'warning';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
+        const dateObj = new Date(x.fecha_entrega);
+        const mes = dateObj.toLocaleString("es-US", { month: "short" });
+        x.dia = dateObj.getDate()+1
+        x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+        if (x.dimension == 'Producto') x.icono = 'fa-box'
+        if (x.dimension == 'Administración') x.icono = 'fa-user-tie'
+        if (x.dimension == 'Operaciones') x.icono = 'fa-gear'
+        if (x.dimension == 'Marketing') x.icono = 'fa-bullhorn'
+    })
+    tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
+    tareas.pendientes.cant = tareas.pendientes.length;
+    tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
+    tareas.enProceso.cant = tareas.enProceso.length;
+    tareas.completadas = tareas.todas.filter(i => i.estado == 'Completada')
+    tareas.completadas.cant = tareas.completadas.length;
+    return tareas;
+}
+
+helpers.consultarDatos = async (tabla, condicion = null) => {
+    const data = await pool.query('SELECT * FROM '+ tabla)
+    return data;
 }
 
 module.exports = helpers;

@@ -4,7 +4,7 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes } = require('../lib/helpers')
+const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 const { consultorAsignadoHTML, consultorAprobadoHTML, informeDiagnosticoHTML, sendEmail } = require('../lib/mail.config')
 
@@ -386,19 +386,19 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /** **************************************************************** */
     // Informe de diagnóstico
-    const informeDiag = await consultarInformes(idUser, idConsultor, "Informe diagnóstico")
+    const informeDiag = await consultarInformes(idUser, "Informe diagnóstico")
     // Informe de dimensión producto
-    const informeProd = await consultarInformes(idUser, idConsultor, "Informe de dimensión producto")
+    const informeProd = await consultarInformes(idUser, "Informe de dimensión producto")
     // Informe de dimensión administración
-    const informeAdmin = await consultarInformes(idUser, idConsultor, "Informe de dimensión administración")
+    const informeAdmin = await consultarInformes(idUser, "Informe de dimensión administración")
     // Informe de dimensión operaciones
-    const informeOperaciones = await consultarInformes(idUser, idConsultor, "Informe de dimensión operaciones")
+    const informeOperaciones = await consultarInformes(idUser, "Informe de dimensión operaciones")
     // Informe de dimensión marketing
-    const informeMarketing = await consultarInformes(idUser, idConsultor, "Informe de dimensión marketing")
+    const informeMarketing = await consultarInformes(idUser, "Informe de dimensión marketing")
     // Informe de análisis
-    const informeAnalisis = await consultarInformes(idUser, idConsultor, "Informe análisis")
+    const informeAnalisis = await consultarInformes(idUser, "Informe de análisis")
     // Informe de Plan estratégico
-    const informePlan = await consultarInformes(idUser, idConsultor, "Informe Plan estratégico")
+    const informePlan = await consultarInformes(idUser, "Informe de plan estratégico")
 
     if (informeDiag) {
         frmInfo.fecha = informeDiag.fecha;
@@ -440,7 +440,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.analisis.fecha = informeAnalisis.fecha;
         info.analisis.ver = 'block';
         info.analisis.url = informeAnalisis.url;
-        datos.etapa = 'Informe análisis general'
+        datos.etapa = 'Informe de análisis general'
     }
 
     console.log("INFORME DEL PLAN >>> ", informePlan)
@@ -449,7 +449,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.plan.fecha = informePlan.fecha;
         info.plan.ver = 'block';
         info.plan.url = informePlan.url;
-        datos.etapa = 'Informe Plan estratégico'
+        datos.etapa = 'Informe de plan estratégico'
     }
     
 
@@ -642,32 +642,32 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /************************************************************************************* */
     // PLAN ESTRATÉGICO DE NEGOCIO
-    const tareas = {}, fechaActual = new Date().toLocaleDateString('fr-CA');
-    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY fecha_entrega ASC', [idUser])
-    tareas.todas.forEach(x => {
-        if (x.estado == 0) { 
-            x.estado = 'Pendiente'; x.color = 'primary';
-            x.tiempo = 'A tiempo'
-            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
-        }
-        if (x.estado == 1) { 
-            x.estado = 'En Proceso'; x.color = 'warning';
-            x.tiempo = 'A tiempo'
-            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
-        }
-        if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
-        const dateObj = new Date(x.fecha_entrega);
-        const mes = dateObj.toLocaleString("es-US", { month: "short" });
-        x.dia = dateObj.getDate()+1
-        x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
-        if (x.dimension == 'Producto') x.icono = 'fa-box'
-        if (x.dimension == 'Administración') x.icono = 'fa-user-tie'
-        if (x.dimension == 'Operaciones') x.icono = 'fa-gear'
-        if (x.dimension == 'Marketing') x.icono = 'fa-bullhorn'
-    })
-    tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
-    tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
-    tareas.completadas = tareas.todas.filter(i => i.estado == 'Completada')
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareas(idUser, fechaActual)
+
+    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+    const listo = [
+        (estado1.length*100)/dim1, (estado2.length*100)/dim2, (estado3.length*100)/dim3, (estado4.length*100)/dim4
+    ]
+    const jsonDim = JSON.stringify([
+        { ok: Math.round(listo[0]), pendiente: Math.round(100-listo[0]) },
+        { ok: Math.round(listo[1]), pendiente: Math.round(100-listo[1]) },
+        { ok: Math.round(listo[2]), pendiente: Math.round(100-listo[2]) },
+        { ok: Math.round(listo[3]), pendiente: Math.round(100-listo[3]) }
+    ])
+    
+    let datosTabla = await consultarDatos('rendimiento_empresa')
+    datosTabla = datosTabla.filter(x => x.empresa == idUser)
+    const jsonRendimiento = JSON.stringify(datosTabla)
+
 
     res.render('admin/editarEmpresa', { 
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
@@ -675,7 +675,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         fechaActual,
-        tareas
+        tareas, jsonDim, jsonRendimiento
     })
 
 }
@@ -1147,11 +1147,11 @@ dashboardController.guardarInforme = async (req, res) => {
     }
     
     // Validando si ya tiene un informe montado
-    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? AND nombre = ? ', [e[0].id_empresas, e[0].consultor, nombreInforme])
+    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e[0].id_empresas, nombreInforme])
     let informe = null;
 
     if (tieneInforme.length > 0) {
-        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND id_consultor = ? AND nombre = ?', [actualizar, e[0].id_empresas, e[0].consultor, nombreInforme])
+        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e[0].id_empresas, nombreInforme])
     } else {
         informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
     }

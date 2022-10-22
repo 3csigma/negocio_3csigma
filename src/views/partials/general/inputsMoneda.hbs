@@ -1,0 +1,21 @@
+{{!-- SCRIPT MASCARAS PARA INPUT --}}
+<script src="https://unpkg.com/imask"></script>
+
+<script>
+    /** MASCARAS DE SIGNO DE MONEDA */
+    const inputsTotales = document.querySelectorAll(".inputTotales_")
+    // Separación para cifras en millares
+    inputsTotales.forEach(xTotal => {
+        IMask(xTotal, {
+            mask: '$num',
+            blocks: {
+                num: {
+                    // nested masks are available!
+                    mask: Number,
+                    thousandsSeparator: ' ',
+                    decimalMarker: '.'
+                }
+            }
+        });
+    })
+</script>

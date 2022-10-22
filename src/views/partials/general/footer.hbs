@@ -1,8 +1,4 @@
 {{!-- COMMON SCRIPTS --}}
-{{!-- {{#if formEdit}}
-<script src="../../js/jquery.js"></script>
-{{else}}
-{{/if}} --}}
 <script src="../js/jquery.js"></script>
 <script src="https://code.iconify.design/2/2.2.0/iconify.min.js"></script>
 <script src="../js/popper.min.js"></script>
@@ -35,6 +31,13 @@
 {{/if}}
 
 <script src="../vendor/js/toastr.min.js"></script>
+
+<!-- Chart Morris plugin files -->
+<script src="../js/raphael-min.js"></script>
+<script src="../js/morris.min.js"></script>
+{{#if jsonDim}}
+<script src="../js/morris-init.js"></script>
+{{/if}}
 
 
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}

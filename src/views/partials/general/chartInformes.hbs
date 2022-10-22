@@ -367,7 +367,7 @@
             }
 
             /*************************** FIN GRÁFICA INDICADORES *******************************/
-
+            
             /* Function ============ */
             return {
                 load: function () {
@@ -395,6 +395,19 @@
             }
             $(".chatbox-close").on("click", () => {
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
+                $('#fechaIni-sidebar').css('display', 'inline-block')
+                $('#fechaFin-sidebar').css('display', 'inline-block')
+                $('#dimension-sidebar').css('display', 'inline-block')
+                $('#btnGuardar-sidebar').css('display', 'inline-block')
+                $("#estado").css('display', 'inline-block')
+                //$("#actividad-sidebar").attr('readonly', true)
+                $('#actividad-sidebar').attr('readonly', false)
+                $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
+                $("#observacion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $('#txtFechaIni').css('display', 'none')
+                $('#txtFechaFin').css('display', 'none')
+                $('#txtDimension').css('display', 'none')
+                $('#estado-sidebar').css('display', 'none')
             })
 
 			{{#if frmDiag.tablasVacias}}
@@ -474,7 +487,7 @@
                 const spanFecha = document.getElementById("spanFecha");
                 const codigoEmpresa = document.getElementById("codigoEmpresa").value;
                 const informeDiag = document.querySelector('.inputInformeDiag');
-                const nombreInforme = document.querySelector('.nombreInformeConsul').textContent;
+                const nomInformeDiag = 'Informe diagnóstico';
 
                 if (informeDiag) {
                     informeDiag.addEventListener('change', (e) => {
@@ -486,7 +499,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
-                        formData.append('nombreInforme', nombreInforme);
+                        formData.append('nombreInforme', nomInformeDiag);
                         formData.append('zonaHoraria', tzLocal);
 
                         guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)
@@ -498,7 +511,6 @@
                 const infoEstadoProd = document.getElementById("infoEstadoProd");
                 const btnVerInformeProd = document.getElementById('btnVerInformeProd');
                 const spanFechaProd = document.getElementById("spanFechaProd");
-                //const informeProd = document.querySelector('.inputInformeProducto');
                 const informeProd = document.getElementById('informeProd');
                 const nomProducto = 'Informe de dimensión producto'
 
@@ -621,7 +633,7 @@
                 const btnVerInformePlan = document.getElementById('btnVerInformePlan');
                 const spanFechaPlan = document.getElementById("spanFechaPlan");
                 const inputInformePlan = document.querySelector('.inputInformePlan');
-                const nomInformePlan = 'Informe Plan estratégico'
+                const nomInformePlan = 'Informe de plan estratégico'
 
                 if (inputInformePlan) {
                     inputInformePlan.addEventListener('change', (e) => {

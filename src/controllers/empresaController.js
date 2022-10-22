@@ -2,8 +2,9 @@ const pool = require('../database')
 const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
-const { authToken, encriptarTxt, desencriptarTxt } = require('../lib/helpers')
-const { Country } = require('country-state-city')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos } = require('../lib/helpers')
+const { Country } = require('country-state-city');
+const { json } = require('body-parser');
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
 
@@ -512,11 +513,14 @@ empresaController.analisis = async (req, res) => {
         }
     }
 
+    const informeAnalisis = await consultarInformes(id_empresa, "Informe de análisis")
+
     res.render('empresa/analisis', {
         user_dash: true, pagoDiag: true, itemActivo: 4, acuerdoFirmado: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
-        etapa1, archivos
+        etapa1, archivos,
+        informeAnalisis
     })
 }
 
@@ -551,4 +555,45 @@ empresaController.guardarArchivos = async (req, res) => {
     }
     console.log("\nARHIVOS >> ", req.files)
     res.redirect('/analisis-de-negocio');
+}
+
+/** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
+empresaController.planEstrategico = async (req, res) => {
+    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const empresa = row[0].id_empresas;
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareas(empresa, fechaActual)
+    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+    const listo = [
+        ((estado1.length*100)/dim1).toFixed(1), 
+        ((estado2.length*100)/dim2).toFixed(1), 
+        ((estado3.length*100)/dim3).toFixed(1),
+        ((estado4.length*100)/dim4).toFixed(1),
+    ]
+    const jsonDim = JSON.stringify([
+        { ok: (listo[0]), pendiente: (100-listo[0]) },
+        { ok: (listo[1]), pendiente: (100-listo[1]) },
+        { ok: (listo[2]), pendiente: (100-listo[2]) },
+        { ok: (listo[3]), pendiente: (100-listo[3]) }
+    ])
+    
+    const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
+    let datosTabla = await consultarDatos('rendimiento_empresa')
+    datosTabla = datosTabla.filter(x => x.empresa == empresa)
+    const jsonRendimiento = JSON.stringify(datosTabla)
+
+    res.render('empresa/planEstrategico', {
+        user_dash: true, pagoDiag: true, itemActivo: 5, acuerdoFirmado: true,
+        actualYear: req.actualYear, btnPagar,
+        tareas, informePlan, 
+        dim1, dim2, dim3, dim4, jsonDim, jsonRendimiento
+    })
 }

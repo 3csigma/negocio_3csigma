@@ -33,6 +33,9 @@ router.post('/guardar-archivos-analisis', checkLogin, empresaLogueada,
 uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'),
 empresaController.guardarArchivos)
 
+// Plan Estratégico de Negocio
+router.get('/plan-estrategico', checkLogin, empresaLogueada, empresaController.planEstrategico)
+
 /*******************************************************************************************************/
 // Ejecución Diaria (12pm)
 cron.schedule('0 12 * * 0-6',() => {
