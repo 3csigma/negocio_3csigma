@@ -1,0 +1,42 @@
+<script>
+    function mostrarTarea(idTarea) {
+        const tiempo = $('#tiempo-sidebar')
+        tiempo.css('display', 'none')
+        $('.chatbox').addClass('active');
+        $('#cuerpoGeneral').css('overflow-y', 'hidden');
+        fetch('/editarTarea', {
+            method: 'POST',
+            body: JSON.stringify({idTarea}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Editar Tarea: ', error))
+        .then(r => {
+            $('#fechaIni-sidebar').css('display', 'none')
+            $('#fechaFin-sidebar').css('display', 'none')
+            $('#dimension-sidebar').css('display', 'none')
+            $('#btnGuardar-sidebar').css('display', 'none')
+            $("#estado").css('display', 'none')
+            //$("#actividad-sidebar").attr('readonly', true)
+            $('#actividad-sidebar').val(r.actividad).attr('readonly', true)
+            $("#responsable").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
+            $("#observacion").val(r.observacion).attr({'readonly': true, 'placeholder': ''})
+            $('#txtFechaIni').text(r.fecha_inicio).css('display', 'inline-block')
+            $('#txtFechaFin').text(r.fecha_entrega).css('display', 'inline-block')
+            $('#txtDimension').text(r.dimension).css('display', 'inline-block')
+            
+            
+            let txtEstado = 'Completado'
+            if (r.estado == 0 || r.estado == 1) {
+                const fechaActual = new Date().toLocaleDateString('fr-CA')
+                $('#tiempoTxt-sidebar').text('A tiempo')
+                tiempo.css('display', 'inline-table')
+                if (fechaActual > r.fecha_entrega){
+                    $('#tiempoTxt-sidebar').text('Retrasada')
+                }
+                txtEstado = 'Pendiente'
+                if (r.estado == 1) txtEstado = 'En Proceso'
+            }
+            $('#estado-sidebar').text(txtEstado).css('display', 'inline-block')
+        })
+    }
+</script>

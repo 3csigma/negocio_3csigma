@@ -588,33 +588,50 @@
                                                             <div class="tab-content">
 
                                                                 <div id="vitales" class="tab-pane fade active show">
+                                                                    {{#if jsonAnalisis1}}
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm1"></canvas>
                                                                     </div>
+                                                                    {{else}}
+                                                                    <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                                        <div>
+                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                                                    border-radius: 35px;"></i></center><br>
+                                                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{/if}}
 
                                                                     {{#if rendimiento.op}}
                                                                     <div class="row justify-content-center">
                                                                         <span style="padding-top: 6px; padding-right: 8px;">Rendimiento Operativo del Negocio: <strong>{{rendimiento.op}}% </strong></span>
                                                                     </div>
                                                                     {{/if}}
-
                                                                 </div>
-
                                                                 <div id="dimensiones" class="tab-pane fade">
-
+                                                                    {{#if jsonDimensiones}}
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm2"></canvas>
                                                                     </div>
+                                                                    {{else}}
+                                                                    <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                                        <div>
+                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                                                    border-radius: 35px;"></i></center><br>
+                                                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{/if}}
 
                                                                     {{#if rendimiento.num}}
                                                                     <div class="row justify-content-center">
                                                                         <span style="padding-top: 6px; padding-right: 8px;font-weight: 800;">Rendimento del proyecto: {{rendimiento.num}}% </span>
                                                                         <span class="badge light {{rendimiento.color}}">{{rendimiento.txt}}</span>
                                                                     </div>
-                                                                    {{/if}}
                                                                 </div>
-
-                                                                
+                                                                {{/if}}
 
                                                             </div>
                                                         </div>

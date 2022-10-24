@@ -30,7 +30,7 @@ router.post('/enviar-propuesta-analisis', checkLogin, consultorLogueado, subirAr
 
 // Cuestionario Análisis dimensión Producto 
 router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorLogueado, consultorController.analisisProducto)
-router.post('/analisis-dimension-producto/',checkLogin, consultorLogueado, consultorController.guardarAnalisisProducto)
+router.post('/analisis-dimension-producto',checkLogin, consultorLogueado, consultorController.guardarAnalisisProducto)
 
 // Cuestionario Análisis dimensión Administración 
 router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorLogueado, consultorController.analisisAdministracion)
@@ -42,6 +42,16 @@ router.post('/analisis-dimension-operaciones', checkLogin, consultorLogueado, co
 
 // Cuestionario Análisis dimensión Marketing  
 router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.analisisMarketing)
-router.post('/analisis-dimension-marketing/', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
+router.post('/analisis-dimension-marketing', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
+
+/********************************************************************************/
+// Etapa 3 - Plan Estratégico de Negocio
+/********************************************************************************/
+// Nuevas Tareas
+router.post('/agregarTarea', checkLogin, consultorLogueado, consultorController.agregarTarea)
+router.post('/editarTarea', checkLogin, consultorController.editarTarea)
+router.post('/actualizarTarea', checkLogin, consultorLogueado, consultorController.actualizarTarea)
+router.post('/eliminarTarea', checkLogin, consultorLogueado, consultorController.eliminarTarea)
+router.post('/nuevoRendimiento', checkLogin, consultorLogueado, consultorController.nuevoRendimiento)
 
 module.exports = router

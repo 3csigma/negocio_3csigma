@@ -72,13 +72,18 @@ app.use((req, res, next) => {
   next();
 })
 
-
 // Rutas
 app.use(require('./routes'));
 app.use(require('./routes/empresa'));
 app.use(require('./routes/consultor'));
 app.use(require('./routes/authentication'));
 app.use(require('./routes/pagos'));
+
+// RUTAS PARA ERROR 404 Y 502
+app.get('*', (req, res) => {
+  res.status(404)
+  res.render('pages/404');
+});
 
 app.listen(app.get('port'), () => {
   console.log('\nCORRIENDO DESDE http://localhost:'+app.get('port'));

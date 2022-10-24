@@ -1,0 +1,662 @@
+<script>
+    function addTaskToList(id, dia, mes, actividad, dimension) {
+        let icono = 'fa-box';
+        if (dimension == 'Administración') icono = 'fa-user-tie';
+        if (dimension == 'Operaciones') icono = 'fa-gear';
+        if (dimension == 'Marketing') icono = 'fa-bullhorn';
+        const item = `
+        <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+            <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                <div class="list-icon bgl-primary mr-3 mb-3">
+                    <p class="fs-24 text-secondary mb-0 mt-2">${dia}</p>
+                    <span class="fs-14 text-secondary">${mes}</span>
+                </div>
+                <div class="info mb-3">
+                    <h4 onclick="editarTarea(${id})" class="fs-20"><span class="text-black">${actividad}</span></h4>
+                    <span class="text-primary font-w600">Pendiente</span>
+                    {{!-- TIEMPO --}}
+                    <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px; padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> A tiempo</span>
+                </div>
+            </div>
+            <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                <i class="fa-solid ${icono}"></i>
+                <span class="text-gray ml-2">${dimension}</span>
+            </div>
+            <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                <a onclick="editarTarea(${id})" class="btn mb-3 play-button rounded mr-3">
+                    <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                </a>
+                {{!-- ELIMINAR TAREA --}}
+                <div class="dropdown mb-3">
+                    <a onclick="eliminarTarea(${id})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        `
+        return item;
+    }
+
+    function agregarTarea() {
+        const actividad = $("#actividad").val();
+        const fecha_inicio = $("#fecha_inicio").val();
+        const fecha_entrega = $("#fecha_entrega").val();
+        const dimension = $("#dimension").val();
+        $('#tiempoTxt-sidebar').text('A tiempo')
+
+        if (actividad == '' || fecha_entrega == '' || dimension == '') {
+            toastr.warning("Hay campos vacíos", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            // Activar Sidebar
+            $('.chatbox').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden');
+            // Enviar info a la base de datos
+            const empresa = $("#idEmpresa").val();
+            const data = JSON.stringify({actividad, fecha_inicio, fecha_entrega, dimension, empresa})
+            fetch('/agregarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Agregar Tarea: ', error))
+            .then(response => {
+                if (response) {
+                    const idTarea = response.insertId
+                    const dateObj = new Date(fecha_entrega);
+                    let mes = dateObj.toLocaleString("es-US", { month: "short" });
+                    const dia = dateObj.getDate()+1
+                    mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+                    const itemTaskList = addTaskToList(idTarea, dia, mes, actividad, dimension)
+                    $('#Pendientes').prepend(itemTaskList);
+
+                    $('#idTarea').val(idTarea)
+                    $('#actividad-sidebar').val(actividad)
+                    $('#fechaIni-sidebar').val(fecha_inicio)
+                    $('#fechaFin-sidebar').val(fecha_entrega)
+                    $('#dimension-sidebar').val(dimension)
+
+                    $("#actividad").val(''); $("#fecha_inicio").val(''); $("#fecha_entrega").val(''); $("#dimension").val('');
+                } else {
+                    toastr.danger("Hubo una inconsistencia al agregar la tarea.", "Error", {
+                        positionClass: "toast-top-full-width",
+                        timeOut: 3e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "200",
+                        hideDuration: "200",
+                        extendedTimeOut: "200",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                }
+            });
+        }
+    }
+
+    function editarTarea(idTarea){
+        const tiempo = $('#tiempo-sidebar')
+        tiempo.css('display', 'none')
+        $('.chatbox').addClass('active');
+        $('#cuerpoGeneral').css('overflow-y', 'hidden');
+        fetch('/editarTarea', {
+            method: 'POST',
+            body: JSON.stringify({idTarea}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Editar Tarea: ', error))
+        .then(r => {
+            $('#idTarea').val(idTarea)
+            $("#idEmpresa").val(r.empresa)
+            $('#actividad-sidebar').val(r.actividad)
+            $("#responsable").val(r.responsable)
+            $("#observacion").val(r.observacion)
+            $('#fechaIni-sidebar').val(r.fecha_inicio)
+            $('#fechaFin-sidebar').val(r.fecha_entrega)
+            $('#dimension-sidebar').val(r.dimension)
+            //$("#mensaje").val(r.mensaje)
+            $("#estado").val(r.estado)
+
+            if (r.estado == 0 || r.estado == 1) {
+                const fechaActual = new Date().toLocaleDateString('fr-CA')
+                $('#tiempoTxt-sidebar').text('A tiempo')
+                tiempo.css('display', 'inline-table')
+                if (fechaActual > r.fecha_entrega){
+                    $('#tiempoTxt-sidebar').text('Retrasada')
+                }
+            }
+        })
+    }
+
+    function actualizarTarea() {
+        const idTarea = $("#idTarea").val();
+        const empresa = $("#idEmpresa").val();
+        const actividad = $("#actividad-sidebar").val();
+        const responsable = $("#responsable").val();
+        const observacion = $("#observacion").val();
+        const fecha_inicio = $("#fechaIni-sidebar").val();
+        const fecha_entrega = $("#fechaFin-sidebar").val();
+        const dimension = $("#dimension-sidebar").val();
+        //const mensaje = $("#mensaje").val();
+        const estado = $("#estado").val();
+        const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado })
+        fetch('/actualizarTarea', {
+            method: 'POST',
+            body: data,
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Actualizar Tarea: ', error))
+        .then(response => {
+            location.hash = '#plan-estrategico';
+            location.reload(true)
+        })
+    }
+
+    function eliminarTarea(idTarea) {
+        Swal.fire({
+            title: '¿Deseas eliminar la tarea?',
+            text: "Esta acción no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarTarea', {
+                    method: 'POST',
+                    body: JSON.stringify({idTarea}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                .catch(error => console.error('Error Eliminar Tarea: ', error))
+                .then(response => {
+                    location.hash = '#plan-estrategico';
+                    location.reload(true)
+                })
+            }
+        })
+    }
+
+    (function () {
+
+        const dzChartlist = function () {
+
+            /** GRÁFICA PARA INDICADORES */
+
+            const chartIndicadores1 = function () {
+                let valAnalisis1 = document.getElementById('jsonAnalisisAdm1').value;
+                let valAnalisis2 = document.getElementById('jsonAnalisisAdm2').value;
+                let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+                let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+                if (valAnalisis1) {
+                    valAnalisis1 = JSON.parse(valAnalisis1) 
+                    chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
+                }
+                if (valAnalisis2) {
+                    valAnalisis2 = JSON.parse(valAnalisis2)
+                    chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
+                }
+
+                let valorMax = 10;
+                if (nuevosProyectos == 1) {
+                    valorMax = 5;
+                }
+
+                if ($('#chartEmpresaAdm1').length > 0) {
+                    const chartEmpresaAdm1 = document.getElementById("chartEmpresaAdm1").getContext('2d')
+
+                    chartEmpresaAdm1.height = 100;
+                    new Chart(chartEmpresaAdm1, {
+                        type: 'bar',
+                        data: {
+                            defaultFontFamily: 'Oblivian',
+                            labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+                            datasets: [{
+                                label: "Puntaje",
+                                backgroundColor: "#50368C",
+                                borderColor: "#50368C",
+                                data: chartAnalisis1,
+                                fill: false,
+                            },
+                                // {
+                                // 	label: "Último análisis",
+                                // 	fill: false,
+                                // 	backgroundColor: "#FED061",
+                                // 	borderColor: "#FED061",
+                                // 	data: chartAnalisis2,
+                                // }
+                            ]
+                        },
+                        options: {
+                            legend: false,
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // minimum value
+                                        max: valorMax // maximum value
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontSize: 10
+                                    },
+                                    barPercentage: 0.5,
+                                    categoryPercentage: 1,
+                                    barThickness: 14,
+                                    maxBarThickness: 10,
+                                }]
+                            }
+                        }
+                    });
+                }
+            }
+
+            const chartIndicadores2 = function () {
+                let valDimensiones1 = document.getElementById('jsonDimensionesAdm1').value;
+                let valDimensiones2 = document.getElementById('jsonDimensionesAdm2').value;
+                let nuevosProyectos = document.getElementById('nuevosProyectos').value;
+                let chartDimensiones1 = [0, 0, 0, 0]
+                let chartDimensiones2 = [0, 0, 0, 0]
+                let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
+
+                if (valDimensiones1) {
+                    valDimensiones1 = JSON.parse(valDimensiones1)
+                }
+
+                if (nuevosProyectos) {
+                    chartDimensiones1 = [valDimensiones1.producto, valDimensiones1.administracion, valDimensiones1.operaciones, valDimensiones1.marketing]
+                    if (nuevosProyectos == 1) {
+                        titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
+                        chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
+                    }
+                }
+
+                if (valDimensiones2) {
+                    valDimensiones2 = JSON.parse(valDimensiones2)
+                    chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
+                }
+
+                if ($('#chartEmpresaAdm2').length > 0) {
+                    const chartEmpresaAdm2 = document.getElementById("chartEmpresaAdm2").getContext('2d')
+
+                    chartEmpresaAdm2.height = 100;
+                    new Chart(chartEmpresaAdm2, {
+                        type: 'bar',
+                        data: {
+                            defaultFontFamily: 'Oblivian',
+                            labels: titulos,
+                            datasets: [{
+                                label: "Puntaje",
+                                backgroundColor: "#50368C",
+                                borderColor: "#50368C",
+                                data: chartDimensiones1,
+                                fill: false,
+                            },
+                                // {
+                                // 	label: "Último análisis",
+                                // 	fill: false,
+                                // 	backgroundColor: "#FED061",
+                                // 	borderColor: "#FED061",
+                                // 	data: chartDimensiones2,
+                                // }
+                            ]
+                        },
+                        options: {
+                            legend: false,
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        display: true
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // minimum value
+                                        //max: 10 // maximum value
+                                    }
+                                }],
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontSize: 10
+                                    },
+                                    barPercentage: 0.5,
+                                    categoryPercentage: 1,
+                                    barThickness: 14,
+                                    maxBarThickness: 10,
+                                }]
+                            }
+                        }
+                    });
+                }
+            }
+
+            /*************************** FIN GRÁFICA INDICADORES *******************************/
+            
+            /* Function ============ */
+            return {
+                load: function () {
+                    {{#if graficas2}}
+                    chartIndicadores1();
+                    chartIndicadores2();
+                    {{/if}}
+                },
+            }
+
+        } ();
+
+        jQuery(window).on('load', function () {
+			setTimeout(function () {
+				dzChartlist.load();
+			}, 1000);
+		});
+
+
+		$(document).ready(function () {
+
+            const URLhash = window.location.hash;
+            if (URLhash === '#plan-estrategico') {
+                $('.planItem').trigger("click");
+            }
+            $(".chatbox-close").on("click", () => {
+                $('#cuerpoGeneral').css('overflow-y', 'auto')
+                $('#fechaIni-sidebar').css('display', 'inline-block')
+                $('#fechaFin-sidebar').css('display', 'inline-block')
+                $('#dimension-sidebar').css('display', 'inline-block')
+                $('#btnGuardar-sidebar').css('display', 'inline-block')
+                $("#estado").css('display', 'inline-block')
+                //$("#actividad-sidebar").attr('readonly', true)
+                $('#actividad-sidebar').attr('readonly', false)
+                $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
+                $("#observacion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $('#txtFechaIni').css('display', 'none')
+                $('#txtFechaFin').css('display', 'none')
+                $('#txtDimension').css('display', 'none')
+                $('#estado-sidebar').css('display', 'none')
+            })
+
+			{{#if frmDiag.tablasVacias}}
+                const btnCargarInforme = document.getElementById('btnInfDiag');
+                btnCargarInforme.addEventListener("click", function () {
+                    Swal.fire(
+                        'Lo sentimos!',
+                        'Aún no sé ha llenado ningún cuestionario para subir un informe',
+                        'warning'
+                    )
+                });
+			{{else}}
+			
+				{{#if graficas2}}
+
+                function guardarInforme(formData, estado, fecha, boton){
+                    fetch('/guardarInforme', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response.ok) {
+                                boton.style.display = 'block'
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                fecha.innerHTML = response.fecha;
+                                boton.href = response.url
+
+                                toastr.success("El informe ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+                            } else {
+                                toastr.danger("No sé pudo subir el informe, contacte a soporte", "Error", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+                            }
+                        });
+                }
+
+                /* Etapa 1 - Informe Diagnóstico */
+                const infoEstado = document.getElementById("infoEstado");
+                const btnVerInforme = document.getElementById('btnVerInforme');
+                const spanFecha = document.getElementById("spanFecha");
+                const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+                const informeDiag = document.querySelector('.inputInformeDiag');
+                const nomInformeDiag = 'Informe diagnóstico';
+
+                if (informeDiag) {
+                    informeDiag.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomInformeDiag);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstado, spanFecha, btnVerInforme)
+                    });
+                }
+				
+                /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
+                // Dimensión Producto
+                const infoEstadoProd = document.getElementById("infoEstadoProd");
+                const btnVerInformeProd = document.getElementById('btnVerInformeProd');
+                const spanFechaProd = document.getElementById("spanFechaProd");
+                const informeProd = document.getElementById('informeProd');
+                const nomProducto = 'Informe de dimensión producto'
+
+                if (informeProd) {
+                    informeProd.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomProducto);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoProd, spanFechaProd, btnVerInformeProd)
+
+                    });
+                }
+
+                // Dimensión Administración
+                const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
+                const btnVerInformeAdmin = document.getElementById('btnVerInformeAdmin');
+                const spanFechaAdmin = document.getElementById("spanFechaAdmin");
+                const informeAdmin = document.querySelector('.inputInformeAdmin');
+                const nomAdmin = 'Informe de dimensión administración';
+
+                if (informeAdmin) {
+                    informeAdmin.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomAdmin);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, btnVerInformeAdmin)
+                    });
+                }
+
+                // Dimensión Operaciones
+                const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+                const btnVerInformeOpe = document.getElementById('btnVerInformeOpe');
+                const spanFechaOpe = document.getElementById("spanFechaOpe");
+                const informeOpe = document.querySelector('.inputInformeOperaciones');
+                const nomOperacion = 'Informe de dimensión operaciones'
+
+                if (informeOpe) {
+                    informeOpe.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomOperacion);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoOpe, spanFechaOpe, btnVerInformeOpe)
+                    });
+                }
+
+                // Dimensión Marketing
+                const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
+                const btnVerInformeMarketing = document.getElementById('btnVerInformeMarketing');
+                const spanFechaMarketing = document.getElementById("spanFechaMarketing");
+                const informeMarketing = document.querySelector('.inputInformeMarketing');
+                const nomMarketing = 'Informe de dimensión marketing'
+
+                if (informeMarketing) {
+                    informeMarketing.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomMarketing);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, btnVerInformeMarketing)
+                    });
+                }
+
+                // Informe Análisis General
+                const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
+                const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
+                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
+                const nomInformeAnalisis = 'Informe de análisis'
+
+                if (inputInformeGeneral) {
+                    inputInformeGeneral.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomInformeAnalisis);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, btnVerInformeGeneral)
+                    });
+                }
+
+                // Informe Plan Estratégico
+                const infoEstadoPlan = document.getElementById("infoEstadoPlan");
+                const btnVerInformePlan = document.getElementById('btnVerInformePlan');
+                const spanFechaPlan = document.getElementById("spanFechaPlan");
+                const inputInformePlan = document.querySelector('.inputInformePlan');
+                const nomInformePlan = 'Informe de plan estratégico'
+
+                if (inputInformePlan) {
+                    inputInformePlan.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('nombreInforme', nomInformePlan);
+                        formData.append('zonaHoraria', tzLocal);
+
+                        guardarInforme(formData, infoEstadoPlan, spanFechaPlan, btnVerInformePlan)
+                    });
+                }
+
+                {{/if}}
+
+			{{/if}}
+
+		});
+
+	})();
+</script>

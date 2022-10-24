@@ -73,6 +73,19 @@
         -webkit-appearance: none !important;
         appearance: none !important;
     }
+
+    .duet-date__input {
+		height: 44px;
+		border: 1px solid #ddd;
+		color: #000;
+		font-weight: 500;
+		font-size: 14px;
+		cursor: no-drop;
+	}
+
+    .nav-tabs .nav-item .tabs-Task.active:before {
+        background-color: transparent;
+    }
 </style>
 <!--**********************************
         Content body start
@@ -109,6 +122,7 @@
         {{!-- ./Fin Header Card --}}
 
         <div class="row">
+            
 
             {{!-- COLUNMA IZQUIERDA RESUMEN --}}
             <div class="col-xl-4">
@@ -190,7 +204,7 @@
                                                 <div class="profile-personal-info">
                                                     <div class="row mb-2">
                                                         <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría : <span>{{#if
+                                                            <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
                                                                     datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
                                                             </h5>
                                                         </div>
@@ -209,7 +223,7 @@
                                                     style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción
                                                     del negocio</label>
                                                 <textarea
-                                                    style="height: 400px; min-height: 400px; max-height: 400px; width: 100%; text-align: justify; background: transparent !important; border: none"
+                                                    style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; text-align: justify; background: transparent !important; border: none"
                                                     class="form-control barra-scroll overflow-y-auto"
                                                     disabled>{{#if empresa.descripcion}}{{empresa.descripcion}}{{else}}N/A{{/if}}</textarea>
                                             </div>
@@ -362,6 +376,20 @@
 
                                     {{/if}}
 
+                                    <div class="row mt-2">
+                                        <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
+                                        <div class="col-12">
+                                            <div id="line_chart_ventas" class="morris_chart_height"></div>
+                                        </div>
+                                        <div class="col-12">
+                                            <!-- BOTÓN PARA MODAL NUEVO RENDIMIENTO -->
+                                            <button type="button" class="btn btn-primary"
+                                                data-toggle="modal" data-target="#modalNewRendimiento"
+                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff;">
+                                                Nuevo Rendimiento </button>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -389,7 +417,7 @@
                                     class="nav-link">Diagnóstico</a></li>
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link">Análisis</a>
                             </li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link">Plan
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link planItem">Plan
                                     Estrategico</a></li>
                         </ul>
                     </div>
@@ -600,9 +628,20 @@
                                                             <div class="tab-content">
 
                                                                 <div id="vitales" class="tab-pane fade active show">
+                                                                    {{#if jsonAnalisis1}}
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm1"></canvas>
                                                                     </div>
+                                                                     {{else}}
+                                                                    <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                                        <div>
+                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                                                    border-radius: 35px;"></i></center><br>
+                                                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{/if}}
 
                                                                     {{#if rendimiento.op}}
                                                                     <div class="row justify-content-center">
@@ -612,10 +651,20 @@
                                                                 </div>
 
                                                                 <div id="dimensiones" class="tab-pane fade">
-
+                                                                    {{#if jsonDimensiones}}
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm2"></canvas>
                                                                     </div>
+                                                                    {{else}}
+                                                                    <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                                        <div>
+                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                                                    border-radius: 35px;"></i></center><br>
+                                                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    {{/if}}
 
                                                                     {{#if rendimiento.num}}
                                                                     <div class="row justify-content-center">
@@ -1127,7 +1176,7 @@
                                                                     <span id="spanFechaProd">N/A</span>
                                                                     {{/if}}
                                                                 </td>
-                                                                <td><span class="nomProducto">Informe de dimensión producto</span></td>
+                                                                <td><span>Informe de dimensión producto</span></td>
                                                                 <td>
                                                                     {{#if info.prod.fecha}}
                                                                     <span class="badge light badge-success">Cargado</span>
@@ -1166,7 +1215,7 @@
                                                                     <span id="spanFechaAdmin">N/A</span>
                                                                     {{/if}}
                                                                 </td>
-                                                                <td><span class="nomAdmin">Informe de dimensión administración</span></td>
+                                                                <td><span>Informe de dimensión administración</span></td>
                                                                 <td>
                                                                     {{#if info.adm.fecha}}
                                                                     <span class="badge light badge-success">Cargado</span>
@@ -1206,7 +1255,7 @@
                                                                     <span id="spanFechaOpe">N/A</span>
                                                                     {{/if}}
                                                                 </td>
-                                                                <td><span class="nomOperacion">Informe de dimensión operaciones</span></td>
+                                                                <td><span>Informe de dimensión operaciones</span></td>
                                                                 <td>
                                                                     {{#if info.op.fecha}}
                                                                     <span class="badge light badge-success">Cargado</span>
@@ -1239,13 +1288,14 @@
                                                                     {{!-- {{/if}} --}}
                                                                 </td>
                                                             </tr>
+
                                                             {{!-- MARKETING --}}
                                                             <tr>
                                                                 <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
                                                                     <span id="spanFechaMarketing">N/A</span>
                                                                     {{/if}}
                                                                 </td>
-                                                                <td><span class="nomMarketing">Informe de dimensión marketing</span></td>
+                                                                <td><span>Informe de dimensión marketing</span></td>
                                                                 <td>
                                                                     {{#if info.marketing.fecha}}
                                                                     <span class="badge light badge-success">Cargado</span>
@@ -1318,7 +1368,7 @@
                                                                     <span id="spanFechaGeneral">N/A</span>
                                                                     {{/if}}
                                                                 </td>
-                                                                <td><span class="nomInformeAnalisis">Informe de análisis</span></td>
+                                                                <td><span>Informe de análisis</span></td>
                                                                 <td>
                                                                     {{#if info.analisis.fecha}}
                                                                     <span class="badge light badge-success">Cargado</span>
@@ -1327,13 +1377,6 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                    {{!-- {{#if frmDiag.tablasVacias}}
-                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                        id="btnInfDiag">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                    {{else}} --}}
 
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
@@ -1372,8 +1415,328 @@
 
                             </div>
 
+                            {{!-- PESTAÑA 4 - PLAN ESTRATÉGICO DE NEGOCIO --}}
                             <div id="plan-estrategico" class="tab-pane fade">
+                                {{!-- CREAR NUEVAS TAREAS --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Nueva Tarea</h4>
+                                        </div>
 
+                                        <div class="row mt-3">
+
+                                            <div class="form-group col-md-6">
+                                                <label for="actividad">Título de actividad a realizar *</label>
+                                                <input type="text" class="form-control" id="actividad" maxlength="47"
+                                                placeholder="Escriba un título..">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="dimension">Dimensión *</label><br>
+                                                <select id="dimension" class="mr-sm-2 default-select text-center" tabindex="-98" required>
+                                                    <option value="">Escoja una..</option>
+                                                    <option value="Producto">Producto</option>
+                                                    <option value="Administración">Administración</option>
+                                                    <option value="Operaciones">Operaciones</option>
+                                                    <option value="Marketing">Marketing</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label for="fecha_inicio">Fecha de inicio *</label>
+                                                <duet-date-picker id="fecha_inicio" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="fecha_entrega">Fecha de entrega *</label>
+                                                <duet-date-picker id="fecha_entrega" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                                            </div>
+
+                                            <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
+                                            <div class="col-md-3 mx-auto">
+                                                <button onclick="agregarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Agregar</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
+                                {{#if jsonDim}}
+                                <div class="card">
+                                    <div class="col-xl-12">
+                                        <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <h4 class="my-4 mx-auto text-center">Producto</h4>
+                                                <div id="morris-dimProducto" style="margin-top: -70px;"></div>
+                                            </div>
+                                            <div class="col-3">
+                                                <h4 class="my-4 mx-auto text-center">Administración</h4>
+                                                <div id="morris-dimAdministracion" style="margin-top: -70px;"></div>
+                                            </div>
+                                            <div class="col-3">
+                                                <h4 class="my-4 mx-auto text-center">Operaciones</h4>
+                                                <div id="morris-dimOperaciones" style="margin-top: -70px;"></div>
+                                            </div>
+                                            <div class="col-3">
+                                                <h4 class="my-4 mx-auto text-center">Marketing</h4>
+                                                <div id="morris-dimMarketing" style="margin-top: -70px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{!-- LISTADO DE TAREAS --}}
+                                {{!-- {{#if tareas.todas}} --}}
+                                <div class="card plan-list">
+
+									<div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
+										<div class="mr-auto pr-3 mb-3">
+											<h4 class="text-black fs-20">Tareas asignadas</h4>
+											<p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
+										</div>
+										<div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
+											<ul class="nav nav-tabs" role="tablist">
+												<li class="nav-item">
+													<a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab" aria-selected="true">Pendientes ({{tareas.pendientes.cant}})</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#EnProceso" role="tab">En Proceso ({{tareas.enProceso.cant}})</a>
+												</li>
+                                                <li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas ({{tareas.completadas.cant}})</a>
+												</li>
+                                                {{!-- <li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#Todas" role="tab" aria-selected="false">Todas</a>
+												</li> --}}
+											</ul>
+										</div>
+										
+									</div>
+
+									<div class="card-body tab-content pt-2">
+                                        {{!-- TAREAS PENDIENTES --}}
+										<div class="tab-pane active show fade" id="Pendientes">
+                                            {{#if tareas.pendientes}}
+                                            {{#each tareas.pendientes}}
+											<div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas pendientes</label>
+                                            </div>
+                                            {{/if}}
+										</div>
+
+                                        {{!-- TODAS LAS TAREAS --}}
+										<div class="tab-pane fade" id="Todas">
+                                            {{#each tareas.todas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        {{#unless tareaOk}}
+                                                            <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                        {{/unless}}
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+										</div>
+
+                                        {{!-- TAREAS EN PROCESO --}}
+                                        <div class="tab-pane fade" id="EnProceso">
+                                            {{#if tareas.enProceso}}
+                                            {{#each tareas.enProceso}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas en proceso</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+
+										{{!-- TAREAS COMPLETADAS --}}
+                                        <div class="tab-pane fade" id="Completadas">
+                                            {{#if tareas.completadas}}
+                                            {{#each tareas.completadas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-7 col-lg-7 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="mostrarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="mostrarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-eye"></i> Ver Detalles
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay tareas completadas</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+									</div>
+
+								</div>
+                                {{!-- {{/if}} --}}
+                                {{!-- {{#if info.plan.ok}} --}}
+                                <!-- ======================== INFORMES DE PLAN ESTRATÉGICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informe general</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            <tr>
+                                                                <td>{{#if info.plan.fecha}}{{info.plan.fecha}}{{else}}
+                                                                    <span id="spanFechaPlan">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
+                                                                <td>
+                                                                    {{#if info.plan.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informePlan" >
+                                                                        <div id="btnSubirInforme"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informePlan" class="inputInformePlan" type="file" style="display:none"
+                                                                        name="informePlan" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                </table>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+                                {{!-- {{/if}} --}}
                             </div>
 
                         </div>
@@ -1404,6 +1767,52 @@
         {{> modals/dimensionMarketing}}
         {{/if}}
 
+        {{#if jsonRendimiento}}
+        {{> modals/nuevoRendimiento}}
+        {{/if}}
+
+        {{> general/mostrarTarea}}
+        {{> general/sidebarTareas}}
+
     </div>
 
 </div>
+
+<script>
+    
+    // CAMPO DATE PICKER (DUET LIBRARY)
+    const elementos = document.querySelectorAll("duet-date-picker")
+    const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+
+    elementos.forEach(picker => {
+        picker.dateAdapter = {
+            parse(value = "", createDate) {
+                const matches = value.match(DATE_FORMAT_US)
+
+                if (matches) {
+                    return createDate(matches[3], matches[1], matches[2])
+                }
+            },
+            format(date) {
+                return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+            },
+        }
+
+        picker.localization = {
+            placeholder: "MM/DD/AAAA",
+            selectedDateMessage: "La fecha seleccionada es",
+            prevMonthLabel: "Mes anterior",
+            nextMonthLabel: "Mes siguiente",
+            monthSelectLabel: "Mes",
+            yearSelectLabel: "Año",
+            closeLabel: "Cerrar ventana",
+            calendarHeading: "Selecciona una fecha",
+            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            //dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
+            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            locale: "en-US",
+        }
+    })
+
+</script>

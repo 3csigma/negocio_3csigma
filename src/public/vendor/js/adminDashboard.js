@@ -1,15 +1,17 @@
-(function ($) {
-	/* "use strict" */
+(function () {
 
-	let dzChartlist = function () {
+	const dzChartlist = function () {
+
 		let draw = Chart.controllers.line.__super__.draw; //draw shadow
 		let screenWidth = $(window).width();
 
-		let chartBar = function () {
-			var optionsArea = {
+		/** GRÁFICA ADMIN DASHBOARD */
+
+		const chartBar = function () {
+			const optionsArea = {
 				series: [{
 					name: "Nuevas Empresas",
-					data: [20, 40, 20, 80, 40, 40, 65, 5, 32, 72, 50, 20]
+					data: [20, 40, 20, 80, 40, 40]
 				}
 				],
 				chart: {
@@ -54,7 +56,7 @@
 					}
 				},
 				xaxis: {
-					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
 					labels: {
 						style: {
 							colors: '#3E4954',
@@ -100,15 +102,15 @@
 					}
 				}]
 			};
-			var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+			const chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
 			chartArea.render();
-
 		}
-		let chartBar2 = function () {
-			var optionsArea = {
+
+		const chartBar2 = function () {
+			const optionsArea = {
 				series: [{
 					name: "Nuevos Consultores",
-					data: [40, 40, 30, 90, 10, 80, 40, 40, 30, 90, 10, 80]
+					data: [40, 40, 30, 90, 10, 80]
 				}
 				],
 				chart: {
@@ -153,7 +155,7 @@
 					}
 				},
 				xaxis: {
-					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
 					labels: {
 						style: {
 							colors: '#3E4954',
@@ -199,15 +201,15 @@
 					}
 				}]
 			};
-			var chartArea = new ApexCharts(document.querySelector("#chartBar2"), optionsArea);
+			const chartArea = new ApexCharts(document.querySelector("#chartBar2"), optionsArea);
 			chartArea.render();
-
 		}
-		let chartBar3 = function () {
-			var optionsArea = {
+		
+		const chartBar3 = function () {
+			const optionsArea = {
 				series: [{
 					name: "Informes generados",
-					data: [20, 15, 50, 20, 50, 30, 18, 25, 60, 15, 20, 45]
+					data: [20, 15, 105, 20, 50, 30]
 				}
 				],
 				chart: {
@@ -252,7 +254,8 @@
 					}
 				},
 				xaxis: {
-					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+/*                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], */
+					categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
 					labels: {
 						style: {
 							colors: '#3E4954',
@@ -269,9 +272,7 @@
 						style: {
 							colors: '#3E4954',
 							fontSize: '14px',
-							fontFamily: 'Poppins',
 							fontWeight: 100,
-
 						},
 					},
 				},
@@ -298,25 +299,29 @@
 					}
 				}]
 			};
-			var chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
+			const chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
 			chartArea.render();
-
 		}
+
+		/*************************** FIN GRÁFICA DASHBOARD *******************************/
+
 
 		/** GRÁFICA PARA INDICADORES */
 
-		let chartIndicadores1 = function () {
-			let valAnalisis1 = document.getElementById('jsonAnalisisAdm1').value;
-			let valAnalisis2 = document.getElementById('jsonAnalisisAdm2').value;
+		const chartIndicadores1 = function () {
+			let valAnalisis1 = document.getElementById('jsonAnalisisAdm1');
+			let valAnalisis2 = document.getElementById('jsonAnalisisAdm2');
 			let nuevosProyectos = document.getElementById('nuevosProyectos').value;
 			let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 			let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 			if (valAnalisis1) {
+				valAnalisis1 = valAnalisis1.value
 				if (valAnalisis1) { valAnalisis1 = JSON.parse(valAnalisis1) }
 				chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
 			}
 			if (valAnalisis2) {
+				valAnalisis2 = valAnalisis2.value
 				if (valAnalisis2) { valAnalisis2 = JSON.parse(valAnalisis2) }
 				chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
 			}
@@ -341,15 +346,15 @@
 							borderColor: "#50368C",
 							data: chartAnalisis1,
 							fill: false,
-						}, 
-						// {
-						// 	label: "Último análisis",
-						// 	fill: false,
-						// 	backgroundColor: "#FED061",
-						// 	borderColor: "#FED061",
-						// 	data: chartAnalisis2,
-						// }
-					]
+						},
+							// {
+							// 	label: "Último análisis",
+							// 	fill: false,
+							// 	backgroundColor: "#FED061",
+							// 	borderColor: "#FED061",
+							// 	data: chartAnalisis2,
+							// }
+						]
 					},
 					options: {
 						legend: false,
@@ -382,7 +387,7 @@
 			}
 		}
 
-		let chartIndicadores2 = function () {
+		const chartIndicadores2 = function () {
 			let valDimensiones1 = document.getElementById('jsonDimensionesAdm1');
 			let valDimensiones2 = document.getElementById('jsonDimensionesAdm2');
 			let nuevosProyectos = document.getElementById('nuevosProyectos');
@@ -394,10 +399,10 @@
 				valDimensiones1 = valDimensiones1.value
 				valDimensiones1 = JSON.parse(valDimensiones1)
 			}
-			
+
 			if (nuevosProyectos) {
 				nuevosProyectos = nuevosProyectos.value
-				if (nuevosProyectos == 1){
+				if (nuevosProyectos == 1) {
 					titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
 					chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
 				} else {
@@ -426,15 +431,15 @@
 							borderColor: "#50368C",
 							data: chartDimensiones1,
 							fill: false,
-						}, 
-						// {
-						// 	label: "Último análisis",
-						// 	fill: false,
-						// 	backgroundColor: "#FED061",
-						// 	borderColor: "#FED061",
-						// 	data: chartDimensiones2,
-						// }
-					]
+						},
+							// {
+							// 	label: "Último análisis",
+							// 	fill: false,
+							// 	backgroundColor: "#FED061",
+							// 	borderColor: "#FED061",
+							// 	data: chartDimensiones2,
+							// }
+						]
 					},
 					options: {
 						legend: false,
@@ -480,7 +485,7 @@
 			},
 		}
 
-	}();
+	} ();
 
 	jQuery(window).on('load', function () {
 		setTimeout(function () {
@@ -488,4 +493,4 @@
 		}, 1000);
 	});
 
-})(jQuery);
+})();

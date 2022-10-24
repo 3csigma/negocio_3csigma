@@ -2,8 +2,9 @@ const pool = require('../database')
 const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
-const { authToken, encriptarTxt, desencriptarTxt } = require('../lib/helpers')
-const { Country } = require('country-state-city')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos } = require('../lib/helpers')
+const { Country } = require('country-state-city');
+const { json } = require('body-parser');
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
 
@@ -189,7 +190,7 @@ empresaController.index = async (req, res) => {
 
     /************************************************************************************* */
 
-    res.render('pages/dashboard', {
+    res.render('empresa/dashboard', {
         user_dash: true,
         pagoPendiente,
         diagnosticoPagado,
@@ -400,11 +401,12 @@ empresaController.fichaCliente = async (req, res) => {
 }
 
 empresaController.addFichaCliente = async (req, res) => {
-    let { nombres, apellidos, email, telefono, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
+    let { nombres, apellidos, email, countryCode, telFicha, fecha_nacimiento, pais, twitter, facebook, instagram, otra, es_propietario, socios, nombre_empresa, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivo1, objetivo2, objetivo3, fortaleza1, fortaleza2, fortaleza3, problema1, problema2, problema3, motivo_consultoria, fecha_zh } = req.body
     let redes_sociales = JSON.stringify({ twitter, facebook, instagram, otra })
     let objetivos = JSON.stringify({ objetivo1, objetivo2, objetivo3 })
     let fortalezas = JSON.stringify({ fortaleza1, fortaleza2, fortaleza3 })
     let problemas = JSON.stringify({ problema1, problema2, problema3 })
+    const telefono = "+" + countryCode + " " + telFicha;
 
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
@@ -464,49 +466,41 @@ empresaController.analisis = async (req, res) => {
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
         btnPagar.activar2 = true;
-    }
-    
-    /************************************************************************************* */
-    const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
-    const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
-    const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
-    const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
-    // PAGÓ EL ANÁLISIS
-    // PAGÓ EL ANÁLISIS
-    // if (objAnalisis.estado == 1) {
-    //     btnPagar.etapa1 = false;
-    //     btnPagar.activar1 = false;
-    //     btnPagar.etapa2 = true;
-    //     btnPagar.activar2 = false;
-    //     analisisPagado = 1
-    // }
+        propuesta.porcentaje = "0%";
+        
+        /************************************************************************************* */
+        const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
+        const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+        const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
+        const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
+        
+        // PAGÓ EL ANÁLISIS
+        if (objAnalisis.estado == 1 ) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = false;
+            analisisPagado = 1
+            propuesta.porcentaje = "100%";
+            btnPagar.analisisPer = false
+        }
 
-    if (objAnalisis.estado == 1 ) {
-        btnPagar.etapa1 = false;
-        btnPagar.activar1 = false;
-        btnPagar.etapa2 = true;
-        btnPagar.activar2 = false;
-        analisisPagado = 1
-        propuesta.porcentaje = "100%";
-        btnPagar.analisisPer = false
-    }
+        btnPagar.obj1 = parseInt(objAnalisis1.estado)
+        btnPagar.obj2 = parseInt(objAnalisis2.estado)
+        btnPagar.obj3 = parseInt(objAnalisis3.estado)
+        
+        if (objAnalisis1.estado == 2) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = true;
+            btnPagar.analisisPer = true;
+            propuesta.porcentaje = "60%";
+        }
+        if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
+        if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
 
-    btnPagar.obj1 = parseInt(objAnalisis1.estado)
-    btnPagar.obj2 = parseInt(objAnalisis2.estado)
-    btnPagar.obj3 = parseInt(objAnalisis3.estado)
-    
-    if (objAnalisis1.estado == 2) {
-        btnPagar.etapa1 = false;
-        btnPagar.activar1 = false;
-        btnPagar.etapa2 = true;
-        btnPagar.activar2 = true;
-        btnPagar.analisisPer = true;
-        propuesta.porcentaje = "60%";
     }
-    if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
-    if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
-
-    
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
@@ -519,11 +513,14 @@ empresaController.analisis = async (req, res) => {
         }
     }
 
+    const informeAnalisis = await consultarInformes(id_empresa, "Informe de análisis")
+
     res.render('empresa/analisis', {
         user_dash: true, pagoDiag: true, itemActivo: 4, acuerdoFirmado: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
-        etapa1, archivos
+        etapa1, archivos,
+        informeAnalisis
     })
 }
 
@@ -558,4 +555,45 @@ empresaController.guardarArchivos = async (req, res) => {
     }
     console.log("\nARHIVOS >> ", req.files)
     res.redirect('/analisis-de-negocio');
+}
+
+/** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
+empresaController.planEstrategico = async (req, res) => {
+    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const empresa = row[0].id_empresas;
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareas(empresa, fechaActual)
+    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+    const listo = [
+        ((estado1.length*100)/dim1).toFixed(1), 
+        ((estado2.length*100)/dim2).toFixed(1), 
+        ((estado3.length*100)/dim3).toFixed(1),
+        ((estado4.length*100)/dim4).toFixed(1),
+    ]
+    const jsonDim = JSON.stringify([
+        { ok: (listo[0]), pendiente: (100-listo[0]) },
+        { ok: (listo[1]), pendiente: (100-listo[1]) },
+        { ok: (listo[2]), pendiente: (100-listo[2]) },
+        { ok: (listo[3]), pendiente: (100-listo[3]) }
+    ])
+    
+    const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
+    let datosTabla = await consultarDatos('rendimiento_empresa')
+    datosTabla = datosTabla.filter(x => x.empresa == empresa)
+    const jsonRendimiento = JSON.stringify(datosTabla)
+
+    res.render('empresa/planEstrategico', {
+        user_dash: true, pagoDiag: true, itemActivo: 5, acuerdoFirmado: true,
+        actualYear: req.actualYear, btnPagar,
+        tareas, informePlan, 
+        dim1, dim2, dim3, dim4, jsonDim, jsonRendimiento
+    })
 }

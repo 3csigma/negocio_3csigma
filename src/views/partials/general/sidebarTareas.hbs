@@ -1,0 +1,222 @@
+<style>
+    .chatbox.active {
+        width: 520px;
+        backdrop-filter: blur(17px);
+        box-shadow: 0px 0px 30px 0px rgb(82 63 105 / 45%);
+        background: linear-gradient(20deg, rgba(80,54,140,0.85) 0%, rgba(129,32,130,0.85) 50%, rgba(254,208,97,0.85) 100%);
+    }
+    .chatbox .chatbox-close {
+        right: 520px;
+    }
+    #custom-sidebar {
+        margin-left: 4em;
+        margin-right: 4em;
+        margin-top: 6em;
+    }
+    #actividad-sidebar {
+        font-size: 30px;
+        font-weight: 900;
+        color: #fff;
+        letter-spacing: -0.7px;
+    }
+    .txtSidebar {
+        color: #fff;
+    }
+    textarea#actividad-sidebar {
+        height: 4em;
+    }
+    textarea#actividad-sidebar, textarea#observacion {
+        width: 100%;
+        padding: 1em 2px;
+        border: 0px solid transparent;
+        background: transparent;
+        color: #fff;
+        border-radius: 0;
+        overflow-y: hidden;
+    }
+    textarea#actividad-sidebar::placeholder, textarea#observacion::placeholder, input#responsable::placeholder {
+	  color: #E1D9E1;
+    }
+    .subtitulos-Sidebar {
+        text-transform: capitalize;
+        font-weight: 900;
+        font-size: 18px;
+        border-radius: 1em;
+        color: #fff;
+        border: 0;
+        background: transparent;
+        padding-left: 10px;
+        width: 17em;
+    }
+    .widget-timeline.style-1 .timeline .timeline-badge.primary+.timeline-panel {
+        border-color: #FED061;
+    }
+    .widget-timeline.style-1 .timeline .timeline-badge.primary+.timeline-panel:after {
+        background: #FED061;
+    }
+    .widget-timeline .timeline-badge.primary:after {
+        background-color: #FED061 !important;
+        box-shadow: 0 5px 10px 0 rgb(254 208 97 / 20%);
+    }
+    .widget-timeline .timeline-badge.primary {
+        border-color: #FED061;
+    }
+    .widget-timeline .timeline>li>.timeline-badge {
+        background: transparent;
+    }
+    .widget-timeline .timeline:before {
+        background: rgb(254 208 97 / 20%);
+    }
+    .fechaMensajes {
+        color: #E1D9E1;
+    }
+    .txtYellow {
+        color: #FED061;
+    }
+    #contentAll {
+        height: calc(100vh - 30px);
+    }
+</style>
+
+<div class="pb-5 chatbox">
+    <div class="chatbox-close"></div>
+    <div id="contentAll" class="p-0 dz-scroll ps ps--active-y">
+        <div id="custom-sidebar">
+            <div class="mb-4">
+                <input type="hidden" id="idTarea">
+                <textarea id="actividad-sidebar" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
+                <textarea id="observacion" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
+            </div>
+
+            <div id="contenido-sidebar" class="">
+                <div class="row mb-1">
+                    <div class="col-5">
+                        <select class="form-select" id="estado" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em;">
+                            <option value="0">Pendiente</option>
+                            <option value="1">En Proceso</option>
+                            <option value="2">Completada</option>
+                        </select>
+                        <span id="estado-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
+                    </div>
+                    <div class="col-5">
+                        <span id="tiempo-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar"></span>
+                    </div>
+                    <div class="col-12">
+                        <hr style="border-top: 1px solid #fff !important;">                                
+                    </div>
+                </div>
+
+                {{!-- RESPONSABLE --}}
+                <div class="row">
+                    <div class="col-2">
+                        <svg width="74" height="42" viewBox="0 0 51 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M34 41V36.6667C34 34.3681 33.0729 32.1637 31.4225 30.5384C29.7722 28.9131 27.5339 28 25.2 28H9.8C7.46609 28 5.22778 28.9131 3.57746 30.5384C1.92714 32.1637 1 34.3681 1 36.6667L1 41" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18 19C22.9706 19 27 14.9706 27 10C27 5.02944 22.9706 1 18 1C13.0294 1 9 5.02944 9 10C9 14.9706 13.0294 19 18 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M37 18.5L41.3333 23L50 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="col-10" style="padding-left: 2em;">
+                        <p class="txtSidebar"><span style="padding-left: 10px;">Asignado a: </span><br>
+                            <input type="text" id="responsable" placeholder="Escribe un nombre.." class="subtitulos-Sidebar" value="{{#if tarea.responsable}}{{tarea.responsable}}{{/if}}" maxlength="25" />
+                        </p>
+                    </div>
+                </div>
+                {{!-- FECHA DE INICIO --}}
+                <div class="row">
+                    <div class="col-2">
+                        <svg width="60" height="52" viewBox="0 0 33 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.15869 14.1836H31.5585" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.9263 20.8457H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16.3584 20.8457H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.77393 20.8457H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.9263 27.4736H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M16.3584 27.4736H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.77393 27.4736H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.2471 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9.46973 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M23.5786 4.24951H9.13715C4.12846 4.24951 1 7.03969 1 12.1685V27.6031C1 32.8125 4.12846 35.6672 9.13715 35.6672H23.5628C28.5873 35.6672 31.7 32.8609 31.7 27.7322V12.1685C31.7158 7.03969 28.6031 4.24951 23.5786 4.24951Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="col-10" style="padding-left: 2em;">
+                        <p class="txtSidebar">
+                            <span style="padding-left: 10px;">Fecha de inicio: </span><br>
+                            <duet-date-picker id="fechaIni-sidebar" value="{{#if tarea.fecha_inicio}}{{tarea.fecha_inicio}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                            <span id="txtFechaIni" style="display: none;padding-left: 10px;"></span>
+                        </p>
+                    </div>
+                </div>
+                {{!-- FECHA DE ENTREGA --}}
+                <div class="row">
+                    <div class="col-2">
+                        <svg width="60" height="52" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M27.8904 2.65313H26.2118V2.32826C26.2118 1.04501 25.1668 0 23.8836 0C22.6003 0 21.5553 1.04501 21.5553 2.32826V2.65313H10.4447V2.32826C10.4447 1.04501 9.39966 0 8.11641 0C6.83316 0 5.78816 1.04501 5.78816 2.32826V2.65313H4.10964C1.84095 2.65313 0 4.49949 0 6.76277V30.5435C0 32.8122 1.84636 34.6531 4.10964 34.6531H27.8904C30.1591 34.6531 32 32.8068 32 30.5435V6.76277C32 4.49408 30.1591 2.65313 27.8904 2.65313ZM22.8927 2.32826C22.8927 1.78139 23.3367 1.33739 23.8836 1.33739C24.4305 1.33739 24.8744 1.78139 24.8744 2.32826V5.8423C24.8744 6.38917 24.4305 6.83316 23.8836 6.83316C23.3367 6.83316 22.8927 6.38917 22.8927 5.8423V2.32826ZM7.12555 2.32826C7.12555 1.78139 7.56954 1.33739 8.11641 1.33739C8.66328 1.33739 9.10728 1.78139 9.10728 2.32826V5.8423C9.10728 6.38917 8.66328 6.83316 8.11641 6.83316C7.56954 6.83316 7.12555 6.38917 7.12555 5.8423V2.32826V2.32826ZM30.6626 30.5435C30.6626 32.0704 29.4173 33.3157 27.8904 33.3157H4.10964C2.58274 33.3157 1.33739 32.0704 1.33739 30.5435V11.0782H30.668V30.5435H30.6626ZM30.6626 9.74078H1.33739V6.76277C1.33739 5.23046 2.58274 3.99052 4.10964 3.99052H5.78816V5.84772C5.78816 7.13096 6.83316 8.17597 8.11641 8.17597C9.39966 8.17597 10.4447 7.13096 10.4447 5.84772V3.99052H21.5553V5.84772C21.5553 7.13096 22.6003 8.17597 23.8836 8.17597C25.1668 8.17597 26.2118 7.13096 26.2118 5.84772V3.99052H27.8904C29.4227 3.99052 30.6626 5.23587 30.6626 6.76277V9.74078V9.74078Z" fill="white"/>
+                            <path d="M11.977 28.0041L26.997 14.511C27.2731 14.2619 27.2948 13.8396 27.0457 13.5689C26.7966 13.2927 26.3743 13.2711 26.1036 13.5202L12.0853 26.109L6.77903 20.0934C6.53537 19.8173 6.11304 19.7902 5.8369 20.0339C5.56075 20.2775 5.53368 20.6998 5.77734 20.976L11.977 28.0041Z" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="col-10" style="padding-left: 2em;">
+                        <p class="txtSidebar"><span style="padding-left: 10px;">Fecha de entrega: </span><br>
+                            <duet-date-picker id="fechaFin-sidebar" value="{{#if tarea.fecha_entrega}}{{tarea.fecha_entrega}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                            <span id="txtFechaFin" style="display: none;padding-left: 10px;"></span>
+                        </p>
+                    </div>
+                </div>
+                {{!-- DIMENSIÓN --}}
+                <div class="row mb-1">
+                    <div class="col-2">
+                        <svg width="60" height="52" viewBox="0 0 33 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28.4229 4.57715L12.9229 18.8848" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12.9231 30.8076C19.508 30.8076 24.8462 25.4694 24.8462 18.8845C24.8462 12.2996 19.508 6.96143 12.9231 6.96143C6.33814 6.96143 1 12.2996 1 18.8845C1 25.4694 6.33814 30.8076 12.9231 30.8076Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12.923 24.8459C16.2154 24.8459 18.8845 22.1769 18.8845 18.8844C18.8845 15.5919 16.2154 12.9229 12.923 12.9229C9.6305 12.9229 6.96143 15.5919 6.96143 18.8844C6.96143 22.1769 9.6305 24.8459 12.923 24.8459Z" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.38477 33.1921L5.76938 28.4229" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22.4618 33.1921L20.0771 28.4229" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M28.4229 1V4.57692H31.9998" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M24.8462 4.57715V8.15407H28.4231" stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="col-10" style="padding-left: 2em;">
+                        <p class="txtSidebar"><span style="padding-left: 10px;">Dimensión: </span><br>
+                            <select id="dimension-sidebar" class="text-center" style="width: 100%;border-radius: 5px;height: 44px;">
+                                <option value="Producto">Producto</option>
+                                <option value="Administración">Administración</option>
+                                <option value="Operaciones">Operaciones</option>
+                                <option value="Marketing">Marketing</option>
+                            </select>
+                            <span id="txtDimension" style="display: none;padding-left: 10px;"></span>
+                        </p>
+                    </div>
+                </div>
+
+                {{!-- MENSAJES --}}
+                {{!-- <div class="row">
+                    <p class="subtitulos-Sidebar">Mensajes</p>
+                    <div id="DZ_W_TimeLine11" class="widget-timeline dz-scroll style-1 height270 ps ps--active-y">
+                        <ul class="timeline">
+                            <li>
+                                <div class="timeline-badge primary"></div>
+                                <a class="timeline-panel text-muted" href="#">
+                                    <span class="fechaMensajes">8/28/2022</span>
+                                    <h6 class="mb-0 txtSidebar">Youtube, a video-sharing website, goes live <br>
+                                        <span class="txtYellow">Carlos Ramirez - Admin</span>
+                                    </h6>
+                                </a>
+                            </li> 
+                        </ul>
+                    </div>
+                </div> --}}
+
+                {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
+                <div class="row" id="btnGuardar-sidebar">
+                    {{!-- <textarea id="mensajes_" rows="2" placeholder="Escribe un mensaje o actulización..." style="width: 100%; border-radius: 1em; padding: 1em;"></textarea> --}}
+                    <div class="col-md-7 mx-auto mt-2">
+                        <button onclick="actualizarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;border:none">
+                            <p class="font-w500 m-auto">Guardar Cambios</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ps__rail-y" style="top: 159px; height: 831px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 134px; height: 697px;"></div></div>
+
+            </div>
+        </div>
+    </div>
+</div>

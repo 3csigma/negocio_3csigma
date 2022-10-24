@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" integrity="sha512-gxWow8Mo6q6pLa1XH/CcH8JyiSDEtiwJV78E+D+QP0EVasFs8wKXq16G8CLD4CJ2SnonHr4Lm/yY2fSI2+cbmw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
 <div id="preloader">
     <div data-loader="circle-side"></div>
 </div><!-- /Preload -->
@@ -49,6 +52,12 @@
     .custom-file-input:lang(en)~.custom-file-label::after {
         content: "Seleccionar";
     }
+
+    .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags.png");}
+
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .iti__flag {background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/img/flags@2x.png");}
+    }
 </style>
 
 <div class="container-fluid">
@@ -89,7 +98,7 @@
                 <form class="sigmaWizard" id="frmConsultor" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
                     <div id="middle-wizard">
-                        {{> message }}
+                        {{> general/message }}
                         <h2 class="section_title">DATOS PERSONALES</h2><br>
                         <div class="row add_top_10">
                             <div class="form-group col-md-6 ">
@@ -105,16 +114,21 @@
                         </div>
                         <!-- /Fila Grupo de campos -->
                         <div class="row add_top_10">
-                            <div class="form-group col-md-6 ">
+                            <div class="form-group col-md-12">
                                 <label for="email_consultor">Email</label>
                                 <input type="email" name="email" id="email_consultor"
                                     class="form-control required">
                                 <input type="hidden" name="clave" value="b7a445a81bc869e6e1a40218e52b2965">
                             </div>
+                        </div>
+                        <!-- /Fila Grupo de campos -->
+                        <div class="row add_top_10">
+                            <div class="form-group col-md-6">
+                                {{> general/countryCodes}}
+                            </div>
                             <div class="form-group col-md-6">
                                 <label for="tel_consultor">Teléfono</label>
-                                <input type="text" name="tel_consultor" id="tel_consultor"
-                                    class="form-control campoNum required">
+                                <input type="tel" name="telConsul" id="tel_consultor" class="form-control campoNum required">
                             </div>
                         </div>
                         <!-- /Fila Grupo de campos -->
@@ -164,14 +178,16 @@
 
 
     {{!-- SCRIPT MASCARAS PARA INPUT --}}
+    <script src="../js/jquery.js"></script>
     <script src="https://unpkg.com/imask"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js" integrity="sha512-+gShyB8GWoOiXNwOlBaYXdLTiZt10Iy6xjACGadpqMs20aJOoh+PJt3bwUVA6Cefe7yF7vblX6QwyXZiVwTWGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
     <script>
 
         // Formato de número USA (+1)
         document.addEventListener("DOMContentLoaded", function () {
             IMask(document.getElementById('tel_consultor'), {
-                mask: '+{1} (000) 000-0000'
+                mask: '(000) 000-0000'
             });
         });
 

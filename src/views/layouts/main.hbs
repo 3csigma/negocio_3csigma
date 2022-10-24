@@ -3,22 +3,10 @@
 
 <head>
     {{!-- HEADER GENERAL --}}
-    {{> header }}
-
-    {{!-- <!-- DASHBOARD USUARIO EMPRESA -->
-    {{#if user_dash}}
-        {{> user/headerUser }}
-    {{/if}} --}}
-    {{!-- DASHBOARD ADMINISTRADOR --}}
-    {{!-- {{#if adminDash}}
-        <!-- Datatable -->
-        
-        {{> admin/headerAdmin }}
-    {{/if}} --}}
-
+    {{> general/header }}
 </head>
 
-<body class="barra-scroll overflow-y-auto">
+<body id="cuerpoGeneral" class="barra-scroll overflow-y-auto">
     {{!-- INICIO DE LA ETIQUETA DIV WRAPPER --}}
     {{#if user_dash}}
         {{> user/navigation }}
@@ -37,7 +25,7 @@
     
 
     {{!-- FOOTER PARTIALS PRINCIPAL --}}
-    {{> footer }}
+    {{> general/footer }}
     {{!-- FOOTER USUARIO EMPRESA --}}
     {{#if user_dash}}
         {{> user/footerUser }}
@@ -49,28 +37,6 @@
     {{!-- FOOTER CONSULTOR --}}
     {{#if consultorDash}}
         {{> consultor/footerConsultor }}
-    {{/if}}
-
-    {{!-- SCRIPTS PARA EL LOGIN --}}
-    {{#if confirmarLogin}}
-    <script>
-        $(document).ready(function () {
-        });
-        
-        (function ($) {
-            jQuery(document).ready(function () {
-            });
-
-            jQuery(window).on('load', function () {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Correo verificado',
-                    text: 'Has confirmado satisfactoriamente tu cuenta, ahora puedes iniciar sesión.',
-                })
-            });
-
-        })(jQuery);
-    </script>
     {{/if}}
 
 </body>

@@ -11,3 +11,5 @@ src/public/archivos_analisis_empresa/*.pdf
 src/public/archivos_analisis_empresa/*.docx
 src/public/archivos_analisis_empresa/*.zip
 src/public/propuestas_analisis/*.pdf
+src/public/certificados_consultores/*.pdf
+src/public/informes_empresas/*.pdf
