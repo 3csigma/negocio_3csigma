@@ -38,6 +38,7 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "rand-token": "^1.0.1",
     "stripe": "^8.218.0",
     "superagent": "^7.1.2",
     "validator": "^13.7.0"

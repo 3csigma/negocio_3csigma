@@ -208,7 +208,7 @@ router.post('/pagar-analisis-per3', checkLogin, async (req, res) => {
 });
 
 router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
-  let destino = 'pages/dashboard', itemActivo = 1, alertSuccess = false, pagoExitoso = false;
+  let destino = 'empresa/dashboard', itemActivo = 1, alertSuccess = false, pagoExitoso = false;
   // Borrando info del Intento de pago
   req.session.intentPay = undefined; 
   req.session.etapa2 = undefined;
@@ -266,7 +266,7 @@ router.get('/pago-exitoso', checkLogin, validarURLPagar, async (req, res) => {
 })
 
 router.get('/pago-cancelado', checkLogin, validarURLPagar, async (req, res) => {
-  let destino = 'pages/dashboard', itemActivo = 1, alertCancel = false, pagoCancelado = false;
+  let destino = 'empresa/dashboard', itemActivo = 1, alertCancel = false, pagoCancelado = false;
   req.session.intentPay = undefined;
   if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
     destino = 'empresa/analisis';

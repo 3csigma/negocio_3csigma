@@ -43,6 +43,8 @@ passport.use('local.registro', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
+            let mes = new Date().getMonth() + 1 ;
+            const year = new Date().getFullYear();
 
             // Objeto de Usuario
             const newUser = { nombres, apellidos, email, clave, rol: 'Empresa', codigo }
@@ -62,7 +64,7 @@ passport.use('local.registro', new LocalStrategy({
 
             // Guardar en la base de datos
             const fila = await pool.query('INSERT INTO users SET ?', [newUser])
-            const empresa = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion }
+            const empresa = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion,mes, year }
             if (fila.affectedRows > 0) {
                 await pool.query('INSERT INTO empresas SET ?', [empresa])
             }
@@ -102,13 +104,15 @@ passport.use('local.registroConsultores', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
+            let mes = new Date().getMonth() + 1 ;
+            const year = new Date().getFullYear();    
 
             // Capturando Certificado de Consul Group
             const certificado = '../certificados_consultores/' + urlCertificado
 
             // Objeto de Usuario
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion };
+            const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year};
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);

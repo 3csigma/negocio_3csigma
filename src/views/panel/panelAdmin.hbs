@@ -28,12 +28,26 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
+                    {{#if datosJson_historialC_adm}}
+                    <input type="hidden" id="datosJson_historialC_adm" value="{{datosJson_historialC_adm }}">
                     <div class="card-body pb-0">
                         <div id="chartBar2"></div>
                     </div>
+                    {{else}}
+                    <div class="card-body pb-0" style="text-align: center;">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div>
+                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;height: 60px; padding-top: 10px;"></i>
+                            </center><br>
+                            <p>Aún no hay información para mostrar</p>
+                        </div>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
-
             {{!-- Nuevas empresas --}}
             <div class="col-xl-4 col-lg-6">
                 <div class="card">
@@ -56,9 +70,24 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
+                        {{#if datosJson_historialE_adm}}
+                    <input type="hidden" id="datosJson_historialE_adm" value="{{datosJson_historialE_adm }}">
                     <div class="card-body pb-0">
                         <div id="chartBar"></div>
                     </div>
+                    {{else}}
+                    <div class="card-body pb-0" style="text-align: center;">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div>
+                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;height: 60px; padding-top: 10px;"></i>
+                            </center><br>
+                            <p>Aún no hay información para mostrar</p>
+                        </div>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
 
@@ -79,9 +108,24 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
+                     {{#if datosJson_historialI_adm}}
+                    <input type="hidden" id="datosJson_historialI_adm" value="{{datosJson_historialI_adm }}">
                     <div class="card-body pb-0">
                         <div id="chartBar3"></div>
                     </div>
+                    {{else}}
+                    <div class="card-body pb-0" style="text-align: center;">
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <div>
+                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;height: 60px; padding-top: 10px;"></i>
+                            </center><br>
+                            <p>Aún no hay información para mostrar</p>
+                        </div>
+                    </div>
+                    {{/if}}
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
+
 const { consultarInformes } = require('../lib/helpers')
 
 const { consultorAsignadoHTML, consultorAprobadoHTML, informeDiagnosticoHTML, sendEmail } = require('../lib/mail.config')
@@ -38,8 +39,170 @@ dashboardController.admin = async (req, res) => {
         });
     });
 
-    res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true });
+// MOSTRAR DATOS PARA LA GRAFICA NUMERO DE CONSULTORES REGISTRADOS MENSUALMENTE <<====
+  let historialConsultores = await pool.query("SELECT * FROM (SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
+  let datosJson_historialC_adm
+  if (historialConsultores.length > 0) {
+    datosJson_historialC_adm = JSON.stringify(historialConsultores);
+    console.log("\n");
+    console.log("IMPIMIENDO datosJson_historialC_adm ====>>>", datosJson_historialC_adm);
+  }
+// FIN DE LA FUNCIÓN <<====
+
+// MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS REGISTRADOS MENSUALMENTE <<====
+let historialEmpresas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
+let datosJson_historialE_adm
+if (historialEmpresas.length > 0) {
+  datosJson_historialE_adm = JSON.stringify(historialEmpresas);
+  console.log("\n");
+  console.log("IMPIMIENDO datosJson_historialE_adm ====>>>", datosJson_historialE_adm);
 }
+// FIN DE LA FUNCIÓN <<====
+
+// MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
+let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
+let datosJson_historialI_adm
+if (historialInformes.length > 0) {
+  datosJson_historialI_adm = JSON.stringify(historialInformes);
+  console.log("\n");
+  console.log("IMPIMIENDO datosJson_historialI_adm ====>>>", datosJson_historialI_adm);
+}
+// FIN DE LA FUNCIÓN <<====
+
+
+    res.render('panel/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, datosJson_historialC_adm,datosJson_historialE_adm,datosJson_historialI_adm });
+}
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
+dashboardController.historial_consultores_admin = async (req, res) => {
+
+    const consultores = await pool.query("SELECT * FROM consultores")
+  
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+  
+    let filtroConsultores, num_consultores
+    filtroConsultores = consultores.filter((item) => mesAnterior == item.mes && year == item.year);
+   
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+    if (filtroConsultores.length > 0) {
+        num_consultores = filtroConsultores.length;
+        console.log("NUMERO DE CONSULTORES FILTRADOS >>>>>", num_consultores);
+
+        // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES FILTRADOS
+        const datos_consultor_admin = { fecha, mes, num_consultores };
+        await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+        console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+    } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_consultor_admin = { fecha, mes, num_consultores: '0' };
+            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+            console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+        }else{
+            num_consultores = numRepetido[0].num_consultores
+            // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES DEL ADMIN FILTRADOS POR SEMANA Y AÑO 
+            const datos_consultor_admin = { fecha, mes, num_consultores };
+            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+            console.log("3");
+        }
+    }
+    res.send("todo ok...");
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
+dashboardController.historial_empresas_admin = async (req, res) => {
+
+    const empresas = await pool.query("SELECT * FROM empresas")
+  
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+  
+    let filtroEmpresas, num_empresas
+    filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
+   
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+
+    if (filtroEmpresas.length > 0) {
+        num_empresas = filtroEmpresas.length;
+        // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
+        const datos_empresas_admin = { fecha, mes, num_empresas };
+        await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+        console.log("Realizando registro en DB HISTORIAL EMPRESAS ADMINISTRADOR....")
+      } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_empresas_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_empresas_admin = { fecha, mes, num_empresas: '0' };
+            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            console.log("2");
+        }else{
+            num_empresas = numRepetido[0].num_empresas
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
+            const datos_empresas_admin = { fecha, mes, num_empresas };
+            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            console.log("3");
+        }
+      }
+
+    res.send("todo ok...");
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES ADMIN
+dashboardController.historial_informes_admin = async (req, res) => {
+
+    const informes = await pool.query("SELECT * FROM informes")
+  
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+  
+    let filtroInformes, num_informes
+    filtroInformes = informes.filter((item) => mesAnterior == item.mes && year == item.year);
+   
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+    if (filtroInformes.length > 0) {
+        num_informes = filtroInformes.length;
+        // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL ADMIN FILTRADOS POR MES Y AÑO 
+        const datos_informes_admin = { fecha, mes, num_informes };
+        await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+        console.log("Realizando registro en DB HISTORIAL INFORMES ADMINISTRADOR....")
+      } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_informes_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_informes_admin = { fecha, mes, num_informes: '0' };
+            await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+            console.log("2");
+        }else{
+            num_informes = numRepetido[0].num_informes
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL ADMIN FILTRADOS POR MES Y AÑO 
+            const datos_informes_admin = { fecha, mes, num_informes };
+            await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+            console.log("3");
+        }
+      }
+
+    res.send("todo ok...");
+};
 
 // CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
@@ -1084,7 +1247,9 @@ dashboardController.guardarInforme = async (req, res) => {
         id_consultor: e[0].consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/'+urlInforme,
-        fecha: new Date().toLocaleString("en-US", {timeZone: zonaHoraria})
+        fecha: new Date().toLocaleString("en-US", {timeZone: zonaHoraria}),
+        mes: new Date().getMonth() + 1,
+        year: new Date().getFullYear()
     }
 
     const actualizar = {

@@ -144,6 +144,14 @@ empresaController.index = async (req, res) => {
     
     /************************************************************************** */
 
+    // PORCENTAJE ETAPA 3
+    let porcentajeEtapa3 = 0
+
+    // PORCENTAJE ETAPA 4
+    let porcentajeTotal = (diagPorcentaje.num + analisisPorcentaje.num + porcentajeEtapa3)/3 
+    porcentajeTotal = Math.round(porcentajeTotal)
+    console.log("=====SUMA ====>>>>>>>" ,porcentajeTotal );
+   
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1, jsonAnalisis2;
@@ -189,7 +197,9 @@ empresaController.index = async (req, res) => {
 
     /************************************************************************************* */
 
-    res.render('pages/dashboard', {
+
+
+    res.render('empresa/dashboard', {
         user_dash: true,
         pagoPendiente,
         diagnosticoPagado,
@@ -200,6 +210,8 @@ empresaController.index = async (req, res) => {
         etapa1,
         diagPorcentaje,
         analisisPorcentaje,
+        porcentajeEtapa3,
+        porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         informe: informeEmpresa[0],
         nuevosProyectos, rendimiento

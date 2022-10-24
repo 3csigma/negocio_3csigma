@@ -6,6 +6,7 @@ const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
+const cron = require('node-cron');
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -24,7 +25,14 @@ const rutaAlmacen = multer.diskStorage({
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
 
-// // Dashboard Principal Administrador
+// Ejecución Mensual
+cron.schedule('0 1 1 * *',() => {
+    dashboardController.historial_consultores_admin();
+    dashboardController.historial_empresas_admin();
+    dashboardController.historial_informes_admin();
+});
+
+// Dashboard Principal Administrador
 router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)

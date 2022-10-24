@@ -18,10 +18,25 @@
 			let screenWidth = $(window).width();
 
 			let chartBar = function () {
+
+				    let valoresE = []   // => Valores historial empresas consultor
+                    const datosY_empresas = []  // => Datos para la barras de la grafica
+                    const datosX_empresas = [] // => Datos para el eje X (los meses)
+                    valoresE = $('#datosJson_empresas_asignadas').val();
+
+                    console.log("VVVVVVVVVVVVVVV",valoresE)
+                    if (valoresE) {
+                        valoresE = JSON.parse(valoresE);
+                        console.log(valoresE)
+                        valoresE.forEach(e => {
+                        datosY_empresas.push(e.num_empresas_asignadas)
+                        datosX_empresas.push(e.mes)
+                        })
+                    }
 				var optionsArea = {
 					series: [{
 						name: "Empresas",
-						data: [1, 3, 20, 5, 7, 8, 6, 5, 16, 18, 11, 7]
+						data: datosY_empresas
 					}
 					],
 					chart: {
@@ -65,30 +80,32 @@
 							size: 6,
 						}
 					},
-					xaxis: {
-						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-						labels: {
-							style: {
-								colors: '#3E4954',
-								fontSize: '14px',
-								fontFamily: 'Poppins',
-								fontWeight: 100,
+			       xaxis: {
+                         categories: datosX_empresas,
+                          labels: {
+                            style: {
+                                colors: '#3E4954',
+                                fontSize: '14px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 100,
+                            },
+                        },
+                    },
+                    yaxis: {
+                        labels: {
+                            offsetX: -16,
+                            style: {
+                                colors: '#3E4954',
+                                fontSize: '14px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 100,
 
-							},
-						},
-					},
-					yaxis: {
-						labels: {
-							offsetX: -16,
-							style: {
-								colors: '#3E4954',
-								fontSize: '14px',
-								fontFamily: 'Poppins',
-								fontWeight: 100,
-
-							},
-						},
-					},
+                            },
+                            formatter: function (y) {
+                                return y.toFixed(0) + "";
+                            },
+                        },
+                    },
 					fill: {
 						colors: ['#FED061'],
 						type: 'solid',
@@ -118,10 +135,26 @@
 			}
 			
 			let chartBar2 = function () {
+
+				    let valoresI = []   // => Valores historial informes consultor
+                    const datosY = []  // => Datos para la barras de la grafica
+                    const datosX = [] // => Datos para el eje X (los meses)
+                    valoresI = $('#datosJson_historialI_consultor').val();
+
+                    console.log("VVVVVVVVVVVVVVV",valoresI)
+                    if (valoresI) {
+                        valoresI = JSON.parse(valoresI);
+                        console.log(valoresI)
+                        valoresI.forEach(i => {
+                        datosY.push(i.num_informes)
+                        datosX.push(i.mes)
+                        })
+                    }
+				
 				var optionsArea = {
 					series: [{
 						name: "Informes generados",
-						data: [20, 15, 50, 20, 50, 30, 18, 25, 60, 15, 20, 45]
+						data: datosY
 					}
 					],
 					chart: {
@@ -165,30 +198,32 @@
 							size: 12,
 						}
 					},
-					xaxis: {
-						categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-						labels: {
-							style: {
-								colors: '#3E4954',
-								fontSize: '14px',
-								fontFamily: 'Poppins',
-								fontWeight: 100,
+			          xaxis: {
+                         categories: datosX,
+                          labels: {
+                            style: {
+                                colors: '#3E4954',
+                                fontSize: '14px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 100,
+                            },
+                        },
+                    },
+                    yaxis: {
+                        labels: {
+                            offsetX: -16,
+                            style: {
+                                colors: '#3E4954',
+                                fontSize: '14px',
+                                fontFamily: 'Poppins',
+                                fontWeight: 100,
 
-							},
-						},
-					},
-					yaxis: {
-						labels: {
-							offsetX: -16,
-							style: {
-								colors: '#3E4954',
-								fontSize: '14px',
-								fontFamily: 'Poppins',
-								fontWeight: 100,
-
-							},
-						},
-					},
+                            },
+                            formatter: function (y) {
+                                return y.toFixed(0) + "";
+                            },
+                        },
+                    },
 					fill: {
 						colors: ['#50368C'],
 						type: 'solid',

@@ -62,13 +62,19 @@
                                 <input class="form-control" type="email" name="email"
                                     placeholder="ejemplo@tusitioweb.com" required autofocus>
                             </div>
-                            <div class="col-12 col-sm-6">
-                                <label style="color:#000;font-weight: bold !important;">Password*</label>
-                                <input class="form-control" type="password" name="clave"
-                                    placeholder="Introduce tu contraseña" required required>
+                            <div class="form-group col-12 col-sm-6">
+                            <label style="color:#000;font-weight: bold !important;">Password* <span id="message" style="color:#6B2986; font-size: 12px; font-weight: bold;"></span></label>
+                            <div class="input-group transparent-append">
+                                <input class="form-control" type="password" id="pass" name="clave" placeholder="Introduce tu contraseña" required>
+                                    <div class="input-group-append show-pass ">
+                                        <span class="input-group-text "> 
+											<i class="fa fa-eye-slash"></i>
+											<i class="fa fa-eye"></i>
+                                        </span>
+                                    </div>
                             </div>
                         </div>
-
+                        </div>
                         {{!-- Campos de Nombre & Apelidos --}}
                         <div class="row">
                             <div class="col-12 col-sm-6">
@@ -79,7 +85,7 @@
                             <div class="col-12 col-sm-6">
                                 <label style="color:#000;font-weight: bold !important;">Apellidos*</label>
                                 <input class="form-control" type="text" name="apellidos"
-                                    placeholder="Introduce tus apellidos" required required>
+                                    placeholder="Introduce tus apellidos" required autofocus>
                             </div>
                         </div>
 
@@ -155,10 +161,7 @@
                     responsibility to check this page periodically for any such changes or updates. Your continued use
                     of or access to the Platform or our services following the posting of any changes, modifications, or
                     updates constitutes your express acceptance thereof.</p>
-
-
-
-            </div>
+                </div>
             <div class="modal-footer">
                 <button type="button" class="btn_1" data-dismiss="modal">Close</button>
             </div>
@@ -168,7 +171,8 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal --> --}}
-
+<script src="../vendor/js/global.min.js"></script>
+<script src="../login/clave.js"></script>
 <script>
     function validarFormRegistro() {
         const a = document.getElementById("politicas").checked
@@ -187,4 +191,5 @@
     // Asignando Zona horaria
     const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.getElementById("zh_empresa").value = tzLocal
+  
 </script>

@@ -1,6 +1,10 @@
 const pool = require('../database')
 const passport = require('passport')
+const bcrypt = require('bcryptjs');
+const { restablecerCuentaHTML, sendEmail } = require('../lib/mail.config')
+const randtoken = require('rand-token');
 const userController = exports;
+
 
 // Cerrar Sesión
 userController.cerrarSesion = (req, res) => {
@@ -27,14 +31,6 @@ userController.postRegistro = (req, res, next) => {
 userController.getLogin = (req, res) => {
     res.render('auth/login', { wizarx: false, user_dash: false, login: false, confirmarLogin: false, csrfToken: req.csrfToken()})
 }
-
-// userController.postLogin = (req, res, next) => {
-//     passport.authenticate('local.login', {
-//         successRedirect: '/', 
-//         failureRedirect: '/login',
-//         failureFlash: true,
-//     })(req, res, next)
-// }
 
 userController.confirmarRegistro = async (req, res) => {
     try {
@@ -75,3 +71,97 @@ userController.confirmarRegistro = async (req, res) => {
         });
     }
 }
+
+/**************************************************************************************************************** */
+// --------------------------------------- RESTABLECER CONTRASEÑA ----------------------------------------------
+
+userController.getrestablecerClave = (req, res) => {
+    res.render('auth/restablecer-clave', { csrfToken: req.csrfToken()});
+}
+
+userController.getresetPassword = (req, res) => {
+    console.log("==========/ REQ /========>>",req.query.token);
+    res.render('auth/reset-password', { csrfToken: req.csrfToken(), token: req.query.token});
+}
+
+userController.resetPassword = async (req, res, next) => {
+    let { email } = req.body;
+
+   pool.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+        if (err) throw err;
+        let type = ''
+        let msg = ''
+        if (result.length > 0) {
+            const token = randtoken.generate(20);
+             // ! ************* PROCESO DEL EMAIL PARA VENDEDOR ************
+            console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" , email);
+            const asunto = "Bienvenido a 3C Sigma"
+            const plantilla = restablecerCuentaHTML(token)
+            // Enviar email
+            const resultEmail = sendEmail(email, asunto, plantilla)
+            
+            if (!resultEmail) {
+                type = 'error';
+                msg = 'Something goes to wrong. Please try again';
+                // res.json("Ocurrio un error inesperado al enviar el email al vendedor")
+            } else {
+                const data = {
+                    token: token
+                }
+               pool.query("UPDATE users SET ? WHERE email = ?", [data, email], (err, result) => {
+                    if (err) throw err
+                })
+                type = 'success';
+                msg = 'Revisa tu bandeja de entrada';
+            }
+            // ! **************************************************************
+        } else {
+            console.log('2');
+            type = 'error';
+            msg = 'Este correo no está registrado';
+        }
+        req.flash(type, msg);
+        res.redirect('/restablecer-clave');
+    });
+}
+
+userController.updatePassword = async (req, res, next) => {
+    const { clave, token } = req.body;
+    console.log("\n")
+    console.log("¡¡¡¡¡¡¡¡¡¡¡¡= TOKEN =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>", token);
+    console.log("¡¡¡¡¡¡¡¡¡¡¡¡= CLAVE =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>", clave);
+
+   await pool.query('SELECT * FROM users WHERE token = ?', [token], (err, result) => {
+        if (err) throw err;
+        let type
+        let msg
+        if (result.length > 0) {
+            const email = result[0].email
+            console.log("¡¡¡¡¡¡¡¡¡¡¡¡= EMAIL =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>" , email);
+            const saltRounds = 10;
+            bcrypt.genSalt(saltRounds, (err, salt) => {
+                if (err) throw err;
+                bcrypt.hash(clave, salt, (err, hash) => {
+                    if (err) throw err;
+                    const data = { clave: hash}
+                    console.log("¡¡¡¡¡¡¡¡¡¡¡¡= DATA =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>" ,data );
+                    pool.query('UPDATE users SET ? WHERE email = ?', [data, email], (err, result) => {
+                        if (err) throw err
+                    });
+                });
+            });
+            type = 'success';
+            msg = 'Contraseña actualizada correctamente';
+          } else {
+            console.log('2 Soy una respuesta negativa');
+             console.log("\n")
+
+            type = 'error';
+            msg = 'Invalid link; please try again';
+        }
+        req.flash(type, msg);
+        res.render('auth/login',{ msgSuccessClave:true, csrfToken: req.csrfToken()})
+    });
+}
+
+

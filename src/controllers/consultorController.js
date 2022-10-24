@@ -8,9 +8,121 @@ consultorController.index = async (req, res) => {
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
 
     const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
-    
-    res.render('consultor/panelConsultor', { consultorDash: true, itemActivo: 1, empresas, graficas1: true });
+    console.log("ID A BUSCAR ==>" , con[0].id_consultores);
+
+// MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
+    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let datosJson_empresas_asignadas
+    if (empresas_asignadas.length > 0) {
+        datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas);
+        console.log("\n");
+        console.log("IMPIMIENDO datosJson_empresas_asignadas ====>>>", datosJson_empresas_asignadas);
+    }
+// FIN DE LA FUNCIÓN <<====
+
+
+// MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
+    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let datosJson_historialI_consultor
+    if (historialInformes.length > 0) {
+        datosJson_historialI_consultor = JSON.stringify(historialInformes);
+        console.log("\n");
+        console.log("IMPIMIENDO datosJson_historialI_consultor ====>>>", datosJson_historialI_consultor);
+    }
+// FIN DE LA FUNCIÓN <<====
+
+    res.render('consultor/panelConsultor', { consultorDash: true, itemActivo: 1, empresas, graficas1: true, datosJson_empresas_asignadas, datosJson_historialI_consultor });
 }
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS CONSULTOR
+consultorController.historial_empresas_consultor = async (req, res) => {
+
+    const empresas = await pool.query("SELECT * FROM empresas")
+    const consultores = await pool.query("SELECT * FROM consultores")
+  
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let idConsultor = 0
+
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+        console.log("IDDDDD  idConsultor DDDD", idConsultor);
+        
+        let filtroEmpresas, num_empresas_asignadas = 0
+        filtroEmpresas = empresas.filter((item) => item.consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
+        
+        if (filtroEmpresas.length > 0) {
+            num_empresas_asignadas = filtroEmpresas.length;
+
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            const datos_empresas_consultor = { fecha, mes, num_empresas_asignadas, idConsultor };
+            await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
+            console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
+            console.log("==--..>> (1) consultor");
+          } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            datos_empresas_consultor = { fecha, mes, num_empresas_asignadas:0, idConsultor }; 
+            await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
+            console.log("==--..>> (2) consultor");
+          }
+    });
+
+    res.send("todo ok...");
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
+consultorController.historial_informes_consultor = async (req, res) => {
+
+    const informes = await pool.query("SELECT * FROM informes")
+    const consultores = await pool.query("SELECT * FROM consultores")
+  
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let idConsultor = 0
+
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+        console.log("IDDDDD  idConsultor DDDD", idConsultor);
+        
+        let filtroInformes, num_informes = 0
+        filtroInformes = informes.filter((item) => item.id_consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
+        
+        if (filtroInformes.length > 0) {
+
+            num_informes = filtroInformes.length;
+
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            const datos_informes_consultor = { fecha, mes, num_informes, idConsultor };
+            await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
+            console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
+            console.log("==--..>> (1) consultor");
+          } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            datos_informes_consultor = { fecha, mes, num_informes:0, idConsultor }; 
+            await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
+            console.log("==--..>> (2) consultor");
+             
+          }
+    });
+
+    res.send("todo ok...");
+};
 
 // EMPRESAS
 consultorController.empresasAsignadas = async (req, res) => {

@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const consultorController = require('../controllers/consultorController');
 const { checkLogin, consultorLogueado } = require('../lib/auth')
+const cron = require('node-cron');
 
 // Dashboard Principal Consultor
 router.get('/consultor', checkLogin, consultorLogueado, consultorController.index)
@@ -26,6 +27,16 @@ const rutaAlmacen = multer.diskStorage({
 
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
+
+// Ejecución Mensual
+cron.schedule('0 1 1 * *',() => {
+    consultorController.historial_informes_consultor();
+    consultorController.historial_empresas_consultor();
+});
+
+router.post('/historial_empresas_consultor', consultorController.historial_empresas_consultor)
+router.post('/historial_informes_consultor', consultorController.historial_informes_consultor)
+
 router.post('/enviar-propuesta-analisis', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
 
 // Cuestionario Análisis dimensión Producto 

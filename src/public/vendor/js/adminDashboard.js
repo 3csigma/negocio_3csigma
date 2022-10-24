@@ -104,10 +104,13 @@
 			chartArea.render();
 
 		}
+
+
+
 		let chartBar2 = function () {
 			var optionsArea = {
 				series: [{
-					name: "Nuevos Consultores",
+					name: "Nuevos CoSSSSSSs",
 					data: [40, 40, 30, 90, 10, 80, 40, 40, 30, 90, 10, 80]
 				}
 				],
@@ -203,6 +206,9 @@
 			chartArea.render();
 
 		}
+
+
+
 		let chartBar3 = function () {
 			var optionsArea = {
 				series: [{
