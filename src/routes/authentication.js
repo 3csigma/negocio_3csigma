@@ -14,8 +14,6 @@ router.get('/confirmar/:codigo', noLogueado, csrfProtection, userController.conf
 
 router.get('/login', noLogueado, csrfProtection, userController.getLogin)
 
-//router.post('/login', noLogueado, csrfProtection, userController.postLogin)
-
 router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.login', {
     failureRedirect: '/login',
     failureFlash: true,
@@ -32,5 +30,17 @@ router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.l
 
 /** Cerrar Sesión */
 router.get('/logout', checkLogin, userController.cerrarSesion)
+
+// Restablecer Clave de Usuario
+router.get('/restablecer-clave', csrfProtection, userController.getrestablecerClave)
+
+/* RUTA DONDE SE COLOCARÁ LA NUEVA CLAVE DE LA CUENTA */
+router.get('/reset-password', noLogueado, csrfProtection, userController.getresetPassword)
+
+/* Enviar link de la clave al correo */
+router.post('/reset-password-email', noLogueado, userController.resetPassword)
+
+/* Actualizar clave en la Base de datos */
+router.post('/update-password', noLogueado, csrfProtection,userController.updatePassword)
 
 module.exports = router;

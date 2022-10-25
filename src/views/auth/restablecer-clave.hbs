@@ -1,0 +1,86 @@
+<div class="form-body">
+    <div class="top_logo">
+        <a href="/">
+            <div class="logo-Login" >
+                <img class="logo-size-Login" src="https://3csigma.com/app_public_files/img/3C-sigma-logo-full.png" alt="Logo 3CSigma">
+            </div>
+        </a>
+    </div>
+    <div class="row">
+        <div class="img-holder">
+            <div class="bg"></div>
+            <div class="info-holder">
+            </div>
+        </div>
+        <div class="loginBanner">
+            <img class="loginBanner-size" src="https://3csigma.com/app_public_files/img/Login_Banner_movil.jpg" alt="Banner Móvil">
+        </div>
+        
+        <div class="form-holder form-abajo">
+            <div class="form-content">
+                <div class="form-items">
+                    {{> message }}
+                    <h3 class="tituH3">Restablacer cuenta</h3>
+                    <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
+                    <p class="msg-Login-Top">Ingresa tu correo registrado en la platforma!</p>
+                    <br>
+                    <form action="/reset-password-email" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Correo electrónico</label>*</label>
+                        <input class="form-control" type="email" id="email" name="email" placeholder="ejemplo@tusitioweb.com" required autofocus>
+                       
+                        <p id="message" style = "color:#6B2986; font-size: 12px; font-weight: bold;"> </p>
+                        <div class="row">
+                            <div class="col-12 col-sm-5" style="margin-top: -15px; font-size: 14px;">¿Recordaste? 
+                                <a href="/login" style="color:#50368C;">Ingresa aquí</a>
+                            </div>
+                        </div>
+                        <div class="form-button d-flex align-items-center">
+                            <button id="submit" type="submit"class="ibtn login-ingresar text-center fw-bold mx-auto mb-4">Enviar</button>
+                        </div>
+                    </form>
+                    {{#if messages.error}}
+                    <div class="alert alert-danger alert-border-left alert-dismissible fade show" style="width: 102%;" role="alert"><i
+                            class="mdi mdi-block-helper me-3 align-middle"></i><strong>Error:</strong>
+                        {{messages.error}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                 {{/if}}
+                  {{#if messages.success}}
+                    <div class="alert alert-success alert-border-left alert-dismissible fade show" role="alert"
+                        style="width: 116%; margin-left: -7%;"> - {{messages.error}}
+                            <a href="/login"><strong>Iniciar sesión</strong></a>
+                    </div>
+                 {{/if}}
+
+                    <div class="other-links d-flex align-items-center my-4">
+                        <span class="text-center fw-bold mx-auto" style="color:#000;font-weight: bold !important;">¿No
+                            estas registrado?<a href="/registro"><span
+                                    style="color:#812082;font-weight: bold !important;"> Crea una cuenta hoy</span>
+                        </span></a>
+                    </div>
+                    {{!-- Copyright --}}
+                    <div class="d-flex align-items-center my-4">
+                        <br><br>
+                        <span class="text-center fw-bold mx-auto mb-0 mt-4">{{actualYear}} Copyright &copy; 3C Sigma</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./vendor/js/global.min.js"></script>
+<script>
+   //{{!-- FUNCIÓN PARA VISUALIZAR LA CONTRASEÑA INGRESADA  --}}
+	jQuery(document).ready(function(){
+		jQuery('.show-pass').on('click',function(){
+			jQuery(this).toggleClass('active');
+			if(jQuery('#pass').attr('type') == 'password'){
+				jQuery('#pass').attr('type','text');
+			}else if(jQuery('#pass').attr('type') == 'text'){
+				jQuery('#pass').attr('type','password');
+			}
+		});
+	});
+      //{{!-- FIN DE LA FUNCIÓN--}} 
+</script> 

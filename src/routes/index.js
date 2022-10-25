@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
+const { perfilUsuarios } = require('../controllers/userController');
 const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
+const cron = require('node-cron');
+const { historial_consultores_admin, historial_empresas_admin, historial_informes_admin } = require('../lib/helpers')
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -23,6 +26,9 @@ const rutaAlmacen = multer.diskStorage({
 
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
+
+// Perfil de Usuarios
+router.get('/perfil', checkLogin, perfilUsuarios)
 
 // // Dashboard Principal Administrador
 router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
@@ -52,5 +58,12 @@ router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardCo
 // Informes Diagnóstico & Análisis 
 // router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
 router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
+
+// Ejecución Mensual
+cron.schedule('0 1 1 * *',() => {
+    historial_consultores_admin();
+    historial_empresas_admin();
+    historial_informes_admin();
+});
 
 module.exports = router;

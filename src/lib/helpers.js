@@ -110,6 +110,7 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 }
 
 /************************************************************************************************************** */
+/*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
 // ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
 helpers.enabled_nextPay = async () => {
     const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
@@ -197,11 +198,236 @@ helpers.enabled_nextPay = async () => {
     console.log("\n***************\nEJECUCIÓN CRON JOB FINALIZADA - PAGO ANÁLISIS\n***************\n");
 }
 
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
+helpers.historial_consultores_admin = async () => {
+
+    const consultores = await pool.query("SELECT * FROM consultores")
+
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    let filtroConsultores, num_consultores
+    filtroConsultores = consultores.filter((item) => mesAnterior == item.mes && year == item.year);
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+    if (filtroConsultores.length > 0) {
+        num_consultores = filtroConsultores.length;
+        console.log("NUMERO DE CONSULTORES FILTRADOS >>>>>", num_consultores);
+
+        // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES FILTRADOS
+        const datos_consultor_admin = { fecha, mes, num_consultores };
+        await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+        console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+    } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_consultor_admin = { fecha, mes, num_consultores: '0' };
+            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+            console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+        } else {
+            num_consultores = numRepetido[0].num_consultores
+            // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES DEL ADMIN FILTRADOS POR SEMANA Y AÑO 
+            const datos_consultor_admin = { fecha, mes, num_consultores };
+            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+            console.log("3");
+        }
+    }
+    console.log("CRON JOB HISTORIAL DE CONSULTORES ADMIN FINALIZADO...");
+    next();
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
+helpers.historial_empresas_admin = async () => {
+
+    const empresas = await pool.query("SELECT * FROM empresas")
+
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    let filtroEmpresas, num_empresas
+    filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+
+    if (filtroEmpresas.length > 0) {
+        num_empresas = filtroEmpresas.length;
+        // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
+        const datos_empresas_admin = { fecha, mes, num_empresas };
+        await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+        console.log("Realizando registro en DB HISTORIAL EMPRESAS ADMINISTRADOR....")
+    } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_empresas_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_empresas_admin = { fecha, mes, num_empresas: '0' };
+            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            console.log("2");
+        } else {
+            num_empresas = numRepetido[0].num_empresas
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
+            const datos_empresas_admin = { fecha, mes, num_empresas };
+            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            console.log("3");
+        }
+    }
+
+    console.log("CRON JOB HISTORIAL DE EMPRESAS ADMIN FINALIZADO...");
+    next();
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES ADMIN
+helpers.historial_informes_admin = async () => {
+
+    const informes = await pool.query("SELECT * FROM informes")
+
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    let filtroInformes, num_informes
+    filtroInformes = informes.filter((item) => mesAnterior == item.mes && year == item.year);
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+    if (filtroInformes.length > 0) {
+        num_informes = filtroInformes.length;
+        // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL ADMIN FILTRADOS POR MES Y AÑO 
+        const datos_informes_admin = { fecha, mes, num_informes };
+        await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+        console.log("Realizando registro en DB HISTORIAL INFORMES ADMINISTRADOR....")
+    } else {
+        let numRepetido = await pool.query("SELECT * FROM historial_informes_admin ORDER BY id DESC LIMIT 1");
+        if (numRepetido.length == 0) {
+            const datos_informes_admin = { fecha, mes, num_informes: '0' };
+            await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+            console.log("2");
+        } else {
+            num_informes = numRepetido[0].num_informes
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL ADMIN FILTRADOS POR MES Y AÑO 
+            const datos_informes_admin = { fecha, mes, num_informes };
+            await pool.query("INSERT INTO historial_informes_admin SET ?", [datos_informes_admin]);
+            console.log("3");
+        }
+    }
+
+    console.log("CRON JOB HISTORIAL INFORMES ADMIN FINALIZADO..")
+    next();
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS CONSULTOR
+helpers.historial_empresas_consultor = async () => {
+
+    const empresas = await pool.query("SELECT * FROM empresas")
+    const consultores = await pool.query("SELECT * FROM consultores")
+
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let idConsultor = 0
+
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+        console.log("IDDDDD  idConsultor DDDD", idConsultor);
+
+        let filtroEmpresas, num_empresas_asignadas = 0
+        filtroEmpresas = empresas.filter((item) => item.consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
+
+        if (filtroEmpresas.length > 0) {
+            num_empresas_asignadas = filtroEmpresas.length;
+
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            const datos_empresas_consultor = { fecha, mes, num_empresas_asignadas, idConsultor };
+            await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
+            console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
+            console.log("==--..>> (1) consultor");
+        } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            datos_empresas_consultor = { fecha, mes, num_empresas_asignadas: 0, idConsultor };
+            await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
+            console.log("==--..>> (2) consultor");
+        }
+    });
+
+    console.log("HISTORIAL DE EMPRESAS CONSULTOR FINALIZADO...");
+    next()
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
+helpers.historial_informes_consultor = async () => {
+
+    const informes = await pool.query("SELECT * FROM informes")
+    const consultores = await pool.query("SELECT * FROM consultores")
+
+    let fecha = new Date().toLocaleDateString("en-CA");
+    let mesActual = new Date().getMonth();
+    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
+    const mesAnterior = mesActual - 1
+    const year = new Date().getFullYear();
+
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let idConsultor = 0
+
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+
+        let filtroInformes, num_informes = 0
+        filtroInformes = informes.filter((item) => item.id_consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
+
+        if (filtroInformes.length > 0) {
+
+            num_informes = filtroInformes.length;
+
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            const datos_informes_consultor = { fecha, mes, num_informes, idConsultor };
+            await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
+            console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
+            console.log("==--..>> (1) consultor");
+        } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            datos_informes_consultor = { fecha, mes, num_informes: 0, idConsultor };
+            await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
+            console.log("==--..>> (2) consultor");
+
+        }
+    });
+
+    console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
+    next();
+};
+/************************************************************************************************************** */
+
+
 /** CONSULTAS MYSQL */
 helpers.consultarInformes = async (empresa, nombreInforme) => {
     const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? `, [empresa, nombreInforme])
-    // const informes = await pool.query('SELECT * FROM informes')
-    // const informe = informes.find(i => i.id_empresa == empresa && i.nombre == nombreInforme)
     return informe[0];
 }
 

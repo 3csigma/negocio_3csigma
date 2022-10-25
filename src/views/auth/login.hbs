@@ -26,22 +26,31 @@
                     <form action="/login" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Correo electrónico</label>*</label>
-                        <input class="form-control" type="email" name="email" placeholder="ejemplo@tusitioweb.com"
-                            required autofocus>
+                        <input class="form-control" type="email" id="username" name="email" placeholder="ejemplo@tusitioweb.com" required autofocus>
                         <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Contraseña*</label>
-                        <input class="form-control" type="password" name="clave" placeholder="Introduce tu contraseña"
-                            required>
+                        <div class="form-group">
+                            <div class="input-group transparent-append">
+                                <input class="form-control" type="password" id="pass" name="clave" placeholder="Introduce tu contraseña" required>
+                                    <div class="input-group-append show-pass ">
+                                        <span class="input-group-text "> 
+											<i class="fa fa-eye-slash"></i>
+											<i class="fa fa-eye"></i>
+                                        </span>
+                                    </div>
+                            </div>
+                        </div>
+                        <p id="message" style = "color:#6B2986; font-size: 12px; font-weight: bold;"> </p>
                         <div class="row">
                             <div class="col-12 col-sm-7">
                                 <label class="switch" style="margin-top: 6px;">
-                                    <input type="checkbox" name="recuerdame" id="recuerdame" value="true">
+                                    <input type="checkbox" name="recuerdame" id="remember_me" value="remember-me">
                                     <span class="slider round"></span>
                                     <label for=""></label>
                                 </label>
                                 <label for="customSwitch1" style="font-weight: bold !important"> Recuérdame</label>
                             </div>
                             <div class="col-12 col-sm-5" style="margin-top: 9px;">
-                                <a href="#" style="color:#50368C;">Olvidé mi contraseña</a>
+                                <a href="/restablecer-clave" style="color:#50368C;">Olvidé mi contraseña</a>
                             </div>
                         </div>
                         <div class="form-button d-flex align-items-center">
@@ -49,12 +58,11 @@
                                 class="ibtn login-ingresar text-center fw-bold mx-auto mb-4">Ingresar</button>
                         </div>
                     </form>
-
                     <div class="other-links d-flex align-items-center my-4">
                         <span class="text-center fw-bold mx-auto" style="color:#000;font-weight: bold !important;">¿No
                             estas registrado?<a href="/registro"><span
-                                    style="color:#812082;font-weight: bold !important;"> Crea una cuenta
-                                    hoy</span></span></a>
+                                    style="color:#812082;font-weight: bold !important;"> Crea una cuenta hoy</span>
+                        </span></a>
                     </div>
                     {{!-- Copyright --}}
                     <div class="d-flex align-items-center my-4">
@@ -66,3 +74,33 @@
         </div>
     </div>
 </div>
+<script src="../vendor/js/global.min.js"></script>
+<script src="../login/clave.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
+ <script>
+   // {{!-- FUNCIÓN PARA RECORDAR LAS CREDENCIALES DE USUARIO --}}
+            $(function() {
+                if (localStorage.chkbx && localStorage.chkbx != '') {
+                    $('#remember_me').attr('checked', 'checked');
+                    $('#username').val(localStorage.usrname);
+                    $('#pass').val(localStorage.pass);
+                } else {
+                    $('#remember_me').removeAttr('checked');
+                    $('#username').val('');
+                    $('#pass').val('');
+                }
+                $('#remember_me').click(function() {
+                    if ($('#remember_me').is(':checked')) {
+                        // save username and password
+                        localStorage.usrname = $('#username').val();
+                        localStorage.pass = $('#pass').val();
+                        localStorage.chkbx = $('#remember_me').val();
+                    } else {
+                        localStorage.usrname = '';
+                        localStorage.pass = '';
+                        localStorage.chkbx = '';
+                    }
+                });
+            });
+    // {{!--  FIN DE LA FUNCIÓN  --}}
+</script>

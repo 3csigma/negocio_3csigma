@@ -574,24 +574,18 @@
                             <h2 class="section_title">FINANZAS</h2>
 
                             <div class="row add_top_10 barra-scroll overflow-y-auto" style="max-height: 60vh;">
-
-                                <div class="form-group col-md-12">
-                                    <div class="form-floating mt-3">
-                                        <input type="text" class="form-control inputTotales_" name="total_ventas">
-                                        <label for="total-ventas">Total de Ventas</label>
-                                    </div>
+                                
+                                <div class="form-group col-md-12 pt-2">
+                                    <label for="total-ventas">Total de Ventas</label>
+                                    <input type="text" class="form-control inputTotales_ required" id="total-ventas" name="total_ventas">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control inputTotales_" naame="total_compras">
-                                        <label for="total-compras">Total de Compras</label>
-                                    </div>
+                                    <label for="total-compras">Total de Compras</label>
+                                    <input type="text" class="form-control inputTotales_ required" id="total-compras" name="total_compras">
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control inputTotales_" name="total_gastos">
-                                        <label for="total-gastos">Total de Gastos</label>
-                                    </div>
+                                    <label for="total-gastos">Total de Gastos</label>
+                                    <input type="text" class="form-control inputTotales_ required" id="total-gastos" name="total_gastos">
                                 </div>
 
                                 <div class="form-group col-md-12">
@@ -1856,5 +1850,12 @@
 </div>
 <!-- /container-fluid -->
 <a href="{{volver}}" class="close"></a>
+
+<script>
+    // Capturando Zona Horaria Local
+    const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzLocalActual);
+    document.getElementById("zhActualAdm").value = tzLocalActual;
+</script>
 
 {{> general/inputsMoneda}}

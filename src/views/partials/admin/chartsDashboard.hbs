@@ -2,14 +2,26 @@
     (function () {
 
         const dzChartlist = function () {
-            //const draw = Chart.controllers.line.__super__.draw; //draw shadow
-            //const screenWidth = $(window).width();
 
+            // NÚMERO DE EMPRESAS 👌 ============|
             const chartBar = function () {
-                const optionsArea = {
+                    let valoresE = []   // => Valores historial empresas
+                    const datosY = []  // => Datos para la barras de la grafica
+                    const datosX = [] // => Datos para el eje X (los meses)
+                    valoresE = $('#datosJson_historialE_adm').val();
+                    console.log(valoresE)
+                    if (valoresE) {
+                        valoresE = JSON.parse(valoresE);
+                        console.log(valoresE)
+                        valoresE.forEach(e => {
+                        datosY.push(e.num_empresas)
+                        datosX.push(e.mes)
+                        })
+                    }
+                var optionsArea = {
                     series: [{
                         name: "Nuevas Empresas",
-                        data: [20, 40, 20, 80, 40, 40]
+                        data: datosY
                     }
                     ],
                     chart: {
@@ -53,9 +65,9 @@
                             size: 6,
                         }
                     },
-                    xaxis: {
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-                        labels: {
+                   xaxis: {
+                         categories: datosX,
+                          labels: {
                             style: {
                                 colors: '#3E4954',
                                 fontSize: '14px',
@@ -75,7 +87,11 @@
                                 fontWeight: 100,
 
                             },
+                              formatter: function (y) {
+                         return y.toFixed(0) + "";
+                     },
                         },
+                       
                     },
                     fill: {
                         colors: ['#FED061'],
@@ -100,16 +116,29 @@
                         }
                     }]
                 };
-                const chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
+                var chartArea = new ApexCharts(document.querySelector("#chartBar"), optionsArea);
                 chartArea.render();
 
             }
 
+            // NÚMERO DE CONSULTORES 👌 ============|
             const chartBar2 = function () {
-                const optionsArea = {
+                    let valoresC = []   // => Valores historial consultores
+                    const datosY = []  // => Datos para la barras de la grafica
+                    const datosX = [] // => Datos para el eje X (los meses)
+                    valoresC = $('#datosJson_historialC_adm').val();
+                    if (valoresC) {
+                        valoresC = JSON.parse(valoresC);
+                        console.log(valoresC)
+                        valoresC.forEach(c => {
+                        datosY.push(c.num_consultores)
+                        datosX.push(c.mes)
+                        })
+                    }
+                var optionsArea = {
                     series: [{
                         name: "Nuevos Consultores",
-                        data: [40, 40, 30, 90, 10, 80]
+                        data: datosY
                     }
                     ],
                     chart: {
@@ -154,8 +183,8 @@
                         }
                     },
                     xaxis: {
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-                        labels: {
+                         categories: datosX,
+                          labels: {
                             style: {
                                 colors: '#3E4954',
                                 fontSize: '14px',
@@ -175,7 +204,11 @@
                                 fontWeight: 100,
 
                             },
+                              formatter: function (y) {
+                         return y.toFixed(0) + "";
+                     },
                         },
+                       
                     },
                     fill: {
                         colors: ['#812082'],
@@ -200,16 +233,31 @@
                         }
                     }]
                 };
-                const chartArea = new ApexCharts(document.querySelector("#chartBar2"), optionsArea);
+                var chartArea = new ApexCharts(document.querySelector("#chartBar2"), optionsArea);
                 chartArea.render();
 
             }
-            
+
+            // NÚMERO DE INFORMES 👌 ============|
             const chartBar3 = function () {
-                const optionsArea = {
+                    let valoresI = []   // => Valores historial informes
+                    const datosY = []  // => Datos para la barras de la grafica
+                    const datosX = [] // => Datos para el eje X (los meses)
+                    valoresI = $('#datosJson_historialI_adm').val();
+                    console.log(valoresI)
+                    if (valoresI) {
+                        valoresI = JSON.parse(valoresI);
+                        console.log(valoresI)
+                        valoresI.forEach(i => {
+                        datosY.push(i.num_informes)
+                        datosX.push(i.mes)
+                        })
+                    }
+
+                var optionsArea = {
                     series: [{
                         name: "Informes generados",
-                        data: [20, 15, 105, 20, 50, 30]
+                        data: datosY
                     }
                     ],
                     chart: {
@@ -253,16 +301,14 @@
                             size: 12,
                         }
                     },
-                    xaxis: {
-/*                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"], */
-                        categories: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-                        labels: {
+                     xaxis: {
+                         categories: datosX,
+                          labels: {
                             style: {
                                 colors: '#3E4954',
                                 fontSize: '14px',
                                 fontFamily: 'Poppins',
                                 fontWeight: 100,
-
                             },
                         },
                     },
@@ -272,7 +318,12 @@
                             style: {
                                 colors: '#3E4954',
                                 fontSize: '14px',
+                                fontFamily: 'Poppins',
                                 fontWeight: 100,
+
+                            },
+                            formatter: function (y) {
+                                return y.toFixed(0) + "";
                             },
                         },
                     },
@@ -299,7 +350,7 @@
                         }
                     }]
                 };
-                const chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
+                var chartArea = new ApexCharts(document.querySelector("#chartBar3"), optionsArea);
                 chartArea.render();
 
             }

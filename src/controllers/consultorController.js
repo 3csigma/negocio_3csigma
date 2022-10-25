@@ -6,15 +6,36 @@ const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/h
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
-
     const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
-    
-    res.render('consultor/panelConsultor', { consultorDash: true, itemActivo: 1, empresas, graficas1: true });
+
+    // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
+    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let datosJson_empresas_asignadas
+    if (empresas_asignadas.length > 0) {
+        datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas);
+        console.log("\n");
+        console.log("IMPIMIENDO datosJson_empresas_asignadas ====>>>", datosJson_empresas_asignadas);
+    }
+    // FIN DE LA FUNCIÓN <<====
+
+    // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
+    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let datosJson_historialI_consultor
+    if (historialInformes.length > 0) {
+        datosJson_historialI_consultor = JSON.stringify(historialInformes);
+        console.log("\n");
+        console.log("IMPIMIENDO datosJson_historialI_consultor ====>>>", datosJson_historialI_consultor);
+    }
+    // FIN DE LA FUNCIÓN <<====
+
+    res.render('consultor/panelConsultor', {
+        consultorDash: true, itemActivo: 1, empresas, graficas1: true, datosJson_empresas_asignadas, datosJson_historialI_consultor
+    });
 }
 
 // EMPRESAS
 consultorController.empresasAsignadas = async (req, res) => {
-    
+
     const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
 
     let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.consultor = ? LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;', [con[0].id_consultores])
@@ -31,7 +52,7 @@ consultorController.empresasAsignadas = async (req, res) => {
         e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
 
         informe.forEach(i => {
-            if (i.id_empresa == e.id_empresas){
+            if (i.id_empresa == e.id_empresas) {
                 e.etapa = 'Informe diagnóstico';
             }
         })
@@ -109,7 +130,7 @@ consultorController.empresaInterna = async (req, res) => {
     let diagnostico = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
     let dgNuevasEmpresas = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? AND id_consultor = ?', [idUser, idConsultor])
 
-    if (diagnostico.length == 0 && dgNuevasEmpresas.length == 0){
+    if (diagnostico.length == 0 && dgNuevasEmpresas.length == 0) {
         frmDiag.color = 'badge-danger'
         frmDiag.texto = 'Pendiente'
         frmDiag.fechaLocal = true;
@@ -120,17 +141,17 @@ consultorController.empresaInterna = async (req, res) => {
         frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
-        
+
         if (diagnostico.length > 0) {
             frmDiag.fecha = diagnostico[0].fecha;
             frmDiag.tabla1 = true;
             frmDiag.tabla2 = false;
-        }else{
+        } else {
             frmDiag.fecha = dgNuevasEmpresas[0].fecha;
             frmDiag.tabla1 = false;
             frmDiag.tabla2 = true;
         }
-        
+
     }
 
     // Respuestas del Cuestionario Diagnóstico Empresa Establecida
@@ -171,25 +192,25 @@ consultorController.empresaInterna = async (req, res) => {
         resDiag.ventas = JSON.parse(r.ventas)
         resDiag.metas = JSON.parse(r.metas)
     }
-    
 
-    /***************** Tabla de Informes ******************* */ 
+
+    /***************** Tabla de Informes ******************* */
     const frmInfo = {};
     const info = {
-        prod : {ver: 'none'},
-        adm : {ver: 'none'},
-        op : {ver: 'none'},
-        marketing : {ver: 'none'},
-        analisis : {ver: 'none'}
+        prod: { ver: 'none' },
+        adm: { ver: 'none' },
+        op: { ver: 'none' },
+        marketing: { ver: 'none' },
+        analisis: { ver: 'none' }
     }
     let tablaInformes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
-    if (tablaInformes.length > 0){
+    if (tablaInformes.length > 0) {
         frmInfo.fecha = tablaInformes[0].fecha;
         frmInfo.ver1 = 'block';
         frmInfo.ver2 = 'none';
         frmInfo.url = tablaInformes[0].url;
         datos.etapa = 'Informe diagnóstico'
-    } else{
+    } else {
         frmInfo.ver1 = 'none';
         frmInfo.ver2 = 'block';
         frmInfo.url = '#'
@@ -254,13 +275,13 @@ consultorController.empresaInterna = async (req, res) => {
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1 = null, jsonAnalisis2 = null;
-    
+
     let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ ASC LIMIT 1', [idUser])
     let areasVitales2 = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ DESC LIMIT 1', [idUser])
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
-        jsonAnalisis2 = JSON.stringify( areasVitales2[0])
-        if (areasVitales[0].rendimiento_op >= 1){
+        jsonAnalisis2 = JSON.stringify(areasVitales2[0])
+        if (areasVitales[0].rendimiento_op >= 1) {
             rendimiento.op = areasVitales[0].rendimiento_op
         } else {
             rendimiento.op = false;
@@ -274,7 +295,7 @@ consultorController.empresaInterna = async (req, res) => {
         nuevosProyectos = 1;
         // Rendimiento del Proyecto
         rendimiento.num = resulCateg[0].rendimiento
-        if (rendimiento.num < 50){
+        if (rendimiento.num < 50) {
             rendimiento.txt = "Mejorable"
             rendimiento.color = "badge-danger"
         } else if (rendimiento.num > 51 && rendimiento.num < 74) {
@@ -290,7 +311,7 @@ consultorController.empresaInterna = async (req, res) => {
     let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [idUser])
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
-        jsonDimensiones2 = JSON.stringify( xDimensiones2[0]);
+        jsonDimensiones2 = JSON.stringify(xDimensiones2[0]);
         nuevosProyectos = 0;
     }
 
@@ -298,7 +319,7 @@ consultorController.empresaInterna = async (req, res) => {
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
     const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
     const propuesta = propuestas.find(i => i.empresa == idUser)
-    let pagos_analisis = {ok:false};
+    let pagos_analisis = { ok: false };
     if (propuesta) {
         datos.etapa = 'Propuesta de análisis enviada'
         const pagos = await pool.query('SELECT * FROM pagos')
@@ -314,12 +335,12 @@ consultorController.empresaInterna = async (req, res) => {
         pagos_analisis.dos.precio = propuesta.precio_per2
         pagos_analisis.tres.precio = propuesta.precio_per3
 
-        if (pagos_analisis.unico.estado == 1){
+        if (pagos_analisis.unico.estado == 1) {
             datos.etapa = 'Análisis de negocio pago único'
             propuesta.pago = true;
             pagos_analisis.ok = true;
         }
-        if (pagos_analisis.uno.estado == 2){
+        if (pagos_analisis.uno.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 60%'
             pagos_analisis.uno.color = 'success'
             pagos_analisis.uno.txt = 'Pagado 60%'
@@ -328,7 +349,7 @@ consultorController.empresaInterna = async (req, res) => {
             pagos_analisis.uno.color = 'warning'
             pagos_analisis.uno.txt = 'Pendiente'
         }
-        if (pagos_analisis.dos.estado == 2){
+        if (pagos_analisis.dos.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 80%'
             pagos_analisis.dos.color = 'success'
             pagos_analisis.dos.txt = 'Pagado 80%'
@@ -336,7 +357,7 @@ consultorController.empresaInterna = async (req, res) => {
             pagos_analisis.dos.color = 'warning'
             pagos_analisis.dos.txt = 'Pendiente'
         }
-        if (pagos_analisis.tres.estado == 2){
+        if (pagos_analisis.tres.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 100%'
             pagos_analisis.tres.color = 'success'
             pagos_analisis.tres.txt = 'Pagado 100%'
@@ -353,7 +374,7 @@ consultorController.empresaInterna = async (req, res) => {
     let analisis = await pool.query('SELECT * FROM analisis_empresa')
     analisis = analisis.find(i => i.id_empresa == idUser)
     if (analisis) {
-        if (analisis.archivos){
+        if (analisis.archivos) {
             archivos = JSON.parse(analisis.archivos)
         }
     }
@@ -367,59 +388,59 @@ consultorController.empresaInterna = async (req, res) => {
         if (dimension.producto) {
             const prod = JSON.parse(dimension.producto)
             dimProducto = {
-                fecha : prod.fecha,
-                publico_objetivo : prod.publico_objetivo,
-                beneficios : prod.beneficios,
-                tipo_producto : prod.tipo_producto,
-                nivel_precio : prod.nivel_precio,
-                mas_vendidos : prod.mas_vendidos,
-                razon_venta : prod.razon_venta,
-                integracion_gama : prod.integracion_gama,
-                calidad : prod.calidad,
-                aceptacion : prod.aceptacion,
+                fecha: prod.fecha,
+                publico_objetivo: prod.publico_objetivo,
+                beneficios: prod.beneficios,
+                tipo_producto: prod.tipo_producto,
+                nivel_precio: prod.nivel_precio,
+                mas_vendidos: prod.mas_vendidos,
+                razon_venta: prod.razon_venta,
+                integracion_gama: prod.integracion_gama,
+                calidad: prod.calidad,
+                aceptacion: prod.aceptacion,
             }
         }
         if (dimension.administracion) {
             const admin = JSON.parse(dimension.administracion)
             dimAdmin = {
-                fecha : admin.fecha,
+                fecha: admin.fecha,
                 v: admin.vision,
                 mision: admin.mision,
                 valores: admin.valores,
                 f: admin.foda,
                 estructura_organizativa: admin.estructura_organizativa,
                 tipo_sistema: admin.tipo_sistema,
-                sistema_facturacion : admin.sistema_facturacion,
-                av_th : admin.av_talento_humano,
-                av_fz : admin.av_finanzas,
+                sistema_facturacion: admin.sistema_facturacion,
+                av_th: admin.av_talento_humano,
+                av_fz: admin.av_finanzas,
             }
         }
         if (dimension.operacion) {
             const op = JSON.parse(dimension.operacion)
             dimOperacion = {
-                fecha : op.fecha,
-                info_productos : op.info_productos,
+                fecha: op.fecha,
+                info_productos: op.info_productos,
                 satisfaccion: op.satisfaccion,
-                encuesta_clientes : op.encuesta_clientes,
-                informacion_deClientes : op.informacion_deClientes,
-                utilidad_libro_quejas : op.utilidad_libro_quejas,
-                beneficio_libro_quejas : op.beneficio_libro_quejas,
-                estrategia__libro_quejas : op.estrategia__libro_quejas,
-                fidelizacion_clientes : op.fidelizacion_clientes,
-                av_op : op.av_operaciones,
-                av_ambiente : op.av_ambiente_laboral,
-                av_innovacion : op.av_innovacion,
+                encuesta_clientes: op.encuesta_clientes,
+                informacion_deClientes: op.informacion_deClientes,
+                utilidad_libro_quejas: op.utilidad_libro_quejas,
+                beneficio_libro_quejas: op.beneficio_libro_quejas,
+                estrategia__libro_quejas: op.estrategia__libro_quejas,
+                fidelizacion_clientes: op.fidelizacion_clientes,
+                av_op: op.av_operaciones,
+                av_ambiente: op.av_ambiente_laboral,
+                av_innovacion: op.av_innovacion,
             }
         }
         if (dimension.marketing) {
             const mark = JSON.parse(dimension.marketing)
             dimMarketing = {
                 fecha: mark.fecha,
-                objetivo_principal: mark.objetivo_principal, 
-                cliente: mark.cliente, 
-                posicionamiento: mark.posicionamiento, 
-                beneficios: mark.beneficios, 
-                mensaje: mark.mensaje, 
+                objetivo_principal: mark.objetivo_principal,
+                cliente: mark.cliente,
+                posicionamiento: mark.posicionamiento,
+                beneficios: mark.beneficios,
+                mensaje: mark.mensaje,
                 oferta1: mark.oferta1,
                 oferta2: mark.oferta2,
                 seguimiento: mark.seguimiento,
@@ -434,7 +455,7 @@ consultorController.empresaInterna = async (req, res) => {
         }
     }
     let divInformes = false
-    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) {divInformes = true}
+    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) { divInformes = true }
     /* --------------------------------------------------------------------------------------- */
 
     /************************************************************************************* */
@@ -446,27 +467,27 @@ consultorController.empresaInterna = async (req, res) => {
     let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
     let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
     let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
-    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
-    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
-    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado1 = dim1.filter(x => x.estado == 'Completada');
+    const estado2 = dim2.filter(x => x.estado == 'Completada');
+    const estado3 = dim3.filter(x => x.estado == 'Completada');
     const estado4 = dim4.filter(x => x.estado == 'Completada');
     dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
     const listo = [
-        (estado1.length*100)/dim1, (estado2.length*100)/dim2, (estado3.length*100)/dim3, (estado4.length*100)/dim4
+        (estado1.length * 100) / dim1, (estado2.length * 100) / dim2, (estado3.length * 100) / dim3, (estado4.length * 100) / dim4
     ]
     const jsonDim = JSON.stringify([
-        { ok: Math.round(listo[0]), pendiente: Math.round(100-listo[0]) },
-        { ok: Math.round(listo[1]), pendiente: Math.round(100-listo[1]) },
-        { ok: Math.round(listo[2]), pendiente: Math.round(100-listo[2]) },
-        { ok: Math.round(listo[3]), pendiente: Math.round(100-listo[3]) }
+        { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
+        { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
+        { ok: Math.round(listo[2]), pendiente: Math.round(100 - listo[2]) },
+        { ok: Math.round(listo[3]), pendiente: Math.round(100 - listo[3]) }
     ])
 
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == idUser)
     const jsonRendimiento = JSON.stringify(datosTabla)
-    
+
     //res.render('consultor/empresaInterna', { 
-    res.render('admin/editarEmpresa', { 
+    res.render('admin/editarEmpresa', {
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
@@ -480,7 +501,7 @@ consultorController.empresaInterna = async (req, res) => {
 /* ------------------------------------------------------------------------------------------------ */
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 consultorController.enviarPropuesta = async (req, res) => {
-    const {precioPropuesta, idEmpresa, codigo} = req.body
+    const { precioPropuesta, idEmpresa, codigo } = req.body
     const empresa = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigo])
     const email = empresa[0].email
     const nombre = empresa[0].nombre_empresa
@@ -488,19 +509,19 @@ consultorController.enviarPropuesta = async (req, res) => {
     const fila = propuestasDB.find(i => i.empresa == idEmpresa)
     const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
-    const precio_per1 = parseFloat(precioPropuesta)*0.6
-    const precio_per2 = parseFloat(precioPropuesta)*0.2
-    const precio_per3 = parseFloat(precioPropuesta)*0.2
+    const precio_per1 = parseFloat(precioPropuesta) * 0.6
+    const precio_per2 = parseFloat(precioPropuesta) * 0.2
+    const precio_per3 = parseFloat(precioPropuesta) * 0.2
     if (fila) {
-        const actualizarPropuesta = {precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta}
+        const actualizarPropuesta = { precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
         await pool.query('UPDATE propuesta_analisis SET ? WHERE empresa = ?', [actualizarPropuesta, idEmpresa]);
     } else {
-        const nuevaPropuesta = {empresa:idEmpresa, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta}
+        const nuevaPropuesta = { empresa: idEmpresa, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
         await pool.query('INSERT INTO propuesta_analisis SET ?', [nuevaPropuesta]);
     }
     /** INFO PARA ENVÍO DE EMAIL */
     const asunto = "¡Felicitaciones!, Etapa 1 finalizada"
-        
+
     // Obtener la plantilla de Email
     const template = etapa1FinalizadaHTML(nombre);
 
@@ -513,9 +534,9 @@ consultorController.enviarPropuesta = async (req, res) => {
         console.log("\n<<<<< Email de Etapa 1 Finalizada - Enviado >>>>>\n")
     }
 
-    let redireccionar = '/empresas/'+codigo
+    let redireccionar = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        redireccionar = '/empresas-asignadas/'+codigo;
+        redireccionar = '/empresas-asignadas/' + codigo;
     }
     res.redirect(redireccionar)
 }
@@ -523,29 +544,29 @@ consultorController.enviarPropuesta = async (req, res) => {
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'+codigo
+    let volver = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/'+codigo;
+        volver = '/empresas-asignadas/' + codigo;
     }
     res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisProducto = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
-    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
     let empresa = await pool.query('SELECT * FROM empresas')
     const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
-   
+
     let id_empresa, id_consultor;
 
     // Consultor que realizó el análisis
     const consultores = await pool.query('SELECT * FROM consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = 0; 
+    c ? id_consultor = c.id_consultores : id_consultor = 0;
 
     if (empresa) {
         id_empresa = empresa.id_empresas;
@@ -567,54 +588,56 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor'){
-            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        if (req.user.rol == 'Consultor') {
+            res.redirect('/empresas-asignadas/' + codigoEmpresa)
         } else {
-            res.redirect('/empresas/'+codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa)
         }
 
     }
 
-    
+
 }
 
 // ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'+codigo
+    let volver = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/'+codigo;
+        volver = '/empresas-asignadas/' + codigo;
     }
     res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisAdministracion = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
-    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
     let empresa = await pool.query('SELECT * FROM empresas')
     const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
-   
+
     let id_consultor;
 
     // Consultor que realizó el análisis
     const consultores = await pool.query('SELECT * FROM consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false; 
+    c ? id_consultor = c.id_consultores : id_consultor = false;
 
     if (empresa && id_consultor) {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
-        const { vision1, vision2, vision3, vision4, vision5, mision, valores, foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8, estructura_organizativa, tipo_sistema, sistema_facturacion, puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6, h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo, proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion} = req.body
+        const { vision1, vision2, vision3, vision4, vision5, mision, valores, foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8, estructura_organizativa, tipo_sistema, sistema_facturacion, puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6, h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo, proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion } = req.body
 
         const vision = { vision1, vision2, vision3, vision4, vision5 };
         const foda = { foda1, foda2, foda3, foda4, foda5, foda6, foda7, foda8 }
-        const av_talento_humano = { puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6,
-            h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo }
+        const av_talento_humano = {
+            puesto1, funcion1, puesto2, funcion2, puesto3, funcion3, puesto4, funcion4, puesto5, funcion5, puesto6, funcion6,
+            h_puesto1, habilidad_interp1, habilidad_tecnica1, h_puesto2, habilidad_interp2, habilidad_tecnica2, h_puesto3, habilidad_interp3, habilidad_tecnica3, h_puesto4, habilidad_interp4, habilidad_tecnica4, h_puesto5, habilidad_interp5, habilidad_tecnica5, h_puesto6, habilidad_interp6, habilidad_tecnica6, habilidad1, habilidad2, necesidad_contratacion, motivo_contratacion, proceso_contratacion1, proceso_contratacion2, evaluacion_cargo
+        }
         const av_finanzas = { proyeccion_ventas, costo_ventas, cuentas_pagar, cuentas_cobrar, costos_fijos_variables, estado_resultados_empresa, utilidad_neta, rentabilidad, punto_equilibrio, flujo_caja, retorno_inversion }
 
         let administracion = JSON.stringify({
@@ -632,10 +655,10 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor'){
-            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        if (req.user.rol == 'Consultor') {
+            res.redirect('/empresas-asignadas/' + codigoEmpresa)
         } else {
-            res.redirect('/empresas/'+codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa)
         }
 
     }
@@ -644,27 +667,27 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN OPERACION
 consultorController.analisisOperacion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'+codigo
+    let volver = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/'+codigo;
+        volver = '/empresas-asignadas/' + codigo;
     }
     res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisOperacion = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
-    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
     let empresa = await pool.query('SELECT * FROM empresas')
     const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
-   
+
     // Consultor que realizó el análisis
     let id_consultor;
     const consultores = await pool.query('SELECT * FROM consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false; 
+    c ? id_consultor = c.id_consultores : id_consultor = false;
 
     if (empresa && id_consultor) {
         let id_empresa = empresa.id_empresas;
@@ -672,9 +695,9 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
         // Capturando datos del formulario - Analisis dimensión Producto
         const { info_productos, satisfaccion, encuesta_clientes, informacion_deClientes, utilidad_libro_quejas, beneficio_libro_quejas, estrategia__libro_quejas, fidelizacion_clientes, instalaciones_op, areas_op, influencia_op, permisos1, permisos2, plan_trabajo1, plan_trabajo2, plan_trabajo3, procesos_estandarizados1, procesos_estandarizados2, ambiente_laboral, comunicacion, reconocimiento1, reconocimiento2, innovacion_inidividual1, innovacion_inidividual2, innovacion_productos, innovacion_procesos, innovacion_modelo, innovacion_gestion } = req.body
 
-        const av_operaciones = {instalaciones_op, areas_op, influencia_op, permisos1, permisos2, plan_trabajo1, plan_trabajo2, plan_trabajo3, procesos_estandarizados1, procesos_estandarizados2}
-        const av_ambiente_laboral = {ambiente_laboral, comunicacion, reconocimiento1, reconocimiento2}
-        const av_innovacion = {innovacion_inidividual1, innovacion_inidividual2, innovacion_productos, innovacion_procesos, innovacion_modelo, innovacion_gestion};
+        const av_operaciones = { instalaciones_op, areas_op, influencia_op, permisos1, permisos2, plan_trabajo1, plan_trabajo2, plan_trabajo3, procesos_estandarizados1, procesos_estandarizados2 }
+        const av_ambiente_laboral = { ambiente_laboral, comunicacion, reconocimiento1, reconocimiento2 }
+        const av_innovacion = { innovacion_inidividual1, innovacion_inidividual2, innovacion_productos, innovacion_procesos, innovacion_modelo, innovacion_gestion };
 
         const operacion = JSON.stringify({
             fecha, info_productos, satisfaccion, encuesta_clientes, informacion_deClientes, utilidad_libro_quejas, beneficio_libro_quejas, estrategia__libro_quejas, fidelizacion_clientes, av_operaciones, av_ambiente_laboral, av_innovacion
@@ -691,10 +714,10 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor'){
-            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        if (req.user.rol == 'Consultor') {
+            res.redirect('/empresas-asignadas/' + codigoEmpresa)
         } else {
-            res.redirect('/empresas/'+codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa)
         }
 
     } else {
@@ -705,39 +728,39 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN MARKETING
 consultorController.analisisMarketing = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'+codigo
+    let volver = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/'+codigo;
+        volver = '/empresas-asignadas/' + codigo;
     }
     res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisMarketing = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
-    const fecha = new Date().toLocaleString("en-US", {timeZone: zhActualAdm})
+    const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
     let empresa = await pool.query('SELECT * FROM empresas')
     const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
-   
+
     let id_consultor;
 
     // Consultor que realizó el análisis
     const consultores = await pool.query('SELECT * FROM consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false; 
+    c ? id_consultor = c.id_consultores : id_consultor = false;
 
     if (empresa && id_consultor) {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
-        const {objetivo_principal, cliente, posicionamiento, beneficios, mensaje, oferta1, oferta2, seguimiento, presupuesto, atraccion, fidelizacion, sitioWeb1, sitioWeb2, sitioWeb3, sitioWeb4, sitioWeb5, sitioWeb6, sitioWeb7, identidadC1, identidadC2, identidadC3, identidadC4, identidadC5, identidadC6, identidadC7, eslogan, estrategia1, estrategia2, estrategia3, estrategia4, estrategia5, estrategia6} = req.body
+        const { objetivo_principal, cliente, posicionamiento, beneficios, mensaje, oferta1, oferta2, seguimiento, presupuesto, atraccion, fidelizacion, sitioWeb1, sitioWeb2, sitioWeb3, sitioWeb4, sitioWeb5, sitioWeb6, sitioWeb7, identidadC1, identidadC2, identidadC3, identidadC4, identidadC5, identidadC6, identidadC7, eslogan, estrategia1, estrategia2, estrategia3, estrategia4, estrategia5, estrategia6 } = req.body
 
-        const sitioWeb = {s1:sitioWeb1, s2:sitioWeb2, s3:sitioWeb3, s4:sitioWeb4, s5:sitioWeb5, s6:sitioWeb6, s7:sitioWeb7}
-        const identidadC = {ic1:identidadC1, ic2:identidadC2, ic3:identidadC3, ic4:identidadC4, ic5:identidadC5, ic6:identidadC6, ic7:identidadC7}
-        const estrategias = {e1:estrategia1, e2:estrategia2, e3:estrategia3, e4:estrategia4, e5:estrategia5, e6:estrategia6}
+        const sitioWeb = { s1: sitioWeb1, s2: sitioWeb2, s3: sitioWeb3, s4: sitioWeb4, s5: sitioWeb5, s6: sitioWeb6, s7: sitioWeb7 }
+        const identidadC = { ic1: identidadC1, ic2: identidadC2, ic3: identidadC3, ic4: identidadC4, ic5: identidadC5, ic6: identidadC6, ic7: identidadC7 }
+        const estrategias = { e1: estrategia1, e2: estrategia2, e3: estrategia3, e4: estrategia4, e5: estrategia5, e6: estrategia6 }
 
         const marketing = JSON.stringify({
             fecha, objetivo_principal, cliente, posicionamiento, beneficios, mensaje, oferta1, oferta2, seguimiento, presupuesto, atraccion, fidelizacion, sitioWeb, identidadC, eslogan, estrategias
@@ -754,10 +777,10 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor'){
-            res.redirect('/empresas-asignadas/'+codigoEmpresa)
+        if (req.user.rol == 'Consultor') {
+            res.redirect('/empresas-asignadas/' + codigoEmpresa)
         } else {
-            res.redirect('/empresas/'+codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa)
         }
 
     }
@@ -815,12 +838,12 @@ consultorController.nuevoRendimiento = async (req, res) => {
     total_compras = total_compras.replace(/[,]/g, '.');
     total_gastos = total_gastos.replace(/[$ ]/g, '');
     total_gastos = total_gastos.replace(/[,]/g, '.');
-    const utilidad = parseFloat(total_ventas)-parseFloat(total_compras)-parseFloat(total_gastos)
-    const nuevoRendimiento = {empresa, total_ventas, total_compras, total_gastos, utilidad, fecha}
+    const utilidad = parseFloat(total_ventas) - parseFloat(total_compras) - parseFloat(total_gastos)
+    const nuevoRendimiento = { empresa, total_ventas, total_compras, total_gastos, utilidad, fecha }
     await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
-    let redireccionar = '/empresas/'+codigo
+    let redireccionar = '/empresas/' + codigo
     if (req.user.rol == 'Consultor') {
-        redireccionar = '/empresas-asignadas/'+codigo;
+        redireccionar = '/empresas-asignadas/' + codigo;
     }
     res.redirect(redireccionar)
 }
