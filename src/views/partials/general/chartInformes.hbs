@@ -43,6 +43,8 @@
         const fecha_inicio = $("#fecha_inicio").val();
         const fecha_entrega = $("#fecha_entrega").val();
         const dimension = $("#dimension").val();
+        const nombreEmpresa = $("#nombreEmpresa").text();
+        const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
 
         if (actividad == '' || fecha_entrega == '' || dimension == '') {
@@ -70,7 +72,7 @@
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
-            const data = JSON.stringify({actividad, fecha_inicio, fecha_entrega, dimension, empresa})
+            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email })
             fetch('/agregarTarea', {
                 method: 'POST',
                 body: data,
@@ -161,9 +163,10 @@
         const fecha_inicio = $("#fechaIni-sidebar").val();
         const fecha_entrega = $("#fechaFin-sidebar").val();
         const dimension = $("#dimension-sidebar").val();
+        const email = $("#emailEmpresa").text();
         //const mensaje = $("#mensaje").val();
         const estado = $("#estado").val();
-        const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado })
+        const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email })
         fetch('/actualizarTarea', {
             method: 'POST',
             body: data,

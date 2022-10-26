@@ -97,7 +97,7 @@ empresaController.index = async (req, res) => {
     
     /**************************************************************************** */
     // PORCENTAJE ETAPA 1
-    let porcentaje = 100/6
+    let porcentaje = 100/6, porcentajeEtapa1 = 0;
     porcentaje = Math.round(porcentaje)
     const diagPorcentaje = { num : 0 }
 
@@ -105,54 +105,73 @@ empresaController.index = async (req, res) => {
     const diagnosticoPago = JSON.parse(e.diagnostico_negocio)
     if (diagnosticoPago.estado == 1){
         diagPorcentaje.txt = 'Diagnóstico pagado'
-        diagPorcentaje.num = porcentaje
+        porcentajeEtapa1 = porcentaje
     }
     if (e.estadoAcuerdo == 1){
         diagPorcentaje.txt = 'Acuerdo enviado'
-        diagPorcentaje.num = porcentaje*2
+        porcentajeEtapa1 = porcentaje*2
     }
     if (e.estadoAcuerdo == 2){
         diagPorcentaje.txt = 'Acuerdo firmado'
-        diagPorcentaje.num = porcentaje*3
+        porcentajeEtapa1 = porcentaje*3
     } 
     if (e.telefono){
         diagPorcentaje.txt = 'Ficha Cliente'
-        diagPorcentaje.num = porcentaje*4
+        porcentajeEtapa1 = porcentaje*4
     }
 
     if (diagEmpresa.length > 0 || diagEmpresa2.length > 0){
         diagPorcentaje.txt = 'Cuestionario diagnóstico'
-        diagPorcentaje.num = porcentaje*5
+        porcentajeEtapa1 = porcentaje*5
     }
 
     // Informe de diagnóstico de empresa subido
-    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? LIMIT 1', [empresa[0].id_empresas, 'Informe diagnóstico'])
-    informeEmpresa.length > 0 ? diagPorcentaje.num = 100 : diagPorcentaje.num = diagPorcentaje.num;
+    let informesEmpresa = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
+    informesEmpresa = informesEmpresa.filter(x => x.id_empresa == id_empresa)
+    if (informesEmpresa.length > 0) {
+        informesEmpresa.forEach(x => {
+            if (x.nombre == 'Informe diagnóstico') {
+                porcentajeEtapa1 = 100;
+                xetapa = 'Diagnóstico'
+            }
+            if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
+            if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
+        })
+    }
 
     /****************************************************************************** */
     // PORCENTAJE ETAPA 2
     // let porcentaje2 = 100/4
     // porcentaje2 = Math.round(porcentaje2)
-    let analisisEmpresa = await pool.query('SELECT * FROM analisis_empresa')
+    let analisisEmpresa = await consultarDatos('analisis_empresa')
     analisisEmpresa = analisisEmpresa.find(i => i.id_empresa == id_empresa)
-    const analisisPorcentaje = { num: 0 }
+    let porcentajeEtapa2 = 0;
     if (analisisEmpresa) {
-        if (analisisEmpresa.producto){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.administracion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.operacion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.marketing){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
+        if (analisisEmpresa.producto){ porcentajeEtapa2 = porcentajeEtapa2 + 25 }
+        if (analisisEmpresa.administracion){ porcentajeEtapa2 = porcentajeEtapa2 + 25 }
+        if (analisisEmpresa.operacion){ porcentajeEtapa2 = porcentajeEtapa2 + 25 }
+        if (analisisEmpresa.marketing){ porcentajeEtapa2 = porcentajeEtapa2 + 25 }
     }
     
     /************************************************************************** */
 
     // PORCENTAJE ETAPA 3
     let porcentajeEtapa3 = 0
+    let tareasEmpresa = await consultarDatos('plan_estrategico')
+    let informeEtapa3 = await consultarDatos('informes')
+    informeEtapa3 = informeEtapa3.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
+    tareasEmpresa = tareasEmpresa.filter(x => x.empresa == id_empresa)
+    const totalTareas = tareasEmpresa.length;
+    let tareasCompletadas = tareasEmpresa.filter(x => x.estado == 2)
+    tareasCompletadas = tareasCompletadas.length
+    if (totalTareas > 0) {
+        porcentajeEtapa3 = ((((tareasCompletadas*100)/totalTareas))*100)/75
+        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+    }
+    if (informeEtapa3) porcentajeEtapa3 = 100;
 
     // PORCENTAJE GENERAL DE LA EMPRESA
-    let porcentajeTotal = (diagPorcentaje.num + analisisPorcentaje.num + porcentajeEtapa3)/3 
-    porcentajeTotal = Math.round(porcentajeTotal)
-    console.log("=====SUMA ====>>>>>>>" ,porcentajeTotal );
-    /************************************************************************** */
+    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3)/3)
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
@@ -198,6 +217,14 @@ empresaController.index = async (req, res) => {
     }
 
     /************************************************************************************* */
+    /** TAREAS ASIGNADAS ETAPA 3 - PLAN ESTRATÉGICO DE NEGOCIO */
+    let tareas = await consultarDatos('plan_estrategico', 'ORDER BY id DESC LIMIT 2')
+    tareas = tareas.filter(x => x.empresa == id_empresa)
+    tareas.forEach(x => {
+        x.fecha_entrega = new Date(x.fecha_entrega).toLocaleDateString('en-US')
+    })
+
+    /************************************************************************************* */
 
     res.render('empresa/dashboard', {
         user_dash: true,
@@ -208,11 +235,9 @@ empresaController.index = async (req, res) => {
         itemActivo: 1,
         acuerdoFirmado,
         etapa1,
-        diagPorcentaje,
-        analisisPorcentaje,
-        porcentajeEtapa3, porcentajeTotal,
+        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
-        informe: informeEmpresa[0],
+        tareas, informesEmpresa,
         nuevosProyectos, rendimiento
     })
 

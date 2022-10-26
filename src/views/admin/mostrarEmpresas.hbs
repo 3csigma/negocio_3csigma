@@ -61,6 +61,13 @@
                                                 <a onclick="bloquearEmpresa({{id_empresas}})" class="btn btn-danger shadow btn-xs sharp"
                                                     style="background: #DC0000; color: white"><i
                                                         class="fa fa-ban"></i></a>
+                                                {{#if pagoEtapa1}}
+                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                    <i class="fa fa-usd"></i></button>
+                                                {{else}}
+                                                <a onclick="pagoManual({{id_empresas}})" class="btn btn-success shadow btn-xs sharp"
+                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                {{/if}}
                                             </div>
                                         </td>
                                     </tr>
@@ -124,6 +131,40 @@
             showCancelButton: false,
             confirmButtonColor: '#50368C',
             confirmButtonText: 'Ok'
+        })
+    }
+
+    function pagoManual(id) {
+        Swal.fire({
+            title: '¿Deseas registrar el pago del diagnóstico de negocio?',
+            text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Pago confirmado'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/pagoManual-Diagnostico', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo efectuar está acción, contactar a soporte..',
+                                'error'
+                            )
+                        }
+                    });
+            }
         })
     }
 </script>

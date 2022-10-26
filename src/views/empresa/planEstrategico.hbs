@@ -17,6 +17,9 @@
     .nav-tabs .nav-item .tabs-Task.active:before {
         background-color: transparent;
     }
+    .morris-hover {
+        opacity: 0.87;
+    }
 </style>
 <!--**********************************
                     Content body start
@@ -46,6 +49,17 @@
                     <div class="card-body">
                         <h2 style="color: #000; font-weight: bold;">Rendimiento</h2>
                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #FED061"></i> <span class="small-text">Ventas</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #50368C"></i> <span class="small-text">Compras</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
+                            </div>
+                        </div>
                         <div id="line_chart_ventas" class="morris_chart_height"></div>
                     </div>
                 </div>

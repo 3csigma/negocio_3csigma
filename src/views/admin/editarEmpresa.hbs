@@ -86,6 +86,9 @@
     .nav-tabs .nav-item .tabs-Task.active:before {
         background-color: transparent;
     }
+    .morris-hover {
+        opacity: 0.87;
+    }
 </style>
 <!--**********************************
         Content body start
@@ -105,7 +108,7 @@
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">
                                 <h4 class="text-primary mb-0">{{datos.nombre_completo}}</h4>
-                                <p>{{datos.nombre_empresa}}</p>
+                                <p id="nombreEmpresa">{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
                                 <h4 class="text-muted mb-0">{{#if
@@ -378,11 +381,23 @@
 
                                     <div class="row mt-2">
                                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
+                                        
                                         {{#if jsonRendimiento}}
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #FED061"></i> <span class="small-text">Ventas</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #50368C"></i> <span class="small-text">Compras</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
+                                        </div>
+
                                         <div class="col-12">
                                             <div id="line_chart_ventas" class="morris_chart_height"></div>
                                         </div>
-                                        <div class="col-12">
+
+                                        <div class="col-12 mt-4">
                                             <!-- BOTÓN PARA MODAL NUEVO RENDIMIENTO -->
                                             <button type="button" class="btn btn-primary"
                                                 data-toggle="modal" data-target="#modalNewRendimiento"
@@ -454,7 +469,7 @@
                                                         <h5 class="f-w-500">Email <span class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{datos.email}}</span>
+                                                    <div class="col-sm-8 col-7"><span id="emailEmpresa">{{datos.email}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">

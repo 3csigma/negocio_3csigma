@@ -4,7 +4,6 @@ const multer = require('multer');
 const path = require('path');
 const consultorController = require('../controllers/consultorController');
 const { checkLogin, consultorLogueado } = require('../lib/auth')
-const { historial_informes_consultor, historial_empresas_consultor } = require('../lib/helpers')
 const cron = require('node-cron');
 
 // Dashboard Principal Consultor
@@ -55,12 +54,5 @@ router.post('/editarTarea', checkLogin, consultorController.editarTarea)
 router.post('/actualizarTarea', checkLogin, consultorLogueado, consultorController.actualizarTarea)
 router.post('/eliminarTarea', checkLogin, consultorLogueado, consultorController.eliminarTarea)
 router.post('/nuevoRendimiento', checkLogin, consultorLogueado, consultorController.nuevoRendimiento)
-
-/*******************************************************************************************************/
-// Ejecución Mensual
-cron.schedule('0 1 1 * *',() => {
-    historial_informes_consultor();
-    historial_empresas_consultor();
-});
 
 module.exports = router

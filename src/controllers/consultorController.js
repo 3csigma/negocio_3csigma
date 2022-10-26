@@ -1,6 +1,6 @@
 const consultorController = exports;
 const pool = require('../database')
-const { etapa1FinalizadaHTML, sendEmail } = require('../lib/mail.config')
+const { etapa1FinalizadaHTML, sendEmail, tareaCompletadaHTML, tareaNuevaHTML, tareaRetrasadaHTML } = require('../lib/mail.config')
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
@@ -82,6 +82,7 @@ consultorController.empresaInterna = async (req, res) => {
     datos.email = filas.email;
     datos.estadoAdm = userEmpresa[0].estadoAdm;
     datos.code = codigo;
+    datos.idEmpresa = idUser
 
 
     if (filas) {
@@ -792,8 +793,19 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 /********************************************************************************/
 // AGREGAR NUEVAS TAREAS x EMPRESA
 consultorController.agregarTarea = async (req, res) => {
-    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa } = req.body
+    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email } = req.body
     // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
+    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa }
+    /** Enviando Notificación al Email de nueva tarea */
+    const asunto = 'Se ha agregado una nueva tarea';
+    const template = tareaNuevaHTML(actividad, nombreEmpresa);
+    const resultEmail = await sendEmail(email, asunto, template)
+    if (resultEmail == false) {
+        console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea nueva >>>> \n")
+    } else {
+        console.log("\n<<<<< Se ha notificado al email ("+email+") que se ha agregado una nueva tarea >>>>>\n")
+    }
+    /******************************************************* */
     const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
     console.log("INFO TAREA DB >>> ", tarea)
     res.send(tarea)
@@ -810,7 +822,19 @@ consultorController.actualizarTarea = async (req, res) => {
     const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado } = req.body
     const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado }
     const { idTarea } = req.body
-    console.log("ID TAREA >> ", idTarea)
+
+    if (estado == 2) {
+        const email = req.body.email;
+        const asunto = 'Haz completado una tarea';
+        const template = tareaCompletadaHTML(actividad);
+        const resultEmail = await sendEmail(email, asunto, template)
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea completada >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado la tarea completada al email de la empresa >>>>>\n")
+        }
+    }
+
     const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
     console.log("INFO TAREA DB >>> ", tarea)
     res.send(tarea)

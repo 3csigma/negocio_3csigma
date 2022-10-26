@@ -8,7 +8,7 @@ const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 const cron = require('node-cron');
-const { historial_consultores_admin, historial_empresas_admin, historial_informes_admin } = require('../lib/helpers')
+const { enabled_nextPay, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas } = require('../lib/helpers')
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -46,6 +46,7 @@ router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEm
 router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
+router.post('/pagoManual-Diagnostico', checkLogin, adminLogueado, dashboardController.pagoManualDiagnostico)
 
 // Cuestionario Diagnóstico Empresa Establecida
 router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
@@ -59,11 +60,29 @@ router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardCo
 // router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
 router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
+/*******************************************************************************************************/
+// Ejecución Diaria (12pm)
+cron.schedule('0 12 * * 0-6',() => {
+    enabled_nextPay()
+});
+
 // Ejecución Mensual
 cron.schedule('0 1 1 * *',() => {
-    historial_consultores_admin();
     historial_empresas_admin();
+    historial_consultores_admin();
     historial_informes_admin();
+    historial_empresas_consultor();
+    historial_informes_consultor();
+});
+
+// Ejecución Semanal
+cron.schedule('0 10 * * Mon',() => {
+    consultar_tiempo_tareas();
+});
+
+router.get('/retrasadas', (req, res) => {
+    consultar_tiempo_tareas()
+    res.send("TODO OK -> END")
 });
 
 module.exports = router;

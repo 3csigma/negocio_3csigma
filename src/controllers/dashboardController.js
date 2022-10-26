@@ -179,7 +179,7 @@ dashboardController.bloquearConsultor = async (req, res) => {
 
 // EMPRESAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa"')
+    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa"')
 
     const dg_nueva = await pool.query('SELECT * FROM dg_empresa_nueva')
     const dg_establecida = await pool.query('SELECT * FROM dg_empresa_establecida')
@@ -191,12 +191,28 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
     const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
     const pagos = await pool.query('SELECT * FROM pagos')
-
     empresas.forEach(e => {
+        e.pagoEtapa1 = false;
         e.etapa = 'Email sin confirmar';
         e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
-        e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
-        e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+        // e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
+        // Pago de la Etapa 1 - Diagnóstico de Negocio
+        const p1 = JSON.parse(e.diagnostico_negocio)
+        if (p1.estado == '1') {
+            e.etapa = 'Diagnóstico pagado';
+            e.pagoEtapa1 = true;
+        } else {
+            e.etapa = e.etapa
+        }
+        // Pago de la Etapa 2 - Análisis de negocio
+        let p2 = JSON.parse(e.analisis_negocio)
+        p2.estado == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+        p2 = JSON.parse(e.analisis_negocio1)
+        p2.estado == 2 ? e.etapa = '60% Análisis pagado' : e.etapa = e.etapa;
+        p2 = JSON.parse(e.analisis_negocio2)
+        p2.estado == 2 ? e.etapa = '80% Análisis pagado' : e.etapa = e.etapa;
+        p2 = JSON.parse(e.analisis_negocio3)
+        p2.estado == 2 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
         e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
         e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
 
@@ -204,7 +220,6 @@ dashboardController.mostrarEmpresas = async (req, res) => {
             const _diag = dg_nueva.find(i => i.id_empresa == e.id_empresas)
             if (_diag)
                 _diag.consecutivo ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
-
         }
 
         if (dg_establecida.length > 0) {
@@ -774,6 +789,17 @@ dashboardController.bloquearEmpresa = async (req, res) => {
     }
 }
 
+dashboardController.pagoManualDiagnostico = async (req, res) => {
+    const { id } = req.body
+    const fecha = new Date().toLocaleDateString("en-US")
+    const data = { estado: 1, fecha }
+    const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
+    await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
+        if (err) throw err;
+        res.send(result)
+    })
+}
+
 
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
@@ -1194,10 +1220,10 @@ dashboardController.guardarInforme = async (req, res) => {
         // Enviar Email
         const resultEmail = await sendEmail(email, asunto, template)
 
-        if (resultEmail == false) {
-            res.json("Ocurrio un error inesperado al enviar el email de informe subido")
-        } else {
+        if (resultEmail) {
             console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
+        } else {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de informe subido >>>> \n")
         }
 
         r.ok = true;
