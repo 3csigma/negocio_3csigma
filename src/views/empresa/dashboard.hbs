@@ -23,14 +23,14 @@
     .apexcharts-text tspan {
         font-family: 'Oblivian Text' !important;
     }
-
+    #icon_avance_general {
+        fill: url(#my-cool-gradient) #447799;
+    }
     body.swal2-shown > [aria-hidden="true"] {
         transition: 0.1s filter;
         filter: blur(10px);
     }
-    #icon_avance_general {
-        fill: url(#my-cool-gradient) #447799;
-    }
+
 </style>
 <!--**********************************
         Content body start
@@ -294,8 +294,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{#if informesEmpresa}}
-                                            {{#each informesEmpresa}}
+                                            {{#if ultimosInformes}}
+                                            {{#each ultimosInformes}}
                                             <tr>
                                                 <td>{{fecha}}</td>
                                                 <td>{{etapa}} de negocio</td>

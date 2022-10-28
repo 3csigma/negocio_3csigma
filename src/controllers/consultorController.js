@@ -1,35 +1,45 @@
 const consultorController = exports;
 const pool = require('../database')
-const { etapa1FinalizadaHTML, sendEmail, tareaCompletadaHTML, tareaNuevaHTML, tareaRetrasadaHTML } = require('../lib/mail.config')
+const { etapaFinalizadaHTML, sendEmail, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
-    const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
-    const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
+    const { codigo } = req.user
+    const consultores = await consultarDatos('consultores')
+    const consultor = consultores.find(x => x.codigo == codigo)
+    const empresas = await consultarDatos('empresas', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_empresas DESC LIMIT 2`)
+    // const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
-    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_empresas_asignadas
-    if (empresas_asignadas.length > 0) {
-        datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas);
-        console.log("\n");
-        console.log("IMPIMIENDO datosJson_empresas_asignadas ====>>>", datosJson_empresas_asignadas);
-    }
+    if (empresas_asignadas.length > 0) { datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas) }
     // FIN DE LA FUNCIÓN <<====
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
-    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [con[0].id_consultores]);
+    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_historialI_consultor
-    if (historialInformes.length > 0) {
-        datosJson_historialI_consultor = JSON.stringify(historialInformes);
-        console.log("\n");
-        console.log("IMPIMIENDO datosJson_historialI_consultor ====>>>", datosJson_historialI_consultor);
-    }
+    if (historialInformes.length > 0) { datosJson_historialI_consultor = JSON.stringify(historialInformes) }
     // FIN DE LA FUNCIÓN <<====
 
+    // Informe de diagnóstico de empresa subido
+    let ultimosInformes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
+    ultimosInformes = ultimosInformes.filter(x => x.id_consultor == consultor.id_consultores)
+    if (ultimosInformes.length > 0) {
+        ultimosInformes.forEach(x => {
+            if (x.nombre == 'Informe diagnóstico') {
+                x.etapa = 'Diagnóstico'
+            }
+            if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
+            if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
+        })
+    }
+
     res.render('consultor/panelConsultor', {
-        consultorDash: true, itemActivo: 1, empresas, graficas1: true, datosJson_empresas_asignadas, datosJson_historialI_consultor
+        consultorDash: true, itemActivo: 1, empresas, graficas1: true, 
+        datosJson_empresas_asignadas, datosJson_historialI_consultor,
+        ultimosInformes
     });
 }
 
@@ -318,12 +328,12 @@ consultorController.empresaInterna = async (req, res) => {
 
     /************************************************************************************* */
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
-    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const propuestas = await consultarDatos('propuesta_analisis')
     const propuesta = propuestas.find(i => i.empresa == idUser)
     let pagos_analisis = { ok: false };
     if (propuesta) {
         datos.etapa = 'Propuesta de análisis enviada'
-        const pagos = await pool.query('SELECT * FROM pagos')
+        const pagos = await consultarDatos('pagos')
 
         /** PAGOS DE ANÁLISIS DE NEGOCIO (ÚNICO o DIVIDIDO*/
         const pay = pagos.find(i => i.id_empresa == idUser)
@@ -346,6 +356,7 @@ consultorController.empresaInterna = async (req, res) => {
             pagos_analisis.uno.color = 'success'
             pagos_analisis.uno.txt = 'Pagado 60%'
             pagos_analisis.ok = true;
+            propuesta.pago = true;
         } else {
             pagos_analisis.uno.color = 'warning'
             pagos_analisis.uno.txt = 'Pendiente'
@@ -455,8 +466,16 @@ consultorController.empresaInterna = async (req, res) => {
             }
         }
     }
-    let divInformes = false
-    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) { divInformes = true }
+    let divInformes = false; 
+    const filaInforme = { producto: false, administracion: false, operaciones: false, marketing: false }
+    if (dimProducto || dimAdmin || dimOperacion || dimMarketing) { 
+        divInformes = true;
+        if (dimProducto) filaInforme.producto = true;
+        if (dimAdmin) filaInforme.administracion = true;
+        if (dimOperacion) filaInforme.operaciones = true;
+        if (dimMarketing) filaInforme.marketing = true;
+        if (dimProducto && dimAdmin && dimOperacion && dimMarketing) filaInforme.completo = true; 
+    }
     /* --------------------------------------------------------------------------------------- */
 
     /************************************************************************************* */
@@ -491,7 +510,7 @@ consultorController.empresaInterna = async (req, res) => {
     res.render('admin/editarEmpresa', {
         consultorDash: true, itemActivo: 2, empresa, formEdit: true, datos, consultores, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
+        graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         fechaActual, tareas,
         jsonDim, jsonRendimiento
@@ -522,9 +541,10 @@ consultorController.enviarPropuesta = async (req, res) => {
     }
     /** INFO PARA ENVÍO DE EMAIL */
     const asunto = "¡Felicitaciones!, Etapa 1 finalizada"
-
+    const etapa  = 'Diagnóstico'
+    const texto = 'Tenemos una propuesta para que continúes con tu proceso en 3C Sigma'
     // Obtener la plantilla de Email
-    const template = etapa1FinalizadaHTML(nombre);
+    const template = etapaFinalizadaHTML(nombre, etapa, texto, 'analisis-de-negocio');
 
     // Enviar Email
     const resultEmail = await sendEmail(email, asunto, template)
@@ -545,9 +565,9 @@ consultorController.enviarPropuesta = async (req, res) => {
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo
+    let volver = '/empresas/' + codigo + '#analisis_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#analisis_';
     }
     res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -590,9 +610,9 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
         }
 
         if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa)
+            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
         } else {
-            res.redirect('/empresas/' + codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
         }
 
     }
@@ -603,9 +623,9 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
 // ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo
+    let volver = '/empresas/' + codigo + '#analisis_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#analisis_';
     }
     res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -657,9 +677,9 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
         }
 
         if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa)
+            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
         } else {
-            res.redirect('/empresas/' + codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
         }
 
     }
@@ -668,9 +688,9 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN OPERACION
 consultorController.analisisOperacion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo
+    let volver = '/empresas/' + codigo + '#analisis_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#analisis_';
     }
     res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -716,9 +736,9 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
         }
 
         if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa)
+            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
         } else {
-            res.redirect('/empresas/' + codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
         }
 
     } else {
@@ -729,9 +749,9 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN MARKETING
 consultorController.analisisMarketing = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo
+    let volver = '/empresas/' + codigo + '#analisis_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#analisis_';
     }
     res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -779,9 +799,9 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
         }
 
         if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa)
+            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
         } else {
-            res.redirect('/empresas/' + codigoEmpresa)
+            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
         }
 
     }

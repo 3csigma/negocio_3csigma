@@ -393,9 +393,16 @@
 		$(document).ready(function () {
 
             const URLhash = window.location.hash;
+            if (URLhash === '#diagnostico_') {
+                $('#diagnostico-item').trigger("click");
+            }
+            if (URLhash === '#analisis_') {
+                $('#analisis-item').trigger("click");
+            }
             if (URLhash === '#plan-estrategico') {
                 $('.planItem').trigger("click");
             }
+            
             $(".chatbox-close").on("click", () => {
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
                 $('#fechaIni-sidebar').css('display', 'inline-block')

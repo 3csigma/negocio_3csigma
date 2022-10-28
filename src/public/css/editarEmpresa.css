@@ -66,12 +66,101 @@ label {
     margin-top: 1em;
 }
 
+a.nav-link.btnIndicadoresAll {
+    background: #f2f2f2;
+    border-radius: 22px;
+    color: #fff;
+    text-align: center;
+}
+
+a.nav-link.btnIndicadoresAll.active {
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
+    color: white !important;
+    border-radius: 22px;
+}
+
+.nav-link.btnIndicadoresAll:focus,
+.nav-link.btnIndicadoresAll:hover {
+    background-color: #f2f2f2 !important;
+    border-color: #50368c;
+    border-radius: 22px !important;
+    color: #50368c;
+    border-width: 0 0px 3px 0;
+}
+
+.toast-success {
+    background-color: #50368D;
+}
+
+.default-tab .nav-link:focus,
+.default-tab .nav-link:hover,
+.default-tab .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff #ebeef6;
+    border-radius: 1.25rem 1.25rem 0 0;
+    color: #0B2A97;
+}
+
+/* Barra Scroll Personalizada para el Modal */
+.modal.open .modal::-webkit-scrollbar-track {
+    border-radius: 10px !important;
+    background-color: #eae6f4 !important;
+}
+
+.modal-open .modal::-webkit-scrollbar-thumb {
+    background-color: #50368c !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(155, 155, 155, 0.747) !important;
+}
+
+.modal-open .modal::-webkit-scrollbar-button:increment,
+.modal-open .modal::-webkit-scrollbar-button {
+    display: none;
+}
+
+.modal-open .modal::-webkit-scrollbar:vertical {
+    width: 10px !important;
+}
+
+.modal-open .modal::-webkit-scrollbar {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+.duet-date__input {
+    height: 44px;
+    border: 1px solid #ddd;
+    color: #000;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: no-drop;
+}
+
+.nav-tabs .nav-item .tabs-Task.active:before {
+    background-color: transparent;
+}
+.morris-hover {
+    opacity: 0.87;
+}
+
 /* ESTILOS NORMALES (para escritorios muy grandes) ========================================================================= */
 #altura_tabs{
     max-height: 100vh;
 }
 /* RESPONSIVE 
 ========================================================================= */
+@media (min-width: 800px) and (max-width: 967px) {
+    .modal.show .modal-dialog {
+        max-width: 700px;
+    }
+}
+
+@media (min-width: 1000px) and (max-width: 1950px) {
+    .modal.show .modal-dialog {
+        max-width: 930px;
+    }
+}
 
 /* Tablets en horizonal y escritorios normales
 ------------------------------------------------------------------------- */

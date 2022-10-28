@@ -9,7 +9,6 @@
 <!-- Dashboard EMPRESA -->
 <script src="../vendor/js/dashboard-1.js"></script>
 
-
 <script>
     (function ($) {
 
@@ -17,20 +16,18 @@
 			const coloresDim = ['#812082', '#f2f2f2'];
             /** GRÁFICA PARA INDICADORES */
 			const chartIndicadores1 = function () {
-				let valAnalisis1 = document.getElementById('jsonAnalisis1');
-				let valAnalisis2 = document.getElementById('jsonAnalisis2');
-				let nuevosProyectos = document.getElementById('nuevosProyectos');
+				let valAnalisis1 = document.getElementById('jsonAnalisis1').value;
+				let valAnalisis2 = document.getElementById('jsonAnalisis2').value;
+				let nuevosProyectos = document.getElementById('nuevosProyectos').value;
 				let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 				let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 				if (valAnalisis1) {
-					valAnalisis1 = valAnalisis1.value;
 					if (valAnalisis1) { valAnalisis1 = JSON.parse(valAnalisis1) }
 					chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
 					console.log("VAL ANALISIS 1 => ", valAnalisis1)
 				}
 				if (valAnalisis2) {
-					valAnalisis2 = valAnalisis2.value;
 					if (valAnalisis2) { valAnalisis2 = JSON.parse(valAnalisis2) }
 					chartAnalisis2 = [valAnalisis2.producto, valAnalisis2.administracion, valAnalisis2.talento_humano, valAnalisis2.finanzas, valAnalisis2.servicio_cliente, valAnalisis2.operaciones, valAnalisis2.ambiente_laboral, valAnalisis2.innovacion, valAnalisis2.marketing, valAnalisis2.ventas]
 					console.log("VAL ANALISIS 2 => ", valAnalisis2)
@@ -38,7 +35,6 @@
 
 				let valorMax = 10;
 				if (nuevosProyectos) {
-					nuevosProyectos = nuevosProyectos.value;
 					if (nuevosProyectos == 1) {
 						valorMax = 5;
 					}
@@ -101,21 +97,19 @@
 			}
 
 			const chartIndicadores2 = function () {
-				let valDimensiones1 = document.getElementById('jsonDimensiones1');
-				let valDimensiones2 = document.getElementById('jsonDimensiones2');
-				let nuevosProyectos = document.getElementById('nuevosProyectos');
+				let valDimensiones1 = document.getElementById('jsonDimensiones1').value;
+				let valDimensiones2 = document.getElementById('jsonDimensiones2').value;
+				let nuevosProyectos = document.getElementById('nuevosProyectos').value;
 				let chartDimensiones1 = [0, 0, 0, 0]
 				let chartDimensiones2 = [0, 0, 0, 0]
 				let titulos = ["Producto", "Administración", "Operaciones", "Marketing"];
 
 				if (valDimensiones1) {
-					valDimensiones1 = valDimensiones1.value
 					valDimensiones1 = JSON.parse(valDimensiones1)
 					console.log("DIMENSIONES 1 => ", valDimensiones1)
 				}
 				
 				if (nuevosProyectos) {
-					nuevosProyectos = nuevosProyectos.value
 					if (nuevosProyectos == 1){
 						titulos = ["Experiencia en el Rubro", "Mentalidad Empresarial", "Viabilidad del Negocio", "Estructura del Negocio"]
 						chartDimensiones1 = [valDimensiones1.experiencia_rubro, valDimensiones1.mentalidad, valDimensiones1.viabilidad_, valDimensiones1.estructura]
@@ -125,7 +119,6 @@
 				}
 
 				if (valDimensiones2) {
-					valDimensiones2 = valDimensiones2.value
 					valDimensiones2 = JSON.parse(valDimensiones2)
 					chartDimensiones2 = [valDimensiones2.producto, valDimensiones2.administracion, valDimensiones2.operaciones, valDimensiones2.marketing]
 				}
@@ -221,17 +214,39 @@
 						+ 'text-align: center;'
 						+ 'padding: 14px;'
 						+ 'font-size: 17px;'
-						+ 'font-weight: 300;">Firmar acuerdo</a>',
+						+ 'font-weight: 300;">Firmar acuerdo</a>'
+						+ '<a href="/" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300;">Ok</a>',
 					showCancelButton: false,
 					showConfirmButton: false,
+					//allowOutsideClick: false,
 				})
             {{/if}}
             {{#if alertCancel}}
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Pago Cancelado',
-                    text: 'Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.',
-                })
+					icon: 'error',
+					title: 'Pago Cancelado',
+					html: '<p>Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.</p>'
+						+ '<a href="/" type="button" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300;">Ok</a>',
+					showCancelButton: false,
+					showConfirmButton: false,
+					allowOutsideClick: false,
+				})
             {{/if}}
 			/*********************************************************************************** */
 			/** PAGOS ETAPA 2 */

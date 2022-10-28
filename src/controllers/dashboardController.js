@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
-const { consultorAsignadoHTML, consultorAprobadoHTML, informeDiagnosticoHTML, sendEmail } = require('../lib/mail.config')
+const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML  } = require('../lib/mail.config')
 
 let aprobarConsultor = false;
 
@@ -181,16 +181,14 @@ dashboardController.bloquearConsultor = async (req, res) => {
 dashboardController.mostrarEmpresas = async (req, res) => {
     let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa"')
 
-    const dg_nueva = await pool.query('SELECT * FROM dg_empresa_nueva')
-    const dg_establecida = await pool.query('SELECT * FROM dg_empresa_establecida')
+    const dg_nueva = await consultarDatos('dg_empresa_nueva')
+    const dg_establecida = await consultarDatos('dg_empresa_establecida')
+    const dg_analisis = await consultarDatos('analisis_empresa')
+    const consultor = await consultarDatos('consultores')
+    const informe = await consultarDatos('informes')
+    const propuestas = await consultarDatos('propuesta_analisis')
+    const pagos = await consultarDatos('pagos')
 
-    const dg_analisis = await pool.query('SELECT * FROM analisis_empresa')
-
-    const consultor = await pool.query('SELECT * FROM consultores')
-    const informe = await pool.query('SELECT * FROM informes')
-
-    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
-    const pagos = await pool.query('SELECT * FROM pagos')
     empresas.forEach(e => {
         e.pagoEtapa1 = false;
         e.etapa = 'Email sin confirmar';
@@ -457,7 +455,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (informeProd) {
         info.prod.fecha = informeProd.fecha;
         info.prod.ver = 'block';
-        info.prod.url = informeProd[0].url;
+        info.prod.url = informeProd  .url;
         datos.etapa = 'Informe análisis dimensión producto'
     }
 
@@ -489,7 +487,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         datos.etapa = 'Informe de análisis general'
     }
 
-    console.log("INFORME DEL PLAN >>> ", informePlan)
     if (informePlan) {
         info.plan.ok = true;
         info.plan.fecha = informePlan.fecha;
@@ -497,7 +494,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.plan.url = informePlan.url;
         datos.etapa = 'Informe de plan estratégico'
     }
-
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1 = null, jsonDimensiones2 = null, nuevosProyectos = 0, rendimiento = {},
@@ -545,12 +541,12 @@ dashboardController.editarEmpresa = async (req, res) => {
     /************************************************************************************* */
 
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
-    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
+    const propuestas = await consultarDatos('propuesta_analisis')
     const propuesta = propuestas.find(i => i.empresa == idUser)
     let pagos_analisis = { ok: false };
     if (propuesta) {
         datos.etapa = 'Propuesta de análisis enviada'
-        const pagos = await pool.query('SELECT * FROM pagos')
+        const pagos = await consultarDatos('pagos')
 
         /** PAGOS DE ANÁLISIS DE NEGOCIO (ÚNICO o DIVIDIDO*/
         const pay = pagos.find(i => i.id_empresa == idUser)
@@ -682,8 +678,16 @@ dashboardController.editarEmpresa = async (req, res) => {
             }
         }
     }
-    let divInformes = false
-    if (dimProducto && dimAdmin && dimOperacion && dimMarketing) { divInformes = true }
+    let divInformes = false; 
+    const filaInforme = { producto: false, administracion: false, operaciones: false, marketing: false }
+    if (dimProducto || dimAdmin || dimOperacion || dimMarketing) { 
+        divInformes = true;
+        if (dimProducto) filaInforme.producto = true;
+        if (dimAdmin) filaInforme.administracion = true;
+        if (dimOperacion) filaInforme.operaciones = true;
+        if (dimMarketing) filaInforme.marketing = true;
+        if (dimProducto && dimAdmin && dimOperacion && dimMarketing) filaInforme.completo = true; 
+    }
     /* --------------------------------------------------------------------------------------- */
 
     /************************************************************************************* */
@@ -718,7 +722,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     res.render('admin/editarEmpresa', {
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, propuesta, pagos_analisis, archivos, divInformes,
+        graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         fechaActual,
         tareas, jsonDim, jsonRendimiento
@@ -804,9 +808,9 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'
+    let volver = '/empresas/' + codigo + '#diagnostico_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#diagnostico_';
     }
     res.render('consultor/cuestionario', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -946,9 +950,9 @@ dashboardController.enviarCuestionario = async (req, res) => {
         if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0) && (rendimiento.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             if (req.user.rol == 'Consultor') {
-                res.redirect('/empresas-asignadas/' + codigoEmpresa)
+                res.redirect('/empresas-asignadas/' + codigoEmpresa + '#diagnostico_')
             } else {
-                res.redirect('/empresas/' + codigoEmpresa)
+                res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
             }
         }
     }
@@ -958,9 +962,9 @@ dashboardController.enviarCuestionario = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO (EMPRESAS NUEVAS)
 dashboardController.dgNuevosProyectos = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/'
+    let volver = '/empresas/' + codigo + '#diagnostico_';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo;
+        volver = '/empresas-asignadas/' + codigo + '#diagnostico_';
     }
     res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
@@ -1144,9 +1148,9 @@ dashboardController.guardarRespuestas = async (req, res) => {
         if ((aVitales.affectedRows > 0) && (resultado_categorias.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             if (req.user.rol == 'Consultor') {
-                res.redirect('/empresas-asignadas/' + codigoEmpresa)
+                res.redirect('/empresas-asignadas/' + codigoEmpresa + '#diagnostico_')
             } else {
-                res.redirect('/empresas/' + codigoEmpresa)
+                res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
             }
         }
     }
@@ -1172,15 +1176,17 @@ const storage = multer.diskStorage({
 const subirInforme = multer({ storage })
 dashboardController.subirInforme = subirInforme.single('file')
 
-
 dashboardController.guardarInforme = async (req, res) => {
     const r = { ok: false }
     const { codigoEmpresa, nombreInforme, zonaHoraria } = req.body
     console.log(req.body)
-    const e = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigoEmpresa])
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.codigo == codigoEmpresa)
+    const empresasNuevas = await consultarDatos('dg_empresa_nueva')
+    const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
     const nuevoInforme = {
-        id_empresa: e[0].id_empresas,
-        id_consultor: e[0].consultor,
+        id_empresa: e.id_empresas,
+        id_consultor: e.consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/' + urlInforme,
         fecha: new Date().toLocaleString("en-US", { timeZone: zonaHoraria })
@@ -1192,38 +1198,55 @@ dashboardController.guardarInforme = async (req, res) => {
     }
 
     // Validando si ya tiene un informe montado
-    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e[0].id_empresas, nombreInforme])
+    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e.id_empresas, nombreInforme])
     let informe = null;
 
     if (tieneInforme.length > 0) {
-        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e[0].id_empresas, nombreInforme])
+        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e.id_empresas, nombreInforme])
     } else {
         informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
     }
 
     if (informe.affectedRows > 0) {
 
-        const nombre = e[0].nombre_empresa;
-        const email = e[0].email
-        let tipoInforme;
+        const nombreEmpresa_ = e.nombre_empresa;
+        const email = e.email
+        let tipoInforme = nombreInforme.toLowerCase();
+        let asunto = 'Se ha cargado un nuevo ' + tipoInforme
+        let template = informesHTML(nombreEmpresa_, tipoInforme);
+
+        
         if (nombreInforme == 'Informe diagnóstico') {
-            tipoInforme = 'informe de diagnóstico de negocio'
-        } else {
-            tipoInforme = nombreInforme.toLowerCase();
+            template = informesHTML(nombreEmpresa_, 'informe de diagnóstico de negocio');
+            if (eNueva) {
+                asunto = 'Diagnóstico de negocio finalizado'
+                const etapa = 'Análisis';
+                const link = 'analisis-de-negocio';
+                template = etapaFinalizadaHTML(nombreEmpresa_, etapa, `Tenemos una propuesta para que continúes con tu proceso en 3C Sigma`, link, 'Revisar la propuesta');
+            }
         }
-
-        const asunto = 'Se ha cargado un nuevo ' + tipoInforme
-
-        // Obtener la plantilla de Email
-        const template = informeDiagnosticoHTML(nombre, tipoInforme);
-
+        const texto = `Tu consultor ha cargado el informe general.<br>Ingresa a tu plataforma 3C Sigma para verlo`;
+        const txtBtn = 'Ir a mi cuenta'
+        if (nombreInforme == 'Informe de análisis') {
+            asunto = 'Análisis de negocio finalizado'
+            const etapa = 'Análisis';
+            const link = 'analisis-de-negocio';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link, txtBtn);
+        }
+        if (nombreInforme == 'Informe de plan estratégico') {
+            asunto = 'Plan estratégico de negocio finalizado'
+            const etapa = 'Plan estratégico';
+            const link = 'plan-estrategicoo';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link, txtBtn);
+        }
+        
         // Enviar Email
         const resultEmail = await sendEmail(email, asunto, template)
 
-        if (resultEmail) {
-            console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
-        } else {
+        if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de informe subido >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
         }
 
         r.ok = true;
