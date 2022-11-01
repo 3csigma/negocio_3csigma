@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const dashboardController = require('../controllers/dashboardController');
-const { perfilUsuarios } = require('../controllers/userController');
+const { actualizarFotoPerfil, update_user } = require('../controllers/userController');
 const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
@@ -27,10 +27,35 @@ const rutaAlmacen = multer.diskStorage({
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
 
-// Perfil de Usuarios
-router.get('/perfil', checkLogin, perfilUsuarios)
 
-// // Dashboard Principal Administrador
+// ===================
+
+// todo ===>> Cambiar foto de perfil
+const rutaCarpetas = multer.diskStorage({
+
+    destination: function (req, file, callback) {
+        const ruta = path.join(__dirname, '../public/foto_profile')
+        callback(null, ruta);
+    },
+
+    filename: function (req, file, callback) {
+        const fechaActual = Math.floor(Date.now() / 1000)
+        urlProfile = "foto_Actualizada" + "_" + fechaActual + "_" + file.originalname;
+        callback(null, urlProfile)
+
+        if(!file.originalname){
+            urlProfile = ''
+        }
+    }
+});
+
+const cargarFotoPerfil = multer({ storage: rutaCarpetas});
+
+// Perfil de Usuarios
+router.post('/updateProfile', checkLogin, update_user);
+router.post('/actualizarFotoPerfil', checkLogin, cargarFotoPerfil.single('foto'), actualizarFotoPerfil);
+
+// Dashboard Principal Administrador
 router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)

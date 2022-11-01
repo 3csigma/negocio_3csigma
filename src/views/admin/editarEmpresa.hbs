@@ -1407,34 +1407,43 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                <style>
+                                    .text-black{color: black;  }
+                                </style>
                                 {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
                                 {{#if jsonDim}}
                                 <div class="card">
+                                  <div class="card-header">
+                                        <h4 class="card-title" style="margin:0 auto">Desarrollo de actividades del plan estratégico</h4>
+                                    </div>
                                     <div class="col-xl-12">
                                         <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
                                         <div class="row">
-                                            <div class="col-3" id="div-Producto">
-                                                <h4 class="my-4 mx-auto text-center">Producto</h4>
+                                            <div class="col-3 text-black" id="div-Producto">
+                                                <h4 class="my-4 mx-auto text-center text-black">Producto</h4>
                                                 <div id="chart-dimProducto"></div>
                                             </div>
                                             <div class="col-3" id="div-Administracion">
-                                                <h4 class="my-4 mx-auto text-center">Administración</h4>
+                                                <h4 class="my-4 mx-auto text-center text-black">Administración</h4>
                                                 <div id="chart-dimAdministracion"></div>
                                             </div>
                                             <div class="col-3" id="div-Operaciones">
-                                                <h4 class="my-4 mx-auto text-center">Operaciones</h4>
-                                                <div id="chart-dimOperaciones"></div>
+                                                <h4 class="my-4 mx-auto text-center text-black">Operaciones</h4>
+                                                <div id="chart-dimOperaciones" ></div>
                                             </div>
                                             <div class="col-3" id="div-Marketing">
-                                                <h4 class="my-4 mx-auto text-center">Marketing</h4>
-                                                <div id="chart-dimMarketing"></div>
+                                                <h4 class="my-4 mx-auto text-center text-black">Marketing</h4>
+                                                <div id="chart-dimMarketing" ></div>
                                             </div>
                                         </div>
+                                        <br>
+                                       <div class="progress" style="width: 73%;margin:auto">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="barra" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                      <p style="text-align: center;"> Avance general de tareas: <span id="dataGeneral" style="font-weight: 800;"></span>%</p>
                                     </div>
                                 </div>
                                 {{/if}}
-
                                 {{!-- LISTADO DE TAREAS --}}
                                 {{!-- {{#if tareas.todas}} --}}
                                 <div class="card plan-list">

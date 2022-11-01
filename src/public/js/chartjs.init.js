@@ -2,9 +2,9 @@
 
 	const graficasDimensiones = function () {
 		const options = {
-			labels: ['Completado', 'Pendiente'],
+			labels: ['% Completado', ' % Pendiente '],
 			chart: {
-				width: 180,
+				width: 150,
 				type: 'pie',
 			},
 			legend: {
@@ -27,7 +27,7 @@
 					},
 				}
 			}],
-			colors: ['#812082', '#f2f2f2'],
+			colors: ['#812082', '#979595'],
 		};
 
 		const chartDim1 = (dim) => {
@@ -57,23 +57,35 @@
 			const chart = new ApexCharts(document.querySelector("#chart-dimMarketing"), opciones);
 			chart.render();
 		}
-		
 
 		return {
 			init: function () {
 			},
-
+     
 			load: function () {
+				let infoGeneral = 0
+				let count = 0
 				let dim = document.querySelector('#jsonDimCompletada').value
 				dim = JSON.parse(dim)
 				dim.forEach(x => {
 					if (x.ok == 'null' || x.ok == 'NaN' || x.pendiente == null) {
 						x.ok = 0.0; x.pendiente = 0.0;
 					}
-				})
+          if (x.ok != 0) {
+            count +=1
+            infoGeneral += parseInt(x.ok)
+          }
+		})
+		infoGeneral = (infoGeneral/count).toFixed(0)
+		if (infoGeneral > 0) {
+			$('#dataGeneral').text(infoGeneral) 
+		} else {
+			$('#dataGeneral').text("0") 
+		}
+		// Barra de progreso
+		$('#barra').css("width", infoGeneral + "%").attr("aria-valuenow", infoGeneral)
+
 				console.log("DIM >> ", dim)
-				//const pruebax = {ok: 60, pendiente: 40}
-				//chartDim1(pruebax)
 				chartDim1(dim[0])
 				chartDim2(dim[1])
 				chartDim3(dim[2])

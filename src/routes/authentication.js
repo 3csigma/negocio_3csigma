@@ -43,4 +43,7 @@ router.post('/reset-password-email', noLogueado, userController.resetPassword)
 /* Actualizar clave en la Base de datos */
 router.post('/update-password', noLogueado, csrfProtection,userController.updatePassword)
 
+router.get('/perfil/:codigo', checkLogin, userController.perfilUsuarios)
+
+
 module.exports = router;

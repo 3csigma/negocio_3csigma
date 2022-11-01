@@ -69,6 +69,7 @@ app.use((req, res, next) => {
   res.locals.session = req.session;
   res.locals.pagoDiag = req.pagoDiag;
   global.urlPropuestaNegocio = '';
+  global.urlProfile = ''
   next();
 })
 
