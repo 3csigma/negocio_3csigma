@@ -11,7 +11,7 @@
 <script src="../vendor/js/deznav-init.js"></script>
 
 {{!-- SWEET ALERT 2 --}}
-<script src="https://3csigma.com/app_public_files/js/sweetalert2.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
 {{!-- SELECTOR CON BUSCADOR --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
@@ -33,16 +33,14 @@
 <script src="../vendor/js/toastr.min.js"></script>
 
 <!-- Chart Morris plugin files -->
-{{!-- <script src="../js/raphael-min.js"></script> --}}
-{{!-- <script src="../js/morris.min.js"></script> --}}
+<script src="../js/raphael-min.js"></script>
+<script src="../js/morris.min.js"></script>
+<script src="../js/apexcharts.js"></script>
+<script src="../js/apexcharts.min.js"></script>
 {{#if jsonDim}}
-{{!-- <script src="../js/morris-init.js"></script> --}}
-<script src="../dist/apexcharts.js"></script>
-<script src="../dist/apexcharts.min.js"></script>
+<script src="../js/morris-init.js"></script>
 <script src="../js/chartjs.init.js"></script>
-{{/if}}
-
-
+{{/if}} 
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
 <script>
     (function () {

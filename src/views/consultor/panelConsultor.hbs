@@ -33,8 +33,8 @@
                             <p class="fs-13 mb-0 text-black">Asignadas a ti</p>
                         </div>
                     </div>
-                   {{#if datosJson_empresas_asignadas}}
-                    <input type="hidden" id="datosJson_empresas_asignadas" value="{{datosJson_empresas_asignadas }}">
+                   {{#if datosJson_empresas_asignadass}}
+                    <input type="hidden" id="datosJson_empresas_asignadas" value="{{datosJson_empresas_asignadas}}">
                     <div class="card-body pb-0">
                         <div id="chartBar"></div>
                     </div>
@@ -163,11 +163,25 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{#unless consultores}}
+                                            {{#if ultimosInformes}}
+                                            {{#each ultimosInformes}}
                                             <tr>
-                                                <td colspan="4">Aún no hay informes cargados.</td>
+                                                <td>{{fecha}}</td>
+                                                <td>{{etapa}} de negocio</td>
+                                                <td>{{nombre}}</td>
+                                                <td>
+                                                    <a href="{{url}}"
+                                                        style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                        target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                        <i class="fa fa-search"></i></a>
+                                                </td>
                                             </tr>
-                                            {{/unless}}
+                                            {{/each}}
+                                            {{else}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay informes generados.</td>
+                                            </tr>
+                                            {{/if}}
                                         </tbody>
                                     </table>
                                 </div>

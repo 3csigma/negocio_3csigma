@@ -4,7 +4,6 @@ const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
-const { json } = require('body-parser');
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
 
@@ -13,8 +12,9 @@ empresaController.index = async (req, res) => {
     diagnosticoPagado = 0, analisisPagado = 0;
     acuerdoFirmado = false;
     req.intentPay = undefined; // Intento de pago
-    const empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    const id_empresa = empresa[0].id_empresas;
+    const empresas = await consultarDatos('empresas')
+    const empresa = empresas.find(x => x.email == req.user.email)
+    const id_empresa = empresa.id_empresas;
     req.pagoDiag = false, btnPagar = {}, pagoAnalisis = false, etapa1 = {};
     /** Consultando que pagos ha realizado el usuario */
     btnPagar.etapa1 = true;
@@ -80,24 +80,24 @@ empresaController.index = async (req, res) => {
     }
 
     // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
-    if (empresa[0].consultor != null) {
+    if (empresa.consultor != null) {
         etapa1.lista = true;
-        let c = await pool.query('SELECT * FROM consultores WHERE id_consultores = ? LIMIT 1', [empresa[0].consultor]);
-        c = c[0];
-        // let nom = c.email.split('@')
-        // nom = nom[0] + ''
+        const consultores = await consultarDatos('consultores');
+        const c = consultores.find(x => x.id_consultores == empresa.consultor)
         etapa1.consultor = c.usuario_calendly;
-        console.log("DATOS AGENDAR CITA");
     }
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
-    const dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa, id_empresa, id_empresa, empresa[0].codigo])
+    const dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa, id_empresa, id_empresa, empresa.codigo])
     const diagEmpresa = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? LIMIT 1', [id_empresa])
     const diagEmpresa2 = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? LIMIT 1', [id_empresa])
     
+    // INFORMES DE LA EMPRESA
+    const informes_empresa = await consultarDatos('informes')
+
     /**************************************************************************** */
     // PORCENTAJE ETAPA 1
-    let porcentaje = 100/6
+    let porcentaje = 100/6, porcentajeEtapa1 = 0;
     porcentaje = Math.round(porcentaje)
     const diagPorcentaje = { num : 0 }
 
@@ -105,60 +105,92 @@ empresaController.index = async (req, res) => {
     const diagnosticoPago = JSON.parse(e.diagnostico_negocio)
     if (diagnosticoPago.estado == 1){
         diagPorcentaje.txt = 'Diagnóstico pagado'
-        diagPorcentaje.num = porcentaje
+        porcentajeEtapa1 = porcentaje
     }
     if (e.estadoAcuerdo == 1){
         diagPorcentaje.txt = 'Acuerdo enviado'
-        diagPorcentaje.num = porcentaje*2
+        porcentajeEtapa1 = porcentaje*2
     }
     if (e.estadoAcuerdo == 2){
         diagPorcentaje.txt = 'Acuerdo firmado'
-        diagPorcentaje.num = porcentaje*3
+        porcentajeEtapa1 = porcentaje*3
     } 
     if (e.telefono){
         diagPorcentaje.txt = 'Ficha Cliente'
-        diagPorcentaje.num = porcentaje*4
+        porcentajeEtapa1 = porcentaje*4
     }
 
     if (diagEmpresa.length > 0 || diagEmpresa2.length > 0){
         diagPorcentaje.txt = 'Cuestionario diagnóstico'
-        diagPorcentaje.num = porcentaje*5
+        porcentajeEtapa1 = porcentaje*5
     }
 
+    const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico')
+    if (informeEtapa1) porcentajeEtapa1 = 100;
+
     // Informe de diagnóstico de empresa subido
-    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? LIMIT 1', [empresa[0].id_empresas, 'Informe diagnóstico'])
-    informeEmpresa.length > 0 ? diagPorcentaje.num = 100 : diagPorcentaje.num = diagPorcentaje.num;
+    let ultimosInformes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
+    ultimosInformes = ultimosInformes.filter(x => x.id_empresa == id_empresa)
+    if (ultimosInformes.length > 0) {
+        ultimosInformes.forEach(x => {
+            if (x.nombre == 'Informe diagnóstico') {
+                x.etapa = 'Diagnóstico'
+            }
+            if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
+            if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
+        })
+    }
 
     /****************************************************************************** */
     // PORCENTAJE ETAPA 2
     // let porcentaje2 = 100/4
     // porcentaje2 = Math.round(porcentaje2)
-    let analisisEmpresa = await pool.query('SELECT * FROM analisis_empresa')
+    let analisisEmpresa = await consultarDatos('analisis_empresa')
     analisisEmpresa = analisisEmpresa.find(i => i.id_empresa == id_empresa)
-    const analisisPorcentaje = { num: 0 }
+    let porcentajeEtapa2 = 0;
     if (analisisEmpresa) {
-        if (analisisEmpresa.producto){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.administracion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.operacion){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
-        if (analisisEmpresa.marketing){ analisisPorcentaje.num = analisisPorcentaje.num + 25 }
+        if (analisisEmpresa.producto){ porcentajeEtapa2 = porcentajeEtapa2 + 12.5 }
+        if (analisisEmpresa.administracion){ porcentajeEtapa2 = porcentajeEtapa2 + 12.5 }
+        if (analisisEmpresa.operacion){ porcentajeEtapa2 = porcentajeEtapa2 + 12.5 }
+        if (analisisEmpresa.marketing){ porcentajeEtapa2 = porcentajeEtapa2 + 12.5 }
     }
+
+    const informeProducto = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de dimensión producto')
+    if (informeProducto) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
+    const informeAdministracion = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de dimensión administración')
+    if (informeAdministracion) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
+    const informeOperaciones = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de dimensión operaciones')
+    if (informeOperaciones) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
+    const informeMarketing = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de dimensión marketing')
+    if (informeMarketing) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
+
+    const informeEtapa2 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de análisis')
+    if (informeEtapa2) porcentajeEtapa2 = 100;
     
     /************************************************************************** */
 
     // PORCENTAJE ETAPA 3
     let porcentajeEtapa3 = 0
+    let tareasEmpresa = await consultarDatos('plan_estrategico')
+    tareasEmpresa = tareasEmpresa.filter(x => x.empresa == id_empresa)
+    const totalTareas = tareasEmpresa.length;
+    let tareasCompletadas = tareasEmpresa.filter(x => x.estado == 2)
+    tareasCompletadas = tareasCompletadas.length
+    if (totalTareas > 0) {
+        porcentajeEtapa3 = ((((tareasCompletadas*100)/totalTareas))*100)/75
+        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+    }
+    const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
+    if (informeEtapa3) porcentajeEtapa3 = 100;
 
     // PORCENTAJE GENERAL DE LA EMPRESA
-    let porcentajeTotal = (diagPorcentaje.num + analisisPorcentaje.num + porcentajeEtapa3)/3 
-    porcentajeTotal = Math.round(porcentajeTotal)
-    console.log("=====SUMA ====>>>>>>>" ,porcentajeTotal );
-    /************************************************************************** */
+    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3)/3)
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
     let jsonAnalisis1, jsonAnalisis2;
     
-    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [empresa[0].id_empresas])
+    let areasVitales = await pool.query('SELECT * FROM indicadores_areasvitales WHERE id_empresa = ? ORDER BY id_ LIMIT 2', [empresa.id_empresas])
 
     if (areasVitales.length > 0) {
         jsonAnalisis1 = JSON.stringify(areasVitales[0]);
@@ -171,15 +203,15 @@ empresaController.index = async (req, res) => {
     }
 
     // Si la empresa está Establecida
-    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [empresa[0].id_empresas])
-    let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [empresa[0].id_empresas])
+    let xDimensiones = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id ASC LIMIT 1', [id_empresa])
+    let xDimensiones2 = await pool.query('SELECT * FROM indicadores_dimensiones WHERE id_empresa = ? ORDER BY id DESC LIMIT 1', [id_empresa])
     if (xDimensiones.length > 0) {
         jsonDimensiones1 = JSON.stringify(xDimensiones[0]);
         jsonDimensiones2 = JSON.stringify(xDimensiones2[0]);
     }
 
     // Si la empresa es Nueva
-    let resCategorias = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [empresa[0].id_empresas])
+    let resCategorias = await pool.query('SELECT * FROM resultado_categorias WHERE id_empresa = ? LIMIT 1', [id_empresa])
     if (resCategorias.length > 0) {
         jsonDimensiones1 = JSON.stringify(resCategorias[0]);
         nuevosProyectos = 1;
@@ -198,6 +230,14 @@ empresaController.index = async (req, res) => {
     }
 
     /************************************************************************************* */
+    /** TAREAS ASIGNADAS ETAPA 3 - PLAN ESTRATÉGICO DE NEGOCIO */
+    let tareas = await consultarDatos('plan_estrategico', 'ORDER BY id DESC LIMIT 2')
+    tareas = tareas.filter(x => x.empresa == id_empresa)
+    tareas.forEach(x => {
+        x.fecha_entrega = new Date(x.fecha_entrega).toLocaleDateString('en-US')
+    })
+
+    /************************************************************************************* */
 
     res.render('empresa/dashboard', {
         user_dash: true,
@@ -208,11 +248,9 @@ empresaController.index = async (req, res) => {
         itemActivo: 1,
         acuerdoFirmado,
         etapa1,
-        diagPorcentaje,
-        analisisPorcentaje,
-        porcentajeEtapa3, porcentajeTotal,
+        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
-        informe: informeEmpresa[0],
+        tareas, ultimosInformes,
         nuevosProyectos, rendimiento
     })
 

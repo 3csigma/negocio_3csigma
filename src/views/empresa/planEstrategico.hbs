@@ -17,6 +17,9 @@
     .nav-tabs .nav-item .tabs-Task.active:before {
         background-color: transparent;
     }
+    .morris-hover {
+        opacity: 0.87;
+    }
 </style>
 <!--**********************************
                     Content body start
@@ -25,7 +28,7 @@
     <!-- row -->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12 col-xl-6 col-xxl-6">
+            <div class="col-md-12 col-xl-7 col-xxl-7">
                 <div class="card avtivity-card"
                     style="background: transparent !important;border: none !important; box-shadow: none !important">
                     <div class="card-body">
@@ -41,11 +44,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-xl-6 col-xxl-6">
+            <div class="col-md-12 col-xl-5 col-xxl-5">
                 <div class="card avtivity-card">
                     <div class="card-body">
                         <h2 style="color: #000; font-weight: bold;">Rendimiento</h2>
                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #FED061"></i> <span class="small-text">Ventas</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #50368C"></i> <span class="small-text">Compras</span>
+                            </div>
+                            <div class="col-sm-4">
+                                <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
+                            </div>
+                        </div>
                         <div id="line_chart_ventas" class="morris_chart_height"></div>
                     </div>
                 </div>
@@ -58,7 +72,7 @@
             <div class="col-xl-7 col-xxl-12">
                 <div class="row">
                     {{!-- GRÁFICAS DE LAS DIMENSIONES DE LAS TAREAS --}}
-                    <div class="col-xl-12">
+                    {{!-- <div class="col-xl-12">
                         <div class="card">
                             <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
                             <div class="row">
@@ -81,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                     --}}
                     {{!-- TAREAS ASIGNADAS --}}
                     <div class="col-xl-12">
                         <div class="card plan-list">
@@ -277,8 +291,9 @@
             </div>
 
             {{!-- TARJETAS LADO DERECHO--}}
-            <div class="col-xl-5 col-xxl-12">
+            <div class="col-xl-5 col-xxl-12">     
                 <div class="row">
+                    {{> user/graficasCircular}}
                     <div class="col-xl-12">
                         {{!-- INFORMES GENERADOS --}}
                         <div class="card">
@@ -332,4 +347,3 @@
             Scripts
 ***********************************-->
 <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>

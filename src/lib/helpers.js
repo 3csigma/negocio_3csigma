@@ -9,7 +9,7 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 const multer = require('multer');
 const path = require('path');
-const { sendEmail, pagoAnalisisPendienteHTML } = require('../lib/mail.config')
+const { sendEmail, pagoAnalisisPendienteHTML, tareasRetrasadasHTML } = require('../lib/mail.config')
 const helpers = {}
 
 // Encriptar clave
@@ -200,9 +200,7 @@ helpers.enabled_nextPay = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
 helpers.historial_consultores_admin = async () => {
-
     const consultores = await pool.query("SELECT * FROM consultores")
-
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
@@ -245,9 +243,7 @@ helpers.historial_consultores_admin = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
 helpers.historial_empresas_admin = async () => {
-
     const empresas = await pool.query("SELECT * FROM empresas")
-
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
@@ -334,7 +330,6 @@ helpers.historial_informes_admin = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS CONSULTOR
 helpers.historial_empresas_consultor = async () => {
-
     const empresas = await pool.query("SELECT * FROM empresas")
     const consultores = await pool.query("SELECT * FROM consultores")
 
@@ -379,7 +374,6 @@ helpers.historial_empresas_consultor = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
 helpers.historial_informes_consultor = async () => {
-
     const informes = await pool.query("SELECT * FROM informes")
     const consultores = await pool.query("SELECT * FROM consultores")
 
@@ -422,10 +416,48 @@ helpers.historial_informes_consultor = async () => {
     console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
     next();
 };
+
+// Consultar Tareas Retrasadas x Empresas y Enviar Email
+helpers.consultar_tiempo_tareas = async () => {
+    console.log("\n******************************************************");
+    console.log("CRON JOB - CONSULTAR TAREAS RETRASADAS");
+    console.log("******************************************************\n");
+    let empresas = await helpers.consultarDatos('empresas')
+    const allTask = await helpers.consultarDatos('plan_estrategico')
+    empresas = empresas.filter(x => x.consultor != null)
+    const tareasRetrasadas = allTask.filter(x => x.estado != 2)
+    if (tareasRetrasadas.length > 0) {
+        const fechaActual = new Date().toLocaleDateString('fr-CA')
+        empresas.forEach(async e => {
+            let numTareas = 0;
+            const tareasEmpresa = tareasRetrasadas.filter(x => x.empresa == e.id_empresas && fechaActual > x.fecha_entrega)
+            if (tareasEmpresa.length > 0) {
+                numTareas = tareasEmpresa.length;
+                const nombreEmpresa = e.nombre_empresa;
+                const email = e.email;
+                console.log("\nEmpresa >> " + nombreEmpresa + " -- Número de Tareas Retrasadas: " + numTareas)
+
+                const asunto = '¡Tienes tareas atrasadas!';
+                const template = tareasRetrasadasHTML(numTareas, nombreEmpresa);
+                const resultEmail = await sendEmail(email, asunto, template)
+                if (resultEmail == false) {
+                    console.log("\n<<<<< Ocurrio un error inesperado al enviar el email Tareas retrasadas >>>> \n")
+                } else {
+                    console.log("\n<<<<< Se ha notificado al email (" + email + ") de la empresa el número de tareas retrasadas >>>>>\n")
+                }
+            }
+        })
+    } else {
+        console.log("\nNO HAY EMPRESAS CON TAREAS RETRASADAS - PLAN ESTRATÉGICO DE NEGOCIO");
+    }
+    await console.log("\n******************************************************");
+    await console.log("CONSULTAR TAREAS RETRASADAS - CRON JOB FINALIZADO...");
+    await console.log("******************************************************");
+
+}
+
 /************************************************************************************************************** */
-
-
-/** CONSULTAS MYSQL */
+/********************************************** CONSULTAS MYSQL ***********************************************/
 helpers.consultarInformes = async (empresa, nombreInforme) => {
     const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? `, [empresa, nombreInforme])
     return informe[0];
@@ -464,8 +496,11 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
     return tareas;
 }
 
-helpers.consultarDatos = async (tabla, condicion = null) => {
-    const data = await pool.query('SELECT * FROM '+ tabla)
+helpers.consultarDatos = async (tabla, extra = null) => {
+    let data = await pool.query('SELECT * FROM '+ tabla)
+    if (extra){
+        data = await pool.query('SELECT * FROM '+ tabla + ' ' + extra)
+    }
     return data;
 }
 

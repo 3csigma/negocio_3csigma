@@ -23,11 +23,14 @@
     .apexcharts-text tspan {
         font-family: 'Oblivian Text' !important;
     }
-
+    #icon_avance_general {
+        fill: url(#my-cool-gradient) #447799;
+    }
     body.swal2-shown > [aria-hidden="true"] {
         transition: 0.1s filter;
         filter: blur(10px);
     }
+
 </style>
 <!--**********************************
         Content body start
@@ -54,14 +57,14 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Diagnóstico de negocio</p>
-                                        <span class="title text-black font-w600">{{diagPorcentaje.num}}%</span>
+                                        <span class="title text-black font-w600">{{porcentajeEtapa1}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
                                     <div class="progress-bar bg-diagnostico"
-                                        style="width:{{#if diagPorcentaje.num}}{{diagPorcentaje.num}}{{else}}5{{/if}}%;
+                                        style="width:{{#if porcentajeEtapa1}}{{porcentajeEtapa1}}{{else}}5{{/if}}%;
                                         height:5px;" role="progressbar">
-                                        <span class="sr-only">{{diagPorcentaje.num}}% Completado</span>
+                                        <span class="sr-only">{{porcentajeEtapa1}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
@@ -82,14 +85,14 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Análisis de negocio</p>
-                                        <span class="title text-black font-w600">{{analisisPorcentaje.num}}%</span>
+                                        <span class="title text-black font-w600">{{porcentajeEtapa2}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
                                     <div class="progress-bar bg-secondary"
-                                        style="width:{{#if analisisPorcentaje.num}}{{analisisPorcentaje.num}}{{else}}5{{/if}}%; 
+                                        style="width:{{#if porcentajeEtapa2}}{{porcentajeEtapa2}}{{else}}5{{/if}}%; 
                                         height:5px;" role="progressbar">
-                                        <span class="sr-only">{{analisisPorcentaje.num}}% Completado</span>
+                                        <span class="sr-only">{{porcentajeEtapa2}}% Completado</span>
                                     </div>
                                     {{!-- <div class="progress-bar bg-secondary" style="width: 5%; height:5px;"
                                         role="progressbar">
@@ -116,12 +119,13 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Plan estratégico de negocio</p>
-                                        <span class="title text-black font-w600">0%</span>
+                                        <span class="title text-black font-w600">{{porcentajeEtapa3}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-plan" style="width: 5%; height:5px;" role="progressbar">
-                                        <span class="sr-only">0% Complete</span>
+                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa3}}{{porcentajeEtapa3}}{{else}}5{{/if}}%; 
+                                        height:5px;" role="progressbar">
+                                        <span class="sr-only">{{porcentajeEtapa3}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
@@ -129,25 +133,19 @@
                         </div>
                     </div>
 
-                     {{!-- TOTAL PORCENTAJE --}}
+                     {{!-- PORCENTAJE AVANCE GENERAL DE LA EMPRESA --}}
                     <div class="col-sm-6">
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
                                     <span class="activity-icon bgl-plan mr-md-4 mr-3">
-                                        <style>
-                                            .icon {
-                                            /* gradient and fallback color */
-                                            fill: url(#my-cool-gradient) #447799;
-                                            }
-                                        </style>
                                         <svg width="40" height="37" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true" focusable="false">
                                         <linearGradient id="my-cool-gradient" x2="1" y2="-0.4">
                                             <stop offset="0%" stop-color=" rgba(80,54,140,1" />
                                             <stop offset="50%" stop-color=" rgba(129,32,130,1)" />
                                             <stop offset="100%" stop-color=" rgba(254,208,97,1)" />
                                         </linearGradient>
-                                            <path class="icon" fill="url(#my-cool-gradient) #447799;"
+                                            <path id="icon_avance_general"
                                                 d="M219.3 .5c3.1-.6 6.3-.6 9.4 0l200 40C439.9 42.7 448 52.6 448 64s-8.1 21.3-19.3 23.5L352 102.9V160c0 70.7-57.3 128-128 128s-128-57.3-128-128V102.9L48 93.3v65.1l15.7 78.4c.9 4.7-.3 9.6-3.3 13.3s-7.6 5.9-12.4 5.9H16c-4.8 0-9.3-2.1-12.4-5.9s-4.3-8.6-3.3-13.3L16 158.4V86.6C6.5 83.3 0 74.3 0 64C0 52.6 8.1 42.7 19.3 40.5l200-40zM129.1 323.2l83.2 88.4c6.3 6.7 17 6.7 23.3 0l83.2-88.4c73.7 14.9 129.1 80 129.1 158.1c0 17-13.8 30.7-30.7 30.7H30.7C13.8 512 0 498.2 0 481.3c0-78.1 55.5-143.2 129.1-158.1z"
                                                  />
                                         </svg>
@@ -235,13 +233,13 @@
                 </div>
             </div>
 
-            {{!-- Últimas tareas realizadas --}}
+            {{!-- Últimas 2 tareas asignadas --}}
             <div class="col-xl-6 col-xxl-6">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Últimas tareas</h4>
+                                <h4 class="card-title">Últimas tareas asignadas</h4>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -249,51 +247,24 @@
                                         <thead>
                                             <tr>
                                                 <th>FECHA</th>
-                                                <th>ETAPA</th>
                                                 <th>NOMBRE</th>
-                                                <th>ESTADO</th>
-                                                <th>ACCIÓN</th>
+                                                <th>DIMENSIÓN</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{#if tareas}}
+                                            {{#each tareas}}
                                             <tr>
-                                                <td>xx/xx/xxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td><span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
-                                                    color: #fff">100%</span></td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                                                            <i class="fa fa-pencil"></i></a>
-                                                        <a href="#" class="btn btn-danger shadow btn-xs sharp"
-                                                            style="background: #DC0000"><i class="fa fa-trash"></i></a>
-                                                    </div>
-                                                </td>
+                                                <td>{{fecha_entrega}}</td>
+                                                <td>{{actividad}}</td>
+                                                <td>{{dimension}}</td>
                                             </tr>
+                                            {{/each}}
                                             {{else}}
                                             <tr>
                                                 <td colspan="5">Aún no hay tareas asignadas.</td>
                                             </tr>
                                             {{/if}}
-                                            {{!-- <tr>
-                                                <td>xx/xx/xxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td>xxxxxxxx</td>
-                                                <td><span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
-                                                    color: #fff">20%</span></td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <a href="#" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);">
-                                                            <i class="fa fa-pencil"></i></a>
-                                                        <a href="#" class="btn btn-danger shadow btn-xs sharp"
-                                                            style="background: #DC0000"><i class="fa fa-trash"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -323,18 +294,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{#if informe.fecha}}
+                                            {{#if ultimosInformes}}
+                                            {{#each ultimosInformes}}
                                             <tr>
-                                                <td>{{informe.fecha}}</td>
-                                                <td>Diagnóstico de negocio</td>
-                                                <td>{{informe.nombre}}</td>
+                                                <td>{{fecha}}</td>
+                                                <td>{{etapa}} de negocio</td>
+                                                <td>{{nombre}}</td>
                                                 <td>
-                                                    <a href="{{informe.url}}"
+                                                    <a href="{{url}}"
                                                         style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
                                                         target="_blank" class="btn btn-info shadow btn-xs sharp">
                                                         <i class="fa fa-search"></i></a>
                                                 </td>
                                             </tr>
+                                            {{/each}}
                                             {{else}}
                                             <tr>
                                                 <td colspan="4">Aún no hay informes generados.</td>

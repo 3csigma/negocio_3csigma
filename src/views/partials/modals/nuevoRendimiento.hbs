@@ -8,19 +8,26 @@
             <form action="/nuevoRendimiento" method="post">
                 <div class="modal-body">
                         <input type="hidden" name="codigo" value="{{datos.code}}">
-                        <div class="form-group">
-                            <input type="text" class="form-control inputTotales_" name="total_ventas" placeholder="Total Ventas">
+                        <div class="form-group col-md-12 pt-2">
+                            <label for="total-ventas">Total de Ventas</label>
+                            <input type="text" class="form-control inputTotales_ required" id="total-ventas" name="total_ventas">
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control inputTotales_" name="total_compras" placeholder="Total Compras">
+                        <div class="form-group col-md-12">
+                            <label for="total-compras">Total de Compras</label>
+                            <input type="text" class="form-control inputTotales_ required" id="total-compras" name="total_compras">
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control inputTotales_" name="total_gastos" placeholder="Total Gastos">
+                        <div class="form-group col-md-12">
+                            <label for="total-gastos">Total de Gastos</label>
+                            <input type="text" class="form-control inputTotales_ required" id="total-gastos" name="total_gastos">
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary" 
+                    style="display: inline-block; background-color: rgb(80, 54, 140);">Guardar</button>
+                    <button type="button" class="btn btn-danger light"
+                    style="display: inline-block; background-color: rgb(221, 51, 51); color:#fff">Cancelar</button>
+                    {{!-- <button type="submit" class="btn btn-primary">Guardar</button> --}}
+                    {{!-- <button type="button" class="btn btn-danger light" data-dismiss="modal">Cerrar</button> --}}
                 </div>
             </form>
         </div>

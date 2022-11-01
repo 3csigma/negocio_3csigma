@@ -347,7 +347,7 @@
           {{#if btnPagar.etapa2}}
           <a href="/analisis-de-negocio" aria-expanded="false">
           {{else}}
-          <a style="cursor:pointer" id="analisis-sin-pagar" aria-expanded="false">
+          <a style="cursor:pointer" aria-expanded="false">
           {{/if}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
@@ -359,7 +359,12 @@
         {{#comparar itemActivo '!=' 5}}
         <li class="activar-cuenta">
         {{/comparar}}
-          <a id="item-link5" href="/plan-estrategico" aria-expanded="false">
+
+          {{#if btnPagar.etapa2}}
+          <a href="/plan-estrategico" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" aria-expanded="false">
+          {{/if}}
             <i class="fa-solid fa-lightbulb"></i>
             <span class="nav-text">Plan estratégico de negocio</span>
           </a>

@@ -37,14 +37,14 @@ empresaController.guardarArchivos)
 router.get('/plan-estrategico', checkLogin, empresaLogueada, empresaController.planEstrategico)
 
 /*******************************************************************************************************/
-// Ejecución Diaria (12pm)
-cron.schedule('0 12 * * 0-6',() => {
-    enabled_nextPay()
-});
-
-// router.get('/update-pay2', (req, res) => {
+// // Ejecución Diaria (12pm)
+// cron.schedule('0 12 * * 0-6',() => {
 //     enabled_nextPay()
-//     res.send("TODO OK -> END")
 // });
+
+// // router.get('/update-pay2', (req, res) => {
+// //     enabled_nextPay()
+// //     res.send("TODO OK -> END")
+// // });
 
 module.exports = router

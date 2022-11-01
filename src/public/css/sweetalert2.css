@@ -1306,6 +1306,8 @@
 }
 body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {
   overflow: hidden;
+  transition: 0.1s filter;
+  filter: blur(10px);
 }
 body.swal2-height-auto {
   height: auto !important;

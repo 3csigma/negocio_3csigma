@@ -30,6 +30,12 @@ body::-webkit-scrollbar {
   }
   /* Fin Barra scroll personalizada */
 
+  /* FONDO BORROSO PARA LAS ALERTAS */
+  /* body.swal2-shown > [aria-hidden="true"] {
+    transition: 0.1s filter;
+    filter: blur(10px);
+  } */
+
 /* ¡Bienvenido de vuelta! */
 .msg-Login-Top {
     font-size: 14px !important;

@@ -1,92 +1,4 @@
 <link rel="stylesheet" href="../css/editarEmpresa.css">
-<style>
-    a.nav-link.btnIndicadoresAll {
-        background: #f2f2f2;
-        border-radius: 22px;
-        color: #fff;
-        text-align: center;
-    }
-
-    a.nav-link.btnIndicadoresAll.active {
-        background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
-        color: white !important;
-        border-radius: 22px;
-    }
-
-    .nav-link.btnIndicadoresAll:focus,
-    .nav-link.btnIndicadoresAll:hover {
-        background-color: #f2f2f2 !important;
-        border-color: #50368c;
-        border-radius: 22px !important;
-        color: #50368c;
-        border-width: 0 0px 3px 0;
-    }
-
-    .toast-success {
-        background-color: #50368D;
-    }
-
-    .default-tab .nav-link:focus,
-    .default-tab .nav-link:hover,
-    .default-tab .nav-link.active {
-        color: #495057;
-        background-color: #fff;
-        border-color: #dee2e6 #dee2e6 #fff #ebeef6;
-        border-radius: 1.25rem 1.25rem 0 0;
-        color: #0B2A97;
-    }
-
-    @media (min-width: 800px) and (max-width: 967px) {
-        .modal.show .modal-dialog {
-            max-width: 700px;
-        }
-    }
-
-    @media (min-width: 1000px) and (max-width: 1950px) {
-        .modal.show .modal-dialog {
-            max-width: 930px;
-        }
-    }
-
-    /* Barra Scroll Personalizada para el Modal */
-    .modal.open .modal::-webkit-scrollbar-track {
-        border-radius: 10px !important;
-        background-color: #eae6f4 !important;
-    }
-
-    .modal-open .modal::-webkit-scrollbar-thumb {
-        background-color: #50368c !important;
-        border-radius: 10px !important;
-        border: 1px solid rgba(155, 155, 155, 0.747) !important;
-    }
-
-    .modal-open .modal::-webkit-scrollbar-button:increment,
-    .modal-open .modal::-webkit-scrollbar-button {
-        display: none;
-    }
-
-    .modal-open .modal::-webkit-scrollbar:vertical {
-        width: 10px !important;
-    }
-
-    .modal-open .modal::-webkit-scrollbar {
-        -webkit-appearance: none !important;
-        appearance: none !important;
-    }
-
-    .duet-date__input {
-		height: 44px;
-		border: 1px solid #ddd;
-		color: #000;
-		font-weight: 500;
-		font-size: 14px;
-		cursor: no-drop;
-	}
-
-    .nav-tabs .nav-item .tabs-Task.active:before {
-        background-color: transparent;
-    }
-</style>
 <!--**********************************
         Content body start
 ***********************************-->
@@ -105,7 +17,7 @@
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">
                                 <h4 class="text-primary mb-0">{{datos.nombre_completo}}</h4>
-                                <p>{{datos.nombre_empresa}}</p>
+                                <p id="nombreEmpresa">{{datos.nombre_empresa}}</p>
                             </div>
                             <div class="profile px-2 pt-2">
                                 <h4 class="text-muted mb-0">{{#if
@@ -366,8 +278,8 @@
 
                                     </div>
 
-                                    <div class="row mt-4">
-                                        <div class="col" style="text-align: left !important">
+                                    <div class="row mt-4 mb-3">
+                                        <div class="col-12" style="text-align: left !important">
                                             <a href="{{empresa.page_web}}">
                                                 {{empresa.page_web}}
                                             </a>
@@ -378,11 +290,28 @@
 
                                     <div class="row mt-2">
                                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
+                                        <div class="col-sm-12">
+                                            <div class="form-group" style="text-align: left !important">
+                                                <label
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Rendimiento de la Empresa</label>
+                                            </div>
+                                        </div>
                                         {{#if jsonRendimiento}}
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #FED061"></i> <span class="small-text">Ventas</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #50368C"></i> <span class="small-text">Compras</span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
+                                        </div>
+
                                         <div class="col-12">
                                             <div id="line_chart_ventas" class="morris_chart_height"></div>
                                         </div>
-                                        <div class="col-12">
+
+                                        <div class="col-12 mt-4">
                                             <!-- BOTÓN PARA MODAL NUEVO RENDIMIENTO -->
                                             <button type="button" class="btn btn-primary"
                                                 data-toggle="modal" data-target="#modalNewRendimiento"
@@ -391,10 +320,12 @@
                                         </div>
                                         {{else}}
                                         <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
-                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
-                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
-                                                    border-radius: 35px;"></i></center><br>
-                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                            <div>
+                                                <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                        height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                        border-radius: 35px;"></i></center><br>
+                                                <label style="font-size:16px;color:#000;font-weight:500;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                            </div>
                                         </div>
                                         {{/if}}
                                     </div>
@@ -422,9 +353,9 @@
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a href="#empresa" data-toggle="tab"
                                     class="nav-link active show">Empresa</a></li>
-                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab"
+                            <li class="nav-item"><a href="#diagnostico" id="diagnostico-item" data-toggle="tab"
                                     class="nav-link">Diagnóstico</a></li>
-                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link">Análisis</a>
+                            <li class="nav-item"><a href="#analisis" id="analisis-item" data-toggle="tab" class="nav-link">Análisis</a>
                             </li>
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link planItem">Plan
                                     Estrategico</a></li>
@@ -454,7 +385,7 @@
                                                         <h5 class="f-w-500">Email <span class="pull-right">:</span>
                                                         </h5>
                                                     </div>
-                                                    <div class="col-sm-8 col-7"><span>{{datos.email}}</span>
+                                                    <div class="col-sm-8 col-7"><span id="emailEmpresa">{{datos.email}}</span>
                                                     </div>
                                                 </div>
                                                 <div class="row mb-2">
@@ -682,8 +613,6 @@
                                                                     </div>
                                                                     {{/if}}
                                                                 </div>
-
-                                                                
 
                                                             </div>
                                                         </div>
@@ -1180,6 +1109,7 @@
                                                         <tbody>
 
                                                             {{!-- PRODUCTO --}}
+                                                            {{#if filaInforme.producto}}
                                                             <tr>
                                                                 <td>{{#if info.prod.fecha}}{{info.prod.fecha}}{{else}}
                                                                     <span id="spanFechaProd">N/A</span>
@@ -1217,8 +1147,10 @@
                                                                     </table>
                                                                 </td>
                                                             </tr>
+                                                            {{/if}}
 
                                                             {{!-- ADMINISTRACIÓN --}}
+                                                            {{#if filaInforme.administracion}}
                                                             <tr>
                                                                 <td>{{#if info.adm.fecha}}{{info.adm.fecha}}{{else}}
                                                                     <span id="spanFechaAdmin">N/A</span>
@@ -1257,8 +1189,10 @@
                                                                     {{!-- {{/if}} --}}
                                                                 </td>
                                                             </tr>
+                                                            {{/if}}
 
                                                             {{!-- OPERACIONES --}}
+                                                            {{#if filaInforme.operaciones}}
                                                             <tr>
                                                                 <td>{{#if info.op.fecha}}{{info.op.fecha}}{{else}}
                                                                     <span id="spanFechaOpe">N/A</span>
@@ -1297,8 +1231,10 @@
                                                                     {{!-- {{/if}} --}}
                                                                 </td>
                                                             </tr>
+                                                            {{/if}}
 
                                                             {{!-- MARKETING --}}
+                                                            {{#if filaInforme.marketing}}
                                                             <tr>
                                                                 <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
                                                                     <span id="spanFechaMarketing">N/A</span>
@@ -1345,6 +1281,7 @@
                                                                     {{!-- {{/if}} --}}
                                                                 </td>
                                                             </tr>
+                                                            {{/if}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -1353,8 +1290,8 @@
                                         </div>
                                     </div>
                                     <!-- ========================================================================== -->
-
                                     <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                    {{#if filaInforme.completo}}
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="card-header">
@@ -1418,6 +1355,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    {{/if}}
                                     <!-- ========================================================================== -->
                                     {{/if}}
                                 {{/if}}
