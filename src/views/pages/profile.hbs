@@ -4,12 +4,6 @@
     .nav-tabs .nav-item .nav-link.active:before{background-color: #812082;}
   </style>
   <div class="container-fluid">
-    <div class="page-titles">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
-        <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
-      </ol>
-    </div>
     <!-- row -->
     <div class="row">
       <div class="col-lg-12">
@@ -138,24 +132,6 @@
                   </div>
                 </div>
               </div>
-              <!-- Modal -->
-              <div class="modal fade" id="replyModal">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title">Post Reply</h5>
-                      <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea class="form-control" rows="4">Message</textarea>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Reply</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -165,95 +141,86 @@
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
   <script>
     // ==> Previsualizar foto de perfil == INICIO <==
-        function fileValidation(){
-            var fileInput = document.getElementById('previewProfile')
-                var filePath = fileInput.value;
-                var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
-                var archivo = fileInput.files[0];
-                if(!allowedExtensions.exec(filePath)){
-                  toastr.success("Solo los formatos jpg, jpeg, png son aceptados", "Atención", {
-                      positionClass: "toast-top-full-width",
-                      timeOut: 3e3,
-                      closeButton: !0,
-                      debug: !1,
-                      newestOnTop: !0,
-                      progressBar: !0,
-                      preventDuplicates: !0,
-                      onclick: null,
-                      showDuration: "200",
-                      hideDuration: "200",
-                      extendedTimeOut: "200",
-                      showEasing: "swing",
-                      hideEasing: "linear",
-                      showMethod: "fadeIn",
-                      hideMethod: "fadeOut",
-                      tapToDismiss: !1
-                  })
-                    fileInput.value = '';
-                    return false;
-                }else if(archivo.size > 1000000) {
-                    toastr.success("Tu foto supera 1MB", "error", {
-                        positionClass: "toast-top-full-width",
-                        timeOut: 3e3,
-                        closeButton: !0,
-                        debug: !1,
-                        newestOnTop: !0,
-                        progressBar: !0,
-                        preventDuplicates: !0,
-                        onclick: null,
-                        showDuration: "200",
-                        hideDuration: "200",
-                        extendedTimeOut: "200",
-                        showEasing: "swing",
-                        hideEasing: "linear",
-                        showMethod: "fadeIn",
-                        hideMethod: "fadeOut",
-                        tapToDismiss: !1
-                    })
-                    fileInput.value = '';
-                    return false;
-                }else {
-                if (fileInput.files && fileInput.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                    $('#imagePre1').attr('src', e.target.result); // Renderizamos la imagen
-                }
-                 reader.readAsDataURL(fileInput.files[0]);
-              }
-           }
-       }
-        $("#imgInp").change(function () {
-        // Código a ejecutar cuando se detecta un cambio de archivO
-        readImage(this);
-     });
+    function fileValidation() {
+      const fileInput = document.getElementById('previewProfile')
+      const filePath = fileInput.value;
+      const allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+      const archivo = fileInput.files[0];
+
+      if(!allowedExtensions.exec(filePath)) {
+        toastr.success("Solo los formatos jpg, jpeg, png son aceptados", "Atención", {
+            positionClass: "toast-top-full-width",
+            timeOut: 3e3,
+            closeButton: !0,
+            debug: !1,
+            newestOnTop: !0,
+            progressBar: !0,
+            preventDuplicates: !0,
+            onclick: null,
+            showDuration: "200",
+            hideDuration: "200",
+            extendedTimeOut: "200",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut",
+            tapToDismiss: !1
+        })
+        return false;
+      } else if (archivo.size > 1000000) {
+        toastr.warning("Tu foto supera 1MB", "Error", {
+              positionClass: "toast-top-full-width",
+              timeOut: 3e3,
+              closeButton: !0,
+              debug: !1,
+              newestOnTop: !0,
+              progressBar: !0,
+              preventDuplicates: !0,
+              onclick: null,
+              showDuration: "200",
+              hideDuration: "200",
+              extendedTimeOut: "200",
+              showEasing: "swing",
+              hideEasing: "linear",
+              showMethod: "fadeIn",
+              hideMethod: "fadeOut",
+              tapToDismiss: !1
+          })
+        return false;
+      }else {
+        /** SI LA FOTO ES ACEPTADA **/
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $('#imagePre1').attr('src', e.target.result); // Renderizamos la imagen
+          }
+          reader.readAsDataURL(fileInput.files[0]);
+        }
+        const foto = fileInput.files[0]
+        const formData = new FormData();
+        formData.append('foto', foto);
+        guardarFoto(formData);
+      }
+    }
+    $("#imgInp").change(function () {
+      // Código a ejecutar cuando se detecta un cambio de archivO
+      readImage(this);
+    });
     // ==> Previsualizar foto de perfil == FIN <==
     
-        /* Actualizar foto de perfil en DB */
-        const inptutFoto = document.querySelector('.filePhoto');
-        console.log("Input desde el evento capturador", inptutFoto)
-        inptutFoto.addEventListener('change', (e) => {
-            console.log(e)
-            const foto = e.target.files[0]
-            const formData = new FormData();
-            formData.append('foto', foto);
-            guardarFoto(formData);
-        });
-
-        
-        function guardarFoto(formData) {
-            fetch('/actualizarFotoPerfil', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(res => res.json())
-                .catch(error => console.error('Error:', error))
-                .then(resultado => {
-                    if (resultado) {
-                        console.log("Todo correcto")
-                    } else {
-                        console.log("Sin datos")
-                    }
-                })
-        }
+    function guardarFoto(formData) {
+      fetch('/actualizarFotoPerfil', {
+          method: 'POST',
+          body: formData,
+      }).then(res => res.json())
+        .catch(error => console.error('Error: ', error))
+        .then(resultado => {
+            if (resultado) {
+                console.log("Todo correcto")
+            } else {
+                console.log("Sin datos")
+            }
+        })
+    }
     </script>
 <!--=============================// FIN SCRIPTS =========================================-->

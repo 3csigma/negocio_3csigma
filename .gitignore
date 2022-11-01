@@ -13,3 +13,6 @@ src/public/archivos_analisis_empresa/*.zip
 src/public/propuestas_analisis/*.pdf
 src/public/certificados_consultores/*.pdf
 src/public/informes_empresas/*.pdf
+src/public/foto_profile/*.jpg
+src/public/foto_profile/*.jpeg
+src/public/foto_profile/*.png

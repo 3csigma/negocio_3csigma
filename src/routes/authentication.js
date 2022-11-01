@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { checkLogin, noLogueado } = require('../lib/auth')
 const userController = require('../controllers/userController');
+const empresaController = require('../controllers/empresaController');
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const passport = require('passport')
@@ -43,7 +44,6 @@ router.post('/reset-password-email', noLogueado, userController.resetPassword)
 /* Actualizar clave en la Base de datos */
 router.post('/update-password', noLogueado, csrfProtection,userController.updatePassword)
 
-router.get('/perfil/:codigo', checkLogin, userController.perfilUsuarios)
-
+router.get('/perfil/:codigo', checkLogin, empresaController.perfilUsuarios)
 
 module.exports = router;

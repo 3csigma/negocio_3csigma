@@ -49,6 +49,7 @@
               {{#comparar itemActivo '==' 2}}Consultores registrados{{/comparar}}
               {{#comparar itemActivo '==' 3}}Empresas registradas{{/comparar}}
               {{!-- {{#comparar itemActivo '==' 4}}Informes generales{{/comparar}} --}}
+              {{#if consultor.foto}}Perfil{{/if}}
             </div>
           </div>
           <ul class="navbar-nav header-right">
@@ -160,7 +161,7 @@
               {{#if user.foto}}
                 <img src="{{user.foto}}" width="20" alt="profile"  style="object-fit: cover;"/>
               {{else}}
-                <img src="{{user.foto}}" width="20" alt="profile"  style="object-fit: cover;" />
+                <img src="../img/profile_default/user.jpg" width="20" alt="profile" style="object-fit: cover;"/>
               {{/if}}
                 <div class="header-info">
                   <span class="text-black"><strong>{{user.nombres}} {{user.apellidos}}</strong></span>

@@ -161,35 +161,6 @@ userController.updatePassword = async (req, res, next) => {
 }
 
 /******************************************************************************************* */
-// Mostrar perfil de Usuarios
-userController.perfilUsuarios = async (req, res) => {
-    const { rol, codigo } = req.user;
-
-    let empresa = await pool.query("SELECT e.*, u.foto,u.rol FROM empresas e JOIN users u ON e.codigo = u.codigo WHERE e.codigo = ?", [codigo])
-    empresa = empresa[0]
-
-    let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
-    consultor = consultor[0]
-
-    let user_dash = false, adminDash = false, consultorDash = false
- 
-    if (rol == 'Empresa') {
-        user_dash = true;
-        empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
-        console.log("FOTO EMPRESA ========>>" , empresa.foto);
-    } else {
-        consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
-        if (rol == 'Consultor') {
-           consultorDash = true;
-       } else {
-           adminDash = true;
-       }
-    }
-    res.render('pages/profile', {
-        rol, adminDash, user_dash, consultorDash, consultor, empresa, 
-    })
-}
-
 // Actualizar datos de usuarios
 userController.update_user = async (req, res) => {
     let { rol, codigo } = req.user;
@@ -266,9 +237,5 @@ userController.actualizarFotoPerfil = async (req, res) => {
     if (rol == 'Consultor' || rol == 'Admin') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
     }
-  
     res.send(true);
 };
-
-
-

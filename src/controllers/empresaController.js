@@ -256,6 +256,51 @@ empresaController.index = async (req, res) => {
 
 }
 
+// Mostrar perfil de Usuarios
+empresaController.perfilUsuarios = async (req, res) => {
+    const { rol, codigo } = req.user;
+
+    let empresa = await pool.query("SELECT e.*, u.foto,u.rol FROM empresas e JOIN users u ON e.codigo = u.codigo WHERE e.codigo = ?", [codigo])
+    empresa = empresa[0]
+
+    let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
+    consultor = consultor[0]
+
+    let user_dash = false, adminDash = false, consultorDash = false
+ 
+    if (rol == 'Empresa') {
+        user_dash = true;
+        empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
+        console.log("FOTO EMPRESA ========>>" , empresa.foto);
+    } else {
+        consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
+        if (rol == 'Consultor') {
+           consultorDash = true;
+       } else {
+           adminDash = true;
+       }
+    }
+
+    let acuerdo = await consultarDatos('acuerdo_confidencial')
+    acuerdo = acuerdo.find(x => x.id_empresa == empresa)
+    if (acuerdo) {
+        if (acuerdo.estadoAcuerdo == 2) {
+            acuerdoFirmado = true;
+            noPago = false;
+        }
+    }
+
+    res.render('pages/profile', {
+        rol, adminDash, user_dash, consultorDash, consultor, empresa,
+        pagoPendiente,
+        diagnosticoPagado,
+        analisisPagado,
+        btnPagar,
+        acuerdoFirmado,
+        etapa1
+    })
+}
+
 /** Creación & validación del proceso Acuerdo de Confidencialidad */
 empresaController.acuerdo = async (req, res) => {
     /**
