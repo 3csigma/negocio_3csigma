@@ -161,13 +161,114 @@ userController.updatePassword = async (req, res, next) => {
 }
 
 /******************************************************************************************* */
-// Perfil de Usuarios
+// Mostrar perfil de Usuarios
 userController.perfilUsuarios = async (req, res) => {
-    const { rol } = req.user;
-    let user_dash = false, adminDash = false, consulDash = false
-    if (rol == 'Empresa') user_dash = true;
-    if (rol == 'Admin') adminDash = true;
+    const { rol, codigo } = req.user;
+
+    let empresa = await pool.query("SELECT e.*, u.foto,u.rol FROM empresas e JOIN users u ON e.codigo = u.codigo WHERE e.codigo = ?", [codigo])
+    empresa = empresa[0]
+
+    let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
+    consultor = consultor[0]
+
+    let user_dash = false, adminDash = false, consultorDash = false
+ 
+    if (rol == 'Empresa') {
+        user_dash = true;
+        empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
+        console.log("FOTO EMPRESA ========>>" , empresa.foto);
+    } else {
+        consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
+        if (rol == 'Consultor') {
+           consultorDash = true;
+       } else {
+           adminDash = true;
+       }
+    }
     res.render('pages/profile', {
-        rol, adminDash, user_dash, consulDash
+        rol, adminDash, user_dash, consultorDash, consultor, empresa, 
     })
 }
+
+// Actualizar datos de usuarios
+userController.update_user = async (req, res) => {
+    let { rol, codigo } = req.user;
+
+    // Aactualizar datos de empresa
+    if (rol == 'Empresa') {
+        console.log("SOY EMPRESA ")
+        user_dash = true;
+        let { nombres_empresa, apellidos_empresa, nombre_empresa, email_empresa,clave_empresa } = req.body;
+        let nombres = nombres_empresa
+        let apellidos = apellidos_empresa
+        let email = email_empresa
+        let clave = clave_empresa
+
+        let resultDatos = await pool.query("SELECT u.nombres, u.apellidos, u.email, u.clave, e.nombre_empresa FROM users u JOIN empresas e ON u.email = e.email WHERE u.codigo = ? ", [codigo]);
+        resultDatos = resultDatos[0];
+        const nombres_db = resultDatos.nombres;
+        const apellidos_db = resultDatos.apellidos;
+        const empresa_db = resultDatos.nombre_empresa;
+        const email_db = resultDatos.email;
+        const clave_db = resultDatos.clave;
+    
+        nombres == '' ? nombres = nombres_db : email
+        apellidos == '' ? apellidos = apellidos_db : apellidos
+        nombre_empresa == '' ? nombre_empresa = empresa_db: nombre_empresa
+        email == '' ? email = email_db : email
+        clave == '' ? clave = clave_db : clave = await bcrypt.hash(clave, 12);
+    
+        const datos_tbl_user = { nombres, apellidos, email, clave }
+        const datos_tbl_empresas = { nombres, apellidos, nombre_empresa, email }
+       
+        await pool.query('UPDATE users SET ? WHERE codigo = ?', [datos_tbl_user, codigo])
+        await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [datos_tbl_empresas, codigo])
+    }
+
+    // Actualizar datos consultor y administrador
+    if (rol == 'Consultor' || rol == 'Admin') {
+        console.log("SOY EL CONSULTOR ")
+        consultorDash = true;
+        let { email_consultor, clave_consultor, tel_consultor, direccion_consultor, usuario_calendly } = req.body;
+        let email = email_consultor
+        let clave = clave_consultor
+
+        let resultDatos = await pool.query("SELECT u.email, u.clave, c.tel_consultor, c.direccion_consultor, c.usuario_calendly FROM users u JOIN consultores c ON u.id_usuarios = c.id_consultores WHERE u.codigo = ?", [codigo]);
+        resultDatos = resultDatos[0];
+        const email_db = resultDatos.email;
+        const clave_db = resultDatos.clave;
+        const tel_db = resultDatos.tel_consultor;
+        const dire_db = resultDatos.direccion_consultor;
+        const calendly_db = resultDatos.usuario_calendly;
+
+        email_consultor == '' ? email = email_db : email
+        clave_consultor == '' ? clave = clave_db : clave = await bcrypt.hash(clave, 12);
+        tel_consultor == '' ? tel_consultor = tel_db : tel_consultor
+        direccion_consultor == '' ? direccion_consultor = dire_db : direccion_consultor
+        usuario_calendly == '' ? usuario_calendly = calendly_db : usuario_calendly
+
+        const datos_tbl_user = { email, clave }
+        const datos_tbl_consultores = { email, tel_consultor, direccion_consultor, usuario_calendly }
+        await pool.query('UPDATE users SET ? WHERE codigo = ?', [datos_tbl_user, codigo])
+        await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [datos_tbl_consultores, codigo])
+
+    } 
+    res.redirect("/perfil/" + codigo);
+}
+// Actualizar foto
+userController.actualizarFotoPerfil = async (req, res) => {
+    const { rol, codigo } = req.user;
+    const actualizar = { foto: "../foto_profile/" + urlProfile, };
+
+    if (rol == 'Empresa') {
+        await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
+    }
+    if (rol == 'Consultor' || rol == 'Admin') {
+        await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
+    }
+  
+    res.send(true);
+};
+
+
+

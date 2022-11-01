@@ -1,10 +1,259 @@
 <div class="content-body">
+  <!-- row -->
+  <style>
+    .nav-tabs .nav-item .nav-link.active:before{background-color: #812082;}
+  </style>
+  <div class="container-fluid">
+    <div class="page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="javascript:void(0)">App</a></li>
+        <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+      </ol>
+    </div>
     <!-- row -->
-    <div class="container-fluid">
-
-        <div class="row">
-          <div class="col">
-            <h2>HOLA DESDE EL PERFIL, SOY USUARIO => {{rol}}</h2>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="profile card card-body px-3 pt-3 pb-0">
+          <div class="profile-head">
+            {{!-- <div class="photo-content">
+              <div class="cover-photo"></div>
+            </div> --}}
+            <div class="profile-info">
+              <div class="profile-photo" style="width: 220px !important;">
+                 <label class="input-group-btn">
+                  <span class="btn btn-primary" style="padding: 0;background: white; border: none;">
+                   {{#if empresa.foto}}
+                      <img id="imagePre1" src="{{empresa.foto}}" alt="" style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="" >
+                      <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;" onchange="fileValidation()">
+                    {{/if}}
+                    {{#if consultor.foto}}
+                      <img id="imagePre1" src="{{consultor.foto}}" alt="" style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="" >
+                      <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;" onchange="fileValidation()">
+                  {{/if}}
+                    </span>
+                </label>
+              </div>
+            {{#if empresa}}
+              <div class="profile-details">
+                 <div class="profile-name px-3 pt-2">
+                  <h4 class="text-primary mb-0">{{empresa.rol}}</h4>
+                  <p>Tipo de cuenta</p>
+                </div>
+                <div class="profile-email px-2 pt-2">
+                  <h4 class="text-muted mb-0" style="text-transform: capitalize;">{{empresa.nombre_empresa}}</h4>
+                  <p>Nombre de empresa</p>
+                </div>
+              </div>
+              {{/if}}
+              {{#if consultor}}
+              <div class="profile-details">
+                <div class="profile-name px-3 pt-2">
+                  <h4 class="text-primary mb-0">{{consultor.rol}}</h4>
+                  <p>Tipo de cuenta</p>
+                </div>
+              </div>
+              {{/if}}
+            </div>
           </div>
         </div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="profile-tab">
+              <div class="custom-tab-1">
+                <ul class="nav nav-tabs">
+                  <li class="nav-item"><a href="#about-me" style="color:#812082;" data-toggle="tab" class="nav-link active show">Configura tu cuenta</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div id="about-me" class="tab-pane fade active show">
+                  </div>
+                   <div id="profile-settings" class="tab-pane fade active show">
+                    <form action="/updateProfile" method="POST">
+                    <div class="pt-3">
+                      <div class="settings-form">
+                          {{#if empresa}}
+                            <div class="form-row">
+                              <div class="form-group col-md-4">
+                                <label>Nombre</label>
+                                <input type="text" name="nombres_empresa" value="{{empresa.nombres}}" class="form-control">
+                              </div>
+                              <div class="form-group col-md-4">
+                                <label>Apellido</label>
+                                <input type="text" name="apellidos_empresa" value="{{empresa.apellidos}}" class="form-control">
+                              </div>
+                                <div class="form-group col-md-4">
+                                <label>Nombre de empresa</label>
+                                <input type="text" name="nombre_empresa" value="{{empresa.nombre_empresa}}" class="form-control">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col-md-6">
+                                <label>Correo</label>
+                                <input type="email" name="email_empresa" value="{{empresa.email}}" class="form-control">
+                              </div>
+                              <div class="form-group col-md-6">
+                                <label>Contraseña</label>
+                                <input type="password" name="clave_empresa" value="{{empresa.clave}}" placeholder="********" class="form-control">
+                              </div>
+                            </div>
+                          {{/if}} 
+                         {{#if consultor}}
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label>Correo</label>
+                              <input type="email" name="email_consultor" value="{{consultor.email}}" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Contraseña</label>
+                              <input type="password" name="clave_consultor" value="{{consultor.clave}}" placeholder="********" class="form-control">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label>Teléfono</label>
+                              <input type="text" name="tel_consultor" value="{{consultor.tel_consultor}}" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Dirección</label>
+                              <input type="text" name="direccion_consultor" value="{{consultor.direccion_consultor}}" class="form-control">
+                            </div>
+                          </div>
+                          <div class="form-row">
+                              <div class="form-group col-md-6">
+                              <label>Usuario calendly</label>
+                              <input type="text" name="usuario_calendly" value="{{consultor.usuario_calendly}}" class="form-control">
+                            </div>
+                          </div>
+                          {{/if}}
+                          </div>
+                          <br>
+                          <button type="submit" class="btn btn-primary" style="background: #812082; border: none;" >Guardar</button>
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Modal -->
+              <div class="modal fade" id="replyModal">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Post Reply</h5>
+                      <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="form-control" rows="4">Message</textarea>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger light" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Reply</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
+  <script>
+    // ==> Previsualizar foto de perfil == INICIO <==
+        function fileValidation(){
+            var fileInput = document.getElementById('previewProfile')
+                var filePath = fileInput.value;
+                var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+                var archivo = fileInput.files[0];
+                if(!allowedExtensions.exec(filePath)){
+                  toastr.success("Solo los formatos jpg, jpeg, png son aceptados", "Atención", {
+                      positionClass: "toast-top-full-width",
+                      timeOut: 3e3,
+                      closeButton: !0,
+                      debug: !1,
+                      newestOnTop: !0,
+                      progressBar: !0,
+                      preventDuplicates: !0,
+                      onclick: null,
+                      showDuration: "200",
+                      hideDuration: "200",
+                      extendedTimeOut: "200",
+                      showEasing: "swing",
+                      hideEasing: "linear",
+                      showMethod: "fadeIn",
+                      hideMethod: "fadeOut",
+                      tapToDismiss: !1
+                  })
+                    fileInput.value = '';
+                    return false;
+                }else if(archivo.size > 1000000) {
+                    toastr.success("Tu foto supera 1MB", "error", {
+                        positionClass: "toast-top-full-width",
+                        timeOut: 3e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "200",
+                        hideDuration: "200",
+                        extendedTimeOut: "200",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                    fileInput.value = '';
+                    return false;
+                }else {
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                    $('#imagePre1').attr('src', e.target.result); // Renderizamos la imagen
+                }
+                 reader.readAsDataURL(fileInput.files[0]);
+              }
+           }
+       }
+        $("#imgInp").change(function () {
+        // Código a ejecutar cuando se detecta un cambio de archivO
+        readImage(this);
+     });
+    // ==> Previsualizar foto de perfil == FIN <==
+    
+        /* Actualizar foto de perfil en DB */
+        const inptutFoto = document.querySelector('.filePhoto');
+        console.log("Input desde el evento capturador", inptutFoto)
+        inptutFoto.addEventListener('change', (e) => {
+            console.log(e)
+            const foto = e.target.files[0]
+            const formData = new FormData();
+            formData.append('foto', foto);
+            guardarFoto(formData);
+        });
+
+        
+        function guardarFoto(formData) {
+            fetch('/actualizarFotoPerfil', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(resultado => {
+                    if (resultado) {
+                        console.log("Todo correcto")
+                    } else {
+                        console.log("Sin datos")
+                    }
+                })
+        }
+    </script>
+<!--=============================// FIN SCRIPTS =========================================-->
