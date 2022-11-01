@@ -1,0 +1,164 @@
+<script src="../pie_chart/bootstrap.bundle.min.js"></script>
+<script src="../pie_chart/Chart.min.js"></script>
+
+<script>
+    (function () {
+
+        const avanceTareas = function () {
+            Chart.defaults.RoundedDoughnut = Chart.helpers.clone(Chart.defaults.doughnut);
+            Chart.controllers.RoundedDoughnut = Chart.controllers.doughnut.extend({
+                draw: function (ease) {
+                    const ctx = this.chart.ctx;
+                    const easingDecimal = ease || 1;
+                    const arcs = this.getMeta().data;
+                    Chart.helpers.each(arcs, function (arc, i) {
+                        arc.transition(easingDecimal).draw();
+
+                        const pArc = arcs[i === 0 ? arcs.length - 1 : i - 1];
+                        const pColor = pArc._view.backgroundColor;
+
+                        const vm = arc._view;
+                        const radius = (vm.outerRadius + vm.innerRadius) / 2;
+                        const thickness = (vm.outerRadius - vm.innerRadius) / 2;
+                        const startAngle = Math.PI - vm.startAngle - Math.PI / 2;
+                        const angle = Math.PI - vm.endAngle - Math.PI / 2;
+
+                        ctx.save();
+                        ctx.translate(vm.x, vm.y);
+
+                        ctx.fillStyle = i === 0 ? vm.backgroundColor : pColor;
+                        ctx.beginPath();
+                        ctx.arc(radius * Math.sin(startAngle), radius * Math.cos(startAngle), thickness, 0, 2 * Math.PI);
+                        ctx.fill();
+
+                        ctx.fillStyle = vm.backgroundColor;
+                        ctx.beginPath();
+                        ctx.arc(radius * Math.sin(angle), radius * Math.cos(angle), thickness, 0, 2 * Math.PI);
+                        ctx.fill();
+
+                        ctx.restore();
+                    });
+                }
+            });
+
+            const general = {
+                type: 'RoundedDoughnut',
+                options: {
+                    cutoutPercentage: 70,
+                    animation: {
+                        duration: 1000,
+                        easing: 'linear'
+                    },
+                    legend: { display: false },
+                },
+                labels: ['Completada', 'Pendiente'],
+                backgroundColor: ['#812082','#d8e0fc'],
+            }
+
+            const pieChart1 = (dim) => {
+                const ctx = document.getElementById("pieChart1");
+                new Chart(ctx, {
+                    type: general.type,
+                    options: general.options,
+                    data: {
+                        labels: general.labels,
+                        datasets: [{
+                            data: [dim.ok, dim.pendiente],
+                            backgroundColor: general.backgroundColor,
+                        }]
+                    }
+                });
+            }
+
+            const pieChart2 = (dim) => {
+                const ctx = document.getElementById("pieChart2");
+                new Chart(ctx,  {
+                    type: general.type,
+                    options: general.options,
+                    data: {
+                        labels: general.labels,
+                        datasets: [{
+                            data: [dim.ok, dim.pendiente],
+                            backgroundColor: general.backgroundColor,
+                        }]
+                    }
+                });
+            }
+
+            const pieChart3 = (dim) => {
+                const ctx = document.getElementById("pieChart3");
+                new Chart(ctx,  {
+                    type: general.type,
+                    options: general.options,
+                    data: {
+                        labels: general.labels,
+                        datasets: [{
+                            data: [dim.ok, dim.pendiente],
+                            backgroundColor: general.backgroundColor,
+                        }]
+                    }
+                });
+            }
+
+            const pieChart4 = (dim) => {
+                const ctx = document.getElementById("pieChart4");
+                new Chart(ctx,  {
+                    type: general.type,
+                    options: general.options,
+                    data: {
+                        labels: general.labels,
+                        datasets: [{
+                            data: [dim.ok, dim.pendiente],
+                            backgroundColor: general.backgroundColor,
+                        }]
+                    }
+                });
+            }
+
+            return {
+                init: function () {
+                },
+
+                load: function () {
+                    let dim = document.querySelector('#jsonDimCompletada').value
+                    dim = JSON.parse(dim)
+                    if (dim.length > 0) {
+                        dim.forEach(x => {
+                            if (x.ok == 'null' || x.ok == 'NaN' || x.pendiente == null) {
+                                x.ok = 0.0; x.pendiente = 0.0;
+                            }
+                        })
+                        console.log("DIM >> ", dim)
+                        pieChart1(dim[0])
+                        pieChart2(dim[1])
+                        pieChart3(dim[2])
+                        pieChart4(dim[3])
+                        $('#perDim1').text(Math.round(dim[0].ok) + '%')
+                        $('#perDim2').text(Math.round(dim[1].ok) + '%')
+                        $('#perDim3').text(Math.round(dim[2].ok) + '%')
+                        $('#perDim4').text(Math.round(dim[3].ok) + '%')
+                        if (dim[0].ok == 0 && dim[0].pendiente == 0) { $('#col-Producto').css('display', 'none') }
+                        if (dim[1].ok == 0 && dim[1].pendiente == 0) { $('#col-Administracion').css('display', 'none') }
+                        if (dim[2].ok == 0 && dim[2].pendiente == 0) { $('#col-Operaciones').css('display', 'none') }
+                        if (dim[3].ok == 0 && dim[3].pendiente == 0) { $('#col-Marketing').css('display', 'none') }
+                    }
+                },
+
+                resize: function () {
+                }
+            }
+
+        }();
+
+        $(document).ready(function () {
+        });
+
+        $(window).on('load', function () {
+            avanceTareas.load();
+        });
+
+        $(window).on('resize', function () {
+        });
+
+})($);
+</script>

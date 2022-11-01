@@ -9,6 +9,16 @@
 <script src="../vendor/js/datatables.init.js"></script>
 <script src="../vendor/js/personalScripts.js"></script>
 
+<!-- Chart Morris plugin files -->
+<script src="../js/raphael-min.js"></script>
+<script src="../js/morris.min.js"></script>
+<script src="../js/apexcharts.js"></script>
+<script src="../js/apexcharts.min.js"></script>
+{{#if jsonDim}}
+<script src="../js/morris-init.js"></script>
+<script src="../js/chartjs.init.js"></script>
+{{/if}}
+
 {{!-- SCRIPTS - GRÁFICAS DASHBOARD --}}
 {{> consultor/chartsDashboard}}
 {{!-- SCRIPTS - VALIDACIONES PARA SUBIR INFORMES --}}

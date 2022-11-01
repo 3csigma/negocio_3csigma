@@ -285,6 +285,10 @@
 
 </script>
 
+{{#if jsonDim}}
+{{> user/pieCharts}}
+{{/if}}
+
 {{!-- Scripts Stripe --}}
 {{#if stripe}}
 <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>

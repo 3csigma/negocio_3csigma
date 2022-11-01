@@ -72,7 +72,7 @@
             <div class="col-xl-7 col-xxl-12">
                 <div class="row">
                     {{!-- GRÁFICAS DE LAS DIMENSIONES DE LAS TAREAS --}}
-                    <div class="col-xl-12">
+                    {{!-- <div class="col-xl-12">
                         <div class="card">
                             <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
                             <div class="row">
@@ -95,7 +95,7 @@
                             </div>
                         </div>
                     </div>
-                    
+                     --}}
                     {{!-- TAREAS ASIGNADAS --}}
                     <div class="col-xl-12">
                         <div class="card plan-list">
@@ -291,8 +291,9 @@
             </div>
 
             {{!-- TARJETAS LADO DERECHO--}}
-            <div class="col-xl-5 col-xxl-12">
+            <div class="col-xl-5 col-xxl-12">     
                 <div class="row">
+                    {{> user/graficasCircular}}
                     <div class="col-xl-12">
                         {{!-- INFORMES GENERADOS --}}
                         <div class="card">
