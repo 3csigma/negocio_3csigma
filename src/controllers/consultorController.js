@@ -1,6 +1,6 @@
 const consultorController = exports;
 const pool = require('../database')
-const { etapaFinalizadaHTML, sendEmail, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
+const { sendEmail, propuestaAnalasisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
@@ -522,9 +522,10 @@ consultorController.empresaInterna = async (req, res) => {
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 consultorController.enviarPropuesta = async (req, res) => {
     const { precioPropuesta, idEmpresa, codigo } = req.body
-    const empresa = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigo])
-    const email = empresa[0].email
-    const nombre = empresa[0].nombre_empresa
+    const empresas = await consultarDatos('empresas')
+    const empresa = empresas.find(x => x.codigo == codigo)
+    const email = empresa.email
+    const nombreEmpresa = empresa.nombre_empresa
     const propuestasDB = await pool.query('SELECT * FROM propuesta_analisis');
     const fila = propuestasDB.find(i => i.empresa == idEmpresa)
     const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
@@ -540,35 +541,34 @@ consultorController.enviarPropuesta = async (req, res) => {
         await pool.query('INSERT INTO propuesta_analisis SET ?', [nuevaPropuesta]);
     }
     /** INFO PARA ENVÍO DE EMAIL */
-    const asunto = "¡Felicitaciones!, Etapa 1 finalizada"
-    const etapa  = 'Diagnóstico'
-    const texto = 'Tenemos una propuesta para que continúes con tu proceso en 3C Sigma'
+    const asunto = "Tenemos una propuesta para tu empresa"
     // Obtener la plantilla de Email
-    const template = etapaFinalizadaHTML(nombre, etapa, texto, 'analisis-de-negocio');
+    const template = propuestaAnalasisHTML(nombreEmpresa);
 
     // Enviar Email
     const resultEmail = await sendEmail(email, asunto, template)
 
     if (resultEmail == false) {
-        res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+        console.log("Ocurrio un error inesperado al enviar el email propuesta de análisis")
     } else {
-        console.log("\n<<<<< Email de Etapa 1 Finalizada - Enviado >>>>>\n")
+        console.log("\n<<<<< Se envió Email de la propuesta de Análisis de Negocio >>>>>\n")
     }
 
-    let redireccionar = '/empresas/' + codigo
+    let redireccionar = '/empresas/'
     if (req.user.rol == 'Consultor') {
-        redireccionar = '/empresas-asignadas/' + codigo;
+        redireccionar = '/empresas-asignadas/'
     }
-    res.redirect(redireccionar)
+    res.redirect(redireccionar + codigo + '#analisis_')
 }
 
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#analisis_';
+    let volver = '/empresas/';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#analisis_';
+        volver = '/empresas-asignadas/';
     }
+    volver = volver + codigo + '#analisis_';
     res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisProducto = async (req, res) => {
@@ -623,10 +623,11 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
 // ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#analisis_';
+    let volver = '/empresas/';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#analisis_';
+        volver = '/empresas-asignadas/';
     }
+    volver = volver + codigo + '#analisis_'
     res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisAdministracion = async (req, res) => {
@@ -688,10 +689,11 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN OPERACION
 consultorController.analisisOperacion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#analisis_';
+    let volver = '/empresas/';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#analisis_';
+        volver = '/empresas-asignadas/';
     }
+    volver = volver + codigo + '#analisis_'
     res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisOperacion = async (req, res) => {
@@ -749,10 +751,11 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN MARKETING
 consultorController.analisisMarketing = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#analisis_';
+    let volver = '/empresas/';
     if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#analisis_';
+        volver = '/empresas-asignadas/';
     }
+    volver = volver + codigo + '#analisis_'
     res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
 }
 consultorController.guardarAnalisisMarketing = async (req, res) => {

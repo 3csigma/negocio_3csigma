@@ -716,8 +716,10 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == idUser)
-    const jsonRendimiento = JSON.stringify(datosTabla)
-
+    let jsonRendimiento = false;
+    if (datosTabla.length > 0) {
+        jsonRendimiento = JSON.stringify(datosTabla)
+    }
 
     res.render('admin/editarEmpresa', {
         adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
@@ -1214,30 +1216,24 @@ dashboardController.guardarInforme = async (req, res) => {
         let tipoInforme = nombreInforme.toLowerCase();
         let asunto = 'Se ha cargado un nuevo ' + tipoInforme
         let template = informesHTML(nombreEmpresa_, tipoInforme);
-
         
         if (nombreInforme == 'Informe diagnóstico') {
-            template = informesHTML(nombreEmpresa_, 'informe de diagnóstico de negocio');
-            if (eNueva) {
-                asunto = 'Diagnóstico de negocio finalizado'
-                const etapa = 'Análisis';
-                const link = 'analisis-de-negocio';
-                template = etapaFinalizadaHTML(nombreEmpresa_, etapa, `Tenemos una propuesta para que continúes con tu proceso en 3C Sigma`, link, 'Revisar la propuesta');
-            }
+            asunto = 'Diagnóstico de negocio finalizado'
+            const etapa = 'Diagnóstico de negocio';
+            const link = 'diagnostico-de-negocio';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
         }
-        const texto = `Tu consultor ha cargado el informe general.<br>Ingresa a tu plataforma 3C Sigma para verlo`;
-        const txtBtn = 'Ir a mi cuenta'
         if (nombreInforme == 'Informe de análisis') {
             asunto = 'Análisis de negocio finalizado'
-            const etapa = 'Análisis';
+            const etapa = 'Análisis de negocio';
             const link = 'analisis-de-negocio';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link, txtBtn);
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
         }
         if (nombreInforme == 'Informe de plan estratégico') {
             asunto = 'Plan estratégico de negocio finalizado'
-            const etapa = 'Plan estratégico';
+            const etapa = 'Plan estratégico de negocio';
             const link = 'plan-estrategicoo';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link, txtBtn);
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
         }
         
         // Enviar Email

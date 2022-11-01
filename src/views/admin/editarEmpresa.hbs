@@ -278,8 +278,8 @@
 
                                     </div>
 
-                                    <div class="row mt-4">
-                                        <div class="col" style="text-align: left !important">
+                                    <div class="row mt-4 mb-3">
+                                        <div class="col-12" style="text-align: left !important">
                                             <a href="{{empresa.page_web}}">
                                                 {{empresa.page_web}}
                                             </a>
@@ -290,7 +290,12 @@
 
                                     <div class="row mt-2">
                                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
-                                        
+                                        <div class="col-sm-12">
+                                            <div class="form-group" style="text-align: left !important">
+                                                <label
+                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Rendimiento de la Empresa</label>
+                                            </div>
+                                        </div>
                                         {{#if jsonRendimiento}}
                                         <div class="col-sm-4">
                                             <i class="fa fa-square" style="color: #FED061"></i> <span class="small-text">Ventas</span>
@@ -315,10 +320,12 @@
                                         </div>
                                         {{else}}
                                         <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
-                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
-                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
-                                                    border-radius: 35px;"></i></center><br>
-                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                            <div>
+                                                <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                        height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                        border-radius: 35px;"></i></center><br>
+                                                <label style="font-size:16px;color:#000;font-weight:500;margin-bottom: 20px;">Aún no hay información para mostrar</label>
+                                            </div>
                                         </div>
                                         {{/if}}
                                     </div>
@@ -1407,21 +1414,21 @@
                                     <div class="col-xl-12">
                                         <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
                                         <div class="row">
-                                            <div class="col-3">
+                                            <div class="col-3" id="div-Producto">
                                                 <h4 class="my-4 mx-auto text-center">Producto</h4>
-                                                <div id="morris-dimProducto" style="margin-top: -70px;"></div>
+                                                <div id="chart-dimProducto"></div>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-3" id="div-Administracion">
                                                 <h4 class="my-4 mx-auto text-center">Administración</h4>
-                                                <div id="morris-dimAdministracion" style="margin-top: -70px;"></div>
+                                                <div id="chart-dimAdministracion"></div>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-3" id="div-Operaciones">
                                                 <h4 class="my-4 mx-auto text-center">Operaciones</h4>
-                                                <div id="morris-dimOperaciones" style="margin-top: -70px;"></div>
+                                                <div id="chart-dimOperaciones"></div>
                                             </div>
-                                            <div class="col-3">
+                                            <div class="col-3" id="div-Marketing">
                                                 <h4 class="my-4 mx-auto text-center">Marketing</h4>
-                                                <div id="morris-dimMarketing" style="margin-top: -70px;"></div>
+                                                <div id="chart-dimMarketing"></div>
                                             </div>
                                         </div>
                                     </div>
