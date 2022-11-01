@@ -4,10 +4,12 @@
 <script src="../vendor/js/personalScripts.js"></script>
 <!-- Chart piety plugin files -->
 <script src="../vendor/js/jquery.peity.min.js"></script>
-<!-- Apex Chart -->
-<script src="../vendor/js/apexchart.js"></script>
 <!-- Dashboard EMPRESA -->
 <script src="../vendor/js/dashboard-1.js"></script>
+
+{{#if jsonDim}}
+{{> user/pieCharts}}
+{{/if}}
 
 <script>
     (function ($) {
@@ -22,10 +24,10 @@
 				let chartAnalisis1 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 				let chartAnalisis2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+				console.log("VAL ANALISIS 1 => ", valAnalisis1)
 				if (valAnalisis1) {
 					if (valAnalisis1) { valAnalisis1 = JSON.parse(valAnalisis1) }
 					chartAnalisis1 = [valAnalisis1.producto, valAnalisis1.administracion, valAnalisis1.talento_humano, valAnalisis1.finanzas, valAnalisis1.servicio_cliente, valAnalisis1.operaciones, valAnalisis1.ambiente_laboral, valAnalisis1.innovacion, valAnalisis1.marketing, valAnalisis1.ventas]
-					console.log("VAL ANALISIS 1 => ", valAnalisis1)
 				}
 				if (valAnalisis2) {
 					if (valAnalisis2) { valAnalisis2 = JSON.parse(valAnalisis2) }
@@ -184,17 +186,13 @@
                 },
 
                 load: function () {
-                    {{#if graficas2}}
                     chartIndicadores1();
 				    chartIndicadores2();
-					{{/if}}
                 },
 
                 resize: function () {
-					{{#if graficas2}}
                     chartIndicadores1();
 				    chartIndicadores2();
-					{{/if}}
                 }
             }
 
@@ -284,10 +282,6 @@
     })(jQuery);
 
 </script>
-
-{{#if jsonDim}}
-{{> user/pieCharts}}
-{{/if}}
 
 {{!-- Scripts Stripe --}}
 {{#if stripe}}
