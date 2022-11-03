@@ -107,7 +107,12 @@ cron.schedule('0 10 * * Mon',() => {
 
 router.get('/retrasadas', (req, res) => {
     consultar_tiempo_tareas()
-    res.send("TODO OK -> END")
+    res.send("TODO OK -> END consultar_tiempo_tareas")
+});
+
+router.get('/consultarPagos', (req, res) => {
+    enabled_nextPay()
+    res.send("Consulta de pagos pendientes finalizada.. -> Todo Ok")
 });
 
 module.exports = router;

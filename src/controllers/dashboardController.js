@@ -1250,7 +1250,7 @@ dashboardController.guardarInforme = async (req, res) => {
         if (nombreInforme == 'Informe de plan estratégico') {
             asunto = 'Plan estratégico de negocio finalizado'
             const etapa = 'Plan estratégico de negocio';
-            const link = 'plan-estrategicoo';
+            const link = 'plan-estrategico';
             template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
         }
         
