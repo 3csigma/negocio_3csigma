@@ -552,7 +552,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     if (informePlan) {
-        info.plan.ok = true;
+        // info.plan.ok = true;
         info.plan.fecha = informePlan.fecha;
         info.plan.ver = 'block';
         info.plan.url = informePlan.url;
@@ -1199,17 +1199,22 @@ dashboardController.guardarInforme = async (req, res) => {
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const empresasNuevas = await consultarDatos('dg_empresa_nueva')
     const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
+    const fecha = new Date()
     const nuevoInforme = {
         id_empresa: e.id_empresas,
         id_consultor: e.consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/' + urlInforme,
-        fecha: new Date().toLocaleString("en-US", { timeZone: zonaHoraria })
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
     }
 
     const actualizar = {
         url: '../informes_empresas/' + urlInforme,
-        fecha: new Date().toLocaleString("en-US", { timeZone: zonaHoraria })
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
     }
 
     // Validando si ya tiene un informe montado

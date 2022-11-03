@@ -216,9 +216,9 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     req.session.intentPay = session.url;
     req.session.payDg0 = false;
     req.session.analisis0 = false;
-    req.session.analisis1 = true;
+    req.session.analisis1 = false;
     req.session.analisis2 = false;
-    req.session.analisis3 = false;
+    req.session.analisis3 = true;
     res.redirect(303, session.url);
 }
 
@@ -270,7 +270,6 @@ pagosController.pagoExitoso = async (req, res) => {
         if (actualizarAnalisis != undefined) {
             alertSuccess = false
             pagoExitoso = true;
-            destino = 'empresa/analisis'
             itemActivo = 4
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         }
@@ -288,7 +287,6 @@ pagosController.pagoCancelado = async (req, res) => {
     let destino = 'empresa/dashboard', itemActivo = 1, alertCancel = true, pagoCancelado = false;
     req.session.intentPay = undefined;
     if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
-        destino = 'empresa/analisis';
         pagoCancelado = true;
         alertCancel = false;
         itemActivo = 4;

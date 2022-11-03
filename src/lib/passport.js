@@ -15,7 +15,6 @@ passport.deserializeUser(async (id, done) => { // Deserialización
     });
 })
 
-
 // Registro de Usuarios (Empresa)
 passport.use('local.registro', new LocalStrategy({
     usernameField: 'email',
@@ -25,9 +24,11 @@ passport.use('local.registro', new LocalStrategy({
 
     const { nombres, apellidos, nombre_empresa, zh_empresa } = req.body
     const rol = 'Empresa'
-    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => { // Verificando si el usuario existe o no
+    // Verificando si el usuario existe o no
+    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
 
-        if (err) throw err; // Si ocurre un error
+        // Si ocurre un error
+        if (err) throw err;
 
         if (result.length > 0) {
             return done(null, false, req.flash('message', 'Ya existe un usuario con este Email'))
@@ -43,7 +44,7 @@ passport.use('local.registro', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
-            let mes = arrayFecha[0] ;
+            const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
             // Objeto de Usuario
@@ -104,7 +105,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
-            let mes = arrayFecha[0];
+            const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
             // Capturando Certificado de Consul Group

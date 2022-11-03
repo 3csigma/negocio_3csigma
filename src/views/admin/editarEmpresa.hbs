@@ -12,7 +12,11 @@
                 <div class="profile-head">
                     <div class="profile-info">
                         <div class="profile-photo">
-                            <img src="../img/avatar/1.jpg" class="img-fluid rounded-circle" alt="">
+                            {{#if user.foto}}
+                            <img src="{{user.foto}}" class="img-fluid rounded-circle" alt="">
+                            {{else}}
+                            <img src="../img/profile_default/user.jpg" class="img-fluid rounded-circle" alt="">
+                            {{/if}}
                         </div>
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">

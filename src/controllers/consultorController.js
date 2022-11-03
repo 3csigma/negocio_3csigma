@@ -212,7 +212,8 @@ consultorController.empresaInterna = async (req, res) => {
         adm: { ver: 'none' },
         op: { ver: 'none' },
         marketing: { ver: 'none' },
-        analisis: { ver: 'none' }
+        analisis: { ver: 'none' },
+        plan: { ver: 'none' }
     }
     let tablaInformes = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND id_consultor = ? ORDER BY id_informes DESC', [idUser, idConsultor])
     if (tablaInformes.length > 0) {
@@ -227,6 +228,7 @@ consultorController.empresaInterna = async (req, res) => {
         frmInfo.url = '#'
     }
 
+    /** **************************************************************** */
     // Informe de diagnóstico
     const informeDiag = await consultarInformes(idUser, "Informe diagnóstico")
     // Informe de dimensión producto
@@ -239,6 +241,8 @@ consultorController.empresaInterna = async (req, res) => {
     const informeMarketing = await consultarInformes(idUser, "Informe de dimensión marketing")
     // Informe de análisis
     const informeAnalisis = await consultarInformes(idUser, "Informe de análisis")
+    // Informe de Plan estratégico
+    const informePlan = await consultarInformes(idUser, "Informe de plan estratégico")
 
     if (informeDiag) {
         frmInfo.fecha = informeDiag.fecha;
@@ -281,6 +285,13 @@ consultorController.empresaInterna = async (req, res) => {
         info.analisis.ver = 'block';
         info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe análisis general'
+    }
+
+    if (informePlan) {
+        info.plan.fecha = informePlan.fecha;
+        info.plan.ver = 'block';
+        info.plan.url = informePlan.url;
+        datos.etapa = 'Informe de plan estratégico de negocio'
     }
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
@@ -504,7 +515,10 @@ consultorController.empresaInterna = async (req, res) => {
 
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == idUser)
-    const jsonRendimiento = JSON.stringify(datosTabla)
+    let jsonRendimiento = false;
+    if (datosTabla.length > 0) {
+        jsonRendimiento = JSON.stringify(datosTabla)
+    }
 
     //res.render('consultor/empresaInterna', { 
     res.render('admin/editarEmpresa', {
