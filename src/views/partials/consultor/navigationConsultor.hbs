@@ -47,8 +47,7 @@
             <div class="dashboard_bar">
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
               {{#comparar itemActivo '==' 2}}Empresas asignadas{{/comparar}}
-              {{#comparar itemActivo '==' 3}}Informes generales{{/comparar}}
-              {{#comparar itemActivo '==' 3}}Informes generales{{/comparar}}
+              {{!-- {{#comparar itemActivo '==' 3}}Informes generales{{/comparar}} --}}
               {{#if consultor.foto}}Perfil{{/if}}
             </div>
           </div>
@@ -131,7 +130,7 @@
           </a>
         </li>
 
-        {{#comparar itemActivo '==' 3}}
+        {{!-- {{#comparar itemActivo '==' 3}}
         <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 3}}
@@ -141,7 +140,7 @@
             <i class="fas fa-file-invoice"></i>
             <span class="nav-text">Informes generales</span>
           </a>
-        </li>
+        </li> --}}
 
       </ul>
 

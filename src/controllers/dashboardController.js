@@ -86,7 +86,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
 
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM empresas WHERE consultor = ?', [c.id_consultores])
@@ -287,6 +287,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.estadoAdm = userEmpresa.estadoAdm;
     datos.code = codigo;
     datos.idEmpresa = idUser
+    datos.foto = userEmpresa.foto
 
     const pagos = await consultarDatos('pagos')
     const pay = pagos.find(i => i.id_empresa == idUser)
@@ -301,12 +302,10 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     if (c1) {
-        pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
+        const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
         pagoDiagnostico.estado == 1 ? datos.etapa = 'Diagnóstico pagado' : datos.etapa = datos.etapa;
     }
-    if (c2) {
-        c2.estadoAcuerdo == 2 ? datos.etapa = 'Acuerdo firmado' : datos.etapa = datos.etapa;
-    }
+    if (c2) c2.estadoAcuerdo == 2 ? datos.etapa = 'Acuerdo firmado' : datos.etapa = datos.etapa;
 
     if (empresa) {
         empresa.telefono != null ? datos.etapa = 'Ficha Cliente' : datos.etapa = datos.etapa;
@@ -341,7 +340,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         empresa.nomConsul = consulAsignado[0].nombres + " " + consulAsignado[0].apellidos;
     }
 
-    consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
+    consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.link_calendly1 != "" AND c.link_calendly2 != "" AND c.link_calendly3 != "" AND c.link_calendly4 != "" AND c.codigo = u.codigo AND u.rol != "Empresa"')
     consultores.forEach(cs => {
         cs.idCon = idConsultor;
     });
@@ -478,6 +477,14 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_analisis.uno = JSON.parse(pay.analisis_negocio1)
         pagos_analisis.dos = JSON.parse(pay.analisis_negocio2)
         pagos_analisis.tres = JSON.parse(pay.analisis_negocio3)
+
+        pagos_analisis = {
+            unico: { color: 'warning', txt: 'Pendiente' },
+            uno: { color: 'warning', txt: 'Pendiente' },
+            dos: { color: 'warning', txt: 'Pendiente' },
+            tres: { color: 'warning', txt: 'Pendiente' }
+        }
+
         pagos_analisis.unico.precio = propuesta.precio_total
         pagos_analisis.uno.precio = propuesta.precio_per1
         pagos_analisis.dos.precio = propuesta.precio_per2
@@ -485,8 +492,10 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         if (pagos_analisis.unico.estado == 1) {
             datos.etapa = 'Análisis de negocio pago único'
-            propuesta.pago = true;
+            pagos_analisis.uno.color = 'success'
+            pagos_analisis.uno.txt = 'Pagado 100%'
             pagos_analisis.ok = true;
+            propuesta.pago = true;
         }
         if (pagos_analisis.uno.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 60%'
@@ -494,25 +503,16 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_analisis.uno.txt = 'Pagado 60%'
             pagos_analisis.ok = true;
             propuesta.pago = true;
-        } else {
-            pagos_analisis.uno.color = 'warning'
-            pagos_analisis.uno.txt = 'Pendiente'
         }
         if (pagos_analisis.dos.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 80%'
             pagos_analisis.dos.color = 'success'
             pagos_analisis.dos.txt = 'Pagado 80%'
-        } else {
-            pagos_analisis.dos.color = 'warning'
-            pagos_analisis.dos.txt = 'Pendiente'
         }
         if (pagos_analisis.tres.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 100%'
             pagos_analisis.tres.color = 'success'
             pagos_analisis.tres.txt = 'Pagado 100%'
-        } else {
-            pagos_analisis.tres.color = 'warning'
-            pagos_analisis.tres.txt = 'Pendiente'
         }
     }
 
@@ -552,7 +552,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     if (informePlan) {
-        info.plan.ok = true;
+        // info.plan.ok = true;
         info.plan.fecha = informePlan.fecha;
         info.plan.ver = 'block';
         info.plan.url = informePlan.url;
@@ -734,13 +734,20 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonRendimiento = JSON.stringify(datosTabla)
     }
 
+    let consultorDash = false, itemActivo = 3, adminDash = true;
+    if (req.user.rol == 'Consultor') {
+        consultorDash = true;
+        itemActivo = 2;
+        adminDash = false;
+        aprobarConsultor = false;
+    }
+
     res.render('admin/editarEmpresa', {
-        adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
+        adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        fechaActual,
-        tareas, jsonDim, jsonRendimiento
+        tareas, jsonDim, jsonRendimiento, fechaActual,
     })
 
 }
@@ -818,7 +825,6 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
         res.send(result)
     })
 }
-
 
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
@@ -1180,7 +1186,7 @@ const storage = multer.diskStorage({
     },
 
     filename: function (req, file, cb) {
-        const fechaActual = Math.floor(Date.now() / 1000)
+        // const fechaActual = Math.floor(Date.now() / 1000)
         urlInforme = "Informe-3C-Sigma-Empresa-" + file.originalname;
         console.log(urlInforme)
         cb(null, urlInforme)
@@ -1199,17 +1205,22 @@ dashboardController.guardarInforme = async (req, res) => {
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const empresasNuevas = await consultarDatos('dg_empresa_nueva')
     const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
+    const fecha = new Date()
     const nuevoInforme = {
         id_empresa: e.id_empresas,
         id_consultor: e.consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/' + urlInforme,
-        fecha: new Date().toLocaleString("en-US", { timeZone: zonaHoraria })
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
     }
 
     const actualizar = {
         url: '../informes_empresas/' + urlInforme,
-        fecha: new Date().toLocaleString("en-US", { timeZone: zonaHoraria })
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
     }
 
     // Validando si ya tiene un informe montado
@@ -1245,7 +1256,7 @@ dashboardController.guardarInforme = async (req, res) => {
         if (nombreInforme == 'Informe de plan estratégico') {
             asunto = 'Plan estratégico de negocio finalizado'
             const etapa = 'Plan estratégico de negocio';
-            const link = 'plan-estrategicoo';
+            const link = 'plan-estrategico';
             template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
         }
         

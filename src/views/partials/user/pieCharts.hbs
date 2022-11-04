@@ -121,18 +121,20 @@
 
                 load: function () {
                     let dim = document.querySelector('#jsonDimCompletada').value
-                    let infoGeneral = 0, count = 0;
+                    let infoGeneral = 0, count = 0, count2 = 0;
                     dim = JSON.parse(dim)
                     if (dim.length > 0) {
                         dim.forEach(x => {
                             if (x.ok == 'null' || x.ok == 'NaN' || x.pendiente == null) {
                                 x.ok = 0.0; x.pendiente = 0.0;
                             }
+                            if (x.pendiente == 100) count2++;
                             if (x.ok != 0) {
-                                count +=1
+                                count++;
                                 infoGeneral += parseInt(x.ok)
                             }
                         })
+                        count = count + count2
                         infoGeneral = (infoGeneral/count).toFixed(0)
                         if (infoGeneral > 0) {
                             $('#dataGeneral').text(infoGeneral) 

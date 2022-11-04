@@ -12,7 +12,11 @@
                 <div class="profile-head">
                     <div class="profile-info">
                         <div class="profile-photo">
-                            <img src="../img/avatar/1.jpg" class="img-fluid rounded-circle" alt="">
+                            {{#if datos.foto}}
+                            <img src="{{datos.foto}}" class="img-fluid rounded-circle" style="height: 100px;object-fit: cover;" alt="Foto_Perfil_Empresa">
+                            {{else}}
+                            <img src="../img/profile_default/user.jpg" class="img-fluid rounded-circle" style="height: 100px;object-fit: cover;" alt="Foto_Perfil_Empresa">
+                            {{/if}}
                         </div>
                         <div class="profile-details">
                             <div class="profile-name px-3 pt-2">
@@ -873,7 +877,7 @@
                                     </div>
                                 </div>
 
-                                {{#if pagos_analisis.ok}}
+                                {{!-- {{#if pagos_analisis.ok}} --}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -890,36 +894,41 @@
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
                                                         <th>PAGO DE ANÁLISIS</th>
+                                                        <th>PAGO</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {{#if pagos_analisis.unico.fecha}}
+                                                        {{!-- {{#if pagos_analisis.unico.fecha}} --}}
                                                         <tr>
-                                                            <td>{{pagos_analisis.unico.fecha}}</td>
+                                                            <td>{{#if pagos_analisis.unico.fecha}}{{pagos_analisis.unico.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Pago Único</td>
                                                             <td>${{pagos_analisis.unico.precio}}</td>
-                                                            <td><span class="badge light badge-success">Pagado 100%</span></td>
+                                                            <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
+                                                            <td>icono</td>
                                                         </tr>
-                                                        {{else}}
+                                                        {{!-- {{else}} --}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Primer Pago</td>
                                                             <td>${{pagos_analisis.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
+                                                            <td>icono</td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
                                                             <td>${{pagos_analisis.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
+                                                            <td>icono</td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
                                                             <td>${{pagos_analisis.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
+                                                            <td>icono</td>
                                                         </tr>
-                                                        {{/if}}
+                                                        {{!-- {{/if}} --}}
                                                     </tbody>
                                                 </table>
                                                 </div>
@@ -927,7 +936,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{/if}}
+                                {{!-- {{/if}} --}}
 
                                 {{#if archivos}}
                                 <div class="card">

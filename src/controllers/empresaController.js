@@ -23,7 +23,15 @@ empresaController.index = async (req, res) => {
     let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
     if (!pago_empresa) {
         diagnosticoPagado = 0;
-        const nuevoPago = { id_empresa }
+        const estado = JSON.stringify({estado:0})
+        const nuevoPago = { 
+            diagnostico_negocio: estado,
+            analisis_negocio: estado,
+            analisis_negocio1: JSON.stringify({estado:1}),
+            analisis_negocio2: estado,
+            analisis_negocio3: estado,
+            id_empresa
+            }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
     } else {
         const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
@@ -508,6 +516,8 @@ empresaController.addFichaCliente = async (req, res) => {
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
     const fecha_modificacion = new Date().toLocaleString("en-US", { timeZone: fecha_zh })
+
+    page_web = page_web.replace(/[$ ]/g, '');
 
     const nuevaFichaCliente = {
         telefono, fecha_nacimiento, pais, redes_sociales, es_propietario, socios, cantidad_socios, porcentaje_accionario, tiempo_fundacion, tiempo_experiencia, promedio_ingreso_anual, num_empleados, page_web, descripcion, etapa_actual, objetivos, fortalezas, problemas, motivo_consultoria, id_empresa, fecha_modificacion

@@ -15,7 +15,6 @@ passport.deserializeUser(async (id, done) => { // Deserialización
     });
 })
 
-
 // Registro de Usuarios (Empresa)
 passport.use('local.registro', new LocalStrategy({
     usernameField: 'email',
@@ -25,9 +24,11 @@ passport.use('local.registro', new LocalStrategy({
 
     const { nombres, apellidos, nombre_empresa, zh_empresa } = req.body
     const rol = 'Empresa'
-    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => { // Verificando si el usuario existe o no
+    // Verificando si el usuario existe o no
+    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
 
-        if (err) throw err; // Si ocurre un error
+        // Si ocurre un error
+        if (err) throw err;
 
         if (result.length > 0) {
             return done(null, false, req.flash('message', 'Ya existe un usuario con este Email'))
@@ -43,7 +44,7 @@ passport.use('local.registro', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
-            let mes = arrayFecha[0] ;
+            const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
             // Objeto de Usuario
@@ -91,10 +92,10 @@ passport.use('local.registroConsultores', new LocalStrategy({
         } else {
 
             // Capturando Nombre de usuario con base al email del usuario
-            let usuario_calendly = email.split('@')
-            usuario_calendly = usuario_calendly[0]+''
-            usuario_calendly = usuario_calendly.replace(".", "-");
-            usuario_calendly = "https://calendly.com/"+usuario_calendly;
+            // let usuario_calendly = email.split('@')
+            // usuario_calendly = usuario_calendly[0]+''
+            // usuario_calendly = usuario_calendly.replace(".", "-");
+            // usuario_calendly = "https://calendly.com/"+usuario_calendly;
 
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(email).digest("hex");
@@ -104,7 +105,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
             const arrayFecha = fecha_creacion.split("/")
             fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
-            let mes = arrayFecha[0];
+            const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
             // Capturando Certificado de Consul Group
@@ -113,7 +114,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Objeto de Usuario
             const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
