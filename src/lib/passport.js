@@ -92,10 +92,10 @@ passport.use('local.registroConsultores', new LocalStrategy({
         } else {
 
             // Capturando Nombre de usuario con base al email del usuario
-            let usuario_calendly = email.split('@')
-            usuario_calendly = usuario_calendly[0]+''
-            usuario_calendly = usuario_calendly.replace(".", "-");
-            usuario_calendly = "https://calendly.com/"+usuario_calendly;
+            // let usuario_calendly = email.split('@')
+            // usuario_calendly = usuario_calendly[0]+''
+            // usuario_calendly = usuario_calendly.replace(".", "-");
+            // usuario_calendly = "https://calendly.com/"+usuario_calendly;
 
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(email).digest("hex");
@@ -114,7 +114,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Objeto de Usuario
             const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, usuario_calendly, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);

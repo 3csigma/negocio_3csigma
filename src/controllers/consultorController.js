@@ -1,7 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
 const { sendEmail, propuestaAnalasisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
-const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
+const { consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -9,7 +9,6 @@ consultorController.index = async (req, res) => {
     const consultores = await consultarDatos('consultores')
     const consultor = consultores.find(x => x.codigo == codigo)
     const empresas = await consultarDatos('empresas', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_empresas DESC LIMIT 2`)
-    // const empresas = await pool.query('SELECT * FROM empresas WHERE consultor = ? ORDER BY id_empresas DESC LIMIT 2', [con[0].id_consultores])
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
     let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
@@ -28,9 +27,7 @@ consultorController.index = async (req, res) => {
     ultimosInformes = ultimosInformes.filter(x => x.id_consultor == consultor.id_consultores)
     if (ultimosInformes.length > 0) {
         ultimosInformes.forEach(x => {
-            if (x.nombre == 'Informe diagnóstico') {
-                x.etapa = 'Diagnóstico'
-            }
+            if (x.nombre == 'Informe diagnóstico') { x.etapa = 'Diagnóstico' }
             if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
             if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
         })

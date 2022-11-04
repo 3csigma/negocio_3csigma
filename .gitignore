@@ -16,3 +16,4 @@ src/public/informes_empresas/*.pdf
 src/public/foto_profile/*.jpg
 src/public/foto_profile/*.jpeg
 src/public/foto_profile/*.png
+info_local.txt

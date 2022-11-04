@@ -302,12 +302,10 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     if (c1) {
-        pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
+        const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
         pagoDiagnostico.estado == 1 ? datos.etapa = 'Diagnóstico pagado' : datos.etapa = datos.etapa;
     }
-    if (c2) {
-        c2.estadoAcuerdo == 2 ? datos.etapa = 'Acuerdo firmado' : datos.etapa = datos.etapa;
-    }
+    if (c2) c2.estadoAcuerdo == 2 ? datos.etapa = 'Acuerdo firmado' : datos.etapa = datos.etapa;
 
     if (empresa) {
         empresa.telefono != null ? datos.etapa = 'Ficha Cliente' : datos.etapa = datos.etapa;
@@ -342,7 +340,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         empresa.nomConsul = consulAsignado[0].nombres + " " + consulAsignado[0].apellidos;
     }
 
-    consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
+    consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.link_calendly1 != "" AND c.link_calendly2 != "" AND c.link_calendly3 != "" AND c.link_calendly4 != "" AND c.codigo = u.codigo AND u.rol != "Empresa"')
     consultores.forEach(cs => {
         cs.idCon = idConsultor;
     });
@@ -479,6 +477,14 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_analisis.uno = JSON.parse(pay.analisis_negocio1)
         pagos_analisis.dos = JSON.parse(pay.analisis_negocio2)
         pagos_analisis.tres = JSON.parse(pay.analisis_negocio3)
+
+        pagos_analisis = {
+            unico: { color: 'warning', txt: 'Pendiente' },
+            uno: { color: 'warning', txt: 'Pendiente' },
+            dos: { color: 'warning', txt: 'Pendiente' },
+            tres: { color: 'warning', txt: 'Pendiente' }
+        }
+
         pagos_analisis.unico.precio = propuesta.precio_total
         pagos_analisis.uno.precio = propuesta.precio_per1
         pagos_analisis.dos.precio = propuesta.precio_per2
@@ -486,8 +492,10 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         if (pagos_analisis.unico.estado == 1) {
             datos.etapa = 'Análisis de negocio pago único'
-            propuesta.pago = true;
+            pagos_analisis.uno.color = 'success'
+            pagos_analisis.uno.txt = 'Pagado 100%'
             pagos_analisis.ok = true;
+            propuesta.pago = true;
         }
         if (pagos_analisis.uno.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 60%'
@@ -495,25 +503,16 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_analisis.uno.txt = 'Pagado 60%'
             pagos_analisis.ok = true;
             propuesta.pago = true;
-        } else {
-            pagos_analisis.uno.color = 'warning'
-            pagos_analisis.uno.txt = 'Pendiente'
         }
         if (pagos_analisis.dos.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 80%'
             pagos_analisis.dos.color = 'success'
             pagos_analisis.dos.txt = 'Pagado 80%'
-        } else {
-            pagos_analisis.dos.color = 'warning'
-            pagos_analisis.dos.txt = 'Pendiente'
         }
         if (pagos_analisis.tres.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 100%'
             pagos_analisis.tres.color = 'success'
             pagos_analisis.tres.txt = 'Pagado 100%'
-        } else {
-            pagos_analisis.tres.color = 'warning'
-            pagos_analisis.tres.txt = 'Pendiente'
         }
     }
 
@@ -826,7 +825,6 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
         res.send(result)
     })
 }
-
 
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
@@ -1188,7 +1186,7 @@ const storage = multer.diskStorage({
     },
 
     filename: function (req, file, cb) {
-        const fechaActual = Math.floor(Date.now() / 1000)
+        // const fechaActual = Math.floor(Date.now() / 1000)
         urlInforme = "Informe-3C-Sigma-Empresa-" + file.originalname;
         console.log(urlInforme)
         cb(null, urlInforme)
