@@ -68,7 +68,7 @@ router.post('/bloquearConsultor', checkLogin, adminLogueado, dashboardController
 
 // Empresas Admin
 router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
-router.get('/empresas/:codigo', checkLogin, adminLogueado, dashboardController.editarEmpresa)
+router.get('/empresas/:codigo', checkLogin, consultorLogueado, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 router.post('/pagoManual-Diagnostico', checkLogin, adminLogueado, dashboardController.pagoManualDiagnostico)

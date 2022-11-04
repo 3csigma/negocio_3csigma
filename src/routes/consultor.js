@@ -4,12 +4,10 @@ const multer = require('multer');
 const path = require('path');
 const consultorController = require('../controllers/consultorController');
 const { checkLogin, consultorLogueado } = require('../lib/auth')
-const cron = require('node-cron');
 
 // Dashboard Principal Consultor
 router.get('/consultor', checkLogin, consultorLogueado, consultorController.index)
 router.get('/empresas-asignadas', checkLogin, consultorLogueado, consultorController.empresasAsignadas)
-router.get('/empresas-asignadas/:codigo', checkLogin, consultorLogueado, consultorController.empresaInterna)
 
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 const rutaAlmacen = multer.diskStorage({
@@ -19,7 +17,6 @@ const rutaAlmacen = multer.diskStorage({
     },
 
     filename: function (req, file, callback) {
-        const fechaActual = Math.floor(Date.now() / 1000)
         urlPropuestaNegocio = "Propuesta-Técnica-Etapa2-" + file.originalname;
         console.log(urlPropuestaNegocio)
         callback(null, urlPropuestaNegocio)

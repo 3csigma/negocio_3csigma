@@ -86,7 +86,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
 
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM empresas WHERE consultor = ?', [c.id_consultores])
@@ -287,6 +287,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.estadoAdm = userEmpresa.estadoAdm;
     datos.code = codigo;
     datos.idEmpresa = idUser
+    datos.foto = userEmpresa.foto
 
     const pagos = await consultarDatos('pagos')
     const pay = pagos.find(i => i.id_empresa == idUser)
@@ -734,13 +735,20 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonRendimiento = JSON.stringify(datosTabla)
     }
 
+    let consultorDash = false, itemActivo = 3, adminDash = true;
+    if (req.user.rol == 'Consultor') {
+        consultorDash = true;
+        itemActivo = 2;
+        adminDash = false;
+        aprobarConsultor = false;
+    }
+
     res.render('admin/editarEmpresa', {
-        adminDash: true, itemActivo: 3, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
+        adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        fechaActual,
-        tareas, jsonDim, jsonRendimiento
+        tareas, jsonDim, jsonRendimiento, fechaActual,
     })
 
 }

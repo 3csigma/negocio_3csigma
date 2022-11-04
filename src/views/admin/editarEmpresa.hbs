@@ -12,10 +12,10 @@
                 <div class="profile-head">
                     <div class="profile-info">
                         <div class="profile-photo">
-                            {{#if user.foto}}
-                            <img src="{{user.foto}}" class="img-fluid rounded-circle" alt="">
+                            {{#if datos.foto}}
+                            <img src="{{datos.foto}}" class="img-fluid rounded-circle" style="height: 100px;object-fit: cover;" alt="Foto_Perfil_Empresa">
                             {{else}}
-                            <img src="../img/profile_default/user.jpg" class="img-fluid rounded-circle" alt="">
+                            <img src="../img/profile_default/user.jpg" class="img-fluid rounded-circle" style="height: 100px;object-fit: cover;" alt="Foto_Perfil_Empresa">
                             {{/if}}
                         </div>
                         <div class="profile-details">
