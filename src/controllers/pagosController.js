@@ -28,8 +28,8 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
-    const propuesta = await consultarDatos('propuesta_analisis')
-    const pay = propuesta.find(i => i.empresa == id_empresa)
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
     let precio = 0;
     if (pay) {
         precio = pay.precio_total + '00'
@@ -73,8 +73,8 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
-    const propuesta = await consultarDatos('propuesta_analisis')
-    const pay = propuesta.find(i => i.empresa == id_empresa)
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per1 + ''
@@ -124,8 +124,8 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
-    const propuesta = await consultarDatos('propuesta_analisis')
-    const pay = propuesta.find(i => i.empresa == id_empresa)
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per2 + ''
@@ -176,8 +176,8 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
-    const propuesta = await consultarDatos('propuesta_analisis')
-    const pay = propuesta.find(i => i.empresa == id_empresa)
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per3 + ''

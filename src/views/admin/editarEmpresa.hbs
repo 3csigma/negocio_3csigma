@@ -898,37 +898,70 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {{!-- {{#if pagos_analisis.unico.fecha}} --}}
+                                                        {{#unless pagos_analisis.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.unico.fecha}}{{pagos_analisis.unico.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Pago Único</td>
                                                             <td>${{pagos_analisis.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            <td>
+                                                                {{#if pagos_analisis.unico.btn}}
+                                                                <a onclick="pagoManualAnalisis(0, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
-                                                        {{!-- {{else}} --}}
+                                                        {{/unless}}
+                                                        {{#unless pagos_analisis.unico.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Primer Pago</td>
                                                             <td>${{pagos_analisis.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            <td>
+                                                                {{#if pagos_analisis.uno.btn}}
+                                                                <a onclick="pagoManualAnalisis(1, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
                                                             <td>${{pagos_analisis.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            <td>
+                                                                {{#if pagos_analisis.dos.btn}}
+                                                                <a onclick="pagoManualAnalisis(2, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
                                                             <td>${{pagos_analisis.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            <td>
+                                                                {{#if pagos_analisis.tres.btn}}
+                                                                <a onclick="pagoManualAnalisis(3, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
-                                                        {{!-- {{/if}} --}}
+                                                        {{/unless}}
                                                     </tbody>
                                                 </table>
                                                 </div>
@@ -1744,6 +1777,45 @@
 </div>
 
 <script>
+    // REGISTRAR PAGO MANUAL DE ANÁLISIS DE NEGOCIO
+    function pagoManualAnalisis(num, id) {
+        let txt = 'pago único';
+        num == 1 ? txt = 'primer pago' : txt = txt;
+        num == 2 ? txt = 'segundo pago' : txt = txt;
+        num == 3 ? txt = 'tercer pago' : txt = txt;
+        Swal.fire({
+            title: `¿Deseas registrar el ${txt} de análisis de negocio?`,
+            text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Pago confirmado'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/pagoManual-Analisis', {
+                    method: 'POST',
+                    body: JSON.stringify({num, id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            window.location.hash = 'analisis_'
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo efectuar está acción, contactar a soporte..',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
     
     // CAMPO DATE PICKER (DUET LIBRARY)
     const elementos = document.querySelectorAll("duet-date-picker")

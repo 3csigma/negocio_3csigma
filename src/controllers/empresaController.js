@@ -19,7 +19,7 @@ empresaController.index = async (req, res) => {
     /** Consultando que pagos ha realizado el usuario */
     btnPagar.etapa1 = true;
     btnPagar.activar1 = true;
-    const pagos = await pool.query('SELECT * FROM pagos')
+    const pagos = await consultarDatos('pagos')
     let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
     if (!pago_empresa) {
         diagnosticoPagado = 0;
@@ -52,8 +52,8 @@ empresaController.index = async (req, res) => {
 
             /************************************************************************************* */
             // PROPUESTA DE ANÁLISIS DE NEGOCIO
-            const propuesta_analisis = await pool.query('SELECT * FROM propuesta_analisis')
-            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa);
+            const propuesta_analisis = await consultarDatos('propuestas')
+            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis');
             if (propuesta) {
                 btnPagar.etapa1 = false;
                 btnPagar.activar1 = false;
@@ -557,9 +557,9 @@ empresaController.eliminarFicha = async (req, res) => {
 empresaController.analisis = async (req, res) => {
     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const id_empresa = row[0].id_empresas;
-    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
-    const propuesta = propuestas.find(i => i.empresa == id_empresa)
-    const pagos = await pool.query('SELECT * FROM pagos')
+    const propuestas = await consultarDatos('propuestas')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa1 = {lista: true}
     /************************************************************************************* */
@@ -608,7 +608,7 @@ empresaController.analisis = async (req, res) => {
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
     let archivos = false;
-    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    let analisis = await consultarDatos('analisis_empresa')
     analisis = analisis.find(i => i.id_empresa == id_empresa)
     if (analisis) {
         if (analisis.archivos){
@@ -633,7 +633,7 @@ empresaController.guardarArchivos = async (req, res) => {
     let colArchivos = []
     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const id_empresa = row[0].id_empresas;
-    let analisis = await pool.query('SELECT * FROM analisis_empresa')
+    let analisis = await consultarDatos('analisis_empresa')
     analisis = analisis.find(i => i.id_empresa == id_empresa)
     if (analisis) {
         // const n = nombreArchivo.filter(i => i != '')

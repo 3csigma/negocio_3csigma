@@ -72,7 +72,7 @@ router.get('/empresas/:codigo', checkLogin, consultorLogueado, dashboardControll
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
 router.post('/pagoManual-Diagnostico', checkLogin, adminLogueado, dashboardController.pagoManualDiagnostico)
-
+router.post('/pagoManual-Analisis', checkLogin, adminLogueado, dashboardController.pagoManualAnalisis)
 // Cuestionario Diagnóstico Empresa Establecida
 router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
 router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboardController.enviarCuestionario)

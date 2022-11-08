@@ -20,8 +20,8 @@ dashboardController.admin = async (req, res) => {
     const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
 
-    const consultorAsignado = await pool.query('SELECT * FROM consultores')
-    const ficha = await pool.query('SELECT * FROM ficha_cliente')
+    const consultorAsignado = await consultarDatos('consultores')
+    const ficha = await consultarDatos('ficha_cliente')
 
     empresas.forEach(e => {
         consultorAsignado.forEach(c => {
@@ -186,8 +186,7 @@ dashboardController.mostrarEmpresas = async (req, res) => {
     const dg_analisis = await consultarDatos('analisis_empresa')
     const consultor = await consultarDatos('consultores')
     const informe = await consultarDatos('informes')
-    const propuestas = await consultarDatos('propuesta_analisis')
-    const pagos = await consultarDatos('pagos')
+    const propuestas = await consultarDatos('propuestas')
 
     empresas.forEach(e => {
         e.pagoEtapa1 = false;
@@ -466,8 +465,8 @@ dashboardController.editarEmpresa = async (req, res) => {
     /************************************************************************************* */
 
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
-    const propuestas = await consultarDatos('propuesta_analisis')
-    const propuesta = propuestas.find(i => i.empresa == idUser)
+    const propuestas = await consultarDatos('propuestas')
+    const propuesta = propuestas.find(i => i.empresa == idUser && i.tipo_propuesta == 'Análisis')
     let pagos_analisis = { ok: false };
     if (propuesta) {
         datos.etapa = 'Propuesta de análisis enviada'
@@ -478,12 +477,18 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_analisis.dos = JSON.parse(pay.analisis_negocio2)
         pagos_analisis.tres = JSON.parse(pay.analisis_negocio3)
 
-        pagos_analisis = {
-            unico: { color: 'warning', txt: 'Pendiente' },
-            uno: { color: 'warning', txt: 'Pendiente' },
-            dos: { color: 'warning', txt: 'Pendiente' },
-            tres: { color: 'warning', txt: 'Pendiente' }
-        }
+        pagos_analisis.unico.color = 'warning';
+        pagos_analisis.unico.txt = 'Pendiente';
+        pagos_analisis.unico.btn = true;
+        pagos_analisis.uno.color = 'warning';
+        pagos_analisis.uno.txt = 'Pendiente'
+        pagos_analisis.uno.btn = true;
+        pagos_analisis.dos.color = 'warning';
+        pagos_analisis.dos.txt = 'Pendiente'
+        pagos_analisis.dos.btn = false;
+        pagos_analisis.tres.color = 'warning';
+        pagos_analisis.tres.txt = 'Pendiente';
+        pagos_analisis.tres.btn = false;
 
         pagos_analisis.unico.precio = propuesta.precio_total
         pagos_analisis.uno.precio = propuesta.precio_per1
@@ -492,10 +497,11 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         if (pagos_analisis.unico.estado == 1) {
             datos.etapa = 'Análisis de negocio pago único'
-            pagos_analisis.uno.color = 'success'
-            pagos_analisis.uno.txt = 'Pagado 100%'
+            pagos_analisis.unico.color = 'success'
+            pagos_analisis.unico.txt = 'Pagado 100%'
             pagos_analisis.ok = true;
             propuesta.pago = true;
+            pagos_analisis.unico.btn = false;
         }
         if (pagos_analisis.uno.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 60%'
@@ -503,16 +509,21 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_analisis.uno.txt = 'Pagado 60%'
             pagos_analisis.ok = true;
             propuesta.pago = true;
+            pagos_analisis.uno.btn = false;
+            pagos_analisis.dos.btn = true;
         }
         if (pagos_analisis.dos.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 80%'
             pagos_analisis.dos.color = 'success'
             pagos_analisis.dos.txt = 'Pagado 80%'
+            pagos_analisis.dos.btn = false;
+            pagos_analisis.tres.btn = true;
         }
         if (pagos_analisis.tres.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 100%'
             pagos_analisis.tres.color = 'success'
             pagos_analisis.tres.txt = 'Pagado 100%'
+            pagos_analisis.tres.btn = false;
         }
     }
 
@@ -815,6 +826,8 @@ dashboardController.bloquearEmpresa = async (req, res) => {
     }
 }
 
+
+/** PAGOS MANUALES ETAPA 1 y 2 */
 dashboardController.pagoManualDiagnostico = async (req, res) => {
     const { id } = req.body
     const fecha = new Date().toLocaleDateString("en-US")
@@ -826,14 +839,36 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
     })
 }
 
+dashboardController.pagoManualAnalisis = async (req, res) => {
+    const { num, id } = req.body
+    const fecha = new Date().toLocaleDateString("en-US")
+    let actualizarPago = false;
+    const data = { estado: 2, fecha }
+    console.log("\n-----------\n-----\nEMPRESA >> " + id + '\n-----------\n-----\n')
+    if (num == 0) {
+        actualizarPago = { 
+            analisis_negocio: JSON.stringify({ estado: 1, fecha }),
+            analisis_negocio1: JSON.stringify({ estado: 0 })
+        }
+    } else if (num == 1) { 
+        actualizarPago = { analisis_negocio1: JSON.stringify(data) }
+    } else if (num == 2) {
+        actualizarPago = { analisis_negocio2: JSON.stringify(data) }
+    } else {
+        actualizarPago = { analisis_negocio3: JSON.stringify(data) }
+    }
+
+    await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
+        if (err) throw err;
+        if (result.affectedRows > 0) res.send(true)
+        else res.send(false)
+    })
+}
+
 // CUESTIONARIO DIAGNÓSTICO DE NEGOCIO EXCEL (EMPRESA ESTABLECIDA)
 dashboardController.cuestionario = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#diagnostico_';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#diagnostico_';
-    }
-    res.render('consultor/cuestionario', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/cuestionario', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 
 dashboardController.enviarCuestionario = async (req, res) => {
@@ -970,11 +1005,7 @@ dashboardController.enviarCuestionario = async (req, res) => {
         const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
         if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0) && (rendimiento.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
-            if (req.user.rol == 'Consultor') {
-                res.redirect('/empresas-asignadas/' + codigoEmpresa + '#diagnostico_')
-            } else {
-                res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
-            }
+            res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
         }
     }
 
@@ -983,11 +1014,7 @@ dashboardController.enviarCuestionario = async (req, res) => {
 // CUESTIONARIO DIAGNÓSTICO (EMPRESAS NUEVAS)
 dashboardController.dgNuevosProyectos = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/' + codigo + '#diagnostico_';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/' + codigo + '#diagnostico_';
-    }
-    res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/nuevos_proyectos', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 
 dashboardController.guardarRespuestas = async (req, res) => {
@@ -1168,11 +1195,7 @@ dashboardController.guardarRespuestas = async (req, res) => {
         const resultado_categorias = await pool.query('INSERT INTO resultado_categorias SET ?', [resulCategorias])
         if ((aVitales.affectedRows > 0) && (resultado_categorias.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
-            if (req.user.rol == 'Consultor') {
-                res.redirect('/empresas-asignadas/' + codigoEmpresa + '#diagnostico_')
-            } else {
-                res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
-            }
+            res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
         }
     }
 }
