@@ -394,13 +394,16 @@
 
             const URLhash = window.location.hash;
             if (URLhash === '#diagnostico_') {
-                $('#diagnostico-item').trigger("click");
+                $('#item-diagnostico').trigger("click");
             }
             if (URLhash === '#analisis_') {
-                $('#analisis-item').trigger("click");
+                $('#item-analisis').trigger("click");
             }
             if (URLhash === '#plan-estrategico') {
-                $('.planItem').trigger("click");
+                $('#item-estrategico').trigger("click");
+            }
+            if (URLhash === '#plan-empresarial') {
+                $('#item-empresarial').trigger("click");
             }
             
             $(".chatbox-close").on("click", () => {

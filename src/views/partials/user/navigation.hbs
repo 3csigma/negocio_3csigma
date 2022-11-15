@@ -281,6 +281,26 @@
         </form>
         {{/if}}
         {{/if}}
+
+        {{#if btnPagar.etapa3}}
+        {{#if btnPagar.activar3}}
+        <form action="/pagar-plan-estrategico" method="POST">
+          <button type="submit" class="add-menu-sidebar">
+            <img src="/img/Pago-diagnostico de-negocio.png">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago plan estratégico</p>
+          </button>
+        </form>
+        {{else}}
+        <form>
+          <button type="submit" class="add-menu-sidebar"
+            style="cursor: auto; background: #585858 !important;pointer-events:none;">
+            <img src="/img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
+            <p class="mb-0" style="text-align: left;padding-left: 11px;">Plan estratégico de negocio pagado</p>
+          </button>
+        </form>
+        {{/if}}
+        {{/if}}
+
       {{/unless}}
 
       <ul class="metismenu" id="menu">
@@ -368,6 +388,23 @@
           {{/if}}
             <i class="fa-solid fa-lightbulb"></i>
             <span class="nav-text">Plan estratégico de negocio</span>
+          </a>
+        </li>
+
+        {{#comparar itemActivo '==' 6}}
+        <li class="mm-active">
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 6}}
+        <li class="activar-cuenta">
+        {{/comparar}}
+
+          {{#if btnPagar.etapa2}}
+          <a href="/plan-empresarial" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" aria-expanded="false">
+          {{/if}}
+            <i class="fa-solid fa-lightbulb"></i>
+            <span class="nav-text">Plan empresarial</span>
           </a>
         </li>
       </ul>

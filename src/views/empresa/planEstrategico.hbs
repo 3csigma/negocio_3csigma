@@ -245,45 +245,52 @@
             {{!-- TARJETAS LADO DERECHO--}}
             <div class="col-xl-5 col-xxl-12">     
                 <div class="row">
-                    {{> user/graficasCircular}}
+                    {{!-- <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title" style="margin:0 auto">TITULO DE LA TARJETA</h4>
+                            </div>
+
+                        </div>
+                    </div> --}}
                     <div class="col-xl-12">
                         {{!-- INFORMES GENERADOS --}}
-                        <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Informe generado</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                            <table class="table table-responsive-md text-center">
-                                <thead>
-                                <tr>
-                                    <th>FECHA</th>
-                                    <th>NOMBRE</th>
-                                    <th>REVISAR</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{#if informePlan.fecha}}
-                                <tr>
-                                    <td>{{informePlan.fecha}}</td>
-                                    <td>{{informePlan.nombre}}</td>
-                                    <td>
-                                    <a href="{{informePlan.url}}"
-                                        style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                                        target="_blank" class="btn btn-info shadow btn-xs sharp">
-                                        <i class="fa fa-search"></i></a>
-                                    </td>
-                                </tr>
-                                {{else}}
-                                <tr>
-                                    <td colspan="4">Aún no hay informes generados.</td>
-                                </tr>
-                                {{/if}}
-                                </tbody>
-                            </table>
+                        {{!-- <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Informe generado</h4>
                             </div>
-                        </div>
-                        </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>FECHA</th>
+                                                <th>NOMBRE</th>
+                                                <th>REVISAR</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#if informePlan.fecha}}
+                                            <tr>
+                                                <td>{{informePlan.fecha}}</td>
+                                                <td>{{informePlan.nombre}}</td>
+                                                <td>
+                                                    <a href="{{informePlan.url}}"
+                                                        style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                        target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                        <i class="fa fa-search"></i></a>
+                                                </td>
+                                            </tr>
+                                            {{else}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay informes generados.</td>
+                                            </tr>
+                                            {{/if}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

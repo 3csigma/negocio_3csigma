@@ -71,8 +71,9 @@ router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEm
 router.get('/empresas/:codigo', checkLogin, consultorLogueado, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
+// PAGOS MANUALES (EXTERNOS)
 router.post('/pagoManual-Diagnostico', checkLogin, adminLogueado, dashboardController.pagoManualDiagnostico)
-router.post('/pagoManual-Analisis', checkLogin, adminLogueado, dashboardController.pagoManualAnalisis)
+router.post('/pagoManual-Empresas', checkLogin, adminLogueado, dashboardController.pagoManualEmpresas)
 // Cuestionario Diagnóstico Empresa Establecida
 router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
 router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboardController.enviarCuestionario)
@@ -81,8 +82,7 @@ router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboar
 router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashboardController.dgNuevosProyectos)
 router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
 
-// Informes Diagnóstico & Análisis 
-// router.post('/subirInforme', checkLogin, consultorLogueado, dashboardController.subirInforme)
+// SUBIR INFORMES DE TODAS LAS ETAPAS
 router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 /*******************************************************************************************************/

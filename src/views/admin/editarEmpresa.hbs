@@ -355,14 +355,11 @@
                         box-shadow: 0px 12px 23px 0px #ededed">
                     <div class="custom-tab-1">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item"><a href="#empresa" data-toggle="tab"
-                                    class="nav-link active show">Empresa</a></li>
-                            <li class="nav-item"><a href="#diagnostico" id="diagnostico-item" data-toggle="tab"
-                                    class="nav-link">Diagnóstico</a></li>
-                            <li class="nav-item"><a href="#analisis" id="analisis-item" data-toggle="tab" class="nav-link">Análisis</a>
-                            </li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link planItem">Plan
-                                    Estrategico</a></li>
+                            <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
+                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
+                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
+                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
                         </ul>
                     </div>
                 </div>
@@ -576,7 +573,7 @@
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm1"></canvas>
                                                                     </div>
-                                                                     {{else}}
+                                                                    {{else}}
                                                                     <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
                                                                         <div>
                                                                             <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
@@ -816,8 +813,8 @@
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta de Análisis de Negocio</h4>
                                         </div>
-                                        {{#unless propuesta.pago}}
-                                        <form action="/enviar-propuesta-analisis" method="POST" enctype="multipart/form-data">
+                                        {{#unless propuesta.analisis.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
                                                 <div class="form-group col-md-6">
                                                     <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
@@ -832,6 +829,7 @@
                                                 </div>
                                                 <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Análisis de negocio">
                                                 <div class="col-md-3 mx-auto">
                                                     <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
@@ -853,13 +851,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        {{#if propuesta.link_propuesta}}
-                                                        <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
+                                                        {{#if propuesta.analisis.link_propuesta}}
+                                                        <td>{{#if propuesta.analisis.fecha}}{{propuesta.analisis.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Análisis de negocio</td>
-                                                        <td>${{propuesta.precio_total}}</td>
+                                                        <td>${{propuesta.analisis.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
-                                                                <a href="{{propuesta.link_propuesta}}" target="_blank"
+                                                                <a href="{{propuesta.analisis.link_propuesta}}" target="_blank"
                                                                 class="btn btn-primary shadow btn-xs sharp"
                                                                 style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
                                                                 <i class="fa fa-search"></i>
@@ -877,7 +875,8 @@
                                     </div>
                                 </div>
 
-                                {{!-- {{#if pagos_analisis.ok}} --}}
+                                {{!-- PROPUESTA MONTADA --}}
+                                {{#if propuesta.analisis.fecha}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -894,7 +893,9 @@
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
                                                         <th>PAGO DE ANÁLISIS</th>
+                                                        {{#if rolAdmin}}
                                                         <th>PAGO</th>
+                                                        {{/if}}
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -904,15 +905,17 @@
                                                             <td>Pago Único</td>
                                                             <td>${{pagos_analisis.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
+                                                            {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_analisis.unico.btn}}
-                                                                <a onclick="pagoManualAnalisis(0, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                                                                     <i class="fa fa-usd"></i></button>
                                                                 {{/if}}
                                                             </td>
+                                                            {{/if}}
                                                         </tr>
                                                         {{/unless}}
                                                         {{#unless pagos_analisis.unico.fecha}}
@@ -921,45 +924,51 @@
                                                             <td>Primer Pago</td>
                                                             <td>${{pagos_analisis.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
+                                                            {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_analisis.uno.btn}}
-                                                                <a onclick="pagoManualAnalisis(1, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                                                                     <i class="fa fa-usd"></i></button>
                                                                 {{/if}}
                                                             </td>
+                                                            {{/if}}
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
                                                             <td>${{pagos_analisis.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
+                                                            {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_analisis.dos.btn}}
-                                                                <a onclick="pagoManualAnalisis(2, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                                                                     <i class="fa fa-usd"></i></button>
                                                                 {{/if}}
                                                             </td>
+                                                            {{/if}}
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
                                                             <td>${{pagos_analisis.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
+                                                            {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_analisis.tres.btn}}
-                                                                <a onclick="pagoManualAnalisis(3, {{datos.idEmpresa}})" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                                                                     <i class="fa fa-usd"></i></button>
                                                                 {{/if}}
                                                             </td>
+                                                            {{/if}}
                                                         </tr>
                                                         {{/unless}}
                                                     </tbody>
@@ -969,7 +978,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{!-- {{/if}} --}}
+                                {{/if}}
 
                                 {{#if archivos}}
                                 <div class="card">
@@ -1008,7 +1017,7 @@
                                 </div>
                                 {{/if}}
                                 
-                                {{#if propuesta.pago}}
+                                {{#if propuesta.analisis.pago}}
                                     <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                     <div class="card">
                                         <div class="card-body">
@@ -1406,6 +1415,127 @@
 
                             {{!-- PESTAÑA 4 - PLAN ESTRATÉGICO DE NEGOCIO --}}
                             <div id="plan-estrategico" class="tab-pane fade">
+
+                                <!-- =========== PROPUESTA PLAN ESTRATÉGICO ========== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
+                                        </div>
+                                        {{#unless propuesta.estrategico.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-6">
+                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12 input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input required" name="filePropuesta" accept="application/pdf" required>
+                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
+                                                <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Plan estratégico">
+                                                <div class="col-md-3 mx-auto">
+                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr class="mt-4">
+                                        {{/unless}}
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FECHA</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{#if propuesta.estrategico.link_propuesta}}
+                                                        <td>{{#if propuesta.estrategico.fecha}}{{propuesta.estrategico.fecha}}{{else}}N/A{{/if}}</td>
+                                                        <td>Plan estratégico de negocio</td>
+                                                        <td>${{propuesta.estrategico.precio_total}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
+                                                                class="btn btn-primary shadow btn-xs sharp"
+                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        {{else}}
+                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta de plan estratégico</span></td>
+                                                        {{/if}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {{!-- PROPUESTA MONTADA --}}
+                                {{#if propuesta.estrategico.fecha}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>FECHA DE PAGO</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>ESTADO</th>
+                                                        {{#if rolAdmin}}
+                                                        <th>SUSCRIPCIÓN</th>
+                                                        {{/if}}
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Suscripción mensual</td>
+                                                            <td>${{pagoEstrategico.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagoEstrategico.color}}">{{pagoEstrategico.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagoEstrategico.btn}}
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan estratégico')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                <button type="button" class="btn btn-danger btn-xs sharp" style="background: red;color: white"><i class="fa fa-stop"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+
+                                {{#if pagoEstrategico.fecha}}
                                 {{!-- CREAR NUEVAS TAREAS --}}
                                 <div class="card">
                                     <div class="card-body">
@@ -1449,9 +1579,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <style>
-                                    .text-black{color: black;  }
-                                </style>
                                 {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
                                 {{#if jsonDim}}
                                 <div class="card">
@@ -1489,7 +1616,6 @@
                                 {{!-- LISTADO DE TAREAS --}}
                                 {{!-- {{#if tareas.todas}} --}}
                                 <div class="card plan-list">
-
 									<div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
 										<div class="mr-auto pr-3 mb-3">
 											<h4 class="text-black fs-20">Tareas asignadas</h4>
@@ -1735,6 +1861,520 @@
                                 </div>
                                 <!-- ========================================================================== -->
                                 {{!-- {{/if}} --}}
+                                {{/if}}
+                            </div>
+
+                            {{!-- PESTAÑA 5 - PLAN EMPRESARIAL --}}
+                            <div id="plan-empresarial" class="tab-pane fade">
+
+                                <!-- ======================== PROPUESTA EMPRESARIAL ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta de Plan Empresarial</h4>
+                                        </div>
+                                        {{#unless propuesta.empresarial.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-6">
+                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12 input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input required" name="filePropuesta" accept="application/pdf" required>
+                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
+                                                <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Plan empresarial">
+                                                <div class="col-md-3 mx-auto">
+                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr class="mt-4">
+                                        {{/unless}}
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FECHA</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{#if propuesta.empresarial.link_propuesta}}
+                                                        <td>{{#if propuesta.empresarial.fecha}}{{propuesta.empresarial.fecha}}{{else}}N/A{{/if}}</td>
+                                                        <td>Plan empresarial</td>
+                                                        <td>${{propuesta.empresarial.precio_total}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{{propuesta.empresarial.link_propuesta}}" target="_blank"
+                                                                class="btn btn-primary shadow btn-xs sharp"
+                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        {{else}}
+                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta aún</span></td>
+                                                        {{/if}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {{#if propuesta.empresarial.fecha}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>FECHA DE PAGO</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>ESTADO</th>
+                                                        {{#if rolAdmin}}
+                                                        <th>PAGO</th>
+                                                        {{/if}}
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#unless pagos_empresarial.uno.fecha}}
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Pago Único</td>
+                                                            <td>${{pagos_empresarial.unico.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.unico.btn}}
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        {{/unless}}
+                                                        {{#unless pagos_empresarial.unico.fecha}}
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.uno.fecha}}{{pagos_empresarial.uno.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Primer Pago</td>
+                                                            <td>${{pagos_empresarial.uno.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.uno.color}}">{{pagos_empresarial.uno.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.uno.btn}}
+                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.dos.fecha}}{{pagos_empresarial.dos.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Segundo Pago</td>
+                                                            <td>${{pagos_empresarial.dos.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.dos.color}}">{{pagos_empresarial.dos.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.dos.btn}}
+                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.tres.fecha}}{{pagos_empresarial.tres.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Tercer Pago</td>
+                                                            <td>${{pagos_empresarial.tres.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.tres.color}}">{{pagos_empresarial.tres.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.tres.btn}}
+                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        {{/unless}}
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+                                
+                                {{#if propuesta.empresarial.pago}}
+                                    <!-- ======================== CARAR ARCHIVOS/INFORMES ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Subir archivos</h4>
+                                            </div>
+                                            {{!-- FORMULARIO PARA SUBIR ARCHIVOS --}}
+                                            <form action="" method="post">
+                                                <div class="row mt-2 py-2">
+                                                    <div class="col-sm-4">
+                                                        <select id="tipoArchivo" class="form-control form-control-md" onchange="archivosItems(this.value)" style="height:35px;">
+                                                            <option value="Plan de Negocio" selected>Plan de Negocio</option>
+                                                            <option value="Plan de Marketing">Plan de Marketing</option>
+                                                            <option value="Branding">Branding</option>
+                                                            <option value="Renders">Renders</option>
+                                                            <option value="Website">Website</option>
+                                                            <option value="Otro">Otro</option>
+                                                        </select>
+                                                        <div class="row" id="div-btnAtras" style="display: none;">
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="mostrarSelector()" style="height: 35px;" class="btn btn-light btn-xs"><i class="mdi mdi-arrow-left"></i></button>
+                                                            </div>
+                                                            <div class="col-sm-10"><input class="form-control form-control-md" id="txt-nomArchivo" style="height: 35px;" type="text" placeholder="¿Qué info tiene el doc..?"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <style>
+                                                            .custom-file-input:lang(en)~.custom-file-label::after {
+                                                                border-radius: 0px 15px 15px 0px;
+                                                            }
+                                                        </style>
+                                                        <div class="custom-file" id="div-archivo">
+                                                            <input type="file" class="custom-file-input form-control-md" id="input-archivo" style="border: 1px solid #000;">
+                                                            <span class="custom-file-label form-control-md" style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300; height: 35px !important;">Cargar documento</span>
+                                                        </div>
+                                                        <div class="input-group-prepend mb-2" id="div-link" style="display: none;">
+                                                            <span class="input-group-text" style="height: 35px">https://www.</span>
+                                                            <input type="text" id="input-link" class="form-control mb-2" placeholder="mipagina.com" style="height: 35px">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button type="button" onclick="cargarArchivo()" id="btnAddFile" style="height: 35px;" class="btn btn-primary btn-xs">Agregar <i class="mdi mdi-plus"></i></button>
+                                                    </div>
+                                                    <div class="col-sm-12" id="div-nomArchivo" style="display: none;">
+                                                        <input type="text" class="form-control-md w-100" id="nomArchivo_">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            {{!-- TABLA DE ARCHIVOS CARGADOS --}}
+                                            <div class="row mt-2">
+                                                <div class="col-12"><hr width="100%"></div>
+                                                <div class="col-xl-12">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title" style="margin:0 auto">Archivos cargados</h4>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-responsive-md text-center">
+                                                            <thead>
+                                                                <th>Nombre</th>
+                                                                <th>Revisar Archivo</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="2">No hay datos</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{#if divInformes.empresarial}}
+                                    <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>ESTADO</th>
+                                                                <th>ACCIÓN</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {{!-- PRODUCTO --}}
+                                                            {{#if filaInforme.producto}}
+                                                            <tr>
+                                                                <td>{{#if info.prod.fecha}}{{info.prod.fecha}}{{else}}
+                                                                    <span id="spanFechaProd">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión producto</span></td>
+                                                                <td>
+                                                                    {{#if info.prod.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeProd">
+                                                                                    <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
+                                                                                    accept="application/pdf" />
+                                                                            </td>
+                                                                    
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a id="btnVerInformeProd" href="{{info.prod.url}}"
+                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                    target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- ADMINISTRACIÓN --}}
+                                                            {{#if filaInforme.administracion}}
+                                                            <tr>
+                                                                <td>{{#if info.adm.fecha}}{{info.adm.fecha}}{{else}}
+                                                                    <span id="spanFechaAdmin">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión administración</span></td>
+                                                                <td>
+                                                                    {{#if info.adm.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeAdmin" >
+                                                                        <div id="btnSubirInformeAdmin"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
+                                                                        name="informeAdmin" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- OPERACIONES --}}
+                                                            {{#if filaInforme.operaciones}}
+                                                            <tr>
+                                                                <td>{{#if info.op.fecha}}{{info.op.fecha}}{{else}}
+                                                                    <span id="spanFechaOpe">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión operaciones</span></td>
+                                                                <td>
+                                                                    {{#if info.op.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeOpe" >
+                                                                        <div id="btnSubirInformeOpe"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
+                                                                        name="informeOpe" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- MARKETING --}}
+                                                            {{#if filaInforme.marketing}}
+                                                            <tr>
+                                                                <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
+                                                                    <span id="spanFechaMarketing">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión marketing</span></td>
+                                                                <td>
+                                                                    {{#if info.marketing.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeMarketing" >
+                                                                        <div id="btnSubirInformeMarketing"
+                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                            <i class="fa fa-upload"></i>
+                                                                        </div>
+                                                                    </label>
+                                                                    <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
+                                                                        name="informeMarketing" accept="application/pdf" />
+                                                                            </td>
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                        class="btn btn-info shadow btn-xs sharp">
+                                                                        <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                        {{#if filaInforme.empresarial.completo}}
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-responsive-md text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>FECHA</th>
+                                                                    <th>NOMBRE</th>
+                                                                    <th>ESTADO</th>
+                                                                    <th>ACCIÓN</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{#if info.analisis.fecha}}{{info.analisis.fecha}}{{else}}
+                                                                        <span id="spanFechaGeneral">N/A</span>
+                                                                        {{/if}}
+                                                                    </td>
+                                                                    <td><span>Informe de análisis</span></td>
+                                                                    <td>
+                                                                        {{#if info.analisis.fecha}}
+                                                                        <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                        <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                            <tr>
+                                                                                <td style="border-color: transparent; padding:3px">
+                                                                                    <label for="informeAnalisisGeneral" >
+                                                                            <div id="btnSubirInforme"
+                                                                                class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                <i class="fa fa-upload"></i>
+                                                                            </div>
+                                                                        </label>
+                                                                        <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
+                                                                            name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                                </td>
+
+                                                                                <td style="border-color: transparent; padding:3px">
+                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
+                                                                            class="btn btn-info shadow btn-xs sharp">
+                                                                            <i class="fa fa-search"></i></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                        {{!-- {{/if}} --}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ========================================================================== -->
+                                        {{/if}}
+                                    {{/if}}
+                                {{/if}}
+
                             </div>
 
                         </div>
@@ -1777,14 +2417,50 @@
 </div>
 
 <script>
-    // REGISTRAR PAGO MANUAL DE ANÁLISIS DE NEGOCIO
-    function pagoManualAnalisis(num, id) {
+    function mostrarSelector() {
+        $('#tipoArchivo').show();
+        $('#div-btnAtras').hide();
+    }
+
+    function archivosItems(e) {
+        $('#div-archivo').show()
+        $('#div-link').hide()
+        if (e == 'Website') {
+            $('#div-archivo').hide()
+            $('#div-link').show()
+        }
+        if (e == 'Otro') {
+            $('#div-btnAtras').show();
+            $('#tipoArchivo').hide();
+        }
+    }
+
+    function agregarArchivo() {
+        const tipoArchivo = $('#tipoArchivo').val()
+        if (tipoArchivo == 'Website') {
+            const link = $('#input-link').val()
+            guardarArchivo(tipoArchivo, link)
+        } else if (tipoArchivo == 'Otro') {
+            const nombre = $('#txt-nomArchivo').val()
+        }
+
+    }
+
+    function guardarArchivo(nombre, archivo) {
+        console.log("Función para guardar los datos en DB & luego responder en la misma vista")
+    }
+
+    // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
+    function pagoManualEmpresas(num, id, tipo) {
         let txt = 'pago único';
+        let etapa = 2;
+        if (tipo == 'plan estratégico') etapa = 3;
+        else if (tipo == 'plan empresarial') etapa = 4
         num == 1 ? txt = 'primer pago' : txt = txt;
         num == 2 ? txt = 'segundo pago' : txt = txt;
         num == 3 ? txt = 'tercer pago' : txt = txt;
         Swal.fire({
-            title: `¿Deseas registrar el ${txt} de análisis de negocio?`,
+            title: `¿Deseas registrar el ${txt} de ${tipo}?`,
             text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
             icon: 'warning',
             showCancelButton: true,
@@ -1795,15 +2471,20 @@
         })
         .then((result) => {
             if (result.isConfirmed) {
-                fetch('/pagoManual-Analisis', {
+                fetch('/pagoManual-Empresas', {
                     method: 'POST',
-                    body: JSON.stringify({num, id}),
+                    body: JSON.stringify({num, id, etapa}),
                     headers: {'Content-Type': 'application/json'}
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response){
-                            window.location.hash = 'analisis_'
+                            if (etapa == 2)
+                                window.location.hash = 'analisis_'
+                            else if (etapa == 3)
+                                window.location.hash = 'plan-estrategico'
+                            else
+                                window.location.hash = 'plan-empresarial'
                             location.reload();
                         } else {
                             Swal.fire(

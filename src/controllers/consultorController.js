@@ -72,26 +72,38 @@ consultorController.empresasAsignadas = async (req, res) => {
 /* ------------------------------------------------------------------------------------------------ */
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 consultorController.enviarPropuesta = async (req, res) => {
-    const { precioPropuesta, idEmpresa, codigo } = req.body
+    const { precioPropuesta, idEmpresa, codigo, tipo_propuesta } = req.body
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.codigo == codigo)
     const email = empresa.email
     const nombreEmpresa = empresa.nombre_empresa
     const propuestasDB = await consultarDatos('propuestas');
-    const fila = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Análisis')
+    const fila = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == tipo_propuesta)
+    // const fila2 = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
     const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
     const precio_per1 = parseFloat(precioPropuesta) * 0.6
     const precio_per2 = parseFloat(precioPropuesta) * 0.2
     const precio_per3 = parseFloat(precioPropuesta) * 0.2
-    const tipo_propuesta = 'Análisis'
-    if (fila) {
-        const actualizarPropuesta = { tipo_propuesta, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
-        await pool.query('UPDATE propuestas SET ? WHERE empresa = ?', [actualizarPropuesta, idEmpresa]);
+
+    let hash = '#analisis_';
+    const actualizarPropuesta = { precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
+    const nuevaPropuesta = { empresa: idEmpresa, tipo_propuesta, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
+
+    if (tipo_propuesta == 'Plan estratégico') {
+        hash = '#plan-estrategico';
+    } else if (tipo_propuesta == 'Plan empresarial') {
+        hash = '#plan-empresarial';
     } else {
-        const nuevaPropuesta = { empresa: idEmpresa, tipo_propuesta, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
+        hash = hash;
+    }
+
+    if (fila) {
+        await pool.query('UPDATE propuestas SET ? WHERE empresa = ? AND tipo_propuesta = ?', [actualizarPropuesta, idEmpresa, tipo_propuesta]);
+    } else {
         await pool.query('INSERT INTO propuestas SET ?', [nuevaPropuesta]);
     }
+
     /** INFO PARA ENVÍO DE EMAIL */
     const asunto = "Tenemos una propuesta para tu empresa"
     // Obtener la plantilla de Email
@@ -106,7 +118,7 @@ consultorController.enviarPropuesta = async (req, res) => {
         console.log("\n<<<<< Se envió Email de la propuesta de Análisis de Negocio >>>>>\n")
     }
 
-    res.redirect('/empresas/' + codigo + '#analisis_')
+    res.redirect('/empresas/' + codigo + hash)
 }
 
 // ANÁLISIS DIMENSIÓN PRODUCTO

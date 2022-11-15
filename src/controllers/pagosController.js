@@ -6,7 +6,6 @@ const stripe = require('stripe')(clientSecretStripe);
 
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
-    req.session.etapa2 = false;
     console.log("URL Sesión>>> ", req.intentPay);
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
@@ -29,11 +28,12 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
         precio = pay.precio_total + '00'
-        precio = parseFloat(precio)
+        precio = parseFloat(precio) - (parseFloat(precio*0.1))
+        console.log("Precio => ", precio)
     }
 
     const session = await stripe.checkout.sessions.create({
@@ -74,7 +74,7 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per1 + ''
@@ -125,7 +125,7 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per2 + ''
@@ -177,7 +177,7 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
         precio = pay.precio_per3 + ''
@@ -222,12 +222,56 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     res.redirect(303, session.url);
 }
 
+pagosController.pagarPlanEstrategico = async (req, res) => {
+    console.log("URL Sesión>>> ", req.intentPay);
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan estratégico')
+    let precio = pay.precio_total + '00';
+    precio = parseFloat(precio)
+
+    const product = await stripe.products.create({
+        name: 'Plan estratégico de negocio',
+        description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?',
+        images: ['https://3csigma.com//app_public_files/img/Plan-estrategico-de-negocio_checkout.png'],
+        default_price_data: {
+            unit_amount: precio,
+            currency: 'usd',
+            recurring: {interval: 'month'},
+        },
+        expand: ['default_price'],
+    });
+
+    const session = await stripe.checkout.sessions.create({
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
+        mode: 'subscription',
+        // payment_method_types: ['card'],
+        line_items: [
+        {
+            price: product.default_price.id,
+            quantity: 1
+        }
+        ],
+        // subscription_data: {
+        //     trial_period_days: 14
+        // },
+    });
+
+    req.session.intentPay = session.url;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.planEstrategico = true;
+    res.redirect(303, session.url);
+}
+
 /********************************************************************/
 pagosController.pagoExitoso = async (req, res) => {
     let destino = 'empresa/dashboard', itemActivo = 1, alertSuccess = false, pagoExitoso = false;
     // Borrando info del Intento de pago
     req.session.intentPay = undefined;
-    req.session.etapa2 = undefined;
 
     /** CONSULTANDO EMPRESA LOGUEADA */
     const empresas = await consultarDatos('empresas')

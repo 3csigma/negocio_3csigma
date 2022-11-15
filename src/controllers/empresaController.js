@@ -30,6 +30,11 @@ empresaController.index = async (req, res) => {
             analisis_negocio1: JSON.stringify({estado:1}),
             analisis_negocio2: estado,
             analisis_negocio3: estado,
+            estrategico: estado,
+            empresarial0: estado,
+            empresarial1: estado,
+            empresarial2: estado,
+            empresarial3: estado,
             id_empresa
             }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
@@ -665,6 +670,7 @@ empresaController.planEstrategico = async (req, res) => {
     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const empresa = row[0].id_empresas;
     const fechaActual = new Date().toLocaleDateString('fr-CA');
+    
     const tareas = await consultarTareas(empresa, fechaActual)
     let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
     let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
@@ -681,7 +687,7 @@ empresaController.planEstrategico = async (req, res) => {
         ((estado3.length*100)/dim3).toFixed(1),
         ((estado4.length*100)/dim4).toFixed(1),
     ]
-    const jsonDim = JSON.stringify([
+    const jsonDim_empresa = JSON.stringify([
         { ok: (listo[0]), pendiente: (100-listo[0]) },
         { ok: (listo[1]), pendiente: (100-listo[1]) },
         { ok: (listo[2]), pendiente: (100-listo[2]) },
@@ -693,10 +699,14 @@ empresaController.planEstrategico = async (req, res) => {
     datosTabla = datosTabla.filter(x => x.empresa == empresa)
     const jsonRendimiento = JSON.stringify(datosTabla)
 
+    btnPagar.etapa2 = false;
+    btnPagar.etapa3 = true;
+    btnPagar.activar3 = true;
+
     res.render('empresa/planEstrategico', {
         user_dash: true, pagoDiag: true, itemActivo: 5, acuerdoFirmado: true,
         actualYear: req.actualYear, btnPagar,
         tareas, informePlan, 
-        dim1, dim2, dim3, dim4, jsonDim, jsonRendimiento
+        dim1, dim2, dim3, dim4, jsonDim_empresa, jsonRendimiento
     })
 }

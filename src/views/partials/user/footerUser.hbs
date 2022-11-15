@@ -5,7 +5,7 @@
 <!-- Chart piety plugin files -->
 <script src="../vendor/js/jquery.peity.min.js"></script>
 
-{{#if jsonDim}}
+{{#if jsonDim_empresa}}
 {{> user/pieCharts}}
 {{/if}}
 
@@ -184,13 +184,17 @@
                 },
 
                 load: function () {
-                    chartIndicadores1();
-				    chartIndicadores2();
+					if (document.getElementById('jsonAnalisis1')) {
+						chartIndicadores1();
+						chartIndicadores2();
+					}
                 },
 
                 resize: function () {
-                    chartIndicadores1();
-				    chartIndicadores2();
+					if (document.getElementById('jsonAnalisis1')) {
+                    	chartIndicadores1();
+				    	chartIndicadores2();
+					}
                 }
             }
 
