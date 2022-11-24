@@ -48,8 +48,78 @@
             {{!-- TARJETAS LADO IZQUIERDO --}}
             <div class="col-xl-7 col-xxl-12">
                 <div class="row">
-                    {{!-- TAREAS ASIGNADAS --}}
+
+                    {{!-- PROPUESTA --}}
                     <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Propuesta de plan estratégico de negocio</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-responsive-md text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>FECHA DE PROPUESTA</th>
+                                                <th>ESTADO DE SUBSCRIPCIÓN</th>
+                                                <th>ACCIONES</th>
+                                                <th>VALOR TOTAL</th>
+                                                <th>REVISAR PROPUESTA</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
+                                                <td>
+                                                    <span class="badge light badge-{{propuesta.color}}">{{propuesta.texto}}</span>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                                            {{#if botones.pagar}}
+                                                            <form action="/pagar-plan-estrategico" method="POST">
+                                                                <button type="submit" class="btn btn-primary btn-xs sharp"
+                                                                    style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                                                    <i class="fa fa-usd"></i>
+                                                                </button>
+                                                            </form>
+                                                            {{else}}
+                                                            <button type="button" class="btn btn-primary btn-xs sharp"
+                                                                style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                <i class="fa fa-usd"></i></button>
+                                                            {{/if}}
+                                                        </div>
+                                                        <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                                        {{#if botones.editSub}}
+                                                            <a type="button" target="_blank" href="https://checkout.3csigma.com/p/login/test_eVa7tj1uygcidQQ288" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);border-color:#812082" class="btn btn-primary btn-xs sharp">
+                                                                <i class="fa fa-pencil"></i></a>
+                                                        {{else}}
+                                                            <button type="button" class="btn btn-primary btn-xs sharp"
+                                                            style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                <i class="fa fa-pencil"></i></button>
+                                                        {{/if}}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>${{propuesta.precio_total}}</td>
+                                                <td>
+                                                    <a href="{{propuesta.link_propuesta}}" target="_blank"
+                                                        class="btn btn-primary shadow btn-xs sharp"
+                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                        <i class="fa fa-search"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{#if propuesta.pagada}}
+                    {{!-- TAREAS ASIGNADAS --}}
+                    <div class="col-xl-12 mt-2">
                         <div class="card plan-list">
                             <div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
                                 <div class="mr-auto pr-3 mb-3">
@@ -238,6 +308,7 @@
 
                         </div>
                     </div>
+                    {{/if}}
                 </div>
 
             </div>

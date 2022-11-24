@@ -10,7 +10,7 @@ module.exports = {
             "**/*/archivos_analisis_empresa",
             "**/*/foto_profile",
             "**/*/informes_empresas",
-            "**/*/propuestas_analisis",
+            "**/*/propuestas_empresa",
         ],
         env_production: {
             NODE_ENV: "production"

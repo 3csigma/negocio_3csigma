@@ -12,7 +12,7 @@ router.get('/empresas-asignadas', checkLogin, consultorLogueado, consultorContro
 // PROPUESTAS PARA LA EMPRESA (ANÁLISIS DE NEGOCIO & PLAN EMPRESARIAL)
 const rutaAlmacen = multer.diskStorage({
     destination: function (req, file, callback) {
-        const ruta = path.join(__dirname, '../public/propuestas_analisis')
+        const ruta = path.join(__dirname, '../public/propuestas_empresa')
         callback(null, ruta);
     },
 

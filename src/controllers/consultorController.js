@@ -80,7 +80,7 @@ consultorController.enviarPropuesta = async (req, res) => {
     const propuestasDB = await consultarDatos('propuestas');
     const fila = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == tipo_propuesta)
     // const fila2 = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
-    const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
+    const link_propuesta = '../propuestas_empresa/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
     const precio_per1 = parseFloat(precioPropuesta) * 0.6
     const precio_per2 = parseFloat(precioPropuesta) * 0.2

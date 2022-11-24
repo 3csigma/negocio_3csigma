@@ -283,6 +283,46 @@
 					allowOutsideClick: false,
 				})
 			{{/if}}
+			/*********************************************************************************** */
+			/** PAGOS ETAPA 2 */
+			{{#if pagoEtapa3Ok}}
+				Swal.fire({
+					icon: 'success',
+					title: '¡Pago exitoso!',
+					html: '<p>Tu pago ha sido recibido, ahora puedes continuar con tu proceso.</p>'
+						+ '<a href="/plan-estrategico" type="button" class="mb-2" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300;">Ok</a>',
+					showCancelButton: false,
+					showConfirmButton: false,
+					allowOutsideClick: false,
+				})
+			{{/if}}
+			{{#if pagoEtapa3Cancel}}
+				Swal.fire({
+					icon: 'error',
+					title: 'Pago Cancelado',
+					html: '<p>Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.</p>'
+						+ '<a href="/plan-estrategico" type="button" class="mb-2" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300;">Ok</a>',
+					showCancelButton: false,
+					showConfirmButton: false,
+					allowOutsideClick: false,
+				})
+			{{/if}}
         });
 
         jQuery(window).on('resize', function () {

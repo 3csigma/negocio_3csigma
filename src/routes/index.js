@@ -10,6 +10,7 @@ const path = require('path');
 const cron = require('node-cron');
 const { enabled_nextPay, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas } = require('../lib/helpers')
 
+
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
     destination: function (req, file, callback) {

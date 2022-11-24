@@ -5,7 +5,7 @@ const { listEnvelope } = require('./listEnvelopes');
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1, btnPagar = {};
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1;
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -15,10 +15,8 @@ empresaController.index = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
     const id_empresa = empresa.id_empresas;
-    req.pagoDiag = false, btnPagar = {}, pagoAnalisis = false, etapa1 = {};
+    req.pagoDiag = false, pagoAnalisis = false, etapa1 = {};
     /** Consultando que pagos ha realizado el usuario */
-    btnPagar.etapa1 = true;
-    btnPagar.activar1 = true;
     const pagos = await consultarDatos('pagos')
     let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
     if (!pago_empresa) {
@@ -43,9 +41,6 @@ empresaController.index = async (req, res) => {
         if (objDiagnostico.estado == 1) {
             // PAGÓ EL DIAGNOSTICO
             diagnosticoPagado = 1;
-            btnPagar.activar1 = false;
-            btnPagar.etapa2 = false;
-            btnPagar.activar2 = false;
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
             if (acuerdo.length > 0) {
@@ -58,13 +53,7 @@ empresaController.index = async (req, res) => {
             /************************************************************************************* */
             // PROPUESTA DE ANÁLISIS DE NEGOCIO
             const propuesta_analisis = await consultarDatos('propuestas')
-            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis');
-            if (propuesta) {
-                btnPagar.etapa1 = false;
-                btnPagar.activar1 = false;
-                btnPagar.etapa2 = true;
-                btnPagar.activar2 = true;
-            }
+            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
             /************************************************************************************* */
 
             const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
@@ -74,19 +63,7 @@ empresaController.index = async (req, res) => {
 
             // PAGÓ EL ANÁLISIS
             if (objAnalisis.estado == 1) {
-                btnPagar.etapa1 = false;
-                btnPagar.activar1 = false;
-                btnPagar.etapa2 = true;
-                btnPagar.activar2 = false;
                 analisisPagado = 1
-            }
-            if (objAnalisis1.estado == 2) {
-                btnPagar.etapa1 = false;
-                btnPagar.activar1 = false;
-                btnPagar.etapa2 = true;
-                btnPagar.activar2 = true;
-                btnPagar.obj1 = parseInt(objAnalisis1.estado)
-                btnPagar.analisisPer = true;
             }
         }
 
@@ -257,7 +234,6 @@ empresaController.index = async (req, res) => {
         pagoPendiente,
         diagnosticoPagado,
         analisisPagado,
-        btnPagar,
         itemActivo: 1,
         acuerdoFirmado,
         etapa1,
@@ -275,12 +251,10 @@ empresaController.perfilUsuarios = async (req, res) => {
 
     let empresa = await pool.query("SELECT e.*, u.foto,u.rol FROM empresas e JOIN users u ON e.codigo = u.codigo WHERE e.codigo = ?", [codigo])
     empresa = empresa[0]
-
     let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
     consultor = consultor[0]
 
     let user_dash = false, adminDash = false, consultorDash = false
- 
     if (rol == 'Empresa') {
         user_dash = true;
         empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
@@ -288,10 +262,10 @@ empresaController.perfilUsuarios = async (req, res) => {
     } else {
         consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
         if (rol == 'Consultor') {
-           consultorDash = true;
-       } else {
-           adminDash = true;
-       }
+            consultorDash = true;
+        } else {
+            adminDash = true;
+        }
     }
 
     let acuerdo = await consultarDatos('acuerdo_confidencial')
@@ -308,7 +282,6 @@ empresaController.perfilUsuarios = async (req, res) => {
         pagoPendiente,
         diagnosticoPagado,
         analisisPagado,
-        btnPagar,
         acuerdoFirmado,
         etapa1
     })
@@ -361,14 +334,12 @@ empresaController.acuerdo = async (req, res) => {
 
             /** Validando si el estado devuelto es enviado o firmado */
             if (statusSign == 'completed') { // Estado desde docusign (completed)
-
                 estado.valor = 2; //Documento Firmado
                 estado.firmado = true;
                 acuerdoFirmado = true;
                 estado.sinEnviar = false; // Documento sin enviar 
                 estado.form = false;
                 estado.enviado = false;
-
                 const actualizarEstado = { estadoAcuerdo: estado.valor }
                 // Actualizando Estado del acuerdo a 2 (Firmado)
                 await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [actualizarEstado, id_empresa])
@@ -399,7 +370,7 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
 
-    res.render('empresa/acuerdoConfidencial', { btnPagar, user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
+    res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -444,7 +415,6 @@ empresaController.diagnostico = async (req, res) => {
         user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
-        btnPagar
     })
 }
 
@@ -560,10 +530,11 @@ empresaController.eliminarFicha = async (req, res) => {
 
 /** Mostrar vista del Panel Análisis de Negocio */
 empresaController.analisis = async (req, res) => {
+    const btnPagar = {};
     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const id_empresa = row[0].id_empresas;
     const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa1 = {lista: true}
@@ -667,11 +638,11 @@ empresaController.guardarArchivos = async (req, res) => {
 
 /** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
 empresaController.planEstrategico = async (req, res) => {
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    const empresa = row[0].id_empresas;
+    let empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    empresa = empresa[0].id_empresas
     const fechaActual = new Date().toLocaleDateString('fr-CA');
-    
     const tareas = await consultarTareas(empresa, fechaActual)
+
     let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
     let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
     let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
@@ -699,14 +670,39 @@ empresaController.planEstrategico = async (req, res) => {
     datosTabla = datosTabla.filter(x => x.empresa == empresa)
     const jsonRendimiento = JSON.stringify(datosTabla)
 
-    btnPagar.etapa2 = false;
-    btnPagar.etapa3 = true;
-    btnPagar.activar3 = true;
+    // PROPUESTA DE PLAN ESTRATÉGICO
+    const botones = {}
+    const propuestas = await consultarDatos('propuestas')
+    const propuesta = propuestas.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
+    let pagos = await consultarDatos('pagos')
+    pagos = pagos.find(i => i.id_empresa == empresa)
+
+    if (propuesta) {
+        botones.pagar = true;
+        botones.editSub = false;
+        propuesta.color = 'warning';
+        propuesta.texto = 'Pendiente';
+        const objEstrategico = JSON.parse(pagos.estrategico)
+        
+        // PAGÓ EL ANÁLISIS
+        if (objEstrategico.estado == 1 ) { // Etapa final (4) Pagada
+            propuesta.color = 'success';
+            propuesta.texto = 'Pagada';
+            botones.pagar = false;
+            botones.editSub = true;
+        } else if (objEstrategico.estado == 2) {
+            propuesta.color = 'danger';
+            propuesta.texto = 'Cancelada';
+            botones.pagar = false;
+            botones.editSub = true;
+        }
+
+    }
 
     res.render('empresa/planEstrategico', {
-        user_dash: true, pagoDiag: true, itemActivo: 5, acuerdoFirmado: true,
-        actualYear: req.actualYear, btnPagar,
-        tareas, informePlan, 
+        user_dash: true, pagoDiag: true, itemActivo: 6, acuerdoFirmado: true,
+        actualYear: req.actualYear, botones,
+        tareas, informePlan, propuesta,
         dim1, dim2, dim3, dim4, jsonDim_empresa, jsonRendimiento
     })
 }

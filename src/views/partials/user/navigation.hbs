@@ -76,7 +76,8 @@
               {{#comparar itemActivo '==' 2}}Acuerdo de confidencialidad{{/comparar}}
               {{#comparar itemActivo '==' 3}}Diagnóstico de negocio{{/comparar}}
               {{#comparar itemActivo '==' 4}}Análisis de negocio{{/comparar}}
-              {{#comparar itemActivo '==' 5}}Plan estratégico de negocio{{/comparar}}
+              {{#comparar itemActivo '==' 5}}Plan empresarial{{/comparar}}
+              {{#comparar itemActivo '==' 6}}Plan estratégico de negocio{{/comparar}}
               {{#if empresa.foto}}Perfil{{/if}}
             </div>
           </div>
@@ -374,10 +375,28 @@
             <span class="nav-text">Análisis de negocio</span>
           </a>
         </li>
+
         {{#comparar itemActivo '==' 5}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 5}}
+        <li class="activar-cuenta">
+        {{/comparar}}
+
+          {{#if btnPagar.etapa2}}
+          <a href="/plan-empresarial" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" aria-expanded="false">
+          {{/if}}
+            <i class="fa-solid fa-lightbulb"></i>
+            <span class="nav-text">Plan empresarial</span>
+          </a>
+        </li>
+
+        {{#comparar itemActivo '==' 6}}
+        <li class="mm-active">
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 6}}
         <li class="activar-cuenta">
         {{/comparar}}
 
@@ -391,22 +410,6 @@
           </a>
         </li>
 
-        {{#comparar itemActivo '==' 6}}
-        <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 6}}
-        <li class="activar-cuenta">
-        {{/comparar}}
-
-          {{#if btnPagar.etapa2}}
-          <a href="/plan-empresarial" aria-expanded="false">
-          {{else}}
-          <a style="cursor:pointer" aria-expanded="false">
-          {{/if}}
-            <i class="fa-solid fa-lightbulb"></i>
-            <span class="nav-text">Plan empresarial</span>
-          </a>
-        </li>
       </ul>
 
       {{!-- BOTÓN AGENDAR CITA --}}

@@ -269,7 +269,6 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
 dashboardController.editarEmpresa = async (req, res) => {
     const codigo = req.params.codigo, datos = {};
-    let consultores = null, c2;
     let userEmpresa = await consultarDatos('users')
     userEmpresa = userEmpresa.find(x => x.codigo == codigo && x.rol == 'Empresa')
     // Empresa tabla Usuarios
@@ -280,6 +279,9 @@ dashboardController.editarEmpresa = async (req, res) => {
     let empresa = await consultarDatos('ficha_cliente')
     empresa = empresa.find(x => x.id_empresa == idEmpresa)
 
+    // Capturando Consultores Activos
+    const consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
+
     datos.nombre_completo = datosEmpresa.nombres + " " + datosEmpresa.apellidos;
     datos.nombre_empresa = datosEmpresa.nombre_empresa;
     datos.email = datosEmpresa.email;
@@ -288,6 +290,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.idEmpresa = idEmpresa
     datos.foto = userEmpresa.foto
 
+    // PAGOS DE LA EMPRESA
     const pagos = await consultarDatos('pagos')
     const pay = pagos.find(i => i.id_empresa == idEmpresa)
 
@@ -329,16 +332,17 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
     }
 
-    // CAPTURANDO CONSULTOR ASIGNADO A LA EMPRESA
-    const consulAsignado = await pool.query('SELECT * FROM consultores WHERE id_consultores = ?', [datosEmpresa.consultor])
-    let idConsultor = '';
-    if (consulAsignado.length > 0) {
-        idConsultor = consulAsignado[0].id_consultores;
-        empresa.nomConsul = consulAsignado[0].nombres + " " + consulAsignado[0].apellidos;
+    // CAPTURANDO CONSULTORES ASIGNADOS A LA EMPRESA
+    let divConsultores = 'none';
+    let consultores_asignados = await consultarDatos('consultores_asignados')
+    consultores_asignados = consultores_asignados.filter(x => x.empresa == idEmpresa)
+    if (consultores_asignados.length > 0) {
+        divConsultores = 'contents';
+        consultores_asignados.forEach(c => {
+            const consultor = consultores.find(x => x.id_consultores == c.consultor)
+            c.consultor = consultor.nombres + " " + consultor.apellidos
+        })
     }
-
-    consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
-    consultores.forEach(cs => { cs.idCon = idConsultor });
 
     /************************************************************************************************************* */
     // Tabla de Diagnóstico - Empresas Nuevas & Establecidas
@@ -698,64 +702,8 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (dimMarketing) filaInforme.marketing = true;
         if (dimProducto && dimAdmin && dimOperacion && dimMarketing) filaInforme.completo = true; 
     }
-    /* --------------------------------------------------------------------------------------- */
 
-    /************************************************************************************* */
-    // PLAN ESTRATÉGICO DE NEGOCIO *************/
-
-    // PROPUESTA
-    propuesta.estrategico = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan estratégico')
-    let pagoEstrategico = {};
-    if (propuesta.estrategico) {
-        datos.etapa = 'Propuesta de plan estratégico enviada'
-
-        // PAGO DE PLAN ESTRATÉGICO
-        pagoEstrategico = JSON.parse(pay.estrategico)
-        pagoEstrategico.color = 'warning';
-        pagoEstrategico.txt = 'Pendiente';
-        pagoEstrategico.btn = true;
-        pagoEstrategico.precio = propuesta.estrategico.precio_total
-
-        if (pagoEstrategico.estado == 1) {
-            datos.etapa = 'Pago por subscripcion de plan estratégico iniciado'
-            pagoEstrategico.color = 'success'
-            pagoEstrategico.txt = 'Pagado'
-            pagoEstrategico.btn = false;
-            propuesta.estrategico.pago = true;
-        }
-    }
-
-    // PROCESO PARA LAS TAREAS DE LA EMPRESA
-    const fechaActual = new Date().toLocaleDateString('fr-CA');
-    const tareas = await consultarTareas(idEmpresa, fechaActual)
-    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
-    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
-    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
-    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
-    const estado1 = dim1.filter(x => x.estado == 'Completada');
-    const estado2 = dim2.filter(x => x.estado == 'Completada');
-    const estado3 = dim3.filter(x => x.estado == 'Completada');
-    const estado4 = dim4.filter(x => x.estado == 'Completada');
-    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
-    const listo = [
-        (estado1.length * 100) / dim1,
-        (estado2.length * 100) / dim2,
-        (estado3.length * 100) / dim3,
-        (estado4.length * 100) / dim4
-    ]
-    const jsonDim = JSON.stringify([
-        { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
-        { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
-        { ok: Math.round(listo[2]), pendiente: Math.round(100 - listo[2]) },
-        { ok: Math.round(listo[3]), pendiente: Math.round(100 - listo[3]) }
-    ])
-
-    let datosTabla = await consultarDatos('rendimiento_empresa')
-    datosTabla = datosTabla.filter(x => x.empresa == idEmpresa)
-    let jsonRendimiento = false;
-    if (datosTabla.length > 0) jsonRendimiento = JSON.stringify(datosTabla);
-
-    /******************************************************************************************************************************* */
+    /**************************************************************************************** */
     // PLAN EMPRESARIAL *************/
     // PROPUESTA
     propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
@@ -773,19 +721,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_empresarial.unico.txt = pagos_empresarial.uno.txt = pagos_empresarial.dos.txt = pagos_empresarial.tres.txt = 'Pendiente';
         pagos_empresarial.unico.btn = pagos_empresarial.uno.btn = true;
         pagos_empresarial.dos.btn = pagos_empresarial.tres.btn = false;
-
-        // pagos_empresarial.unico.color = 'warning';
-        // pagos_empresarial.unico.txt = 'Pendiente';
-        // pagos_empresarial.unico.btn = true;
-        // pagos_empresarial.uno.color = 'warning';
-        // pagos_empresarial.uno.txt = 'Pendiente'
-        // pagos_empresarial.uno.btn = true;
-        // pagos_empresarial.dos.color = 'warning';
-        // pagos_empresarial.dos.txt = 'Pendiente'
-        // pagos_empresarial.dos.btn = false;
-        // pagos_empresarial.tres.color = 'warning';
-        // pagos_empresarial.tres.txt = 'Pendiente';
-        // pagos_empresarial.tres.btn = false;
 
         pagos_empresarial.unico.precio = propuesta.empresarial.precio_total
         pagos_empresarial.uno.precio = propuesta.empresarial.precio_per1
@@ -833,8 +768,69 @@ dashboardController.editarEmpresa = async (req, res) => {
         aprobarConsultor = false;
     }
 
+    /************************************************************************************* */
+    // PLAN ESTRATÉGICO DE NEGOCIO *************/
+
+    // PROPUESTA
+    propuesta.estrategico = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan estratégico')
+    let pagoEstrategico = {};
+    if (propuesta.estrategico) {
+        datos.etapa = 'Propuesta de plan estratégico enviada'
+
+        // PAGO DE PLAN ESTRATÉGICO
+        pagoEstrategico = JSON.parse(pay.estrategico)
+        pagoEstrategico.color = 'warning';
+        pagoEstrategico.txt = 'Pendiente';
+        pagoEstrategico.btn = false;
+        pagoEstrategico.precio = propuesta.estrategico.precio_total
+
+        if (pagoEstrategico.estado == 1) {
+            datos.etapa = 'Pago por subscripcion de plan estratégico iniciado'
+            pagoEstrategico.color = 'success'
+            pagoEstrategico.txt = 'Pagada'
+            pagoEstrategico.btn = true;
+            propuesta.estrategico.pago = true;
+        } else if (pagoEstrategico.estado == 2) {
+            pagoEstrategico.color = 'danger'
+            pagoEstrategico.txt = 'Cancelada'
+            pagoEstrategico.btn = false;
+            propuesta.estrategico.pago = true;
+        }
+    }
+
+    // PROCESO PARA LAS TAREAS DE LA EMPRESA
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareas(idEmpresa, fechaActual)
+    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+    const estado1 = dim1.filter(x => x.estado == 'Completada');
+    const estado2 = dim2.filter(x => x.estado == 'Completada');
+    const estado3 = dim3.filter(x => x.estado == 'Completada');
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+    const listo = [
+        (estado1.length * 100) / dim1,
+        (estado2.length * 100) / dim2,
+        (estado3.length * 100) / dim3,
+        (estado4.length * 100) / dim4
+    ]
+    const jsonDim = JSON.stringify([
+        { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
+        { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
+        { ok: Math.round(listo[2]), pendiente: Math.round(100 - listo[2]) },
+        { ok: Math.round(listo[3]), pendiente: Math.round(100 - listo[3]) }
+    ])
+
+    let datosTabla = await consultarDatos('rendimiento_empresa')
+    datosTabla = datosTabla.filter(x => x.empresa == idEmpresa)
+    let jsonRendimiento = false;
+    if (datosTabla.length > 0) jsonRendimiento = JSON.stringify(datosTabla);
+
     res.render('admin/editarEmpresa', {
-        adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores, aprobarConsultor, frmDiag, frmInfo,
+        adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,
+        aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
@@ -846,45 +842,32 @@ dashboardController.editarEmpresa = async (req, res) => {
 }
 
 dashboardController.actualizarEmpresa = async (req, res) => {
-    const { codigo, id_consultor, estadoAdm } = req.body;
-    let consul = { consultor: id_consultor };
-    console.log("\n <<< DATOS CAPTURADOS PARA ACTUALIZAR EMPRESA >>>", req.body);
+    const { idEmpresa, codigo, estadoAdm, mapa } = req.body;
+    const mapaConsultores = new Map(Object.entries(mapa)) 
+    console.log("mapaConsultores > ", mapaConsultores)
 
-    // Asignando y/o actualizando consultor a la empresa
-    if (id_consultor == '' || id_consultor == null) { consul.consultor = null }
-    const asignado = await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [consul, codigo])
-    const e = await pool.query('SELECT * FROM empresas WHERE codigo = ?', [codigo])
+    // Consultar Datos de la empresa
+    let empresa = await consultarDatos('empresas')
+    empresa = empresa.find(x => x.codigo = codigo)
 
-    // Proceso de email de consultor asignado
-    if (asignado.affectedRows > 0) {
-
-        if (e.length > 0 && e[0].consultor != null) {
-
-            const nombre = e[0].nombre_empresa;
-            const email = e[0].email
-
-            // Obtener la plantilla de Email
-            const template = consultorAsignadoHTML(nombre);
-
-            // Enviar Email
-            const resultEmail = await sendEmail(email, 'Tu consultor ha sido asignado en 3C Sigma', template)
-
-            if (resultEmail == false) {
-                res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
-            } else {
-                console.log("Email de Consultor Asignado enviado")
-            }
-
-
+    // Consultores Asignados
+    const asignados = await pool.query('SELECT * FROM consultores_asignados WHERE empresa = ?', [idEmpresa])
+    for (const [key, value] of mapaConsultores) {
+        const filtro = asignados.find(x => x.etapa == key)
+        if (filtro) {
+            const dato = {consultor: value.id}
+            await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
+        } else {
+            const datos = {consultor: value.id, empresa: idEmpresa, etapa: key}
+            await pool.query('INSERT INTO consultores_asignados SET ?', [datos])    
         }
     }
 
     // Cambiando estado de la cuenta de la empresa (Activa o Bloqueada)
     const estado = { estadoAdm }
     await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Empresa"', [estado, codigo], (err, result) => {
-        if (err) throw err;
-        console.log("estado adm empresa >>>", result)
-        res.redirect('/empresas')
+        if (err) { res.send(false); throw err; }
+        res.send(true)
     })
 
 }

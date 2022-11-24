@@ -1,7 +1,7 @@
 const pagosController = require('../controllers/pagosController');
 const express = require('express');
 const router = express.Router();
-const { checkLogin, validarURLPagar, empresaLogueada } = require('../lib/auth')
+const { checkLogin, validarURLPagar, empresaLogueada, consultorLogueado } = require('../lib/auth')
 
 
 // const MY_DOMAIN = 'http://localhost:4000';
@@ -25,6 +25,9 @@ router.post('/pagar-plan-estrategico', checkLogin, empresaLogueada, pagosControl
 router.get('/pago-exitoso', checkLogin, validarURLPagar, empresaLogueada, pagosController.pagoExitoso)
 
 router.get('/pago-cancelado', checkLogin, validarURLPagar, empresaLogueada, pagosController.pagoCancelado)
+
+//CANCELAR SUUBSCRIPCIÓN
+router.post('/cancelarSub', checkLogin, consultorLogueado, pagosController.cancelarSub)
 
 router.post('/test-pago3', pagosController.pagarPlanEstrategico);
 

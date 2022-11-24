@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="../css/editarEmpresa.css">
+<style>
+    .chosen-container-single .chosen-single span {
+        font-size: 11px;
+    }
+</style>
 <!--**********************************
         Content body start
 ***********************************-->
@@ -37,8 +42,7 @@
 
         {{!-- ./Fin Header Card --}}
 
-        <div class="row">
-            
+        <div class="row"> 
 
             {{!-- COLUNMA IZQUIERDA RESUMEN --}}
             <div class="col-xl-4">
@@ -65,72 +69,103 @@
                                 </div>
 
                                 <div class="mt-4">
-                                    <form action="/actualizarEmpresa" method="post">
-                                        {{#if adminDash}}
-                                        {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>Consultor</label>
-                                                <select name="id_consultor" id="id_consultor"
-                                                    class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                    <option value=""></option>
-                                                    {{#each consultores}}
-                                                    {{#comparar id_consultores '==' idCon}}
-                                                    <option selected {{/comparar}} {{#comparar id_consultores '!='
-                                                        idCon}} <option {{/comparar}} value="{{id_consultores}}">
-                                                        {{nombres}} {{apellidos}}</option>
+                                    {{!-- <form action="/actualizarEmpresa" method="post"> --}}
+                                    {{#if adminDash}}
+                                    {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label>Estado</label>
+                                            <select id="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                {{#comparar datos.estadoAdm '==' '1'}}
+                                                <option value="1" selected>Activa</option>
+                                                <option value="0">Bloqueada</option>
+                                                {{/comparar}}
+                                                {{#comparar datos.estadoAdm '!=' '1'}}
+                                                <option value="0" selected>Bloqueada</option>
+                                                <option value="1">Activa</option>
+                                                {{/comparar}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        
+                                        <div class="col-5">
+                                            <label>Consultor</label>
+                                            <select name="id_consultor" id="id_consultor" class="form-control sltBuscar chosen-container chosen-container-single required">
+                                                <option value=""></option>
+                                                {{#each consultores}}
+                                                <option {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
+                                                    {{nombres}} {{apellidos}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-5">
+                                            <label>Etapa</label>
+                                            <select id="etapaConsultor" name="etapaConsultor" class="default-select">
+                                                <option value="Diagnóstico" selected>Diagnóstico</option>
+                                                <option value="Análisis">Análisis</option>
+                                                <option value="Plan Empresarial">Plan Empresarial</option>
+                                                <option value="Plan Estratégico">Plan Estratégico</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 pt-3">
+                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm btn-primary text-white mt-4" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: transparent"><i class="fa fa-check"></i></button>
+                                        </div>
+
+                                        <div class="col-12" id="divTablaConsul" style="display: {{divConsultores}};">
+                                            <table id="tblConsulAsignados" class="table text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Etapa</th>
+                                                        <th>Consultor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each consultores_asignados}}
+                                                    <tr>
+                                                        <td>{{etapa}}</td>
+                                                        <td>{{consultor}}</td>
+                                                    </tr>
                                                     {{/each}}
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <label>Estado</label>
-                                                <select id="estadoAdm" name="estadoAdm"
-                                                    class="mr-sm-2 default-select text-center">
-                                                    {{#comparar datos.estadoAdm '==' '1'}}
-                                                    <option value="1" selected>Activa</option>
-                                                    <option value="0">Bloqueada</option>
-                                                    {{/comparar}}
-                                                    {{#comparar datos.estadoAdm '!=' '1'}}
-                                                    <option value="0" selected>Bloqueada</option>
-                                                    <option value="1">Activa</option>
-                                                    {{/comparar}}
-                                                </select>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+                                    {{!-- Boton actualizar empresa --}}
+                                    <div class="row">
+                                        <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
+                                        {{#if adminDash}}
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary"
+                                                    onclick="guardarConsulEtapas()"
+                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Guardar cambios</p>
+                                                </button>
                                             </div>
                                         </div>
                                         {{/if}}
 
-                                        {{!-- Boton actualizar empresa --}}
-                                        <div class="row">
-                                            <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
-                                            {{#if adminDash}}
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary"
-                                                        id="btnActualizarEmpresa"
-                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
-                                                        <p class="font-w500 m-auto">Guardar cambios</p>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {{/if}}
 
-
-                                            <div class="col-12 mt-3">
-                                                {{!-- Datos personales --}}
-                                                <div class="profile-personal-info">
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
-                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
-                                                            </h5>
-                                                        </div>
+                                        <div class="col-12 mt-3">
+                                            {{!-- Datos personales --}}
+                                            <div class="profile-personal-info">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-12 col-12">
+                                                        <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
+                                                                datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                         </div>
+                                        
+                                    </div>
 
-                                    </form>
+                                    {{!-- </form> --}}
 
                                     <div class="row mt-4">
                                         <div class="col">
@@ -358,8 +393,8 @@
                             <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
                             <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                             <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                         </ul>
                     </div>
                 </div>
@@ -1413,458 +1448,7 @@
 
                             </div>
 
-                            {{!-- PESTAÑA 4 - PLAN ESTRATÉGICO DE NEGOCIO --}}
-                            <div id="plan-estrategico" class="tab-pane fade">
-
-                                <!-- =========== PROPUESTA PLAN ESTRATÉGICO ========== -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
-                                        </div>
-                                        {{#unless propuesta.estrategico.pago}}
-                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
-                                            <div class="row mt-3">
-                                                <div class="form-group col-md-6">
-                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <div class="form-group col-md-12 input-group">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input required" name="filePropuesta" accept="application/pdf" required>
-                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
-                                                <input type="hidden" name="codigo" value="{{datos.code}}">
-                                                <input type="hidden" name="tipo_propuesta" value="Plan estratégico">
-                                                <div class="col-md-3 mx-auto">
-                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
-                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <hr class="mt-4">
-                                        {{/unless}}
-                                        <div class="table-responsive">
-                                            <table class="table table-responsive-md text-center">
-                                                <thead>
-                                                    <tr>
-                                                        <th>FECHA</th>
-                                                        <th>NOMBRE</th>
-                                                        <th>PRECIO</th>
-                                                        <th>REVISAR PROPUESTA</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        {{#if propuesta.estrategico.link_propuesta}}
-                                                        <td>{{#if propuesta.estrategico.fecha}}{{propuesta.estrategico.fecha}}{{else}}N/A{{/if}}</td>
-                                                        <td>Plan estratégico de negocio</td>
-                                                        <td>${{propuesta.estrategico.precio_total}}</td>
-                                                        <td>
-                                                            <div class="d-flex">
-                                                                <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
-                                                                class="btn btn-primary shadow btn-xs sharp"
-                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
-                                                                <i class="fa fa-search"></i>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                        {{else}}
-                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta de plan estratégico</span></td>
-                                                        {{/if}}
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                {{!-- PROPUESTA MONTADA --}}
-                                {{#if propuesta.estrategico.fecha}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
-                                        </div>
-
-                                        <div class="row mt-3">
-                                            <div class="col-xl-12">
-                                                <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>FECHA DE PAGO</th>
-                                                        <th>NOMBRE</th>
-                                                        <th>PRECIO</th>
-                                                        <th>ESTADO</th>
-                                                        {{#if rolAdmin}}
-                                                        <th>SUSCRIPCIÓN</th>
-                                                        {{/if}}
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Suscripción mensual</td>
-                                                            <td>${{pagoEstrategico.precio}}</td>
-                                                            <td><span class="badge light badge-{{pagoEstrategico.color}}">{{pagoEstrategico.txt}}</span></td>
-                                                            {{#if rolAdmin}}
-                                                            <td>
-                                                                {{#if pagoEstrategico.btn}}
-                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan estratégico')" class="btn btn-success shadow btn-xs sharp"
-                                                                    style="color: white"><i class="fa fa-usd"></i></a>
-                                                                {{else}}
-                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                                                                    <i class="fa fa-usd"></i></button>
-                                                                <button type="button" class="btn btn-danger btn-xs sharp" style="background: red;color: white"><i class="fa fa-stop"></i></button>
-                                                                {{/if}}
-                                                            </td>
-                                                            {{/if}}
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{/if}}
-
-                                {{#if pagoEstrategico.fecha}}
-                                {{!-- CREAR NUEVAS TAREAS --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Nueva Tarea</h4>
-                                        </div>
-
-                                        <div class="row mt-3">
-
-                                            <div class="form-group col-md-6">
-                                                <label for="actividad">Título de actividad a realizar *</label>
-                                                <input type="text" class="form-control" id="actividad" maxlength="47"
-                                                placeholder="Escriba un título..">
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="dimension">Dimensión *</label><br>
-                                                <select id="dimension" class="mr-sm-2 default-select text-center" tabindex="-98" required>
-                                                    <option value="">Escoja una..</option>
-                                                    <option value="Producto">Producto</option>
-                                                    <option value="Administración">Administración</option>
-                                                    <option value="Operaciones">Operaciones</option>
-                                                    <option value="Marketing">Marketing</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label for="fecha_inicio">Fecha de inicio *</label>
-                                                <duet-date-picker id="fecha_inicio" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="fecha_entrega">Fecha de entrega *</label>
-                                                <duet-date-picker id="fecha_entrega" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
-                                            </div>
-
-                                            <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
-                                            <div class="col-md-3 mx-auto">
-                                                <button onclick="agregarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
-                                                    <p class="font-w500 m-auto">Agregar</p>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
-                                {{#if jsonDim}}
-                                <div class="card">
-                                  <div class="card-header">
-                                        <h4 class="card-title" style="margin:0 auto">Desarrollo de actividades del plan estratégico</h4>
-                                    </div>
-                                    <div class="col-xl-12">
-                                        <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
-                                        <div class="row">
-                                            <div class="col-3 text-black" id="div-Producto">
-                                                <h4 class="my-4 mx-auto text-center text-black">Producto</h4>
-                                                <div id="chart-dimProducto"></div>
-                                            </div>
-                                            <div class="col-3" id="div-Administracion">
-                                                <h4 class="my-4 mx-auto text-center text-black">Administración</h4>
-                                                <div id="chart-dimAdministracion"></div>
-                                            </div>
-                                            <div class="col-3" id="div-Operaciones">
-                                                <h4 class="my-4 mx-auto text-center text-black">Operaciones</h4>
-                                                <div id="chart-dimOperaciones" ></div>
-                                            </div>
-                                            <div class="col-3" id="div-Marketing">
-                                                <h4 class="my-4 mx-auto text-center text-black">Marketing</h4>
-                                                <div id="chart-dimMarketing" ></div>
-                                            </div>
-                                        </div>
-                                        <br>
-                                       <div class="progress" style="width: 73%;margin:auto">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="barra" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                      <p style="text-align: center;"> Avance general de tareas: <span id="dataGeneral" style="font-weight: 800;"></span>%</p>
-                                    </div>
-                                </div>
-                                {{/if}}
-                                {{!-- LISTADO DE TAREAS --}}
-                                {{!-- {{#if tareas.todas}} --}}
-                                <div class="card plan-list">
-									<div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
-										<div class="mr-auto pr-3 mb-3">
-											<h4 class="text-black fs-20">Tareas asignadas</h4>
-											<p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
-										</div>
-										<div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
-											<ul class="nav nav-tabs" role="tablist">
-												<li class="nav-item">
-													<a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab" aria-selected="true">Pendientes ({{tareas.pendientes.cant}})</a>
-												</li>
-												<li class="nav-item">
-													<a class="nav-link tabs-Task" data-toggle="tab" href="#EnProceso" role="tab">En Proceso ({{tareas.enProceso.cant}})</a>
-												</li>
-                                                <li class="nav-item">
-													<a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas ({{tareas.completadas.cant}})</a>
-												</li>
-                                                {{!-- <li class="nav-item">
-													<a class="nav-link tabs-Task" data-toggle="tab" href="#Todas" role="tab" aria-selected="false">Todas</a>
-												</li> --}}
-											</ul>
-										</div>
-										
-									</div>
-
-									<div class="card-body tab-content pt-2">
-                                        {{!-- TAREAS PENDIENTES --}}
-										<div class="tab-pane active show fade" id="Pendientes">
-                                            {{#if tareas.pendientes}}
-                                            {{#each tareas.pendientes}}
-											<div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
-													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-secondary">{{mes}}</span>
-													</div>
-													<div class="info mb-3">
-														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
-														<span class="text-{{color}} font-w600">{{estado}}</span>
-                                                        {{!-- TIEMPO --}}
-                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
-													</div>
-												</div>
-												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-													<i class="fa-solid {{icono}}"></i>
-													<span class="text-gray ml-2">{{dimension}}</span>
-												</div>
-												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
-													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
-                                                    </a>
-                                                    {{!-- ELIMINAR TAREA --}}
-													<div class="dropdown mb-3">
-														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
-														</a>
-													</div>
-												</div>
-											</div>
-                                            {{/each}}
-                                            {{else}}
-                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
-                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas pendientes</label>
-                                            </div>
-                                            {{/if}}
-										</div>
-
-                                        {{!-- TODAS LAS TAREAS --}}
-										<div class="tab-pane fade" id="Todas">
-                                            {{#each tareas.todas}}
-                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
-													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-secondary">{{mes}}</span>
-													</div>
-													<div class="info mb-3">
-														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
-														<span class="text-{{color}} font-w600">{{estado}}</span>
-                                                        {{!-- TIEMPO --}}
-                                                        {{#unless tareaOk}}
-                                                            <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
-                                                        {{/unless}}
-													</div>
-												</div>
-												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-													<i class="fa-solid {{icono}}"></i>
-													<span class="text-gray ml-2">{{dimension}}</span>
-												</div>
-												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
-													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
-                                                    </a>
-													{{!-- ELIMINAR TAREA --}}
-													<div class="dropdown mb-3">
-														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
-														</a>
-													</div>
-												</div>
-											</div>
-                                            {{/each}}
-										</div>
-
-                                        {{!-- TAREAS EN PROCESO --}}
-                                        <div class="tab-pane fade" id="EnProceso">
-                                            {{#if tareas.enProceso}}
-                                            {{#each tareas.enProceso}}
-                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
-													<div class="list-icon bgl-primary mr-3 mb-3">
-														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
-														<span class="fs-14 text-secondary">{{mes}}</span>
-													</div>
-													<div class="info mb-3">
-														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
-														<span class="text-{{color}} font-w600">{{estado}}</span>
-                                                        {{!-- TIEMPO --}}
-                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
-													</div>
-												</div>
-												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-													<i class="fa-solid {{icono}}"></i>
-													<span class="text-gray ml-2">{{dimension}}</span>
-												</div>
-												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
-													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
-                                                    </a>
-													{{!-- ELIMINAR TAREA --}}
-													<div class="dropdown mb-3">
-														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
-														</a>
-													</div>
-												</div>
-											</div>
-                                            {{/each}}
-                                            {{else}}
-                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
-                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas en proceso</label>
-                                            </div>
-                                            {{/if}}
-                                        </div>
-
-										{{!-- TAREAS COMPLETADAS --}}
-                                        <div class="tab-pane fade" id="Completadas">
-                                            {{#if tareas.completadas}}
-                                            {{#each tareas.completadas}}
-                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-                                                <div class="col-xl-5 col-xxl-7 col-lg-7 col-sm-8 d-flex align-items-center">
-                                                    <div class="list-icon bgl-primary mr-3 mb-3">
-                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
-                                                        <span class="fs-14 text-secondary">{{mes}}</span>
-                                                    </div>
-                                                    <div class="info mb-3">
-                                                        <h4 onclick="mostrarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
-                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-                                                    <i class="fa-solid {{icono}}"></i>
-                                                    <span class="text-gray ml-2">{{dimension}}</span>
-                                                </div>
-                                                <div class="col-xl-3 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
-                                                    <a onclick="mostrarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
-                                                        <i class="fa-regular fa-eye"></i> Ver Detalles
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            {{/each}}
-                                            {{else}}
-                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
-                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay tareas completadas</label>
-                                            </div>
-                                            {{/if}}
-                                        </div>
-									</div>
-
-								</div>
-                                {{!-- {{/if}} --}}
-                                {{!-- {{#if info.plan.ok}} --}}
-                                <!-- ======================== INFORMES DE PLAN ESTRATÉGICO ======================== -->
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Informe general</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA</th>
-                                                            <th>NOMBRE</th>
-                                                            <th>ESTADO</th>
-                                                            <th>ACCIÓN</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                            <tr>
-                                                                <td>{{#if info.plan.fecha}}{{info.plan.fecha}}{{else}}
-                                                                    <span id="spanFechaPlan">N/A</span>
-                                                                    {{/if}}
-                                                                </td>
-                                                                <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
-                                                                <td>
-                                                                    {{#if info.plan.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
-                                                                    {{else}}
-                                                                    <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
-                                                                    {{/if}}
-                                                                </td>
-                                                                <td>
-                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                        <tr>
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <label for="informePlan" >
-                                                                        <div id="btnSubirInforme"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informePlan" class="inputInformePlan" type="file" style="display:none"
-                                                                        name="informePlan" accept="application/pdf" />
-                                                                            </td>
-
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                </table>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- ========================================================================== -->
-                                {{!-- {{/if}} --}}
-                                {{/if}}
-                            </div>
-
-                            {{!-- PESTAÑA 5 - PLAN EMPRESARIAL --}}
+                            {{!-- PESTAÑA 4 - PLAN EMPRESARIAL --}}
                             <div id="plan-empresarial" class="tab-pane fade">
 
                                 <!-- ======================== PROPUESTA EMPRESARIAL ======================== -->
@@ -2377,6 +1961,508 @@
 
                             </div>
 
+                            {{!-- PESTAÑA 5 - PLAN ESTRATÉGICO DE NEGOCIO --}}
+                            <div id="plan-estrategico" class="tab-pane fade">
+                            
+                                <!-- =========== PROPUESTA PLAN ESTRATÉGICO ========== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
+                                        </div>
+                                        {{#unless propuesta.estrategico.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-6">
+                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio"
+                                                        class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12 input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input required" name="filePropuesta"
+                                                                accept="application/pdf" required>
+                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
+                                                <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Plan estratégico">
+                                                <div class="col-md-3 mx-auto">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr class="mt-4">
+                                        {{/unless}}
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FECHA</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{#if propuesta.estrategico.link_propuesta}}
+                                                        <td>{{#if propuesta.estrategico.fecha}}{{propuesta.estrategico.fecha}}{{else}}N/A{{/if}}
+                                                        </td>
+                                                        <td>Plan estratégico de negocio</td>
+                                                        <td>${{propuesta.estrategico.precio_total}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
+                                                                    class="btn btn-primary shadow btn-xs sharp"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        {{else}}
+                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta de plan
+                                                                estratégico</span></td>
+                                                        {{/if}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                            
+                                    </div>
+                                </div>
+                            
+                                {{!-- PROPUESTA MONTADA --}}
+                                {{#if propuesta.estrategico.fecha}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Subscripción Plan Estratégico</h4>
+                                        </div>
+                            
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA DE PAGO</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>PRECIO</th>
+                                                                <th>ESTADO</th>
+                                                                {{#if rolAdmin}}
+                                                                <th>ACCIÓN</th>
+                                                                {{/if}}
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Suscripción mensual</td>
+                                                                <td>${{pagoEstrategico.precio}}</td>
+                                                                <td><span
+                                                                        class="badge light badge-{{pagoEstrategico.color}}">{{pagoEstrategico.txt}}</span>
+                                                                </td>
+                                                                {{#if rolAdmin}}
+                                                                <td>
+                                                                    {{!-- {{#if pagoEstrategico.btn}}
+                                                                    <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan estratégico')"
+                                                                        class="btn btn-success shadow btn-xs sharp" style="color: white"><i
+                                                                            class="fa fa-usd"></i></a>
+                                                                    {{else}} --}}
+                                                                    {{!-- <button type="button" class="btn btn-primary btn-xs sharp"
+                                                                        style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                        <i class="fa fa-usd"></i></button> --}}
+                                                                    {{#if pagoEstrategico.btn}}
+                                                                    <button type="button" onclick="cancelarSubscripcion('{{datos.idEmpresa}}','{{pagoEstrategico.subscription}}')" class="btn btn-danger btn-sm sharp"
+                                                                        style="background: red;color: white">Detener</button>
+                                                                    {{else}}
+                                                                    <button type="button" class="btn btn-sm sharp"
+                                                                        style="background: gray;color: white">Detener</button>
+                                                                    {{/if}}
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                                {{/if}}
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+                            
+                                {{#if pagoEstrategico.fecha}}
+                                {{!-- CREAR NUEVAS TAREAS --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Nueva Tarea</h4>
+                                        </div>
+                            
+                                        <div class="row mt-3">
+                            
+                                            <div class="form-group col-md-6">
+                                                <label for="actividad">Título de actividad a realizar *</label>
+                                                <input type="text" class="form-control" id="actividad" maxlength="47"
+                                                    placeholder="Escriba un título..">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="dimension">Dimensión *</label><br>
+                                                <select id="dimension" class="mr-sm-2 default-select text-center" tabindex="-98" required>
+                                                    <option value="">Escoja una..</option>
+                                                    <option value="Producto">Producto</option>
+                                                    <option value="Administración">Administración</option>
+                                                    <option value="Operaciones">Operaciones</option>
+                                                    <option value="Marketing">Marketing</option>
+                                                </select>
+                                            </div>
+                            
+                                            <div class="form-group col-md-6">
+                                                <label for="fecha_inicio">Fecha de inicio *</label>
+                                                <duet-date-picker id="fecha_inicio" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="fecha_entrega">Fecha de entrega *</label>
+                                                <duet-date-picker id="fecha_entrega" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                                            </div>
+                            
+                                            <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
+                                            <div class="col-md-3 mx-auto">
+                                                <button onclick="agregarTarea()" class="btn btn-primary"
+                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Agregar</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
+                                {{#if jsonDim}}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title" style="margin:0 auto">Desarrollo de actividades del plan estratégico</h4>
+                                    </div>
+                                    <div class="col-xl-12">
+                                        <input type="hidden" id="jsonDimCompletada" value="{{jsonDim}}">
+                                        <div class="row">
+                                            <div class="col-3 text-black" id="div-Producto">
+                                                <h4 class="my-4 mx-auto text-center text-black">Producto</h4>
+                                                <div id="chart-dimProducto"></div>
+                                            </div>
+                                            <div class="col-3" id="div-Administracion">
+                                                <h4 class="my-4 mx-auto text-center text-black">Administración</h4>
+                                                <div id="chart-dimAdministracion"></div>
+                                            </div>
+                                            <div class="col-3" id="div-Operaciones">
+                                                <h4 class="my-4 mx-auto text-center text-black">Operaciones</h4>
+                                                <div id="chart-dimOperaciones"></div>
+                                            </div>
+                                            <div class="col-3" id="div-Marketing">
+                                                <h4 class="my-4 mx-auto text-center text-black">Marketing</h4>
+                                                <div id="chart-dimMarketing"></div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="progress" style="width: 73%;margin:auto">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="barra" role="progressbar"
+                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p style="text-align: center;"> Avance general de tareas: <span id="dataGeneral"
+                                                style="font-weight: 800;"></span>%</p>
+                                    </div>
+                                </div>
+                                {{/if}}
+                                {{!-- LISTADO DE TAREAS --}}
+                                {{!-- {{#if tareas.todas}} --}}
+                                <div class="card plan-list">
+                                    <div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
+                                        <div class="mr-auto pr-3 mb-3">
+                                            <h4 class="text-black fs-20">Tareas asignadas</h4>
+                                            <p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
+                                        </div>
+                                        <div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
+                                            <ul class="nav nav-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab"
+                                                        aria-selected="true">Pendientes ({{tareas.pendientes.cant}})</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link tabs-Task" data-toggle="tab" href="#EnProceso" role="tab">En Proceso
+                                                        ({{tareas.enProceso.cant}})</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas
+                                                        ({{tareas.completadas.cant}})</a>
+                                                </li>
+                                                {{!-- <li class="nav-item">
+                                                    <a class="nav-link tabs-Task" data-toggle="tab" href="#Todas" role="tab"
+                                                        aria-selected="false">Todas</a>
+                                                </li> --}}
+                                            </ul>
+                                        </div>
+                            
+                                    </div>
+                            
+                                    <div class="card-body tab-content pt-2">
+                                        {{!-- TAREAS PENDIENTES --}}
+                                        <div class="tab-pane active show fade" id="Pendientes">
+                                            {{#if tareas.pendientes}}
+                                            {{#each tareas.pendientes}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="editarTarea({{id}})" class="fs-20"><span
+                                                                class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
+                                                                class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
+                                                    <div class="dropdown mb-3">
+                                                        <a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512">
+                                                                <path
+                                                                    d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                                                    fill="red" />
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas
+                                                    pendientes</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                            
+                                        {{!-- TODAS LAS TAREAS --}}
+                                        <div class="tab-pane fade" id="Todas">
+                                            {{#each tareas.todas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="editarTarea({{id}})" class="fs-20"><span
+                                                                class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        {{#unless tareaOk}}
+                                                        <span class="badge light badge-success"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
+                                                                class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                        {{/unless}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
+                                                    <div class="dropdown mb-3">
+                                                        <a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512">
+                                                                <path
+                                                                    d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                                                    fill="red" />
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                        </div>
+                            
+                                        {{!-- TAREAS EN PROCESO --}}
+                                        <div class="tab-pane fade" id="EnProceso">
+                                            {{#if tareas.enProceso}}
+                                            {{#each tareas.enProceso}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="editarTarea({{id}})" class="fs-20"><span
+                                                                class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success"
+                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
+                                                                class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
+                                                    <div class="dropdown mb-3">
+                                                        <a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown"
+                                                            aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512">
+                                                                <path
+                                                                    d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                                                    fill="red" />
+                                                            </svg>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas en
+                                                    proceso</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                            
+                                        {{!-- TAREAS COMPLETADAS --}}
+                                        <div class="tab-pane fade" id="Completadas">
+                                            {{#if tareas.completadas}}
+                                            {{#each tareas.completadas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-7 col-lg-7 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="mostrarTarea({{id}})" class="fs-20"><span
+                                                                class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="mostrarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-eye"></i> Ver Detalles
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay tareas
+                                                    completadas</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                                {{!-- {{/if}} --}}
+                                {{!-- {{#if info.plan.ok}} --}}
+                                <!-- ======================== INFORMES DE PLAN ESTRATÉGICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Informe general</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA</th>
+                                                            <th>NOMBRE</th>
+                                                            <th>ESTADO</th>
+                                                            <th>ACCIÓN</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{#if info.plan.fecha}}{{info.plan.fecha}}{{else}}
+                                                                <span id="spanFechaPlan">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
+                                                            <td>
+                                                                {{#if info.plan.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informePlan">
+                                                                                <div id="btnSubirInforme"
+                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informePlan" class="inputInformePlan" type="file"
+                                                                                style="display:none" name="informePlan" accept="application/pdf" />
+                                                                        </td>
+                            
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}"
+                                                                                style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+                                {{!-- {{/if}} --}}
+                                {{/if}}
+                            </div>
+
                         </div>
                     </div>
 
@@ -2416,121 +2502,4 @@
 
 </div>
 
-<script>
-    function mostrarSelector() {
-        $('#tipoArchivo').show();
-        $('#div-btnAtras').hide();
-    }
-
-    function archivosItems(e) {
-        $('#div-archivo').show()
-        $('#div-link').hide()
-        if (e == 'Website') {
-            $('#div-archivo').hide()
-            $('#div-link').show()
-        }
-        if (e == 'Otro') {
-            $('#div-btnAtras').show();
-            $('#tipoArchivo').hide();
-        }
-    }
-
-    function agregarArchivo() {
-        const tipoArchivo = $('#tipoArchivo').val()
-        if (tipoArchivo == 'Website') {
-            const link = $('#input-link').val()
-            guardarArchivo(tipoArchivo, link)
-        } else if (tipoArchivo == 'Otro') {
-            const nombre = $('#txt-nomArchivo').val()
-        }
-
-    }
-
-    function guardarArchivo(nombre, archivo) {
-        console.log("Función para guardar los datos en DB & luego responder en la misma vista")
-    }
-
-    // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
-    function pagoManualEmpresas(num, id, tipo) {
-        let txt = 'pago único';
-        let etapa = 2;
-        if (tipo == 'plan estratégico') etapa = 3;
-        else if (tipo == 'plan empresarial') etapa = 4
-        num == 1 ? txt = 'primer pago' : txt = txt;
-        num == 2 ? txt = 'segundo pago' : txt = txt;
-        num == 3 ? txt = 'tercer pago' : txt = txt;
-        Swal.fire({
-            title: `¿Deseas registrar el ${txt} de ${tipo}?`,
-            text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#50368C',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Pago confirmado'
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                fetch('/pagoManual-Empresas', {
-                    method: 'POST',
-                    body: JSON.stringify({num, id, etapa}),
-                    headers: {'Content-Type': 'application/json'}
-                }).then(res => res.json())
-                    .catch(error => console.error('Error:', error))
-                    .then(response => {
-                        if (response){
-                            if (etapa == 2)
-                                window.location.hash = 'analisis_'
-                            else if (etapa == 3)
-                                window.location.hash = 'plan-estrategico'
-                            else
-                                window.location.hash = 'plan-empresarial'
-                            location.reload();
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                'No sé pudo efectuar está acción, contactar a soporte..',
-                                'error'
-                            )
-                        }
-                    });
-            }
-        })
-    }
-    
-    // CAMPO DATE PICKER (DUET LIBRARY)
-    const elementos = document.querySelectorAll("duet-date-picker")
-    const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-
-    elementos.forEach(picker => {
-        picker.dateAdapter = {
-            parse(value = "", createDate) {
-                const matches = value.match(DATE_FORMAT_US)
-
-                if (matches) {
-                    return createDate(matches[3], matches[1], matches[2])
-                }
-            },
-            format(date) {
-                return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-            },
-        }
-
-        picker.localization = {
-            placeholder: "MM/DD/AAAA",
-            selectedDateMessage: "La fecha seleccionada es",
-            prevMonthLabel: "Mes anterior",
-            nextMonthLabel: "Mes siguiente",
-            monthSelectLabel: "Mes",
-            yearSelectLabel: "Año",
-            closeLabel: "Cerrar ventana",
-            calendarHeading: "Selecciona una fecha",
-            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            //dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
-            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            locale: "en-US",
-        }
-    })
-
-</script>
+{{> admin/scriptsEmpresa}}
