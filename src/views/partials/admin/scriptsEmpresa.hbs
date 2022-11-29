@@ -1,24 +1,39 @@
 <script>
     const mapaConsultores = new Map();
     function addConsulEtapa() {
-        const tabla = $('#tblConsulAsignados')
         const idConsultor = $("#id_consultor option:selected").val();
         const nomConsultor = $("#id_consultor option:selected").text();
-        const etapa = $('#etapaConsultor option:selected').text();
+        const etapa = $('#etapaConsultor option:selected').val();
         const consultor = { id: idConsultor, nombre: nomConsultor.trim() }
-        mapaConsultores.set(etapa, consultor)
-
-        //console.log("MAPA CONSULTORES >>> ", mapaConsultores)
+        const etapa_ = etapa.replace(/[$_]/g, ' ');
+        mapaConsultores.set(etapa_, consultor)
+        console.log("MAPA CONSULTORES -->> ", mapaConsultores)
         let filas = ``
-        $('#tblConsulAsignados>tbody').remove();
-        for (const [key, value] of mapaConsultores) {
-            filas += `<tr>
+        let idFila = $(`#tblConsulAsignados>tbody>tr#${etapa}`)
+        
+        if (idFila.length > 0) {
+            console.log("Existe")
+            idFila = idFila[0].id
+            console.log("ETAPA >> ", idFila)
+            const etapaTxt = idFila.replace(/[$_]/g, ' ')
+            $(`#tblConsulAsignados>tbody>tr#${idFila.trim()}`).empty().append(`
+                <td>${etapaTxt}</td>
+                <td>${nomConsultor.trim()}</td>
+            `)
+        } else {
+            console.log("ETAPA >> ", idFila)
+            console.log("NO EXISTE ESTE TR")
+            for (const [key, value] of mapaConsultores) {
+                const idFila = key.replace(/[$ ]/g, '_');
+                $(`#tblConsulAsignados>tbody>tr#${idFila}`).remove();
+                $('#tblConsulAsignados>tbody').append(`
+                    <tr id="${idFila}">
                         <td>${key}</td>
                         <td>${value.nombre}</td>
-                    </tr>`
+                    </tr>`)
+            }
         }
 
-        tabla.append(`<tbody>${filas}</tbody`)
         if ($('#divTablaConsul').hide()) {
             $('#divTablaConsul').show()
         }

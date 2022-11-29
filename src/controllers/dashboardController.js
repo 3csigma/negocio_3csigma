@@ -7,7 +7,6 @@ const path = require('path');
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML  } = require('../lib/mail.config');
-const { request } = require('http');
 
 let aprobarConsultor = false;
 
@@ -334,13 +333,14 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     // CAPTURANDO CONSULTORES ASIGNADOS A LA EMPRESA
     let divConsultores = 'none';
-    let consultores_asignados = await consultarDatos('consultores_asignados')
+    let consultores_asignados = await consultarDatos('consultores_asignados', 'ORDER BY orden ASC')
     consultores_asignados = consultores_asignados.filter(x => x.empresa == idEmpresa)
     if (consultores_asignados.length > 0) {
         divConsultores = 'contents';
         consultores_asignados.forEach(c => {
-            const consultor = consultores.find(x => x.id_consultores == c.consultor)
-            c.consultor = consultor.nombres + " " + consultor.apellidos
+            const consultor = consultores.find(x => x.id_consultores == c.consultor);
+            c.consultor = consultor.nombres + " " + consultor.apellidos;
+            c.idFila = c.etapa.replace(/[$ ]/g, '_');
         })
     }
 
@@ -836,7 +836,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pagos_empresarial,
-        rolAdmin
+        rolAdmin,
     })
 
 }
@@ -845,7 +845,8 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const { idEmpresa, codigo, estadoAdm, mapa } = req.body;
     const mapaConsultores = new Map(Object.entries(mapa)) 
     console.log("mapaConsultores > ", mapaConsultores)
-
+    
+    const linkBase = 'https://3csigma.com/app_public_files/emails_consultor/'
     // Consultar Datos de la empresa
     let empresa = await consultarDatos('empresas')
     empresa = empresa.find(x => x.codigo = codigo)
@@ -854,12 +855,42 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const asignados = await pool.query('SELECT * FROM consultores_asignados WHERE empresa = ?', [idEmpresa])
     for (const [key, value] of mapaConsultores) {
         const filtro = asignados.find(x => x.etapa == key)
+        let orden = 1;
+        let link_Imagen = '';
+        let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
+        if (key == 'Diagnóstico') {
+            link_Imagen = linkBase+'Consultor-asignado_Diagnostico.jpg';
+            mensaje = 'Ahora puedes realizar el pago del Diagnóstico de Negocio para empezar tu proceso con nosotros'
+        }
+        if (key == 'Análisis') {
+            orden = 2;
+            link_Imagen = linkBase+'Consultor-asignado_analisis.jpg';
+        }
+        if (key == 'Plan Empresarial') {
+            orden = 3;
+            link_Imagen = linkBase+'Consultor-asignado_Plan_Empresarial.jpg';
+        }
+        if (key == 'Plan Estratégico') {
+            orden = 4;
+            link_Imagen = linkBase+'Consultor-asignado_Plan_Estrategico.jpg';
+        }
         if (filtro) {
             const dato = {consultor: value.id}
             await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
         } else {
-            const datos = {consultor: value.id, empresa: idEmpresa, etapa: key}
-            await pool.query('INSERT INTO consultores_asignados SET ?', [datos])    
+            const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
+            await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
+            
+             /** INFO PARA ENVÍO DE EMAIL */
+            console.log("Enviando email de consultor Asignado - Etapa: " + key)
+            const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
+            const template = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
+            const resultEmail = await sendEmail(empresa.email, asunto, template)
+            if (resultEmail == false) {
+                console.log("Ocurrio un error inesperado al enviar el email propuesta de análisis")
+            } else {
+                console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + empresa.email + " >>>>>\n")
+            }
         }
     }
 

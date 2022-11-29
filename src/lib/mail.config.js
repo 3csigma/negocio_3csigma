@@ -616,10 +616,9 @@ const consultorAprobadoHTML = (nombre, clave) => {
 		`
 }
 
-const consultorAsignadoHTML = (nombre) => {
+const consultorAsignadoHTML = (nombre, imagen, mensaje) => {
 	return `
 	<!DOCTYPE html>
-
 <html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
 <title></title>
@@ -724,7 +723,7 @@ const consultorAsignadoHTML = (nombre) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #50368c; background-image: url('https://3csigma.com/app_public_files/emails_consultor/Consultor-asignado_BG-01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #50368c; background-image: url('${imagen}'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -753,7 +752,7 @@ const consultorAsignadoHTML = (nombre) => {
 <tr>
 <td style="padding-left:25px;padding-right:25px;">
 <div style="color:#ffffff;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:19px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;">
-<p style="margin: 0;">Ahora puedes agendar una cita</p>
+<p style="margin: 0;">${mensaje}</p>
 </div>
 </td>
 </tr>
@@ -761,9 +760,7 @@ const consultorAsignadoHTML = (nombre) => {
 <table border="0" cellpadding="0" cellspacing="0" class="paragraph_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;" width="100%">
 <tr>
 <td style="padding-bottom:180px;padding-left:25px;padding-right:25px;">
-<div style="color:#ffffff;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:19px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;">
-<p style="margin: 0;">desde tu plataforma 3C Sigma</p>
-</div>
+<div style="color:#ffffff;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:19px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:left;"></div>
 </td>
 </tr>
 </table>
