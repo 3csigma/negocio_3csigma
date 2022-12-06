@@ -687,7 +687,7 @@ empresaController.planEstrategico = async (req, res) => {
         // PAGÓ EL ANÁLISIS
         if (objEstrategico.estado == 1 ) { // Etapa final (4) Pagada
             propuesta.color = 'success';
-            propuesta.texto = 'Pagada';
+            propuesta.texto = 'Activa';
             botones.pagar = false;
             botones.editSub = true;
         } else if (objEstrategico.estado == 2) {

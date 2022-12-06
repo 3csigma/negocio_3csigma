@@ -339,6 +339,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         divConsultores = 'contents';
         consultores_asignados.forEach(c => {
             const consultor = consultores.find(x => x.id_consultores == c.consultor);
+            c.idConsultor = c.consultor;
             c.consultor = consultor.nombres + " " + consultor.apellidos;
             c.idFila = c.etapa.replace(/[$ ]/g, '_');
         })
@@ -348,9 +349,9 @@ dashboardController.editarEmpresa = async (req, res) => {
     // Tabla de Diagnóstico - Empresas Nuevas & Establecidas
     const frmDiag = {}
     let diagnostico = await consultarDatos('dg_empresa_establecida')
-    diagnostico = diagnostico.find(x => x.id_empresa == idEmpresa && x.id_consultor == idConsultor)
+    diagnostico = diagnostico.find(x => x.id_empresa == idEmpresa)
     let dgNuevasEmpresas = await consultarDatos('dg_empresa_nueva')
-    dgNuevasEmpresas = dgNuevasEmpresas.find(x => x.id_empresa == idEmpresa && x.id_consultor == idConsultor)
+    dgNuevasEmpresas = dgNuevasEmpresas.find(x => x.id_empresa == idEmpresa)
     
     if (!diagnostico && !dgNuevasEmpresas) {
         frmDiag.color = 'badge-danger'
@@ -435,7 +436,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     } else {
         frmInfo.ver1 = 'none';
         frmInfo.ver2 = 'block';
-        frmInfo.url = '#'
+        frmInfo.url = false;
     }
 
     /** **************************************************************** */
@@ -757,17 +758,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
     }
 
-    /** VALIDAR EL ROL DEL USUARIO */
-    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true;
-    if (req.user.rol == 'Admin') {
-        rolAdmin = true;
-    } else {
-        consultorDash = true;
-        itemActivo = 2;
-        adminDash = false;
-        aprobarConsultor = false;
-    }
-
     /************************************************************************************* */
     // PLAN ESTRATÉGICO DE NEGOCIO *************/
 
@@ -787,7 +777,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (pagoEstrategico.estado == 1) {
             datos.etapa = 'Pago por subscripcion de plan estratégico iniciado'
             pagoEstrategico.color = 'success'
-            pagoEstrategico.txt = 'Pagada'
+            pagoEstrategico.txt = 'Activa'
             pagoEstrategico.btn = true;
             propuesta.estrategico.pago = true;
         } else if (pagoEstrategico.estado == 2) {
@@ -828,6 +818,35 @@ dashboardController.editarEmpresa = async (req, res) => {
     let jsonRendimiento = false;
     if (datosTabla.length > 0) jsonRendimiento = JSON.stringify(datosTabla);
 
+    /*************************************************************************************************** */
+    // Objeto para Botones de las tarjetas con base a la etapa del consultor
+    const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
+    // VALIDAR EL ROL DEL USUARIO
+    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true;
+    if (req.user.rol == 'Admin') {
+        rolAdmin = true;
+        botonesEtapas.uno = true;
+        botonesEtapas.dos = true;
+        botonesEtapas.plan1 = true;
+        botonesEtapas.plan2 = true;
+    } else {
+        consultorDash = true;
+        itemActivo = 2;
+        adminDash = false;
+        aprobarConsultor = false;
+
+        let cLogin = await consultarDatos('consultores');
+        cLogin = cLogin.find(i => i.codigo == req.user.codigo)
+        const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
+        console.log(etapasAsignadas)
+        etapasAsignadas.forEach(x => {
+            x.etapa == 'Diagnóstico' ? botonesEtapas.uno = true : false;
+            x.etapa == 'Análisis' ? botonesEtapas.dos = true : false;
+            x.etapa == 'Plan Empresarial' ? botonesEtapas.plan1 = true : false;
+            x.etapa == 'Plan Estratégico' ? botonesEtapas.plan2 = true : false;
+        })
+    }
+
     res.render('admin/editarEmpresa', {
         adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,
         aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
@@ -836,7 +855,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pagos_empresarial,
-        rolAdmin,
+        rolAdmin, botonesEtapas
     })
 
 }

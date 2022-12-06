@@ -448,13 +448,11 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-sm-4 col-5">
-                                                    <h5 class="f-w-500">¿Dueño del negocio? <span
-                                                            class="pull-right">:</span></h5>
+                                                    <h5 class="f-w-500">¿Dueño del negocio? <span class="pull-right">:</span></h5>
                                                 </div>
-                                                <div class="col-sm-8 col-7"><span>{{#if
-                                                        empresa.es_propietario}}{{empresa.es_propietario}}
-                                                        {{else}} N/A
-                                                        {{/if}}</span>
+                                                <div class="col-sm-8 col-7">
+                                                    <span>{{#if empresa.es_propietario}}
+                                                        {{empresa.es_propietario}} {{else}} N/A {{/if}}</span>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -576,13 +574,13 @@
                             {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
                             <div id="diagnostico" class="tab-pane fade">
 
+                                {{!-- Grafíco de indicadores --}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="profile-about-me">
                                             <div class="pt-4 border-bottom-1 pb-3">
                                                 <h4 class="text-primary"></h4>
 
-                                                {{!-- Grafíco de indicadores --}}
                                                 <div class="col-xl-12">
 
                                                     <!-- PESTAÑAS DE LAS GRÁFICAS -->
@@ -698,10 +696,16 @@
                                                                     class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
+                                                                {{#if botonesEtapas.uno}}
                                                                 <a href="/diagnostico-proyecto/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{else}}
+                                                                <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="filter: grayscale(1);">
+                                                                    <i class="fa fa-search"></i></button>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                         <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
@@ -712,10 +716,16 @@
                                                             <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
+                                                                {{#if botonesEtapas.uno}}
                                                                 <a href="/cuestionario-diagnostico/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{else}}
+                                                                <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="filter: grayscale(1);">
+                                                                    <i class="fa fa-search"></i></button>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                         <!-- ============================= TABLAS LLENAS ============================= -->
@@ -726,9 +736,7 @@
                                                             <td>{{frmDiag.fecha}}</td>
                                                             <td>Nueva</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span
-                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
-                                                            </td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
                                                                 <a class="btn btn-info shadow btn-xs sharp"
@@ -743,9 +751,7 @@
                                                             <td>{{frmDiag.fecha}}</td>
                                                             <td>Establecida</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span
-                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
-                                                            </td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
                                                                 <a class="btn btn-info shadow btn-xs sharp"
@@ -797,31 +803,37 @@
                                                             </td>
                                                             <td>
                                                                 {{#if frmDiag.tablasVacias}}
-                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                    id="btnInfDiag">
-                                                                    <i class="fa fa-upload"></i>
-                                                                </div>
-                                                                {{else}}
-
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeDiag" >
-                                                                    <div id="btnSubirInforme"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    {{#if botonesEtapas.uno}}
+                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                        id="btnInfDiag">
                                                                         <i class="fa fa-upload"></i>
                                                                     </div>
-                                                                </label>
-                                                                <input id="informeDiag" class="inputInformeDiag" type="file" style="display:none"
-                                                                    name="informeDiag" accept="application/pdf" />
-                                                                        </td>
-
+                                                                    {{else}}
+                                                                    <button style="margin: 0 auto; margin-top: -8px;color: white;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
+                                                                {{else}}
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        {{#if botonesEtapas.uno}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
+                                                                            <label for="informeDiag" >
+                                                                                <div id="btnSubirInforme"
+                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informeDiag" class="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
+                                                                        </td>
+                                                                        {{/if}}
+                                                                        
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            {{#if frmInfo.url}}
+                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                            {{else}}
+                                                                            <button style="margin: 0 auto; margin-top: -8px;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
+                                                                            {{/if}}
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -848,6 +860,7 @@
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta de Análisis de Negocio</h4>
                                         </div>
+                                        {{#if botonesEtapas.dos}}
                                         {{#unless propuesta.analisis.pago}}
                                         <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
@@ -874,6 +887,7 @@
                                         </form>
                                         <hr class="mt-4">
                                         {{/unless}}
+                                        {{/if}}
                                         <div class="table-responsive">
                                             <table class="table table-responsive-md text-center">
                                                 <thead>
@@ -1088,10 +1102,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-producto/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1112,10 +1131,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-administracion/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1136,10 +1160,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-operaciones/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1160,10 +1189,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-marketing/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1212,6 +1246,7 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeProd">
                                                                                     <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1222,13 +1257,20 @@
                                                                                 <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
                                                                                     accept="application/pdf" />
                                                                             </td>
-                                                                    
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
+
+                                                                            {{#if info.prod.url}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
                                                                                     style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
                                                                                     target="_blank" class="btn btn-info shadow btn-xs sharp">
                                                                                     <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                 </td>
@@ -1253,23 +1295,29 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAdmin" >
-                                                                        <div id="btnSubirInformeAdmin"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
-                                                                        name="informeAdmin" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeAdmin"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none" name="informeAdmin" accept="application/pdf" />
                                                                             </td>
-
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
+                                                                            
+                                                                            {{#if info.adm.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1295,23 +1343,29 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeOpe" >
-                                                                        <div id="btnSubirInformeOpe"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
-                                                                        name="informeOpe" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeOpe"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none" name="informeOpe" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.op.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1335,33 +1389,31 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                    {{!-- {{#if frmDiag.tablasVacias}}
-                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                        id="btnInfDiag">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                    {{else}} --}}
-
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeMarketing" >
-                                                                        <div id="btnSubirInformeMarketing"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
-                                                                        name="informeMarketing" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeMarketing"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none" name="informeMarketing" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.marketing.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1412,23 +1464,29 @@
 
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAnalisisGeneral" >
-                                                                        <div id="btnSubirInforme"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
-                                                                        name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                                    <div id="btnSubirInforme"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none" name="informeAnalisisGeneral" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.analisis.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1457,6 +1515,7 @@
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta de Plan Empresarial</h4>
                                         </div>
+                                        {{#if botonesEtapas.plan1}}
                                         {{#unless propuesta.empresarial.pago}}
                                         <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
@@ -1483,6 +1542,7 @@
                                         </form>
                                         <hr class="mt-4">
                                         {{/unless}}
+                                        {{/if}}
                                         <div class="table-responsive">
                                             <table class="table table-responsive-md text-center">
                                                 <thead>
@@ -1623,10 +1683,11 @@
                                 </div>
                                 {{/if}}
                                 
+                                <!-- ======================== CARAR ARCHIVOS/INFORMES ======================== -->
                                 {{#if propuesta.empresarial.pago}}
-                                    <!-- ======================== CARAR ARCHIVOS/INFORMES ======================== -->
                                     <div class="card">
                                         <div class="card-body">
+                                            {{#if botonesEtapas.plan1}}
                                             <div class="card-header">
                                                 <h4 class="card-title" style="margin:0 auto">Subir archivos</h4>
                                             </div>
@@ -1672,6 +1733,7 @@
                                                     </div>
                                                 </div>
                                             </form>
+                                            {{/if}}
                                             {{!-- TABLA DE ARCHIVOS CARGADOS --}}
                                             <div class="row mt-2">
                                                 <div class="col-12"><hr width="100%"></div>
@@ -1735,6 +1797,7 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.plan1}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeProd">
                                                                                     <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1745,6 +1808,11 @@
                                                                                 <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
                                                                                     accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
                                                                     
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
@@ -1776,22 +1844,22 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.plan1}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAdmin" >
-                                                                        <div id="btnSubirInformeAdmin"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
-                                                                        name="informeAdmin" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeAdmin"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none" name="informeAdmin" accept="application/pdf" />
                                                                             </td>
+                                                                            {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -1818,22 +1886,22 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.plan1}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeOpe" >
-                                                                        <div id="btnSubirInformeOpe"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
-                                                                        name="informeOpe" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeOpe"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none" name="informeOpe" accept="application/pdf" />
                                                                             </td>
+                                                                            {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -1860,22 +1928,22 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.plan1}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeMarketing" >
-                                                                        <div id="btnSubirInformeMarketing"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
-                                                                        name="informeMarketing" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeMarketing"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none" name="informeMarketing" accept="application/pdf" />
                                                                             </td>
+                                                                            {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -1925,22 +1993,22 @@
 
                                                                         <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                             <tr>
+                                                                                {{#if botonesEtapas.plan1}}
                                                                                 <td style="border-color: transparent; padding:3px">
                                                                                     <label for="informeAnalisisGeneral" >
-                                                                            <div id="btnSubirInforme"
-                                                                                class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                                <i class="fa fa-upload"></i>
-                                                                            </div>
-                                                                        </label>
-                                                                        <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
-                                                                            name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                                        <div id="btnSubirInforme"
+                                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                            <i class="fa fa-upload"></i>
+                                                                                        </div>
+                                                                                    </label>
+                                                                                    <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none" name="informeAnalisisGeneral" accept="application/pdf" />
                                                                                 </td>
+                                                                                {{/if}}
 
                                                                                 <td style="border-color: transparent; padding:3px">
-                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                            class="btn btn-info shadow btn-xs sharp">
-                                                                            <i class="fa fa-search"></i></a>
+                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <i class="fa fa-search"></i></a>
                                                                                 </td>
                                                                             </tr>
                                                                         </table>
@@ -1970,6 +2038,7 @@
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
                                         </div>
+                                        {{#if botonesEtapas.plan2}}
                                         {{#unless propuesta.estrategico.pago}}
                                         <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
@@ -1999,6 +2068,7 @@
                                         </form>
                                         <hr class="mt-4">
                                         {{/unless}}
+                                        {{/if}}
                                         <div class="table-responsive">
                                             <table class="table table-responsive-md text-center">
                                                 <thead>
@@ -2100,6 +2170,7 @@
                             
                                 {{#if pagoEstrategico.fecha}}
                                 {{!-- CREAR NUEVAS TAREAS --}}
+                                {{#if botonesEtapas.plan2}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -2143,6 +2214,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{/if}}
                                 {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
                                 {{#if jsonDim}}
                                 <div class="card">
@@ -2235,6 +2307,7 @@
                                                     <i class="fa-solid {{icono}}"></i>
                                                     <span class="text-gray ml-2">{{dimension}}</span>
                                                 </div>
+                                                {{#if botonesEtapas.plan2}}
                                                 <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
                                                     <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
                                                         <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
@@ -2251,6 +2324,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                {{/if}}
                                             </div>
                                             {{/each}}
                                             {{else}}
@@ -2286,6 +2360,7 @@
                                                     <i class="fa-solid {{icono}}"></i>
                                                     <span class="text-gray ml-2">{{dimension}}</span>
                                                 </div>
+                                                {{#if botonesEtapas.plan2}}
                                                 <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
                                                     <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
                                                         <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
@@ -2302,6 +2377,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                {{/if}}
                                             </div>
                                             {{/each}}
                                         </div>
@@ -2330,6 +2406,7 @@
                                                     <i class="fa-solid {{icono}}"></i>
                                                     <span class="text-gray ml-2">{{dimension}}</span>
                                                 </div>
+                                                {{#if botonesEtapas.plan2}}
                                                 <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
                                                     <a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
                                                         <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
@@ -2346,6 +2423,7 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                {{/if}}
                                             </div>
                                             {{/each}}
                                             {{else}}
@@ -2429,6 +2507,7 @@
                                                             <td>
                                                                 <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                     <tr>
+                                                                        {{#if botonesEtapas.plan2}}
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <label for="informePlan">
                                                                                 <div id="btnSubirInforme"
@@ -2440,13 +2519,17 @@
                                                                             <input id="informePlan" class="inputInformePlan" type="file"
                                                                                 style="display:none" name="informePlan" accept="application/pdf" />
                                                                         </td>
+                                                                        {{else}}
+                                                                        {{#unless info.prod.url}}
+                                                                        <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                        {{/unless}}
+                                                                        {{/if}}
                             
+                                                                        {{#if info.plan.url}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}"
-                                                                                style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                                                                                target="_blank" class="btn btn-info shadow btn-xs sharp">
-                                                                                <i class="fa fa-search"></i></a>
+                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
                                                                         </td>
+                                                                        {{/if}}
                                                                     </tr>
                                                                 </table>
                                                             </td>

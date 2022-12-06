@@ -6,18 +6,28 @@ const { consultarDatos } = require('../lib/helpers')
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
     const { codigo } = req.user
+    let empresas = []
     const consultores = await consultarDatos('consultores')
     const consultor = consultores.find(x => x.codigo == codigo)
-    const empresas = await consultarDatos('empresas', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_empresas DESC LIMIT 2`)
+    const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 2`)
+    const idEmpresas = consultores_asignados.reduce((acc,item) => {
+        if(!acc.includes(item.empresa)) acc.push(item.empresa);
+        return acc;
+    },[])
+    let dataEmpresas = await consultarDatos('empresas')
+    idEmpresas.forEach(x => {
+        const e = dataEmpresas.find(i => i.id_empresas == x)
+        if (e) empresas.push(e);
+    })
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
-    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+    const empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_empresas_asignadas
     if (empresas_asignadas.length > 0) { datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas) }
     // FIN DE LA FUNCIÓN <<====
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
-    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+    const historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_historialI_consultor
     if (historialInformes.length > 0) { datosJson_historialI_consultor = JSON.stringify(historialInformes) }
     // FIN DE LA FUNCIÓN <<====
@@ -40,31 +50,47 @@ consultorController.index = async (req, res) => {
     });
 }
 
-// EMPRESAS
+// EMPRESAS ASIGANADAS
 consultorController.empresasAsignadas = async (req, res) => {
 
-    const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
+    const empresas = []
+    let consulActual = await consultarDatos('consultores')
+    consulActual = consulActual.find(x => x.codigo == req.user.codigo)
+    const consultoresAsignados = await consultarDatos('consultores_asignados')
 
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.consultor = ? LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;', [con[0].id_consultores])
+    let tablaEmpresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas')
 
-    const informe = await consultarDatos('informes')
+    tablaEmpresas.forEach(data => {
+        const tieneConsultor = consultoresAsignados.filter(x => x.consultor == consulActual.id_consultores && x.empresa == data.id_empresas)
 
-    empresas.forEach(e => {
-        e.etapa = 'Email sin confirmar';
-        e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
-        e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
-        e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
-        e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
-        e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
-        e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+        console.group("\nEmpresa ID -> ", data.id_empresas)
+        console.log("Info tiene consultor: ", tieneConsultor)
+        console.groupEnd()
 
-        informe.forEach(i => {
-            if (i.id_empresa == e.id_empresas) {
-                e.etapa = 'Informe diagnóstico';
-            }
-        })
+        if (tieneConsultor.length > 0) {
+            empresas.push(data)
+        }
 
     });
+
+    if (empresas.length > 0) {
+        const informe = await consultarDatos('informes')
+        empresas.forEach(e => {
+            e.etapa = 'Email sin confirmar';
+            e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
+            e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
+            e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+            e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
+            e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
+            e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+    
+            informe.forEach(i => {
+                if (i.id_empresa == e.id_empresas) {
+                    e.etapa = 'Informe diagnóstico';
+                }
+            })
+        })
+    }
 
     res.render('consultor/empresas', { consultorDash: true, itemActivo: 2, empresas })
 }
