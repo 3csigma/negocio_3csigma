@@ -44,10 +44,39 @@
         const fecha_entrega = $("#fecha_entrega").val();
         const dimension = $("#dimension").val();
         const nombreEmpresa = $("#nombreEmpresa").text();
+        const prioridades = "Sin especificar"
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
+        let fechaini, fechafin
 
-        if (actividad == '' || fecha_entrega == '' || dimension == '') {
+        fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+
+        fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+               toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        }else if (actividad == '' || fecha_entrega == '' || dimension == '') {
             toastr.warning("Hay campos vacíos", "Atención", {
                 positionClass: "toast-top-full-width",
                 timeOut: 3e3,
@@ -72,7 +101,7 @@
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
-            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email })
+            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridades, email })
             fetch('/agregarTarea', {
                 method: 'POST',
                 body: data,
@@ -160,23 +189,54 @@
         const actividad = $("#actividad-sidebar").val();
         const responsable = $("#responsable").val();
         const observacion = $("#observacion").val();
-        const fecha_inicio = $("#fechaIni-sidebar").val();
-        const fecha_entrega = $("#fechaFin-sidebar").val();
+        let fecha_inicio = $("#fechaIni-sidebar").val();
+        let fecha_entrega = $("#fechaFin-sidebar").val();
         const dimension = $("#dimension-sidebar").val();
         const email = $("#emailEmpresa").text();
         //const mensaje = $("#mensaje").val();
         const estado = $("#estado").val();
-        const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email })
-        fetch('/actualizarTarea', {
-            method: 'POST',
-            body: data,
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json())
-        .catch(error => console.error('Error Actualizar Tarea: ', error))
-        .then(response => {
-            location.hash = '#plan-estrategico';
-            location.reload(true)
-        })
+        let fechaini, fechafin
+
+        fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+
+        fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+               toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email })
+            fetch('/actualizarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Actualizar Tarea: ', error))
+            .then(response => {
+                location.hash = '#plan-estrategico';
+                location.reload(true)
+            })
+        }
     }
 
     function eliminarTarea(idTarea) {

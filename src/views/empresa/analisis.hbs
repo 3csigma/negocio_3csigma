@@ -77,51 +77,104 @@
                         {{#unless propuesta.pago}}
                         <td>
                           <div class="d-flex">
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj1 "!=" 1}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj1 "==" 1}}
-                              <form action="/pagar-analisis-per1" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                            </div>
-
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj2 "==" 0}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj2 "==" 1}}
-                              <form action="/pagar-analisis-per2" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj2 "==" 2}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
-                              {{/comparar}}
-                            </div>
-
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj3 "==" 0}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj3 "==" 1}}
-                              <form action="/pagar-analisis-per3" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj3 "==" 2}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                            </div>
                             
+                            {{#if escena1}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "==" 1 --}}
+                                <form action="/pagar-analisis-per1" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}">
+                                    <i class="fa fa-usd"></i>
+                                  </button>
+                                </form>
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 0 --}}
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 0 --}}
+                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena2}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "!=" 1 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 0 --}}
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 0 --}}
+                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena3}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 1 --}}
+                                <form action="/pagar-analisis-per2" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
+                                </form>
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 0 --}}
+                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena4}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 0 --}}
+                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena5}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 1 --}}
+                                <form action="/pagar-analisis-per3" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
+                                </form>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena6}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{!-- btnPagar.obj1 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj2 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  {{!-- btnPagar.obj3 "==" 2 --}}
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                            {{/if}}
                           </div>
                         </td>
                         {{/unless}}

@@ -1,5 +1,6 @@
-{{!-- <script src="../pie_chart/bootstrap.bundle.min.js"></script> --}}
 <script src="../pie_chart/Chart.min.js"></script>
+
+
 
 <script>
     (function () {
@@ -120,7 +121,7 @@
                 },
 
                 load: function () {
-                    let dim = document.querySelector('#jsonDimCompletada').value
+                    let dim = document.querySelector('#jsonDim_empresa').value
                     let infoGeneral = 0, count = 0, count2 = 0;
                     dim = JSON.parse(dim)
                     if (dim.length > 0) {
@@ -143,6 +144,7 @@
                         }
                         // Barra de progreso
                         $('#barra').css("width", infoGeneral + "%").attr("aria-valuenow", infoGeneral)
+                        
                         console.log("DIM >> ", dim)
                         pieChart1(dim[0])
                         pieChart2(dim[1])

@@ -32,20 +32,23 @@
 
 <script src="../vendor/js/toastr.min.js"></script>
 
-<!-- Chart Morris plugin files -->
-<script src="../js/raphael-min.js"></script>
-<script src="../js/morris.min.js"></script>
+<!-- Chart plugin files -->
 <script src="../js/apexcharts.js"></script>
 <script src="../js/apexcharts.min.js"></script>
+<script src="../vendor/js/chartist.min.js"></script>
+<script src="../vendor/js/chartist-plugin-tooltip.min.js"></script>
+<script src="../js/chartist-init.js"></script> 
 {{#if jsonDim}}
-<script src="../js/morris-init.js"></script>
 <script src="../js/chartjs.init.js"></script>
 {{/if}} 
+
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
 <script>
     // ==> Previsualizar foto de perfil == INICIO <==
+    let formData
+    let fileInput
 function fileValidation() {
-    const fileInput = document.getElementById('previewProfile')
+    fileInput = document.getElementById('previewProfile')
     const filePath = fileInput.value;
     const allowedExtensions = /(.jpg|.jpeg|.png)$/i;
     const archivo = fileInput.files[0];
@@ -100,11 +103,13 @@ function fileValidation() {
         reader.readAsDataURL(fileInput.files[0]);
     }
     const foto = fileInput.files[0]
-    const formData = new FormData();
+    formData = new FormData();
     formData.append('foto', foto);
     guardarFoto(formData);
     }
+      
 }
+
 $("#imgInp").change(function () {
     // Código a ejecutar cuando se detecta un cambio de archivO
     readImage(this);
@@ -119,6 +124,15 @@ function guardarFoto(formData) {
     .catch(error => console.error('Error: ', error))
     .then(resultado => {
         if (resultado) {
+                $(".btn-save").attr("disabled", true);
+                $(".loading-icon").removeClass("mostrar");
+                $(".text-btn").text("Cargando..");
+
+            setTimeout(function() {
+                $(".btn-save").attr("disabled", false);
+                $(".loading-icon").addClass("mostrar");
+                $(".text-btn").text("Guardar cambios");
+            }, 4000)
             console.log("Todo correcto")
         } else {
             console.log("Sin datos")
@@ -190,11 +204,15 @@ function guardarFoto(formData) {
             // Actualizar Estado del Consultor
             $("#btnActualizarConsultor").click(function () {
                 const estado = $("#estado_consul option:selected").val()
+                const nivel = $("#nivel_consul option:selected").val()
                 const codigo = $("#codigo_consultor").val()
-                const usuario_calendly = $("#urlCalendly").val()
+                const link_calendly1 = $("#link_calendly1").val()
+                const link_calendly2 = $("#link_calendly2").val()
+                const link_calendly3 = $("#link_calendly3").val()
+                const link_calendly4 = $("#link_calendly4").val()
                 fetch('/actualizarConsultor', {
                     method: 'POST',
-                    body: JSON.stringify({ codigo, estado, usuario_calendly }),
+                    body: JSON.stringify({ codigo, estado, nivel, link_calendly1, link_calendly2, link_calendly3, link_calendly4}),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))

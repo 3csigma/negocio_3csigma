@@ -92,7 +92,7 @@ empresaController.index = async (req, res) => {
         etapa1.lista = true;
         const consultores = await consultarDatos('consultores');
         const c = consultores.find(x => x.id_consultores == empresa.consultor)
-        etapa1.consultor = c.usuario_calendly;
+        etapa1.consultor = c.link_calendly1;
     }
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
@@ -246,7 +246,39 @@ empresaController.index = async (req, res) => {
     })
 
     /************************************************************************************* */
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const actividad = await consultarTareas(id_empresa, fechaActual)
+    let dim1 = actividad.todas.filter(i => i.dimension == 'Producto');
+    let dim2 = actividad.todas.filter(i => i.dimension == 'Administración');
+    let dim3 = actividad.todas.filter(i => i.dimension == 'Operaciones');
+    let dim4 = actividad.todas.filter(i => i.dimension == 'Marketing');
 
+    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+    const estado4 = dim4.filter(x => x.estado == 'Completada');
+    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+
+    const listo = [
+        ((estado1.length*100)/dim1).toFixed(1), 
+        ((estado2.length*100)/dim2).toFixed(1), 
+        ((estado3.length*100)/dim3).toFixed(1),
+        ((estado4.length*100)/dim4).toFixed(1),
+    ]
+
+    const jsonDim_empresa = JSON.stringify([
+        { ok: (listo[0]), pendiente: (100-listo[0]) },
+        { ok: (listo[1]), pendiente: (100-listo[1]) },
+        { ok: (listo[2]), pendiente: (100-listo[2]) },
+        { ok: (listo[3]), pendiente: (100-listo[3]) }
+    ])
+
+    let existencia = false
+    if (jsonDim_empresa == '[{"ok":"NaN","pendiente":null},{"ok":"NaN","pendiente":null},{"ok":"NaN","pendiente":null},{"ok":"NaN","pendiente":null}]') {
+        existencia
+    } else {
+        existencia = true
+    }
     res.render('empresa/dashboard', {
         user_dash: true,
         pagoPendiente,
@@ -259,9 +291,8 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento
+        nuevosProyectos, rendimiento, dim1, dim2, dim3, dim4, jsonDim_empresa, existencia
     })
-
 }
 
 // Mostrar perfil de Usuarios
@@ -274,18 +305,30 @@ empresaController.perfilUsuarios = async (req, res) => {
     let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
     consultor = consultor[0]
 
+    if (consultor) {
+        if(consultor.nivel == 1){
+            consultor.nivel = "Business Representative"
+        }else if(consultor.nivel == 2){
+            consultor.nivel = "Business Leader"
+        }else if(consultor.nivel == 3){
+            consultor.nivel = "Business Director"
+        }else if(consultor.nivel == 4){
+            consultor.nivel = "Executive Director"
+        }
+    }         
     let user_dash = false, adminDash = false, consultorDash = false
  
     if (rol == 'Empresa') {
         user_dash = true;
         empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
-        console.log("FOTO EMPRESA ========>>" , empresa.foto);
     } else {
         consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
         if (rol == 'Consultor') {
            consultorDash = true;
+           consultor.nivel
        } else {
            adminDash = true;
+           consultor.nivel
        }
     }
 
@@ -618,12 +661,89 @@ empresaController.analisis = async (req, res) => {
 
     const informeAnalisis = await consultarInformes(id_empresa, "Informe de análisis")
 
+    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false,
+    msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
+    btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;", 
+    btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
+
+    let objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
+    objAnalisis = objAnalisis.estado
+    
+    let fechaAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+    fechaAnalisis1 = fechaAnalisis1.fecha
+    let fechaDB = new Date(fechaAnalisis1)
+    let fechaDB2 = new Date(fechaAnalisis1)
+    
+    if (msgDesactivo2) {
+        fechaDB.setDate(fechaDB2.getDate() + 30);
+        fechaDB = fechaDB.toLocaleDateString("en-US")
+        msgDesactivo2 = "Pago disponible apartir de: "+fechaDB+""
+    }
+
+    if (msgDesactivo3) {
+        fechaDB2.setDate(fechaDB2.getDate() + 60);
+        fechaDB2 = fechaDB2.toLocaleDateString("en-US")
+        msgDesactivo3 = "Pago disponible apartir de: "+fechaDB2+""
+    }
+
+    if(objAnalisis == 1 ){
+        escena6 = true
+        btnDesactivo
+        msgDesactivo = "Análisis de negocio pagado"
+        msgDesactivo2 = "Análisis de negocio pagado"
+        msgDesactivo3 = "Análisis de negocio pagado"
+
+    }else if(btnPagar.obj1 == 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0) {
+        escena1 = true
+        msgActivo = "Primera cuota lista para pagarse"
+        btnActivo  
+        msgDesactivo = "Pago no disponible aun"
+        btnDesactivo
+    }else if(btnPagar.obj1 != 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0){
+        escena2 = true
+        msgDesactivo = "Primera cuota pagada"
+        msgDesactivo2
+        msgDesactivo3 
+        btnDesactivo 
+    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 1 && btnPagar.obj3 == 0){
+        escena3 = true
+        btnDesactivo
+        msgDesactivo = "Primera cuota pagada"
+        msgActivo = "Segunda cuota lista para pagarse"
+        btnActivo 
+        msgDesactivo3
+    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 0){
+        escena4 = true
+        btnDesactivo
+        msgDesactivo = "Primera cuota pagada"
+        msgDesactivo2 = "Segunda cuota pagada"
+        msgDesactivo3
+    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 1){
+        escena5 = true
+        btnDesactivo
+        msgDesactivo = "Primera cuota pagada"
+        msgDesactivo2 = "Segunda cuota pagada"
+        msgActivo = "Tercera cuota lista para pagarse"
+        btnActivo
+    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 2){
+        escena6 = true
+        btnDesactivo
+        msgDesactivo = "Primera cuota pagada"
+        msgDesactivo2 = "Segunda cuota pagada"
+        msgDesactivo3 = "Tercera cuota pagada"
+    }
+
     res.render('empresa/analisis', {
         user_dash: true, pagoDiag: true, itemActivo: 4, acuerdoFirmado: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
         etapa1, archivos,
-        informeAnalisis
+        informeAnalisis,
+        escena1,escena2,
+        escena3,escena4,
+        escena5,escena6, 
+        msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, 
+        btnActivo, btnDesactivo
     })
 }
 
@@ -665,29 +785,26 @@ empresaController.planEstrategico = async (req, res) => {
     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
     const empresa = row[0].id_empresas;
     const fechaActual = new Date().toLocaleDateString('fr-CA');
+
     const tareas = await consultarTareas(empresa, fechaActual)
-    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
-    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
-    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
-    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
-    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
-    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
-    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
-    const estado4 = dim4.filter(x => x.estado == 'Completada');
-    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
-    const listo = [
-        ((estado1.length*100)/dim1).toFixed(1), 
-        ((estado2.length*100)/dim2).toFixed(1), 
-        ((estado3.length*100)/dim3).toFixed(1),
-        ((estado4.length*100)/dim4).toFixed(1),
-    ]
-    const jsonDim = JSON.stringify([
-        { ok: (listo[0]), pendiente: (100-listo[0]) },
-        { ok: (listo[1]), pendiente: (100-listo[1]) },
-        { ok: (listo[2]), pendiente: (100-listo[2]) },
-        { ok: (listo[3]), pendiente: (100-listo[3]) }
-    ])
-    
+     let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
+     let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
+     let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+     let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+ 
+     const estado1 = dim1.filter(x => x.estado == 'Completada'); 
+     const estado2 = dim2.filter(x => x.estado == 'Completada'); 
+     const estado3 = dim3.filter(x => x.estado == 'Completada'); 
+     const estado4 = dim4.filter(x => x.estado == 'Completada');
+     dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
+ 
+     const listo = [
+         ((estado1.length*100)/dim1).toFixed(1), 
+         ((estado2.length*100)/dim2).toFixed(1), 
+         ((estado3.length*100)/dim3).toFixed(1),
+         ((estado4.length*100)/dim4).toFixed(1),
+     ]
+ 
     const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == empresa)
@@ -696,7 +813,6 @@ empresaController.planEstrategico = async (req, res) => {
     res.render('empresa/planEstrategico', {
         user_dash: true, pagoDiag: true, itemActivo: 5, acuerdoFirmado: true,
         actualYear: req.actualYear, btnPagar,
-        tareas, informePlan, 
-        dim1, dim2, dim3, dim4, jsonDim, jsonRendimiento
+        informePlan, jsonRendimiento, dim1, dim2, dim3, dim4
     })
 }

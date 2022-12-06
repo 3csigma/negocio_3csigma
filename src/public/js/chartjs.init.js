@@ -85,7 +85,7 @@
 				}
 				// Barra de progreso
 				$('#barra').css("width", infoGeneral + "%").attr("aria-valuenow", infoGeneral)
-				console.log("DIM >> ", dim)
+				console.log("HOLA SOY CONSULTOR" ,  dim);
 				chartDim1(dim[0])
 				chartDim2(dim[1])
 				chartDim3(dim[2])

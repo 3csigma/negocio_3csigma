@@ -1,29 +1,6 @@
 <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 
-<style>
-  [data-sidebar-position="fixed"][data-layout="vertical"] .imgToggle_ {
-    display: none;
-  }
-  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgGrande {
-    display: none;
-  }
-  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgToggle_ {
-    display: block;
-  }
-
-  [data-sidebar-style="mini"] .deznav .imgToggle_ {
-    display: none;
-  }
-  [data-sidebar-style="mini"] .deznav .imgGrande {
-    display: none;
-  }
-  [data-sidebar-style="mini"] .deznav .imgToggle_ {
-    display: block;
-  }
-
-</style>
-
 <!--*******************
         Preloader start
     ********************-->
@@ -367,39 +344,40 @@
           <a style="cursor:pointer" aria-expanded="false">
           {{/if}}
             <i class="fa-solid fa-lightbulb"></i>
-            <span class="nav-text">Plan estratégico de negocio</span>
+            <span class="nav-text">Plan estratégico</span>
           </a>
         </li>
       </ul>
 
       {{!-- BOTÓN AGENDAR CITA --}}
-      {{#if etapa1.lista}}
-        <a href=""
-          onclick="Calendly.initPopupWidget({url: '{{etapa1.consultor}}/diagnostico?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=812082'});return false;">
-          <div class="text-center">
+      {{!-- {{#if etapa1.lista}}
+          <a href=""
+            onclick="Calendly.initPopupWidget({url: '{{etapa1.consultor}}/diagnostico?hide_landing_page_details=1&hide_gdpr_banner=1&primary_color=812082'});return false;">
+            <div class="text-center">
+              <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+              <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
+            </div>
+          </a>
+        {{else}}
+          <div class="text-center" style="margin-top: 25px; filter: grayscale(1)">
             <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
             <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
           </div>
-        </a>
-      {{else}}
-        <div class="text-center" style="margin-top: 25px; filter: grayscale(1)">
-          <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
-          <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
+      {{/if}} --}}
+
+        <br>
+        <br>
+        <div class="text-center" >
+          <li>
+            <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" style="padding: 2px;" aria-expanded="false">
+              <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
+            </a>
+          </li>
         </div>
-      {{/if}}
 
-      <div class="text-center">
-        <li>
-          <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" style="padding: 2px;" aria-expanded="false">
-            <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
-          </a>
-        </li>
-      </div>
-
-      <div class="copyright text-center">
-        <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
-      </div>
-
+        <div class="copyright text-center">
+          <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
+        </div>
     </div>
   </div>
   <!--**********************************

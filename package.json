@@ -35,7 +35,7 @@
     "mysql": "^2.18.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.7.3",
-    "passport": "^0.5.2",
+    "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "rand-token": "^1.0.1",
@@ -44,6 +44,6 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "nodemon": "2.0.18"
+    "nodemon": "^2.0.20"
   }
 }

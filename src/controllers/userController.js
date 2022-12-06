@@ -167,7 +167,6 @@ userController.update_user = async (req, res) => {
 
     // Aactualizar datos de empresa
     if (rol == 'Empresa') {
-        console.log("SOY EMPRESA ")
         user_dash = true;
         let { nombres_empresa, apellidos_empresa, nombre_empresa, email_empresa,clave_empresa } = req.body;
         let nombres = nombres_empresa
@@ -198,28 +197,33 @@ userController.update_user = async (req, res) => {
 
     // Actualizar datos consultor y administrador
     if (rol == 'Consultor' || rol == 'Admin') {
-        console.log("SOY EL CONSULTOR ")
         consultorDash = true;
-        let { email_consultor, clave_consultor, tel_consultor, direccion_consultor, usuario_calendly } = req.body;
+        let { email_consultor, clave_consultor, tel_consultor, direccion_consultor, link_calendly1, link_calendly2, link_calendly3, link_calendly4 } = req.body;
         let email = email_consultor
         let clave = clave_consultor
 
-        let resultDatos = await pool.query("SELECT u.email, u.clave, c.tel_consultor, c.direccion_consultor, c.usuario_calendly FROM users u JOIN consultores c ON u.id_usuarios = c.id_consultores WHERE u.codigo = ?", [codigo]);
+        let resultDatos = await pool.query("SELECT u.email, u.clave, c.tel_consultor, c.direccion_consultor, c.link_calendly1, c.link_calendly2, c.link_calendly3, c.link_calendly4 FROM users u JOIN consultores c ON u.id_usuarios = c.id_consultores WHERE u.codigo = ?", [codigo]);
         resultDatos = resultDatos[0];
         const email_db = resultDatos.email;
         const clave_db = resultDatos.clave;
         const tel_db = resultDatos.tel_consultor;
         const dire_db = resultDatos.direccion_consultor;
-        const calendly_db = resultDatos.usuario_calendly;
+        const calendly_db1 = resultDatos.link_calendly1;
+        const calendly_db2 = resultDatos.link_calendly2;
+        const calendly_db3 = resultDatos.link_calendly3;
+        const calendly_db4 = resultDatos.link_calendly4;
 
         email_consultor == '' ? email = email_db : email
         clave_consultor == '' ? clave = clave_db : clave = await bcrypt.hash(clave, 12);
         tel_consultor == '' ? tel_consultor = tel_db : tel_consultor
         direccion_consultor == '' ? direccion_consultor = dire_db : direccion_consultor
-        usuario_calendly == '' ? usuario_calendly = calendly_db : usuario_calendly
+        link_calendly1 == '' ? link_calendly1 = calendly_db1 : link_calendly1
+        link_calendly2 == '' ? link_calendly2 = calendly_db2 : link_calendly2
+        link_calendly3 == '' ? link_calendly3 = calendly_db3 : link_calendly3
+        link_calendly4 == '' ? link_calendly4 = calendly_db4 : link_calendly4
 
         const datos_tbl_user = { email, clave }
-        const datos_tbl_consultores = { email, tel_consultor, direccion_consultor, usuario_calendly }
+        const datos_tbl_consultores = { email, tel_consultor, direccion_consultor, link_calendly1, link_calendly2, link_calendly3, link_calendly4 }
         await pool.query('UPDATE users SET ? WHERE codigo = ?', [datos_tbl_user, codigo])
         await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [datos_tbl_consultores, codigo])
 

@@ -2,12 +2,6 @@
 <!--**********************************
         Content body start
 ***********************************-->
-
-<style>
-    .table td{
-        padding: 12px 15px;
-    }
-</style>
 <div class="content-body">
     <!-- row -->
     <div class="container-fluid">
@@ -316,11 +310,12 @@
                                         <div class="col-sm-4">
                                             <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
                                         </div>
-                                        <br>
-                                        <div class="card-body" style="margin-left: -50px;">
-                                            <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
+
+                                        <div class="col-12">
+                                            <div id="line_chart_ventas" class="morris_chart_height"></div>
                                         </div>
-                                        <div class="col-12" style="margin-top: -48px;">
+
+                                        <div class="col-12 mt-4">
                                             <!-- BOTÓN PARA MODAL NUEVO RENDIMIENTO -->
                                             <button type="button" class="btn btn-primary"
                                                 data-toggle="modal" data-target="#modalNewRendimiento"
@@ -584,7 +579,8 @@
                                                                      {{else}}
                                                                     <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
                                                                         <div>
-                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px; height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px;
+                                                                                    height: 60px; background-color: #f4f4f4; padding-top: 14px;
                                                                                     border-radius: 35px;"></i></center><br>
                                                                             <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay información para mostrar</label>
                                                                         </div>
@@ -593,7 +589,7 @@
 
                                                                     {{#if rendimiento.op}}
                                                                     <div class="row justify-content-center">
-                                                                        <span style="padding-top: 6px; padding-right: 8px;">Rendimiento Operativo: <strong>{{rendimiento.op}}% </strong></span>
+                                                                        <span style="padding-top: 6px; padding-right: 8px;">Rendimiento Operativo del Negocio: <strong>{{rendimiento.op}}% </strong></span>
                                                                     </div>
                                                                     {{/if}}
                                                                 </div>
@@ -1460,64 +1456,186 @@
                                 {{!-- LISTADO DE TAREAS --}}
                                 {{!-- {{#if tareas.todas}} --}}
                                 <div class="card plan-list">
+
 									<div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
 										<div class="mr-auto pr-3 mb-3">
 											<h4 class="text-black fs-20">Tareas asignadas</h4>
 											<p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
 										</div>
 										<div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
+											<ul class="nav nav-tabs" role="tablist">
+												<li class="nav-item">
+													<a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab" aria-selected="true">Pendientes ({{tareas.pendientes.cant}})</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#EnProceso" role="tab">En Proceso ({{tareas.enProceso.cant}})</a>
+												</li>
+                                                <li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas ({{tareas.completadas.cant}})</a>
+												</li>
+                                                {{!-- <li class="nav-item">
+													<a class="nav-link tabs-Task" data-toggle="tab" href="#Todas" role="tab" aria-selected="false">Todas</a>
+												</li> --}}
+											</ul>
 										</div>
+										
 									</div>
 
-                                <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered verticle-middle table-responsive-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Responsable</th>
-                                                <th scope="col">Dimensión</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Cronograma</th>
-                                                <th scope="col">Prioridad</th>
-                                                <th scope="col">Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#if tareas.info}}
-                                                {{#each tareas.info}}
-                                                <tr>
-                                                    <td>{{responsable}}</td>
-                                                    <td>{{dimension}}</td>
-                                                    <td class="text-{{color}} font-w600" style="font-size: 14px;">{{estado}}</td>
-                                                    <td>
-                                                        {{!-- <div class="progress" style="width: 119%;margin: auto;height: 16px; margin-left: -8px;">
-                                                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{resultado}}%; font-size: 9px;" role="progressbar"></div>
-                                                        </div> --}}
-                                                        <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;"> 
-                                                           {{fecha_inicio}} - {{fecha_entrega}}
-                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{resultado}}%;height: 16px;margin-top: -13px;"></div>
-                                                    </div>
-                                                    </td>
-                                                    <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridades}}</td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <a onclick="editarTarea({{id}})"
-                                                                title="Edit" class="btn btn-primary shadow btn-xs sharp mr-1" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i style="color:white ;" class="fa fa-pencil"></i>
-                                                            </a>
-                                                            <a onclick="eliminarTarea({{id}})" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000;"
-                                                                title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="12px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="white"/></svg>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                              {{/each}}
+									<div class="card-body tab-content pt-2">
+                                        {{!-- TAREAS PENDIENTES --}}
+										<div class="tab-pane active show fade" id="Pendientes">
+                                            {{#if tareas.pendientes}}
+                                            {{#each tareas.pendientes}}
+											<div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+                                                    {{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas pendientes</label>
+                                            </div>
                                             {{/if}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                              </div>
-							</div>
+										</div>
 
+                                        {{!-- TODAS LAS TAREAS --}}
+										<div class="tab-pane fade" id="Todas">
+                                            {{#each tareas.todas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        {{#unless tareaOk}}
+                                                            <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                        {{/unless}}
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+										</div>
+
+                                        {{!-- TAREAS EN PROCESO --}}
+                                        <div class="tab-pane fade" id="EnProceso">
+                                            {{#if tareas.enProceso}}
+                                            {{#each tareas.enProceso}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+												<div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+													<div class="list-icon bgl-primary mr-3 mb-3">
+														<p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+														<span class="fs-14 text-secondary">{{mes}}</span>
+													</div>
+													<div class="info mb-3">
+														<h4 onclick="editarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+														<span class="text-{{color}} font-w600">{{estado}}</span>
+                                                        {{!-- TIEMPO --}}
+                                                        <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+													</div>
+												</div>
+												<div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+													<i class="fa-solid {{icono}}"></i>
+													<span class="text-gray ml-2">{{dimension}}</span>
+												</div>
+												<div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+													<a onclick="editarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
+                                                    </a>
+													{{!-- ELIMINAR TAREA --}}
+													<div class="dropdown mb-3">
+														<a onclick="eliminarTarea({{id}})" class="more-button" data-toggle="dropdown" aria-expanded="false">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+														</a>
+													</div>
+												</div>
+											</div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No hay tareas en proceso</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+
+										{{!-- TAREAS COMPLETADAS --}}
+                                        <div class="tab-pane fade" id="Completadas">
+                                            {{#if tareas.completadas}}
+                                            {{#each tareas.completadas}}
+                                            <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                                                <div class="col-xl-5 col-xxl-7 col-lg-7 col-sm-8 d-flex align-items-center">
+                                                    <div class="list-icon bgl-primary mr-3 mb-3">
+                                                        <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                                                        <span class="fs-14 text-secondary">{{mes}}</span>
+                                                    </div>
+                                                    <div class="info mb-3">
+                                                        <h4 onclick="mostrarTarea({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                                                        <span class="text-{{color}} font-w600">{{estado}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
+                                                    <i class="fa-solid {{icono}}"></i>
+                                                    <span class="text-gray ml-2">{{dimension}}</span>
+                                                </div>
+                                                <div class="col-xl-3 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                                                    <a onclick="mostrarTarea({{id}})" class="btn mb-3 play-button rounded mr-3">
+                                                        <i class="fa-regular fa-eye"></i> Ver Detalles
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {{/each}}
+                                            {{else}}
+                                            <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún no hay tareas completadas</label>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+									</div>
+
+								</div>
                                 {{!-- {{/if}} --}}
                                 {{!-- {{#if info.plan.ok}} --}}
                                 <!-- ======================== INFORMES DE PLAN ESTRATÉGICO ======================== -->
@@ -1585,9 +1703,12 @@
                                 <!-- ========================================================================== -->
                                 {{!-- {{/if}} --}}
                             </div>
+
                         </div>
                     </div>
+
                 </div>
+
             </div>
         </div>
 
@@ -1622,9 +1743,8 @@
 
 </div>
 
-
 <script>
- 
+    
     // CAMPO DATE PICKER (DUET LIBRARY)
     const elementos = document.querySelectorAll("duet-date-picker")
     const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/

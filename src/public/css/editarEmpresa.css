@@ -148,6 +148,19 @@ a.nav-link.btnIndicadoresAll.active {
 #altura_tabs{
     max-height: 100vh;
 }
+
+.ct-chart .ct-series.ct-series-a .ct-bar{
+    stroke: #fed061 ;
+}
+.ct-chart .ct-series.ct-series-b .ct-bar{
+    stroke: #50368c ;
+    
+}
+.ct-chart .ct-series.ct-series-c .ct-bar{
+    stroke: #812082 ;
+    
+}
+
 /* RESPONSIVE 
 ========================================================================= */
 @media (min-width: 800px) and (max-width: 967px) {
@@ -168,6 +181,19 @@ a.nav-link.btnIndicadoresAll.active {
     #altura_tabs {
         max-height: 67em;
     }
+    /* ESTILOS PARA GRÁFICA DE BARRAS - RENDIMIENTO DE LA EMPRESA */
+    .ct-bar {
+        stroke-width: 7px !important;
+    }
+
+    .ct-label {
+        font-size: 9px !important;
+    }
+
+    span.small-text {
+        font-size: 11px;
+    }
+
 }
 
 /* Móviles en horizontal o tablets en vertical

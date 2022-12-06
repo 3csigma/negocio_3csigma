@@ -1,3 +1,27 @@
+
+<style>
+  [data-sidebar-position="fixed"][data-layout="vertical"] .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgGrande {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgToggle_ {
+    display: block;
+  }
+
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgGrande {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: block;
+  }
+
+</style>
+
 <!--*******************
         Preloader start
 ********************-->
@@ -268,6 +292,14 @@
         <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
       </a>
       {{/if}}
+
+       {{!-- BOTÓN AGENDAR CITA --}}
+          <a href="https://calendly.com/app/scheduled_events/user/me" target="_blank">
+            <div class="text-center">
+              <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+              <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
+            </div>
+          </a>
 
       <div class="copyright text-center">
         <p><strong>© 3C Sigma {{actualYear}}</strong> </p>
