@@ -1,0 +1,200 @@
+<!--**********************************
+                    Content body start
+***********************************-->
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-xl-6 col-xxl-6">
+        <div class="card avtivity-card"
+          style="background: transparent !important;border: none !important; box-shadow: none !important">
+          <div class="card-body">
+            <h2 style="color: #000; font-weight: bold;">Lorem ipsum dolor sit amet</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Consectetur adipisicing elit. Quos temporibus iste laboriosam deleniti expedita maxime nesciunt facilis, assumenda, odio magni voluptates. Vero nesciunt fugiat aliquam molestiae quidem distinctio cumque voluptatem</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-xl-6 col-xxl-6">
+        <div class="card avtivity-card"
+          style="background: transparent !important;border: none !important; box-shadow: none !important">
+          {{#if btnPagar.empresarialPer}}
+          <div class="card-body">
+            <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de plan empresarial. Agenda una cita con tu consultor si tienes alguna duda.</p>
+          </div>
+          {{else}}
+          <div class="card-body">
+            {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
+            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pago único Plan empresarial"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
+            <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{!-- Fin de la 1era fila --}}
+
+    <div class="row">
+      {{!-- TARJETAS IZQUIERDA (PROPUESTAS - PAGOS - INFORMES) --}}
+      <div class="col-xl-6 col-xxl-6">
+        {{!-- PROPUESTA --}}
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Propuesta de plan empresarial</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive-md text-center">
+                    <thead>
+                      <tr>
+                        <th>FECHA DE PROPUESTA</th>
+                        <th>ESTADO DE PAGO</th>
+                        {{#unless propuesta.pago}}
+                        <th>PAGO EN COUTAS</th>
+                        {{/unless}}
+                        <th>VALOR TOTAL</th>
+                        <th>REVISAR PROPUESTA</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
+                        <td>
+                          {{#if propuesta.porcentaje}}
+                            <span class="badge light badge-success">Pagado {{propuesta.porcentaje}}</span>
+                          {{else}}
+                            <span class="badge light badge-warning">Pendiente</span>
+                          {{/if}}
+                        </td>
+                        {{#unless propuesta.pago}}
+                        <td>
+                          <div class="d-flex">
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj1 "!=" 1}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj1 "==" 1}}
+                              <form action="/pagar-empresarial-per1" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                            </div>
+
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj2 "==" 0}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj2 "==" 1}}
+                              <form action="/pagar-empresarial-per2" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj2 "==" 2}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
+                              {{/comparar}}
+                            </div>
+
+                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                              {{#comparar btnPagar.obj3 "==" 0}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj3 "==" 1}}
+                              <form action="/pagar-empresarial-per3" method="POST">
+                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
+                                <i class="fa fa-usd"></i>
+                                </button>
+                              </form>
+                              {{/comparar}}
+                              {{#comparar btnPagar.obj3 "==" 2}}
+                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
+                              {{/comparar}}
+                            </div>
+                            
+                          </div>
+                        </td>
+                        {{/unless}}
+                        <td>${{propuesta.precio_total}}</td>
+                        <td>
+                          <a href="{{propuesta.link_propuesta}}" target="_blank"
+                              class="btn btn-primary shadow btn-xs sharp"
+                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                              <i class="fa fa-search"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- INFORMES GENERADOS --}}
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Informes generados</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive-md text-center">
+                    <thead>
+                      <tr>
+                        <th>FECHA</th>
+                        <th>ETAPA</th>
+                        <th>NOMBRE</th>
+                        <th>ACCIÓN</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#if informeEmpresarial.fecha}}
+                      <tr>
+                        <td>{{informeEmpresarial.fecha}}</td>
+                        <td>Diagnóstico de negocio</td>
+                        <td>{{informeEmpresarial.nombre}}</td>
+                        <td>
+                          <a href="{{informeEmpresarial.url}}"
+                            style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                            target="_blank" class="btn btn-info shadow btn-xs sharp">
+                            <i class="fa fa-search"></i></a>
+                        </td>
+                      </tr>
+                      {{else}}
+                      <tr>
+                        <td colspan="4">Aún no hay informes generados.</td>
+                      </tr>
+                      {{/if}}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-6 col-xxl-6">
+        <div class="row">
+          <div class="col-xl-12">
+            
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--**********************************
+            Scripts
+***********************************-->
+<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">

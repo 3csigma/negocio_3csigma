@@ -1,4 +1,9 @@
 <link rel="stylesheet" href="../css/editarEmpresa.css">
+<style>
+    .chosen-container-single .chosen-single span {
+        font-size: 11px;
+    }
+</style>
 <!--**********************************
         Content body start
 ***********************************-->
@@ -43,8 +48,7 @@
 
         {{!-- ./Fin Header Card --}}
 
-        <div class="row">
-            
+        <div class="row"> 
 
             {{!-- COLUNMA IZQUIERDA RESUMEN --}}
             <div class="col-xl-4">
@@ -71,72 +75,103 @@
                                 </div>
 
                                 <div class="mt-4">
-                                    <form action="/actualizarEmpresa" method="post">
-                                        {{#if adminDash}}
-                                        {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
-                                        <div class="row">
-                                            <div class="col">
-                                                <label>Consultor</label>
-                                                <select name="id_consultor" id="id_consultor"
-                                                    class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                    <option value=""></option>
-                                                    {{#each consultores}}
-                                                    {{#comparar id_consultores '==' idCon}}
-                                                    <option selected {{/comparar}} {{#comparar id_consultores '!='
-                                                        idCon}} <option {{/comparar}} value="{{id_consultores}}">
-                                                        {{nombres}} {{apellidos}}</option>
+                                    {{!-- <form action="/actualizarEmpresa" method="post"> --}}
+                                    {{#if adminDash}}
+                                    {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label>Estado</label>
+                                            <select id="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                {{#comparar datos.estadoAdm '==' '1'}}
+                                                <option value="1" selected>Activa</option>
+                                                <option value="0">Bloqueada</option>
+                                                {{/comparar}}
+                                                {{#comparar datos.estadoAdm '!=' '1'}}
+                                                <option value="0" selected>Bloqueada</option>
+                                                <option value="1">Activa</option>
+                                                {{/comparar}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        
+                                        <div class="col-5">
+                                            <label>Consultor</label>
+                                            <select name="id_consultor" id="id_consultor" class="form-control sltBuscar chosen-container chosen-container-single required">
+                                                <option value=""></option>
+                                                {{#each consultores}}
+                                                <option {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
+                                                    {{nombres}} {{apellidos}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-5">
+                                            <label>Etapa</label>
+                                            <select id="etapaConsultor" name="etapaConsultor" class="default-select">
+                                                <option value="Diagnóstico" selected>Diagnóstico</option>
+                                                <option value="Análisis">Análisis</option>
+                                                <option value="Plan_Empresarial">Plan Empresarial</option>
+                                                <option value="Plan_Estratégico">Plan Estratégico</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-2 pt-3">
+                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm btn-primary text-white mt-4" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: transparent"><i class="fa fa-check"></i></button>
+                                        </div>
+
+                                        <div class="col-12" id="divTablaConsul" style="display: {{divConsultores}};">
+                                            <table id="tblConsulAsignados" class="table text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Etapa</th>
+                                                        <th>Consultor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each consultores_asignados}}
+                                                    <tr id="{{idFila}}">
+                                                        <td>{{etapa}}</td>
+                                                        <td >{{consultor}}</td>
+                                                    </tr>
                                                     {{/each}}
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <label>Estado</label>
-                                                <select id="estadoAdm" name="estadoAdm"
-                                                    class="mr-sm-2 default-select text-center">
-                                                    {{#comparar datos.estadoAdm '==' '1'}}
-                                                    <option value="1" selected>Activa</option>
-                                                    <option value="0">Bloqueada</option>
-                                                    {{/comparar}}
-                                                    {{#comparar datos.estadoAdm '!=' '1'}}
-                                                    <option value="0" selected>Bloqueada</option>
-                                                    <option value="1">Activa</option>
-                                                    {{/comparar}}
-                                                </select>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    {{/if}}
+
+                                    {{!-- Boton actualizar empresa --}}
+                                    <div class="row">
+                                        <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
+                                        {{#if adminDash}}
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn btn-primary"
+                                                    onclick="guardarConsulEtapas()"
+                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Guardar cambios</p>
+                                                </button>
                                             </div>
                                         </div>
                                         {{/if}}
 
-                                        {{!-- Boton actualizar empresa --}}
-                                        <div class="row">
-                                            <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
-                                            {{#if adminDash}}
-                                            <div class="col-12">
-                                                <div class="form-group">
-                                                    <button type="submit" class="btn btn-primary"
-                                                        id="btnActualizarEmpresa"
-                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
-                                                        <p class="font-w500 m-auto">Guardar cambios</p>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            {{/if}}
 
-
-                                            <div class="col-12 mt-3">
-                                                {{!-- Datos personales --}}
-                                                <div class="profile-personal-info">
-                                                    <div class="row mb-2">
-                                                        <div class="col-sm-12 col-12">
-                                                            <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
-                                                                    datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
-                                                            </h5>
-                                                        </div>
+                                        <div class="col-12 mt-3">
+                                            {{!-- Datos personales --}}
+                                            <div class="profile-personal-info">
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-12 col-12">
+                                                        <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
+                                                                datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
+                                                        </h5>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                         </div>
+                                        
+                                    </div>
 
-                                    </form>
+                                    {{!-- </form> --}}
 
                                     <div class="row mt-4">
                                         <div class="col">
@@ -360,14 +395,11 @@
                         box-shadow: 0px 12px 23px 0px #ededed">
                     <div class="custom-tab-1">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item"><a href="#empresa" data-toggle="tab"
-                                    class="nav-link active show">Empresa</a></li>
-                            <li class="nav-item"><a href="#diagnostico" id="diagnostico-item" data-toggle="tab"
-                                    class="nav-link">Diagnóstico</a></li>
-                            <li class="nav-item"><a href="#analisis" id="analisis-item" data-toggle="tab" class="nav-link">Análisis</a>
-                            </li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link planItem">Plan
-                                    Estrategico</a></li>
+                            <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
+                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
+                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
+                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                         </ul>
                     </div>
                 </div>
@@ -421,13 +453,11 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-sm-4 col-5">
-                                                    <h5 class="f-w-500">¿Dueño del negocio? <span
-                                                            class="pull-right">:</span></h5>
+                                                    <h5 class="f-w-500">¿Dueño del negocio? <span class="pull-right">:</span></h5>
                                                 </div>
-                                                <div class="col-sm-8 col-7"><span>{{#if
-                                                        empresa.es_propietario}}{{empresa.es_propietario}}
-                                                        {{else}} N/A
-                                                        {{/if}}</span>
+                                                <div class="col-sm-8 col-7">
+                                                    <span>{{#if empresa.es_propietario}}
+                                                        {{empresa.es_propietario}} {{else}} N/A {{/if}}</span>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
@@ -549,13 +579,13 @@
                             {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
                             <div id="diagnostico" class="tab-pane fade">
 
+                                {{!-- Grafíco de indicadores --}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="profile-about-me">
                                             <div class="pt-4 border-bottom-1 pb-3">
                                                 <h4 class="text-primary"></h4>
 
-                                                {{!-- Grafíco de indicadores --}}
                                                 <div class="col-xl-12">
 
                                                     <!-- PESTAÑAS DE LAS GRÁFICAS -->
@@ -581,7 +611,7 @@
                                                                     <div class="card-body">
                                                                         <canvas id="chartEmpresaAdm1"></canvas>
                                                                     </div>
-                                                                     {{else}}
+                                                                    {{else}}
                                                                     <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
                                                                         <div>
                                                                             <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px; height: 60px; background-color: #f4f4f4; padding-top: 14px;
@@ -670,10 +700,16 @@
                                                                     class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
+                                                                {{#if botonesEtapas.uno}}
                                                                 <a href="/diagnostico-proyecto/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{else}}
+                                                                <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="filter: grayscale(1);">
+                                                                    <i class="fa fa-search"></i></button>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                         <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
@@ -684,10 +720,16 @@
                                                             <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
                                                             </td>
                                                             <td>
+                                                                {{#if botonesEtapas.uno}}
                                                                 <a href="/cuestionario-diagnostico/{{datos.code}}"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
+                                                                {{else}}
+                                                                <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="filter: grayscale(1);">
+                                                                    <i class="fa fa-search"></i></button>
+                                                                {{/if}}
                                                             </td>
                                                         </tr>
                                                         <!-- ============================= TABLAS LLENAS ============================= -->
@@ -698,9 +740,7 @@
                                                             <td>{{frmDiag.fecha}}</td>
                                                             <td>Nueva</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span
-                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
-                                                            </td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
                                                                 <a class="btn btn-info shadow btn-xs sharp"
@@ -715,9 +755,7 @@
                                                             <td>{{frmDiag.fecha}}</td>
                                                             <td>Establecida</td>
                                                             <td>Cuestionario diagnóstico</td>
-                                                            <td><span
-                                                                    class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span>
-                                                            </td>
+                                                            <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
                                                                 <a class="btn btn-info shadow btn-xs sharp"
@@ -769,31 +807,37 @@
                                                             </td>
                                                             <td>
                                                                 {{#if frmDiag.tablasVacias}}
-                                                                <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                    id="btnInfDiag">
-                                                                    <i class="fa fa-upload"></i>
-                                                                </div>
-                                                                {{else}}
-
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                    <tr>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="informeDiag" >
-                                                                    <div id="btnSubirInforme"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    {{#if botonesEtapas.uno}}
+                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                        id="btnInfDiag">
                                                                         <i class="fa fa-upload"></i>
                                                                     </div>
-                                                                </label>
-                                                                <input id="informeDiag" class="inputInformeDiag" type="file" style="display:none"
-                                                                    name="informeDiag" accept="application/pdf" />
-                                                                        </td>
-
+                                                                    {{else}}
+                                                                    <button style="margin: 0 auto; margin-top: -8px;color: white;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
+                                                                {{else}}
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        {{#if botonesEtapas.uno}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                    class="btn btn-info shadow btn-xs sharp">
-                                                                    <i class="fa fa-search"></i></a>
+                                                                            <label for="informeDiag" >
+                                                                                <div id="btnSubirInforme"
+                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informeDiag" class="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
+                                                                        </td>
+                                                                        {{/if}}
+                                                                        
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            {{#if frmInfo.url}}
+                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                            {{else}}
+                                                                            <button style="margin: 0 auto; margin-top: -8px;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
+                                                                            {{/if}}
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -820,8 +864,9 @@
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta de Análisis de Negocio</h4>
                                         </div>
-                                        {{#unless propuesta.pago}}
-                                        <form action="/enviar-propuesta-analisis" method="POST" enctype="multipart/form-data">
+                                        {{#if botonesEtapas.dos}}
+                                        {{#unless propuesta.analisis.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
                                                 <div class="form-group col-md-6">
                                                     <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
@@ -836,6 +881,7 @@
                                                 </div>
                                                 <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Análisis de negocio">
                                                 <div class="col-md-3 mx-auto">
                                                     <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
@@ -845,6 +891,7 @@
                                         </form>
                                         <hr class="mt-4">
                                         {{/unless}}
+                                        {{/if}}
                                         <div class="table-responsive">
                                             <table class="table table-responsive-md text-center">
                                                 <thead>
@@ -857,13 +904,13 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        {{#if propuesta.link_propuesta}}
-                                                        <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
+                                                        {{#if propuesta.analisis.link_propuesta}}
+                                                        <td>{{#if propuesta.analisis.fecha}}{{propuesta.analisis.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Análisis de negocio</td>
-                                                        <td>${{propuesta.precio_total}}</td>
+                                                        <td>${{propuesta.analisis.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
-                                                                <a href="{{propuesta.link_propuesta}}" target="_blank"
+                                                                <a href="{{propuesta.analisis.link_propuesta}}" target="_blank"
                                                                 class="btn btn-primary shadow btn-xs sharp"
                                                                 style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
                                                                 <i class="fa fa-search"></i>
@@ -881,7 +928,8 @@
                                     </div>
                                 </div>
 
-                                {{!-- {{#if pagos_analisis.ok}} --}}
+                                {{!-- PROPUESTA MONTADA --}}
+                                {{#if propuesta.analisis.fecha}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -898,41 +946,84 @@
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
                                                         <th>PAGO DE ANÁLISIS</th>
+                                                        {{#if rolAdmin}}
                                                         <th>PAGO</th>
+                                                        {{/if}}
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {{!-- {{#if pagos_analisis.unico.fecha}} --}}
+                                                        {{#unless pagos_analisis.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.unico.fecha}}{{pagos_analisis.unico.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Pago Único</td>
                                                             <td>${{pagos_analisis.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_analisis.unico.btn}}
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
                                                         </tr>
-                                                        {{!-- {{else}} --}}
+                                                        {{/unless}}
+                                                        {{#unless pagos_analisis.unico.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Primer Pago</td>
                                                             <td>${{pagos_analisis.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_analisis.uno.btn}}
+                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
                                                             <td>${{pagos_analisis.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_analisis.dos.btn}}
+                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
                                                         </tr>
                                                         <tr>
                                                             <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
                                                             <td>${{pagos_analisis.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
-                                                            <td>icono</td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_analisis.tres.btn}}
+                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'análisis de negocio')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
                                                         </tr>
-                                                        {{!-- {{/if}} --}}
+                                                        {{/unless}}
                                                     </tbody>
                                                 </table>
                                                 </div>
@@ -940,7 +1031,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{!-- {{/if}} --}}
+                                {{/if}}
 
                                 {{#if archivos}}
                                 <div class="card">
@@ -979,7 +1070,7 @@
                                 </div>
                                 {{/if}}
                                 
-                                {{#if propuesta.pago}}
+                                {{#if propuesta.analisis.pago}}
                                     <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                     <div class="card">
                                         <div class="card-body">
@@ -1015,10 +1106,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-producto/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1039,10 +1135,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-administracion/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1063,10 +1164,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-operaciones/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1087,10 +1193,15 @@
                                                                         style="color: white; background: #FED061; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
+                                                                    {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-marketing/{{datos.code}}"
                                                                         class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                             </tr>
@@ -1139,6 +1250,7 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeProd">
                                                                                     <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1149,13 +1261,20 @@
                                                                                 <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
                                                                                     accept="application/pdf" />
                                                                             </td>
-                                                                    
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
+
+                                                                            {{#if info.prod.url}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
                                                                                     style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
                                                                                     target="_blank" class="btn btn-info shadow btn-xs sharp">
                                                                                     <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                 </td>
@@ -1180,23 +1299,29 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAdmin" >
-                                                                        <div id="btnSubirInformeAdmin"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none"
-                                                                        name="informeAdmin" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeAdmin"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none" name="informeAdmin" accept="application/pdf" />
                                                                             </td>
-
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
+                                                                            
+                                                                            {{#if info.adm.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1222,23 +1347,29 @@
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeOpe" >
-                                                                        <div id="btnSubirInformeOpe"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none"
-                                                                        name="informeOpe" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeOpe"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none" name="informeOpe" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.op.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1262,33 +1393,31 @@
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-                                                                    {{!-- {{#if frmDiag.tablasVacias}}
-                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
-                                                                        id="btnInfDiag">
-                                                                        <i class="fa fa-upload"></i>
-                                                                    </div>
-                                                                    {{else}} --}}
-
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeMarketing" >
-                                                                        <div id="btnSubirInformeMarketing"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none"
-                                                                        name="informeMarketing" accept="application/pdf" />
+                                                                                    <div id="btnSubirInformeMarketing"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none" name="informeMarketing" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.marketing.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1339,23 +1468,29 @@
 
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
+                                                                            {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAnalisisGeneral" >
-                                                                        <div id="btnSubirInforme"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none"
-                                                                        name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                                    <div id="btnSubirInforme"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none" name="informeAnalisisGeneral" accept="application/pdf" />
                                                                             </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
 
+                                                                            {{#if info.analisis.url}}
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
+                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
                                                                             </td>
+                                                                            {{/if}}
                                                                         </tr>
                                                                     </table>
                                                                     {{!-- {{/if}} --}}
@@ -1375,21 +1510,683 @@
 
                             </div>
 
-                            {{!-- PESTAÑA 4 - PLAN ESTRATÉGICO DE NEGOCIO --}}
+                            {{!-- PESTAÑA 4 - PLAN EMPRESARIAL --}}
+                            <div id="plan-empresarial" class="tab-pane fade">
+
+                                <!-- ======================== PROPUESTA EMPRESARIAL ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta de Plan Empresarial</h4>
+                                        </div>
+                                        {{#if botonesEtapas.plan1}}
+                                        {{#unless propuesta.empresarial.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-6">
+                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12 input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input required" name="filePropuesta" accept="application/pdf" required>
+                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
+                                                <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Plan empresarial">
+                                                <div class="col-md-3 mx-auto">
+                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr class="mt-4">
+                                        {{/unless}}
+                                        {{/if}}
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FECHA</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{#if propuesta.empresarial.link_propuesta}}
+                                                        <td>{{#if propuesta.empresarial.fecha}}{{propuesta.empresarial.fecha}}{{else}}N/A{{/if}}</td>
+                                                        <td>Plan empresarial</td>
+                                                        <td>${{propuesta.empresarial.precio_total}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{{propuesta.empresarial.link_propuesta}}" target="_blank"
+                                                                class="btn btn-primary shadow btn-xs sharp"
+                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        {{else}}
+                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta aún</span></td>
+                                                        {{/if}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {{#if propuesta.empresarial.fecha}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>FECHA DE PAGO</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>ESTADO</th>
+                                                        {{#if rolAdmin}}
+                                                        <th>PAGO</th>
+                                                        {{/if}}
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#unless pagos_empresarial.uno.fecha}}
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Pago Único</td>
+                                                            <td>${{pagos_empresarial.unico.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.unico.btn}}
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        {{/unless}}
+                                                        {{#unless pagos_empresarial.unico.fecha}}
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.uno.fecha}}{{pagos_empresarial.uno.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Primer Pago</td>
+                                                            <td>${{pagos_empresarial.uno.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.uno.color}}">{{pagos_empresarial.uno.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.uno.btn}}
+                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.dos.fecha}}{{pagos_empresarial.dos.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Segundo Pago</td>
+                                                            <td>${{pagos_empresarial.dos.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.dos.color}}">{{pagos_empresarial.dos.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.dos.btn}}
+                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{{#if pagos_empresarial.tres.fecha}}{{pagos_empresarial.tres.fecha}}{{else}}N/A{{/if}}</td>
+                                                            <td>Tercer Pago</td>
+                                                            <td>${{pagos_empresarial.tres.precio}}</td>
+                                                            <td><span class="badge light badge-{{pagos_empresarial.tres.color}}">{{pagos_empresarial.tres.txt}}</span></td>
+                                                            {{#if rolAdmin}}
+                                                            <td>
+                                                                {{#if pagos_empresarial.tres.btn}}
+                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                    style="color: white"><i class="fa fa-usd"></i></a>
+                                                                {{else}}
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                    <i class="fa fa-usd"></i></button>
+                                                                {{/if}}
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                        {{/unless}}
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+                                
+                                <!-- ======================== CARAR ARCHIVOS/INFORMES ======================== -->
+                                {{#if propuesta.empresarial.pago}}
+                                    <div class="card">
+                                        <div class="card-body">
+                                            {{#if botonesEtapas.plan1}}
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Subir archivos</h4>
+                                            </div>
+                                            {{!-- FORMULARIO PARA SUBIR ARCHIVOS --}}
+                                            <form action="" method="post">
+                                                <div class="row mt-2 py-2">
+                                                    <div class="col-sm-4">
+                                                        <select id="tipoArchivo" class="form-control form-control-md" onchange="archivosItems(this.value)" style="height:35px;">
+                                                            <option value="Plan de Negocio" selected>Plan de Negocio</option>
+                                                            <option value="Plan de Marketing">Plan de Marketing</option>
+                                                            <option value="Branding">Branding</option>
+                                                            <option value="Renders">Renders</option>
+                                                            <option value="Website">Website</option>
+                                                            <option value="Otro">Otro</option>
+                                                        </select>
+                                                        <div class="row" id="div-btnAtras" style="display: none;">
+                                                            <div class="col-sm-2">
+                                                                <button type="button" onclick="mostrarSelector()" style="height: 35px;" class="btn btn-light btn-xs"><i class="mdi mdi-arrow-left"></i></button>
+                                                            </div>
+                                                            <div class="col-sm-10"><input class="form-control form-control-md" id="txt-nomArchivo" style="height: 35px;" type="text" placeholder="¿Qué info tiene el doc..?"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <style>
+                                                            .custom-file-input:lang(en)~.custom-file-label::after {
+                                                                border-radius: 0px 15px 15px 0px;
+                                                            }
+                                                        </style>
+                                                        <div class="custom-file" id="div-archivo">
+                                                            <input type="file" class="custom-file-input form-control-md" id="input-archivo" style="border: 1px solid #000;">
+                                                            <span class="custom-file-label form-control-md" style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300; height: 35px !important;">Cargar documento</span>
+                                                        </div>
+                                                        <div class="input-group-prepend mb-2" id="div-link" style="display: none;">
+                                                            <span class="input-group-text" style="height: 35px">https://www.</span>
+                                                            <input type="text" id="input-link" class="form-control mb-2" placeholder="mipagina.com" style="height: 35px">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-2">
+                                                        <button type="button" onclick="cargarArchivo()" id="btnAddFile" style="height: 35px;" class="btn btn-primary btn-xs">Agregar <i class="mdi mdi-plus"></i></button>
+                                                    </div>
+                                                    <div class="col-sm-12" id="div-nomArchivo" style="display: none;">
+                                                        <input type="text" class="form-control-md w-100" id="nomArchivo_">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            {{/if}}
+                                            {{!-- TABLA DE ARCHIVOS CARGADOS --}}
+                                            <div class="row mt-2">
+                                                <div class="col-12"><hr width="100%"></div>
+                                                <div class="col-xl-12">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title" style="margin:0 auto">Archivos cargados</h4>
+                                                    </div>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-responsive-md text-center">
+                                                            <thead>
+                                                                <th>Nombre</th>
+                                                                <th>Revisar Archivo</th>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td colspan="2">No hay datos</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{#if divInformes.empresarial}}
+                                    <!-- ======================== INFORMES DE ANÁLISIS PARCIALES ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Informes parciales</h4>
+                                            </div>
+                                            <div class="row">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>ESTADO</th>
+                                                                <th>ACCIÓN</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            {{!-- PRODUCTO --}}
+                                                            {{#if filaInforme.producto}}
+                                                            <tr>
+                                                                <td>{{#if info.prod.fecha}}{{info.prod.fecha}}{{else}}
+                                                                    <span id="spanFechaProd">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión producto</span></td>
+                                                                <td>
+                                                                    {{#if info.prod.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            {{#if botonesEtapas.plan1}}
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeProd">
+                                                                                    <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeProd" class="inputInformeProducto" type="file" style="display:none" name="informeProd"
+                                                                                    accept="application/pdf" />
+                                                                            </td>
+                                                                            {{else}}
+                                                                            {{#unless info.prod.url}}
+                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                            {{/unless}}
+                                                                            {{/if}}
+                                                                    
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a id="btnVerInformeProd" href="{{info.prod.url}}"
+                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
+                                                                                    target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- ADMINISTRACIÓN --}}
+                                                            {{#if filaInforme.administracion}}
+                                                            <tr>
+                                                                <td>{{#if info.adm.fecha}}{{info.adm.fecha}}{{else}}
+                                                                    <span id="spanFechaAdmin">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión administración</span></td>
+                                                                <td>
+                                                                    {{#if info.adm.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            {{#if botonesEtapas.plan1}}
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeAdmin" >
+                                                                                    <div id="btnSubirInformeAdmin"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeAdmin" class="inputInformeAdmin" type="file" style="display:none" name="informeAdmin" accept="application/pdf" />
+                                                                            </td>
+                                                                            {{/if}}
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- OPERACIONES --}}
+                                                            {{#if filaInforme.operaciones}}
+                                                            <tr>
+                                                                <td>{{#if info.op.fecha}}{{info.op.fecha}}{{else}}
+                                                                    <span id="spanFechaOpe">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión operaciones</span></td>
+                                                                <td>
+                                                                    {{#if info.op.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            {{#if botonesEtapas.plan1}}
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeOpe" >
+                                                                                    <div id="btnSubirInformeOpe"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeOpe" class="inputInformeOperaciones" type="file" style="display:none" name="informeOpe" accept="application/pdf" />
+                                                                            </td>
+                                                                            {{/if}}
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+
+                                                            {{!-- MARKETING --}}
+                                                            {{#if filaInforme.marketing}}
+                                                            <tr>
+                                                                <td>{{#if info.marketing.fecha}}{{info.marketing.fecha}}{{else}}
+                                                                    <span id="spanFechaMarketing">N/A</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td><span>Informe de dimensión marketing</span></td>
+                                                                <td>
+                                                                    {{#if info.marketing.fecha}}
+                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                    <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
+                                                                </td>
+                                                                <td>
+                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                        <tr>
+                                                                            {{#if botonesEtapas.plan1}}
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="informeMarketing" >
+                                                                                    <div id="btnSubirInformeMarketing"
+                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="informeMarketing" class="inputInformeMarketing" type="file" style="display:none" name="informeMarketing" accept="application/pdf" />
+                                                                            </td>
+                                                                            {{/if}}
+
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <i class="fa fa-search"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            {{/if}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <!-- ======================== INFORMES DE ANÁLISIS COMPLETO ======================== -->
+                                        {{#if filaInforme.empresarial.completo}}
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="card-header">
+                                                    <h4 class="card-title" style="margin:0 auto">Informe completo</h4>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-responsive-md text-center">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>FECHA</th>
+                                                                    <th>NOMBRE</th>
+                                                                    <th>ESTADO</th>
+                                                                    <th>ACCIÓN</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>{{#if info.analisis.fecha}}{{info.analisis.fecha}}{{else}}
+                                                                        <span id="spanFechaGeneral">N/A</span>
+                                                                        {{/if}}
+                                                                    </td>
+                                                                    <td><span>Informe de análisis</span></td>
+                                                                    <td>
+                                                                        {{#if info.analisis.fecha}}
+                                                                        <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                        <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
+                                                                    </td>
+                                                                    <td>
+
+                                                                        <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                            <tr>
+                                                                                {{#if botonesEtapas.plan1}}
+                                                                                <td style="border-color: transparent; padding:3px">
+                                                                                    <label for="informeAnalisisGeneral" >
+                                                                                        <div id="btnSubirInforme"
+                                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                            <i class="fa fa-upload"></i>
+                                                                                        </div>
+                                                                                    </label>
+                                                                                    <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none" name="informeAnalisisGeneral" accept="application/pdf" />
+                                                                                </td>
+                                                                                {{/if}}
+
+                                                                                <td style="border-color: transparent; padding:3px">
+                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <i class="fa fa-search"></i></a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                        {{!-- {{/if}} --}}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ========================================================================== -->
+                                        {{/if}}
+                                    {{/if}}
+                                {{/if}}
+
+                            </div>
+
+                            {{!-- PESTAÑA 5 - PLAN ESTRATÉGICO DE NEGOCIO --}}
                             <div id="plan-estrategico" class="tab-pane fade">
+                            
+                                <!-- =========== PROPUESTA PLAN ESTRATÉGICO ========== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
+                                        </div>
+                                        {{#if botonesEtapas.plan2}}
+                                        {{#unless propuesta.estrategico.pago}}
+                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                            <div class="row mt-3">
+                                                <div class="form-group col-md-6">
+                                                    <input type="number" name="precioPropuesta" placeholder="Introduce un precio"
+                                                        class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-group col-md-12 input-group">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input required" name="filePropuesta"
+                                                                accept="application/pdf" required>
+                                                            <span class="custom-file-label" id="msgInput">Carga el PDF de la propuesta</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
+                                                <input type="hidden" name="codigo" value="{{datos.code}}">
+                                                <input type="hidden" name="tipo_propuesta" value="Plan estratégico">
+                                                <div class="col-md-3 mx-auto">
+                                                    <button type="submit" class="btn btn-primary"
+                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                        <p class="font-w500 m-auto">Enviar Propuesta</p>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <hr class="mt-4">
+                                        {{/unless}}
+                                        {{/if}}
+                                        <div class="table-responsive">
+                                            <table class="table table-responsive-md text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>FECHA</th>
+                                                        <th>NOMBRE</th>
+                                                        <th>PRECIO</th>
+                                                        <th>REVISAR PROPUESTA</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        {{#if propuesta.estrategico.link_propuesta}}
+                                                        <td>{{#if propuesta.estrategico.fecha}}{{propuesta.estrategico.fecha}}{{else}}N/A{{/if}}
+                                                        </td>
+                                                        <td>Plan estratégico de negocio</td>
+                                                        <td>${{propuesta.estrategico.precio_total}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
+                                                                    class="btn btn-primary shadow btn-xs sharp"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                        {{else}}
+                                                        <td colspan="4"><span class="mx-auto">No se ha subido una propuesta de plan
+                                                                estratégico</span></td>
+                                                        {{/if}}
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                            
+                                    </div>
+                                </div>
+                            
+                                {{!-- PROPUESTA MONTADA --}}
+                                {{#if propuesta.estrategico.fecha}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Subscripción Plan Estratégico</h4>
+                                        </div>
+                            
+                                        <div class="row mt-3">
+                                            <div class="col-xl-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>FECHA DE PAGO</th>
+                                                                <th>NOMBRE</th>
+                                                                <th>PRECIO</th>
+                                                                <th>ESTADO</th>
+                                                                {{#if rolAdmin}}
+                                                                <th>ACCIÓN</th>
+                                                                {{/if}}
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
+                                                                <td>Suscripción mensual</td>
+                                                                <td>${{pagoEstrategico.precio}}</td>
+                                                                <td><span
+                                                                        class="badge light badge-{{pagoEstrategico.color}}">{{pagoEstrategico.txt}}</span>
+                                                                </td>
+                                                                {{#if rolAdmin}}
+                                                                <td>
+                                                                    {{!-- {{#if pagoEstrategico.btn}}
+                                                                    <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan estratégico')"
+                                                                        class="btn btn-success shadow btn-xs sharp" style="color: white"><i
+                                                                            class="fa fa-usd"></i></a>
+                                                                    {{else}} --}}
+                                                                    {{!-- <button type="button" class="btn btn-primary btn-xs sharp"
+                                                                        style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                        <i class="fa fa-usd"></i></button> --}}
+                                                                    {{#if pagoEstrategico.btn}}
+                                                                    <button type="button" onclick="cancelarSubscripcion('{{datos.idEmpresa}}','{{pagoEstrategico.subscription}}')" class="btn btn-danger btn-sm sharp"
+                                                                        style="background: red;color: white">Detener</button>
+                                                                    {{else}}
+                                                                    <button type="button" class="btn btn-sm sharp"
+                                                                        style="background: gray;color: white">Detener</button>
+                                                                    {{/if}}
+                                                                    {{!-- {{/if}} --}}
+                                                                </td>
+                                                                {{/if}}
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
+                            
+                                {{#if pagoEstrategico.fecha}}
                                 {{!-- CREAR NUEVAS TAREAS --}}
+                                {{#if botonesEtapas.plan2}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Nueva Tarea</h4>
                                         </div>
-
+                            
                                         <div class="row mt-3">
-
+                            
                                             <div class="form-group col-md-6">
                                                 <label for="actividad">Título de actividad a realizar *</label>
                                                 <input type="text" class="form-control" id="actividad" maxlength="47"
-                                                placeholder="Escriba un título..">
+                                                    placeholder="Escriba un título..">
                                             </div>
                                             <div class="form-group col-md-6">
                                                 <label for="dimension">Dimensión *</label><br>
@@ -1401,7 +2198,7 @@
                                                     <option value="Marketing">Marketing</option>
                                                 </select>
                                             </div>
-
+                            
                                             <div class="form-group col-md-6">
                                                 <label for="fecha_inicio">Fecha de inicio *</label>
                                                 <duet-date-picker id="fecha_inicio" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
@@ -1410,23 +2207,22 @@
                                                 <label for="fecha_entrega">Fecha de entrega *</label>
                                                 <duet-date-picker id="fecha_entrega" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
                                             </div>
-
+                            
                                             <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
                                             <div class="col-md-3 mx-auto">
-                                                <button onclick="agregarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                <button onclick="agregarTarea()" class="btn btn-primary"
+                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
                                                     <p class="font-w500 m-auto">Agregar</p>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <style>
-                                    .text-black{color: black;  }
-                                </style>
+                                {{/if}}
                                 {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
                                 {{#if jsonDim}}
                                 <div class="card">
-                                  <div class="card-header">
+                                    <div class="card-header">
                                         <h4 class="card-title" style="margin:0 auto">Desarrollo de actividades del plan estratégico</h4>
                                     </div>
                                     <div class="col-xl-12">
@@ -1442,18 +2238,20 @@
                                             </div>
                                             <div class="col-3" id="div-Operaciones">
                                                 <h4 class="my-4 mx-auto text-center text-black">Operaciones</h4>
-                                                <div id="chart-dimOperaciones" ></div>
+                                                <div id="chart-dimOperaciones"></div>
                                             </div>
                                             <div class="col-3" id="div-Marketing">
                                                 <h4 class="my-4 mx-auto text-center text-black">Marketing</h4>
-                                                <div id="chart-dimMarketing" ></div>
+                                                <div id="chart-dimMarketing"></div>
                                             </div>
                                         </div>
                                         <br>
-                                       <div class="progress" style="width: 73%;margin:auto">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="barra" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                      <p style="text-align: center;"> Avance general de tareas: <span id="dataGeneral" style="font-weight: 800;"></span>%</p>
+                                        <div class="progress" style="width: 73%;margin:auto">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="barra" role="progressbar"
+                                                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                        <p style="text-align: center;"> Avance general de tareas: <span id="dataGeneral"
+                                                style="font-weight: 800;"></span>%</p>
                                     </div>
                                 </div>
                                 {{/if}}
@@ -1469,54 +2267,59 @@
 										</div>
 									</div>
 
-                                <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered verticle-middle table-responsive-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Responsable</th>
-                                                <th scope="col">Dimensión</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Cronograma</th>
-                                                <th scope="col">Prioridad</th>
-                                                <th scope="col">Acción</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#if tareas.info}}
-                                                {{#each tareas.info}}
-                                                <tr>
-                                                    <td>{{responsable}}</td>
-                                                    <td>{{dimension}}</td>
-                                                    <td class="text-{{color}} font-w600" style="font-size: 14px;">{{estado}}</td>
-                                                    <td>
-                                                        {{!-- <div class="progress" style="width: 119%;margin: auto;height: 16px; margin-left: -8px;">
-                                                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{resultado}}%; font-size: 9px;" role="progressbar"></div>
-                                                        </div> --}}
-                                                        <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;"> 
-                                                           {{fecha_inicio}} - {{fecha_entrega}}
-                                                        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width:{{resultado}}%;height: 16px;margin-top: -13px;"></div>
-                                                    </div>
-                                                    </td>
-                                                    <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridades}}</td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <a onclick="editarTarea({{id}})"
-                                                                title="Edit" class="btn btn-primary shadow btn-xs sharp mr-1" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i style="color:white ;" class="fa fa-pencil"></i>
-                                                            </a>
-                                                            <a onclick="eliminarTarea({{id}})" class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000;"
-                                                                title="Edit"><svg xmlns="http://www.w3.org/2000/svg" width="12px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="white"/></svg>
-                                                            </a>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                              {{/each}}
-                                            {{/if}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                              </div>
-							</div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered verticle-middle table-responsive-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Responsable</th>
+                                                        <th scope="col">Dimensión</th>
+                                                        <th scope="col">Estado</th>
+                                                        <th scope="col">Cronograma</th>
+                                                        <th scope="col">Prioridad</th>
+                                                        <th scope="col">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#if tareas.info}}
+                                                    {{#each tareas.info}}
+                                                    <tr>
+                                                        <td>{{responsable}}</td>
+                                                        <td>{{dimension}}</td>
+                                                        <td class="text-{{color}} font-w600" style="font-size: 14px;">{{estado}}</td>
+                                                        <td>
+                                                            <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
+                                                                {{fecha_inicio}} - {{fecha_entrega}}
+                                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                                    style="width:{{resultado}}%;height: 16px;margin-top: -13px;"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridades}}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a onclick="editarTarea({{id}})" title="Edit"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                                                                        style="color:white ;" class="fa fa-pencil"></i>
+                                                                </a>
+                                                                <a onclick="eliminarTarea({{id}})" class="btn btn-danger shadow btn-xs sharp"
+                                                                    style="background: #DC0000;" title="Edit"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="12px" viewBox="0 0 448 512">
+                                                                        <path
+                                                                            d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                                                            fill="white" />
+                                                                    </svg>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {{/each}}
+                                                    {{/if}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+							    </div>
 
                                 {{!-- {{/if}} --}}
                                 {{!-- {{#if info.plan.ok}} --}}
@@ -1538,52 +2341,59 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                            <tr>
-                                                                <td>{{#if info.plan.fecha}}{{info.plan.fecha}}{{else}}
-                                                                    <span id="spanFechaPlan">N/A</span>
-                                                                    {{/if}}
-                                                                </td>
-                                                                <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
-                                                                <td>
-                                                                    {{#if info.plan.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
-                                                                    {{else}}
-                                                                    <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
-                                                                    {{/if}}
-                                                                </td>
-                                                                <td>
-                                                                    <table border="0" cellspacing="0" style="margin: 0 auto;">
-                                                                        <tr>
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <label for="informePlan" >
-                                                                        <div id="btnSubirInforme"
-                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
-                                                                            <i class="fa fa-upload"></i>
-                                                                        </div>
-                                                                    </label>
-                                                                    <input id="informePlan" class="inputInformePlan" type="file" style="display:none"
-                                                                        name="informePlan" accept="application/pdf" />
-                                                                            </td>
-
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank"
-                                                                        class="btn btn-info shadow btn-xs sharp">
-                                                                        <i class="fa fa-search"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
+                                                        <tr>
+                                                            <td>{{#if info.plan.fecha}}{{info.plan.fecha}}{{else}}
+                                                                <span id="spanFechaPlan">N/A</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
+                                                            <td>
+                                                                {{#if info.plan.fecha}}
+                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{else}}
+                                                                <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
+                                                                {{/if}}
+                                                            </td>
+                                                            <td>
+                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                    <tr>
+                                                                        {{#if botonesEtapas.plan2}}
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <label for="informePlan">
+                                                                                <div id="btnSubirInforme"
+                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <i class="fa fa-upload"></i>
+                                                                                </div>
+                                                                            </label>
+                                                                            <input id="informePlan" class="inputInformePlan" type="file"
+                                                                                style="display:none" name="informePlan" accept="application/pdf" />
+                                                                        </td>
+                                                                        {{else}}
+                                                                        {{#unless info.prod.url}}
+                                                                        <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
+                                                                        {{/unless}}
+                                                                        {{/if}}
+                            
+                                                                        {{#if info.plan.url}}
+                                                                        <td style="border-color: transparent; padding:3px">
+                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                        </td>
+                                                                        {{/if}}
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
                                                 </table>
                                             </div>
-
+                            
                                         </div>
                                     </div>
                                 </div>
                                 <!-- ========================================================================== -->
                                 {{!-- {{/if}} --}}
+                                {{/if}}
                             </div>
                         </div>
                     </div>
@@ -1622,42 +2432,4 @@
 
 </div>
 
-
-<script>
- 
-    // CAMPO DATE PICKER (DUET LIBRARY)
-    const elementos = document.querySelectorAll("duet-date-picker")
-    const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-
-    elementos.forEach(picker => {
-        picker.dateAdapter = {
-            parse(value = "", createDate) {
-                const matches = value.match(DATE_FORMAT_US)
-
-                if (matches) {
-                    return createDate(matches[3], matches[1], matches[2])
-                }
-            },
-            format(date) {
-                return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-            },
-        }
-
-        picker.localization = {
-            placeholder: "MM/DD/AAAA",
-            selectedDateMessage: "La fecha seleccionada es",
-            prevMonthLabel: "Mes anterior",
-            nextMonthLabel: "Mes siguiente",
-            monthSelectLabel: "Mes",
-            yearSelectLabel: "Año",
-            closeLabel: "Cerrar ventana",
-            calendarHeading: "Selecciona una fecha",
-            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            //dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
-            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            locale: "en-US",
-        }
-    })
-
-</script>
+{{> admin/scriptsEmpresa}}

@@ -1846,13 +1846,4 @@
     <!-- /row-->
 </div>
 <!-- /container-fluid -->
-<a href="{{volver}}" class="close"></a>
-
-<script>
-    // Capturando Zona Horaria Local
-    const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    console.log(tzLocalActual);
-    document.getElementById("zhActualAdm").value = tzLocalActual;
-</script>
-
-{{> general/inputsMoneda}}
+{{> general/footerForms}}

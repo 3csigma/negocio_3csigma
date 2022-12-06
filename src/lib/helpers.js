@@ -113,9 +113,10 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 /*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
 // ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
 helpers.enabled_nextPay = async () => {
-    const propuestas = await pool.query('SELECT * FROM propuesta_analisis')
-    const pagos = await pool.query("SELECT * FROM pagos");
-    const empresas = await pool.query('SELECT * FROM empresas')
+    
+    const propuestas = await helpers.consultarDatos('propuestas')
+    const pagos = await helpers.consultarDatos('pagos');
+    const empresas = await helpers.consultarDatos('empresas')
 
     if (propuestas.length > 0) {
         propuestas.forEach(async (x) => {
@@ -200,7 +201,7 @@ helpers.enabled_nextPay = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
 helpers.historial_consultores_admin = async () => {
-    const consultores = await pool.query("SELECT * FROM consultores")
+    const consultores = await helpers.consultarDatos('consultores')
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
@@ -243,7 +244,7 @@ helpers.historial_consultores_admin = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
 helpers.historial_empresas_admin = async () => {
-    const empresas = await pool.query("SELECT * FROM empresas")
+    const empresas = await helpers.consultarDatos('empresas')
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
@@ -287,7 +288,7 @@ helpers.historial_empresas_admin = async () => {
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES ADMIN
 helpers.historial_informes_admin = async () => {
 
-    const informes = await pool.query("SELECT * FROM informes")
+    const informes = await helpers.consultarDatos('informes')
 
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
@@ -330,8 +331,8 @@ helpers.historial_informes_admin = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS CONSULTOR
 helpers.historial_empresas_consultor = async () => {
-    const empresas = await pool.query("SELECT * FROM empresas")
-    const consultores = await pool.query("SELECT * FROM consultores")
+    const empresas = await helpers.consultarDatos("empresas")
+    const consultores = await helpers.consultarDatos("consultores")
 
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
@@ -374,8 +375,8 @@ helpers.historial_empresas_consultor = async () => {
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
 helpers.historial_informes_consultor = async () => {
-    const informes = await pool.query("SELECT * FROM informes")
-    const consultores = await pool.query("SELECT * FROM consultores")
+    const informes = await helpers.consultarDatos("informes")
+    const consultores = await helpers.consultarDatos("consultores")
 
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();

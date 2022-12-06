@@ -300,7 +300,7 @@
                         type: 'bar',
                         data: {
                             defaultFontFamily: 'Oblivian',
-                            labels: ["Producto", "Admin", "T. Humano", "Finanzas", "S. Al cliente", "Operaciones", "A. Laboral", "Innovación", "Marketing", "Ventas"],
+                            labels: ["Producto", "Admin", "Talento Humano", "Finanzas", "Servicio al cliente", "Operaciones", "Ambiente Laboral", "Innovación", "Marketing", "Ventas"],
                             datasets: [{
                                 label: "Puntaje",
                                 backgroundColor: "#50368C",
@@ -335,7 +335,7 @@
                                         display: false
                                     },
                                     ticks: {
-                                        fontSize: 10
+                                        fontSize: 11
                                     },
                                     barPercentage: 0.5,
                                     categoryPercentage: 1,
@@ -416,7 +416,7 @@
                                         display: false
                                     },
                                     ticks: {
-                                        fontSize: 10
+                                        fontSize: 11
                                     },
                                     barPercentage: 0.5,
                                     categoryPercentage: 1,
@@ -454,13 +454,16 @@
 
             const URLhash = window.location.hash;
             if (URLhash === '#diagnostico_') {
-                $('#diagnostico-item').trigger("click");
+                $('#item-diagnostico').trigger("click");
             }
             if (URLhash === '#analisis_') {
-                $('#analisis-item').trigger("click");
+                $('#item-analisis').trigger("click");
             }
             if (URLhash === '#plan-estrategico') {
-                $('.planItem').trigger("click");
+                $('#item-estrategico').trigger("click");
+            }
+            if (URLhash === '#plan-empresarial') {
+                $('#item-empresarial').trigger("click");
             }
             
             $(".chatbox-close").on("click", () => {

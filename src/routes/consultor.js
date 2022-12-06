@@ -9,10 +9,10 @@ const { checkLogin, consultorLogueado } = require('../lib/auth')
 router.get('/consultor', checkLogin, consultorLogueado, consultorController.index)
 router.get('/empresas-asignadas', checkLogin, consultorLogueado, consultorController.empresasAsignadas)
 
-// PROPUESTA DE ANÁLISIS DE NEGOCIO
+// PROPUESTAS PARA LA EMPRESA (ANÁLISIS DE NEGOCIO & PLAN EMPRESARIAL)
 const rutaAlmacen = multer.diskStorage({
     destination: function (req, file, callback) {
-        const ruta = path.join(__dirname, '../public/propuestas_analisis')
+        const ruta = path.join(__dirname, '../public/propuestas_empresa')
         callback(null, ruta);
     },
 
@@ -24,7 +24,8 @@ const rutaAlmacen = multer.diskStorage({
 
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
-router.post('/enviar-propuesta-analisis', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
+router.post('/enviar-propuesta-empresa', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
+// router.post('/enviar-propuesta-empresarial', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
 
 // Cuestionario Análisis dimensión Producto 
 router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorLogueado, consultorController.analisisProducto)

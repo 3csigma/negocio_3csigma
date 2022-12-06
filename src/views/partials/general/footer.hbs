@@ -107,9 +107,7 @@ function fileValidation() {
     formData.append('foto', foto);
     guardarFoto(formData);
     }
-      
 }
-
 $("#imgInp").change(function () {
     // Código a ejecutar cuando se detecta un cambio de archivO
     readImage(this);
@@ -140,79 +138,75 @@ function guardarFoto(formData) {
     })
 }
 
-    (function () {
-        $(document).ready(function () {
-            // VAINAS PARA SELECTOR CON BUSCADOR
-            function selectBuscarPais(id) {
-                id.chosen({
-                    no_results_text: "Sin resultados para",
-                    allow_single_deselect: true,
-                    placeholder_text_single: "Selecciona tu País/Nacionalidad",
-                    width: '100%',
-                });
+(function () {
+    $(document).ready(function () {
+        // VAINAS PARA SELECTOR CON BUSCADOR
+        function selectBuscarPais(id) {
+            id.chosen({
+                no_results_text: "Sin resultados para",
+                allow_single_deselect: true,
+                placeholder_text_single: "Selecciona tu País/Nacionalidad",
+                width: '100%',
+            });
+        }
+        const claseCajaPais = $('#pais')
+        selectBuscarPais(claseCajaPais);
+
+        function selectBuscar(id) {
+            id.chosen({
+                no_results_text: "Sin resultados para",
+                allow_single_deselect: true,
+                placeholder_text_single: "Selecciona una opción",
+                width: '100%',
+            });
+        }
+        const claseCajaGeneral = $('.sltBuscar')
+        selectBuscar(claseCajaGeneral);
+
+        // CAMPOS SOLO LETRAS
+        $("input.campoLetras").bind('keypress', function (event) {
+            let regex = new RegExp("^[a-zA-ZÀ-ÿ.\u00f1\u00d1 ]+$");
+            let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
             }
-            const claseCajaPais = $('#pais')
-            selectBuscarPais(claseCajaPais);
+        });
 
-            function selectBuscar(id) {
-                id.chosen({
-                    no_results_text: "Sin resultados para",
-                    allow_single_deselect: true,
-                    placeholder_text_single: "Selecciona una opción",
-                    width: '100%',
-                });
+        // CAMPOS SOLO NÚMEROS
+        $("input.campoNum").bind('keypress', function (event) {
+            let regex = new RegExp("^[0-9 .]+$");
+            let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+            if (!regex.test(key)) {
+                event.preventDefault();
+                return false;
             }
-            const claseCajaGeneral = $('.sltBuscar')
-            selectBuscar(claseCajaGeneral);
+        });
 
-            // CAMPOS SOLO LETRAS
-            $("input.campoLetras").bind('keypress', function (event) {
-                let regex = new RegExp("^[a-zA-ZÀ-ÿ.\u00f1\u00d1 ]+$");
-                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                if (!regex.test(key)) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-
-            // CAMPOS SOLO NÚMEROS
-            $("input.campoNum").bind('keypress', function (event) {
-                let regex = new RegExp("^[0-9 .]+$");
-                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                if (!regex.test(key)) {
-                    event.preventDefault();
-                    return false;
-                }
-            });
-
-            // CheckButton Tiene Socios - ficha Cliente
-            $("input.checkSocios").change(function () {
-                //const numS = $("#cantidad_socios")
-                const numS = document.getElementById("cantidad_socios")
-                if ($(this).val() == "Si") {
-                    numS.removeAttribute("disabled");
-                    numS.style.background = "white";
-                    numS.value = 1;
-                } else {
-                    numS.setAttribute("disabled", true);
-                    numS.style.background = "#f2f2f2";
-                    numS.value = 0;
-                    numS.removeAttribute("min");
-                }
-            });
+        // CheckButton Tiene Socios - ficha Cliente
+        $("input.checkSocios").change(function () {
+            //const numS = $("#cantidad_socios")
+            const numS = document.getElementById("cantidad_socios")
+            if ($(this).val() == "Si") {
+                numS.removeAttribute("disabled");
+                numS.style.background = "white";
+                numS.value = 1;
+            } else {
+                numS.setAttribute("disabled", true);
+                numS.style.background = "#f2f2f2";
+                numS.value = 0;
+                numS.removeAttribute("min");
+            }
+        });
 
             // Actualizar Estado del Consultor
             $("#btnActualizarConsultor").click(function () {
                 const estado = $("#estado_consul option:selected").val()
                 const nivel = $("#nivel_consul option:selected").val()
                 const codigo = $("#codigo_consultor").val()
-                const link_calendly1 = $("#link_calendly1").val()
-                const link_calendly2 = $("#link_calendly2").val()
-                const link_calendly3 = $("#link_calendly3").val()
-                const link_calendly4 = $("#link_calendly4").val()
                 fetch('/actualizarConsultor', {
                     method: 'POST',
-                    body: JSON.stringify({ codigo, estado, nivel, link_calendly1, link_calendly2, link_calendly3, link_calendly4}),
+                    body: JSON.stringify({ codigo, estado, nivel }),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))

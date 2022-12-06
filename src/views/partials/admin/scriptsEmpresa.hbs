@@ -1,0 +1,225 @@
+<script>
+    const mapaConsultores = new Map();
+    function addConsulEtapa() {
+        const idConsultor = $("#id_consultor option:selected").val();
+        const nomConsultor = $("#id_consultor option:selected").text();
+        const etapa = $('#etapaConsultor option:selected').val();
+        const consultor = { id: idConsultor, nombre: nomConsultor.trim() }
+        const etapa_ = etapa.replace(/[$_]/g, ' ');
+        mapaConsultores.set(etapa_, consultor)
+        console.log("MAPA CONSULTORES -->> ", mapaConsultores)
+        let filas = ``
+        let idFila = $(`#tblConsulAsignados>tbody>tr#${etapa}`)
+        
+        if (idFila.length > 0) {
+            console.log("Existe")
+            idFila = idFila[0].id
+            console.log("ETAPA >> ", idFila)
+            const etapaTxt = idFila.replace(/[$_]/g, ' ')
+            $(`#tblConsulAsignados>tbody>tr#${idFila.trim()}`).empty().append(`
+                <td>${etapaTxt}</td>
+                <td>${nomConsultor.trim()}</td>
+            `)
+        } else {
+            console.log("ETAPA >> ", idFila)
+            console.log("NO EXISTE ESTE TR")
+            for (const [key, value] of mapaConsultores) {
+                const idFila = key.replace(/[$ ]/g, '_');
+                $(`#tblConsulAsignados>tbody>tr#${idFila}`).remove();
+                $('#tblConsulAsignados>tbody').append(`
+                    <tr id="${idFila}">
+                        <td>${key}</td>
+                        <td>${value.nombre}</td>
+                    </tr>`)
+            }
+        }
+
+        if ($('#divTablaConsul').hide()) {
+            $('#divTablaConsul').show()
+        }
+
+    }
+
+    function guardarConsulEtapas () {
+        const estadoAdm = $('#estadoAdm option:selected').val()
+        const idEmpresa = $('#idEmpresa').val()
+        const codigo = $('#codigoEmpresa').val()
+        console.group("Datos de la empresa")
+        console.log("ID Empresa >> ", idEmpresa)
+        console.log("Estado Empresa >> ", estadoAdm)
+        console.log("Consultores Asignados >> ", mapaConsultores)
+        console.groupEnd()
+
+        const mapa = Object.fromEntries(mapaConsultores)
+
+        fetch('/actualizarEmpresa', {
+            method: 'POST',
+            body: JSON.stringify({idEmpresa, codigo, estadoAdm, mapa}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+            if (response){
+                location.reload();
+            } else {
+                Swal.fire(
+                    'Error!',
+                    'No sé pudo efectuar está acción, contactar a soporte..',
+                    'error'
+                )
+            }
+        });
+    }
+
+    function mostrarSelector() {
+        $('#tipoArchivo').show();
+        $('#div-btnAtras').hide();
+    }
+
+    function archivosItems(e) {
+        $('#div-archivo').show()
+        $('#div-link').hide()
+        if (e == 'Website') {
+            $('#div-archivo').hide()
+            $('#div-link').show()
+        }
+        if (e == 'Otro') {
+            $('#div-btnAtras').show();
+            $('#tipoArchivo').hide();
+        }
+    }
+
+    function agregarArchivo() {
+        const tipoArchivo = $('#tipoArchivo').val()
+        if (tipoArchivo == 'Website') {
+            const link = $('#input-link').val()
+            guardarArchivo(tipoArchivo, link)
+        } else if (tipoArchivo == 'Otro') {
+            const nombre = $('#txt-nomArchivo').val()
+        }
+
+    }
+
+    function guardarArchivo(nombre, archivo) {
+        console.log("Función para guardar los datos en DB & luego responder en la misma vista")
+    }
+
+    // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
+    function pagoManualEmpresas(num, id, tipo) {
+        let txt = 'pago único';
+        let etapa = 2;
+        if (tipo == 'plan estratégico') etapa = 3;
+        else if (tipo == 'plan empresarial') etapa = 4
+        num == 1 ? txt = 'primer pago' : txt = txt;
+        num == 2 ? txt = 'segundo pago' : txt = txt;
+        num == 3 ? txt = 'tercer pago' : txt = txt;
+        Swal.fire({
+            title: `¿Deseas registrar el ${txt} de ${tipo}?`,
+            text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Pago confirmado'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/pagoManual-Empresas', {
+                    method: 'POST',
+                    body: JSON.stringify({num, id, etapa}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            if (etapa == 2)
+                                window.location.hash = 'analisis_'
+                            else if (etapa == 3)
+                                window.location.hash = 'plan-estrategico'
+                            else
+                                window.location.hash = 'plan-empresarial'
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo efectuar está acción, contactar a soporte..',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
+    
+    function cancelarSubscripcion(empresa, id_sub) {
+        console.log(id_sub)
+        Swal.fire({
+            title: `¿Deseas cancelar la subscripción de esta empresa?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'No',
+            confirmButtonText: 'Si'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/cancelarSub', {
+                    method: 'POST',
+                    body: JSON.stringify({empresa, id_sub}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            window.location.hash = 'plan-estrategico'
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo efectuar está acción, contactar a soporte..',
+                                'error'
+                            )
+                        }
+                    })
+            }
+        })
+    }
+
+    /*************************************************************************/    // CAMPO DATE PICKER (DUET LIBRARY)
+    const elementos = document.querySelectorAll("duet-date-picker")
+    const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+
+    elementos.forEach(picker => {
+        picker.dateAdapter = {
+            parse(value = "", createDate) {
+                const matches = value.match(DATE_FORMAT_US)
+
+                if (matches) {
+                    return createDate(matches[3], matches[1], matches[2])
+                }
+            },
+            format(date) {
+                return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
+            },
+        }
+
+        picker.localization = {
+            placeholder: "MM/DD/AAAA",
+            selectedDateMessage: "La fecha seleccionada es",
+            prevMonthLabel: "Mes anterior",
+            nextMonthLabel: "Mes siguiente",
+            monthSelectLabel: "Mes",
+            yearSelectLabel: "Año",
+            closeLabel: "Cerrar ventana",
+            calendarHeading: "Selecciona una fecha",
+            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+            //dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
+            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+            locale: "en-US",
+        }
+    })
+
+</script>

@@ -6,18 +6,28 @@ const { consultarDatos } = require('../lib/helpers')
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
     const { codigo } = req.user
+    let empresas = []
     const consultores = await consultarDatos('consultores')
     const consultor = consultores.find(x => x.codigo == codigo)
-    const empresas = await consultarDatos('empresas', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_empresas DESC LIMIT 2`)
+    const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 2`)
+    const idEmpresas = consultores_asignados.reduce((acc,item) => {
+        if(!acc.includes(item.empresa)) acc.push(item.empresa);
+        return acc;
+    },[])
+    let dataEmpresas = await consultarDatos('empresas')
+    idEmpresas.forEach(x => {
+        const e = dataEmpresas.find(i => i.id_empresas == x)
+        if (e) empresas.push(e);
+    })
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
-    let empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+    const empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_empresas_asignadas
     if (empresas_asignadas.length > 0) { datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas) }
     // FIN DE LA FUNCIÓN <<====
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
-    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+    const historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
     let datosJson_historialI_consultor
     if (historialInformes.length > 0) { datosJson_historialI_consultor = JSON.stringify(historialInformes) }
     // FIN DE LA FUNCIÓN <<====
@@ -40,31 +50,47 @@ consultorController.index = async (req, res) => {
     });
 }
 
-// EMPRESAS
+// EMPRESAS ASIGANADAS
 consultorController.empresasAsignadas = async (req, res) => {
 
-    const con = await pool.query('SELECT * FROM consultores WHERE codigo = ? LIMIT 1', [req.user.codigo])
+    const empresas = []
+    let consulActual = await consultarDatos('consultores')
+    consulActual = consulActual.find(x => x.codigo == req.user.codigo)
+    const consultoresAsignados = await consultarDatos('consultores_asignados')
 
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.consultor = ? LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas;', [con[0].id_consultores])
+    let tablaEmpresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas')
 
-    const informe = await pool.query('SELECT * FROM informes')
+    tablaEmpresas.forEach(data => {
+        const tieneConsultor = consultoresAsignados.filter(x => x.consultor == consulActual.id_consultores && x.empresa == data.id_empresas)
 
-    empresas.forEach(e => {
-        e.etapa = 'Email sin confirmar';
-        e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
-        e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
-        e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
-        e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
-        e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
-        e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+        console.group("\nEmpresa ID -> ", data.id_empresas)
+        console.log("Info tiene consultor: ", tieneConsultor)
+        console.groupEnd()
 
-        informe.forEach(i => {
-            if (i.id_empresa == e.id_empresas) {
-                e.etapa = 'Informe diagnóstico';
-            }
-        })
+        if (tieneConsultor.length > 0) {
+            empresas.push(data)
+        }
 
     });
+
+    if (empresas.length > 0) {
+        const informe = await consultarDatos('informes')
+        empresas.forEach(e => {
+            e.etapa = 'Email sin confirmar';
+            e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
+            e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
+            e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+            e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
+            e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
+            e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
+    
+            informe.forEach(i => {
+                if (i.id_empresa == e.id_empresas) {
+                    e.etapa = 'Informe diagnóstico';
+                }
+            })
+        })
+    }
 
     res.render('consultor/empresas', { consultorDash: true, itemActivo: 2, empresas })
 }
@@ -72,25 +98,38 @@ consultorController.empresasAsignadas = async (req, res) => {
 /* ------------------------------------------------------------------------------------------------ */
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 consultorController.enviarPropuesta = async (req, res) => {
-    const { precioPropuesta, idEmpresa, codigo } = req.body
+    const { precioPropuesta, idEmpresa, codigo, tipo_propuesta } = req.body
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.codigo == codigo)
     const email = empresa.email
     const nombreEmpresa = empresa.nombre_empresa
-    const propuestasDB = await pool.query('SELECT * FROM propuesta_analisis');
-    const fila = propuestasDB.find(i => i.empresa == idEmpresa)
-    const link_propuesta = '../propuestas_analisis/' + urlPropuestaNegocio
+    const propuestasDB = await consultarDatos('propuestas');
+    const fila = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == tipo_propuesta)
+    // const fila2 = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
+    const link_propuesta = '../propuestas_empresa/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
     const precio_per1 = parseFloat(precioPropuesta) * 0.6
     const precio_per2 = parseFloat(precioPropuesta) * 0.2
     const precio_per3 = parseFloat(precioPropuesta) * 0.2
-    if (fila) {
-        const actualizarPropuesta = { precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
-        await pool.query('UPDATE propuesta_analisis SET ? WHERE empresa = ?', [actualizarPropuesta, idEmpresa]);
+
+    let hash = '#analisis_';
+    const actualizarPropuesta = { precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
+    const nuevaPropuesta = { empresa: idEmpresa, tipo_propuesta, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
+
+    if (tipo_propuesta == 'Plan estratégico') {
+        hash = '#plan-estrategico';
+    } else if (tipo_propuesta == 'Plan empresarial') {
+        hash = '#plan-empresarial';
     } else {
-        const nuevaPropuesta = { empresa: idEmpresa, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta }
-        await pool.query('INSERT INTO propuesta_analisis SET ?', [nuevaPropuesta]);
+        hash = hash;
     }
+
+    if (fila) {
+        await pool.query('UPDATE propuestas SET ? WHERE empresa = ? AND tipo_propuesta = ?', [actualizarPropuesta, idEmpresa, tipo_propuesta]);
+    } else {
+        await pool.query('INSERT INTO propuestas SET ?', [nuevaPropuesta]);
+    }
+
     /** INFO PARA ENVÍO DE EMAIL */
     const asunto = "Tenemos una propuesta para tu empresa"
     // Obtener la plantilla de Email
@@ -105,22 +144,13 @@ consultorController.enviarPropuesta = async (req, res) => {
         console.log("\n<<<<< Se envió Email de la propuesta de Análisis de Negocio >>>>>\n")
     }
 
-    let redireccionar = '/empresas/'
-    if (req.user.rol == 'Consultor') {
-        redireccionar = '/empresas-asignadas/'
-    }
-    res.redirect(redireccionar + codigo + '#analisis_')
+    res.redirect('/empresas/' + codigo + hash)
 }
 
 // ANÁLISIS DIMENSIÓN PRODUCTO
 consultorController.analisisProducto = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/';
-    }
-    volver = volver + codigo + '#analisis_';
-    res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/analisisProducto', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 consultorController.guardarAnalisisProducto = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
@@ -128,15 +158,15 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
-    let empresa = await pool.query('SELECT * FROM empresas')
-    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+    let empresa = await consultarDatos('empresas')
+    const analisis_empresa = await consultarDatos('analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
     let id_empresa, id_consultor;
 
     // Consultor que realizó el análisis
-    const consultores = await pool.query('SELECT * FROM consultores');
+    const consultores = await consultarDatos('consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
     c ? id_consultor = c.id_consultores : id_consultor = 0;
 
@@ -159,27 +189,15 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
             const nuevoAnalisis = { id_empresa, id_consultor, producto }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
-
-        if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
-        } else {
-            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
-        }
-
+        
+        res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
     }
-
-
 }
 
 // ANÁLISIS DIMENSIÓN ADMINISTRACIÓN
 consultorController.analisisAdministracion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/';
-    }
-    volver = volver + codigo + '#analisis_'
-    res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/analisisAdministracion', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 consultorController.guardarAnalisisAdministracion = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
@@ -187,8 +205,8 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
-    let empresa = await pool.query('SELECT * FROM empresas')
-    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+    let empresa = await consultarDatos('empresas')
+    const analisis_empresa = await consultarDatos('analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
@@ -228,24 +246,14 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
-        } else {
-            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
-        }
-
+        res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
     }
 }
 
 // ANÁLISIS DIMENSIÓN OPERACION
 consultorController.analisisOperacion = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/';
-    }
-    volver = volver + codigo + '#analisis_'
-    res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/analisisOperacion', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 consultorController.guardarAnalisisOperacion = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
@@ -253,13 +261,13 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
-    let empresa = await pool.query('SELECT * FROM empresas')
-    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+    let empresa = await consultarDatos('empresas')
+    const analisis_empresa = await consultarDatos('analisis_empresa');
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
     // Consultor que realizó el análisis
     let id_consultor;
-    const consultores = await pool.query('SELECT * FROM consultores');
+    const consultores = await consultarDatos('consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
     c ? id_consultor = c.id_consultores : id_consultor = false;
 
@@ -288,11 +296,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
-        } else {
-            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
-        }
+        res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
 
     } else {
         console.log("Error no sé encontró la empresa y el consultor ligado..")
@@ -302,12 +306,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
 // ANÁLISIS DIMENSIÓN MARKETING
 consultorController.analisisMarketing = async (req, res) => {
     const { codigo } = req.params;
-    let volver = '/empresas/';
-    if (req.user.rol == 'Consultor') {
-        volver = '/empresas-asignadas/';
-    }
-    volver = volver + codigo + '#analisis_'
-    res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo, volver })
+    res.render('consultor/analisisMarketing', { wizarx: true, user_dash: false, adminDash: false, codigo })
 }
 consultorController.guardarAnalisisMarketing = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
@@ -315,15 +314,15 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
-    let empresa = await pool.query('SELECT * FROM empresas')
-    const analisis_empresa = await pool.query('SELECT * FROM analisis_empresa');
+    let empresa = await consultarDatos('FROM empresas')
+    const analisis_empresa = await consultarDatos('analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
     let id_consultor;
 
     // Consultor que realizó el análisis
-    const consultores = await pool.query('SELECT * FROM consultores');
+    const consultores = await consultarDatos('consultores');
     const c = consultores.find(item => item.codigo == req.user.codigo)
     c ? id_consultor = c.id_consultores : id_consultor = false;
 
@@ -352,11 +351,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
-        if (req.user.rol == 'Consultor') {
-            res.redirect('/empresas-asignadas/' + codigoEmpresa + '#analisis_')
-        } else {
-            res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
-        }
+        res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
 
     }
 }
@@ -440,9 +435,5 @@ consultorController.nuevoRendimiento = async (req, res) => {
     const utilidad = parseFloat(total_ventas) - parseFloat(total_compras) - parseFloat(total_gastos)
     const nuevoRendimiento = { empresa, total_ventas, total_compras, total_gastos, utilidad, fecha }
     await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
-    let redireccionar = '/empresas/' + codigo
-    if (req.user.rol == 'Consultor') {
-        redireccionar = '/empresas-asignadas/' + codigo;
-    }
-    res.redirect(redireccionar)
+    res.redirect('/empresas/' + codigo)
 }

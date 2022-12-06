@@ -1,0 +1,7 @@
+<a href="/empresas/{{codigo}}#analisis_" class="close"></a>
+<script>
+    // Capturando Zona Horaria Local
+    const tzLocalActual = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    console.log(tzLocalActual);
+    document.getElementById("zhActualAdm").value = tzLocalActual;
+</script>
