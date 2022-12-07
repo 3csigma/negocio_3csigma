@@ -7,6 +7,7 @@ const path = require('path');
 const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML  } = require('../lib/mail.config');
+const { Console } = require('console');
 
 let aprobarConsultor = false;
 
@@ -871,7 +872,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     empresa = empresa.find(x => x.codigo = codigo)
 
     // Consultores Asignados
-    const asignados = await pool.query('SELECT * FROM consultores_asignados WHERE empresa = ?', [idEmpresa])
+    const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
     for (const [key, value] of mapaConsultores) {
         const filtro = asignados.find(x => x.etapa == key)
         let orden = 1;
@@ -940,7 +941,6 @@ dashboardController.bloquearEmpresa = async (req, res) => {
         }
     }
 }
-
 
 /** PAGOS MANUALES ETAPA 1 y 2 */
 dashboardController.pagoManualDiagnostico = async (req, res) => {
@@ -1357,11 +1357,10 @@ dashboardController.guardarInforme = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const empresasNuevas = await consultarDatos('dg_empresa_nueva')
-    const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
+    // const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
     const fecha = new Date()
     const nuevoInforme = {
         id_empresa: e.id_empresas,
-        id_consultor: e.consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/' + urlInforme,
         fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
@@ -1377,7 +1376,8 @@ dashboardController.guardarInforme = async (req, res) => {
     }
 
     // Validando si ya tiene un informe montado
-    const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e.id_empresas, nombreInforme])
+    // const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e.id_empresas, nombreInforme])
+    const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
     let informe = null;
 
     if (tieneInforme.length > 0) {

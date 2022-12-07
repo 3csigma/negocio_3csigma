@@ -163,12 +163,7 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
-    let id_empresa, id_consultor;
-
-    // Consultor que realizó el análisis
-    const consultores = await consultarDatos('consultores');
-    const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = 0;
+    let id_empresa;
 
     if (empresa) {
         id_empresa = empresa.id_empresas;
@@ -186,7 +181,7 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
             await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         } else {
             // Creando Objetos para guardar en la base de datos
-            const nuevoAnalisis = { id_empresa, id_consultor, producto }
+            const nuevoAnalisis = { id_empresa, producto }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
         
@@ -210,14 +205,7 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
-    let id_consultor;
-
-    // Consultor que realizó el análisis
-    const consultores = await pool.query('SELECT * FROM consultores');
-    const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false;
-
-    if (empresa && id_consultor) {
+    if (empresa) {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
@@ -242,7 +230,7 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
             await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         } else {
             // Creando Objetos para guardar en la base de datos
-            const nuevoAnalisis = { id_empresa, id_consultor, administracion }
+            const nuevoAnalisis = { id_empresa, administracion }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
@@ -265,12 +253,6 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
     const analisis_empresa = await consultarDatos('analisis_empresa');
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
-    // Consultor que realizó el análisis
-    let id_consultor;
-    const consultores = await consultarDatos('consultores');
-    const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false;
-
     if (empresa && id_consultor) {
         let id_empresa = empresa.id_empresas;
 
@@ -292,7 +274,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
             await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         } else {
             // Creando Objetos para guardar en la base de datos
-            const nuevoAnalisis = { id_empresa, id_consultor, operacion }
+            const nuevoAnalisis = { id_empresa, operacion }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 
@@ -319,14 +301,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
-    let id_consultor;
-
-    // Consultor que realizó el análisis
-    const consultores = await consultarDatos('consultores');
-    const c = consultores.find(item => item.codigo == req.user.codigo)
-    c ? id_consultor = c.id_consultores : id_consultor = false;
-
-    if (empresa && id_consultor) {
+    if (empresa) {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
@@ -347,7 +322,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
             await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         } else {
             // Creando Objetos para guardar en la base de datos
-            const nuevoAnalisis = { id_empresa, id_consultor, marketing }
+            const nuevoAnalisis = { id_empresa, marketing }
             await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
         }
 

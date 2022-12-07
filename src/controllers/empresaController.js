@@ -418,13 +418,13 @@ empresaController.acuerdo = async (req, res) => {
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.emai}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     const formDiag = {}
     formDiag.id = id_empresa;
     formDiag.usuario = encriptarTxt('' + id_empresa)
     formDiag.estado = false;
-    const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_empresa = ?', [id_empresa])
+    const fichaCliente = await consultarDatos('ficha_cliente', `WHERE id_empresa = ${id_empresa}`)
     const ficha = fichaCliente[0]
 
     if (fichaCliente.length == 0) {
@@ -452,7 +452,7 @@ empresaController.diagnostico = async (req, res) => {
     }
 
     // Informe de la empresa subido
-    let informeEmpresa = await pool.query('SELECT * FROM informes WHERE id_empresa = ? LIMIT 1', [id_empresa])
+    let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
 
     res.render('empresa/diagnostico', {
         user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag,
@@ -464,7 +464,8 @@ empresaController.diagnostico = async (req, res) => {
 /** Mostrar vista del formulario Ficha Cliente */
 empresaController.validarFichaCliente = async (req, res) => {
     const { id } = req.params;
-    let row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    // let row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    let row = await consultarDatos('empresas', `WHERE email = ${req.user.email} LIMIT 1`)
     row = row[0]
     const id_empresa = desencriptarTxt(id)
     if (row.id_empresas == id_empresa) {
@@ -477,10 +478,10 @@ empresaController.validarFichaCliente = async (req, res) => {
 
 empresaController.fichaCliente = async (req, res) => {
     req.session.fichaCliente = false
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const empresa = row[0]
     const id_empresa = row[0].id_empresas, datos = {};
-    const fichaCliente = await pool.query('SELECT * FROM ficha_cliente WHERE id_empresa = ?', [id_empresa])
+    const fichaCliente = await consultarDatos('ficha_cliente', `WHERE id_empresa = "${id_empresa}"`)
     const ficha = fichaCliente[0]
     if (fichaCliente.length > 0) {
         ficha.es_propietario === "Si" ? datos.prop1 = 'checked' : datos.prop2 = 'checked';
@@ -529,7 +530,7 @@ empresaController.addFichaCliente = async (req, res) => {
 
     es_propietario != undefined ? es_propietario : es_propietario = 'No'
     socios != undefined ? socios : socios = 'No'
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     cantidad_socios == null ? cantidad_socios = 0 : cantidad_socios = cantidad_socios;
 
@@ -547,7 +548,7 @@ empresaController.addFichaCliente = async (req, res) => {
     await pool.query('UPDATE empresas SET ? WHERE id_empresas = ?', [userUpdate, id_empresa])
 
     // Consultar si ya existen datos en la Base de datos
-    const ficha = await pool.query('SELECT * FROM ficha_cliente WHERE id_empresa = ?', [id_empresa])
+    const ficha = await consultarDatos('ficha_cliente', `WHERE id_empresa = "${id_empresa}"`)
     if (ficha.length > 0) {
         await pool.query('UPDATE ficha_cliente SET ? WHERE id_empresa = ?', [nuevaFichaCliente, id_empresa])
     } else {
@@ -574,7 +575,7 @@ empresaController.eliminarFicha = async (req, res) => {
 /** Mostrar vista del Panel Análisis de Negocio */
 empresaController.analisis = async (req, res) => {
     const btnPagar = {};
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     const propuestas = await consultarDatos('propuestas')
     const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
@@ -727,7 +728,7 @@ empresaController.analisis = async (req, res) => {
 empresaController.guardarArchivos = async (req, res) => {
     const nom = req.body.nombreArchivo
     let colArchivos = []
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     let analisis = await consultarDatos('analisis_empresa')
     analisis = analisis.find(i => i.id_empresa == id_empresa)
@@ -758,7 +759,7 @@ empresaController.guardarArchivos = async (req, res) => {
 
 /** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
 empresaController.planEstrategico = async (req, res) => {
-    let empresa = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+    let empresa = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     empresa = empresa[0].id_empresas
     const fechaActual = new Date().toLocaleDateString('fr-CA');
 
@@ -812,7 +813,6 @@ empresaController.planEstrategico = async (req, res) => {
             botones.pagar = false;
             botones.editSub = true;
         }
-
     }
 
     res.render('empresa/planEstrategico', {

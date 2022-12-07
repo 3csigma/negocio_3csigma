@@ -75,7 +75,7 @@
                                 </div>
 
                                 <div class="mt-4">
-                                    {{!-- <form action="/actualizarEmpresa" method="post"> --}}
+                                    <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
                                     {{#if adminDash}}
                                     {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
                                     <div class="row">
@@ -171,14 +171,10 @@
                                         
                                     </div>
 
-                                    {{!-- </form> --}}
-
                                     <div class="row mt-4">
                                         <div class="col">
                                             <div class="form-group" style="text-align: left !important">
-                                                <label
-                                                    style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción
-                                                    del negocio</label>
+                                                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Descripción del negocio</label>
                                                 <textarea
                                                     style="height: 200px; min-height: 200px; max-height: 200px; width: 100%; text-align: justify; background: transparent !important; border: none"
                                                     class="form-control barra-scroll overflow-y-auto"
@@ -2208,7 +2204,6 @@
                                                 <duet-date-picker id="fecha_entrega" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
                                             </div>
                             
-                                            <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
                                             <div class="col-md-3 mx-auto">
                                                 <button onclick="agregarTarea()" class="btn btn-primary"
                                                     style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
