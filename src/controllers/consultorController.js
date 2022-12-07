@@ -362,13 +362,13 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 /********************************************************************************/
 // AGREGAR NUEVAS TAREAS x EMPRESA
 consultorController.agregarTarea = async (req, res) => {
-    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email } = req.body
+    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email, prioridades } = req.body
     // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
-    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa }
+    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa, prioridades }
     /** Enviando Notificación al Email de nueva tarea */
     const asunto = 'Se ha agregado una nueva tarea';
     const template = tareaNuevaHTML(actividad, nombreEmpresa);
-    const resultEmail = await sendEmail(email, asunto, template)
+    const resultEmail = await sendEmail(email, asunto, template);
     if (resultEmail == false) {
         console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea nueva >>>> \n")
     } else {
@@ -388,8 +388,9 @@ consultorController.editarTarea = async (req, res) => {
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado } = req.body
-    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado }
+    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridades } = req.body
+    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridades }
+    
     const { idTarea } = req.body
 
     if (estado == 2) {

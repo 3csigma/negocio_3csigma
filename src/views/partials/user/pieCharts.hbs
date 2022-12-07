@@ -1,5 +1,7 @@
 <script src="../pie_chart/Chart.min.js"></script>
 
+
+
 <script>
     (function () {
 
@@ -142,6 +144,7 @@
                         }
                         // Barra de progreso
                         $('#barra').css("width", infoGeneral + "%").attr("aria-valuenow", infoGeneral)
+                        
                         console.log("DIM >> ", dim)
                         pieChart1(dim[0])
                         pieChart2(dim[1])

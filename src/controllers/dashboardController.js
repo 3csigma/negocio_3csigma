@@ -112,11 +112,11 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
-    const { codigo, estado, usuario_calendly } = req.body;
+    const { codigo, estado, nivel, link_calendly1, link_calendly2, link_calendly3, link_calendly4 } = req.body;
+    const linkCalendly_nivel = {nivel, link_calendly1, link_calendly2, link_calendly3 , link_calendly4}
     const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
-    const urlCalendly = { usuario_calendly } // URL Calendly
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
-    const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [urlCalendly, codigo])
+    const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [linkCalendly_nivel, codigo])
     const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
 

@@ -24,7 +24,7 @@
             <div class="col-md-12 col-xl-5 col-xxl-5">
                 <div class="card avtivity-card">
                     <div class="card-body">
-                        <h2 style="color: #000; font-weight: bold;">Rendimiento</h2>
+                        <h2 style="color: #000; font-weight: bold;margin-bottom: 21px;">Rendimiento</h2>
                         <input type="hidden" id="jsonRendimiento" value="{{jsonRendimiento}}">
                         <div class="row">
                             <div class="col-sm-4">
@@ -37,7 +37,12 @@
                                 <i class="fa fa-square" style="color: #812082"></i> <span class="small-text">Gastos</span>
                             </div>
                         </div>
-                        <div id="line_chart_ventas" class="morris_chart_height"></div>
+                        <br>
+                        <br>
+                        {{!-- <div id="line_chart_ventas" class="morris_chart_height"></div> --}}
+                        <div style="margin-left: -31px;">
+                                <div id="multi-line-chart" class="ct-chart ct-golden-section chartlist-chart"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -377,3 +382,110 @@
             Scripts
 ***********************************-->
 <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+<script src="../vendor/js/chartist.min.js"></script>
+<script src="../vendor/js/chartist-plugin-tooltip.min.js"></script>
+
+<script>
+    (function($) {
+
+        const dzChartlist = function(){
+            const screenWidth = $(window).width();
+                
+            const setChartWidth = function(){
+                
+                if(screenWidth <= 768)
+                {
+                    const chartBlockWidth = 0;
+                    if(screenWidth >= 500)
+                    {
+                        chartBlockWidth = 250;
+                    }else{
+                        chartBlockWidth = 300;
+                    }
+                    
+                    jQuery('.chartlist-chart').css('min-width',chartBlockWidth - 31);
+                }
+            }
+            
+            const multiLineChart = (fechas, datos) => {
+                //Multi-line labels
+                new Chartist.Bar('#multi-line-chart', {
+                    labels: fechas,
+                    series: datos,
+                }, {
+                    seriesBarDistance: 10,
+                    axisX: { offset: 60 },
+                    axisY: {
+                        offset: 80,
+                        labelInterpolationFnc: function(value) {
+                            return '$' + value
+                        },
+                        scaleMinSpace: 15
+                    },
+                    plugins: [Chartist.plugins.tooltip()],
+                    classNames: {
+                        chart: 'ct-chart-bar',
+                        horizontalBars: 'ct-horizontal-bars',
+                        label: 'ct-label',
+                        labelGroup: 'ct-labels',
+                        series: 'ct-series',
+                        bar: 'ct-bar',
+                        grid: 'ct-grid',
+                        gridGroup: 'ct-grids',
+                        gridBackground: 'ct-grid-background',
+                        vertical: 'ct-vertical',
+                        horizontal: 'ct-horizontal',
+                        start: 'ct-start',
+                        end: 'ct-end'
+                    }
+                });
+            }
+
+            /* Function ============ */
+                return {
+                    init:function(){
+                    },
+                    
+                    load:function(){
+                        
+                        /** Gráfica de Rendimiento para Empresas */
+                        let matriz = new Array(), fechas = [];
+                        let dataEmpresa = document.querySelector('#jsonRendimiento').value
+                        dataEmpresa = JSON.parse(dataEmpresa)
+                        if (dataEmpresa.length > 0) {
+                            for(let i=0;i<dataEmpresa.length; i++){
+                                matriz[i] = new Array();
+                                fechas.push(dataEmpresa[i].fecha)
+                                for(let j=0;j<3; j++){
+                                    if(j == 0){
+                                        matriz[i][j] = dataEmpresa[i].total_ventas                                    
+                                    }  else if(j == 1){
+                                        matriz[i][j] = dataEmpresa[i].total_compras                                    
+                                    }else if(j == 2){
+                                        matriz[i][j] = dataEmpresa[i].total_gastos    
+                                    }
+                                }
+                            }
+                        // TRANPONER MATRIZ (Ej: de 3 COLUMNAS a 2)
+                        let arrayT = matriz[0].map((_, colIndex) => matriz.map(x => x[colIndex]));
+                        multiLineChart(fechas, arrayT) 
+                        }
+              
+                    }
+                }
+        }();
+
+        jQuery(document).ready(function(){
+        });
+            
+        jQuery(window).on('load',function(){
+            dzChartlist.load();
+        });
+
+        jQuery(window).on('resize',function(){
+        });     
+
+    })(jQuery);
+</script>

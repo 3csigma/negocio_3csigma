@@ -468,17 +468,41 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
     const tareas = {};
     tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY fecha_entrega ASC', [empresa])
     tareas.todas.forEach(x => {
+
+    //   **** VALIDANDO ESTADOS *****
+
         if (x.estado == 0) { 
             x.estado = 'Pendiente'; x.color = 'primary';
-            x.tiempo = 'A tiempo'
-            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+            // x.tiempo = 'A tiempo'
+            // if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
         }
         if (x.estado == 1) { 
-            x.estado = 'En Proceso'; x.color = 'warning';
-            x.tiempo = 'A tiempo'
-            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+            x.estado = 'Proceso'; x.color = 'warning';
+            // x.tiempo = 'A tiempo'
+            // if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
         }
         if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
+        x.responsable ? x.responsable : x.responsable = "N/A"
+
+
+    //   **** VALIDANDO PRIORIDADES *****
+      
+        if (x.prioridades == "Sin especificar" ) {
+                x.prioridades = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px" ;
+        }
+        if (x.prioridades == 0 ) {
+                x.prioridades = 'Baja'; x.background = "background: #a184e3";
+        }
+        if (x.prioridades == 1 ) {
+                x.prioridades = 'Media'; x.background = "background: #825fd3;"
+        }
+        if (x.prioridades == 2 ) {
+                x.prioridades = 'Alta'; x.background = "background: #6647af;"
+        }
+        if (x.prioridades == 3 ) {
+                x.prioridades = 'Crítica';  x.background = "background: #50368c;"
+        }
+        
         const dateObj = new Date(x.fecha_entrega);
         const mes = dateObj.toLocaleString("es-US", { month: "short" });
         x.dia = dateObj.getDate()+1
@@ -487,13 +511,39 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
         if (x.dimension == 'Administración') x.icono = 'fa-user-tie'
         if (x.dimension == 'Operaciones') x.icono = 'fa-gear'
         if (x.dimension == 'Marketing') x.icono = 'fa-bullhorn'
+
+    //  *** DIFERENCIA ENTRE LAS 2 FECHA  ****
+        x.fechaini = new Date(x.fecha_inicio);
+        x.fechaini = x.fechaini.getTime();
+        x.fechaini = (((x.fechaini / 1000) / 60) / 60) / 24
+        
+        x.fechafin = new Date(x.fecha_entrega);
+        x.fechafin = x.fechafin.getTime();
+        x.fechafin = (((x.fechafin / 1000) / 60) / 60) / 24
+
+    //  *** FECHA ACTUAL ****
+        x.fecha_actual = new Date().getTime();
+        x.fecha_actual = (((x.fecha_actual / 1000) / 60) / 60) / 24
+
+        let plazo = x.fechafin - x.fechaini
+        let diasCorridos = x.fecha_actual - x.fechaini
+        diasCorridos = parseInt(diasCorridos)
+        x.resultado = (diasCorridos * 100) / plazo
+
+        // if (x.resultado <=0) {
+        //     x.resultado = 0
+        // }
+
+
     })
-    tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
-    tareas.pendientes.cant = tareas.pendientes.length;
-    tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
-    tareas.enProceso.cant = tareas.enProceso.length;
-    tareas.completadas = tareas.todas.filter(i => i.estado == 'Completada')
-    tareas.completadas.cant = tareas.completadas.length;
+
+    tareas.info = tareas.todas
+    // tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
+    // tareas.pendientes.cant = tareas.pendientes.length;
+    // tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
+    // tareas.enProceso.cant = tareas.enProceso.length;
+    // tareas.completadas = tareas.todas.filter(i => i.estado == 'Completada')
+    // tareas.completadas.cant = tareas.completadas.length;
     return tareas;
 }
 

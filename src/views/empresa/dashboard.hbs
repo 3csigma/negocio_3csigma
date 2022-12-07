@@ -167,6 +167,10 @@
                 </div>
                 {{!-- Fin de Cuadros principales --}}
             </div>
+            {{#if existencia}}
+            {{> user/graficasCircular}}
+            {{else}} 
+            {{/if}}
 
             {{!-- Grafíco de indicadores --}}
             <div class="col-xl-6 col-xxl-12">
@@ -191,8 +195,6 @@
                         </div>
                     </div>
                     <!-- ./ Fin de pestañas -->
-                
-                
                 
                     <div class="tab-content">
 
@@ -338,4 +340,25 @@
 {{#if pagoPendiente}}
 <input type="hidden" id="diagnosticoPagado" value="{{diagnosticoPagado}}">
 <input type="hidden" id="tokenForm" value="{{csrfToken}}">
+{{/if}}
+
+
+
+
+<!-- ****************** Required JS - DASHBOARD ****************** -->
+<script src="../vendor/js/Chart.bundle.min.js"></script>
+<script src="../vendor/js/owl.carousel.js"></script>
+<script src="../vendor/js/personalScripts.js"></script>
+<!-- Chart piety plugin files -->
+<script src="../vendor/js/jquery.peity.min.js"></script>
+<script src="../js/jquery.js"></script>
+
+{{#if jsonDim_empresa}}
+{{> user/pieCharts}}
+{{/if}}
+
+{{!-- Scripts Stripe --}}
+{{#if stripe}}
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+<script src="https://js.stripe.com/v3/"></script>
 {{/if}}

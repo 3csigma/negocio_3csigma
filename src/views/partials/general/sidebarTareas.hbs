@@ -99,6 +99,16 @@
                         <span id="estado-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
                     </div>
                     <div class="col-5">
+                        <select class="form-select" id="prioridades" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
+                            <option value="Sin especificar">Sin especificar</option>
+                            <option value="0">Baja</option>
+                            <option value="1">Media</option>
+                            <option value="2">Alta</option>
+                            <option value="3">Crítica</option>
+                        </select>
+                        <span id="prioridad-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
+                    </div>
+                    <div class="col-1" style="margin-left: -52px;">
                         <span id="tiempo-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar"></span>
                     </div>
                     <div class="col-12">
@@ -187,7 +197,7 @@
                 </div>
 
                 {{!-- MENSAJES --}}
-                {{!-- <div class="row">
+                <div class="row">
                     <p class="subtitulos-Sidebar">Mensajes</p>
                     <div id="DZ_W_TimeLine11" class="widget-timeline dz-scroll style-1 height270 ps ps--active-y">
                         <ul class="timeline">
@@ -202,8 +212,14 @@
                             </li> 
                         </ul>
                     </div>
-                </div> --}}
-
+                </div>
+                <div class="row" style="height: 100px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
+                    <input type="text" class="form-control" placeholder="Escribe un mensaje o una actualización..." style="border:none;">
+                        <button style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); width: 28%;border: none;height: 32px;color: #fff !important; margin-right: 10px;font-size: 13px;">
+                            Comentar
+                        </button>
+                </div>
+               
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar">
                     {{!-- <textarea id="mensajes_" rows="2" placeholder="Escribe un mensaje o actulización..." style="width: 100%; border-radius: 1em; padding: 1em;"></textarea> --}}

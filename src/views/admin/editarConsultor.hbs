@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Dirección</label>
                             <textarea class="form-control" style="min-height: 45px; height: 45px; max-height: 108px"
@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Experiencia</label>
                             <input type="text" value="{{consultor.experiencia_years}} años" class="form-control"
@@ -79,7 +79,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Estado</label>
                             <select id="estado_consul" class="mr-sm-2 default-select">
@@ -110,37 +110,99 @@
                             </select>
                         </div>
                     </div>
-
+                     <div class="col-xl-3">
+                        <div class="form-group">
+                            <label>Nivel</label>
+                            <select id="nivel_consul" class="mr-sm-2 default-select">
+                                {{#comparar consultor.nivel '==' 1}}
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                {{/comparar}}
+                                {{#comparar consultor.nivel '==' 2}}
+                                <option value="1">1</option>
+                                <option value="2" selected>2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                {{/comparar}}
+                                {{#comparar consultor.nivel '==' 3}}
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3" selected>3</option>
+                                <option value="4">4</option>
+                                {{/comparar}}
+                                {{#comparar consultor.nivel '==' 4}}
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4" selected>4</option>
+                                {{/comparar}}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <!-- ./Fin Fila 1 -->
-
                 <div class="row mt-2 ">
-
                     <div class="col-xl-6 m-auto">
                         <div class="form-group">
-                            <label>URL Calendly</label>
+                            <label>Link Calendly Diganóstico de negocio</label>
                             <div class="input-group input-primary">
-                                <input type="text" name="usuario_calendly" id="urlCalendly" class="form-control" readonly value="{{consultor.usuario_calendly}}">
+                                <input type="text" id="link_calendly1" class="form-control" readonly value="{{consultor.link_calendly1}}">
                                 <div class="input-group-append">
                                     <button type="button" class="input-group-text" onclick="txtCalendly()">Editar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                      <div class="col-xl-6 m-auto">
+                        <div class="form-group">
+                            <label>Link Calendly Análisis de negocio</label>
+                            <div class="input-group input-primary">
+                                <input type="text" id="link_calendly2" class="form-control" readonly value="{{consultor.link_calendly2}}">
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="txtCalendly()">Editar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 ">
+                    <div class="col-xl-6 m-auto">
+                        <div class="form-group">
+                            <label>Link Calendly Plan Estratégico</label>
+                            <div class="input-group input-primary">
+                                <input type="text" id="link_calendly3" class="form-control" readonly value="{{consultor.link_calendly3}}">
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="txtCalendly()">Editar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                      <div class="col-xl-6 m-auto">
+                        <div class="form-group">
+                            <label>Link Calendly Plan Empresarial</label>
+                            <div class="input-group input-primary">
+                                <input type="text" id="link_calendly4" class="form-control" readonly value="{{consultor.link_calendly4}}">
+                                <div class="input-group-append">
+                                    <button type="button" class="input-group-text" onclick="txtCalendly()">Editar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2 ">
                     <div class="col-xl-6 m-auto">
                         <div class="form-group">
                             <label>Certificado de Consul International Group</label>
                             <div class="input-group input-primary">
                                 <input type="text" class="form-control" readonly value="{{consultor.txtCertificado}}">
                                 <div class="input-group-append">
-                                    <a class="input-group-text" target="_blank" href="{{consultor.certificado}}">Ver
-                                        documento</a>
+                                    <a class="input-group-text" target="_blank" href="{{consultor.certificado}}">Ver documento</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -153,22 +215,30 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
-
 </div>
-
-
 <!--******************************
             SCRIPTS
 *******************************-->
 <script>
     function txtCalendly() {
-        const urlCalendly = document.getElementById("urlCalendly");
-        urlCalendly.removeAttribute("readonly")
-        urlCalendly.focus()
+        const urlCalendly1 = document.getElementById("link_calendly1");
+        const urlCalendly2 = document.getElementById("link_calendly2");
+        const urlCalendly3 = document.getElementById("link_calendly3");
+        const urlCalendly4 = document.getElementById("link_calendly4");
+
+        urlCalendly1.removeAttribute("readonly")
+        urlCalendly1.focus()
+
+        urlCalendly2.removeAttribute("readonly")
+        urlCalendly2.focus()
+
+        urlCalendly3.removeAttribute("readonly")
+        urlCalendly3.focus()
+
+        urlCalendly4.removeAttribute("readonly")
+        urlCalendly4.focus()
     }
 </script>
