@@ -2,7 +2,7 @@ const pool = require('../database')
 const empresaController = exports;
 const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
-const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos } = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1;
@@ -11,7 +11,7 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisi
 empresaController.index = async (req, res) => {
     diagnosticoPagado = 0, analisisPagado = 0;
     acuerdoFirmado = false;
-    req.intentPay = undefined; // Intento de pago
+    req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
     const id_empresa = empresa.id_empresas;
@@ -229,27 +229,9 @@ empresaController.index = async (req, res) => {
 
     /************************************************************************************* */
     const fechaActual = new Date().toLocaleDateString('fr-CA');
-    const actividad = await consultarTareas(id_empresa, fechaActual)
-    let dim1, dim2, dim3, dim4, jsonDim_empresa = false;
-    if (actividad.length > 0) {
-        dim1 = actividad.todas.filter(i => i.dimension == 'Producto');
-        dim2 = actividad.todas.filter(i => i.dimension == 'Administración');
-        dim3 = actividad.todas.filter(i => i.dimension == 'Operaciones');
-        dim4 = actividad.todas.filter(i => i.dimension == 'Marketing');
-
-        const estado1 = dim1.filter(x => x.estado == 'Completada'); 
-        const estado2 = dim2.filter(x => x.estado == 'Completada'); 
-        const estado3 = dim3.filter(x => x.estado == 'Completada'); 
-        const estado4 = dim4.filter(x => x.estado == 'Completada');
-        dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
-
-        const listo = [
-            ((estado1.length*100)/dim1).toFixed(1), 
-            ((estado2.length*100)/dim2).toFixed(1), 
-            ((estado3.length*100)/dim3).toFixed(1),
-            ((estado4.length*100)/dim4).toFixed(1),
-        ]
-
+    const dimObj = await tareasGenerales(id_empresa, fechaActual)
+    let jsonDim_empresa = false;
+    if (dimObj.tareas.length > 0) {
         jsonDim_empresa = JSON.stringify([
             { ok: (listo[0]), pendiente: (100-listo[0]) },
             { ok: (listo[1]), pendiente: (100-listo[1]) },
@@ -269,7 +251,7 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, dim1, dim2, dim3, dim4, jsonDim_empresa
+        nuevosProyectos, rendimiento, jsonDim_empresa
     })
 }
 
@@ -760,24 +742,7 @@ empresaController.planEstrategico = async (req, res) => {
     empresa = empresa[0].id_empresas
     const fechaActual = new Date().toLocaleDateString('fr-CA');
 
-    const tareas = await consultarTareas(empresa, fechaActual)
-    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
-    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
-    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
-    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
-
-    const estado1 = dim1.filter(x => x.estado == 'Completada'); 
-    const estado2 = dim2.filter(x => x.estado == 'Completada'); 
-    const estado3 = dim3.filter(x => x.estado == 'Completada'); 
-    const estado4 = dim4.filter(x => x.estado == 'Completada');
-    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
-
-    const listo = [
-        ((estado1.length*100)/dim1).toFixed(1), 
-        ((estado2.length*100)/dim2).toFixed(1), 
-        ((estado3.length*100)/dim3).toFixed(1),
-        ((estado4.length*100)/dim4).toFixed(1),
-    ]
+    const dimObj = tareasGenerales(empresa, fechaActual)
 
     const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
     let datosTabla = await consultarDatos('rendimiento_empresa')
@@ -816,6 +781,6 @@ empresaController.planEstrategico = async (req, res) => {
         user_dash: true, pagoDiag: true, itemActivo: 6, acuerdoFirmado: true,
         actualYear: req.actualYear, botones,
         tareas, informePlan, propuesta,
-        dim1, dim2, dim3, dim4, jsonRendimiento
+        dimObj, jsonRendimiento
     })
 }

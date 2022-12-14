@@ -4,10 +4,9 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarTareas, consultarDatos } = require('../lib/helpers')
+const { consultarInformes, consultarTareas, consultarDatos, tareasGenerales } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML  } = require('../lib/mail.config');
-const { Console } = require('console');
 
 let aprobarConsultor = false;
 
@@ -1158,8 +1157,6 @@ dashboardController.guardarRespuestas = async (req, res) => {
     const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
     // Capturar ID Empresa
     const id_empresa = infoEmp[0].id_empresas;
-    // Capturar ID Consultor
-    const id_consultor = infoEmp[0].consultor;
 
     // EXPERIENCIA EN EL RUBRO
     const { rubro, exp_previa, foda, unidades_rubro, actividades, vision } = req.body
@@ -1217,7 +1214,7 @@ dashboardController.guardarRespuestas = async (req, res) => {
     const { m1, m2, m3, m4, m5 } = req.body
     let metas = JSON.stringify({ m1, m2, m3, m4, m5 })
 
-    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, rubro, exp_rubro, mentalidad_empresarial, viabilidad, productos_servicios, administracion, talento_humano, finanzas, servicio_cliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, metas }
+    const nuevoDiagnostico = { id_empresa, fecha, rubro, exp_rubro, mentalidad_empresarial, viabilidad, productos_servicios, administracion, talento_humano, finanzas, servicio_cliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, metas }
 
     /* ========================== Calculos del Diagnóstico ========================== */
     // Categorías

@@ -6,7 +6,7 @@ const stripe = require('stripe')(clientSecretStripe);
 
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
-    console.log("URL Sesión>>> ", req.intentPay);
+    console.log("URL Sesión>>> ", req.session.intentPay);
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,

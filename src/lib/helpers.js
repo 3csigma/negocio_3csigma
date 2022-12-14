@@ -9,6 +9,7 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 const multer = require('multer');
 const path = require('path');
+
 const { sendEmail, pagoAnalisisPendienteHTML, tareasRetrasadasHTML } = require('../lib/mail.config')
 const helpers = {}
 
@@ -29,7 +30,6 @@ helpers.matchPass = async (password, passDB) => {
 
 // Generar Token de Autenticación en API Docusing
 helpers.authToken = async () => {
-    
     try {
         let fechaActual = Math.floor(Date.now()/1000) // Fecha Actual
         let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
@@ -64,19 +64,19 @@ helpers.authToken = async () => {
 
 // Encriptando texto
 helpers.encriptarTxt = (text) => {
-   let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
-   let encrypted = cipher.update(text);
-   encrypted = Buffer.concat([encrypted, cipher.final()]);
-   return encrypted.toString('hex');
+    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
+    let encrypted = cipher.update(text);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return encrypted.toString('hex');
 }
 
 // Desencriptando texto
 helpers.desencriptarTxt = (text) => {
-   let encryptedText = Buffer.from(text, 'hex');
-   let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
-   let decrypted = decipher.update(encryptedText);
-   decrypted = Buffer.concat([decrypted, decipher.final()]);
-   return decrypted.toString();
+    let encryptedText = Buffer.from(text, 'hex');
+    let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
 }
 
 // Eliminar elemetos duplicados de un Arreglo
@@ -90,6 +90,7 @@ helpers.delDuplicados = (array) => {
     }
     return resultado;
 }
+
 /************************************************************************************************************** */
 /** CARGA DE ARCHIVOS */
 helpers.uploadFiles = (preNombre, inputName, carpeta) => {
@@ -553,6 +554,30 @@ helpers.consultarDatos = async (tabla, extra = null) => {
         data = await pool.query('SELECT * FROM '+ tabla + ' ' + extra)
     }
     return data;
+}
+
+/******************************************************************** */
+// FUNCIÓN MULTIPLE
+helpers.tareasGenerales = async (empresa, fechaActual) => {
+    const tareas = await helpers.consultarTareas(empresa, fechaActual)
+    let d1 = tareas.todas.filter(i => i.dimension == 'Producto');
+    let d2 = tareas.todas.filter(i => i.dimension == 'Administración');
+    let d3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
+    let d4 = tareas.todas.filter(i => i.dimension == 'Marketing');
+
+    const estado1 = d1.filter(x => x.estado == 'Completada'); 
+    const estado2 = d2.filter(x => x.estado == 'Completada'); 
+    const estado3 = d3.filter(x => x.estado == 'Completada'); 
+    const estado4 = d4.filter(x => x.estado == 'Completada');
+    d1 = d1.length; d2 = d2.length; d3 = d3.length; d4 = d4.length;
+    
+    const listo = [
+        ((estado1.length*100)/d1).toFixed(1), 
+        ((estado2.length*100)/d2).toFixed(1), 
+        ((estado3.length*100)/d3).toFixed(1),
+        ((estado4.length*100)/d4).toFixed(1),
+    ]
+    return { tareas, d1, d2, d3, d4, listo };
 }
 
 module.exports = helpers;

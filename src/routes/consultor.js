@@ -3,11 +3,11 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const consultorController = require('../controllers/consultorController');
-const { checkLogin, consultorLogueado } = require('../lib/auth')
+const { checkLogin } = require('../lib/auth')
 
 // Dashboard Principal Consultor
-router.get('/consultor', checkLogin, consultorLogueado, consultorController.index)
-router.get('/empresas-asignadas', checkLogin, consultorLogueado, consultorController.empresasAsignadas)
+// router.get('/consultor', checkLogin, consultorLogueado, consultorController.index)
+router.get('/empresas-asignadas', checkLogin, consultorController.empresasAsignadas)
 
 // PROPUESTAS PARA LA EMPRESA (ANÁLISIS DE NEGOCIO & PLAN EMPRESARIAL)
 const rutaAlmacen = multer.diskStorage({
@@ -24,33 +24,33 @@ const rutaAlmacen = multer.diskStorage({
 
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
-router.post('/enviar-propuesta-empresa', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
+router.post('/enviar-propuesta-empresa', checkLogin, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
 // router.post('/enviar-propuesta-empresarial', checkLogin, consultorLogueado, subirArchivo.single('filePropuesta'), consultorController.enviarPropuesta)
 
 // Cuestionario Análisis dimensión Producto 
-router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorLogueado, consultorController.analisisProducto)
-router.post('/analisis-dimension-producto',checkLogin, consultorLogueado, consultorController.guardarAnalisisProducto)
+router.get('/analisis-dimension-producto/:codigo', checkLogin, consultorController.analisisProducto)
+router.post('/analisis-dimension-producto',checkLogin, consultorController.guardarAnalisisProducto)
 
 // Cuestionario Análisis dimensión Administración 
-router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorLogueado, consultorController.analisisAdministracion)
-router.post('/analisis-dimension-administracion', checkLogin, consultorLogueado, consultorController.guardarAnalisisAdministracion)
+router.get('/analisis-dimension-administracion/:codigo', checkLogin, consultorController.analisisAdministracion)
+router.post('/analisis-dimension-administracion', checkLogin, consultorController.guardarAnalisisAdministracion)
 
 // Cuestionario Análisis dimensión Operación 
-router.get('/analisis-dimension-operaciones/:codigo', checkLogin, consultorLogueado, consultorController.analisisOperacion)
-router.post('/analisis-dimension-operaciones', checkLogin, consultorLogueado, consultorController.guardarAnalisisOperacion)
+router.get('/analisis-dimension-operaciones/:codigo', checkLogin, consultorController.analisisOperacion)
+router.post('/analisis-dimension-operaciones', checkLogin, consultorController.guardarAnalisisOperacion)
 
 // Cuestionario Análisis dimensión Marketing  
-router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorLogueado, consultorController.analisisMarketing)
-router.post('/analisis-dimension-marketing', checkLogin, consultorLogueado, consultorController.guardarAnalisisMarketing)
+router.get('/analisis-dimension-marketing/:codigo', checkLogin, consultorController.analisisMarketing)
+router.post('/analisis-dimension-marketing', checkLogin, consultorController.guardarAnalisisMarketing)
 
 /********************************************************************************/
 // Etapa 3 - Plan Estratégico de Negocio
 /********************************************************************************/
 // Nuevas Tareas
-router.post('/agregarTarea', checkLogin, consultorLogueado, consultorController.agregarTarea)
+router.post('/agregarTarea', checkLogin, consultorController.agregarTarea)
 router.post('/editarTarea', checkLogin, consultorController.editarTarea)
-router.post('/actualizarTarea', checkLogin, consultorLogueado, consultorController.actualizarTarea)
-router.post('/eliminarTarea', checkLogin, consultorLogueado, consultorController.eliminarTarea)
-router.post('/nuevoRendimiento', checkLogin, consultorLogueado, consultorController.nuevoRendimiento)
+router.post('/actualizarTarea', checkLogin, consultorController.actualizarTarea)
+router.post('/eliminarTarea', checkLogin, consultorController.eliminarTarea)
+router.post('/nuevoRendimiento', checkLogin, consultorController.nuevoRendimiento)
 
 module.exports = router

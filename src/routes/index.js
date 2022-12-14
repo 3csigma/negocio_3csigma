@@ -1,15 +1,16 @@
 const express = require('express');
 const router = express.Router();
+const empresaController = require('../controllers/empresaController');
+const consultorController = require('../controllers/consultorController');
 const dashboardController = require('../controllers/dashboardController');
-const { actualizarFotoPerfil, update_user } = require('../controllers/userController');
-const { checkLogin, noLogueado, adminLogueado, consultorLogueado } = require('../lib/auth')
+const userController = require('../controllers/userController');
+const { checkLogin, noLogueado } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 const cron = require('node-cron');
 const { enabled_nextPay, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas } = require('../lib/helpers')
-
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -27,10 +28,7 @@ const rutaAlmacen = multer.diskStorage({
 
 });
 const subirArchivo = multer({ storage: rutaAlmacen })
-
-
 // ===================
-
 // todo ===>> Cambiar foto de perfil
 const rutaCarpetas = multer.diskStorage({
 
@@ -49,42 +47,63 @@ const rutaCarpetas = multer.diskStorage({
         }
     }
 });
-
 const cargarFotoPerfil = multer({ storage: rutaCarpetas});
 
+function chooseController(req, res) {
+    console.log("URL ", req.url)
+    if (req.isAuthenticated()) {
+        if (req.session.empresa) {
+            empresaController.index(req, res)
+        } else if (req.session.admin) {
+            dashboardController.admin(req, res)
+        } else if (req.session.consultor) {
+            consultorController.index(req, res)
+        } else {
+            // res.send('NO ENCONTRADO - VISTA')
+            res.redirect('404')
+        }
+    } else {
+        return res.redirect('/login')
+    }
+}
+
+// Dashboard Principal
+router.get('/', chooseController)
+
 // Perfil de Usuarios
-router.post('/updateProfile', checkLogin, update_user);
-router.post('/actualizarFotoPerfil', checkLogin, cargarFotoPerfil.single('foto'), actualizarFotoPerfil);
+router.post('/updateProfile', checkLogin, userController.update_user);
+router.post('/actualizarFotoPerfil', checkLogin, cargarFotoPerfil.single('foto'), userController.actualizarFotoPerfil);
 
 // Dashboard Principal Administrador
-router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
+// router.get('/admin', checkLogin, adminLogueado, dashboardController.admin)
 router.get('/registro-de-consultores', noLogueado, csrfProtection, dashboardController.registroConsultores)
 router.post('/registro-de-consultores', noLogueado, subirArchivo.single('certificadoConsul'), csrfProtection, dashboardController.addConsultores)
 
 // Consultores Admin
-router.get('/consultores', checkLogin, adminLogueado, dashboardController.mostrarConsultores)
-router.get('/consultores/:codigo', checkLogin, adminLogueado, dashboardController.editarConsultor)
-router.post('/actualizarConsultor', checkLogin, adminLogueado, dashboardController.actualizarConsultor)
-router.post('/bloquearConsultor', checkLogin, adminLogueado, dashboardController.bloquearConsultor)
+router.get('/consultores', checkLogin, dashboardController.mostrarConsultores)
+router.get('/consultores/:codigo', checkLogin, dashboardController.editarConsultor)
+router.post('/actualizarConsultor', checkLogin, dashboardController.actualizarConsultor)
+router.post('/bloquearConsultor', checkLogin, dashboardController.bloquearConsultor)
 
 // Empresas Admin
-router.get('/empresas', checkLogin, adminLogueado, dashboardController.mostrarEmpresas)
-router.get('/empresas/:codigo', checkLogin, consultorLogueado, dashboardController.editarEmpresa)
-router.post('/actualizarEmpresa', checkLogin, adminLogueado, dashboardController.actualizarEmpresa)
-router.post('/bloquearEmpresa', checkLogin, adminLogueado, dashboardController.bloquearEmpresa)
+router.get('/empresas', checkLogin, dashboardController.mostrarEmpresas)
+router.get('/empresas/:codigo', checkLogin, dashboardController.editarEmpresa)
+router.get('/empresas-asignadas/:codigo', checkLogin, dashboardController.editarEmpresa)
+router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpresa)
+router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
 // PAGOS MANUALES (EXTERNOS)
-router.post('/pagoManual-Diagnostico', checkLogin, adminLogueado, dashboardController.pagoManualDiagnostico)
-router.post('/pagoManual-Empresas', checkLogin, adminLogueado, dashboardController.pagoManualEmpresas)
+router.post('/pagoManual-Diagnostico', checkLogin, dashboardController.pagoManualDiagnostico)
+router.post('/pagoManual-Empresas', checkLogin, dashboardController.pagoManualEmpresas)
 // Cuestionario Diagnóstico Empresa Establecida
-router.get('/cuestionario-diagnostico/:codigo', checkLogin, consultorLogueado, dashboardController.cuestionario)
-router.post('/cuestionario-diagnostico', checkLogin, consultorLogueado, dashboardController.enviarCuestionario)
+router.get('/cuestionario-diagnostico/:codigo', checkLogin, dashboardController.cuestionario)
+router.post('/cuestionario-diagnostico', checkLogin, dashboardController.enviarCuestionario)
 
 // Cuestionario Diagnóstico Empresa Nueva
-router.get('/diagnostico-proyecto/:codigo', checkLogin, consultorLogueado, dashboardController.dgNuevosProyectos)
-router.post('/diagnostico-proyecto/', checkLogin, consultorLogueado, dashboardController.guardarRespuestas)
+router.get('/diagnostico-proyecto/:codigo', checkLogin, dashboardController.dgNuevosProyectos)
+router.post('/diagnostico-proyecto/', checkLogin, dashboardController.guardarRespuestas)
 
 // SUBIR INFORMES DE TODAS LAS ETAPAS
-router.post('/guardarInforme', checkLogin, consultorLogueado, dashboardController.subirInforme, dashboardController.guardarInforme)
+router.post('/guardarInforme', checkLogin, dashboardController.subirInforme, dashboardController.guardarInforme)
 
 /*******************************************************************************************************/
 // Ejecución Diaria (12pm)

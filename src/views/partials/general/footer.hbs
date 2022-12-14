@@ -45,159 +45,158 @@
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
 <script>
     // ==> Previsualizar foto de perfil == INICIO <==
-    let formData
-    let fileInput
-function fileValidation() {
-    fileInput = document.getElementById('previewProfile')
-    const filePath = fileInput.value;
-    const allowedExtensions = /(.jpg|.jpeg|.png)$/i;
-    const archivo = fileInput.files[0];
+    let formData, fileInput;
+    function fileValidation() {
+        fileInput = document.getElementById('previewProfile')
+        const filePath = fileInput.value;
+        const allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+        const archivo = fileInput.files[0];
 
-    if(!allowedExtensions.exec(filePath)) {
-    toastr.success("Solo los formatos jpg, jpeg, png son aceptados", "Atención", {
-        positionClass: "toast-top-full-width",
-        timeOut: 3e3,
-        closeButton: !0,
-        debug: !1,
-        newestOnTop: !0,
-        progressBar: !0,
-        preventDuplicates: !0,
-        onclick: null,
-        showDuration: "200",
-        hideDuration: "200",
-        extendedTimeOut: "200",
-        showEasing: "swing",
-        hideEasing: "linear",
-        showMethod: "fadeIn",
-        hideMethod: "fadeOut",
-        tapToDismiss: !1
-    })
-    return false;
-    } else if (archivo.size > 5000000) {
-    toastr.warning("Tu foto supera 1MB", "Error", {
-            positionClass: "toast-top-full-width",
-            timeOut: 3e3,
-            closeButton: !0,
-            debug: !1,
-            newestOnTop: !0,
-            progressBar: !0,
-            preventDuplicates: !0,
-            onclick: null,
-            showDuration: "200",
-            hideDuration: "200",
-            extendedTimeOut: "200",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut",
-            tapToDismiss: !1
-        })
-    return false;
-    }else {
-    /** SI LA FOTO ES ACEPTADA **/
-    if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-        $('#imagePre1').attr('src', e.target.result); // Renderizamos la imagen
-        }
-        reader.readAsDataURL(fileInput.files[0]);
-    }
-    const foto = fileInput.files[0]
-    formData = new FormData();
-    formData.append('foto', foto);
-    guardarFoto(formData);
-    }
-}
-$("#imgInp").change(function () {
-    // Código a ejecutar cuando se detecta un cambio de archivO
-    readImage(this);
-});
-// ==> Previsualizar foto de perfil == FIN <==
-
-function guardarFoto(formData) {
-    fetch('/actualizarFotoPerfil', {
-        method: 'POST',
-        body: formData,
-    }).then(res => res.json())
-    .catch(error => console.error('Error: ', error))
-    .then(resultado => {
-        if (resultado) {
-                $(".btn-save").attr("disabled", true);
-                $(".loading-icon").removeClass("mostrar");
-                $(".text-btn").text("Cargando..");
-
-            setTimeout(function() {
-                $(".btn-save").attr("disabled", false);
-                $(".loading-icon").addClass("mostrar");
-                $(".text-btn").text("Guardar cambios");
-            }, 4000)
-            console.log("Todo correcto")
+        if (!allowedExtensions.exec(filePath)) {
+            toastr.success("Solo los formatos jpg, jpeg, png son aceptados", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+            return false;
+        } else if (archivo.size > 5000000) {
+            toastr.warning("Tu foto supera 1MB", "Error", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+            return false;
         } else {
-            console.log("Sin datos")
+            /** SI LA FOTO ES ACEPTADA **/
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePre1').attr('src', e.target.result); // Renderizamos la imagen
+                }
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+            const foto = fileInput.files[0]
+            formData = new FormData();
+            formData.append('foto', foto);
+            guardarFoto(formData);
         }
-    })
-}
+    }
+    $("#imgInp").change(function () {
+        // Código a ejecutar cuando se detecta un cambio de archivO
+        readImage(this);
+    });
+    // ==> Previsualizar foto de perfil == FIN <==
 
-(function () {
-    $(document).ready(function () {
-        // VAINAS PARA SELECTOR CON BUSCADOR
-        function selectBuscarPais(id) {
-            id.chosen({
-                no_results_text: "Sin resultados para",
-                allow_single_deselect: true,
-                placeholder_text_single: "Selecciona tu País/Nacionalidad",
-                width: '100%',
+    function guardarFoto(formData) {
+        fetch('/actualizarFotoPerfil', {
+            method: 'POST',
+            body: formData,
+        }).then(res => res.json())
+            .catch(error => console.error('Error: ', error))
+            .then(resultado => {
+                if (resultado) {
+                    $(".btn-save").attr("disabled", true);
+                    $(".loading-icon").removeClass("mostrar");
+                    $(".text-btn").text("Cargando..");
+
+                    setTimeout(function () {
+                        $(".btn-save").attr("disabled", false);
+                        $(".loading-icon").addClass("mostrar");
+                        $(".text-btn").text("Guardar cambios");
+                    }, 4000)
+                    console.log("Todo correcto")
+                } else {
+                    console.log("Sin datos")
+                }
+            })
+    }
+
+    (function () {
+        $(document).ready(function () {
+            // VAINAS PARA SELECTOR CON BUSCADOR
+            function selectBuscarPais(id) {
+                id.chosen({
+                    no_results_text: "Sin resultados para",
+                    allow_single_deselect: true,
+                    placeholder_text_single: "Selecciona tu País/Nacionalidad",
+                    width: '100%',
+                });
+            }
+            const claseCajaPais = $('#pais')
+            selectBuscarPais(claseCajaPais);
+
+            function selectBuscar(id) {
+                id.chosen({
+                    no_results_text: "Sin resultados para",
+                    allow_single_deselect: true,
+                    placeholder_text_single: "Selecciona una opción",
+                    width: '100%',
+                });
+            }
+            const claseCajaGeneral = $('.sltBuscar')
+            selectBuscar(claseCajaGeneral);
+
+            // CAMPOS SOLO LETRAS
+            $("input.campoLetras").bind('keypress', function (event) {
+                let regex = new RegExp("^[a-zA-ZÀ-ÿ.\u00f1\u00d1 ]+$");
+                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
             });
-        }
-        const claseCajaPais = $('#pais')
-        selectBuscarPais(claseCajaPais);
 
-        function selectBuscar(id) {
-            id.chosen({
-                no_results_text: "Sin resultados para",
-                allow_single_deselect: true,
-                placeholder_text_single: "Selecciona una opción",
-                width: '100%',
+            // CAMPOS SOLO NÚMEROS
+            $("input.campoNum").bind('keypress', function (event) {
+                let regex = new RegExp("^[0-9 .]+$");
+                let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
             });
-        }
-        const claseCajaGeneral = $('.sltBuscar')
-        selectBuscar(claseCajaGeneral);
 
-        // CAMPOS SOLO LETRAS
-        $("input.campoLetras").bind('keypress', function (event) {
-            let regex = new RegExp("^[a-zA-ZÀ-ÿ.\u00f1\u00d1 ]+$");
-            let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            if (!regex.test(key)) {
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        // CAMPOS SOLO NÚMEROS
-        $("input.campoNum").bind('keypress', function (event) {
-            let regex = new RegExp("^[0-9 .]+$");
-            let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-            if (!regex.test(key)) {
-                event.preventDefault();
-                return false;
-            }
-        });
-
-        // CheckButton Tiene Socios - ficha Cliente
-        $("input.checkSocios").change(function () {
-            //const numS = $("#cantidad_socios")
-            const numS = document.getElementById("cantidad_socios")
-            if ($(this).val() == "Si") {
-                numS.removeAttribute("disabled");
-                numS.style.background = "white";
-                numS.value = 1;
-            } else {
-                numS.setAttribute("disabled", true);
-                numS.style.background = "#f2f2f2";
-                numS.value = 0;
-                numS.removeAttribute("min");
-            }
-        });
+            // CheckButton Tiene Socios - ficha Cliente
+            $("input.checkSocios").change(function () {
+                //const numS = $("#cantidad_socios")
+                const numS = document.getElementById("cantidad_socios")
+                if ($(this).val() == "Si") {
+                    numS.removeAttribute("disabled");
+                    numS.style.background = "white";
+                    numS.value = 1;
+                } else {
+                    numS.setAttribute("disabled", true);
+                    numS.style.background = "#f2f2f2";
+                    numS.value = 0;
+                    numS.removeAttribute("min");
+                }
+            });
 
             // Actualizar Estado del Consultor
             $("#btnActualizarConsultor").click(function () {
@@ -230,12 +229,12 @@ function guardarFoto(formData) {
             })
             {{/if}}
             {{#if msgSuccessClave}}
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Cambio exitoso',
-                    text: 'Tu contraseña ha sido actualizada.',
-                })
+            Swal.fire({
+                icon: 'success',
+                title: 'Cambio exitoso',
+                text: 'Tu contraseña ha sido actualizada.',
+            })
             {{/if}}
-        }); 
+        });
     })();
 </script>

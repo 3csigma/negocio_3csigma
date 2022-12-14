@@ -91,12 +91,6 @@ passport.use('local.registroConsultores', new LocalStrategy({
             return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
         } else {
 
-            // Capturando Nombre de usuario con base al email del usuario
-            // let usuario_calendly = email.split('@')
-            // usuario_calendly = usuario_calendly[0]+''
-            // usuario_calendly = usuario_calendly.replace(".", "-");
-            // usuario_calendly = "https://calendly.com/"+usuario_calendly;
-
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(email).digest("hex");
             clave = codigo.slice(5, 13);

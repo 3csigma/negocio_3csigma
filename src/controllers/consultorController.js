@@ -337,9 +337,9 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 /********************************************************************************/
 // AGREGAR NUEVAS TAREAS x EMPRESA
 consultorController.agregarTarea = async (req, res) => {
-    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email, prioridades } = req.body
+    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email, prioridad } = req.body
     // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
-    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa, prioridades }
+    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa, prioridad }
     /** Enviando Notificación al Email de nueva tarea */
     const asunto = 'Se ha agregado una nueva tarea';
     const template = tareaNuevaHTML(actividad, nombreEmpresa);
@@ -363,8 +363,8 @@ consultorController.editarTarea = async (req, res) => {
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridades } = req.body
-    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridades }
+    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad } = req.body
+    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad }
     
     const { idTarea } = req.body
 

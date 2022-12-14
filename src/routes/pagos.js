@@ -1,33 +1,31 @@
 const pagosController = require('../controllers/pagosController');
 const express = require('express');
 const router = express.Router();
-const { checkLogin, validarURLPagar, empresaLogueada, consultorLogueado } = require('../lib/auth')
+const { checkLogin, validarURLPagar } = require('../lib/auth')
 
-
-// const MY_DOMAIN = 'http://localhost:4000';
-router.post('/create-checkout-session', checkLogin, empresaLogueada, pagosController.pagarDiagnostico)
+router.post('/create-checkout-session', checkLogin, pagosController.pagarDiagnostico)
 
 /** PAGO A STRIPE - ANÁLISIS DE NEGOCIO */
-router.post('/checkout-etapa2', checkLogin, empresaLogueada, pagosController.pagarAnalisisCompleto);
+router.post('/checkout-etapa2', checkLogin, pagosController.pagarAnalisisCompleto);
 
 /** PAGO 1 ANÁLISIS PORCENTAJE 60% */
-router.post('/pagar-analisis-per1', checkLogin, empresaLogueada, pagosController.pagarAnalisis_parte1);
+router.post('/pagar-analisis-per1', checkLogin, pagosController.pagarAnalisis_parte1);
 
 /** PAGO 2 ANÁLISIS PORCENTAJE 20% */
-router.post('/pagar-analisis-per2', checkLogin, empresaLogueada, pagosController.pagarAnalisis_parte2);
+router.post('/pagar-analisis-per2', checkLogin, pagosController.pagarAnalisis_parte2);
 
 /** PAGO 3 ANÁLISIS PORCENTAJE 20% */
-router.post('/pagar-analisis-per3', checkLogin, empresaLogueada, pagosController.pagarAnalisis_parte3);
+router.post('/pagar-analisis-per3', checkLogin, pagosController.pagarAnalisis_parte3);
 
 /** PAGO PLAN ESTRATÉGICO DE NEGOCIO */
-router.post('/pagar-plan-estrategico', checkLogin, empresaLogueada, pagosController.pagarPlanEstrategico);
+router.post('/pagar-plan-estrategico', checkLogin, pagosController.pagarPlanEstrategico);
 
-router.get('/pago-exitoso', checkLogin, validarURLPagar, empresaLogueada, pagosController.pagoExitoso)
+router.get('/pago-exitoso', checkLogin, validarURLPagar, pagosController.pagoExitoso)
 
-router.get('/pago-cancelado', checkLogin, validarURLPagar, empresaLogueada, pagosController.pagoCancelado)
+router.get('/pago-cancelado', checkLogin, validarURLPagar, pagosController.pagoCancelado)
 
 //CANCELAR SUUBSCRIPCIÓN
-router.post('/cancelarSub', checkLogin, consultorLogueado, pagosController.cancelarSub)
+router.post('/cancelarSub', checkLogin, pagosController.cancelarSub)
 
 router.post('/test-pago3', pagosController.pagarPlanEstrategico);
 

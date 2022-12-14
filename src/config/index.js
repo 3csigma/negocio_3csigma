@@ -59,8 +59,15 @@ ZxJ8U9ZbPhV4U+kWJ1qeHRUmgmmFt08d0ZU08/EywqwkgwrSUn1SUBf+eMIClK6r
 55If65RnCnlHvCOmujwWZOXkql1ZHXPzFcmRc90l7ucJLQzC7oK7
 -----END RSA PRIVATE KEY-----`
 
+const rutasEmpresa = ['logout', 'updateprofile', 'actualizarfotoperfil', 'create-payment-intent', 'diagnostico-de-negocio', 'ficha-cliente', 'addficha', 'eliminarficha', 'acuerdo-de-confidencialidad', 'analisis-de-negocio', 'guardar-archivos-analisis', 'plan-estrategico']
+
+const rutasConsultor = ['logout', 'updateprofile', 'actualizarfotoperfil', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme']
+
+const rutasAdmin = ['logout', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagoManual-diagnostico', 'pagomanual-empresas']
+
 exports.config = {
   dsOauthServer, dsPayload,
   authToken, settings, args, acuerdoFirmado,
-  envelopeId, clavesStripe, clavePrivada
+  envelopeId, clavesStripe, clavePrivada,
+  rutasEmpresa, rutasConsultor, rutasAdmin
 };
