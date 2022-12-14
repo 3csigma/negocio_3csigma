@@ -8,14 +8,16 @@ module.exports = {
             url = url[1]
             if (req.session.empresa) {
                 const ok = rutasObj.rutasEmpresa.find(x => x == url.toLowerCase())
-                if (ok) return next(); else res.redirect('404');
+                if (ok) return next();
             } else if (req.session.admin) {
                 const adm = rutasObj.rutasAdmin.find(x => x == url.toLowerCase())
                 const adm2 = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
-                if (adm || adm2) return next(); else res.redirect('404')
+                if (adm || adm2) return next();
             } else if (req.session.consultor) {
                 const ok = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
-                if (ok) return next(); else res.redirect('404')
+                if (ok) return next();
+            } else {
+                res.redirect('/404')
             }
         } else {
             return res.redirect('/login')
