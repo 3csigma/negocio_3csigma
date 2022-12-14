@@ -50,7 +50,7 @@ const rutaCarpetas = multer.diskStorage({
 const cargarFotoPerfil = multer({ storage: rutaCarpetas});
 
 function chooseController(req, res) {
-    console.log("URL ", req.url)
+    console.log("\nURL >>> " + req.url + "\n")
     if (req.isAuthenticated()) {
         if (req.session.empresa) {
             empresaController.index(req, res)
@@ -60,7 +60,7 @@ function chooseController(req, res) {
             consultorController.index(req, res)
         } else {
             // res.send('NO ENCONTRADO - VISTA')
-            res.redirect('404')
+            return res.redirect('/404')
         }
     } else {
         return res.redirect('/login')
