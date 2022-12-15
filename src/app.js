@@ -70,6 +70,13 @@ app.use((req, res, next) => {
   res.locals.pagoDiag = req.pagoDiag;
   global.urlPropuestaNegocio = '';
   global.urlProfile = ''
+  if(!req.session.initialised) {
+    req.session.initialised = true;
+    req.session.empresa = false;
+    req.session.consultor = false;
+    req.session.admin = false;
+    req.session.etapa2 = false;
+  }
   next();
 })
 

@@ -4,6 +4,7 @@ const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const { getTemplate, sendEmail } = require('../lib/mail.config')
+const { consultarDatos } = require('../lib/helpers')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id_usuarios);
@@ -131,46 +132,51 @@ passport.use('local.login', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => {
 
-    const usuarios = await pool.query('SELECT * FROM users WHERE email = ?', [email])
+    let usuario = await consultarDatos('users')
+    usuario = usuario.find(x => x.email == email)
 
-    req.session.empresa = false;
-    req.session.consultor = false;
-    req.session.admin = false;
-    req.session.etapa2 = false;
-
-    if (usuarios.length > 0) {
-        const user = usuarios[0]
-        const claveValida = await helpers.matchPass(clave, user.clave)
+    if (usuario) {
+        const claveValida = await helpers.matchPass(clave, usuario.clave)
 
         if (claveValida) {
 
-            if (user.rol == 'Empresa') { // Usuario Empresa
-                if (user.estadoEmail == 1 && user.estadoAdm == 1) {
+            if (usuario.rol == 'Empresa') { // Usuario Empresa
+                console.log("\n**************");
+                console.log("EMPRESA LOGUEADO >>> ");
+                console.log("**************");
+                if (usuario.estadoEmail == 1 && usuario.estadoAdm == '1') {
                     req.session.empresa = true;
-                    return done(null, user, req.flash('success', 'Bienvenido Usuario Empresa'))
-                } else if (user.estadoAdm == 0) {
+                    return done(null, usuario, req.flash('success', 'Bienvenido Usuario Empresa'))
+                } else if (usuario.estadoAdm == 0) {
                     return done(null, false, req.flash('message', 'Tu cuenta esta bloqueada o no ha sido activada. Contacta a un administrador.'))
                 } else {
                     return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
                 }
-            } else if (user.rol == 'Consultor') { // Usuario Consultor
-                if (user.estadoEmail == 1 && user.estadoAdm == 1) {
+            } else if (usuario.rol == 'Consultor') { // Usuario Consultor
+                console.log("\n**************");
+                console.log("Consultor LOGUEADO >>> ");
+                console.log("**************");
+                if (usuario.estadoEmail == 1 && usuario.estadoAdm == '1') {
                     req.session.consultor = true;
-                    req.session.empresa = false;
-                    req.session.admin = false;
-                    return done(null, user, req.flash('success', 'Bienvenido Consultor'))
-                } else if (user.estadoAdm == 2) {
+                    return done(null, usuario, req.flash('success', 'Bienvenido Consultor'))
+                } else if (usuario.estadoAdm == 2) {
                     return done(null, false, req.flash('message', 'Tu cuenta esta bloqueada. Contacta a un administrador.'))
-                } else if (user.estadoAdm == 3) {
+                } else if (usuario.estadoAdm == 3) {
                     return done(null, false, req.flash('message', 'Tu cuenta fue rechazada.'))
                 } else {
                     return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
                 }
-            } else if (user.rol == 'Admin') { // Administrador
-                req.session.consultor = false;
-                req.session.empresa = false;
-                req.session.admin = true;
-                return done(null, user, req.flash('success', 'Bienvenido Admin'))
+            } else if (usuario.rol == 'Admin') { // Administrador
+                console.log("\n**************");
+                console.log("Admin LOGUEADO >>> ");
+                console.log("**************");
+                if (req.session.initialised) {
+                    req.session.admin = true;
+                }
+                console.group("\nDESDE PASSPORT");
+                console.log(req.session);
+                console.groupEnd();
+                return done(null, usuario, req.flash('success', 'Bienvenido Admin'))
             }
 
         } else {

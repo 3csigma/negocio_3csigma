@@ -7,9 +7,7 @@ const userController = exports;
 
 // Cerrar Sesión
 userController.cerrarSesion = (req, res) => {
-    req.session.empresa = false;
-    req.session.consultor = false;
-    req.session.admin = false;
+    req.user = false;
     req.logOut();
     res.redirect('/login');
 }

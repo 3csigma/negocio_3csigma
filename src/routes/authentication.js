@@ -19,12 +19,12 @@ router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.l
     failureRedirect: '/login',
     failureFlash: true,
 }), (req, res) => {
-    console.log(req.user) // Datos de sesión del usuario actual.
+    // console.log(req.user) // Datos de sesión del usuario actual.
     res.redirect('/')
 })
 
 /** Cerrar Sesión */
-router.get('/logout', checkLogin, userController.cerrarSesion)
+router.get('/logout', userController.cerrarSesion)
 
 // Restablecer Clave de Usuario
 router.get('/restablecer-clave', csrfProtection, userController.getrestablecerClave)

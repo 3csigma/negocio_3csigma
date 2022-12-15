@@ -4,7 +4,7 @@ const empresaController = require('../controllers/empresaController');
 const consultorController = require('../controllers/consultorController');
 const dashboardController = require('../controllers/dashboardController');
 const userController = require('../controllers/userController');
-const { checkLogin, noLogueado } = require('../lib/auth')
+const { checkLogin, noLogueado, requireRole } = require('../lib/auth')
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
@@ -49,26 +49,8 @@ const rutaCarpetas = multer.diskStorage({
 });
 const cargarFotoPerfil = multer({ storage: rutaCarpetas});
 
-function chooseController(req, res) {
-    console.log("\nURL >>> " + req.url + "\n")
-    if (req.isAuthenticated()) {
-        if (req.session.empresa) {
-            empresaController.index(req, res)
-        } else if (req.session.admin) {
-            dashboardController.admin(req, res)
-        } else if (req.session.consultor) {
-            consultorController.index(req, res)
-        } else {
-            // res.send('NO ENCONTRADO - VISTA')
-            return res.redirect('/404')
-        }
-    } else {
-        return res.redirect('/login')
-    }
-}
-
 // Dashboard Principal
-router.get('/', chooseController)
+router.get('/', requireRole)
 
 // Perfil de Usuarios
 router.post('/updateProfile', checkLogin, userController.update_user);
