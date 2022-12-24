@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { checkLogin, validarURLPagar } = require('../lib/auth')
 
-router.post('/create-checkout-session', checkLogin, pagosController.pagarDiagnostico)
+router.post('/pagar-diagnostico', checkLogin, pagosController.pagarDiagnostico)
 
 /** PAGO A STRIPE - ANÁLISIS DE NEGOCIO */
 router.post('/checkout-etapa2', checkLogin, pagosController.pagarAnalisisCompleto);

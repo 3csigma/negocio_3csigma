@@ -241,7 +241,7 @@
         {{/if}}
         {{/if}}
       
-        {{#if btnPagar.etapa2}}
+        {{!-- {{#if btnPagar.etapa2}}
         {{#if btnPagar.activar2}}
         <form action="/checkout-etapa2" method="POST">
           <button type="submit" class="add-menu-sidebar">
@@ -258,7 +258,7 @@
           </button>
         </form>
         {{/if}}
-        {{/if}}
+        {{/if}} --}}
 
         {{#if btnPagar.etapa3}}
         {{#if btnPagar.activar3}}
@@ -327,10 +327,10 @@
         {{#comparar itemActivo '!=' 3}}
         <li class="firmar-acuerdo">
         {{/comparar}}
-          {{#if acuerdoFirmado}}
+          {{#if activado}}
           <a id="item-link3" href="/diagnostico-de-negocio" aria-expanded="false">
           {{else}}
-          <a style="cursor:pointer" aria-expanded="false">
+          <a style="cursor:pointer" id="item-link3" aria-expanded="false">
           {{/if}}
             <i class="fa-solid fa-gauge-high"></i>
             <span class="nav-text">Diagnóstico de negocio</span>

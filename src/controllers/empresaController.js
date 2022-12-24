@@ -11,6 +11,7 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisi
 empresaController.index = async (req, res) => {
     diagnosticoPagado = 0, analisisPagado = 0;
     acuerdoFirmado = false;
+    let activado = true;
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
@@ -19,6 +20,14 @@ empresaController.index = async (req, res) => {
     /** Consultando que pagos ha realizado el usuario */
     const pagos = await consultarDatos('pagos')
     let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
+    const row = await pool.query('SELECT e.*, ca.* FROM empresas e JOIN consultores_asignados ca ON e.id_empresas = ca.empresa', `WHERE e.email = "${req.user.email} AND ca.orden = 1" LIMIT 1`)
+    let orden = row[0].orden
+    console.log("====>> ROW " , row);
+    if (orden == 1) {
+        activado
+    } else {
+       activado = false
+    }
     if (!pago_empresa) {
         diagnosticoPagado = 0;
         const estado = JSON.stringify({estado:0})
@@ -37,18 +46,21 @@ empresaController.index = async (req, res) => {
             }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
     } else {
-        const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
+        const objDiagnostico  = JSON.parse(pago_empresa.diagnostico_negocio)
+        
+
+
         if (objDiagnostico.estado == 1) {
             // PAGÓ EL DIAGNOSTICO
             diagnosticoPagado = 1;
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
-            if (acuerdo.length > 0) {
-                if (acuerdo[0].estadoAcuerdo == 2) {
-                    acuerdoFirmado = true;
-                    noPago = false;
-                }
-            }
+            // if (acuerdo.length > 0) {
+            //     if (acuerdo[0].estadoAcuerdo == 2) {
+            //         acuerdoFirmado = true;
+            //         noPago = false;
+            //     }
+            // }
 
             /************************************************************************************* */
             // PROPUESTA DE ANÁLISIS DE NEGOCIO
@@ -251,7 +263,7 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, jsonDim_empresa
+        nuevosProyectos, rendimiento, jsonDim_empresa, activado
     })
 }
 
@@ -397,8 +409,42 @@ empresaController.acuerdo = async (req, res) => {
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
-    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
+    // const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
+    const row = await pool.query('SELECT e.*, ca.*, pa.* FROM empresas e JOIN consultores_asignados ca ON e.id_empresas = ca.empresa JOIN pagos pa ON e.id_empresas = pa.id_empresa', `WHERE e.email = "${req.user.email} AND ca.orden = 1" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
+    // para la fecha 
+    const fechaDiagnostico = JSON.parse(row[0].diagnostico_negocio)
+    let fechaDePago = fechaDiagnostico.fecha
+    !fechaDePago ? fechaDePago = "N/A" : fechaDePago
+    // para el estado 
+    const estadoDiagnostico= JSON.parse(row[0].diagnostico_negocio)
+    let estadoDePago = {}
+    let existencia = true
+    if(estadoDiagnostico.estado == 1){
+        existencia = false
+        estadoDePago.color = 'badge-success'
+        estadoDePago.texto = 'Pagado'
+        estadoDePago.btn = 'background: #656c73; color:white; disabled="true"'
+    }else if(estadoDiagnostico.estado == 0) {
+        estadoDePago.color = 'badge-warning'
+        estadoDePago.texto = 'Pendiente'
+        estadoDePago.btn = 'background: #85bb65; color:white'
+        existencia
+    }
+    // para el nivel
+    const caConsultor = row[0].consultor; // ca significa 'Consultor Asignado' + la columna
+    const respuesta = await pool.query('SELECT nivel FROM consultores WHERE id_consultores = ?', [caConsultor])
+    const nivelConsultor = respuesta[0].nivel;
+    let costo = 0
+    if (nivelConsultor == 1) {
+        costo = "$197"
+    }else if(nivelConsultor == 2){
+         costo = "$297"
+    }else if(nivelConsultor == 3){
+        costo = "$497"
+    }else {
+         costo = "$697"
+    }
     const formDiag = {}
     formDiag.id = id_empresa;
     formDiag.usuario = encriptarTxt('' + id_empresa)
@@ -434,7 +480,7 @@ empresaController.diagnostico = async (req, res) => {
     let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
 
     res.render('empresa/diagnostico', {
-        user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag,
+        user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, costo, fechaDePago, estadoDePago, existencia,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
     })
@@ -444,7 +490,7 @@ empresaController.diagnostico = async (req, res) => {
 empresaController.validarFichaCliente = async (req, res) => {
     const { id } = req.params;
     // let row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    let row = await consultarDatos('empresas', `WHERE email = ${req.user.email} LIMIT 1`)
+    let row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     row = row[0]
     const id_empresa = desencriptarTxt(id)
     if (row.id_empresas == id_empresa) {

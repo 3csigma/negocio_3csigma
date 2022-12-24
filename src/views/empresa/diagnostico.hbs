@@ -10,7 +10,11 @@
           style="background: transparent !important;border: none !important; box-shadow: none !important">
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Queremos conocerte un poco más</h2>
+            {{#if existencia}}
+            <p style="text-align: justify;margin-top: 2em;color: #000">Ahora que tu consultor ha sido asignado puedes realizar el pago del diagnóstico de negocio, y podremos comenzar juntos el proceso de llevar tu empresa al siguiente nivel.</p>
+            {{else}}
             <p style="text-align: justify;margin-top: 2em;color: #000">Por favor completa el formulario a continuación para tener información mas detallada sobre tu empresa, estos datos son vitales para realizar un diagnóstico preciso. Si deseas modificar, agregar datos o rehacer el formulario puedes hacerlo.</p>
+            {{/if}}
           </div>
         </div>
       </div>
@@ -31,7 +35,60 @@
     </div>
     {{!-- Fin de la 1era fila --}}
 
-    <div class="row">
+  {{!-- todo ========================================================= --}}
+
+        <div class="col-xl-6 col-xxl-6">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title">Pago</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-responsive-md text-center">
+                    <thead>
+                      <tr>
+                        <th>FECHA PAGO</th>
+                        <th>VALOR</th>
+                        <th>ESTADO DE PAGO</th>
+                        <th>PAGAR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{fechaDePago}}</td>
+                        <td>{{costo}}</td>
+                        <td><span class="badge light {{estadoDePago.color}}"
+                            style="background: {{formDiag.estilo}}">{{estadoDePago.texto}}</span></td>
+                        <td>
+                          {{#if existencia}}
+                          <form action="/pagar-diagnostico" method="POST">
+                              <button type="submit" class="btn btn-xs sharp" title="{{estadoDePago.texto}}" style="{{estadoDePago.btn}}">
+                                <i class="fa fa-usd"></i>
+                              </button>
+                          </form>
+                          {{else}}
+                          <button type="submit" class="btn btn-xs sharp" title="{{estadoDePago.texto}}" style="{{estadoDePago.btn}}">
+                                <i class="fa fa-usd"></i>
+                          </button>
+                          {{/if}}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  {{!-- todo ========================================================= --}}
+  {{#if existencia}}
+
+  {{else}}
+ <div class="row">
       {{!-- FORMULARIOS --}}
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
@@ -124,6 +181,7 @@
         </div>
       </div>
     </div>
+  {{/if}}
   </div>
 </div>
 

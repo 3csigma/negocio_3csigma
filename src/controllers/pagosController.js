@@ -6,20 +6,73 @@ const stripe = require('stripe')(clientSecretStripe);
 
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
-    console.log("URL Sesión>>> ", req.session.intentPay);
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const consultores = await consultarDatos('consultores')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+   
+    const row = await pool.query('SELECT consultor FROM consultores_asignados WHERE empresa = ? AND orden = 1', [id_empresa])
+    const consulAsignados = row[0].consultor
+    const resul = consultores.find(co => co.id_consultores == consulAsignados)
+    
+    let precio = 0;
+
+    if (resul.nivel == 1) {
+        precio = 197 + '00'
+    }else if(resul.nivel == 2){
+         precio = 297 + '00'
+    }else if(resul.nivel == 3){
+        precio = 497 + '00'
+    }else {
+         precio = 697 + '00'
+    }
+    
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
         line_items: [
-            { price: 'price_1Kqg8yGzbo0cXNUHYMXPROWT', quantity: 1 },
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Pago Único - Diagnóstico de negocio',
+                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
+                    },
+                    unit_amount: parseFloat(precio),
+                },
+                quantity: 1,
+                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+            },
         ],
         mode: 'payment',
     });
 
+    console.log("RESPUESTA STRIPE SESSION", session.url)
     req.session.intentPay = session.url;
-    req.session.payDg0 = true;
+    req.session.payDg0 = false;
+    req.session.analisis0 = true;
+    req.session.analisis1 = false;
+    req.session.analisis2 = false;
+    req.session.analisis3 = false;
     res.redirect(303, session.url);
 }
+
+// pagosController.pagarDiagnostico = async (req, res) => {
+//     console.log("URL Sesión>>> ", req.session.intentPay);
+//     const session = await stripe.checkout.sessions.create({
+//         success_url: `${my_domain}/pago-exitoso`,
+//         cancel_url: `${my_domain}/pago-cancelado`,
+//         line_items: [
+//             { price: 'price_1Kqg8yGzbo0cXNUHYMXPROWT', quantity: 1 },
+//         ],
+//         mode: 'payment',
+//     });
+
+//     req.session.intentPay = session.url;
+//     req.session.payDg0 = true;
+//     res.redirect(303, session.url);
+// }
 
 /** PAGO ÚNICO - ANÁLISIS DE NEGOCIO */
 pagosController.pagarAnalisisCompleto = async (req, res) => {
