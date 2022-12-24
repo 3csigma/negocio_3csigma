@@ -44,7 +44,6 @@
         const fecha_entrega = $("#fecha_entrega").val();
         const dimension = $("#dimension").val();
         const nombreEmpresa = $("#nombreEmpresa").text();
-        const prioridad= $("#prioridad").val();
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
         let fechaini, fechafin
@@ -101,7 +100,7 @@
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
-            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridad, email })
+            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridad: 0, email })
             fetch('/agregarTarea', {
                 method: 'POST',
                 body: data,
@@ -192,7 +191,7 @@
         let fecha_inicio = $("#fechaIni-sidebar").val();
         let fecha_entrega = $("#fechaFin-sidebar").val();
         const dimension = $("#dimension-sidebar").val();
-        const prioridad= $("#prioridad").val();
+        const prioridad = $("#prioridad").val();
         const email = $("#emailEmpresa").text();
         //const mensaje = $("#mensaje").val();
         const estado = $("#estado").val();
@@ -207,7 +206,7 @@
         fechafin = (((fechafin / 1000) / 60) / 60) / 24
 
         if(fechaini > fechafin){
-               toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+            toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
                 positionClass: "toast-top-full-width",
                 timeOut: 3e3,
                 closeButton: !0,
@@ -226,7 +225,7 @@
                 tapToDismiss: !1
             })
         } else {
-            const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email })
+            const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email, prioridad })
             fetch('/actualizarTarea', {
                 method: 'POST',
                 body: data,

@@ -59,7 +59,7 @@ ZxJ8U9ZbPhV4U+kWJ1qeHRUmgmmFt08d0ZU08/EywqwkgwrSUn1SUBf+eMIClK6r
 55If65RnCnlHvCOmujwWZOXkql1ZHXPzFcmRc90l7ucJLQzC7oK7
 -----END RSA PRIVATE KEY-----`
 
-const rutasEmpresa = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'create-payment-intent', 'diagnostico-de-negocio', 'ficha-cliente', 'addficha', 'eliminarficha', 'acuerdo-de-confidencialidad', 'analisis-de-negocio', 'guardar-archivos-analisis', 'plan-estrategico','pagar-diagnostico']
+const rutasEmpresa = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'create-payment-intent', 'diagnostico-de-negocio', 'ficha-cliente', 'addficha', 'eliminarficha', 'acuerdo-de-confidencialidad', 'analisis-de-negocio', 'guardar-archivos-analisis', 'plan-estrategico', 'editartarea', 'pagar-diagnostico', 'pagar-analisis-per1','pagar-analisis-per2', 'pagar-analisis-per3', 'checkout-etapa2', 'pago-cancelado', 'pago-exitoso']
 
 const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme']
 

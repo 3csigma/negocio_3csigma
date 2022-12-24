@@ -98,7 +98,7 @@
                                         <div class="col-5">
                                             <label>Consultor</label>
                                             <select name="id_consultor" id="id_consultor" class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                <option value=""></option>
+                                                {{!-- <option value=""></option> --}}
                                                 {{#each consultores}}
                                                 <option {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
                                                     {{nombres}} {{apellidos}}</option>
@@ -110,9 +110,9 @@
                                             <label>Etapa</label>
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
-                                                <option value="Análisis">Análisis</option>
+                                                {{!-- <option value="Análisis">Análisis</option>
                                                 <option value="Plan_Empresarial">Plan Empresarial</option>
-                                                <option value="Plan_Estratégico">Plan Estratégico</option>
+                                                <option value="Plan_Estratégico">Plan Estratégico</option> --}}
                                             </select>
                                         </div>
                                         <div class="col-2 pt-3">
@@ -393,9 +393,9 @@
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
                             <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
-                            <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
+                            {{!-- <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
                             <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
-                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li> --}}
                         </ul>
                     </div>
                 </div>
@@ -2289,7 +2289,7 @@
                                                                     style="width:{{resultado}}%;height: 16px;margin-top: -13px;"></div>
                                                             </div>
                                                         </td>
-                                                        <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridades}}</td>
+                                                        <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridad}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a onclick="editarTarea({{id}})" title="Edit"
@@ -2314,7 +2314,7 @@
                                             </table>
                                         </div>
                                     </div>
-							    </div>
+                                </div>
 
                                 {{!-- {{/if}} --}}
                                 {{!-- {{#if info.plan.ok}} --}}

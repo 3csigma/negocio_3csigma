@@ -4,29 +4,32 @@ const { my_domain, clientSecretStripe } = require('../keys').config
 const { consultarDatos } = require('../lib/helpers')
 const stripe = require('stripe')(clientSecretStripe);
 
+let precioDiag = 0;
+
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
-    /** CONSULTANDO EMPRESA LOGUEADA */
-    const empresas = await consultarDatos('empresas')
-    const consultores = await consultarDatos('consultores')
-    const e = empresas.find(x => x.email == req.user.email)
-    const id_empresa = e.id_empresas;
-   
-    const row = await pool.query('SELECT consultor FROM consultores_asignados WHERE empresa = ? AND orden = 1', [id_empresa])
-    const consulAsignados = row[0].consultor
-    const resul = consultores.find(co => co.id_consultores == consulAsignados)
-    
-    let precio = 0;
+    console.log("URL Sesión>>> ", req.session.intentPay);
 
-    if (resul.nivel == 1) {
-        precio = 197 + '00'
-    }else if(resul.nivel == 2){
-         precio = 297 + '00'
-    }else if(resul.nivel == 3){
-        precio = 497 + '00'
-    }else {
-         precio = 697 + '00'
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    let consulDiag = await consultarDatos('consultores_asignados')
+    consulDiag = consulDiag.find(x => x.empresa = e.id_empresas && x.orden == 1)
+    let consul = await consultarDatos('consultores')
+    consul = consul.find(x => x.id_consultores == consulDiag.consultor)
+    
+    if (consul) {
+        if (consul.nivel == '1') {
+            precioDiag = 197
+        } else if (consul.nivel == '2') {
+            precioDiag = 297
+        } else if (consul.nivel == '3') {
+            precioDiag = 497
+        } else if (consul.nivel == '4') {
+            precioDiag = 697
+        }
     }
+
+    const precio = precioDiag + '00'
     
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
@@ -37,7 +40,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
                     currency: 'usd',
                     product_data: {
                         name: 'Pago Único - Diagnóstico de negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
+                        images: ['https://3csigma.com/app_public_files/img/diagnostico-de-negocio-pay.png'],
                     },
                     unit_amount: parseFloat(precio),
                 },
@@ -48,31 +51,10 @@ pagosController.pagarDiagnostico = async (req, res) => {
         mode: 'payment',
     });
 
-    console.log("RESPUESTA STRIPE SESSION", session.url)
     req.session.intentPay = session.url;
-    req.session.payDg0 = false;
-    req.session.analisis0 = true;
-    req.session.analisis1 = false;
-    req.session.analisis2 = false;
-    req.session.analisis3 = false;
+    req.session.payDg0 = true;
     res.redirect(303, session.url);
 }
-
-// pagosController.pagarDiagnostico = async (req, res) => {
-//     console.log("URL Sesión>>> ", req.session.intentPay);
-//     const session = await stripe.checkout.sessions.create({
-//         success_url: `${my_domain}/pago-exitoso`,
-//         cancel_url: `${my_domain}/pago-cancelado`,
-//         line_items: [
-//             { price: 'price_1Kqg8yGzbo0cXNUHYMXPROWT', quantity: 1 },
-//         ],
-//         mode: 'payment',
-//     });
-
-//     req.session.intentPay = session.url;
-//     req.session.payDg0 = true;
-//     res.redirect(303, session.url);
-// }
 
 /** PAGO ÚNICO - ANÁLISIS DE NEGOCIO */
 pagosController.pagarAnalisisCompleto = async (req, res) => {
@@ -349,7 +331,7 @@ pagosController.cancelarSub = async (req, res) => {
 
 /********************************************************************/
 pagosController.pagoExitoso = async (req, res) => {
-    let destino = 'empresa/dashboard', itemActivo = 1, alertSuccess = false, pagoExitoso = false, pagoEtapa3Ok = false;
+    let itemActivo = 1, alertSuccess = false, pagoExitoso = false, pagoEtapa3Ok = false;
     // Borrando info del Intento de pago
     req.session.intentPay = undefined;
 
@@ -364,55 +346,53 @@ pagosController.pagoExitoso = async (req, res) => {
 
     if (pago) {
         const fecha = new Date().toLocaleDateString("en-US")
-
         if (req.session.payDg0) {
-            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha }) }
+            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: precioDiag }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
-            alertSuccess = true
-            pagoExitoso = false;
+            // alertSuccess = true
         }
 
-        let actualizarAnalisis = undefined;
-        let pagoAnalisis = { estado: 1, fecha }
-        if (req.session.analisis0) {
-            pagoAnalisis.estado = 1;
-            actualizarAnalisis = {
-                analisis_negocio: JSON.stringify(pagoAnalisis),
-                analisis_negocio1: JSON.stringify({ estado: 0 })
-            }
-        } else if (req.session.analisis1) {
-            pagoAnalisis.estado = 2;
-            actualizarAnalisis = { analisis_negocio1: JSON.stringify(pagoAnalisis) }
-        } else if (req.session.analisis2) {
-            pagoAnalisis.estado = 2;
-            actualizarAnalisis = { analisis_negocio2: JSON.stringify(pagoAnalisis) }
-        } else if (req.session.analisis3) {
-            pagoAnalisis.estado = 2;
-            actualizarAnalisis = { analisis_negocio3: JSON.stringify(pagoAnalisis) }
-        } 
+        // let actualizarAnalisis = undefined;
+        // let pagoAnalisis = { estado: 1, fecha }
+        // if (req.session.analisis0) {
+        //     pagoAnalisis.estado = 1;
+        //     actualizarAnalisis = {
+        //         analisis_negocio: JSON.stringify(pagoAnalisis),
+        //         analisis_negocio1: JSON.stringify({ estado: 0 })
+        //     }
+        // } else if (req.session.analisis1) {
+        //     pagoAnalisis.estado = 2;
+        //     actualizarAnalisis = { analisis_negocio1: JSON.stringify(pagoAnalisis) }
+        // } else if (req.session.analisis2) {
+        //     pagoAnalisis.estado = 2;
+        //     actualizarAnalisis = { analisis_negocio2: JSON.stringify(pagoAnalisis) }
+        // } else if (req.session.analisis3) {
+        //     pagoAnalisis.estado = 2;
+        //     actualizarAnalisis = { analisis_negocio3: JSON.stringify(pagoAnalisis) }
+        // } 
         
-        if (req.session.planEstrategico) {
-            const idSession = req.session.idSesion;
-            const dataSession = await stripe.checkout.sessions.retrieve(idSession);
-            const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription }) }
-            await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
-            alertSuccess = false;
-            pagoExitoso = false;
-            pagoEtapa3Ok = true;
-            itemActivo = 6;
-        }
+        // if (req.session.planEstrategico) {
+        //     const idSession = req.session.idSesion;
+        //     const dataSession = await stripe.checkout.sessions.retrieve(idSession);
+        //     const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription }) }
+        //     await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
+        //     alertSuccess = false;
+        //     pagoExitoso = false;
+        //     pagoEtapa3Ok = true;
+        //     itemActivo = 6;
+        // }
 
-        if (actualizarAnalisis != undefined) {
-            alertSuccess = false
-            pagoExitoso = true;
-            itemActivo = 4
-            await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
-        }
+        // if (actualizarAnalisis != undefined) {
+        //     alertSuccess = false
+        //     pagoExitoso = true;
+        //     itemActivo = 4
+        //     await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        // }
 
     }
 
-    res.render(destino, {
-        alertSuccess, pagoExitoso, pagoEtapa3Ok,
+    res.render('empresa/dashboard', {
+        alertSuccess: true,
         user_dash: true, wizarx: false, login: false,
         itemActivo,
     })
@@ -421,18 +401,18 @@ pagosController.pagoExitoso = async (req, res) => {
 pagosController.pagoCancelado = async (req, res) => {
     let destino = 'empresa/dashboard', itemActivo = 1, alertCancel = true, pagoCancelado = false, pagoEtapa3Cancel = false;
     req.session.intentPay = undefined;
-    if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
-        pagoCancelado = true;
-        alertCancel = false;
-        itemActivo = 4;
-    }
+    // if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
+    //     pagoCancelado = true;
+    //     alertCancel = false;
+    //     itemActivo = 4;
+    // }
 
-    if (req.session.planEstrategico) {
-        pagoEtapa3Cancel = true; 
-        pagoCancelado = false; 
-        alertCancel = false;
-        itemActivo = 6;
-    }
+    // if (req.session.planEstrategico) {
+    //     pagoEtapa3Cancel = true; 
+    //     pagoCancelado = false; 
+    //     alertCancel = false;
+    //     itemActivo = 6;
+    // }
 
     req.session.payDg0 = false;
     req.session.analisis0 = false;
@@ -441,7 +421,7 @@ pagosController.pagoCancelado = async (req, res) => {
     req.session.analisis3 = false;
 
     res.render(destino, {
-        alertCancel, pagoCancelado, pagoEtapa3Cancel,
+        alertCancel: true,
         user_dash: true, wizarx: false, login: false,
         itemActivo,
     })

@@ -1,7 +1,9 @@
 <script>
     function mostrarTarea(idTarea) {
+        console.log("ID TAREA >> ", idTarea)
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
+        $('#prioridad-sidebar').css('display', 'none');
         $('.chatbox').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
         fetch('/editarTarea', {
@@ -9,8 +11,12 @@
             body: JSON.stringify({idTarea}),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json())
-        .catch(error => console.error('Error Editar Tarea: ', error))
+        .catch(error => console.error('Error Mostrar Tarea: ', error))
         .then(r => {
+            console.group("INFO DE LA TAREA >> ")
+            console.log(r)
+            console.log("\n")
+            console.groupEnd()
             $('#fechaIni-sidebar').css('display', 'none')
             $('#fechaFin-sidebar').css('display', 'none')
             $('#dimension-sidebar').css('display', 'none')
@@ -23,7 +29,6 @@
             $('#txtFechaIni').text(r.fecha_inicio).css('display', 'inline-block')
             $('#txtFechaFin').text(r.fecha_entrega).css('display', 'inline-block')
             $('#txtDimension').text(r.dimension).css('display', 'inline-block')
-            
             
             let txtEstado = 'Completado'
             if (r.estado == 0 || r.estado == 1) {

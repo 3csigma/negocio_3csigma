@@ -89,8 +89,8 @@ dashboardController.mostrarConsultores = async (req, res) => {
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
 
     consultores.forEach(async c => {
-        const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM empresas WHERE consultor = ?', [c.id_consultores])
-        c.num_empresas = num[0].numEmpresas
+        // const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM empresas WHERE consultor = ?', [c.id_consultores])
+        c.num_empresas = 0
     });
 
     /** Acceso directo para Consultores pendientes por aprobar */
@@ -112,11 +112,11 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
-    const { codigo, estado, nivel  } = req.body;
-    const niveles = {nivel}
+    const { codigo, estado, nivel } = req.body;
+    const estadoNivel = {nivel}
     const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
-    const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [niveles, codigo])
+    const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
     const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
 
@@ -806,6 +806,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         (estado3.length * 100) / dim3,
         (estado4.length * 100) / dim4
     ]
+    // jsonDim => Array para la gráfica de Plan Estratégico
     const jsonDim = JSON.stringify([
         { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
         { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
@@ -1007,12 +1008,11 @@ dashboardController.enviarCuestionario = async (req, res) => {
     const { codigoEmpresa, zhActualAdm } = req.body;
     // Capturar Fecha de guardado
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
-
-    const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
+    let infoEmp = await consultarDatos('empresas')
+    infoEmp = infoEmp.find(x => x.codigo == codigoEmpresa)
+    // const infoEmp = await pool.query('SELECT * FROM empresas WHERE codigo = ? LIMIT 1', [codigoEmpresa])
     // Capturar ID Empresa
-    const id_empresa = infoEmp[0].id_empresas;
-    // Capturar ID Consultor
-    const id_consultor = infoEmp[0].consultor;
+    const id_empresa = infoEmp.id_empresas;
 
     // Productos o Servicios
     const { necesidad_producto, precio_producto, productos_coherentes, calidad_producto, presentacion_producto, calificacion_global_producto } = req.body
@@ -1089,7 +1089,7 @@ dashboardController.enviarCuestionario = async (req, res) => {
     let metas_corto_plazo = JSON.stringify({ m1, m2, m3, m4, m5 })
 
     // Creando Objetos para guardar en la base de datos
-    const nuevoDiagnostico = { id_empresa, id_consultor, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
+    const nuevoDiagnostico = { id_empresa, fecha, productos_servicios, administracion, talento_humano, finanzas, servicio_alcliente, operaciones, ambiente_laboral, innovacion, marketing, ventas, fortalezas, oportunidades_mejoras, metas_corto_plazo }
 
     const areasVitales = {
         id_empresa,

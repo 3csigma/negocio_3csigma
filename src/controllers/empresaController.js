@@ -5,31 +5,30 @@ const { listEnvelope } = require('./listEnvelopes');
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = 0, analisisPagado = 0, etapa1;
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulDiagAsignado = false, id_empresa = false;
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
-    diagnosticoPagado = 0, analisisPagado = 0;
+    diagnosticoPagado = false, analisisPagado = 0;
     acuerdoFirmado = false;
-    let activado = true;
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
-    const id_empresa = empresa.id_empresas;
+    id_empresa = empresa.id_empresas;
     req.pagoDiag = false, pagoAnalisis = false, etapa1 = {};
+
+    // VALIDACIÓN PARA SABER SI LA EMPRESA TIENE CONSULTOR DE DIAGNÓSTICO ASIGNADO
+    let cAsignado = await consultarDatos("consultores_asignados", 'WHERE orden = 1') 
+    cAsignado = cAsignado.find(x => x.empresa == id_empresa)
+    if (cAsignado) {
+        consulDiagAsignado = cAsignado;
+    }
+
     /** Consultando que pagos ha realizado el usuario */
     const pagos = await consultarDatos('pagos')
     let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
-    const row = await pool.query('SELECT e.*, ca.* FROM empresas e JOIN consultores_asignados ca ON e.id_empresas = ca.empresa', `WHERE e.email = "${req.user.email} AND ca.orden = 1" LIMIT 1`)
-    let orden = row[0].orden
-    console.log("====>> ROW " , row);
-    if (orden == 1) {
-        activado
-    } else {
-       activado = false
-    }
     if (!pago_empresa) {
-        diagnosticoPagado = 0;
+        diagnosticoPagado = false;
         const estado = JSON.stringify({estado:0})
         const nuevoPago = { 
             diagnostico_negocio: estado,
@@ -46,13 +45,10 @@ empresaController.index = async (req, res) => {
             }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
     } else {
-        const objDiagnostico  = JSON.parse(pago_empresa.diagnostico_negocio)
-        
-
-
+        const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
         if (objDiagnostico.estado == 1) {
             // PAGÓ EL DIAGNOSTICO
-            diagnosticoPagado = 1;
+            diagnosticoPagado = objDiagnostico;
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
             // if (acuerdo.length > 0) {
@@ -79,14 +75,6 @@ empresaController.index = async (req, res) => {
             }
         }
 
-    }
-
-    // VALIDANDO SI PUEDE O NO AGENDAR UNA CITA CON EL CONSULTOR
-    if (empresa.consultor != null) {
-        etapa1.lista = true;
-        const consultores = await consultarDatos('consultores');
-        const c = consultores.find(x => x.id_consultores == empresa.consultor)
-        etapa1.consultor = c.link_calendly1;
     }
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
@@ -168,7 +156,6 @@ empresaController.index = async (req, res) => {
 
     const informeEtapa2 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de análisis')
     if (informeEtapa2) porcentajeEtapa2 = 100;
-    
     /************************************************************************** */
 
     // PORCENTAJE ETAPA 3
@@ -258,12 +245,12 @@ empresaController.index = async (req, res) => {
         diagnosticoPagado,
         analisisPagado,
         itemActivo: 1,
-        acuerdoFirmado,
+        consulDiagAsignado,
         etapa1,
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, jsonDim_empresa, activado
+        nuevosProyectos, rendimiento, jsonDim_empresa,
     })
 }
 
@@ -409,42 +396,38 @@ empresaController.acuerdo = async (req, res) => {
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
 empresaController.diagnostico = async (req, res) => {
-    // const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
-    const row = await pool.query('SELECT e.*, ca.*, pa.* FROM empresas e JOIN consultores_asignados ca ON e.id_empresas = ca.empresa JOIN pagos pa ON e.id_empresas = pa.id_empresa', `WHERE e.email = "${req.user.email} AND ca.orden = 1" LIMIT 1`)
-    const id_empresa = row[0].id_empresas;
-    // para la fecha 
-    const fechaDiagnostico = JSON.parse(row[0].diagnostico_negocio)
-    let fechaDePago = fechaDiagnostico.fecha
-    !fechaDePago ? fechaDePago = "N/A" : fechaDePago
-    // para el estado 
-    const estadoDiagnostico= JSON.parse(row[0].diagnostico_negocio)
-    let estadoDePago = {}
-    let existencia = true
-    if(estadoDiagnostico.estado == 1){
-        existencia = false
-        estadoDePago.color = 'badge-success'
-        estadoDePago.texto = 'Pagado'
-        estadoDePago.btn = 'background: #656c73; color:white; disabled="true"'
-    }else if(estadoDiagnostico.estado == 0) {
-        estadoDePago.color = 'badge-warning'
-        estadoDePago.texto = 'Pendiente'
-        estadoDePago.btn = 'background: #85bb65; color:white'
-        existencia
+    // ID Empresa Global => id_empresa
+    // Pago Diagnóstico => diagnosticoPagado
+    // Consultor Asignado => consulDiagAsignado
+    let existencia = true;
+    const estadoPago = {
+        color : 'badge-warning',
+        texto : 'Pendiente',
+        btn : 'background: #85bb65; color: white',
+        fecha : 'N/A'
     }
-    // para el nivel
-    const caConsultor = row[0].consultor; // ca significa 'Consultor Asignado' + la columna
-    const respuesta = await pool.query('SELECT nivel FROM consultores WHERE id_consultores = ?', [caConsultor])
-    const nivelConsultor = respuesta[0].nivel;
-    let costo = 0
-    if (nivelConsultor == 1) {
-        costo = "$197"
-    }else if(nivelConsultor == 2){
-         costo = "$297"
-    }else if(nivelConsultor == 3){
-        costo = "$497"
-    }else {
-         costo = "$697"
+
+    let infoConsul = await consultarDatos('consultores')
+    infoConsul = infoConsul.find(x => x.id_consultores == consulDiagAsignado.consultor)
+    let costo = 197;
+    if (infoConsul.nivel == '2'){
+        costo = 297;
+    } else if (infoConsul.nivel == '3'){
+        costo = 497;
+    } else if (infoConsul.nivel == '4'){
+        costo = 697;
     }
+
+    // Validando Diagnóstico de negocio ha sido pagado
+    if (diagnosticoPagado.estado == 1) {
+        existencia = false;
+        estadoPago.color = 'badge-success'
+        estadoPago.texto = 'Pagado'
+        estadoPago.btn = 'background: #656c73; color: white; disabled= "true" '
+        costo = diagnosticoPagado.precio;
+        estadoPago.fecha = diagnosticoPagado.fecha
+    }
+
     const formDiag = {}
     formDiag.id = id_empresa;
     formDiag.usuario = encriptarTxt('' + id_empresa)
@@ -480,9 +463,11 @@ empresaController.diagnostico = async (req, res) => {
     let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
 
     res.render('empresa/diagnostico', {
-        user_dash: true, pagoDiag: true, itemActivo: 3, acuerdoFirmado: true, formDiag, costo, fechaDePago, estadoDePago, existencia,
+        user_dash: true, pagoDiag: true, itemActivo: 3, formDiag,
+        existencia, costo, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
+        consulDiagAsignado: true
     })
 }
 
@@ -788,7 +773,8 @@ empresaController.planEstrategico = async (req, res) => {
     empresa = empresa[0].id_empresas
     const fechaActual = new Date().toLocaleDateString('fr-CA');
 
-    const dimObj = tareasGenerales(empresa, fechaActual)
+    const dimObj = await tareasGenerales(empresa, fechaActual)
+    const tareas = dimObj.tareas;
 
     const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
     let datosTabla = await consultarDatos('rendimiento_empresa')
@@ -807,14 +793,16 @@ empresaController.planEstrategico = async (req, res) => {
         botones.editSub = false;
         propuesta.color = 'warning';
         propuesta.texto = 'Pendiente';
+        propuesta.pagada = false;
         const objEstrategico = JSON.parse(pagos.estrategico)
         
-        // PAGÓ EL ANÁLISIS
+        // PAGÓ EL PLAN ESTRATÉGICO
         if (objEstrategico.estado == 1 ) { // Etapa final (4) Pagada
             propuesta.color = 'success';
             propuesta.texto = 'Activa';
             botones.pagar = false;
             botones.editSub = true;
+            propuesta.pagada = true;
         } else if (objEstrategico.estado == 2) {
             propuesta.color = 'danger';
             propuesta.texto = 'Cancelada';

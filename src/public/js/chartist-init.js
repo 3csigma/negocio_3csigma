@@ -62,25 +62,28 @@
 					
 					/** Gráfica de Rendimiento para Empresas */
 					let matriz = new Array(), fechas = [];
-					let dataEmpresa = document.querySelector('#jsonRendimiento').value
-					dataEmpresa = JSON.parse(dataEmpresa)
-					if (dataEmpresa.length > 0) {
-						for(let i=0;i<dataEmpresa.length; i++){
-							matriz[i] = new Array();
-							fechas.push(dataEmpresa[i].fecha)
-							for(let j=0;j<3; j++){
-								if(j == 0){
-									matriz[i][j] = dataEmpresa[i].total_ventas                                    
-								}  else if(j == 1){
-									matriz[i][j] = dataEmpresa[i].total_compras                                    
-								}else if(j == 2){
-									matriz[i][j] = dataEmpresa[i].total_gastos    
+					let dataEmpresa = document.querySelector('#jsonRendimiento')
+					if (dataEmpresa) {
+						dataEmpresa = dataEmpresa.value
+						dataEmpresa = JSON.parse(dataEmpresa)
+						if (dataEmpresa.length > 0) {
+							for(let i=0;i<dataEmpresa.length; i++){
+								matriz[i] = new Array();
+								fechas.push(dataEmpresa[i].fecha)
+								for(let j=0;j<3; j++){
+									if(j == 0){
+										matriz[i][j] = dataEmpresa[i].total_ventas                                    
+									}  else if(j == 1){
+										matriz[i][j] = dataEmpresa[i].total_compras                                    
+									}else if(j == 2){
+										matriz[i][j] = dataEmpresa[i].total_gastos    
+									}
 								}
 							}
+						// TRANPONER MATRIZ (Ej: de 3 COLUMNAS a 2)
+						let arrayT = matriz[0].map((_, colIndex) => matriz.map(x => x[colIndex]));
+						multiLineChart(fechas, arrayT) 
 						}
-					// TRANPONER MATRIZ (Ej: de 3 COLUMNAS a 2)
-					let arrayT = matriz[0].map((_, colIndex) => matriz.map(x => x[colIndex]));
-					multiLineChart(fechas, arrayT) 
 					}
 		  
 				}

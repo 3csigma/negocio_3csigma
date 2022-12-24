@@ -6,13 +6,6 @@ const signingViaEmail = require('../controllers/envelopeController');
 const paymentController = require('../controllers/paymentController');
 const { uploadFiles } = require('../lib/helpers')
 
-// Dashboard Principal Empresas
-// router.get('/', checkLogin, empresaLogueada, empresaController.index)
-// router.get('/', checkLogin, chooseController)
-
-/** Proceso de pago - API Stripe */
-router.post("/create-payment-intent", checkLogin, paymentController.createPayment)
-
 // Diagnóstico de Negocio
 router.get('/diagnostico-de-negocio', checkLogin, empresaController.diagnostico)
 

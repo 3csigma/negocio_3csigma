@@ -35,60 +35,56 @@
     </div>
     {{!-- Fin de la 1era fila --}}
 
-  {{!-- todo ========================================================= --}}
-
-        <div class="col-xl-6 col-xxl-6">
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Pago</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-responsive-md text-center">
-                    <thead>
-                      <tr>
-                        <th>FECHA PAGO</th>
-                        <th>VALOR</th>
-                        <th>ESTADO DE PAGO</th>
-                        <th>PAGAR</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{{fechaDePago}}</td>
-                        <td>{{costo}}</td>
-                        <td><span class="badge light {{estadoDePago.color}}"
-                            style="background: {{formDiag.estilo}}">{{estadoDePago.texto}}</span></td>
-                        <td>
-                          {{#if existencia}}
-                          <form action="/pagar-diagnostico" method="POST">
-                              <button type="submit" class="btn btn-xs sharp" title="{{estadoDePago.texto}}" style="{{estadoDePago.btn}}">
-                                <i class="fa fa-usd"></i>
-                              </button>
-                          </form>
-                          {{else}}
-                          <button type="submit" class="btn btn-xs sharp" title="{{estadoDePago.texto}}" style="{{estadoDePago.btn}}">
-                                <i class="fa fa-usd"></i>
-                          </button>
-                          {{/if}}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+    {{!-- TARJETA DE PAGO DIAGNÓSTICO --}}
+    <div class="col-xl-6 col-xxl-6">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="card">
+            <div class="card-header">
+              <h4 class="card-title">Pago</h4>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-responsive-md text-center">
+                  <thead>
+                    <tr>
+                      <th>FECHA PAGO</th>
+                      <th>VALOR</th>
+                      <th>ESTADO DE PAGO</th>
+                      <th>PAGAR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{estadoPago.fecha}}</td>
+                      <td>${{costo}}</td>
+                      <td><span class="badge light {{estadoPago.color}}"
+                          style="background: {{formDiag.estilo}}">{{estadoPago.texto}}</span></td>
+                      <td>
+                        {{#if existencia}}
+                        <form action="/pagar-diagnostico" method="POST">
+                            <button type="submit" class="btn btn-xs sharp" title="{{estadoPago.texto}}" style="{{estadoPago.btn}}">
+                              <i class="fa fa-usd"></i>
+                            </button>
+                        </form>
+                        {{else}}
+                        <button type="submit" class="btn btn-xs sharp" title="{{estadoPago.texto}}" style="{{estadoPago.btn}}">
+                          <i class="fa fa-usd"></i>
+                        </button>
+                        {{/if}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-  {{!-- todo ========================================================= --}}
-  {{#if existencia}}
-
-  {{else}}
- <div class="row">
+    </div>
+    {{#unless existencia}}
+    {{!-- TARJETAS FORMULARIOS E INFORMES --}}
+    <div class="row">
       {{!-- FORMULARIOS --}}
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
@@ -181,7 +177,7 @@
         </div>
       </div>
     </div>
-  {{/if}}
+    {{/unless}}
   </div>
 </div>
 

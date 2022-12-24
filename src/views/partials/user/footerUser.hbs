@@ -1,7 +1,6 @@
 <!-- ****************** Required JS - DASHBOARD ****************** -->
 <script src="../vendor/js/Chart.bundle.min.js"></script>
 <script src="../vendor/js/owl.carousel.js"></script>
-<script src="../vendor/js/personalScripts.js"></script>
 <!-- Chart piety plugin files -->
 <script src="../vendor/js/jquery.peity.min.js"></script>
 
@@ -10,6 +9,15 @@
 {{/if}}
 
 <script>
+
+	function msgSinConsultor() {
+		Swal.fire(
+			'Atención',
+			'Tu consultor no ha sido asignado. Recibiras una notificación a tu correo y podras ingresar',
+			'info'
+		)
+	}
+
     (function ($) {
 
         const dzGraficasEmpresa = function () {
@@ -201,10 +209,52 @@
         }();
 
         jQuery(document).ready(function () {
+			 $(".chatbox-close").on("click", () => {
+                $('#cuerpoGeneral').css('overflow-y', 'auto')
+			})
+			{{#if alertSuccess}}
+				Swal.fire({
+					icon: 'success',
+					title: '¡Pago exitoso!',
+					html: '<p>Tu pago ha sido recibido, ahora puedes continuar con el formulario Ficha de cliente.</p>'
+						+ '<a href="/" type="button" class="mr-2 mb-2" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: transparent !important;'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300; border: none !important;">Ok</a>',
+					showCancelButton: false,
+					showConfirmButton: false,
+					allowOutsideClick: false,
+				})
+            {{/if}}
+            {{#if alertCancel}}
+                Swal.fire({
+					icon: 'error',
+					title: 'Pago Cancelado',
+					html: '<p>Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.</p>'
+						+ '<a href="/" type="button" class="mr-2 mb-2" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: transparent !important;'
+						+ 'border-radius: 22px;'
+						+ 'color: #fff;'
+						+ 'width: 160px;'
+						+ 'height: 50px;'
+						+ 'text-align: center;'
+						+ 'padding: 14px;'
+						+ 'font-size: 17px;'
+						+ 'font-weight: 300; border: none !important;">Ok</a>',
+					showCancelButton: false,
+					showConfirmButton: false,
+					allowOutsideClick: false,
+				})
+            {{/if}}
         });
 
         jQuery(window).on('load', function () {
             dzGraficasEmpresa.load();
+			/*
             {{#if alertSuccess}}
 				Swal.fire({
 					icon: 'success',
@@ -243,8 +293,10 @@
 					allowOutsideClick: false,
 				})
             {{/if}}
+			*/
 			/*********************************************************************************** */
 			/** PAGOS ETAPA 2 */
+			/*
 			{{#if pagoExitoso}}
 				Swal.fire({
 					icon: 'success',
@@ -283,8 +335,10 @@
 					allowOutsideClick: false,
 				})
 			{{/if}}
+			*/
 			/*********************************************************************************** */
 			/** PAGOS ETAPA 2 */
+			/*
 			{{#if pagoEtapa3Ok}}
 				Swal.fire({
 					icon: 'success',
@@ -323,6 +377,7 @@
 					allowOutsideClick: false,
 				})
 			{{/if}}
+			*/
         });
 
         jQuery(window).on('resize', function () {

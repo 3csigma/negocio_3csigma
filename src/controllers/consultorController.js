@@ -253,7 +253,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
     const analisis_empresa = await consultarDatos('analisis_empresa');
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
 
-    if (empresa && id_consultor) {
+    if (empresa) {
         let id_empresa = empresa.id_empresas;
 
         // Capturando datos del formulario - Analisis dimensión Producto
@@ -296,7 +296,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
     const fecha = new Date().toLocaleString("en-US", { timeZone: zhActualAdm })
 
     // Verificando si existen registros Análisis de empresa en la Base de datos
-    let empresa = await consultarDatos('FROM empresas')
+    let empresa = await consultarDatos('empresas')
     const analisis_empresa = await consultarDatos('analisis_empresa');
 
     empresa = empresa.find(item => item.codigo == codigoEmpresa)
@@ -357,8 +357,11 @@ consultorController.agregarTarea = async (req, res) => {
 
 consultorController.editarTarea = async (req, res) => {
     const { idTarea } = req.body
-    const infoTarea = await pool.query('SELECT * FROM plan_estrategico WHERE id = ?', [idTarea])
-    res.send(infoTarea[0])
+    console.log("controller id tarea")
+    let infoTarea = await consultarDatos('plan_estrategico')
+    infoTarea = infoTarea.find(x => x.id === idTarea)
+    console.log("\n *********** INFO TAREA DB >>> ", infoTarea)
+    res.send(infoTarea)
 }
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID

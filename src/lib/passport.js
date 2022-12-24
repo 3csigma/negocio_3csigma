@@ -3,8 +3,10 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
-const { getTemplate, sendEmail } = require('../lib/mail.config')
+const { getTemplate, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
 const { consultarDatos } = require('../lib/helpers')
+// const emailAdmin = 'dalo.beta@gmail.com'
+const emailAdmin = '3csigmagroup@gmail.com'
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id_usuarios);
@@ -56,11 +58,13 @@ passport.use('local.registro', new LocalStrategy({
 
             // Obtener la plantilla de Email
             const template = getTemplate(nombres, nombre_empresa, codigo);
+            const templateNuevaEmpresa = nuevaEmpresa('Carlos', nombre_empresa)
 
             // Enviar Email
             const resultEmail = await sendEmail(email, 'Confirma tu registro en 3C Sigma', template)
+            const resultEmail2 = await sendEmail(emailAdmin, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
 
-            if (resultEmail == false) {
+            if (resultEmail == false || resultEmail2 == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
             }
 
@@ -114,13 +118,23 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
 
-            // Guardar en la base de datos
-            const fila1 = await pool.query('INSERT INTO users SET ?', [newUser]);
-            if (fila1.affectedRows > 0) {
-                await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
+            // Enviando email al admin del registro
+            const nombreCompleto = nombres + ' ' + apellidos
+            const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
+            const resultEmail = await sendEmail(emailAdmin, '¡Se ha registrado una nuevo consultor!', templateConsul)
+
+            if (resultEmail == false) {
+                return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
+            } else {
+                // Guardar en la base de datos
+                const fila1 = await pool.query('INSERT INTO users SET ?', [newUser]);
+                if (fila1.affectedRows > 0) {
+                    await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
+                }
+
+                return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
             }
 
-            return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
         }
     })
 }))

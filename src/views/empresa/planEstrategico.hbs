@@ -170,9 +170,11 @@
                                                         class="text-black">{{actividad}}</span></h4>
                                                 <span class="text-{{color}} font-w600">{{estado}}</span>
                                                 {{!-- TIEMPO --}}
-                                                <span class="badge light badge-success"
-                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
-                                                        class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                <span class="badge light"
+                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;">
+                                                    <i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                {{!-- PRIORIDAD  --}}
+                                                <span>Prioridad: {{prioridad}}</span>
                                             </div>
                                         </div>
                                         <div
@@ -214,6 +216,8 @@
                                                 <span class="badge light badge-success"
                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
                                                         class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                {{!-- PRIORIDAD --}}
+                                                <span class="badge light badge-success">Prioridad: {{prioridad}}</span>
                                                 {{/unless}}
                                             </div>
                                         </div>
@@ -249,6 +253,8 @@
                                                 <span class="badge light badge-success"
                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
                                                         class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                                                {{!-- PRIORIDAD  --}}
+                                                <span class="badge light badge-success">Prioridad: {{prioridad}}</span>
                                             </div>
                                         </div>
                                         <div
