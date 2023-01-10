@@ -15,13 +15,22 @@ empresaController.index = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
     id_empresa = empresa.id_empresas;
+    let idEmpresaActual = empresa.id_empresas;
     req.pagoDiag = false, pagoAnalisis = false, etapa1 = {};
 
     // VALIDACIÓN PARA SABER SI LA EMPRESA TIENE CONSULTOR DE DIAGNÓSTICO ASIGNADO
-    let cAsignado = await consultarDatos("consultores_asignados", 'WHERE orden = 1') 
-    cAsignado = cAsignado.find(x => x.empresa == id_empresa)
-    if (cAsignado) {
-        consulDiagAsignado = cAsignado;
+    let cAsignado = await consultarDatos("consultores_asignados", 'WHERE orden = 1')
+    if (cAsignado.length > 0) { 
+        console.log("\n****************************\n")
+        console.log("Hay datos en la Tabla de Consultores Asignados")
+        console.log("\n****************************\n")
+        cAsignado = cAsignado.find(x => x.empresa == idEmpresaActual)
+        if (cAsignado) {
+            consulDiagAsignado = cAsignado;
+        } else {
+            consulDiagAsignado = false;
+            
+        }
     }
 
     /** Consultando que pagos ha realizado el usuario */
@@ -304,7 +313,8 @@ empresaController.perfilUsuarios = async (req, res) => {
         diagnosticoPagado,
         analisisPagado,
         acuerdoFirmado,
-        etapa1
+        etapa1,
+        consulDiagAsignado
     })
 }
 

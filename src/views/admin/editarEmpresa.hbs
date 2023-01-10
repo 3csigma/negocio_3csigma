@@ -154,20 +154,6 @@
                                             </div>
                                         </div>
                                         {{/if}}
-
-
-                                        <div class="col-12 mt-3">
-                                            {{!-- Datos personales --}}
-                                            <div class="profile-personal-info">
-                                                <div class="row mb-2">
-                                                    <div class="col-sm-12 col-12">
-                                                        <h5 class="f-w-500">Etapa de consultoría :</br><span>{{#if
-                                                                datos.etapa}}{{datos.etapa}}{{else}}N/A{{/if}}</span>
-                                                        </h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         
                                     </div>
 
@@ -666,6 +652,45 @@
                                     </div>
                                 </div>
 
+                                {{!-- PAGO DE DIAGNÓSTICO --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pago Diagnóstico</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA PAGO</th>
+                                                            <th>VALOR</th>
+                                                            <th>ESTADO DE PAGO</th>
+                                                            {{#if pago_diagnostico.btn}}
+                                                            <th>PAGAR</th>
+                                                            {{/if}}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{pago_diagnostico.fecha}}</td>
+                                                            <td>{{pago_diagnostico.valor}}</td>
+                                                            <td><span class="badge light {{pago_diagnostico.color}}"
+                                                                style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
+                                                            </td>
+                                                            {{#if pago_diagnostico.btn}}
+                                                            <td>
+                                                                <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
+                                                            </td>
+                                                            {{/if}}
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
                                     <div class="card-body">
@@ -829,11 +854,8 @@
                                                                         {{/if}}
                                                                         
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            {{#if frmInfo.url}}
-                                                                            <a  id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
-                                                                            {{else}}
-                                                                            <button style="margin: 0 auto; margin-top: -8px;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
-                                                                            {{/if}}
+                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061;" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i>
+                                                                            </a>
                                                                         </td>
                                                                     </tr>
                                                                 </table>

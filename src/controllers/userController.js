@@ -121,9 +121,6 @@ userController.resetPassword = async (req, res, next) => {
 
 userController.updatePassword = async (req, res, next) => {
     const { clave, token } = req.body;
-    console.log("\n")
-    console.log("¡¡¡¡¡¡¡¡¡¡¡¡= TOKEN =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>", token);
-    console.log("¡¡¡¡¡¡¡¡¡¡¡¡= CLAVE =¡¡¡¡¡¡¡¡¡¡¡¡:::>>>>", clave);
 
     await pool.query('SELECT * FROM users WHERE token = ?', [token], (err, result) => {
         if (err) throw err;
@@ -188,7 +185,7 @@ userController.update_user = async (req, res) => {
     
         const datos_tbl_user = { nombres, apellidos, email, clave }
         const datos_tbl_empresas = { nombres, apellidos, nombre_empresa, email }
-       
+    
         await pool.query('UPDATE users SET ? WHERE codigo = ?', [datos_tbl_user, codigo])
         await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [datos_tbl_empresas, codigo])
     }

@@ -103,6 +103,42 @@
     function guardarArchivo(nombre, archivo) {
         console.log("Función para guardar los datos en DB & luego responder en la misma vista")
     }
+    
+    // REGISTRAR PAGO MANUAL (DIAGNÓSTICO DE NEGOCIO)
+    function pagoManual(id, precio) {
+        Swal.fire({
+            title: '¿Deseas registrar el pago del diagnóstico de negocio?',
+            text: "Asegúrate de que esta empresa haya realizado el pago de forma externa, esta acción no puede revertirse.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Pago confirmado'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/pagoManual-Diagnostico', {
+                    method: 'POST',
+                    body: JSON.stringify({id, precio}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            window.location.hash = 'diagnostico_'
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'No sé pudo efectuar está acción, contactar a soporte..',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
 
     // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
     function pagoManualEmpresas(num, id, tipo) {

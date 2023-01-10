@@ -194,12 +194,14 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
         // e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
         // Pago de la Etapa 1 - Diagnóstico de Negocio
-        const p1 = JSON.parse(e.diagnostico_negocio)
-        if (p1.estado == 1) {
-            e.etapa = 'Diagnóstico pagado';
-            e.pagoEtapa1 = true;
-        } else {
-            e.etapa = e.etapa
+        if (e.diagnostico_negocio) {
+            const p1 = JSON.parse(e.diagnostico_negocio)
+            if (p1.estado == 1) {
+                e.etapa = 'Diagnóstico pagado';
+                e.pagoEtapa1 = true;
+            } else {
+                e.etapa = e.etapa
+            }
         }
         e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
         e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
@@ -223,14 +225,16 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         if (propuesta) { e.etapa = 'Propuesta de análisis enviada' }
 
         // Pago de la Etapa 2 - Análisis de negocio
-        let p2 = JSON.parse(e.analisis_negocio)
-        p2.estado == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
-        p2 = JSON.parse(e.analisis_negocio1)
-        p2.estado == 2 ? e.etapa = '60% Análisis pagado' : e.etapa = e.etapa;
-        p2 = JSON.parse(e.analisis_negocio2)
-        p2.estado == 2 ? e.etapa = '80% Análisis pagado' : e.etapa = e.etapa;
-        p2 = JSON.parse(e.analisis_negocio3)
-        p2.estado == 2 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+        if (e.analisis_negocio) {
+            let p2 = JSON.parse(e.analisis_negocio)
+            p2.estado == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+            p2 = JSON.parse(e.analisis_negocio1)
+            p2.estado == 2 ? e.etapa = '60% Análisis pagado' : e.etapa = e.etapa;
+            p2 = JSON.parse(e.analisis_negocio2)
+            p2.estado == 2 ? e.etapa = '80% Análisis pagado' : e.etapa = e.etapa;
+            p2 = JSON.parse(e.analisis_negocio3)
+            p2.estado == 2 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
+        }
 
         if (dg_analisis.length > 0) {
             const dim = dg_analisis.find(i => i.id_empresa == e.id_empresas)
@@ -277,6 +281,14 @@ dashboardController.editarEmpresa = async (req, res) => {
     // Empresa tabla Ficha Cliente
     let empresa = await consultarDatos('ficha_cliente')
     empresa = empresa.find(x => x.id_empresa == idEmpresa)
+    const pago_diagnostico = {
+        color : 'badge-warning',
+        texto : 'Pendiente',
+        btn : false,
+        fecha : 'N/A',
+        valor: 'Sin consultor',
+        activarBtn : false
+    }
 
     // Capturando Consultores Activos
     const consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
@@ -296,11 +308,40 @@ dashboardController.editarEmpresa = async (req, res) => {
     // INFO DE LA EMPRESA HASTA LA FICHA CLIENTE
     if (datosEmpresa) {
         datosEmpresa.estadoEmail == 1 ? datos.etapa = 'Email confirmado' : datos.etapa = datos.etapa;
-        datosEmpresa.consultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
+        // datosEmpresa.consultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
 
         if (pay) {
             const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
-            pagoDiagnostico.estado == 1 ? datos.etapa = 'Diagnóstico pagado' : datos.etapa = datos.etapa;
+            
+            let consulDg = await consultarDatos('consultores_asignados')
+            let infoConsul = await consultarDatos('consultores')
+            if (consulDg.length > 0) {
+                consulDg = consulDg.find(x => x.empresa == datos.idEmpresa && x.orden == 1)
+                if (consulDg) {
+                    infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
+                    pago_diagnostico.btn = 'color: white;'
+                    if (infoConsul.nivel == '1') {
+                        pago_diagnostico.valor = 197
+                    } else if (infoConsul.nivel == '2') {
+                        pago_diagnostico.valor= 297;
+                    } else if (infoConsul.nivel == '3') {
+                        pago_diagnostico.valor= 497;
+                    } else if (infoConsul.nivel == '4') {
+                        pago_diagnostico.valor= 697;
+                    }
+                    pago_diagnostico.valor = '$'+pago_diagnostico.valor
+                }
+            }
+        
+            // Validando Diagnóstico de negocio ha sido pagado
+            if (pagoDiagnostico.estado == 1) {
+                datos.etapa = 'Diagnóstico pagado'
+                pago_diagnostico.color = 'badge-success'
+                pago_diagnostico.texto = 'Pagado'
+                pago_diagnostico.btn = false
+                pago_diagnostico.valor = pagoDiagnostico.precio;
+                pago_diagnostico.fecha = pagoDiagnostico.fecha
+            }
         }
 
         let acuerdo = await consultarDatos('acuerdo_confidencial')
@@ -855,7 +896,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
-        pagos_empresarial,
+        pago_diagnostico, pagos_empresarial,
         rolAdmin, botonesEtapas
     })
 
@@ -865,16 +906,26 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const { idEmpresa, codigo, estadoAdm, mapa } = req.body;
     const mapaConsultores = new Map(Object.entries(mapa)) 
     console.log("mapaConsultores > ", mapaConsultores)
+
+    console.log("\nCódigo ->", codigo)
     
     const linkBase = 'https://3csigma.com/app_public_files/emails_consultor/'
     // Consultar Datos de la empresa
     let empresa = await consultarDatos('empresas')
-    empresa = empresa.find(x => x.codigo = codigo)
+    
+    console.group("\n Empresas ---> ")
+    console.log(empresa)
+    console.groupEnd()
+    console.log("******************\n")
+    
+    empresa = empresa.find(x => x.codigo == codigo)
+    console.log("Empresa Actual --> ", empresa)
 
     // Consultores Asignados
     const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
     for (const [key, value] of mapaConsultores) {
         const filtro = asignados.find(x => x.etapa == key)
+        console.log("\n FILTRO ---> ", filtro)
         let orden = 1;
         let link_Imagen = '';
         let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
@@ -901,7 +952,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
             await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
             
-             /** INFO PARA ENVÍO DE EMAIL */
+            /** INFO PARA ENVÍO DE EMAIL */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
             const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
             const template = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
@@ -944,9 +995,9 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 
 /** PAGOS MANUALES ETAPA 1 y 2 */
 dashboardController.pagoManualDiagnostico = async (req, res) => {
-    const { id } = req.body
+    const { id, precio } = req.body
     const fecha = new Date().toLocaleDateString("en-US")
-    const data = { estado: 1, fecha }
+    const data = { estado: 1, fecha, precio}
     const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
     await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
         if (err) throw err;

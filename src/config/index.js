@@ -63,7 +63,7 @@ const rutasEmpresa = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil
 
 const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme']
 
-const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagoManual-diagnostico', 'pagomanual-empresas']
+const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagomanual-diagnostico', 'pagomanual-empresas']
 
 exports.config = {
   dsOauthServer, dsPayload,
