@@ -112,6 +112,21 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 
 /************************************************************************************************************** */
 /*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
+
+// CAPTURAR MES ANTERIOR Y ABREVIATURA DEL MES ACTUAL (ej: Dic)
+capturarMes = (fecha, year) => {
+    let mesActual = new Date().getMonth();
+    console.log("Mes Actual Original -> ", mesActual)
+    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
+    let mesAnterior = mesActual - 1
+    mesAnterior == 0 ? mesAnterior = 12 : false;
+    const year = new Date().getFullYear();
+    const f = new Date()
+    f.setMonth(mesAnterior - 1);
+    let txtMes = f.toLocaleDateString("es", { month: "short" })
+    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+}
+
 // ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
 helpers.enabled_nextPay = async () => {
     
@@ -203,19 +218,15 @@ helpers.enabled_nextPay = async () => {
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
 helpers.historial_consultores_admin = async () => {
     const consultores = await helpers.consultarDatos('consultores')
-    let fecha = new Date().toLocaleDateString("en-CA");
-    let mesActual = new Date().getMonth();
-    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
-    const mesAnterior = mesActual - 1
-    const year = new Date().getFullYear();
 
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
+    /////////////////////////////////////////////////////////////////////
+    
     let filtroConsultores, num_consultores
     filtroConsultores = consultores.filter((item) => mesAnterior == item.mes && year == item.year);
-
-    const f = new Date()
-    f.setMonth(mesAnterior - 1);
-    let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
 
     if (filtroConsultores.length > 0) {
         num_consultores = filtroConsultores.length;
@@ -240,26 +251,27 @@ helpers.historial_consultores_admin = async () => {
         }
     }
     console.log("CRON JOB HISTORIAL DE CONSULTORES ADMIN FINALIZADO...");
-    next();
 };
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
 helpers.historial_empresas_admin = async () => {
     const empresas = await helpers.consultarDatos('empresas')
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
-    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
-    const mesAnterior = mesActual - 1
+    console.log("Mes Actual Original -> ", mesActual)
+    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
+    let mesAnterior = mesActual - 1
+    mesAnterior == 0 ? mesAnterior = 12 : false;
     const year = new Date().getFullYear();
-
-    let filtroEmpresas, num_empresas
-    filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
-
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
     const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-
+    /////////////////////////////////////////////////////////////////////
+    
+    let filtroEmpresas, num_empresas
+    filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
 
     if (filtroEmpresas.length > 0) {
         num_empresas = filtroEmpresas.length;
@@ -283,7 +295,6 @@ helpers.historial_empresas_admin = async () => {
     }
 
     console.log("CRON JOB HISTORIAL DE EMPRESAS ADMIN FINALIZADO...");
-    next();
 };
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES ADMIN
@@ -291,20 +302,22 @@ helpers.historial_informes_admin = async () => {
 
     const informes = await helpers.consultarDatos('informes')
 
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
-    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
-    const mesAnterior = mesActual - 1
+    console.log("Mes Actual Original -> ", mesActual)
+    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
+    let mesAnterior = mesActual - 1
+    mesAnterior == 0 ? mesAnterior = 12 : false;
     const year = new Date().getFullYear();
-
-    let filtroInformes, num_informes
-    filtroInformes = informes.filter((item) => mesAnterior == item.mes && year == item.year);
-
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
     const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-
+    /////////////////////////////////////////////////////////////////////
+    
+    let filtroInformes, num_informes
+    filtroInformes = informes.filter((item) => mesAnterior == item.mes && year == item.year);
     if (filtroInformes.length > 0) {
         num_informes = filtroInformes.length;
         // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL ADMIN FILTRADOS POR MES Y AÑO 
@@ -327,7 +340,6 @@ helpers.historial_informes_admin = async () => {
     }
 
     console.log("CRON JOB HISTORIAL INFORMES ADMIN FINALIZADO..")
-    next();
 };
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS CONSULTOR
@@ -335,16 +347,19 @@ helpers.historial_empresas_consultor = async () => {
     const empresas = await helpers.consultarDatos("empresas")
     const consultores = await helpers.consultarDatos("consultores")
 
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
-    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
-    const mesAnterior = mesActual - 1
+    console.log("Mes Actual Original -> ", mesActual)
+    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
+    let mesAnterior = mesActual - 1
+    mesAnterior == 0 ? mesAnterior = 12 : false;
     const year = new Date().getFullYear();
-
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
     const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    /////////////////////////////////////////////////////////////////////
     let idConsultor = 0
 
     consultores.forEach(async (c) => {
@@ -371,7 +386,6 @@ helpers.historial_empresas_consultor = async () => {
     });
 
     console.log("HISTORIAL DE EMPRESAS CONSULTOR FINALIZADO...");
-    next()
 };
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
@@ -379,18 +393,21 @@ helpers.historial_informes_consultor = async () => {
     const informes = await helpers.consultarDatos("informes")
     const consultores = await helpers.consultarDatos("consultores")
 
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     let mesActual = new Date().getMonth();
-    mesActual == 0 ? (mesActual = 12) : (mesActual = mesActual + 1);
-    const mesAnterior = mesActual - 1
+    console.log("Mes Actual Original -> ", mesActual)
+    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
+    let mesAnterior = mesActual - 1
+    mesAnterior == 0 ? mesAnterior = 12 : false;
     const year = new Date().getFullYear();
-
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
     const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-    let idConsultor = 0
+    /////////////////////////////////////////////////////////////////////
 
+    let idConsultor = 0
     consultores.forEach(async (c) => {
         idConsultor = c.id_consultores;
 
@@ -416,7 +433,6 @@ helpers.historial_informes_consultor = async () => {
     });
 
     console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
-    next();
 };
 
 // Consultar Tareas Retrasadas x Empresas y Enviar Email
