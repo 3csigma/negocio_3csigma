@@ -7,8 +7,7 @@ const userController = exports;
 
 // Cerrar Sesión
 userController.cerrarSesion = (req, res) => {
-    req.user = false;
-    req.logOut();
+    req.session.destroy();
     res.redirect('/login');
 }
 

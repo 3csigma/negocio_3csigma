@@ -529,35 +529,35 @@
                                     btnVerInforme.style.display = 'block'
                                     btnVerInforme.href = response.url
                                     $("#btnHidden1").hide()
-                                } else
+                                } 
                                 if (boton == 2){
                                     btnVerInformeProd.style.display = 'block'
                                     btnVerInformeProd.href = response.url
                                     $("#btnHidden2").hide()
-                                } else
+                                } 
                                 if (boton == 3){
                                     btnVerInformeAdmin.style.display = 'block'
                                     btnVerInformeAdmin.href = response.url
                                     $("#btnHidden3").hide()
-                                } else
+                                } 
                                 if (boton == 4){
                                     btnVerInformeOpe.style.display = 'block'
                                     btnVerInformeOpe.href = response.url
                                     $("#btnHidden4").hide()
-                                } else
+                                } 
                                 if (boton == 5){
                                     btnVerInformeMarketing.style.display = 'block'
                                     btnVerInformeMarketing.href = response.url
                                     $("#btnHidden5").hide()
-                                } else
+                                } 
                                 if (boton == 6){
                                     btnVerInformeGeneral.style.display = 'block'
                                     btnVerInformeGeneral.href = response.url
                                     $("#btnHidden6").hide()
-                                } else
+                                } 
                                 if (boton == 7){
-                                    btnVerInformeGeneral.style.display = 'block'
-                                    btnVerInformeGeneral.href = response.url
+                                    btnVerInformePlan.style.display = 'block'
+                                    btnVerInformePlan.href = response.url
                                     $("#btnHidden7").hide()
                                 } 
 
@@ -565,6 +565,7 @@
                                 estado.classList.add("badge-success")
                                 estado.innerHTML = "Cargado"
                                 fecha.innerHTML = response.fecha;
+                                
                             } else {
                                 toastr.danger("No sé pudo subir el informe, contacte a soporte", "Error", {
                                     positionClass: "toast-top-center",

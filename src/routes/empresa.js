@@ -3,7 +3,6 @@ const router = express.Router()
 const { checkLogin, validarIDFicha } = require('../lib/auth');
 const empresaController = require('../controllers/empresaController');
 const signingViaEmail = require('../controllers/envelopeController');
-const paymentController = require('../controllers/paymentController');
 const { uploadFiles } = require('../lib/helpers')
 
 // Diagnóstico de Negocio

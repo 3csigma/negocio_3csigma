@@ -17,11 +17,6 @@ settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settin
 let authToken, args = {}, envelopeId;
 let acuerdoFirmado = {};
 
-const clavesStripe = {
-  publica: 'pk_test_51KoWlrGzbo0cXNUHA7kdUqpjjt4fEX8PP4usXF7s3YUC65UriJ2RHJsfB4fO4aqBIjZlu4lYD2lOfiEiGVyBilbt00qRzO8fn7',
-  secreta: 'sk_test_51KoWlrGzbo0cXNUH7JnVHxXqKjN9UaAmSVRrf89EGuk3hQM8BztHtlLYLiPIZsH7u7eLHkyYdM7gYwJpXOfQLi9f00f5mJxKsw'
-};
-
 let dsPayload = {
   "iss": settings.dsIntegrationKey,
   "sub": settings.impersonatedUserGuid,
@@ -68,6 +63,6 @@ const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil',
 exports.config = {
   dsOauthServer, dsPayload,
   authToken, settings, args, acuerdoFirmado,
-  envelopeId, clavesStripe, clavePrivada,
+  envelopeId, clavePrivada,
   rutasEmpresa, rutasConsultor, rutasAdmin
 };

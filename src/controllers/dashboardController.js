@@ -931,7 +931,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
         if (key == 'Diagnóstico') {
             link_Imagen = linkBase+'Consultor-asignado_Diagnostico.jpg';
-            mensaje = 'Ahora puedes realizar el pago del Diagnóstico de Negocio para empezar tu proceso con nosotros'
+            mensaje = 'Ahora puedes realizar el pago del Diagnóstico de Negocio'
         }
         if (key == 'Análisis') {
             orden = 2;

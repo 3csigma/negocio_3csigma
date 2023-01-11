@@ -13,7 +13,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     let consulDiag = await consultarDatos('consultores_asignados')
-    consulDiag = consulDiag.find(x => x.empresa = e.id_empresas && x.orden == 1)
+    consulDiag = consulDiag.find(x => x.empresa == e.id_empresas && x.orden == 1)
     let consul = await consultarDatos('consultores')
     consul = consul.find(x => x.id_consultores == consulDiag.consultor)
     
@@ -45,7 +45,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
                     unit_amount: parseFloat(precio),
                 },
                 quantity: 1,
-                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+                description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
             },
         ],
         mode: 'payment',
@@ -347,7 +347,7 @@ pagosController.pagoExitoso = async (req, res) => {
     if (pago) {
         const fecha = new Date().toLocaleDateString("en-US")
         if (req.session.payDg0) {
-            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: precioDiag }) }
+            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: '$'+precioDiag }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
             // alertSuccess = true
         }
