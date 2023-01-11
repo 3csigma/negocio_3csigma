@@ -102,6 +102,8 @@ cron.schedule('0 1 1 * *',() => {
     historial_informes_consultor();
 });
 
+router.post('/historial_empresas_admin', historial_empresas_admin)
+
 // Ejecución Semanal
 cron.schedule('0 10 * * Mon',() => {
     consultar_tiempo_tareas();

@@ -125,7 +125,12 @@ empresaController.index = async (req, res) => {
     }
 
     const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico')
-    if (informeEtapa1) porcentajeEtapa1 = 100;
+    console.log("=========== en VERDE  ==> " ,  informeEtapa1);
+    let existenciaInforme =  false
+    if (informeEtapa1) {
+        porcentajeEtapa1 = 100;
+        existenciaInforme =  true
+    }
 
     // Informe de diagnóstico de empresa subido
     let ultimosInformes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
@@ -259,7 +264,7 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, jsonDim_empresa,
+        nuevosProyectos, rendimiento, jsonDim_empresa, existenciaInforme
     })
 }
 

@@ -215,12 +215,17 @@
         <li>
         {{/comparar}}
           {{#if consulDiagAsignado}}
-          <a href="/diagnostico-de-negocio" aria-expanded="false">
+            <a href="/diagnostico-de-negocio" aria-expanded="false">
           {{else}}
-          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
+            <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
+          {{#if existenciaInforme}}
+            <i class="fa-solid fa-check" style="color:#4BB543 ;"></i>
+            <span class="nav-text" style="color: #6EBB0B">Diagnóstico de negocio</span>
+            {{else}}
             <i class="fa-solid fa-gauge-high"></i>
             <span class="nav-text">Diagnóstico de negocio</span>
+          {{/if}}
           </a>
         </li>
         {{!-- {{#comparar itemActivo '==' 4}}

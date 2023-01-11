@@ -114,17 +114,18 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 /*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
 
 // CAPTURAR MES ANTERIOR Y ABREVIATURA DEL MES ACTUAL (ej: Dic)
-capturarMes = (fecha, year) => {
+ capturarMes = () => {
     let mesActual = new Date().getMonth();
-    console.log("Mes Actual Original -> ", mesActual)
     mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
     let mesAnterior = mesActual - 1
     mesAnterior == 0 ? mesAnterior = 12 : false;
-    const year = new Date().getFullYear();
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+
+    return {mes, mesAnterior}
+
 }
 
 // ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
@@ -223,8 +224,11 @@ helpers.historial_consultores_admin = async () => {
     let fecha = new Date().toLocaleDateString("en-CA");
     const year = new Date().getFullYear();
     
-    /////////////////////////////////////////////////////////////////////
-    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
+
     let filtroConsultores, num_consultores
     filtroConsultores = consultores.filter((item) => mesAnterior == item.mes && year == item.year);
 
@@ -258,18 +262,13 @@ helpers.historial_empresas_admin = async () => {
     const empresas = await helpers.consultarDatos('empresas')
     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
-    let mesActual = new Date().getMonth();
-    console.log("Mes Actual Original -> ", mesActual)
-    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
-    let mesAnterior = mesActual - 1
-    mesAnterior == 0 ? mesAnterior = 12 : false;
-    const year = new Date().getFullYear();
-    const f = new Date()
-    f.setMonth(mesAnterior - 1);
-    let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-    /////////////////////////////////////////////////////////////////////
+    let year = new Date().getFullYear();
     
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
+
     let filtroEmpresas, num_empresas
     filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
 
@@ -304,17 +303,12 @@ helpers.historial_informes_admin = async () => {
 
     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
-    let mesActual = new Date().getMonth();
-    console.log("Mes Actual Original -> ", mesActual)
-    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
-    let mesAnterior = mesActual - 1
-    mesAnterior == 0 ? mesAnterior = 12 : false;
     const year = new Date().getFullYear();
-    const f = new Date()
-    f.setMonth(mesAnterior - 1);
-    let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-    /////////////////////////////////////////////////////////////////////
+    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
     
     let filtroInformes, num_informes
     filtroInformes = informes.filter((item) => mesAnterior == item.mes && year == item.year);
@@ -347,19 +341,15 @@ helpers.historial_empresas_consultor = async () => {
     const empresas = await helpers.consultarDatos("empresas")
     const consultores = await helpers.consultarDatos("consultores")
 
-    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
-    let fecha = new Date().toLocaleDateString("en-CA");
-    let mesActual = new Date().getMonth();
-    console.log("Mes Actual Original -> ", mesActual)
-    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
-    let mesAnterior = mesActual - 1
-    mesAnterior == 0 ? mesAnterior = 12 : false;
-    const year = new Date().getFullYear();
-    const f = new Date()
-    f.setMonth(mesAnterior - 1);
-    let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-    /////////////////////////////////////////////////////////////////////
+      /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+      let fecha = new Date().toLocaleDateString("en-CA");
+      const year = new Date().getFullYear();
+      
+      const objMes = capturarMes()
+      const mesAnterior = objMes.mesAnterior;
+      mesAnterior == 12 ? year = year - 1 : false
+      const mes = objMes.mes;
+
     let idConsultor = 0
 
     consultores.forEach(async (c) => {
@@ -393,19 +383,14 @@ helpers.historial_informes_consultor = async () => {
     const informes = await helpers.consultarDatos("informes")
     const consultores = await helpers.consultarDatos("consultores")
 
-    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
-    let fecha = new Date().toLocaleDateString("en-CA");
-    let mesActual = new Date().getMonth();
-    console.log("Mes Actual Original -> ", mesActual)
-    mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
-    let mesAnterior = mesActual - 1
-    mesAnterior == 0 ? mesAnterior = 12 : false;
-    const year = new Date().getFullYear();
-    const f = new Date()
-    f.setMonth(mesAnterior - 1);
-    let txtMes = f.toLocaleDateString("es", { month: "short" })
-    const mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
-    /////////////////////////////////////////////////////////////////////
+     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+     let fecha = new Date().toLocaleDateString("en-CA");
+     const year = new Date().getFullYear();
+     
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
 
     let idConsultor = 0
     consultores.forEach(async (c) => {
