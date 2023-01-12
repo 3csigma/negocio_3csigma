@@ -5,7 +5,7 @@ const { listEnvelope } = require('./listEnvelopes');
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulDiagAsignado = false, id_empresa = false;
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -26,9 +26,9 @@ empresaController.index = async (req, res) => {
         console.log("\n****************************\n")
         cAsignado = cAsignado.find(x => x.empresa == idEmpresaActual)
         if (cAsignado) {
-            consulDiagAsignado = cAsignado;
+            consulAsignado.c1 = cAsignado;
         } else {
-            consulDiagAsignado = false;
+            consulAsignado.c1 = false;
             
         }
     }
@@ -124,12 +124,13 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1 = porcentaje*5
     }
 
+    // VERIFICACIÓN DE ETAPAS FINALIZADAS (Estapa 1)
     const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico')
     console.log("=========== en VERDE  ==> " ,  informeEtapa1);
-    let existenciaInforme =  false
+
     if (informeEtapa1) {
         porcentajeEtapa1 = 100;
-        existenciaInforme =  true
+        etapaCompleta.e1 =  true
     }
 
     // Informe de diagnóstico de empresa subido
@@ -169,7 +170,10 @@ empresaController.index = async (req, res) => {
     if (informeMarketing) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
 
     const informeEtapa2 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de análisis')
-    if (informeEtapa2) porcentajeEtapa2 = 100;
+    if (informeEtapa2) {
+        porcentajeEtapa2 = 100;
+        etapaCompleta.e2 = true;
+    }
     /************************************************************************** */
 
     // PORCENTAJE ETAPA 3
@@ -259,12 +263,12 @@ empresaController.index = async (req, res) => {
         diagnosticoPagado,
         analisisPagado,
         itemActivo: 1,
-        consulDiagAsignado,
+        consulAsignado,
         etapa1,
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, jsonDim_empresa, existenciaInforme
+        nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta
     })
 }
 
@@ -319,7 +323,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         analisisPagado,
         acuerdoFirmado,
         etapa1,
-        consulDiagAsignado
+        consulAsignado
     })
 }
 
@@ -413,7 +417,7 @@ empresaController.acuerdo = async (req, res) => {
 empresaController.diagnostico = async (req, res) => {
     // ID Empresa Global => id_empresa
     // Pago Diagnóstico => diagnosticoPagado
-    // Consultor Asignado => consulDiagAsignado
+    // Consultor Asignado => consulAsignado
     let existencia = true;
     const estadoPago = {
         color : 'badge-warning',
@@ -423,7 +427,7 @@ empresaController.diagnostico = async (req, res) => {
     }
 
     let infoConsul = await consultarDatos('consultores')
-    infoConsul = infoConsul.find(x => x.id_consultores == consulDiagAsignado.consultor)
+    infoConsul = infoConsul.find(x => x.id_consultores == consulAsignado.c1.consultor)
     let costo = '$197';
     if (infoConsul.nivel == '2'){
         costo = '$297';
@@ -482,7 +486,8 @@ empresaController.diagnostico = async (req, res) => {
         existencia, costo, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
-        consulDiagAsignado: true
+        consulAsignado: true,
+        etapaCompleta
     })
 }
 
