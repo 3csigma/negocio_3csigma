@@ -48218,3 +48218,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 
 /*# sourceMappingURL=style.css.map */
+body.swal2-shown > [aria-hidden="true"] {
+    transition: 0.1s filter !important;
+    filter: blur(10px) !important;
+}

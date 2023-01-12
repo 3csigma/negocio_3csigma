@@ -487,7 +487,7 @@ empresaController.diagnostico = async (req, res) => {
         existencia, costo, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
-        consulAsignado: true,
+        consulAsignado,
         etapaCompleta
     })
 }
@@ -669,7 +669,7 @@ empresaController.analisis = async (req, res) => {
 
     const informeAnalisis = await consultarInformes(id_empresa, "Informe de análisis")
 
-    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false,
+    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
     msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
     btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;", 
     btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
@@ -709,10 +709,11 @@ empresaController.analisis = async (req, res) => {
         btnDesactivo
     }else if(btnPagar.obj1 != 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0){
         escena2 = true
+        activarPagoUnico = false
         msgDesactivo = "Primera cuota pagada"
         msgDesactivo2
         msgDesactivo3 
-        btnDesactivo 
+        btnDesactivo
     }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 1 && btnPagar.obj3 == 0){
         escena3 = true
         btnDesactivo
@@ -750,8 +751,9 @@ empresaController.analisis = async (req, res) => {
         escena1,escena2,
         escena3,escena4,
         escena5,escena6, 
-        msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, 
-        btnActivo, btnDesactivo
+        msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, activarPagoUnico,
+        btnActivo, btnDesactivo,
+        consulAsignado, etapaCompleta
     })
 }
 

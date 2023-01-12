@@ -59,6 +59,7 @@
                         <th>ESTADO DE PAGO</th>
                         {{#unless propuesta.pago}}
                         <th>PAGO EN COUTAS</th>
+                        <th>PAGO ÚNICO</th>
                         {{/unless}}
                         <th>VALOR TOTAL</th>
                         <th>REVISAR PROPUESTA</th>
@@ -125,7 +126,7 @@
                               </div>
                               <div class="col" style="padding-right: 7px;padding-left: 7px;">
                                   {{!-- btnPagar.obj3 "==" 0 --}}
-                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
                               </div>
                             {{/if}}
 
@@ -140,7 +141,7 @@
                               </div>
                               <div class="col" style="padding-right: 7px;padding-left: 7px;">
                                   {{!-- btnPagar.obj3 "==" 0 --}}
-                                   <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
                               </div>
                             {{/if}}
 
@@ -172,8 +173,24 @@
                               </div>
                               <div class="col" style="padding-right: 7px;padding-left: 7px;">
                                   {{!-- btnPagar.obj3 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
                               </div>
+                            {{/if}}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                            {{#if activarPagoUnico}}
+                            <form action="/pagar-analisis" method="POST">
+                              <button type="submit" title="Pagar ahora" style="margin: 0 auto;border:none">
+                                <span class="badge badge-primary btn-pagos-analisis">Pagar con 10% OFF</span>
+                              </button>
+                            </form>
+                            {{/if}}
+                            {{#if escena6}}
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="Análisis de negocio pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                              <i class="fa fa-usd"></i>
+                            </button>
                             {{/if}}
                           </div>
                         </td>

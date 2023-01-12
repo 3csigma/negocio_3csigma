@@ -171,7 +171,8 @@
           </a>
         </li>
 
-        {{!-- {{#comparar itemActivo '==' 4}}
+        {{#if etapaCompleta.e1}}
+        {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 4}}
@@ -180,7 +181,7 @@
           {{#if consulAsignado.c2}}
           <a href="/analisis-de-negocio" aria-expanded="false">
           {{else}}
-          <a style="cursor:pointer" aria-expanded="false">
+          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
           {{#if etapaCompleta.e2}}
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
@@ -190,7 +191,8 @@
             <span class="nav-text">Análisis de negocio</span>
           {{/if}}
           </a>
-        </li> --}}
+        </li>
+        {{/if}}
 
         {{!-- {{#comparar itemActivo '==' 5}}
         <li class="mm-active">

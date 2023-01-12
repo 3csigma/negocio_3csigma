@@ -6,7 +6,7 @@ const { checkLogin, validarURLPagar } = require('../lib/auth')
 router.post('/pagar-diagnostico', checkLogin, pagosController.pagarDiagnostico)
 
 /** PAGO A STRIPE - ANÁLISIS DE NEGOCIO */
-router.post('/checkout-etapa2', checkLogin, pagosController.pagarAnalisisCompleto);
+router.post('/pagar-analisis', checkLogin, pagosController.pagarAnalisisCompleto);
 
 /** PAGO 1 ANÁLISIS PORCENTAJE 60% */
 router.post('/pagar-analisis-per1', checkLogin, pagosController.pagarAnalisis_parte1);
