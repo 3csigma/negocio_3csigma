@@ -212,7 +212,7 @@
 			 $(".chatbox-close").on("click", () => {
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
 			})
-			{{#if alertSuccess}}
+			{{#if pagoEtapa1_ok}}
 				Swal.fire({
 					icon: 'success',
 					title: '¡Pago exitoso!',

@@ -249,7 +249,7 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: `- Análisis y Evaluación dimensión producto 
+                description: `Análisis y Evaluación dimensión producto 
                 - Análisis y Evaluación dimensión administración  
                 - Análisis y Evaluación dimensión Operaciones
                 - Análisis y Evaluación dimensión Marketing`
