@@ -19,18 +19,19 @@ empresaController.index = async (req, res) => {
     req.pagoDiag = false, pagoAnalisis = false, etapa1 = {};
 
     // VALIDACIÓN PARA SABER SI LA EMPRESA TIENE CONSULTOR DE DIAGNÓSTICO ASIGNADO
-    let cAsignado = await consultarDatos("consultores_asignados", 'WHERE orden = 1')
-    if (cAsignado.length > 0) { 
-        console.log("\n****************************\n")
-        console.log("Hay datos en la Tabla de Consultores Asignados")
-        console.log("\n****************************\n")
-        cAsignado = cAsignado.find(x => x.empresa == idEmpresaActual)
-        if (cAsignado) {
-            consulAsignado.c1 = cAsignado;
-        } else {
-            consulAsignado.c1 = false;
-            
-        }
+    let cAsignado = await consultarDatos("consultores_asignados")
+    if (cAsignado.length > 0) {
+        const c1 = cAsignado.find(x => x.empresa == idEmpresaActual && x.orden == 1)
+        c1 ? consulAsignado.c1 = c1 : consulAsignado.c1 = false;
+        
+        const c2 = cAsignado.find(x => x.empresa == idEmpresaActual && x.orden == 2)
+        c2 ? consulAsignado.c2 = c2 : consulAsignado.c2 = false;
+
+        const c3 = cAsignado.find(x => x.empresa == idEmpresaActual && x.orden == 3)
+        c3 ? consulAsignado.c3 = c3 : consulAsignado.c3 = false;
+
+        const c4 = cAsignado.find(x => x.empresa == idEmpresaActual && x.orden == 4)
+        c4 ? consulAsignado.c4 = c4 : consulAsignado.c4 = false;
     }
 
     /** Consultando que pagos ha realizado el usuario */

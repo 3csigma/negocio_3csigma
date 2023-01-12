@@ -162,7 +162,7 @@
             <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
           {{#if etapaCompleta.e1}}
-            <i class="fa-solid fa-check" style="color:#6EBB0B ;"></i>
+            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Diagnóstico de negocio</span>
             {{else}}
             <i class="fa-solid fa-gauge-high"></i>
@@ -171,7 +171,7 @@
           </a>
         </li>
 
-        {{#comparar itemActivo '==' 4}}
+        {{!-- {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 4}}
@@ -182,11 +182,15 @@
           {{else}}
           <a style="cursor:pointer" aria-expanded="false">
           {{/if}}
-          {{}}
+          {{#if etapaCompleta.e2}}
+            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
+            <span class="nav-text" style="color: #6EBB0B">Análisis de negocio</span>
+          {{else}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
+          {{/if}}
           </a>
-        </li>
+        </li> --}}
 
         {{!-- {{#comparar itemActivo '==' 5}}
         <li class="mm-active">
