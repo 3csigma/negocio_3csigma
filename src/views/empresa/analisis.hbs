@@ -187,11 +187,16 @@
                             <form action="/pagar-analisis" method="POST">
                               <button type="submit" class="btn btn-sm btn-pago-analisis" title="Pagar ahora">Pagar con 10% OFF</button>
                             </form>
-                            {{/if}}
+                            {{else}}
                             {{#if escena6}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgPagoUnico}}" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="Análisis de negocio pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                               <i class="fa fa-usd"></i>
                             </button>
+                            {{else}}
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="Pago de cuotas en proceso" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                              <i class="fa fa-usd"></i>
+                            </button>
+                            {{/if}}
                             {{/if}}
                           </div>
                         </td>

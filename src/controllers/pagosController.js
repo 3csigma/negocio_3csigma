@@ -39,7 +39,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago Único - Diagnóstico de negocio',
+                        name: 'Pago Único - Diagnóstico de Negocio',
                         images: ['https://3csigma.com/app_public_files/img/diagnostico-de-negocio-pay.png'],
                     },
                     unit_amount: parseFloat(precio),
@@ -79,13 +79,16 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago Único - Análisis de negocio',
+                        name: 'Pago Único - Análisis de Negocio',
                         images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                     },
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+                description: `- Análisis y Evaluación dimensión producto 
+                - Análisis y Evaluación dimensión administración  
+                - Análisis y Evaluación dimensión Operaciones
+                - Análisis y Evaluación dimensión Marketing`
             },
         ],
         mode: 'payment',
@@ -131,13 +134,16 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago 1 - Análisis de negocio',
+                        name: 'Pago primera cuota - Análisis de Negocio',
                         images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                     },
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+                description: `- Análisis y Evaluación dimensión producto 
+                - Análisis y Evaluación dimensión administración  
+                - Análisis y Evaluación dimensión Operaciones
+                - Análisis y Evaluación dimensión Marketing`
             },
         ],
         mode: 'payment',
@@ -182,13 +188,16 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago 2 - Análisis de negocio',
+                        name: 'Pago segunda cuota - Análisis de Negocio',
                         images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                     },
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+                description: `- Análisis y Evaluación dimensión producto 
+                - Análisis y Evaluación dimensión administración  
+                - Análisis y Evaluación dimensión Operaciones
+                - Análisis y Evaluación dimensión Marketing`
             },
         ],
         mode: 'payment',
@@ -234,13 +243,16 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago 3 - Análisis de negocio',
+                        name: 'Pago tercera cuota - Análisis de Negocio',
                         images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                     },
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?'
+                description: `- Análisis y Evaluación dimensión producto 
+                - Análisis y Evaluación dimensión administración  
+                - Análisis y Evaluación dimensión Operaciones
+                - Análisis y Evaluación dimensión Marketing`
             },
         ],
         mode: 'payment',

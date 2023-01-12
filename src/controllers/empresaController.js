@@ -694,7 +694,7 @@ empresaController.analisis = async (req, res) => {
         msgDesactivo3 = "Pago disponible apartir de: "+fechaDB2+""
     }
 
-    if(objAnalisis == 1 ){
+    if(objAnalisis == 1 ) {
         escena6 = true
         activarPagoUnico = false
         btnDesactivo
