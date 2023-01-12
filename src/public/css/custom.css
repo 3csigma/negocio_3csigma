@@ -553,33 +553,3 @@ button.bg-plan:focus {
         margin-left: 925px;
     }
 }
-
-.btn-pagos-analisis {
-    background: linear-gradient(264deg, #fed061, #812082, #50368c) !important;
-    /* background-size: 600% 600%;*/
-    -webkit-animation: PagoUnico_BG 3s ease infinite !important;
-    -moz-animation: PagoUnico_BG 3s ease infinite !important;
-    -o-animation: PagoUnico_BG 3s ease infinite !important;
-    animation: PagoUnico_BG 3s ease infinite !important;
-}
-
-@-webkit-keyframes PagoUnico_BG {
-    0%{background-position:90% 0%}
-    50%{background-position:11% 100%}
-    100%{background-position:90% 0%}
-}
-@-moz-keyframes PagoUnico_BG {
-    0%{background-position:90% 0%}
-    50%{background-position:11% 100%}
-    100%{background-position:90% 0%}
-}
-@-o-keyframes PagoUnico_BG {
-    0%{background-position:90% 0%}
-    50%{background-position:11% 100%}
-    100%{background-position:90% 0%}
-}
-@keyframes PagoUnico_BG {
-    0%{background-position:90% 0%}
-    50%{background-position:11% 100%}
-    100%{background-position:90% 0%}
-}

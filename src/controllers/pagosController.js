@@ -67,7 +67,7 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     let precio = 0;
     if (pay) {
         precio = pay.precio_total + '00'
-        precio = parseFloat(precio) - (parseFloat(precio*0.1))
+        precio = (parseFloat(precio*0.9))
         console.log("Precio => ", precio)
     }
 
@@ -331,8 +331,7 @@ pagosController.cancelarSub = async (req, res) => {
 
 /********************************************************************/
 pagosController.pagoExitoso = async (req, res) => {
-    let itemActivo = 1, alertSuccess = false, pagoExitoso = false, pagoEtapa3Ok = false;
-    // Borrando info del Intento de pago
+    let itemActivo = 1, pagoEtapa1_ok = false, pagoEtapa2_ok = false, pagoEtapa3_ok = false;
     req.session.intentPay = undefined;
 
     /** CONSULTANDO EMPRESA LOGUEADA */
@@ -349,27 +348,34 @@ pagosController.pagoExitoso = async (req, res) => {
         if (req.session.payDg0) {
             const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: '$'+precioDiag }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
-            // alertSuccess = true
+            pagoEtapa1_ok = true
         }
 
-        // let actualizarAnalisis = undefined;
-        // let pagoAnalisis = { estado: 1, fecha }
-        // if (req.session.analisis0) {
-        //     pagoAnalisis.estado = 1;
-        //     actualizarAnalisis = {
-        //         analisis_negocio: JSON.stringify(pagoAnalisis),
-        //         analisis_negocio1: JSON.stringify({ estado: 0 })
-        //     }
-        // } else if (req.session.analisis1) {
-        //     pagoAnalisis.estado = 2;
-        //     actualizarAnalisis = { analisis_negocio1: JSON.stringify(pagoAnalisis) }
-        // } else if (req.session.analisis2) {
-        //     pagoAnalisis.estado = 2;
-        //     actualizarAnalisis = { analisis_negocio2: JSON.stringify(pagoAnalisis) }
-        // } else if (req.session.analisis3) {
-        //     pagoAnalisis.estado = 2;
-        //     actualizarAnalisis = { analisis_negocio3: JSON.stringify(pagoAnalisis) }
-        // } 
+        let actualizarAnalisis = undefined;
+        let pagoAnalisis = { estado: 1, fecha }
+        if (req.session.analisis0) {
+            pagoAnalisis.estado = 1;
+            actualizarAnalisis = {
+                analisis_negocio: JSON.stringify(pagoAnalisis),
+                analisis_negocio1: JSON.stringify({ estado: 0 })
+            }
+        } else if (req.session.analisis1) {
+            pagoAnalisis.estado = 2;
+            actualizarAnalisis = { analisis_negocio1: JSON.stringify(pagoAnalisis) }
+        } else if (req.session.analisis2) {
+            pagoAnalisis.estado = 2;
+            actualizarAnalisis = { analisis_negocio2: JSON.stringify(pagoAnalisis) }
+        } else if (req.session.analisis3) {
+            pagoAnalisis.estado = 2;
+            actualizarAnalisis = { analisis_negocio3: JSON.stringify(pagoAnalisis) }
+        } 
+
+        if (actualizarAnalisis != undefined) {
+            pagoEtapa1_ok = false
+            pagoEtapa2_ok = true;
+            itemActivo = 4
+            await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        }
         
         // if (req.session.planEstrategico) {
         //     const idSession = req.session.idSesion;
@@ -382,38 +388,18 @@ pagosController.pagoExitoso = async (req, res) => {
         //     itemActivo = 6;
         // }
 
-        // if (actualizarAnalisis != undefined) {
-        //     alertSuccess = false
-        //     pagoExitoso = true;
-        //     itemActivo = 4
-        //     await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
-        // }
-
     }
 
     res.render('empresa/dashboard', {
-        alertSuccess: true,
+        pagoEtapa1_ok, pagoEtapa2_ok, pagoEtapa3_ok,
         user_dash: true, wizarx: false, login: false,
         itemActivo,
     })
 }
 
 pagosController.pagoCancelado = async (req, res) => {
-    let destino = 'empresa/dashboard', itemActivo = 1, alertCancel = true, pagoCancelado = false, pagoEtapa3Cancel = false;
+    let destino = 'empresa/dashboard', itemActivo = 1;
     req.session.intentPay = undefined;
-    // if (req.session.analisis0 || req.session.analisis1 || req.session.analisis2 || req.session.analisis3) {
-    //     pagoCancelado = true;
-    //     alertCancel = false;
-    //     itemActivo = 4;
-    // }
-
-    // if (req.session.planEstrategico) {
-    //     pagoEtapa3Cancel = true; 
-    //     pagoCancelado = false; 
-    //     alertCancel = false;
-    //     itemActivo = 6;
-    // }
-
     req.session.payDg0 = false;
     req.session.analisis0 = false;
     req.session.analisis1 = false;

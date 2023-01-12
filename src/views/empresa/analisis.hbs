@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../css/estilosAnalisis.css">
 <!--**********************************
                     Content body start
 ***********************************-->
@@ -26,12 +27,12 @@
           {{#if btnPagar.analisisPer}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Agenda una cita con tu consultor si tienes alguna duda.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Tu consultor agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
           </div>
           {{else}}
           <div class="card-body">
             {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
-            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pago único de análisis de negocio"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
+            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pagar con 10% OFF"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
             <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
           {{/if}}
@@ -178,22 +179,23 @@
                             {{/if}}
                           </div>
                         </td>
+
+                        {{!-- CELDA DE PAGO ÚNICO ANÁLISIS DE NEGOCIO --}}
                         <td>
                           <div class="col" style="padding-right: 7px;padding-left: 7px;">
                             {{#if activarPagoUnico}}
                             <form action="/pagar-analisis" method="POST">
-                              <button type="submit" title="Pagar ahora" style="margin: 0 auto;border:none">
-                                <span class="badge badge-primary btn-pagos-analisis">Pagar con 10% OFF</span>
-                              </button>
+                              <button type="submit" class="btn btn-sm btn-pago-analisis" title="Pagar ahora">Pagar con 10% OFF</button>
                             </form>
                             {{/if}}
                             {{#if escena6}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="Análisis de negocio pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgPagoUnico}}" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                               <i class="fa fa-usd"></i>
                             </button>
                             {{/if}}
                           </div>
                         </td>
+
                         {{/unless}}
                         <td>${{propuesta.precio_total}}</td>
                         <td>
@@ -213,6 +215,7 @@
         </div>
 
         {{!-- INFORMES GENERADOS --}}
+        {{#unless escena1}}
         <div class="row">
           <div class="col-xl-12">
             {{!-- INFORMES GENERADOS --}}
@@ -256,9 +259,11 @@
             </div>
           </div>
         </div>
+        {{/unless}}
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
+      {{#unless escena1}}
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
@@ -529,6 +534,7 @@
         </div>
         
       </div>
+      {{/unless}}
     </div>
   </div>
 </div>

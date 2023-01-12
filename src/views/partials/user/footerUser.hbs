@@ -296,8 +296,7 @@
 			*/
 			/*********************************************************************************** */
 			/** PAGOS ETAPA 2 */
-			/*
-			{{#if pagoExitoso}}
+			{{#if pagoEtapa2_ok}}
 				Swal.fire({
 					icon: 'success',
 					title: '¡Pago exitoso!',
@@ -316,30 +315,10 @@
 					allowOutsideClick: false,
 				})
 			{{/if}}
-			{{#if pagoCancelado}}
-				Swal.fire({
-					icon: 'error',
-					title: 'Pago Cancelado',
-					html: '<p>Cancelaste el proceso de pago, tómate tu tiempo e intenta nuevamente.</p>'
-						+ '<a href="/analisis-de-negocio" type="button" class="mb-2" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);'
-						+ 'border-radius: 22px;'
-						+ 'color: #fff;'
-						+ 'width: 160px;'
-						+ 'height: 50px;'
-						+ 'text-align: center;'
-						+ 'padding: 14px;'
-						+ 'font-size: 17px;'
-						+ 'font-weight: 300;">Ok</a>',
-					showCancelButton: false,
-					showConfirmButton: false,
-					allowOutsideClick: false,
-				})
-			{{/if}}
-			*/
 			/*********************************************************************************** */
-			/** PAGOS ETAPA 2 */
+			/** PAGOS ETAPA 3 */
 			/*
-			{{#if pagoEtapa3Ok}}
+			{{#if pagoEtapa3_ok}}
 				Swal.fire({
 					icon: 'success',
 					title: '¡Pago exitoso!',

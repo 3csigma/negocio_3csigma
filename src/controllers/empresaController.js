@@ -696,6 +696,7 @@ empresaController.analisis = async (req, res) => {
 
     if(objAnalisis == 1 ){
         escena6 = true
+        activarPagoUnico = false
         btnDesactivo
         msgDesactivo = "Análisis de negocio pagado"
         msgDesactivo2 = "Análisis de negocio pagado"
@@ -736,6 +737,7 @@ empresaController.analisis = async (req, res) => {
         btnActivo
     }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 2){
         escena6 = true
+        activarPagoUnico = false
         btnDesactivo
         msgDesactivo = "Primera cuota pagada"
         msgDesactivo2 = "Segunda cuota pagada"

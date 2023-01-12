@@ -1,0 +1,41 @@
+
+.btn-pago-analisis {
+    /* line-height: 1.5;
+    border-radius: 1.25rem;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border: 1px solid transparent; */
+    color: white;
+    background: linear-gradient(264deg, #fed061, #812082, #50368c);
+    background-size: 600% 600%;
+    -webkit-animation: PagoUnico_BG 2s ease infinite;
+    -moz-animation: PagoUnico_BG 2s ease infinite;
+    -o-animation: PagoUnico_BG 2s ease infinite;
+    animation: PagoUnico_BG 2s ease infinite;
+}
+
+.btn-pago-analisis:hover {
+    color: white;
+}
+
+@-webkit-keyframes PagoUnico_BG {
+    0%{background-position:90% 0%}
+    50%{background-position:11% 100%}
+    100%{background-position:90% 0%}
+}
+@-moz-keyframes PagoUnico_BG {
+    0%{background-position:90% 0%}
+    50%{background-position:11% 100%}
+    100%{background-position:90% 0%}
+}
+@-o-keyframes PagoUnico_BG {
+    0%{background-position:90% 0%}
+    50%{background-position:11% 100%}
+    100%{background-position:90% 0%}
+}
+@keyframes PagoUnico_BG {
+    0%{background-position:90% 0%}
+    50%{background-position:11% 100%}
+    100%{background-position:90% 0%}
+}
