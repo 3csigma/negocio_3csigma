@@ -717,6 +717,7 @@ empresaController.analisis = async (req, res) => {
         btnDesactivo
     }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 1 && btnPagar.obj3 == 0){
         escena3 = true
+        activarPagoUnico = false
         btnDesactivo
         msgDesactivo = "Primera cuota pagada"
         msgActivo = "Segunda cuota lista para pagarse"
@@ -724,12 +725,14 @@ empresaController.analisis = async (req, res) => {
         msgDesactivo3
     }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 0){
         escena4 = true
+        activarPagoUnico = false
         btnDesactivo
         msgDesactivo = "Primera cuota pagada"
         msgDesactivo2 = "Segunda cuota pagada"
         msgDesactivo3
     }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 1){
         escena5 = true
+        activarPagoUnico = false
         btnDesactivo
         msgDesactivo = "Primera cuota pagada"
         msgDesactivo2 = "Segunda cuota pagada"
