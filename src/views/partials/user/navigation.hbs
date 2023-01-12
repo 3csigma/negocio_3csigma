@@ -108,66 +108,6 @@
     ***********************************-->
   <div class="deznav">
     <div class="deznav-scroll">
-      {{!-- {{#unless btnPagar.analisisPer}}
-        {{#if btnPagar.etapa1}}
-        {{#if btnPagar.activar1}}
-        <form action="/create-checkout-session" method="POST">
-          <button type="submit" class="add-menu-sidebar">
-            <img src="/img/Pago-diagnostico de-negocio.png">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pagar diagnóstico de negocio</p>
-          </button>
-        </form>
-        {{else}}
-        <form>
-          <button type="submit" class="add-menu-sidebar"
-            style="cursor: auto; background: #585858 !important;pointer-events:none;">
-            <img src="/img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Diagnóstico de negocio pagado</p>
-          </button>
-        </form>
-        {{/if}}
-        {{/if}}
-      
-        {{#if btnPagar.etapa2}}
-        {{#if btnPagar.activar2}}
-        <form action="/checkout-etapa2" method="POST">
-          <button type="submit" class="add-menu-sidebar">
-            <img src="/img/Pago-diagnostico de-negocio.png">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago único de análisis de negocio</p>
-          </button>
-        </form>
-        {{else}}
-        <form>
-          <button type="submit" class="add-menu-sidebar"
-            style="cursor: auto; background: #585858 !important;pointer-events:none;">
-            <img src="/img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Análisis de negocio pagado</p>
-          </button>
-        </form>
-        {{/if}}
-        {{/if}}
-
-        {{#if btnPagar.etapa3}}
-        {{#if btnPagar.activar3}}
-        <form action="/pagar-plan-estrategico" method="POST">
-          <button type="submit" class="add-menu-sidebar">
-            <img src="/img/Pago-diagnostico de-negocio.png">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Pago plan estratégico</p>
-          </button>
-        </form>
-        {{else}}
-        <form>
-          <button type="submit" class="add-menu-sidebar"
-            style="cursor: auto; background: #585858 !important;pointer-events:none;">
-            <img src="/img/Pago-diagnostico de-negocio.png" style="filter: grayscale(1)">
-            <p class="mb-0" style="text-align: left;padding-left: 11px;">Plan estratégico de negocio pagado</p>
-          </button>
-        </form>
-        {{/if}}
-        {{/if}}
-
-      {{/unless}} --}}
-
       <ul class="metismenu" id="menu">
         {{#comparar itemActivo '==' 1}}
         <li class="mm-active">
@@ -180,6 +120,7 @@
             <span class="nav-text">Dashboard</span>
           </a>
         </li>
+
         {{!-- {{#comparar itemActivo '==' 2}}
         <li class="mm-active">
         {{/comparar}}
@@ -208,19 +149,20 @@
               {{/if}}
             </a>
         </li> --}}
+
         {{#comparar itemActivo '==' 3}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 3}}
         <li>
         {{/comparar}}
-          {{#if consulDiagAsignado}}
+          {{#if consulAsignado.c1}}
             <a href="/diagnostico-de-negocio" aria-expanded="false">
           {{else}}
             <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
-          {{#if existenciaInforme}}
-            <i class="fa-solid fa-check" style="color:#4BB543 ;"></i>
+          {{#if etapaCompleta.e1}}
+            <i class="fa-solid fa-check" style="color:#6EBB0B ;"></i>
             <span class="nav-text" style="color: #6EBB0B">Diagnóstico de negocio</span>
             {{else}}
             <i class="fa-solid fa-gauge-high"></i>
@@ -228,24 +170,25 @@
           {{/if}}
           </a>
         </li>
-        {{!-- {{#comparar itemActivo '==' 4}}
+
+        {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 4}}
-        <li class="activar-cuenta">
+        <li>
         {{/comparar}}
-
-          {{#if btnPagar.etapa2}}
+          {{#if consulAsignado.c2}}
           <a href="/analisis-de-negocio" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" aria-expanded="false">
           {{/if}}
+          {{}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
           </a>
         </li>
 
-        {{#comparar itemActivo '==' 5}}
+        {{!-- {{#comparar itemActivo '==' 5}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 5}}
@@ -283,13 +226,6 @@
 
         <br>
         <br>
-        {{!-- <div class="text-center" >
-          <li>
-            <a href="https://api.whatsapp.com/send/?phone=%2B17863548822&text=Hola,%20necesito%20soporte%20t%C3%A9cnico%20para%20la%20plataforma%203C%20Sigma&app_absent=0" target="_blank" class="btn_1 rounded yellow my-auto" style="padding: 2px;" aria-expanded="false">
-              <i class="fab fa-whatsapp" style="font-size:19px"></i> ¿Tienes dudas?
-            </a>
-          </li>
-        </div> --}}
 
         <div class="text-center" style="margin-top: 20em;">
           <div>
@@ -307,4 +243,4 @@
   </div>
   <!--**********************************
               END Sidebar end
-    ***********************************-->
+  ***********************************-->
