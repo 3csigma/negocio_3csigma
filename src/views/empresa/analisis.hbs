@@ -5,6 +5,7 @@
 <div class="content-body">
   <!-- row -->
   <div class="container-fluid">
+    {{!-- MENSAJES INFORMATIVOS DE LA 1ERA FILA --}}
     <div class="row">
       <div class="col-md-12 col-xl-6 col-xxl-6">
         <div class="card avtivity-card"
@@ -234,24 +235,24 @@
                     <thead>
                       <tr>
                         <th>FECHA</th>
-                        <th>ETAPA</th>
                         <th>NOMBRE</th>
                         <th>ACCIÓN</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {{#if informeAnalisis.fecha}}
+                      {{#if informesAnalisis}}
+                      {{#each informesAnalisis}}
                       <tr>
-                        <td>{{informeAnalisis.fecha}}</td>
-                        <td>Diagnóstico de negocio</td>
-                        <td>{{informeAnalisis.nombre}}</td>
+                        <td>{{fecha}}</td>
+                        <td>{{nombre}}</td>
                         <td>
-                          <a href="{{informeAnalisis.url}}"
+                          <a href="{{url}}"
                             style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
                             target="_blank" class="btn btn-info shadow btn-xs sharp">
                             <i class="fa fa-search"></i></a>
                         </td>
                       </tr>
+                      {{/each}}
                       {{else}}
                       <tr>
                         <td colspan="4">Aún no hay informes generados.</td>

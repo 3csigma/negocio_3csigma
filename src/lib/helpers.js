@@ -101,7 +101,8 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
         },
     
         filename: (_req, file, cb) => {
-            const nomFile = preNombre + file.originalname;
+            const fechaActual = Math.floor(Date.now() / 1000)
+            const nomFile = preNombre + fechaActual + '_' + file.originalname;
             cb(null, nomFile)
         }
     });
@@ -342,13 +343,13 @@ helpers.historial_empresas_consultor = async () => {
     const consultores = await helpers.consultarDatos("consultores")
 
       /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
-      let fecha = new Date().toLocaleDateString("en-CA");
-      const year = new Date().getFullYear();
-      
-      const objMes = capturarMes()
-      const mesAnterior = objMes.mesAnterior;
-      mesAnterior == 12 ? year = year - 1 : false
-      const mes = objMes.mes;
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
 
     let idConsultor = 0
 
@@ -384,9 +385,9 @@ helpers.historial_informes_consultor = async () => {
     const consultores = await helpers.consultarDatos("consultores")
 
      /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
-     let fecha = new Date().toLocaleDateString("en-CA");
-     const year = new Date().getFullYear();
-     
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
     const objMes = capturarMes()
     const mesAnterior = objMes.mesAnterior;
     mesAnterior == 12 ? year = year - 1 : false

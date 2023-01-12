@@ -472,11 +472,9 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (tablaInformes) {
         frmInfo.fecha = tablaInformes.fecha;
         frmInfo.ver1 = 'block';
-        frmInfo.ver2 = 'none';
         frmInfo.url = tablaInformes.url;
     } else {
         frmInfo.ver1 = 'none';
-        frmInfo.ver2 = 'block';
         frmInfo.url = false;
     }
 
@@ -499,7 +497,6 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (informeDiag) {
         frmInfo.fecha = informeDiag.fecha;
         frmInfo.ver1 = 'block';
-        frmInfo.ver2 = 'none';
         frmInfo.url = informeDiag.url;
         datos.etapa = 'Informe general de diagnóstico de negocio'
     }

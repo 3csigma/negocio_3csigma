@@ -667,7 +667,20 @@ empresaController.analisis = async (req, res) => {
         }
     }
 
-    const informeAnalisis = await consultarInformes(id_empresa, "Informe de análisis")
+    const informesAnalisis = []
+    const info0Analisis = await consultarInformes(id_empresa, "Informe de análisis")
+    const info1Analisis = await consultarInformes(id_empresa, "Informe de dimensión producto")
+    const info2Analisis = await consultarInformes(id_empresa, "Informe de dimensión administración")
+    const info3Analisis = await consultarInformes(id_empresa, "Informe de dimensión operaciones")
+    const info4Analisis = await consultarInformes(id_empresa, "Informe de dimensión marketing")
+    info0Analisis ? informesAnalisis.push(info0Analisis) : false;
+    info1Analisis ? informesAnalisis.push(info1Analisis) : false;
+    info2Analisis ? informesAnalisis.push(info2Analisis) : false;
+    info3Analisis ? informesAnalisis.push(info3Analisis) : false;
+    info4Analisis ? informesAnalisis.push(info4Analisis) : false;
+
+    console.log("INFORME 0 -> ", info0Analisis)
+    console.log("ARRAY DE INFORMES --> ", informesAnalisis)
 
     let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
     msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
@@ -752,7 +765,7 @@ empresaController.analisis = async (req, res) => {
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
         etapa1, archivos,
-        informeAnalisis,
+        informesAnalisis,
         escena1,escena2,
         escena3,escena4,
         escena5,escena6, 
