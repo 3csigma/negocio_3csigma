@@ -324,7 +324,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         analisisPagado,
         acuerdoFirmado,
         etapa1,
-        consulAsignado
+        consulAsignado, etapaCompleta
     })
 }
 
