@@ -8,13 +8,14 @@ const path = require('path');
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser');
 const MemoryStore = require('memorystore')(session);
+const {port} = require('./keys')
 
 // Inicializaciones
 const app = express();
 require('./lib/passport')
 
 // Configuraciones
-app.set('port', process.env.PORT || 4000);
+app.set('port', port);
 
 app.set('views', __dirname + '/views');
 app.engine('hbs', engine({
