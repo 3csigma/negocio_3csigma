@@ -85,10 +85,10 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: `- Análisis y Evaluación dimensión producto 
-                - Análisis y Evaluación dimensión administración  
-                - Análisis y Evaluación dimensión Operaciones
-                - Análisis y Evaluación dimensión Marketing`
+                description: `Análisis y Evaluación dimensión producto. 
+                - Análisis y Evaluación dimensión administración.   
+                - Análisis y Evaluación dimensión Operaciones. 
+                - Análisis y Evaluación dimensión Marketing.`
             },
         ],
         mode: 'payment',
@@ -140,10 +140,10 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: `- Análisis y Evaluación dimensión producto 
-                - Análisis y Evaluación dimensión administración  
-                - Análisis y Evaluación dimensión Operaciones
-                - Análisis y Evaluación dimensión Marketing`
+                description: `Análisis y Evaluación dimensión producto. 
+                - Análisis y Evaluación dimensión administración.   
+                - Análisis y Evaluación dimensión Operaciones. 
+                - Análisis y Evaluación dimensión Marketing.`
             },
         ],
         mode: 'payment',
@@ -194,10 +194,10 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: `- Análisis y Evaluación dimensión producto 
-                - Análisis y Evaluación dimensión administración  
-                - Análisis y Evaluación dimensión Operaciones
-                - Análisis y Evaluación dimensión Marketing`
+                description: `Análisis y Evaluación dimensión producto. 
+                - Análisis y Evaluación dimensión administración.   
+                - Análisis y Evaluación dimensión Operaciones. 
+                - Análisis y Evaluación dimensión Marketing.`
             },
         ],
         mode: 'payment',
@@ -249,10 +249,10 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
                     unit_amount: precio,
                 },
                 quantity: 1,
-                description: `Análisis y Evaluación dimensión producto 
-                - Análisis y Evaluación dimensión administración  
-                - Análisis y Evaluación dimensión Operaciones
-                - Análisis y Evaluación dimensión Marketing`
+                description: `Análisis y Evaluación dimensión producto. 
+                - Análisis y Evaluación dimensión administración.   
+                - Análisis y Evaluación dimensión Operaciones. 
+                - Análisis y Evaluación dimensión Marketing.`
             },
         ],
         mode: 'payment',

@@ -11,6 +11,8 @@ let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, ana
 empresaController.index = async (req, res) => {
     diagnosticoPagado = false, analisisPagado = 0;
     acuerdoFirmado = false;
+    etapaCompleta = {};
+    consulAsignado = {};
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
@@ -258,6 +260,9 @@ empresaController.index = async (req, res) => {
         ])
     }
 
+    req.session.etapaCompleta = etapaCompleta;
+    req.session.consulAsignado = consulAsignado;
+
     res.render('empresa/dashboard', {
         user_dash: true,
         pagoPendiente,
@@ -324,7 +329,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         analisisPagado,
         acuerdoFirmado,
         etapa1,
-        consulAsignado, etapaCompleta
+        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta
     })
 }
 
@@ -487,8 +492,8 @@ empresaController.diagnostico = async (req, res) => {
         existencia, costo, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
-        consulAsignado,
-        etapaCompleta
+        consulAsignado: req.session.consulAsignado,
+        etapaCompleta: req.session.etapaCompleta
     })
 }
 
@@ -771,7 +776,8 @@ empresaController.analisis = async (req, res) => {
         escena5,escena6, 
         msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, activarPagoUnico,
         btnActivo, btnDesactivo,
-        consulAsignado, etapaCompleta
+        consulAsignado: req.session.consulAsignado,
+        etapaCompleta: req.session.etapaCompleta
     })
 }
 
