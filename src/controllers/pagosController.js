@@ -328,16 +328,25 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
 
 pagosController.cancelarSub = async (req, res) => {
     const { empresa, id_sub } = req.body;
-    const deleted = await stripe.subscriptions.del(id_sub);
-    // const subscription = await stripe.subscriptions.retrieve(id_sub);
-    console.log("\n>>> DELETED: ", deleted)
-    let result = false;
-    if (deleted.status == 'canceled') {
+
+    console.log("\nID de la Sub: " + id_sub)
+
+    const subscription = await stripe.subscriptions.retrieve(id_sub);
+    console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
+
+    // Cancelar suscripción al final del ciclo 
+    const subCancel = await stripe.subscriptions.update(id_sub, {cancel_at_period_end: true});
+    console.log("\nSub Cancelada: ", subCancel)
+    console.log("-----------\n")
+    // const deleted = await stripe.subscriptions.del(id_sub);
+    console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
+    // let result = false;
+    // if (deleted.status == 'canceled') {
         const fecha = new Date().toLocaleDateString("en-US")
         const actualizar = { estrategico: JSON.stringify({ estado: 2, fecha, subscription: id_sub }) }
         await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, empresa])
-        result = true;
-    }
+        let result = true;
+    // }
     res.send(result)
 }
 
@@ -389,16 +398,16 @@ pagosController.pagoExitoso = async (req, res) => {
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         }
         
-        // if (req.session.planEstrategico) {
-        //     const idSession = req.session.idSesion;
-        //     const dataSession = await stripe.checkout.sessions.retrieve(idSession);
-        //     const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription }) }
-        //     await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
-        //     alertSuccess = false;
-        //     pagoExitoso = false;
-        //     pagoEtapa3Ok = true;
-        //     itemActivo = 6;
-        // }
+        if (req.session.planEstrategico) {
+            const idSession = req.session.idSesion;
+            const dataSession = await stripe.checkout.sessions.retrieve(idSession);
+            const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription }) }
+            await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
+            pagoEtapa1_ok = false;
+            pagoEtapa2_ok = false;
+            pagoEtapa3_ok = true;
+            itemActivo = 6;
+        }
 
     }
 
