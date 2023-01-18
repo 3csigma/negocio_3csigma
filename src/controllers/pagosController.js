@@ -1,8 +1,8 @@
 const pagosController = exports;
 const pool = require('../database')
 const { my_domain, clientSecretStripe } = require('../keys').config
-const { consultarDatos } = require('../lib/helpers')
 const stripe = require('stripe')(clientSecretStripe);
+const { consultarDatos } = require('../lib/helpers')
 
 let precioDiag = 0;
 
@@ -328,9 +328,7 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
 
 pagosController.cancelarSub = async (req, res) => {
     const { empresa, id_sub } = req.body;
-
     console.log("\nID de la Sub: " + id_sub)
-
     const subscription = await stripe.subscriptions.retrieve(id_sub);
     console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
 
@@ -338,16 +336,11 @@ pagosController.cancelarSub = async (req, res) => {
     const subCancel = await stripe.subscriptions.update(id_sub, {cancel_at_period_end: true});
     console.log("\nSub Cancelada: ", subCancel)
     console.log("-----------\n")
-    // const deleted = await stripe.subscriptions.del(id_sub);
     console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
-    // let result = false;
-    // if (deleted.status == 'canceled') {
-        const fecha = new Date().toLocaleDateString("en-US")
-        const actualizar = { estrategico: JSON.stringify({ estado: 2, fecha, subscription: id_sub }) }
-        await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, empresa])
-        let result = true;
-    // }
-    res.send(result)
+    const fecha = new Date().toLocaleDateString("en-US")
+    const actualizar = { estrategico: JSON.stringify({ estado: 2, fecha, subscription: id_sub }) }
+    await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, empresa])
+    res.send(true)
 }
 
 /********************************************************************/

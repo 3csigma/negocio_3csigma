@@ -4,6 +4,8 @@ const dsConfig = require('../config/index.js').config;
 const { listEnvelope } = require('./listEnvelopes');
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 const { Country } = require('country-state-city');
+const { clientSecretStripe } = require('../keys').config
+const stripe = require('stripe')(clientSecretStripe);
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
 
@@ -855,6 +857,22 @@ empresaController.planEstrategico = async (req, res) => {
             propuesta.texto = 'Cancelada';
             botones.pagar = false;
             botones.editSub = true;
+
+            /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN */
+            const id_sub = objEstrategico.subscription;
+            const subscription = await stripe.subscriptions.retrieve(id_sub);
+            console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
+            if (subscription.cancel_at_period_end == false) {
+                propuesta.color = 'success';
+                propuesta.texto = 'Activa';
+                botones.pagar = false;
+                botones.editSub = true;
+                propuesta.pagada = true;
+                const fecha = new Date().toLocaleDateString("en-US")
+                const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: id_sub }) }
+                await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, empresa])
+            }
+
         }
     }
 

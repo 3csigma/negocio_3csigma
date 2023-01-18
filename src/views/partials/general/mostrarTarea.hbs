@@ -3,7 +3,7 @@
         console.log("ID TAREA >> ", idTarea)
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
-        $('#prioridad-sidebar').css('display', 'none');
+        $('#prioridad-sidebar-div').css('display', 'none');
         $('.chatbox').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
         fetch('/editarTarea', {

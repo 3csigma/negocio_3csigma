@@ -844,6 +844,15 @@ dashboardController.editarEmpresa = async (req, res) => {
         (estado3.length * 100) / dim3,
         (estado4.length * 100) / dim4
     ]
+
+    // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
+    tareas.info.forEach(x => {
+        if (x.estado == 'Completada')
+            x.tareaLista = true
+        else
+            x.tareaLista = false
+    })
+
     // jsonDim => Array para la gráfica de Plan Estratégico
     const jsonDim = JSON.stringify([
         { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },

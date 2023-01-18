@@ -168,8 +168,9 @@
             $('#fechaIni-sidebar').val(r.fecha_inicio)
             $('#fechaFin-sidebar').val(r.fecha_entrega)
             $('#dimension-sidebar').val(r.dimension)
-            //$("#mensaje").val(r.mensaje)
             $("#estado").val(r.estado)
+            $("#prioridad").val(r.prioridad)
+            //$("#mensaje").val(r.mensaje)
 
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
@@ -471,7 +472,7 @@
                 $('#fechaIni-sidebar').css('display', 'inline-block')
                 $('#fechaFin-sidebar').css('display', 'inline-block')
                 $('#dimension-sidebar').css('display', 'inline-block')
-                $('#btnGuardar-sidebar').css('display', 'inline-block')
+                $('#btnGuardar-sidebar').css('display', 'flex')
                 $("#estado").css('display', 'inline-block')
                 //$("#actividad-sidebar").attr('readonly', true)
                 $('#actividad-sidebar').attr('readonly', false)

@@ -2303,7 +2303,14 @@
                                                         </td>
                                                         <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridad}}</td>
                                                         <td>
-                                                            <div class="d-flex">
+                                                            <div class="d-flex justify-content-center align-items-center">
+                                                                {{#if tareaLista}}
+                                                                <a onclick="mostrarTarea({{id}})" title="Edit"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                                                                        style="color:white ;" class="fa fa-pencil"></i>
+                                                                </a>
+                                                                {{else}}
                                                                 <a onclick="editarTarea({{id}})" title="Edit"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
@@ -2317,6 +2324,7 @@
                                                                             fill="white" />
                                                                     </svg>
                                                                 </a>
+                                                                {{/if}}
                                                             </div>
                                                         </td>
                                                     </tr>

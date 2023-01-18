@@ -98,7 +98,7 @@
                         </select>
                         <span id="estado-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
                     </div>
-                    <div class="col-5" id="prioridad-sidebar">
+                    <div class="col-5" id="prioridad-sidebar-div">
                         <select class="form-select" id="prioridad" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
                             <option value="0">Sin especificar</option>
                             <option value="1">Baja</option>
@@ -106,7 +106,6 @@
                             <option value="3">Alta</option>
                             <option value="4">Crítica</option>
                         </select>
-                        {{!-- <span id="prioridad-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span> --}}
                     </div>
                     <div class="col-2" style="margin-left: -52px;">
                         <span id="tiempo-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar"></span>
@@ -222,8 +221,8 @@
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar">
                     {{!-- <textarea id="mensajes_" rows="2" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em;"></textarea> --}}
-                    <div class="col-md-7 mx-auto mt-2">
-                        <button onclick="actualizarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;border:none">
+                    <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
+                        <button onclick="actualizarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; color:#fff !important; padding: 10px 15px;border:none">
                             <p class="font-w500 m-auto">Guardar Cambios</p>
                         </button>
                     </div>
