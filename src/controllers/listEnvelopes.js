@@ -20,7 +20,7 @@ const dsConfig = require('../config/index.js').config;
     let options = {envelopeIds: envelopeId};
     // Exceptions will be caught by the calling function
     results = await envelopesApi.listStatusChanges(dsConfig.settings.dsAccountID, options);
-    // console.log("<<<< Results List Envelope >>>>\n", result);
+    // console.log("<<<< Results List Envelope >>>>\n", results);
     return results;
   }
 

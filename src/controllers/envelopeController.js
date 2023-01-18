@@ -77,9 +77,11 @@ signingViaEmail.createController = (req, res) => {
                         args: JSON.stringify(args),
                     }
 
-                   await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [datos, id_empresa])
-                   res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, pagar: true, itemActivo: 2, email, estado })
-                } else {
+                    await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [datos, id_empresa])
+                    res.redirect('/acuerdo-de-confidencialidad')
+                    // res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, pagar: true, email, estado })
+                } 
+                else {
                     res.redirect('/acuerdo-de-confidencialidad')
                 }
 

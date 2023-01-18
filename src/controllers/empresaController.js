@@ -7,7 +7,7 @@ const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {}, linksMenu = {};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -15,6 +15,7 @@ empresaController.index = async (req, res) => {
     acuerdoFirmado = false;
     etapaCompleta = {};
     consulAsignado = {};
+    linksMenu = {};
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
@@ -56,7 +57,7 @@ empresaController.index = async (req, res) => {
             empresarial2: estado,
             empresarial3: estado,
             id_empresa
-            }
+        }
         await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
     } else {
         const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
@@ -64,13 +65,14 @@ empresaController.index = async (req, res) => {
             // PAGÓ EL DIAGNOSTICO
             diagnosticoPagado = objDiagnostico;
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-            const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
-            // if (acuerdo.length > 0) {
-            //     if (acuerdo[0].estadoAcuerdo == 2) {
-            //         acuerdoFirmado = true;
-            //         noPago = false;
-            //     }
-            // }
+            let acuerdo = await consultarDatos('acuerdo_confidencial')
+            acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
+            if (acuerdo) {
+                if (acuerdo.estadoAcuerdo == 2) {
+                    acuerdoFirmado = true;
+                    noPago = false;
+                }
+            }
 
             /************************************************************************************* */
             // PROPUESTA DE ANÁLISIS DE NEGOCIO
@@ -78,14 +80,27 @@ empresaController.index = async (req, res) => {
             const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
             /************************************************************************************* */
 
-            const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
-            const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
-            // const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
-            // const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
+            const objAnalisis = JSON.parse(pago_empresa.analisis_negocio) // Pago único de Análisis
+            const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1) // Pago #1 de Análisis
+            const objPlanEstrat = JSON.parse(pago_empresa.estrategico) // Subscripción Plan Estratégico
 
             // PAGÓ EL ANÁLISIS
-            if (objAnalisis.estado == 1) {
+            if (objAnalisis.estado == 1 || objAnalisis1.estado == 2) {
                 analisisPagado = 1
+                if (acuerdoFirmado) {
+                    linksMenu.e2 = '/analisis-de-negocio'
+                } else {
+                    linksMenu.e2 = '/acuerdo-de-confidencialidad'
+                }
+            }
+
+
+            if (objPlanEstrat.estado == 1) {
+                if (acuerdoFirmado) {
+                    linksMenu.e3 = '/plan-estrategico'
+                } else {
+                    linksMenu.e3 = '/acuerdo-de-confidencialidad'
+                }
             }
         }
 
@@ -131,11 +146,15 @@ empresaController.index = async (req, res) => {
 
     // VERIFICACIÓN DE ETAPAS FINALIZADAS (Estapa 1)
     const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico')
-    console.log("=========== en VERDE  ==> " ,  informeEtapa1);
-
     if (informeEtapa1) {
         porcentajeEtapa1 = 100;
         etapaCompleta.e1 =  true
+
+        if (diagEmpresa.length > 0) {
+            etapaCompleta.verAnalisis = true;
+        } else if (diagEmpresa2.length > 0) {
+            etapaCompleta.verAnalisis = false;
+        }
     }
 
     // Informe de diagnóstico de empresa subido
@@ -193,7 +212,10 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa3 = Math.round(porcentajeEtapa3)
     }
     const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
-    if (informeEtapa3) porcentajeEtapa3 = 100;
+    if (informeEtapa3) {
+        porcentajeEtapa3 = 100;
+        etapaCompleta.e3 = true;
+    }
 
     // PORCENTAJE GENERAL DE LA EMPRESA
     const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3)/3)
@@ -276,7 +298,7 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes,
-        nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta
+        nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta, linksMenu
     })
 }
 
@@ -345,12 +367,13 @@ empresaController.acuerdo = async (req, res) => {
     const id_empresa = row[0].id_empresas;
     const tipoUser = req.user.rol;
     let estado = {}, email, statusSign = '';
-    const acuerdo = await pool.query('SELECT * FROM acuerdo_confidencial WHERE id_empresa = ?', [id_empresa])
+    let acuerdo = await consultarDatos('acuerdo_confidencial')
+    acuerdo = acuerdo.find(x => x.id_empresa == id_empresa)
 
-    if (acuerdo.length > 0) {
+    if (acuerdo) {
         // console.log("ARGS DATABASE >>>> ", JSON.parse(acuerdo[0].args))
         /** Validando si ya está firmado el documento y su estado de firmado (2) se encuentra en la base de datos */
-        if (acuerdo[0].estadoAcuerdo == 2) {
+        if (acuerdo.estadoAcuerdo == 2) {
             estado.valor = 2; //Documento Firmado
             estado.firmado = true;
             acuerdoFirmado = true;
@@ -358,7 +381,7 @@ empresaController.acuerdo = async (req, res) => {
             estado.form = false;
             estado.enviado = false;
 
-        } else if (acuerdo[0].estadoAcuerdo == 1) { // Validando desde Base de datos
+        } else if (acuerdo.estadoAcuerdo == 1) { // Validando desde Base de datos
             acuerdoFirmado = false;
             estado.valor = 1; // Documento enviado
             estado.form = true; // Debe mostrar el formulario
@@ -366,18 +389,20 @@ empresaController.acuerdo = async (req, res) => {
             estado.firmado = false;
             estado.sinEnviar = false; // Documento sin enviar 
 
-            email = acuerdo[0].email_signer;
-            const args = JSON.parse(acuerdo[0].args) // CONVERTIR  JSON A UN OBJETO
-            const newToken = await authToken() //Generando nuevo Token para enviar a Docusign
+            email = acuerdo.email_signer;
+            const args = JSON.parse(acuerdo.args) // CONVERTIR  JSON A UN OBJETO
+            const newToken = await authToken() // Generando nuevo Token para enviar a Docusign
             args.accessToken = newToken.access_token;
             const new_args = { args: JSON.stringify(args) }
+
+            // console.log("ASDASODIHASIDUHASIOD --> " + new_args.args);
 
             await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [new_args, id_empresa])
 
             /** Consultando el estado del documento en Docusign */
-            await listEnvelope(args, acuerdo[0].envelopeId).then((values) => {
+            await listEnvelope(args, acuerdo.envelopeId).then((values) => {
                 statusSign = values.envelopes[0].status //Capturando el estado desde Docusign
-                // console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
+                console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
             })
 
             /** Validando si el estado devuelto es enviado o firmado */
@@ -418,7 +443,20 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
 
-    res.render('empresa/acuerdoConfidencial', { user_dash: true, wizarx: false, tipoUser, itemActivo: 2, email, estado, acuerdoFirmado, etapa1 })
+    let itemActivo = '';
+    let btnAqui = '/plan-estrategico'
+    if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
+        itemActivo = 4;
+        btnAqui = '/analisis-de-negocio'
+    } 
+    if (linksMenu.e3 == '/acuerdo-de-confidencialidad') {
+        itemActivo = 6;
+    }
+
+    res.render('empresa/acuerdoConfidencial', { 
+        user_dash: true, wizarx: false, tipoUser, itemActivo, email, estado, acuerdoFirmado, etapa1,
+        etapaCompleta, linksMenu, btnAqui
+    })
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -880,6 +918,6 @@ empresaController.planEstrategico = async (req, res) => {
         user_dash: true, pagoDiag: true, itemActivo: 6, acuerdoFirmado: true,
         actualYear: req.actualYear, botones,
         tareas, informePlan, propuesta,
-        dimObj, jsonRendimiento
+        dimObj, jsonRendimiento, etapaCompleta, linksMenu, consulAsignado
     })
 }

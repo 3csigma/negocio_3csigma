@@ -50,7 +50,7 @@
           <div class="header-left">
             <div class="dashboard_bar">
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
-              {{#comparar itemActivo '==' 2}}Acuerdo de confidencialidad{{/comparar}}
+              {{!-- {{#comparar itemActivo '==' 2}}Acuerdo de confidencialidad{{/comparar}} --}}
               {{#comparar itemActivo '==' 3}}Diagnóstico de negocio{{/comparar}}
               {{#comparar itemActivo '==' 4}}Análisis de negocio{{/comparar}}
               {{#comparar itemActivo '==' 5}}Plan empresarial{{/comparar}}
@@ -121,35 +121,6 @@
           </a>
         </li>
 
-        {{!-- {{#comparar itemActivo '==' 2}}
-        <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 2}}
-        <li class="pagar-diagnostico">
-        {{/comparar}}
-          {{#comparar diagnosticoPagado '==' 0}}
-          <a style="cursor:pointer" aria-expanded="false">
-            {{/comparar}}
-            {{#comparar diagnosticoPagado '!=' 0}}
-            <a href="/acuerdo-de-confidencialidad" aria-expanded="false">
-            {{/comparar}}
-              {{#if acuerdoFirmado}}
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M9.99996 1.6665C5.39996 1.6665 1.66663 5.39984 1.66663 9.99984C1.66663 14.5998 5.39996 18.3332 9.99996 18.3332C14.6 18.3332 18.3333 14.5998 18.3333 9.99984C18.3333 5.39984 14.6 1.6665 9.99996 1.6665ZM9.99996 16.6665C6.31663 16.6665 3.33329 13.6832 3.33329 9.99984C3.33329 6.3165 6.31663 3.33317 9.99996 3.33317C13.6833 3.33317 16.6666 6.3165 16.6666 9.99984C16.6666 13.6832 13.6833 16.6665 9.99996 16.6665Z"
-                  fill="#6EBB0B" />
-                <path
-                  d="M8.24997 12.4324L5.81747 9.99991L4.98914 10.8224L8.24997 14.0832L15.25 7.08324L14.4275 6.26074L8.24997 12.4324Z"
-                  fill="#6EBB0B" />
-              </svg>
-              <span class="nav-text" style="color: #6EBB0B">Acuerdo de confidencialidad</span>
-              {{else}}
-              <i class="zmdi zmdi-circle-o"></i>
-              <span class="nav-text">Acuerdo de confidencialidad</span>
-              {{/if}}
-            </a>
-        </li> --}}
-
         {{#comparar itemActivo '==' 3}}
         <li class="mm-active">
         {{/comparar}}
@@ -171,24 +142,80 @@
           </a>
         </li>
 
-        {{#if etapaCompleta.e1}}
+        {{#if etapaCompleta.verAnalisis}}
+
         {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
         {{/comparar}}
         {{#comparar itemActivo '!=' 4}}
         <li>
         {{/comparar}}
+
           {{#if consulAsignado.c2}}
-          <a href="/analisis-de-negocio" aria-expanded="false">
+          {{!-- <a href="/analisis-de-negocio" aria-expanded="false"> --}}
+          <a href="{{linksMenu.e2}}" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
+
           {{#if etapaCompleta.e2}}
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Análisis de negocio</span>
           {{else}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
+          {{/if}}
+
+          </a>
+        </li>
+        {{/if}}
+
+        {{#unless etapaCompleta.verAnalisis}}
+
+        {{#comparar itemActivo '==' 6}}
+        <li class="mm-active">
+        {{/comparar}}
+
+        {{#comparar itemActivo '!=' 6}}
+        <li>
+        {{/comparar}}
+
+          {{#if consulAsignado.c3}}
+          <a href="{{linksMenu.e3}}" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
+          {{/if}}
+
+          {{#if etapaCompleta.e3}}
+            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
+            <span class="nav-text" style="color: #6EBB0B">Plan estratégico</span>
+          {{else}}
+            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <span class="nav-text">Plan estratégico</span>
+          {{/if}}
+
+          </a>
+        </li>
+        {{/unless}}
+
+        {{#if etapaCompleta.e2}}
+        {{#comparar itemActivo '==' 6}}
+        <li class="mm-active">
+        {{/comparar}}
+        {{#comparar itemActivo '!=' 6}}
+        <li>
+        {{/comparar}}
+          {{#if consulAsignado.c3}}
+          <a href="/plan-estrategico" aria-expanded="false">
+          {{else}}
+          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
+          {{/if}}
+          {{#if etapaCompleta.e3}}
+            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
+            <span class="nav-text" style="color: #6EBB0B">Plan estratégico</span>
+          {{else}}
+            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <span class="nav-text">Plan estratégico</span>
           {{/if}}
           </a>
         </li>
