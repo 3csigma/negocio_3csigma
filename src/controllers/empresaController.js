@@ -152,8 +152,10 @@ empresaController.index = async (req, res) => {
 
         if (diagEmpresa.length > 0) {
             etapaCompleta.verAnalisis = true;
+            etapaCompleta.verPlanEstr = false;
         } else if (diagEmpresa2.length > 0) {
             etapaCompleta.verAnalisis = false;
+            etapaCompleta.verPlanEstr = true;
         }
     }
 
@@ -197,6 +199,7 @@ empresaController.index = async (req, res) => {
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
+        etapaCompleta.verPlanEstr = true;
     }
     /************************************************************************** */
 

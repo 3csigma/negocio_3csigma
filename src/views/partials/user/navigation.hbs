@@ -170,7 +170,7 @@
         </li>
         {{/if}}
 
-        {{#unless etapaCompleta.verAnalisis}}
+        {{#if etapaCompleta.verPlanEstr}}
 
         {{#comparar itemActivo '==' 6}}
         <li class="mm-active">
@@ -180,7 +180,7 @@
         <li>
         {{/comparar}}
 
-          {{#if consulAsignado.c3}}
+          {{#if consulAsignado.c4}}
           <a href="{{linksMenu.e3}}" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
@@ -196,7 +196,7 @@
 
           </a>
         </li>
-        {{/unless}}
+        {{/if}}
 
         {{#if etapaCompleta.e2}}
         {{#comparar itemActivo '==' 6}}
@@ -205,7 +205,7 @@
         {{#comparar itemActivo '!=' 6}}
         <li>
         {{/comparar}}
-          {{#if consulAsignado.c3}}
+          {{#if consulAsignado.c4}}
           <a href="/plan-estrategico" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
