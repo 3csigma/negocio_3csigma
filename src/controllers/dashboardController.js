@@ -845,14 +845,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         (estado4.length * 100) / dim4
     ]
 
-    // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
-    tareas.info.forEach(x => {
-        if (x.estado == 'Completada')
-            x.tareaLista = true
-        else
-            x.tareaLista = false
-    })
-
     // jsonDim => Array para la gráfica de Plan Estratégico
     const jsonDim = JSON.stringify([
         { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
@@ -868,9 +860,10 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /*************************************************************************************************** */
     // Objeto para Botones de las tarjetas con base a la etapa del consultor
-    const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
-    // VALIDAR EL ROL DEL USUARIO
     let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true;
+    const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
+    
+    // VALIDAR EL ROL DEL USUARIO
     if (req.user.rol == 'Admin') {
         rolAdmin = true;
         botonesEtapas.uno = true;
@@ -886,14 +879,34 @@ dashboardController.editarEmpresa = async (req, res) => {
         let cLogin = await consultarDatos('consultores');
         cLogin = cLogin.find(i => i.codigo == req.user.codigo)
         const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
+        console.group("\n* Soy un consultor - ETAPAS ASIGNADAS")
         console.log(etapasAsignadas)
-        etapasAsignadas.forEach(x => {
-            x.etapa == 'Diagnóstico' ? botonesEtapas.uno = true : false;
-            x.etapa == 'Análisis' ? botonesEtapas.dos = true : false;
-            x.etapa == 'Plan Empresarial' ? botonesEtapas.plan1 = true : false;
-            x.etapa == 'Plan Estratégico' ? botonesEtapas.plan2 = true : false;
-        })
+        console.log(botonesEtapas)
+        console.groupEnd()
+        if (etapasAsignadas.length > 0) {
+            etapasAsignadas.forEach(x => {
+                console.log("X Etapa -> ", x.etapa)
+                x.orden == 1 ? botonesEtapas.uno = true : botonesEtapas.uno = false;
+                x.orden == 2 ? botonesEtapas.dos = true : botonesEtapas.dos = false;
+                x.orden == 3 ? botonesEtapas.plan1 = true : botonesEtapas.plan1 = false;
+                x.orden == 4 ? botonesEtapas.plan2 = true : botonesEtapas.plan2 = false;
+            })
+        }
     }
+
+    // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
+    tareas.info.forEach(x => {
+        // if (x.estado == 'Completada')
+        //     x.tareaLista = true
+        // else
+        //     x.tareaLista = false
+        if (botonesEtapas.plan2) {
+            x.taskBtns = true;
+        } else {
+            x.taskBtns = false;
+        }
+        
+    })
 
     res.render('admin/editarEmpresa', {
         adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,

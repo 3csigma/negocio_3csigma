@@ -111,7 +111,7 @@
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
-                                                <option value="Plan_Empresarial">Plan Empresarial</option>
+                                                {{!-- <option value="Plan_Empresarial">Plan Empresarial</option> --}}
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
@@ -380,7 +380,7 @@
                             <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
                             <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
-                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
+                            {{!-- <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li> --}}
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                         </ul>
                     </div>
@@ -1496,11 +1496,9 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
                                                                                 <i class="fa fa-search"></i></a>
-
                                                                             </td>
                                                                         </tr>
                                                                     </table>
-                                                                    {{!-- {{/if}} --}}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -2226,6 +2224,7 @@
                                     </div>
                                 </div>
                                 {{/if}}
+
                                 {{!-- GRÁFICAS DE PORCENTAJE DE DIMENSIONES --}}
                                 {{#if jsonDim}}
                                 <div class="card">
@@ -2262,8 +2261,8 @@
                                     </div>
                                 </div>
                                 {{/if}}
+
                                 {{!-- LISTADO DE TAREAS --}}
-                                {{!-- {{#if tareas.todas}} --}}
                                 <div class="card plan-list">
 									<div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
 										<div class="mr-auto pr-3 mb-3">
@@ -2304,25 +2303,25 @@
                                                         <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridad}}</td>
                                                         <td>
                                                             <div class="d-flex justify-content-center align-items-center">
-                                                                {{#if tareaLista}}
-                                                                <a onclick="mostrarTarea({{id}})" title="Edit"
+                                                                {{#if taskBtns}}
+                                                                <a onclick="editarTarea({{id}})" title="Editar"
                                                                     class="btn btn-primary shadow btn-xs sharp mr-1"
                                                                     style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
                                                                         style="color:white ;" class="fa fa-pencil"></i>
                                                                 </a>
-                                                                {{else}}
-                                                                <a onclick="editarTarea({{id}})" title="Edit"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
-                                                                        style="color:white ;" class="fa fa-pencil"></i>
-                                                                </a>
-                                                                <a onclick="eliminarTarea({{id}})" class="btn btn-danger shadow btn-xs sharp"
-                                                                    style="background: #DC0000;" title="Edit"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                <a onclick="eliminarTarea({{id}})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
+                                                                    style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
                                                                         width="12px" viewBox="0 0 448 512">
                                                                         <path
                                                                             d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
                                                                             fill="white" />
                                                                     </svg>
+                                                                </a>
+                                                                {{else}}
+                                                                <a onclick="mostrarTarea({{id}})" title="Mostrar"
+                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                                                                        style="color:white ;" class="fa fa-search"></i>
                                                                 </a>
                                                                 {{/if}}
                                                             </div>
@@ -2336,10 +2335,8 @@
                                     </div>
                                 </div>
 
-                                {{!-- {{/if}} --}}
-                                {{!-- {{#if info.plan.ok}} --}}
                                 <!-- ======================== INFORMES DE PLAN ESTRATÉGICO ======================== -->
-                                <div class="card">
+                                <div class="card"> 
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Informe general</h4>
@@ -2385,16 +2382,16 @@
                                                                                 style="display:none" name="informePlan" accept="application/pdf" />
                                                                         </td>
                                                                         {{else}}
-                                                                        {{#unless info.prod.url}}
+                                                                        {{#unless info.plan.url}}
                                                                         <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
                                                                         {{/unless}}
                                                                         {{/if}}
                             
-                                                                        {{#if info.plan.url}}
+                                                                        {{!-- {{#if info.plan.url}} --}}
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
                                                                         </td>
-                                                                        {{/if}}
+                                                                        {{!-- {{/if}} --}}
                                                                     </tr>
                                                                 </table>
                                                             </td>
@@ -2407,8 +2404,7 @@
                                     </div>
                                 </div>
                                 <!-- ========================================================================== -->
-                                {{!-- {{/if}} --}}
-                                {{/if}}
+                                {{/if}} {{!-- CERRANDO IF DE PAGO ESTRATÉGICO FECHAS --}}
                             </div>
                         </div>
                     </div>
