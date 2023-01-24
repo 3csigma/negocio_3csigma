@@ -20,3 +20,6 @@ module.exports = {
         }
     }]
 }
+
+id_producto_estrategico = 'prod_NEK8lDJGAH1qiK' -> SERVER
+id_producto_estrategico = 'prod_MoQcrJC6jsrtcY' -> LOCAL

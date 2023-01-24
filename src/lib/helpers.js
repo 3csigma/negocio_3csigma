@@ -479,7 +479,7 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
             if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
         }
         if (x.estado == 1) {
-            x.estado = 'Proceso'; x.color = 'warning';
+            x.estado = 'En Proceso'; x.color = 'warning';
             x.tiempo = 'A tiempo'
             if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
         }

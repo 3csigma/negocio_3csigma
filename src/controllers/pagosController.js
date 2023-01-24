@@ -1,6 +1,6 @@
 const pagosController = exports;
 const pool = require('../database')
-const { my_domain, clientSecretStripe } = require('../keys').config
+const { my_domain, id_producto_estrategico, clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 const { consultarDatos } = require('../lib/helpers')
 
@@ -279,31 +279,12 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
     let precio = pay.precio_total + '00';
     precio = parseFloat(precio)
 
-    // const precio = 456000
-
-    // const product = await stripe.products.create({
-    //     name: 'Plan estratégico de negocio',
-    //     description: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil nobis nesciunt fugiat autem hic. Nemo ut fugit repudiandae enim assumenda vitae culpa quibusdam quae cum unde? Assumenda rem asperiores ducimus?',
-    //     images: ['https://3csigma.com//app_public_files/img/Plan-estrategico-de-negocio_checkout.png'],
-    //     default_price_data: {
-    //         unit_amount: precio,
-    //         currency: 'usd',
-    //         recurring: {interval: 'month'},
-    //     },
-    //     expand: ['default_price'],
-    // });
-
     const price = await stripe.prices.create({
         unit_amount: precio,
         currency: 'usd',
         recurring: {interval: 'month'},
-        product: 'prod_MoQcrJC6jsrtcY',
+        product: `${id_producto_estrategico}`,
     });
-
-    // const product = await stripe.products.update(
-    //     'prod_MoQcrJC6jsrtcY',
-    //     {default_price: price.id}
-    // );
 
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
@@ -316,10 +297,6 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
     });
 
     req.session.idSesion = session.id
-
-    // console.log(JSON.stringify(subscriptions))
-    // res.send(JSON.stringify(subscriptions))
-
     req.session.intentPay = session.url;
     req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
     req.session.planEstrategico = true;
@@ -345,7 +322,7 @@ pagosController.cancelarSub = async (req, res) => {
 
 /********************************************************************/
 pagosController.pagoExitoso = async (req, res) => {
-    let itemActivo = 1, pagoEtapa1_ok = false, pagoEtapa2_ok = false, pagoEtapa3_ok = false;
+    let pagoEtapa1_ok = false, pagoEtapa2_ok = false, pagoEtapa3_ok = false;
     req.session.intentPay = undefined;
 
     /** CONSULTANDO EMPRESA LOGUEADA */
@@ -387,7 +364,6 @@ pagosController.pagoExitoso = async (req, res) => {
         if (actualizarAnalisis != undefined) {
             pagoEtapa1_ok = false
             pagoEtapa2_ok = true;
-            itemActivo = 4
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
         }
         
@@ -399,7 +375,6 @@ pagosController.pagoExitoso = async (req, res) => {
             pagoEtapa1_ok = false;
             pagoEtapa2_ok = false;
             pagoEtapa3_ok = true;
-            itemActivo = 6;
         }
 
     }
@@ -407,12 +382,12 @@ pagosController.pagoExitoso = async (req, res) => {
     res.render('empresa/dashboard', {
         pagoEtapa1_ok, pagoEtapa2_ok, pagoEtapa3_ok,
         user_dash: true, wizarx: false, login: false,
-        itemActivo,
+        itemDashboard: true,
     })
 }
 
 pagosController.pagoCancelado = async (req, res) => {
-    let destino = 'empresa/dashboard', itemActivo = 1;
+    let destino = 'empresa/dashboard';
     req.session.intentPay = undefined;
     req.session.payDg0 = false;
     req.session.analisis0 = false;
@@ -423,6 +398,6 @@ pagosController.pagoCancelado = async (req, res) => {
     res.render(destino, {
         alertCancel: true,
         user_dash: true, wizarx: false, login: false,
-        itemActivo,
+        itemDashboard: true,
     })
 }

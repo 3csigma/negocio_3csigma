@@ -49,11 +49,11 @@
         <div class="collapse navbar-collapse justify-content-between">
           <div class="header-left">
             <div class="dashboard_bar">
-              {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
-              {{#comparar itemActivo '==' 3}}Diagnóstico de negocio{{/comparar}}
-              {{#comparar itemActivo '==' 4}}Análisis de negocio{{/comparar}}
-              {{#comparar itemActivo '==' 5}}Plan empresarial{{/comparar}}
-              {{#comparar itemActivo '==' 6}}Plan estratégico de negocio{{/comparar}}
+              {{#if itemDashboard}}Dashboard{{/if}}
+              {{#if itemDiagnostico}}Diagnóstico de negocio{{/if}}
+              {{#if itemAnalisis}}Análisis de negocio{{/if}}
+              {{#if itemEmpresarial}}Plan empresarial{{/if}}
+              {{#if itemEstrategico}}Plan estratégico de negocio{{/if}}
               {{#if empresa.foto}}Perfil{{/if}}
             </div>
           </div>
@@ -108,29 +108,30 @@
   <div class="deznav">
     <div class="deznav-scroll">
       <ul class="metismenu" id="menu">
-        {{#comparar itemActivo '==' 1}}
+        {{!-- ITEM DASHBOARD --}}
+        {{#if itemDashboard}}
         <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 1}}
+        {{else}}
         <li>
-        {{/comparar}}
+        {{/if}}
           <a href="/" aria-expanded="false">
             <i class="zmdi zmdi-view-dashboard"></i>
             <span class="nav-text">Dashboard</span>
           </a>
         </li>
 
-        {{#comparar itemActivo '==' 3}}
+        {{!-- ITEM DIAGNÓSTICO --}}
+        {{#if itemDiagnostico}}
         <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 3}}
+        {{else}}
         <li>
-        {{/comparar}}
+        {{/if}}
           {{#if consulAsignado.c1}}
             <a href="/diagnostico-de-negocio" aria-expanded="false">
           {{else}}
             <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
+
           {{#if etapaCompleta.e1}}
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Diagnóstico de negocio</span>
@@ -143,116 +144,56 @@
 
         {{#if etapaCompleta.verAnalisis}}
 
-        {{#comparar itemActivo '==' 4}}
+        {{!-- ITEM ANÁLISIS --}}
+        {{#if itemAnalisis}}
         <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 4}}
+        {{else}}
         <li>
-        {{/comparar}}
-
+        {{/if}}
           {{#if consulAsignado.c2}}
-          {{!-- <a href="/analisis-de-negocio" aria-expanded="false"> --}}
           <a href="{{linksMenu.e2}}" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
 
-          {{#if etapaCompleta.e2}}
+            {{#if etapaCompleta.e2}}
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Análisis de negocio</span>
-          {{else}}
+            {{else}}
             <i class="fa-solid fa-magnifying-glass-dollar"></i>
             <span class="nav-text">Análisis de negocio</span>
-          {{/if}}
-
+            {{/if}}
           </a>
         </li>
+
         {{/if}}
 
-        {{#if etapaCompleta.verPlanEstr}}
+        {{#if etapaCompleta.verEstrategico}}
 
-        {{#comparar itemActivo '==' 6}}
+        {{!-- ITEM ESTRATÉGICO --}}
+        {{#if itemEstrategico}}
         <li class="mm-active">
-        {{/comparar}}
-
-        {{#comparar itemActivo '!=' 6}}
+        {{else}}
         <li>
-        {{/comparar}}
-
+        {{/if}}
+          
           {{#if consulAsignado.c4}}
-          <a href="{{linksMenu.e3}}" aria-expanded="false">
+          <a href="{{linksMenu.e4}}" aria-expanded="false">
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
 
-          {{#if etapaCompleta.e3}}
+            {{#if etapaCompleta.e4}}
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Plan estratégico</span>
-          {{else}}
-            <i class="fa-solid fa-magnifying-glass-dollar"></i>
-            <span class="nav-text">Plan estratégico</span>
-          {{/if}}
-
-          </a>
-        </li>
-        {{/if}}
-
-        {{#if etapaCompleta.e2}}
-        {{#comparar itemActivo '==' 6}}
-        <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 6}}
-        <li>
-        {{/comparar}}
-          {{#if consulAsignado.c4}}
-          <a href="/plan-estrategico" aria-expanded="false">
-          {{else}}
-          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
-          {{/if}}
-          {{#if etapaCompleta.e3}}
-            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
-            <span class="nav-text" style="color: #6EBB0B">Plan estratégico</span>
-          {{else}}
-            <i class="fa-solid fa-magnifying-glass-dollar"></i>
-            <span class="nav-text">Plan estratégico</span>
-          {{/if}}
-          </a>
-        </li>
-        {{/if}}
-
-        {{!-- {{#comparar itemActivo '==' 5}}
-        <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 5}}
-        <li class="activar-cuenta">
-        {{/comparar}}
-
-          {{#if btnPagar.etapa2}}
-          <a href="/plan-empresarial" aria-expanded="false">
-          {{else}}
-          <a style="cursor:pointer" aria-expanded="false">
-          {{/if}}
-            <i class="fa-solid fa-lightbulb"></i>
-            <span class="nav-text">Plan empresarial</span>
-          </a>
-        </li>
-
-        {{#comparar itemActivo '==' 6}}
-        <li class="mm-active">
-        {{/comparar}}
-        {{#comparar itemActivo '!=' 6}}
-        <li class="activar-cuenta">
-        {{/comparar}}
-
-          {{#if btnPagar.etapa2}}
-          <a href="/plan-estrategico" aria-expanded="false">
-          {{else}}
-          <a style="cursor:pointer" aria-expanded="false">
-          {{/if}}
+            {{else}}
             <i class="fa-solid fa-lightbulb"></i>
             <span class="nav-text">Plan estratégico</span>
+            {{/if}}
           </a>
-        </li> --}}
+        </li>
+
+        {{/if}}
 
       </ul>
 

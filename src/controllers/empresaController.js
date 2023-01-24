@@ -7,7 +7,7 @@ const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {}, linksMenu = {};
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {}, linksMenu = {e2: '/analisis-de-negocio', e3: '/plan-empresarial', e4: '/plan-estrategico'};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -15,7 +15,7 @@ empresaController.index = async (req, res) => {
     acuerdoFirmado = false;
     etapaCompleta = {};
     consulAsignado = {};
-    linksMenu = {};
+    linksMenu = {e2: '/analisis-de-negocio', e3: '/plan-empresarial', e4: '/plan-estrategico'};
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
@@ -76,8 +76,8 @@ empresaController.index = async (req, res) => {
 
             /************************************************************************************* */
             // PROPUESTA DE ANÁLISIS DE NEGOCIO
-            const propuesta_analisis = await consultarDatos('propuestas')
-            const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
+            // const propuesta_analisis = await consultarDatos('propuestas')
+            // const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
             /************************************************************************************* */
 
             const objAnalisis = JSON.parse(pago_empresa.analisis_negocio) // Pago único de Análisis
@@ -87,19 +87,14 @@ empresaController.index = async (req, res) => {
             // PAGÓ EL ANÁLISIS
             if (objAnalisis.estado == 1 || objAnalisis1.estado == 2) {
                 analisisPagado = 1
-                if (acuerdoFirmado) {
-                    linksMenu.e2 = '/analisis-de-negocio'
-                } else {
+                if (!acuerdoFirmado) {
                     linksMenu.e2 = '/acuerdo-de-confidencialidad'
                 }
             }
 
-
             if (objPlanEstrat.estado == 1) {
-                if (acuerdoFirmado) {
-                    linksMenu.e3 = '/plan-estrategico'
-                } else {
-                    linksMenu.e3 = '/acuerdo-de-confidencialidad'
+                if (!acuerdoFirmado) {
+                    linksMenu.e4 = '/acuerdo-de-confidencialidad'
                 }
             }
         }
@@ -111,6 +106,11 @@ empresaController.index = async (req, res) => {
     const diagEmpresa = await pool.query('SELECT * FROM dg_empresa_establecida WHERE id_empresa = ? LIMIT 1', [id_empresa])
     const diagEmpresa2 = await pool.query('SELECT * FROM dg_empresa_nueva WHERE id_empresa = ? LIMIT 1', [id_empresa])
     
+    /**
+     * diagEmpresa -> EMPRESA ESTABLECIDA
+     * diagEmpresa2 -> EMPRESA NUEVA
+     */
+
     // INFORMES DE LA EMPRESA
     const informes_empresa = await consultarDatos('informes')
 
@@ -150,12 +150,13 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1 = 100;
         etapaCompleta.e1 =  true
 
+        // VALIDANDO EL TIPO DE EMPRESA (NUEVA O ESTABLECIDA) - PARA HABILITAR EL MENÚ
         if (diagEmpresa.length > 0) {
             etapaCompleta.verAnalisis = true;
-            etapaCompleta.verPlanEstr = false;
+            etapaCompleta.verEstrategico = false;
         } else if (diagEmpresa2.length > 0) {
             etapaCompleta.verAnalisis = false;
-            etapaCompleta.verPlanEstr = true;
+            etapaCompleta.verEstrategico = true;
         }
     }
 
@@ -199,7 +200,7 @@ empresaController.index = async (req, res) => {
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
-        etapaCompleta.verPlanEstr = true;
+        etapaCompleta.verEstrategico = true;
     }
     /************************************************************************** */
 
@@ -217,7 +218,7 @@ empresaController.index = async (req, res) => {
     const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
     if (informeEtapa3) {
         porcentajeEtapa3 = 100;
-        etapaCompleta.e3 = true;
+        etapaCompleta.e4 = true;
     }
 
     // PORCENTAJE GENERAL DE LA EMPRESA
@@ -295,7 +296,7 @@ empresaController.index = async (req, res) => {
         pagoPendiente,
         diagnosticoPagado,
         analisisPagado,
-        itemActivo: 1,
+        itemDashboard: true,
         consulAsignado,
         etapa1,
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
@@ -356,7 +357,8 @@ empresaController.perfilUsuarios = async (req, res) => {
         analisisPagado,
         acuerdoFirmado,
         etapa1,
-        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta
+        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
+        linksMenu
     })
 }
 
@@ -452,13 +454,11 @@ empresaController.acuerdo = async (req, res) => {
         itemActivo = 4;
         btnAqui = '/analisis-de-negocio'
     } 
-    if (linksMenu.e3 == '/acuerdo-de-confidencialidad') {
-        itemActivo = 6;
-    }
 
     res.render('empresa/acuerdoConfidencial', { 
-        user_dash: true, wizarx: false, tipoUser, itemActivo, email, estado, acuerdoFirmado, etapa1,
-        etapaCompleta, linksMenu, btnAqui
+        user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,
+        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
+        linksMenu, btnAqui
     })
 }
 
@@ -531,12 +531,14 @@ empresaController.diagnostico = async (req, res) => {
     let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
 
     res.render('empresa/diagnostico', {
-        user_dash: true, pagoDiag: true, itemActivo: 3, formDiag,
+        user_dash: true, pagoDiag: true, formDiag,
         existencia, costo, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
+        itemDiagnostico: true,
         consulAsignado: req.session.consulAsignado,
-        etapaCompleta: req.session.etapaCompleta
+        etapaCompleta: req.session.etapaCompleta,
+        linksMenu
     })
 }
 
@@ -809,7 +811,7 @@ empresaController.analisis = async (req, res) => {
     }
 
     res.render('empresa/analisis', {
-        user_dash: true, pagoDiag: true, itemActivo: 4, acuerdoFirmado: true,
+        user_dash: true, pagoDiag: true, acuerdoFirmado: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
         etapa1, archivos,
@@ -819,8 +821,10 @@ empresaController.analisis = async (req, res) => {
         escena5,escena6, 
         msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, activarPagoUnico,
         btnActivo, btnDesactivo,
+        itemAnalisis: true,
         consulAsignado: req.session.consulAsignado,
-        etapaCompleta: req.session.etapaCompleta
+        etapaCompleta: req.session.etapaCompleta,
+        linksMenu
     })
 }
 
@@ -918,9 +922,13 @@ empresaController.planEstrategico = async (req, res) => {
     }
 
     res.render('empresa/planEstrategico', {
-        user_dash: true, pagoDiag: true, itemActivo: 6, acuerdoFirmado: true,
+        user_dash: true, pagoDiag: true, acuerdoFirmado: true,
         actualYear: req.actualYear, botones,
         tareas, informePlan, propuesta,
-        dimObj, jsonRendimiento, etapaCompleta, linksMenu, consulAsignado
+        dimObj, jsonRendimiento,
+        itemEstrategico: true,
+        consulAsignado: req.session.consulAsignado,
+        etapaCompleta: req.session.etapaCompleta,
+        linksMenu
     })
 }
