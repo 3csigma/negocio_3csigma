@@ -3,16 +3,16 @@
     .chosen-container-single .chosen-single span {
         font-size: 11px;
     }
-</style>
-<!--**********************************
-        Content body start
-***********************************-->
-
-<style>
+    .mostrar{
+        display: none;
+    }
     .table td{
         padding: 12px 15px;
     }
 </style>
+<!--**********************************
+        Content body start
+***********************************-->
 <div class="content-body">
     <!-- row -->
     <div class="container-fluid">
@@ -869,6 +869,29 @@
                                 </div>
                                 <!-- ========================================================================== -->
 
+                                <!-- ======================== CONCLUSIONES - DIAGNOSTICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Conclusiones</h4>
+                                        </div>
+                                            <div class="row" style="justify-content: center;">
+                                                {{#if botonesEtapas.uno}}
+                                                <input type="text" id="conclusion_diagnostico" value="{{objconclusion.e1}}" class="form-control">
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(1)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                        <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
+                                                        <span class="text-btn">Guardar</span>
+                                                    </button>
+                                                </div>
+                                                {{else}}
+                                                <input type="text" value="{{objconclusion.e1}}" class="form-control" readonly>
+                                                {{/if}}
+                                            </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
                             </div>
 
                             {{!-- PESTAÑA 3 - ANÁLISIS DE NEGOCIO --}}
@@ -1488,7 +1511,7 @@
                                                                                 <input id="informeAnalisisGeneral" class="inputInformeGeneral" type="file" style="display:none" name="informeAnalisisGeneral" accept="application/pdf" />
                                                                             </td>
                                                                             {{else}}
-                                                                            {{#unless info.prod.url}}
+                                                                            {{#unless info.analisis.url}}
                                                                             <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
                                                                             {{/unless}}
                                                                             {{/if}}
@@ -1511,8 +1534,31 @@
                                     {{/if}}
                                     <!-- ========================================================================== -->
                                     {{/if}}
-                                {{/if}}
 
+                                    <!-- ======================== CONCLUSIONES - ANALISIS ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Conclusiones</h4>
+                                            </div>
+                                                <div class="row" style="justify-content: center;">
+                                                    {{#if botonesEtapas.dos}}
+                                                    <input type="text" id="conclusion_analisis" value="{{objconclusion.e2}}" class="form-control">
+                                                    <div class="col-md-3">
+                                                        <button class="btn btn-primary btn-save" onclick="agregarConclusion(2)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                            <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
+                                                            <span class="text-btn">Guardar</span>
+                                                        </button>
+                                                    </div>
+                                                    {{else}}
+                                                    <input type="text" value="{{objconclusion.e2}}" class="form-control" readonly>
+                                                    {{/if}}
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <!-- ========================================================================== -->
+
+                                {{/if}}
                             </div>
 
                             {{!-- PESTAÑA 4 - PLAN EMPRESARIAL --}}
@@ -2037,6 +2083,25 @@
                                     {{/if}}
                                 {{/if}}
 
+                                <!-- ======================== CONCLUSIONES - PLAN EMPRESARIAL ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Conclusiones</h4>
+                                        </div>
+                                            <div class="row" style="justify-content: center;">
+                                                <input type="text" id="conclusion_planEmpresarial" value="{{objconclusion.e3}}" class="form-control">
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(3)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                        <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
+                                                        <span class="text-btn">Guardar</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
                             </div>
 
                             {{!-- PESTAÑA 5 - PLAN ESTRATÉGICO DE NEGOCIO --}}
@@ -2404,7 +2469,32 @@
                                     </div>
                                 </div>
                                 <!-- ========================================================================== -->
+
+                                <!-- ======================== CONCLUSIONES - PLAN ESTRATEGICO ======================== -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Conclusiones</h4>
+                                        </div>
+                                            <div class="row" style="justify-content: center;">
+                                                {{#if botonesEtapas.plan2}}
+                                                <input type="text" id="conclusion_planEstrategico" value="{{objconclusion.e4}}" class="form-control">
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(4)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                        <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
+                                                        <span class="text-btn">Guardar</span>
+                                                    </button>
+                                                </div>
+                                                {{else}}
+                                                <input type="text" value="{{objconclusion.e4}}" class="form-control" readonly>
+                                                {{/if}}
+                                            </div>
+                                    </div>
+                                </div>
+                                <!-- ========================================================================== -->
+
                                 {{/if}} {{!-- CERRANDO IF DE PAGO ESTRATÉGICO FECHAS --}}
+
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,37 @@
 <script>
+    function agregarConclusion(etapa){
+        let conclusion = 0
+        if(etapa == 1) {conclusion = $("#conclusion_diagnostico").val()}
+        if(etapa == 2) {conclusion = $("#conclusion_analisis").val()}
+        if(etapa == 3) {conclusion = $("#conclusion_planEmpresarial").val()}
+        if(etapa == 4) {conclusion = $("#conclusion_planEstrategico").val()}
+
+        const id_empresa = $("#idEmpresa").val()
+        fetch('/conclusiones', {
+            method: 'POST',
+            body: JSON.stringify({id_empresa, etapa, conclusion}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                if (response){
+                    console.log("TODO TRUE")
+                    $(".btn-save").attr("disabled", true);
+                    $(".loading-icon").removeClass("mostrar");
+                    $(".text-btn").text("Guardando..");
+                    
+                    setTimeout(function () {
+                        $(".btn-save").attr("disabled", false);
+                        $(".loading-icon").addClass("mostrar");
+                        $(".text-btn").text("Guardar");
+                    }, 2000)
+
+                } else {
+                    console.log("TODO FALSE")
+                }
+            });
+    }
+
     const mapaConsultores = new Map();
     function addConsulEtapa() {
         const idConsultor = $("#id_consultor option:selected").val();

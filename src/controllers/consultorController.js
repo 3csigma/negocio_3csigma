@@ -1,6 +1,6 @@
 const consultorController = exports;
 const pool = require('../database')
-const { sendEmail, propuestaAnalasisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
+const { sendEmail, propuestaAnalisisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
 const { consultarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
@@ -133,7 +133,7 @@ consultorController.enviarPropuesta = async (req, res) => {
     /** INFO PARA ENVÍO DE EMAIL */
     const asunto = "Tenemos una propuesta para tu empresa"
     // Obtener la plantilla de Email
-    const template = propuestaAnalasisHTML(nombreEmpresa);
+    const template = propuestaAnalisisHTML(nombreEmpresa);
 
     // Enviar Email
     const resultEmail = await sendEmail(email, asunto, template)

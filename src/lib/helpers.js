@@ -521,12 +521,13 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
         //  *** FECHA ACTUAL ****
         x.fecha_actual = new Date().getTime();
         x.fecha_actual = (((x.fecha_actual / 1000) / 60) / 60) / 24
-
         let plazo = x.fechafin - x.fechaini
-        let diasCorridos = x.fecha_actual - x.fechaini
+        let diasCorridos = 0
+        console.log("plazo: " , plazo);
+        if ( x.fechaini > x.fecha_actual ) {diasCorridos }else {diasCorridos = x.fecha_actual - x.fechaini}
         diasCorridos = parseInt(diasCorridos)
         x.resultado = (diasCorridos * 100) / plazo
-
+        if (x.resultado > 100) {x.resultado = 100}
     })
 
     tareas.info = tareas.todas

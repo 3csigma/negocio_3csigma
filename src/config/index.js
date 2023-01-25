@@ -56,7 +56,7 @@ ZxJ8U9ZbPhV4U+kWJ1qeHRUmgmmFt08d0ZU08/EywqwkgwrSUn1SUBf+eMIClK6r
 
 const rutasEmpresa = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'create-payment-intent', 'diagnostico-de-negocio', 'ficha-cliente', 'addficha', 'eliminarficha', 'acuerdo-de-confidencialidad', 'analisis-de-negocio', 'guardar-archivos-analisis', 'plan-estrategico', 'editartarea', 'pagar-diagnostico', 'pagar-analisis-per1','pagar-analisis-per2', 'pagar-analisis-per3', 'pagar-analisis', 'pago-cancelado', 'pago-exitoso', 'pagar-plan-estrategico' ]
 
-const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'empresas', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme']
+const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'empresas', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme', 'conclusiones']
 
 const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagomanual-diagnostico', 'pagomanual-empresas', 'cancelarsub']
 

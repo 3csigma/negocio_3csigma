@@ -908,6 +908,25 @@ dashboardController.editarEmpresa = async (req, res) => {
         
     })
 
+    let tblConclusiones = await consultarDatos('conclusiones');
+    tblConclusiones = tblConclusiones.filter(x => x.id_empresa == idEmpresa)
+    let objconclusion = {}
+    
+    if (tblConclusiones) {
+        const e1 = tblConclusiones.find(i => i.etapa == 1)
+        if (e1) {objconclusion.e1 = e1.conclusion}
+
+        const e2 = tblConclusiones.find(i => i.etapa == 2)
+        if (e2) {objconclusion.e2 = e2.conclusion}
+
+        const e3 = tblConclusiones.find(i => i.etapa == 3)
+        if (e3) {objconclusion.e3 = e3.conclusion}
+
+        const e4 = tblConclusiones.find(i => i.etapa == 4)
+        if (e4) {objconclusion.e4 = e4.conclusion}
+
+    }
+
     res.render('admin/editarEmpresa', {
         adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,
         aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
@@ -916,9 +935,25 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pago_diagnostico, pagos_empresarial,
-        rolAdmin, botonesEtapas
+        rolAdmin, botonesEtapas, objconclusion
     })
 
+}
+
+dashboardController.conclusionDiag = async (req, res) => {
+    const {id_empresa, etapa, conclusion} = req.body
+    let row = await consultarDatos('conclusiones');
+
+    row = row.find(x => x.id_empresa == id_empresa && x.etapa == etapa)
+    console.log(" ROW ==>" ,  row);
+    if (row) {
+        const obj = {conclusion}
+        await pool.query('UPDATE conclusiones SET ? WHERE id_empresa = ? AND etapa = ?', [obj, id_empresa, etapa])
+    } else {
+        const objConclusion = {id_empresa, etapa, conclusion}
+        await pool.query('INSERT INTO conclusiones SET ?', [objConclusion])
+    }
+    res.send(true)
 }
 
 dashboardController.actualizarEmpresa = async (req, res) => {

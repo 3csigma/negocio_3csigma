@@ -36,7 +36,7 @@ const sendEmail = async (email, subject, html) => {
 
 /* --------------- PLANTILLAS DE CORREOS HTML ----------------- */
 
-//Registro de nueva empresa
+// Registro de nueva empresa
 const nuevaEmpresa = (nombreAdmin, nombreEmpresa) => {
 	return `
 	<!DOCTYPE html>
@@ -301,7 +301,7 @@ const nuevaEmpresa = (nombreAdmin, nombreEmpresa) => {
 	`
 }
 
-//Registro de nuevo consultor
+// Registro de nuevo consultor
 const nuevoConsultorRegistrado = (nombreAdmin, nombreConsultor) => {
 	return `
 	<!DOCTYPE html>
@@ -2190,7 +2190,7 @@ const etapaFinalizadaHTML = (empresa, etapa, link) => {
 		`
 }
 
-const propuestaAnalasisHTML = (empresa) => {
+const propuestaAnalisisHTML = (empresa) => {
 	return `
 	<!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -4029,6 +4029,6 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 module.exports = {
 	sendEmail, getTemplate, consultorAprobadoHTML, consultorAsignadoHTML, informesHTML,
 	pagoAnalisisPendienteHTML, restablecerCuentaHTML, tareaCompletadaHTML, tareaNuevaHTML, tareasRetrasadasHTML,
-	etapaFinalizadaHTML, propuestaAnalasisHTML,
+	etapaFinalizadaHTML, propuestaAnalisisHTML,
 	nuevaEmpresa, nuevoConsultorRegistrado
 }

@@ -663,9 +663,11 @@ empresaController.analisis = async (req, res) => {
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa1 = {lista: true}
+    let tienePropuesta = false
     /************************************************************************************* */
     // PROPUESTA DE ANÁLISIS DE NEGOCIO
     if (propuesta) {
+        tienePropuesta = true
         btnPagar.etapa1 = false;
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
@@ -820,7 +822,7 @@ empresaController.analisis = async (req, res) => {
         escena3,escena4,
         escena5,escena6, 
         msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, activarPagoUnico,
-        btnActivo, btnDesactivo,
+        btnActivo, btnDesactivo, tienePropuesta,
         itemAnalisis: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
@@ -881,8 +883,9 @@ empresaController.planEstrategico = async (req, res) => {
     const propuesta = propuestas.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
     let pagos = await consultarDatos('pagos')
     pagos = pagos.find(i => i.id_empresa == empresa)
-
+    let tienePropuesta = false
     if (propuesta) {
+        tienePropuesta = true
         botones.pagar = true;
         botones.editSub = false;
         propuesta.color = 'warning';
@@ -925,7 +928,7 @@ empresaController.planEstrategico = async (req, res) => {
         user_dash: true, pagoDiag: true, acuerdoFirmado: true,
         actualYear: req.actualYear, botones,
         tareas, informePlan, propuesta,
-        dimObj, jsonRendimiento,
+        dimObj, jsonRendimiento, tienePropuesta,
         itemEstrategico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
