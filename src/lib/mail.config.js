@@ -11,6 +11,7 @@ const mail = {
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
+	tls: {rejectUnauthorized: false},
 	// host: "smtp.office365.com",
 	// port: 587,
 	// secure: false, // true for 465, false for other ports
@@ -20,7 +21,6 @@ let transporter = nodemailer.createTransport({
 		pass: mail.pass,
 	},
 });
-
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
