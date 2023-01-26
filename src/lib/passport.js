@@ -5,8 +5,6 @@ const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const { getTemplate, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
 const { consultarDatos } = require('../lib/helpers')
-// const emailAdmin = 'dalo.beta@gmail.com'
-const emailAdmin = '3csigmagroup@gmail.com'
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id_usuarios);
@@ -40,6 +38,10 @@ passport.use('local.registro', new LocalStrategy({
             let username = email.split('@')
             username = username[0]
 
+            let tableUsers = await consultarDatos('users')
+            tableUsers = tableUsers.find(x => x.rol == 'Admin')
+            const emailAdmin = tableUsers.email
+
             // Generar código MD5 con base a su email
             const codigo = crypto.createHash('md5').update(email).digest("hex");
 
@@ -59,6 +61,8 @@ passport.use('local.registro', new LocalStrategy({
             // Obtener la plantilla de Email
             const template = getTemplate(nombres, nombre_empresa, codigo);
             const templateNuevaEmpresa = nuevaEmpresa('Carlos', nombre_empresa)
+
+            console.log("\nEnviando email al admin de nueva empresa registrada..\n")
 
             // Enviar Email
             const resultEmail = await sendEmail(email, 'Confirma tu registro en 3C Sigma', template)
@@ -100,6 +104,10 @@ passport.use('local.registroConsultores', new LocalStrategy({
             let codigo = crypto.createHash('md5').update(email).digest("hex");
             clave = codigo.slice(5, 13);
 
+            let tableUsers = await consultarDatos('users')
+            tableUsers = tableUsers.find(x => x.rol == 'Admin')
+            const emailAdmin = tableUsers.email
+
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
             const arrayFecha = fecha_creacion.split("/")
@@ -119,6 +127,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             newUser.clave = await helpers.encryptPass(clave);
 
             // Enviando email al admin del registro
+            console.log("\nEnviando email al admin del registro de un consultor nuevo..\n")
             const nombreCompleto = nombres + ' ' + apellidos
             const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
             const resultEmail = await sendEmail(emailAdmin, '¡Se ha registrado una nuevo consultor!', templateConsul)
