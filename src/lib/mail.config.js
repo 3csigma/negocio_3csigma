@@ -11,21 +11,13 @@ const mail = {
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
-	// host: "3csigma.com",
-	// port: 465,
-	// secure: true, // true for 465, false for other ports
-	service: 'Godaddy',
 	host: "smtpout.secureserver.net",
-	secure: true,
-	port: 465,
+	secure: false,
+	port: 587,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
-	// tls: {
-	// 	// do not fail on invalid certs
-	// 	rejectUnauthorized: false,
-	// },
 });
 
 /** Enviar el email */
