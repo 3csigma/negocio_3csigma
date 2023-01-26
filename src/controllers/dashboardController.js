@@ -4,9 +4,9 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarTareas, consultarDatos, tareasGenerales } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 
-const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML  } = require('../lib/mail.config');
+const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa  } = require('../lib/mail.config');
 
 let aprobarConsultor = false;
 
@@ -415,6 +415,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             frmDiag.fecha = dgNuevasEmpresas.fecha;
             frmDiag.tabla1 = false;
             frmDiag.tabla2 = true;
+            datos.nueva = true;
         }
     }
 
@@ -828,30 +829,19 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     // PROCESO PARA LAS TAREAS DE LA EMPRESA
     const fechaActual = new Date().toLocaleDateString('fr-CA');
-    const tareas = await consultarTareas(idEmpresa, fechaActual)
-    let dim1 = tareas.todas.filter(i => i.dimension == 'Producto');
-    let dim2 = tareas.todas.filter(i => i.dimension == 'Administración');
-    let dim3 = tareas.todas.filter(i => i.dimension == 'Operaciones');
-    let dim4 = tareas.todas.filter(i => i.dimension == 'Marketing');
-    const estado1 = dim1.filter(x => x.estado == 'Completada');
-    const estado2 = dim2.filter(x => x.estado == 'Completada');
-    const estado3 = dim3.filter(x => x.estado == 'Completada');
-    const estado4 = dim4.filter(x => x.estado == 'Completada');
-    dim1 = dim1.length; dim2 = dim2.length; dim3 = dim3.length; dim4 = dim4.length;
-    const listo = [
-        (estado1.length * 100) / dim1,
-        (estado2.length * 100) / dim2,
-        (estado3.length * 100) / dim3,
-        (estado4.length * 100) / dim4
-    ]
-
-    // jsonDim => Array para la gráfica de Plan Estratégico
-    const jsonDim = JSON.stringify([
-        { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
-        { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
-        { ok: Math.round(listo[2]), pendiente: Math.round(100 - listo[2]) },
-        { ok: Math.round(listo[3]), pendiente: Math.round(100 - listo[3]) }
-    ])
+    const dimObj = await tareasGenerales(idEmpresa, fechaActual)
+    const tareas = dimObj.tareas;
+    let jsonDim = false;
+    if (tareas.todas.length > 0) {
+        const listo = dimObj.listo
+        // jsonDim => Array para la gráfica de Plan Estratégico
+        jsonDim = JSON.stringify([
+            { ok: Math.round(listo[0]), pendiente: Math.round(100 - listo[0]) },
+            { ok: Math.round(listo[1]), pendiente: Math.round(100 - listo[1]) },
+            { ok: Math.round(listo[2]), pendiente: Math.round(100 - listo[2]) },
+            { ok: Math.round(listo[3]), pendiente: Math.round(100 - listo[3]) }
+        ])
+    }
 
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == idEmpresa)
@@ -876,8 +866,9 @@ dashboardController.editarEmpresa = async (req, res) => {
         adminDash = false;
         aprobarConsultor = false;
 
-        let cLogin = await consultarDatos('consultores');
-        cLogin = cLogin.find(i => i.codigo == req.user.codigo)
+        let cLogin = await consultarDatos('consultores'); // Consulta a la tabla de consultores
+        cLogin = cLogin.find(i => i.codigo == req.user.codigo) // Buscando el código del consultor logueado
+        // Filtro para saber a que etapas de la empresa está asignado el consultor
         const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
         console.group("\n* Soy un consultor - ETAPAS ASIGNADAS")
         console.log(etapasAsignadas)
@@ -886,26 +877,19 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (etapasAsignadas.length > 0) {
             etapasAsignadas.forEach(x => {
                 console.log("X Etapa -> ", x.etapa)
-                x.orden == 1 ? botonesEtapas.uno = true : botonesEtapas.uno = false;
-                x.orden == 2 ? botonesEtapas.dos = true : botonesEtapas.dos = false;
-                x.orden == 3 ? botonesEtapas.plan1 = true : botonesEtapas.plan1 = false;
-                x.orden == 4 ? botonesEtapas.plan2 = true : botonesEtapas.plan2 = false;
+                x.orden == 1 ? botonesEtapas.uno = true : false;
+                x.orden == 2 ? botonesEtapas.dos = true : false;
+                x.orden == 3 ? botonesEtapas.plan1 = true : false;
+                x.orden == 4 ? botonesEtapas.plan2 = true : false;
             })
         }
+
+        console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
     }
 
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
-    tareas.info.forEach(x => {
-        // if (x.estado == 'Completada')
-        //     x.tareaLista = true
-        // else
-        //     x.tareaLista = false
-        if (botonesEtapas.plan2) {
-            x.taskBtns = true;
-        } else {
-            x.taskBtns = false;
-        }
-        
+    tareas.todas.forEach(x => {
+        botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
     })
 
     let tblConclusiones = await consultarDatos('conclusiones');
@@ -979,7 +963,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
     for (const [key, value] of mapaConsultores) {
         const filtro = asignados.find(x => x.etapa == key)
-        console.log("\n FILTRO ---> ", filtro)
+        // console.log("\n FILTRO ---> ", filtro)
         let orden = 1;
         let link_Imagen = '';
         let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
@@ -1006,15 +990,28 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
             await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
             
-            /** INFO PARA ENVÍO DE EMAIL */
+            /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
             const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
-            const template = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
-            const resultEmail = await sendEmail(empresa.email, asunto, template)
+            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
+            const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
             if (resultEmail == false) {
-                console.log("Ocurrio un error inesperado al enviar el email propuesta de análisis")
+                console.log("\nOcurrio un error inesperado al enviar el email consultor asignado")
             } else {
                 console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + empresa.email + " >>>>>\n")
+            }
+
+            /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
+            let consultor = await consultarDatos('consultores')
+            consultor = consultor.find(x => x.id_consultores == value.id)
+            console.log("\nEnviando email para el consultor de que fue Asignado a una empresa en la Etapa: " + key)
+            const subject = "Has sido asignado a una empresa para la etapa de " + key;
+            const template = consultor_AsignadoEtapa(consultor.nombres, empresa.nombre_empresa, key);
+            const resultConsultor = await sendEmail(consultor.email, subject, template)
+            if (resultConsultor == false) {
+                console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
+            } else {
+                console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + consultor.email + " >>>>>\n")
             }
         }
     }

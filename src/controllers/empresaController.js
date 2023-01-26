@@ -211,9 +211,11 @@ empresaController.index = async (req, res) => {
     const totalTareas = tareasEmpresa.length;
     let tareasCompletadas = tareasEmpresa.filter(x => x.estado == 2)
     tareasCompletadas = tareasCompletadas.length
+    let verGraficasCircular = false;
     if (totalTareas > 0) {
         porcentajeEtapa3 = ((((tareasCompletadas*100)/totalTareas))*100)/75
         porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+        verGraficasCircular = true;
     }
     const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
     if (informeEtapa3) {
@@ -279,7 +281,8 @@ empresaController.index = async (req, res) => {
     const fechaActual = new Date().toLocaleDateString('fr-CA');
     const dimObj = await tareasGenerales(id_empresa, fechaActual)
     let jsonDim_empresa = false;
-    if (dimObj.tareas.length > 0) {
+    if (dimObj.tareas.todas.length > 0) {
+        const listo = dimObj.listo
         jsonDim_empresa = JSON.stringify([
             { ok: (listo[0]), pendiente: (100-listo[0]) },
             { ok: (listo[1]), pendiente: (100-listo[1]) },
@@ -301,7 +304,7 @@ empresaController.index = async (req, res) => {
         etapa1,
         porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
-        tareas, ultimosInformes,
+        tareas, ultimosInformes, verGraficasCircular,
         nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta, linksMenu
     })
 }
@@ -448,12 +451,13 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
 
-    let itemActivo = '';
-    let btnAqui = '/plan-estrategico'
+    let btnAqui = '#default-link'
     if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
-        itemActivo = 4;
         btnAqui = '/analisis-de-negocio'
-    } 
+    }
+    if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
+        btnAqui = '/plan-estrategico'
+    }
 
     res.render('empresa/acuerdoConfidencial', { 
         user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,

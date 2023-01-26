@@ -523,14 +523,12 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
         x.fecha_actual = (((x.fecha_actual / 1000) / 60) / 60) / 24
         let plazo = x.fechafin - x.fechaini
         let diasCorridos = 0
-        console.log("plazo: " , plazo);
         if ( x.fechaini > x.fecha_actual ) {diasCorridos }else {diasCorridos = x.fecha_actual - x.fechaini}
         diasCorridos = parseInt(diasCorridos)
         x.resultado = (diasCorridos * 100) / plazo
         if (x.resultado > 100) {x.resultado = 100}
     })
 
-    tareas.info = tareas.todas
     tareas.pendientes = tareas.todas.filter(i => i.estado == 'Pendiente')
     tareas.pendientes.cant = tareas.pendientes.length;
     tareas.enProceso = tareas.todas.filter(i => i.estado == 'En Proceso')
@@ -569,6 +567,9 @@ helpers.tareasGenerales = async (empresa, fechaActual) => {
         ((estado3.length*100)/d3).toFixed(1),
         ((estado4.length*100)/d4).toFixed(1),
     ]
+
+    console.log("\nTAREAS EMPRESA >> ", tareas);
+
     return { tareas, d1, d2, d3, d4, listo };
 }
 

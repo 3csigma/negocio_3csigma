@@ -162,10 +162,6 @@
                 </div>
                 {{!-- Fin de Cuadros principales --}}
             </div>
-            
-            {{!-- {{#if existencia}} --}}
-            {{!-- {{> user/graficasCircular}} --}}
-            {{!-- {{/if}} --}}
 
             {{!-- Grafíco de indicadores --}}
             <div class="col-xl-6 col-xxl-12">
@@ -228,6 +224,12 @@
                     <input type="hidden" id="jsonDimensiones2" value="{{jsonDimensiones2}}" />
                     <input type="hidden" id="nuevosProyectos" value="{{nuevosProyectos}}" />
                 </div>
+            </div>
+
+            <div class="col-xl-12 col-xxl-12">
+                {{#if verGraficasCircular}}
+                {{> user/graficasCircular}}
+                {{/if}}
             </div>
 
             {{!-- Últimas 2 tareas asignadas --}}
