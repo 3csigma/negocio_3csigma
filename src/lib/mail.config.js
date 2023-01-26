@@ -2,18 +2,27 @@ const nodemailer = require("nodemailer");
 const { my_domain } = require("../keys").config
 
 const mail = {
-	user: 'noreply@3csigma.com',
-	pass: '&gxq6DOCYk$I'
-	// user: 'hello@3csigma.com',
-	// pass: 'OAjN-3jQd*y-t#eq',
+	// user: 'noreply@3csigma.com',
+	// pass: '&gxq6DOCYk$I'
+	user: 'hello@3csigma.com',
+	pass: 'OAjN-3jQd*y-t#eq',
 	// pass: 'lrrbbvcvrhmvpzmf',
 }
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
-	host: "3csigma.com",
+	// host: "3csigma.com",
+	// port: 465,
+	// secure: true, // true for 465, false for other ports
+	host: "smtpout.secureserver.net",
+	secure: true,
+	secureConnection: false, // TLS requires secureConnection to be false
+	tls: {
+		ciphers: "SSLv3",
+	},
+	requireTLS: true,
 	port: 465,
-	secure: true, // true for 465, false for other ports
+	debug: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
