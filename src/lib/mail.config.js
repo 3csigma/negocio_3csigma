@@ -13,7 +13,7 @@ const mail = {
 let transporter = nodemailer.createTransport({
 	host: "smtpout.secureserver.net",
 	secure: false,
-	port: 587,
+	port: 25,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
