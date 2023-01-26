@@ -5,20 +5,20 @@ const mail = {
 	// user: 'noreply@3csigma.com',
 	// pass: '&gxq6DOCYk$I'
 	user: 'hello@3csigma.com',
-	pass: 'OAjN-3jQd*y-t#eq',
-	// pass: 'lrrbbvcvrhmvpzmf',
+	// pass: 'OAjN-3jQd*y-t#eq',
+	pass: 'lrrbbvcvrhmvpzmf',
 }
 
 // create reusable transporter object using the default SMTP transport
 let transporter = nodemailer.createTransport({
-	host: "smtp.office365.com",
-	port: 587,
-	secure: false, // true for 465, false for other ports
+	// host: "smtp.office365.com",
+	// port: 587,
+	// secure: false, // true for 465, false for other ports
+	service: "Outlook365",
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
-    tls: { ciphers: 'SSLv3' }
 });
 
 
