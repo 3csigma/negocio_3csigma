@@ -14,15 +14,11 @@ let transporter = nodemailer.createTransport({
 	// host: "3csigma.com",
 	// port: 465,
 	// secure: true, // true for 465, false for other ports
+	service: 'Godaddy',
 	host: "smtpout.secureserver.net",
 	secure: true,
-	secureConnection: false, // TLS requires secureConnection to be false
-	tls: {
-		ciphers: "SSLv3",
-	},
-	requireTLS: true,
+	secureConnection: true,
 	port: 465,
-	debug: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
