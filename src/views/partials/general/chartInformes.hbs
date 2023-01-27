@@ -1,42 +1,52 @@
 <script>
+    function ocultar_DivIzq() {
+        $('#icono-noVerDiv').hide()
+        $('#icono-verDiv').show()
+        $('#col_izq').hide()
+        $('#col_der').removeClass('col-xl-8')
+        $('#col_der').addClass('col-xl-12')
+    }
+    function mostrar_DivIzq() {
+        $('#icono-verDiv').hide()
+        $('#icono-noVerDiv').show()
+        $('#col_izq').show()
+        $('#col_der').removeClass('col-xl-12')
+        $('#col_der').addClass('col-xl-8')
+    }
 
-    function addTaskToList(id, dia, mes, actividad, dimension) {
-        let icono = 'fa-box';
-        if (dimension == 'Administración') icono = 'fa-user-tie';
-        if (dimension == 'Operaciones') icono = 'fa-gear';
-        if (dimension == 'Marketing') icono = 'fa-bullhorn';
-        const item = `
-        <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
-            <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
-                <div class="list-icon bgl-primary mr-3 mb-3">
-                    <p class="fs-24 text-secondary mb-0 mt-2">${dia}</p>
-                    <span class="fs-14 text-secondary">${mes}</span>
+    function addTaskToList(id, fecha_inicio, fecha_entrega, dimension) {
+        return `
+        <tr>
+            <td>N/A</td>
+            <td>${dimension}</td>
+            <td class="text-primary font-w600" style="font-size: 14px;">Pendiente</td>
+            <td>
+                <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
+                    ${fecha_inicio} - ${fecha_entrega}
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        style="width:0%;height: 16px;margin-top: -13px;"></div>
                 </div>
-                <div class="info mb-3">
-                    <h4 onclick="editarTarea(${id})" class="fs-20"><span class="text-black">${actividad}</span></h4>
-                    <span class="text-primary font-w600">Pendiente</span>
-                    {{!-- TIEMPO --}}
-                    <span class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px; padding-left: 7px;"><i class="fa-regular fa-clock pr-2"></i> A tiempo</span>
-                </div>
-            </div>
-            <div class="col-xl-3 col-xxl-5 col-lg-3 col-sm-5 activities mb-3 mr-auto pl-3 pr-3 text-sm-center">
-                <i class="fa-solid ${icono}"></i>
-                <span class="text-gray ml-2">${dimension}</span>
-            </div>
-            <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
-                <a onclick="editarTarea(${id})" class="btn mb-3 play-button rounded mr-3">
-                    <i class="fa-regular fa-pen-to-square"></i> Editar Tarea
-                </a>
-                {{!-- ELIMINAR TAREA --}}
-                <div class="dropdown mb-3">
-                    <a onclick="eliminarTarea(${id})" class="more-button" data-toggle="dropdown" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20px" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" fill="red"/></svg>
+            </td>
+            <td class="text-white" style="background: #585858;font-size: 11px; text-align:center">Sin especificar</td>
+            <td>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a onclick="editarTarea(${id})" title="Editar"
+                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                            style="color:white ;" class="fa fa-pencil"></i>
+                    </a>
+                    <a onclick="eliminarTarea(${id})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
+                        style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="12px" viewBox="0 0 448 512">
+                            <path
+                                d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                fill="white" />
+                        </svg>
                     </a>
                 </div>
-            </div>
-        </div>
+            </td>
+        </tr>
         `
-        return item;
     }
 
     function agregarTarea() {
@@ -47,7 +57,8 @@
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
-        let fechaini, fechafin
+
+        let fechaini, fechafin;
 
         fechaini = new Date(fecha_inicio);
         fechaini = fechaini.getTime();
@@ -111,12 +122,19 @@
             .then(response => {
                 if (response) {
                     const idTarea = response.insertId
+                    /*
                     const dateObj = new Date(fecha_entrega);
                     let mes = dateObj.toLocaleString("es-US", { month: "short" });
                     const dia = dateObj.getDate()+1
                     mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
-                    const itemTaskList = addTaskToList(idTarea, dia, mes, actividad, dimension)
-                    $('#Pendientes').prepend(itemTaskList);
+                    */
+                    const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
+                    $('#cuerpoTareas').prepend(itemTaskList);
+
+                    $('#observacion').val('')
+                    $('#estado').val(0)
+                    $('#prioridad').val(0)
+                    $('#responsable').val('')
 
                     $('#idTarea').val(idTarea)
                     $('#actividad-sidebar').val(actividad)
@@ -171,7 +189,6 @@
             $('#dimension-sidebar').val(r.dimension)
             $("#estado").val(r.estado)
             $("#prioridad").val(r.prioridad)
-            //$("#mensaje").val(r.mensaje)
 
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')

@@ -469,7 +469,7 @@ helpers.consultarInformes = async (empresa, nombreInforme) => {
 
 helpers.consultarTareas = async (empresa, fechaActual) => {
     const tareas = {};
-    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY fecha_entrega ASC', [empresa])
+    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY dimension ASC', [empresa])
     tareas.todas.forEach(x => {
 
         //**** VALIDANDO ESTADOS *****

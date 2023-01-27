@@ -146,7 +146,7 @@ a.nav-link.btnIndicadoresAll.active {
 
 /* ESTILOS NORMALES (para escritorios muy grandes) ========================================================================= */
 #altura_tabs{
-    max-height: 100vh;
+    max-height: 120vh;
 }
 
 .ct-chart .ct-series.ct-series-a .ct-bar{
