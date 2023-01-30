@@ -1,3 +1,6 @@
+
+<script src="../js/ui.js"></script>
+
 <script>
     function ocultar_DivIzq() {
         $('#icono-noVerDiv').hide()
@@ -283,6 +286,33 @@
             }
         })
     }
+
+//=> borra lo escrito en el area de comentario siderbar
+function clearAreaSocket() {
+    document.getElementById("comentario").value = "";
+}
+
+// => Función para el envio de los comentarios a la base de datos
+function addComentario() {
+    const comentario= $("#comentario").val();
+    const idTarea = $("#idTarea").val();
+
+    fetch('/comentarioTareas', {
+        method: 'POST',
+        body: JSON.stringify({comentario, idTarea}),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+        if (response){
+            console.log("ENVIADO !!");
+        } else {
+            console.log("HA FALLADO EL ENVIO !!");
+        
+        }
+    });
+}
+
 
     (function () {
 

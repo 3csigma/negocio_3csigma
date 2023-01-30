@@ -196,8 +196,19 @@
                 </div>
 
                 {{!-- MENSAJES --}}
-                
-                
+                <div class="row">
+                    <p class="subtitulos-Sidebar">Mensajes</p>
+                    <div id="DZ_W_TimeLine11" class="widget-timeline dz-scroll style-1 height270 ps ps--active-y">
+                        <div id="listaComentarios"></div>
+                    </div>
+                </div>
+                <div class="row" id="divTxtComentario" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
+                    <textarea id="comentario" rows="2" class="form-control" placeholder="Escribe un mensaje o actulización..." style="width: 100%; border-radius: 1em; padding: 1em; border:none;"></textarea>
+                        <button id="btnComentario" onclick="addComentario()" onblur="clearAreaSocket()" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); width: 28%;border: none;height: 32px;color: #fff !important; margin-right: 10px;font-size: 13px;">
+                            Comentar
+                        </button>
+                </div>
+
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar">
                     {{!-- <textarea id="mensajes_" rows="2" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em;"></textarea> --}}

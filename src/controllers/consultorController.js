@@ -388,6 +388,39 @@ consultorController.actualizarTarea = async (req, res) => {
     res.send(tarea)
 }
 
+// COMENTARIO DE TAREAS 
+consultorController.comentarioTareas = async (req, res) => {
+    const idTarea = req.body.idTarea
+
+    let row = await consultarDatos('plan_estrategico')
+    row = row.find(x => x.id == idTarea)
+
+    let mensaje = row.mensaje
+    const objMensaje = {
+        fecha: fecha = new Date().toLocaleDateString("en-US"),
+        mensaje: req.body.comentario,
+        rol: req.user.rol,
+        nombres: req.user.nombres,
+        apellidos: req.user.apellidos,
+    }
+    let objActualizar = {mensaje:null}
+    if (mensaje == null) {
+        let arregloComentarios = []
+        arregloComentarios.push(objMensaje)
+        arregloComentarios = JSON.stringify(arregloComentarios)
+        objActualizar = {mensaje: arregloComentarios}
+    } else {
+        mensaje = JSON.parse(mensaje)
+        mensaje.push(objMensaje)
+        mensaje = JSON.stringify(mensaje)
+        objActualizar = {mensaje}
+    }
+    await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
+    
+    res.send(true)
+}
+
+
 // ELIMINAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.eliminarTarea = async (req, res) => {
     const { idTarea } = req.body
