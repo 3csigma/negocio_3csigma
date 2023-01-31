@@ -84,6 +84,7 @@
         <div id="custom-sidebar">
             <div class="mb-4">
                 <input type="hidden" id="idTarea">
+                <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
                 <textarea id="actividad-sidebar" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
                 <textarea id="observacion" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
             </div>
@@ -198,8 +199,8 @@
                 {{!-- MENSAJES --}}
                 <div class="row">
                     <p class="subtitulos-Sidebar">Mensajes</p>
-                    <div id="DZ_W_TimeLine11" class="widget-timeline dz-scroll style-1 height270 ps ps--active-y">
-                        <div id="listaComentarios"></div>
+                    <div id="DZ_W_TimeLine11" class="widget-timeline dz-scroll style-1 height270 w-100 ps ps--active-y ">
+                        <ul class="timeline" id="listaComentarios"></ul>
                     </div>
                 </div>
                 <div class="row" id="divTxtComentario" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
@@ -211,7 +212,6 @@
 
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar">
-                    {{!-- <textarea id="mensajes_" rows="2" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em;"></textarea> --}}
                     <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
                         <button onclick="actualizarTarea()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; color:#fff !important; padding: 10px 15px;border:none">
                             <p class="font-w500 m-auto">Guardar Cambios</p>

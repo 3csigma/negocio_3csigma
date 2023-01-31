@@ -366,8 +366,8 @@ consultorController.editarTarea = async (req, res) => {
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad } = req.body
-    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad }
+    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad } = req.body
+    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
     
     const { idTarea } = req.body
 
@@ -390,14 +390,14 @@ consultorController.actualizarTarea = async (req, res) => {
 
 // COMENTARIO DE TAREAS 
 consultorController.comentarioTareas = async (req, res) => {
-    const idTarea = req.body.idTarea
+    const {idTarea, fecha} = req.body
 
     let row = await consultarDatos('plan_estrategico')
     row = row.find(x => x.id == idTarea)
 
     let mensaje = row.mensaje
     const objMensaje = {
-        fecha: fecha = new Date().toLocaleDateString("en-US"),
+        fecha: fecha,
         mensaje: req.body.comentario,
         rol: req.user.rol,
         nombres: req.user.nombres,

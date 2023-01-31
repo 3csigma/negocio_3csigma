@@ -919,7 +919,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pago_diagnostico, pagos_empresarial,
-        rolAdmin, botonesEtapas, objconclusion
+        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user)
     })
 
 }

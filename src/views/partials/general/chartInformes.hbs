@@ -1,6 +1,4 @@
-
-<script src="../js/ui.js"></script>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <script>
     function ocultar_DivIzq() {
         $('#icono-noVerDiv').hide()
@@ -171,6 +169,10 @@
     }
 
     function editarTarea(idTarea){
+        const listaComentarios = document.querySelector('#listaComentarios')
+
+        listaComentarios.innerHTML = ''
+
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
         $('.chatbox').addClass('active');
@@ -192,6 +194,21 @@
             $('#dimension-sidebar').val(r.dimension)
             $("#estado").val(r.estado)
             $("#prioridad").val(r.prioridad)
+
+            const comentarios = JSON.parse(r.mensaje)
+            comentarios.forEach(x => {
+                listaComentarios.innerHTML += `
+                    <li>
+                        <div class="timeline-badge primary"></div>
+                        <a class="timeline-panel text-muted">
+                            <span class="fechaMensajes">${x.fecha}</span>
+                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                            </h6>
+                        </a>
+                    </li>
+                `
+            })
 
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
@@ -294,12 +311,32 @@ function clearAreaSocket() {
 
 // => Función para el envio de los comentarios a la base de datos
 function addComentario() {
-    const comentario= $("#comentario").val();
+    const comentario = $("#comentario").val();
     const idTarea = $("#idTarea").val();
+
+    const btnComentario = document.querySelector('#btnComentario')
+    let datosUsuario = document.getElementById('datosUsuario').value
+    datosUsuario = JSON.parse(datosUsuario)
+
+    const fecha = new Date().toLocaleDateString("en-US")
+    const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
+    const listaComentarios = document.querySelector('#listaComentarios')
+
+    listaComentarios.innerHTML += `
+        <li animate__animated animate__fadeInUp>
+            <div class="timeline-badge primary"></div>
+            <a class="timeline-panel text-muted">
+                <span class="fechaMensajes">${fecha}</span>
+                <h6 class="mb-0 txtSidebar">${comentario}<br>
+                    <span class="txtYellow">${consultor} - ${datosUsuario.rol}</span>
+                </h6>
+            </a>
+        </li> 
+    `
 
     fetch('/comentarioTareas', {
         method: 'POST',
-        body: JSON.stringify({comentario, idTarea}),
+        body: JSON.stringify({comentario, idTarea, fecha}),
         headers: {'Content-Type': 'application/json'}
     }).then(res => res.json())
     .catch(error => console.error('Error:', error))
