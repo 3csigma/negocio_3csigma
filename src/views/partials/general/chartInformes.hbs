@@ -58,6 +58,9 @@
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
+     
+        const listaComentarios = document.querySelector('#listaComentarios')
+        listaComentarios.innerHTML = ''
 
         let fechaini, fechafin;
 
@@ -170,7 +173,6 @@
 
     function editarTarea(idTarea){
         const listaComentarios = document.querySelector('#listaComentarios')
-
         listaComentarios.innerHTML = ''
 
         const tiempo = $('#tiempo-sidebar')
@@ -196,6 +198,9 @@
             $("#prioridad").val(r.prioridad)
 
             const comentarios = JSON.parse(r.mensaje)
+            if (comentarios){
+                $('#DZ_W_TimeLine11').css('display', 'inline-block')
+            } 
             comentarios.forEach(x => {
                 listaComentarios.innerHTML += `
                     <li>
@@ -313,6 +318,9 @@ function clearAreaSocket() {
 function addComentario() {
     const comentario = $("#comentario").val();
     const idTarea = $("#idTarea").val();
+    const listaComentarios = document.querySelector('#listaComentarios')
+
+    $('#DZ_W_TimeLine11').css('display', 'inline-block')
 
     const btnComentario = document.querySelector('#btnComentario')
     let datosUsuario = document.getElementById('datosUsuario').value
@@ -320,7 +328,6 @@ function addComentario() {
 
     const fecha = new Date().toLocaleDateString("en-US")
     const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
-    const listaComentarios = document.querySelector('#listaComentarios')
 
     listaComentarios.innerHTML += `
         <li animate__animated animate__fadeInUp>
