@@ -151,7 +151,11 @@
         <li>
         {{/if}}
           {{#if consulAsignado.c2}}
-          <a href="{{linksMenu.e2}}" aria-expanded="false">
+          {{#if linksMenu.e2}}
+            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
+            {{else}}
+            <a href="/analisis-de-negocio" aria-expanded="false">
+            {{/if}}
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
@@ -178,7 +182,11 @@
         {{/if}}
           
           {{#if consulAsignado.c4}}
-          <a href="{{linksMenu.e4}}" aria-expanded="false">
+          {{#if linksMenu.e4}}
+            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
+            {{else}}
+            <a href="/plan-estrategico" aria-expanded="false">
+            {{/if}}
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}

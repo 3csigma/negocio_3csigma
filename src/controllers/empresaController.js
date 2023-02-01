@@ -7,7 +7,9 @@ const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {}, linksMenu = {e2: '/analisis-de-negocio', e3: '/plan-empresarial', e4: '/plan-estrategico'};
+let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
+let linksMenu = {e2: false, e3: false, e4: false};
+// let linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: 'href="/plan-estrategico"'};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -15,7 +17,8 @@ empresaController.index = async (req, res) => {
     acuerdoFirmado = false;
     etapaCompleta = {};
     consulAsignado = {};
-    linksMenu = {e2: '/analisis-de-negocio', e3: '/plan-empresarial', e4: '/plan-estrategico'};
+    // linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: `href="/plan-estrategico"`};
+    linksMenu = {e2: false, e3: false, e4: false}
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
@@ -88,13 +91,17 @@ empresaController.index = async (req, res) => {
             if (objAnalisis.estado == 1 || objAnalisis1.estado == 2) {
                 analisisPagado = 1
                 if (!acuerdoFirmado) {
-                    linksMenu.e2 = '/acuerdo-de-confidencialidad'
+                    // linksMenu.e2 = '/acuerdo-de-confidencialidad'
+                    linksMenu.e2 = true;
+                    linksMenu.e4 = false;
                 }
             }
 
             if (objPlanEstrat.estado == 1) {
                 if (!acuerdoFirmado) {
-                    linksMenu.e4 = '/acuerdo-de-confidencialidad'
+                    // linksMenu.e4 = '/acuerdo-de-confidencialidad'
+                    linksMenu.e2 = false;
+                    linksMenu.e4 = true;
                 }
             }
         }
@@ -451,19 +458,83 @@ empresaController.acuerdo = async (req, res) => {
         })
     }
 
-    let btnAqui = '#default-link'
-    if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
-        btnAqui = '/analisis-de-negocio'
-    }
-    if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
-        btnAqui = '/plan-estrategico'
-    }
+    // let btnAqui = '#default-link'
+    // if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
+    //     btnAqui = '/analisis-de-negocio'
+    // }
+    // if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
+    //     btnAqui = '/plan-estrategico'
+    // }
 
     res.render('empresa/acuerdoConfidencial', { 
         user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,
         consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
-        linksMenu, btnAqui
+        linksMenu,
     })
+}
+
+empresaController.acuerdoCheck = async (req, res) => {
+    /**
+     * Estados (Acuerdo de Confidencialidad):
+     * No firmado: 0, Firmado: 2
+     */
+    const {estado} = req.body;
+    let datosEmpresa = await consultarDatos('empresas')
+    datosEmpresa = datosEmpresa.find(x => x.email == req.user.email)
+    let acuerdo = await consultarDatos('acuerdo_confidencial')
+    acuerdo = acuerdo.find(x => x.id_empresa == datosEmpresa.id_empresas)
+    let objRes = {}
+    acuerdoFirmado = false;
+    console.log("\nNo existen datos en la tabla de acuerdo para esta empresa\n")
+    // Efectuando firma del acuerdo
+    console.log("\nEfectuando firma del acuerdo.....")
+    const insertarAcuerdo = {id_empresa: datosEmpresa.id_empresas, estadoAcuerdo: estado}
+    await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
+    if (linksMenu.e2) {
+        objRes.ok = true;
+        objRes.txt = '/analisis-de-negocio'
+        acuerdoFirmado = true;
+    }
+    if (linksMenu.e4) {
+        objRes.ok = true;
+        objRes.txt = '/plan-estrategico'
+        acuerdoFirmado = true;
+    }
+    // if (acuerdo) {
+    //     if (acuerdo.estadoAcuerdo == 2) {
+    //         acuerdoFirmado = true;
+    //     } else {
+    //         console.log("\nNo se ha aceptado el modal de acuerdo de confidencialidad\n")
+    //         acuerdoFirmado = false;
+    //     }
+    //     // // Efectuando firma del acuerdo
+    //     // console.log("\nEfectuando firma del acuerdo.....")
+    //     // await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [{ estadoAcuerdo: estado }, datosEmpresa.id_empresas])
+    //     // if (linksMenu.e2) {
+    //     //     res.redirect('/analisis-de-negocio')
+    //     // }
+    //     // if (linksMenu.e4) {
+    //     //     res.redirect('/plan-estrategico')
+    //     // }
+    // } else {
+    //     acuerdoFirmado = false;
+    //     console.log("\nNo existen datos en la tabla de acuerdo para esta empresa\n")
+    //     // Efectuando firma del acuerdo
+    //     console.log("\nEfectuando firma del acuerdo.....")
+    //     const insertarAcuerdo = {id_empresa: datosEmpresa.id_empresas, estadoAcuerdo: estado}
+    //     await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
+    //     if (linksMenu.e2) {
+    //         objRes.ok = true;
+    //         objRes.txt = '/analisis-de-negocio'
+    //         acuerdoFirmado = true;
+    //     }
+    //     if (linksMenu.e4) {
+    //         objRes.ok = true;
+    //         objRes.txt = '/plan-estrategico'
+    //         acuerdoFirmado = true;
+    //     }
+    // }
+    res.send(objRes)
 }
 
 /** Mostrar vista del Panel Diagnóstico de Negocio */
@@ -872,6 +943,7 @@ empresaController.planEstrategico = async (req, res) => {
     let empresa = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     empresa = empresa[0].id_empresas
     const fechaActual = new Date().toLocaleDateString('fr-CA');
+    let subCancelada = false;
 
     const dimObj = await tareasGenerales(empresa, fechaActual)
     const tareas = dimObj.tareas;
@@ -896,36 +968,47 @@ empresaController.planEstrategico = async (req, res) => {
         propuesta.texto = 'Pendiente';
         propuesta.pagada = false;
         const objEstrategico = JSON.parse(pagos.estrategico)
-        
-        // PAGÓ EL PLAN ESTRATÉGICO
-        if (objEstrategico.estado == 1 ) { // Etapa final (4) Pagada
-            propuesta.color = 'success';
-            propuesta.texto = 'Activa';
-            botones.pagar = false;
-            botones.editSub = true;
-            propuesta.pagada = true;
-        } else if (objEstrategico.estado == 2) {
-            propuesta.color = 'danger';
-            propuesta.texto = 'Cancelada';
-            botones.pagar = false;
-            botones.editSub = true;
 
-            /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN */
-            const id_sub = objEstrategico.subscription;
-            const subscription = await stripe.subscriptions.retrieve(id_sub);
-            console.log("\n>>> INFO SUB RECUPERADA : ", subscription)
-            if (subscription.cancel_at_period_end == false) {
+        /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN - POR SI RENUEVA O NO LA SUB */
+        let id_sub = null;
+        let subscription = null;
+        if (objEstrategico.subscription) {
+            id_sub = objEstrategico.subscription;
+            subscription = await stripe.subscriptions.retrieve(id_sub);
+            if (subscription.cancel_at != null) {
+                propuesta.fechaCancelacion = new Date(subscription.cancel_at*1000).toLocaleDateString('en-US');
+            } else {
+                propuesta.fechaCancelacion = false;
+            }
+            console.log("\n>>> DATA SUBSCRIPTION: ", subscription)
+            console.log('\n*******************\n');
+            if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at != null) {
                 propuesta.color = 'success';
                 propuesta.texto = 'Activa';
                 botones.pagar = false;
                 botones.editSub = true;
                 propuesta.pagada = true;
-                const fecha = new Date().toLocaleDateString("en-US")
-                const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: id_sub }) }
-                await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, empresa])
+            } else if (subscription.status == 'active' && subscription.cancel_at_period_end && subscription.cancel_at != null) {
+                propuesta.color = 'secondary';
+                propuesta.texto = 'Pendiente por cancelar';
+                botones.pagar = false;
+                botones.editSub = true;
+                propuesta.pagada = true;
+            } else if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at == null) {
+                propuesta.color = 'info';
+                propuesta.texto = 'Pendiente por renovar';
+                botones.pagar = false;
+                botones.editSub = true;
+                propuesta.pagada = true;
+            } else {
+                propuesta.color = 'danger';
+                propuesta.texto = 'Cancelada';
+                botones.pagar = false;
+                botones.editSub = false;
+                subCancelada = true;
             }
-
         }
+        
     }
 
     res.render('empresa/planEstrategico', {
@@ -936,6 +1019,6 @@ empresaController.planEstrategico = async (req, res) => {
         itemEstrategico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        linksMenu
+        linksMenu, subCancelada
     })
 }

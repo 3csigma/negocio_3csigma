@@ -683,7 +683,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{pago_diagnostico.fecha}}</td>
-                                                            <td>{{pago_diagnostico.valor}}</td>
+                                                            <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
                                                             <td><span class="badge light {{pago_diagnostico.color}}"
                                                                 style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
                                                             </td>
@@ -955,7 +955,7 @@
                                                         {{#if propuesta.analisis.link_propuesta}}
                                                         <td>{{#if propuesta.analisis.fecha}}{{propuesta.analisis.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Análisis de negocio</td>
-                                                        <td>${{propuesta.analisis.precio_total}}</td>
+                                                        <td class="precios_celdas">{{propuesta.analisis.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.analisis.link_propuesta}}" target="_blank"
@@ -1003,8 +1003,8 @@
                                                         {{#unless pagos_analisis.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.unico.fecha}}{{pagos_analisis.unico.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Pago Único</td>
-                                                            <td>${{pagos_analisis.unico.precio}}</td>
+                                                            <td>Pago Único (10% OFF)</td>
+                                                            <td class="precios_celdas">{{pagos_analisis.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1023,7 +1023,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_analisis.uno.fecha}}{{pagos_analisis.uno.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Primer Pago</td>
-                                                            <td>${{pagos_analisis.uno.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_analisis.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.uno.color}}">{{pagos_analisis.uno.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1040,7 +1040,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_analisis.dos.fecha}}{{pagos_analisis.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
-                                                            <td>${{pagos_analisis.dos.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_analisis.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.dos.color}}">{{pagos_analisis.dos.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1057,7 +1057,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_analisis.tres.fecha}}{{pagos_analisis.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
-                                                            <td>${{pagos_analisis.tres.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_analisis.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_analisis.tres.color}}">{{pagos_analisis.tres.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1085,7 +1085,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Documentos enviados</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Documentos recibidos</h4>
                                         </div>
 
                                         <div class="row mt-3">
@@ -1642,7 +1642,8 @@
 
                                     </div>
                                 </div>
-
+                                
+                                {{!-- TABLA PARA PROPUESTA + PRECIO --}}
                                 {{#if propuesta.empresarial.fecha}}
                                 <div class="card">
                                     <div class="card-body">
@@ -1670,7 +1671,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Pago Único</td>
-                                                            <td>${{pagos_empresarial.unico.precio}}</td>
+                                                            <td {{pagos_empresarial.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -2126,9 +2127,18 @@
                                         {{#unless propuesta.estrategico.pago}}
                                         <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
-                                                <div class="form-group col-md-6">
+                                                <div class="form-group col-md-3">
                                                     <input type="number" name="precioPropuesta" placeholder="Introduce un precio"
                                                         class="form-control required" required>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <select name="limiteSub" class="mr-sm-2 default-select text-center">
+                                                        <option value="">Escoge un limite</option>
+                                                        <option value="3">3 meses</option>
+                                                        <option value="6">6 meses</option>
+                                                        <option value="9">9 meses</option>
+                                                        <option value="12">12 meses</option>
+                                                    </select>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <div class="form-group col-md-12 input-group">
@@ -2169,7 +2179,7 @@
                                                         <td>{{#if propuesta.estrategico.fecha}}{{propuesta.estrategico.fecha}}{{else}}N/A{{/if}}
                                                         </td>
                                                         <td>Plan estratégico de negocio</td>
-                                                        <td>${{propuesta.estrategico.precio_total}}</td>
+                                                        <td class="precios_celdas">{{propuesta.estrategico.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
@@ -2191,7 +2201,7 @@
                                     </div>
                                 </div>
                             
-                                {{!-- PROPUESTA MONTADA --}}
+                                {{!-- PROPUESTA MONTADA + PRECIO --}}
                                 {{#if propuesta.estrategico.fecha}}
                                 <div class="card">
                                     <div class="card-body">
@@ -2208,6 +2218,9 @@
                                                                 <th>FECHA DE INICIO</th>
                                                                 <th>NOMBRE</th>
                                                                 <th>PRECIO</th>
+                                                                {{#if pagoEstrategico.fechaCancelacion}}
+                                                                <th>ACTIVA HASTA</th>
+                                                                {{/if}}
                                                                 <th>ESTADO</th>
                                                                 {{#if rolAdmin}}
                                                                 <th>ACCIÓN</th>
@@ -2218,7 +2231,10 @@
                                                             <tr>
                                                                 <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
                                                                 <td>Suscripción mensual</td>
-                                                                <td>${{pagoEstrategico.precio}}</td>
+                                                                <td class="precios_celdas">{{pagoEstrategico.precio}}</td>
+                                                                {{#if pagoEstrategico.fechaCancelacion}}
+                                                                <td>{{pagoEstrategico.fechaCancelacion}}</td>
+                                                                {{/if}}
                                                                 <td><span
                                                                         class="badge light badge-{{pagoEstrategico.color}}">{{pagoEstrategico.txt}}</span>
                                                                 </td>
@@ -2310,19 +2326,19 @@
                                         <div class="row">
                                             <div class="col-3 text-black" id="div-Producto">
                                                 <h4 class="my-4 mx-auto text-center text-black">Producto</h4>
-                                                <div id="chart-dimProducto"></div>
+                                                <div id="chart-dimProducto" class="d-flex justify-content-center"></div>
                                             </div>
                                             <div class="col-3" id="div-Administracion">
                                                 <h4 class="my-4 mx-auto text-center text-black">Administración</h4>
-                                                <div id="chart-dimAdministracion"></div>
+                                                <div id="chart-dimAdministracion" class="d-flex justify-content-center"></div>
                                             </div>
                                             <div class="col-3" id="div-Operaciones">
                                                 <h4 class="my-4 mx-auto text-center text-black">Operaciones</h4>
-                                                <div id="chart-dimOperaciones"></div>
+                                                <div id="chart-dimOperaciones" class="d-flex justify-content-center"></div>
                                             </div>
                                             <div class="col-3" id="div-Marketing">
                                                 <h4 class="my-4 mx-auto text-center text-black">Marketing</h4>
-                                                <div id="chart-dimMarketing"></div>
+                                                <div id="chart-dimMarketing" class="d-flex justify-content-center"></div>
                                             </div>
                                         </div>
                                         <br>

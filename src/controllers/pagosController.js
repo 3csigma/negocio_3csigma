@@ -286,6 +286,8 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
         product: `${id_producto_estrategico}`,
     });
 
+    console.log(price)
+
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
@@ -296,10 +298,13 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
         }],
     });
 
+    
     req.session.idSesion = session.id
     req.session.intentPay = session.url;
     req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
     req.session.planEstrategico = true;
+    req.session.limiteSub = pay.limiteSub;
+    console.log(req.session.limiteSub);
     res.redirect(303, session.url);
 }
 
@@ -337,7 +342,7 @@ pagosController.pagoExitoso = async (req, res) => {
     if (pago) {
         const fecha = new Date().toLocaleDateString("en-US")
         if (req.session.payDg0) {
-            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: '$'+precioDiag }) }
+            const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: precioDiag }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
             pagoEtapa1_ok = true
         }
@@ -370,8 +375,25 @@ pagosController.pagoExitoso = async (req, res) => {
         if (req.session.planEstrategico) {
             const idSession = req.session.idSesion;
             const dataSession = await stripe.checkout.sessions.retrieve(idSession);
-            const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription }) }
+
+            // ACTUALIZANDO SUBSCRIPCIÓN - CANCEL AT
+            const limiteSub = req.session.limiteSub;
+            let fCancel = new Date(fecha) // Fecha de Cancelación para la Sub
+            fCancel.setMonth(fCancel.getMonth()+limiteSub)
+            console.log("\n<<<< Fecha de Cancelación para la Sub >>>> ")
+            console.log(fCancel)
+            fCancel = (fCancel.getTime()/1000)-86400
+            console.log(fCancel)
+            console.log("----------------------------------------------------------------");
+            const updateSub = await stripe.subscriptions.update(dataSession.subscription, {cancel_at: fCancel});
+            console.log("\nUPDATE SUB >> ", updateSub);
+            console.log("----------------------------------------------------------------");
+
+            // Actualizando Pago de Plan Estrategico en DB
+            const fechaCancelacion = new Date(fCancel*1000).toLocaleDateString('en-US')
+            const actualizar = { estrategico: JSON.stringify({ estado: 1, fecha, subscription: dataSession.subscription, fechaCancelacion }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
+
             pagoEtapa1_ok = false;
             pagoEtapa2_ok = false;
             pagoEtapa3_ok = true;

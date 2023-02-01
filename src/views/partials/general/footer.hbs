@@ -139,7 +139,18 @@
 
     (function () {
         $(document).ready(function () {
-            // VAINAS PARA SELECTOR CON BUSCADOR
+            /*************************************************************************/
+            // Formateando Celdas con precios de propuestas para las etapas
+            const precios = document.querySelectorAll(".precios_celdas")
+
+            precios.forEach(x => {
+                console.log(x.innerHTML)
+                let precio = x.innerHTML
+                precio = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(precio)
+                x.innerHTML = precio;
+            })
+
+            // FUNCIONALIDAD PARA SELECTOR CON BUSCADOR
             function selectBuscarPais(id) {
                 id.chosen({
                     no_results_text: "Sin resultados para",

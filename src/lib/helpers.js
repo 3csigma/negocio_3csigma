@@ -502,7 +502,7 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
 
         const dateObj = new Date(x.fecha_entrega);
         const mes = dateObj.toLocaleString("es-US", { month: "short" });
-        x.dia = dateObj.getDate() + 1
+        x.dia = dateObj.getDate()
         x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
         if (x.dimension == 'Producto') x.icono = 'fa-box'
         if (x.dimension == 'Administración') x.icono = 'fa-user-tie'
@@ -567,8 +567,6 @@ helpers.tareasGenerales = async (empresa, fechaActual) => {
         ((estado3.length*100)/d3).toFixed(1),
         ((estado4.length*100)/d4).toFixed(1),
     ]
-
-    console.log("\nTAREAS EMPRESA >> ", tareas);
 
     return { tareas, d1, d2, d3, d4, listo };
 }
