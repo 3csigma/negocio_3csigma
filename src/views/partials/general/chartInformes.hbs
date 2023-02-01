@@ -196,9 +196,12 @@
             $("#prioridad").val(r.prioridad)
 
             const comentarios = JSON.parse(r.mensaje)
-            if (comentarios){
-                $('#DZ_W_TimeLine11').css('display', 'inline-block')
-            } 
+            if (comentarios) {
+                $('#divComentarios').css('display', 'inline-block')
+            } else {
+                $('#divComentarios').css('display', 'none')
+            }
+
             comentarios.forEach(x => {
                 listaComentarios.innerHTML += `
                     <li>
@@ -228,7 +231,7 @@
 
         const listaComentarios = document.querySelector('#listaComentarios')
         listaComentarios.innerHTML = ''
-        $('#DZ_W_TimeLine11').css('display', 'none')
+        $('#divComentarios').css('display', 'none')
         const idTarea = $("#idTarea").val();
         const empresa = $("#idEmpresa").val();
         const actividad = $("#actividad-sidebar").val();
@@ -322,7 +325,7 @@ function addComentario() {
     const idTarea = $("#idTarea").val();
     const listaComentarios = document.querySelector('#listaComentarios')
 
-    $('#DZ_W_TimeLine11').css('display', 'inline-block')
+    $('#divComentarios').css('display', 'inline-block')
 
     const btnComentario = document.querySelector('#btnComentario')
     let datosUsuario = document.getElementById('datosUsuario').value

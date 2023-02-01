@@ -33,8 +33,10 @@
             listaComentarios.innerHTML = ''
 
             const comentarios = JSON.parse(r.mensaje)
-            if(comentarios){
-                $('#DZ_W_TimeLine11').css('display', 'inline-block')
+            if (comentarios) {
+                $('#divComentarios').css('display', 'inline-block')
+            } else {
+                $('#divComentarios').css('display', 'none')
             }
             comentarios.forEach(x => {
                 listaComentarios.innerHTML += `
