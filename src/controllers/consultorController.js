@@ -365,8 +365,8 @@ consultorController.editarTarea = async (req, res) => {
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad } = req.body
-    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, mensaje, estado, prioridad }
+    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad } = req.body
+    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
     
     const { idTarea } = req.body
 
@@ -386,6 +386,39 @@ consultorController.actualizarTarea = async (req, res) => {
     console.log("INFO TAREA DB >>> ", tarea)
     res.send(tarea)
 }
+
+// COMENTARIO DE TAREAS 
+consultorController.comentarioTareas = async (req, res) => {
+    const {idTarea, fecha} = req.body
+
+    let row = await consultarDatos('plan_estrategico')
+    row = row.find(x => x.id == idTarea)
+
+    let mensaje = row.mensaje
+    const objMensaje = {
+        fecha: fecha,
+        mensaje: req.body.comentario,
+        rol: req.user.rol,
+        nombres: req.user.nombres,
+        apellidos: req.user.apellidos,
+    }
+    let objActualizar = {mensaje:null}
+    if (mensaje == null) {
+        let arregloComentarios = []
+        arregloComentarios.push(objMensaje)
+        arregloComentarios = JSON.stringify(arregloComentarios)
+        objActualizar = {mensaje: arregloComentarios}
+    } else {
+        mensaje = JSON.parse(mensaje)
+        mensaje.push(objMensaje)
+        mensaje = JSON.stringify(mensaje)
+        objActualizar = {mensaje}
+    }
+    await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
+    
+    res.send(true)
+}
+
 
 // ELIMINAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.eliminarTarea = async (req, res) => {

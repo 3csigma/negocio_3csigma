@@ -52,5 +52,5 @@ router.post('/editarTarea', checkLogin, consultorController.editarTarea)
 router.post('/actualizarTarea', checkLogin, consultorController.actualizarTarea)
 router.post('/eliminarTarea', checkLogin, consultorController.eliminarTarea)
 router.post('/nuevoRendimiento', checkLogin, consultorController.nuevoRendimiento)
-
+router.post('/comentarioTareas', checkLogin, consultorController.comentarioTareas)
 module.exports = router

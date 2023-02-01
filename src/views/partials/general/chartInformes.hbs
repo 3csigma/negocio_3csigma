@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <script>
     function ocultar_DivIzq() {
         $('#icono-noVerDiv').hide()
@@ -110,6 +111,7 @@
             // Activar Sidebar
             $('.chatbox').addClass('active');
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
+
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
             const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridad: 0, email })
@@ -168,6 +170,9 @@
     }
 
     function editarTarea(idTarea){
+        const listaComentarios = document.querySelector('#listaComentarios')
+        listaComentarios.innerHTML = ''
+
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
         $('.chatbox').addClass('active');
@@ -190,6 +195,24 @@
             $("#estado").val(r.estado)
             $("#prioridad").val(r.prioridad)
 
+            const comentarios = JSON.parse(r.mensaje)
+            if (comentarios){
+                $('#DZ_W_TimeLine11').css('display', 'inline-block')
+            } 
+            comentarios.forEach(x => {
+                listaComentarios.innerHTML += `
+                    <li>
+                        <div class="timeline-badge primary"></div>
+                        <a class="timeline-panel text-muted">
+                            <span class="fechaMensajes">${x.fecha}</span>
+                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                            </h6>
+                        </a>
+                    </li>
+                `
+            })
+
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
                 $('#tiempoTxt-sidebar').text('A tiempo')
@@ -202,6 +225,10 @@
     }
 
     function actualizarTarea() {
+
+        const listaComentarios = document.querySelector('#listaComentarios')
+        listaComentarios.innerHTML = ''
+        $('#DZ_W_TimeLine11').css('display', 'none')
         const idTarea = $("#idTarea").val();
         const empresa = $("#idEmpresa").val();
         const actividad = $("#actividad-sidebar").val();
@@ -283,6 +310,54 @@
             }
         })
     }
+
+//=> borra lo escrito en el area de comentario siderbar
+function clearTextArea() {
+    document.getElementById("comentario").value = "";
+}
+
+// => Función para el envio de los comentarios a la base de datos
+function addComentario() {
+    const comentario = $("#comentario").val();
+    const idTarea = $("#idTarea").val();
+    const listaComentarios = document.querySelector('#listaComentarios')
+
+    $('#DZ_W_TimeLine11').css('display', 'inline-block')
+
+    const btnComentario = document.querySelector('#btnComentario')
+    let datosUsuario = document.getElementById('datosUsuario').value
+    datosUsuario = JSON.parse(datosUsuario)
+
+    const fecha = new Date().toLocaleDateString("en-US")
+    const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
+
+    listaComentarios.innerHTML += `
+        <li class="animate__animated animate__fadeInUp">
+            <div class="timeline-badge primary"></div>
+            <a class="timeline-panel text-muted">
+                <span class="fechaMensajes">${fecha}</span>
+                <h6 class="mb-0 txtSidebar">${comentario}<br>
+                    <span class="txtYellow">${consultor} - ${datosUsuario.rol}</span>
+                </h6>
+            </a>
+        </li> 
+    `
+
+    fetch('/comentarioTareas', {
+        method: 'POST',
+        body: JSON.stringify({comentario, idTarea, fecha}),
+        headers: {'Content-Type': 'application/json'}
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => {
+        if (response){
+            console.log("ENVIADO !!");
+        } else {
+            console.log("HA FALLADO EL ENVIO !!");
+        
+        }
+    });
+}
 
     (function () {
 

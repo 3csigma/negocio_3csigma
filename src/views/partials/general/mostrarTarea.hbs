@@ -1,11 +1,12 @@
 <script>
     function mostrarTarea(idTarea) {
-        console.log("ID TAREA >> ", idTarea)
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
         $('#prioridad-sidebar-div').css('display', 'none');
+        $('#divTxtComentario').css('display', 'none');
         $('.chatbox').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
+
         fetch('/editarTarea', {
             method: 'POST',
             body: JSON.stringify({idTarea}),
@@ -22,13 +23,32 @@
             $('#dimension-sidebar').css('display', 'none')
             $('#btnGuardar-sidebar').css('display', 'none')
             $("#estado").css('display', 'none')
-            //$("#actividad-sidebar").attr('readonly', true)
             $('#actividad-sidebar').val(r.actividad).attr('readonly', true)
             $("#responsable").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
             $("#observacion").val(r.observacion).attr({'readonly': true, 'placeholder': ''})
             $('#txtFechaIni').text(r.fecha_inicio).css('display', 'inline-block')
             $('#txtFechaFin').text(r.fecha_entrega).css('display', 'inline-block')
             $('#txtDimension').text(r.dimension).css('display', 'inline-block')
+            const listaComentarios = document.querySelector('#listaComentarios')
+            listaComentarios.innerHTML = ''
+
+            const comentarios = JSON.parse(r.mensaje)
+            if(comentarios){
+                $('#DZ_W_TimeLine11').css('display', 'inline-block')
+            }
+            comentarios.forEach(x => {
+                listaComentarios.innerHTML += `
+                    <li>
+                        <div class="timeline-badge primary"></div>
+                        <a class="timeline-panel text-muted">
+                            <span class="fechaMensajes">${x.fecha}</span>
+                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                            </h6>
+                        </a>
+                    </li>
+                `
+            })
             
             let txtEstado = 'Completado'
             if (r.estado == 0 || r.estado == 1) {
