@@ -1446,7 +1446,7 @@ const consultorAsignadoHTML = (nombre, imagen, mensaje) => {
 
 const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 	return `
-<!DOCTYPE html>
+	<!DOCTYPE html>
 
 <html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
@@ -1528,6 +1528,15 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 				display: table !important;
 				max-height: none !important;
 			}
+
+			.row-1 .column-2 .block-5.heading_block h1,
+			.row-1 .column-2 .block-6.heading_block h1 {
+				font-size: 30px !important;
+			}
+
+			.row-1 .column-2 .block-8.heading_block td.pad {
+				padding: 0 25px 0 0 !important;
+			}
 		}
 	</style>
 </head>
@@ -1536,11 +1545,11 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto;" width="100%">
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #812082; background-image: url('https://3csigma.com/app_public_files/img/Banner_Asignado.jpg'); background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #812082; background-image: url('https://3csigma.com/app_public_files/img/Banner_Asignado.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="50%">
@@ -1568,9 +1577,10 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </td>
 </tr>
 </table>
+<div class="spacer_block mobile_hide" style="height:20px;line-height:20px;font-size:1px;"> </div>
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block block-8" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td class="pad" style="padding-right:40px;text-align:center;width:100%;padding-top:20px;padding-bottom:50px;">
+<td class="pad" style="padding-right:40px;text-align:center;width:100%;padding-bottom:50px;">
 <h1 style="margin: 0; color: #ffffff; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 23px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Has sido asignado a una empresa</span></h1>
 </td>
 </tr>
@@ -1611,7 +1621,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tr>
 <td class="pad" style="text-align:center;padding-top:45px;padding-bottom:45px;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="Reemplazar URL" style="height:42px;width:480px;v-text-anchor:middle;" arcsize="15%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a href="${my_domain}/empresas" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:6px;width:80%;border-top:0px solid transparent;font-weight:700;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 32px;">Revisar empresas</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/empresas" style="height:42px;width:256px;v-text-anchor:middle;" arcsize="15%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a href="Reemplazar URL" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:6px;width:80%;border-top:0px solid transparent;font-weight:700;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 32px;">Revisar empresas</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -1704,23 +1714,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </table>
 </td>
 <td class="column column-5" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="25%">
-<div class="spacer_block" style="height:11px;line-height:5px;font-size:1px;"> </div>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-5" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
-<tbody>
-<tr>
-<td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px;" width="600">
-<tbody>
-<tr>
-<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
+<div class="spacer_block" style="height:11px;line-height:5px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1734,7 +1728,8 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </tbody>
 </table><!-- End -->
 </body>
-</html>`
+</html>
+	`
 }
 
 const informesHTML = (empresa, informe) => {

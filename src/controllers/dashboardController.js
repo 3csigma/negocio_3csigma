@@ -7,6 +7,8 @@ const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa  } = require('../lib/mail.config');
+const { clientSecretStripe } = require('../keys').config
+const stripe = require('stripe')(clientSecretStripe);
 
 let aprobarConsultor = false;
 
@@ -523,12 +525,13 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_analisis.unico.btn = pagos_analisis.uno.btn = true;
         pagos_analisis.dos.btn = pagos_analisis.tres.btn = false;
 
-        pagos_analisis.unico.precio = propuesta.analisis.precio_total
+        pagos_analisis.unico.precio = parseFloat(propuesta.analisis.precio_total*0.9)
         pagos_analisis.uno.precio = propuesta.analisis.precio_per1
         pagos_analisis.dos.precio = propuesta.analisis.precio_per2
         pagos_analisis.tres.precio = propuesta.analisis.precio_per3
 
         if (pagos_analisis.unico.estado == 1) {
+            propuesta.analisis.precio_total = propuesta.analisis.precio_total;
             datos.etapa = 'Análisis de negocio pago único'
             pagos_analisis.unico.color = 'success'
             pagos_analisis.unico.txt = 'Pagado 100%'
@@ -813,18 +816,49 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico.btn = false;
         pagoEstrategico.precio = propuesta.estrategico.precio_total
 
-        if (pagoEstrategico.estado == 1) {
-            datos.etapa = 'Pago por subscripcion de plan estratégico iniciado'
-            pagoEstrategico.color = 'success'
-            pagoEstrategico.txt = 'Activa'
-            pagoEstrategico.btn = true;
-            propuesta.estrategico.pago = true;
-        } else if (pagoEstrategico.estado == 2) {
-            pagoEstrategico.color = 'danger'
-            pagoEstrategico.txt = 'Cancelada'
-            pagoEstrategico.btn = false;
-            propuesta.estrategico.pago = true;
+        /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN - POR SI RENUEVA O NO LA SUB */
+        let id_sub = null;
+        let subscription = null;
+        if (pagoEstrategico.subscription) {
+            id_sub = pagoEstrategico.subscription;
+            subscription = await stripe.subscriptions.retrieve(id_sub);
+            if (subscription.cancel_at != null) {
+                pagoEstrategico.fechaCancelacion = new Date(subscription.cancel_at*1000).toLocaleDateString('en-US');
+            } else {
+                pagoEstrategico.fechaCancelacion = false;
+            }
+            console.log("\n>>> DATA SUBSCRIPTION DESDE ADMIN ===> ", subscription)
+            console.log('\n*******************\n');
+            if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at != null) {
+                datos.etapa = 'Pago por subscripción de plan estratégico iniciado'
+                pagoEstrategico.color = 'success'
+                pagoEstrategico.txt = 'Activa'
+                pagoEstrategico.btn = true;
+                propuesta.estrategico.pago = true;
+                propuesta.pagada = true;
+            } else if (subscription.status == 'active' && subscription.cancel_at_period_end && subscription.cancel_at != null) {
+                datos.etapa = 'Subscripción de plan estratégico pendiente por cancelar'
+                pagoEstrategico.txt = 'Pendiente por cancelar';
+                pagoEstrategico.color = 'secondary';
+                pagoEstrategico.btn = false;
+                propuesta.estrategico.pago = true;
+                propuesta.pagada = true;
+            } else if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at == null) {
+                datos.etapa = 'Subscripción de plan estratégico pendiente por renovar'
+                pagoEstrategico.txt = 'Pendiente por renovar';
+                pagoEstrategico.color = 'info'
+                pagoEstrategico.btn = true;
+                propuesta.estrategico.pago = true;
+                propuesta.pagada = true;
+            } else {
+                datos.etapa = 'Subscripción de plan estratégico cancelada'
+                pagoEstrategico.color = 'danger'
+                pagoEstrategico.txt = 'Cancelada'
+                pagoEstrategico.btn = false;
+                propuesta.estrategico.pago = true;
+            }
         }
+
     }
 
     // PROCESO PARA LAS TAREAS DE LA EMPRESA

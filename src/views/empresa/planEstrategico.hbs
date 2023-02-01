@@ -10,20 +10,26 @@
                     style="background: transparent !important;border: none !important; box-shadow: none !important">
                     <div class="card-body">
                         {{#if tienePropuesta}}
-                        {{#if propuesta.pagada}}
-                        <h2 style="color: #000; font-weight: bold;">Planifiquemos tus estrategías</h2>
-                        <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una
-                            lista de tareas para mejorar tu empresa, a través de las dimensiones:</p>
-                        <p style="color: #000; font-weight: bold;">
-                            <i class="fa-solid fa-box"></i> Producto ({{dimObj.d1}})</li></br>
-                            <i class="fa-solid fa-user-tie"></i> Administración ({{dimObj.d2}})</br>
-                            <i class="fa-solid fa-gear"></i> Operaciones ({{dimObj.d3}})</br>
-                            <i class="fa-solid fa-bullhorn"></i> Marketing ({{dimObj.d4}})</br>
-                        </p>
-                        {{else}}
-                        <h2 style="color: #000; font-weight: bold;">Todo listo para empezar</h2>
-                        <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha cargado una propuesta para iniciar el plan estratégico de tu empresa, si estas de acuerdo, puedes iniciar la subscripción para que avancemos al siguiente paso.</p>
-                        {{/if}}        
+                            {{#unless subCancelada}}
+                            {{#if propuesta.pagada}}
+                            <h2 style="color: #000; font-weight: bold;">Planifiquemos tus estrategías</h2>
+                            <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una
+                                lista de tareas para mejorar tu empresa, a través de las dimensiones:</p>
+                            <p style="color: #000; font-weight: bold;">
+                                <i class="fa-solid fa-box"></i> Producto ({{dimObj.d1}})</li></br>
+                                <i class="fa-solid fa-user-tie"></i> Administración ({{dimObj.d2}})</br>
+                                <i class="fa-solid fa-gear"></i> Operaciones ({{dimObj.d3}})</br>
+                                <i class="fa-solid fa-bullhorn"></i> Marketing ({{dimObj.d4}})</br>
+                            </p>
+                            {{else}}
+                            <h2 style="color: #000; font-weight: bold;">Todo listo para empezar</h2>
+                            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha cargado una propuesta para iniciar el plan estratégico de tu empresa, si estas de acuerdo, puedes iniciar la subscripción para que avancemos al siguiente paso.</p>
+                            {{/if}} 
+                            {{/unless}}
+                            {{#if subCancelada}}
+                            <h2 style="color: #000; font-weight: bold;">Subscripción finalizada</h2>
+                            <p style="text-align: justify;margin-top: 2em;color: #000">La subscripción al Plan Estratégico de negocio ha concluido, gracias por habernos elegido para realizar este viaje corporativo juntos, esperamos que llegues cada vez más lejos y pongas en práctica lo aprendido, si has llegado hasta aquí, eres uno de los afortunados empresarios que decidió tomar las riendas de su empresa y llevarla al siguiente nivel. <br><strong>¡Te deseamos el mayor de los éxitos!</strong></p>
+                            {{/if}}
                         {{else}}
                         <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
                         <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar con el plan estratégico.</p>
@@ -83,8 +89,13 @@
                                             <tr>
                                                 <th>FECHA DE PROPUESTA</th>
                                                 <th>ESTADO DE SUBSCRIPCIÓN</th>
+                                                {{#unless subCancelada}}
                                                 <th>ACCIONES</th>
+                                                {{/unless}}
                                                 <th>VALOR TOTAL</th>
+                                                {{#if propuesta.fechaCancelacion}}
+                                                <th>FECHA DE CANCELACIÓN</th>
+                                                {{/if}}
                                                 <th>REVISAR PROPUESTA</th>
                                             </tr>
                                         </thead>
@@ -94,6 +105,7 @@
                                                 <td>
                                                     <span class="badge light badge-{{propuesta.color}}">{{propuesta.texto}}</span>
                                                 </td>
+                                                {{#unless subCancelada}}
                                                 <td>
                                                     <div class="d-flex">
                                                         <div class="col" style="padding-right: 7px;padding-left: 7px;">
@@ -122,7 +134,11 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>${{propuesta.precio_total}}</td>
+                                                {{/unless}}
+                                                <td class="precios_celdas">{{propuesta.precio_total}}</td>
+                                                {{#if propuesta.fechaCancelacion}}
+                                                <td>{{propuesta.fechaCancelacion}}</td>
+                                                {{/if}}
                                                 <td>
                                                     <a href="{{propuesta.link_propuesta}}" target="_blank"
                                                         class="btn btn-primary shadow btn-xs sharp"
@@ -140,7 +156,7 @@
                 </div>
             </div>
 
-            {{!-- TARJETAS LADO DERECHO--}}
+            {{!-- TARJETAS LADO DERECHO (INFORMES GENERADOS) --}}
             {{#if propuesta.pagada}}
             <div class="col-xl-5 col-xxl-12">     
                 <div class="row">
