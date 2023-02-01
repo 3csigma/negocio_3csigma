@@ -414,9 +414,14 @@ consultorController.comentarioTareas = async (req, res) => {
         mensaje = JSON.stringify(mensaje)
         objActualizar = {mensaje}
     }
-    await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
-    
-    res.send(true)
+    const addMensaje = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
+    console.log("\nMENSAJE AGREGADO A DB: ", addMensaje)
+    console.log("------------------------------------------------");
+    let resultado = false;
+    if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
+        resultado = true;
+    }
+    res.send(resultado)
 }
 
 

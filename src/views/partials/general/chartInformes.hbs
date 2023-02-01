@@ -58,6 +58,7 @@
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
+        document.getElementById("comentario").value = "";
 
         let fechaini, fechafin;
 
@@ -124,12 +125,7 @@
             .then(response => {
                 if (response) {
                     const idTarea = response.insertId
-                    /*
-                    const dateObj = new Date(fecha_entrega);
-                    let mes = dateObj.toLocaleString("es-US", { month: "short" });
-                    const dia = dateObj.getDate()+1
-                    mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
-                    */
+                    
                     const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
                     $('#cuerpoTareas').prepend(itemTaskList);
 
@@ -172,6 +168,7 @@
     function editarTarea(idTarea){
         const listaComentarios = document.querySelector('#listaComentarios')
         listaComentarios.innerHTML = ''
+        document.getElementById("comentario").value = "";
 
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
@@ -314,53 +311,50 @@
         })
     }
 
-//=> borra lo escrito en el area de comentario siderbar
-function clearTextArea() {
-    document.getElementById("comentario").value = "";
-}
+    // => Función para el envio de los comentarios a la base de datos
+    function addComentario() {
+        const comentario = $("#comentario").val();
+        const idTarea = $("#idTarea").val();
+        const listaComentarios = document.querySelector('#listaComentarios')
 
-// => Función para el envio de los comentarios a la base de datos
-function addComentario() {
-    const comentario = $("#comentario").val();
-    const idTarea = $("#idTarea").val();
-    const listaComentarios = document.querySelector('#listaComentarios')
+        $('#divComentarios').css('display', 'inline-block')
 
-    $('#divComentarios').css('display', 'inline-block')
+        const btnComentario = document.querySelector('#btnComentario')
+        let datosUsuario = document.getElementById('datosUsuario').value
+        datosUsuario = JSON.parse(datosUsuario)
 
-    const btnComentario = document.querySelector('#btnComentario')
-    let datosUsuario = document.getElementById('datosUsuario').value
-    datosUsuario = JSON.parse(datosUsuario)
+        const fecha = new Date().toLocaleDateString("en-US")
+        const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
 
-    const fecha = new Date().toLocaleDateString("en-US")
-    const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
+        listaComentarios.innerHTML += `
+            <li class="animate__animated animate__fadeInUp">
+                <div class="timeline-badge primary"></div>
+                <a class="timeline-panel text-muted">
+                    <span class="fechaMensajes">${fecha}</span>
+                    <h6 class="mb-0 txtSidebar">${comentario}<br>
+                        <span class="txtYellow">${consultor} - ${datosUsuario.rol}</span>
+                    </h6>
+                </a>
+            </li> 
+        `
 
-    listaComentarios.innerHTML += `
-        <li class="animate__animated animate__fadeInUp">
-            <div class="timeline-badge primary"></div>
-            <a class="timeline-panel text-muted">
-                <span class="fechaMensajes">${fecha}</span>
-                <h6 class="mb-0 txtSidebar">${comentario}<br>
-                    <span class="txtYellow">${consultor} - ${datosUsuario.rol}</span>
-                </h6>
-            </a>
-        </li> 
-    `
-
-    fetch('/comentarioTareas', {
-        method: 'POST',
-        body: JSON.stringify({comentario, idTarea, fecha}),
-        headers: {'Content-Type': 'application/json'}
-    }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => {
-        if (response){
-            console.log("ENVIADO !!");
-        } else {
-            console.log("HA FALLADO EL ENVIO !!");
-        
-        }
-    });
-}
+        fetch('/comentarioTareas', {
+            method: 'POST',
+            body: JSON.stringify({comentario, idTarea, fecha}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error:', error))
+        .then(response => {
+            if (response){
+                console.log("\nCOMENTARIO AGREGADO A DB EXITOSAMENTE !!\n");
+                document.getElementById("comentario").value = "";
+            } else {
+                const msg = "Ocurrió un error inesperado al agregar el mensaje por favor recargue la página e intente nuevamente. Si el error persiste contactar a soporte."
+                console.log("\n"+msg+"\n");
+                document.getElementById("comentario").value = msg;
+            }
+        });
+    }
 
     (function () {
 
