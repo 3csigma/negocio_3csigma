@@ -58,9 +58,6 @@
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
         $('#tiempoTxt-sidebar').text('A tiempo')
-     
-        const listaComentarios = document.querySelector('#listaComentarios')
-        listaComentarios.innerHTML = ''
 
         let fechaini, fechafin;
 
@@ -114,6 +111,7 @@
             // Activar Sidebar
             $('.chatbox').addClass('active');
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
+
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
             const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridad: 0, email })
@@ -227,6 +225,10 @@
     }
 
     function actualizarTarea() {
+
+        const listaComentarios = document.querySelector('#listaComentarios')
+        listaComentarios.innerHTML = ''
+        $('#DZ_W_TimeLine11').css('display', 'none')
         const idTarea = $("#idTarea").val();
         const empresa = $("#idEmpresa").val();
         const actividad = $("#actividad-sidebar").val();
@@ -310,7 +312,7 @@
     }
 
 //=> borra lo escrito en el area de comentario siderbar
-function clearAreaSocket() {
+function clearTextArea() {
     document.getElementById("comentario").value = "";
 }
 
@@ -330,7 +332,7 @@ function addComentario() {
     const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
 
     listaComentarios.innerHTML += `
-        <li animate__animated animate__fadeInUp>
+        <li class="animate__animated animate__fadeInUp">
             <div class="timeline-badge primary"></div>
             <a class="timeline-panel text-muted">
                 <span class="fechaMensajes">${fecha}</span>
@@ -356,7 +358,6 @@ function addComentario() {
         }
     });
 }
-
 
     (function () {
 

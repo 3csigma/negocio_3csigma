@@ -29,6 +29,8 @@
             $('#txtFechaIni').text(r.fecha_inicio).css('display', 'inline-block')
             $('#txtFechaFin').text(r.fecha_entrega).css('display', 'inline-block')
             $('#txtDimension').text(r.dimension).css('display', 'inline-block')
+            const listaComentarios = document.querySelector('#listaComentarios')
+            listaComentarios.innerHTML = ''
 
             const comentarios = JSON.parse(r.mensaje)
             if(comentarios){
