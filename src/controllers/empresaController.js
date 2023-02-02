@@ -552,13 +552,13 @@ empresaController.diagnostico = async (req, res) => {
 
     let infoConsul = await consultarDatos('consultores')
     infoConsul = infoConsul.find(x => x.id_consultores == consulAsignado.c1.consultor)
-    let costo = '$197';
+    let costo = '197';
     if (infoConsul.nivel == '2'){
-        costo = '$297';
+        costo = '297';
     } else if (infoConsul.nivel == '3'){
-        costo = '$497';
+        costo = '497';
     } else if (infoConsul.nivel == '4'){
-        costo = '$697';
+        costo = '697';
     }
 
     // Validando Diagnóstico de negocio ha sido pagado
