@@ -388,7 +388,7 @@
                             <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
                             <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
-                            {{!-- <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li> --}}
+                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                         </ul>
                     </div>
@@ -1622,7 +1622,7 @@
                                                         {{#if propuesta.empresarial.link_propuesta}}
                                                         <td>{{#if propuesta.empresarial.fecha}}{{propuesta.empresarial.fecha}}{{else}}N/A{{/if}}</td>
                                                         <td>Plan empresarial</td>
-                                                        <td>${{propuesta.empresarial.precio_total}}</td>
+                                                        <td class="precios_celdas">{{propuesta.empresarial.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.empresarial.link_propuesta}}" target="_blank"
@@ -1671,7 +1671,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Pago Único</td>
-                                                            <td {{pagos_empresarial.unico.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_empresarial.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1690,7 +1690,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.uno.fecha}}{{pagos_empresarial.uno.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Primer Pago</td>
-                                                            <td>${{pagos_empresarial.uno.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_empresarial.uno.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.uno.color}}">{{pagos_empresarial.uno.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1707,7 +1707,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.dos.fecha}}{{pagos_empresarial.dos.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Segundo Pago</td>
-                                                            <td>${{pagos_empresarial.dos.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_empresarial.dos.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.dos.color}}">{{pagos_empresarial.dos.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1724,7 +1724,7 @@
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.tres.fecha}}{{pagos_empresarial.tres.fecha}}{{else}}N/A{{/if}}</td>
                                                             <td>Tercer Pago</td>
-                                                            <td>${{pagos_empresarial.tres.precio}}</td>
+                                                            <td class="precios_celdas">{{pagos_empresarial.tres.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.tres.color}}">{{pagos_empresarial.tres.txt}}</span></td>
                                                             {{#if rolAdmin}}
                                                             <td>
@@ -1791,7 +1791,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-2">
-                                                        <button type="button" onclick="cargarArchivo()" id="btnAddFile" style="height: 35px;" class="btn btn-primary btn-xs">Agregar <i class="mdi mdi-plus"></i></button>
+                                                        <button type="button" onclick="cargarArchivo()" id="cargarArchivo_e3" style="height: 35px;" class="btn btn-primary btn-xs">Agregar <i class="mdi mdi-plus"></i></button>
                                                     </div>
                                                     <div class="col-sm-12" id="div-nomArchivo" style="display: none;">
                                                         <input type="text" class="form-control-md w-100" id="nomArchivo_">
@@ -1813,9 +1813,7 @@
                                                                 <th>Revisar Archivo</th>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <td colspan="2">No hay datos</td>
-                                                                </tr>
+                                                                <tr><td colspan="2">No hay datos</td></tr>
                                                             </tbody>
                                                         </table>
                                                     </div>
