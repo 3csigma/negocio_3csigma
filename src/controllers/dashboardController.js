@@ -89,17 +89,17 @@ dashboardController.addConsultores = (req, res, next) => {
 
 dashboardController.mostrarConsultores = async (req, res) => {
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
-
+    
     consultores.forEach(async c => {
-        // const num = await pool.query('SELECT COUNT(*) AS numEmpresas FROM empresas WHERE consultor = ?', [c.id_consultores])
-        c.num_empresas = 0
+        const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
+        c.num_empresas = num[0].numEmpresas
     });
-
+    
     /** Acceso directo para Consultores pendientes por aprobar */
     aprobarConsultor = false;
     const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
-
+    
     res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
 }
 
