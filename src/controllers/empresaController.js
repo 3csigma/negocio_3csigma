@@ -9,7 +9,6 @@ const stripe = require('stripe')(clientSecretStripe);
 
 let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
 let linksMenu = {e2: false, e3: false, e4: false};
-// let linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: 'href="/plan-estrategico"'};
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
@@ -17,7 +16,6 @@ empresaController.index = async (req, res) => {
     acuerdoFirmado = false;
     etapaCompleta = {};
     consulAsignado = {};
-    // linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: `href="/plan-estrategico"`};
     linksMenu = {e2: false, e3: false, e4: false}
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
@@ -72,8 +70,9 @@ empresaController.index = async (req, res) => {
             acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
             if (acuerdo) {
                 if (acuerdo.estadoAcuerdo == 2) {
-                    acuerdoFirmado = true;
+                    linksMenu.e2 = linksMenu.e3 = linksMenu.e4 = false;
                     noPago = false;
+                    acuerdoFirmado = true;
                 }
             }
 
@@ -107,6 +106,12 @@ empresaController.index = async (req, res) => {
         }
 
     }
+
+    console.group("\nTITULOS DE LINKS MENU DASHBOARD: ")
+    console.log(linksMenu)
+    console.log("-----------")
+    console.groupEnd()
+    console.log("-----------")
 
     /** ETAPAS DEL DIAGNOSTICO EN LA EMPRESA */
     const dataEmpresa = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = ? LEFT OUTER JOIN pagos p ON p.id_empresa = ? LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = ? INNER JOIN users u ON u.codigo = ? AND rol = "Empresa" LIMIT 1', [id_empresa, id_empresa, id_empresa, empresa.codigo])
@@ -373,105 +378,105 @@ empresaController.perfilUsuarios = async (req, res) => {
 }
 
 /** Creación & validación del proceso Acuerdo de Confidencialidad */
-empresaController.acuerdo = async (req, res) => {
-    /**
-     * Estados (Acuerdo de Confidencialidad):
-     * Sin enviar: 0, Enviado: 1, Firmado: 2
-     */
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    const id_empresa = row[0].id_empresas;
-    const tipoUser = req.user.rol;
-    let estado = {}, email, statusSign = '';
-    let acuerdo = await consultarDatos('acuerdo_confidencial')
-    acuerdo = acuerdo.find(x => x.id_empresa == id_empresa)
+// empresaController.acuerdo = async (req, res) => {
+//     /**
+//      * Estados (Acuerdo de Confidencialidad):
+//      * Sin enviar: 0, Enviado: 1, Firmado: 2
+//      */
+//     const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
+//     const id_empresa = row[0].id_empresas;
+//     const tipoUser = req.user.rol;
+//     let estado = {}, email, statusSign = '';
+//     let acuerdo = await consultarDatos('acuerdo_confidencial')
+//     acuerdo = acuerdo.find(x => x.id_empresa == id_empresa)
 
-    if (acuerdo) {
-        // console.log("ARGS DATABASE >>>> ", JSON.parse(acuerdo[0].args))
-        /** Validando si ya está firmado el documento y su estado de firmado (2) se encuentra en la base de datos */
-        if (acuerdo.estadoAcuerdo == 2) {
-            estado.valor = 2; //Documento Firmado
-            estado.firmado = true;
-            acuerdoFirmado = true;
-            estado.sinEnviar = false; // Documento sin enviar 
-            estado.form = false;
-            estado.enviado = false;
+//     if (acuerdo) {
+//         // console.log("ARGS DATABASE >>>> ", JSON.parse(acuerdo[0].args))
+//         /** Validando si ya está firmado el documento y su estado de firmado (2) se encuentra en la base de datos */
+//         if (acuerdo.estadoAcuerdo == 2) {
+//             estado.valor = 2; //Documento Firmado
+//             estado.firmado = true;
+//             acuerdoFirmado = true;
+//             estado.sinEnviar = false; // Documento sin enviar 
+//             estado.form = false;
+//             estado.enviado = false;
 
-        } else if (acuerdo.estadoAcuerdo == 1) { // Validando desde Base de datos
-            acuerdoFirmado = false;
-            estado.valor = 1; // Documento enviado
-            estado.form = true; // Debe mostrar el formulario
-            estado.enviado = true;
-            estado.firmado = false;
-            estado.sinEnviar = false; // Documento sin enviar 
+//         } else if (acuerdo.estadoAcuerdo == 1) { // Validando desde Base de datos
+//             acuerdoFirmado = false;
+//             estado.valor = 1; // Documento enviado
+//             estado.form = true; // Debe mostrar el formulario
+//             estado.enviado = true;
+//             estado.firmado = false;
+//             estado.sinEnviar = false; // Documento sin enviar 
 
-            email = acuerdo.email_signer;
-            const args = JSON.parse(acuerdo.args) // CONVERTIR  JSON A UN OBJETO
-            const newToken = await authToken() // Generando nuevo Token para enviar a Docusign
-            args.accessToken = newToken.access_token;
-            const new_args = { args: JSON.stringify(args) }
+//             email = acuerdo.email_signer;
+//             const args = JSON.parse(acuerdo.args) // CONVERTIR  JSON A UN OBJETO
+//             const newToken = await authToken() // Generando nuevo Token para enviar a Docusign
+//             args.accessToken = newToken.access_token;
+//             const new_args = { args: JSON.stringify(args) }
 
-            // console.log("ASDASODIHASIDUHASIOD --> " + new_args.args);
+//             // console.log("ASDASODIHASIDUHASIOD --> " + new_args.args);
 
-            await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [new_args, id_empresa])
+//             await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [new_args, id_empresa])
 
-            /** Consultando el estado del documento en Docusign */
-            await listEnvelope(args, acuerdo.envelopeId).then((values) => {
-                statusSign = values.envelopes[0].status //Capturando el estado desde Docusign
-                console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
-            })
+//             /** Consultando el estado del documento en Docusign */
+//             await listEnvelope(args, acuerdo.envelopeId).then((values) => {
+//                 statusSign = values.envelopes[0].status //Capturando el estado desde Docusign
+//                 console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
+//             })
 
-            /** Validando si el estado devuelto es enviado o firmado */
-            if (statusSign == 'completed') { // Estado desde docusign (completed)
-                estado.valor = 2; //Documento Firmado
-                estado.firmado = true;
-                acuerdoFirmado = true;
-                estado.sinEnviar = false; // Documento sin enviar 
-                estado.form = false;
-                estado.enviado = false;
-                const actualizarEstado = { estadoAcuerdo: estado.valor }
-                // Actualizando Estado del acuerdo a 2 (Firmado)
-                await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [actualizarEstado, id_empresa])
-            }
+//             /** Validando si el estado devuelto es enviado o firmado */
+//             if (statusSign == 'completed') { // Estado desde docusign (completed)
+//                 estado.valor = 2; //Documento Firmado
+//                 estado.firmado = true;
+//                 acuerdoFirmado = true;
+//                 estado.sinEnviar = false; // Documento sin enviar 
+//                 estado.form = false;
+//                 estado.enviado = false;
+//                 const actualizarEstado = { estadoAcuerdo: estado.valor }
+//                 // Actualizando Estado del acuerdo a 2 (Firmado)
+//                 await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [actualizarEstado, id_empresa])
+//             }
 
-        } else {
-            console.log("\nNo existe la variable de sesión email o No ha solicitado el documento a firmar\n")
-            estado.sinEnviar = true; // Documento sin enviar 
-            estado.valor = 0;
-            estado.form = true;
-            dsConfig.envelopeId = ''
-            acuerdoFirmado = false;
-            estado.enviado = false;
-        }
+//         } else {
+//             console.log("\nNo existe la variable de sesión email o No ha solicitado el documento a firmar\n")
+//             estado.sinEnviar = true; // Documento sin enviar 
+//             estado.valor = 0;
+//             estado.form = true;
+//             dsConfig.envelopeId = ''
+//             acuerdoFirmado = false;
+//             estado.enviado = false;
+//         }
 
-        // Si no se ha solicitado el documento a firmar desde el formulario Acuerdo de Confidencialidad
-    } else {
-        const nuevoAcuerdo = { id_empresa } // Campo id_empresa para la tabla acuerdo_confidencial
-        estado.sinEnviar = true; // Documento sin enviar 
-        estado.valor = 0;
-        estado.form = true; // Debe mostrar el formulario
-        acuerdoFirmado = false;
-        dsConfig.envelopeId = ''
-        await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
-            if (err) throw err;
-            console.log("1 Registro insertado");
-            res.redirect('/acuerdo-de-confidencialidad')
-        })
-    }
+//         // Si no se ha solicitado el documento a firmar desde el formulario Acuerdo de Confidencialidad
+//     } else {
+//         const nuevoAcuerdo = { id_empresa } // Campo id_empresa para la tabla acuerdo_confidencial
+//         estado.sinEnviar = true; // Documento sin enviar 
+//         estado.valor = 0;
+//         estado.form = true; // Debe mostrar el formulario
+//         acuerdoFirmado = false;
+//         dsConfig.envelopeId = ''
+//         await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
+//             if (err) throw err;
+//             console.log("1 Registro insertado");
+//             res.redirect('/acuerdo-de-confidencialidad')
+//         })
+//     }
 
-    // let btnAqui = '#default-link'
-    // if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
-    //     btnAqui = '/analisis-de-negocio'
-    // }
-    // if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
-    //     btnAqui = '/plan-estrategico'
-    // }
+//     // let btnAqui = '#default-link'
+//     // if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
+//     //     btnAqui = '/analisis-de-negocio'
+//     // }
+//     // if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
+//     //     btnAqui = '/plan-estrategico'
+//     // }
 
-    res.render('empresa/acuerdoConfidencial', { 
-        user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,
-        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
-        linksMenu,
-    })
-}
+//     res.render('empresa/acuerdoConfidencial', { 
+//         user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,
+//         consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
+//         linksMenu,
+//     })
+// }
 
 empresaController.acuerdoCheck = async (req, res) => {
     /**
@@ -571,6 +576,15 @@ empresaController.diagnostico = async (req, res) => {
         estadoPago.fecha = diagnosticoPagado.fecha
     }
 
+    /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+    let acuerdo = await consultarDatos('acuerdo_confidencial')
+    acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
+    if (acuerdo) {
+        if (acuerdo.estadoAcuerdo == 2) {
+            linksMenu.e2 = linksMenu.e3 = linksMenu.e4 = false;
+        }
+    }
+
     const formDiag = {}
     formDiag.id = id_empresa;
     formDiag.usuario = encriptarTxt('' + id_empresa)
@@ -605,6 +619,12 @@ empresaController.diagnostico = async (req, res) => {
     // Informe de la empresa subido
     let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
 
+    console.group("\nTITULOS DE LINKS MENU DIAGNÓSTICO: ")
+    console.log(linksMenu)
+    console.log("-----------")
+    console.groupEnd()
+    console.log("-----------")
+
     res.render('empresa/diagnostico', {
         user_dash: true, pagoDiag: true, formDiag,
         existencia, costo, estadoPago,
@@ -613,7 +633,7 @@ empresaController.diagnostico = async (req, res) => {
         itemDiagnostico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        linksMenu
+        linksMenu,
     })
 }
 
@@ -887,6 +907,16 @@ empresaController.analisis = async (req, res) => {
         msgDesactivo2 = "Segunda cuota pagada"
         msgDesactivo3 = "Tercera cuota pagada"
     }
+
+    if (acuerdoFirmado) {
+        linksMenu.e2 = linksMenu.e3 = linksMenu.e4 = false;
+    }
+
+    console.group("\nTITULOS DE LINKS MENU ANÁLISIS: ")
+    console.log(linksMenu)
+    console.log("-----------")
+    console.groupEnd()
+    console.log("-----------")
 
     res.render('empresa/analisis', {
         user_dash: true, pagoDiag: true, acuerdoFirmado: true,

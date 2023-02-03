@@ -331,7 +331,7 @@ dashboardController.editarEmpresa = async (req, res) => {
                     } else if (infoConsul.nivel == '4') {
                         pago_diagnostico.valor= 697;
                     }
-                    pago_diagnostico.valor = '$'+pago_diagnostico.valor
+                    pago_diagnostico.valor = pago_diagnostico.valor
                 }
             }
         
@@ -1091,7 +1091,7 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
 }
 
 dashboardController.pagoManualEmpresas = async (req, res) => {
-    const { num, id, etapa } = req.body
+    const { num, id, etapa, precio } = req.body
     const fecha = new Date().toLocaleDateString("en-US")
     let actualizarPago = false;
     const data = { estado: 2, fecha }
@@ -1099,7 +1099,7 @@ dashboardController.pagoManualEmpresas = async (req, res) => {
     if (etapa == 2) {
         if (num == 0) {
             actualizarPago = { 
-                analisis_negocio: JSON.stringify({ estado: 1, fecha }),
+                analisis_negocio: JSON.stringify({ estado: 1, fecha, precio }),
                 analisis_negocio1: JSON.stringify({ estado: 0 })
             }
         } else if (num == 1) { 

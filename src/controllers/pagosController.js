@@ -66,9 +66,9 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precio = pay.precio_total + '00'
-        precio = (parseFloat(precio*0.9))
+        precio = (parseFloat(pay.precio_total*0.9))
         precioE2 = precio;
+        precio = precio + '00'
         console.log("Precio => ", precio)
     }
 
@@ -352,9 +352,10 @@ pagosController.pagoExitoso = async (req, res) => {
         }
 
         let actualizarAnalisis = undefined;
-        let pagoAnalisis = { estado: 1, fecha, precio: precioE2 }
+        let pagoAnalisis = { estado: 1, fecha }
         if (req.session.analisis0) {
             pagoAnalisis.estado = 1;
+            pagoAnalisis.precio = precioE2;
             actualizarAnalisis = {
                 analisis_negocio: JSON.stringify(pagoAnalisis),
                 analisis_negocio1: JSON.stringify({ estado: 0 })
