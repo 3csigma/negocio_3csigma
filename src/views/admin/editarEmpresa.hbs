@@ -2170,6 +2170,7 @@
                                                         <th>FECHA</th>
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
+                                                        <th>DURACIÓN</th>
                                                         <th>REVISAR PROPUESTA</th>
                                                     </tr>
                                                 </thead>
@@ -2180,6 +2181,7 @@
                                                         </td>
                                                         <td>Plan estratégico de negocio</td>
                                                         <td class="precios_celdas">{{propuesta.estrategico.precio_total}}</td>
+                                                        <td>{{propuesta.estrategico.limiteSub}} meses</td>
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
