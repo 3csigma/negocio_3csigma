@@ -92,7 +92,7 @@ empresaController.index = async (req, res) => {
                 analisisPagado = 1
                 if (!acuerdoFirmado) {
                     // linksMenu.e2 = '/acuerdo-de-confidencialidad'
-                    linksMenu.e2 = true;
+                    linksMenu.e2 = true; // Linsk para activar el popup
                     linksMenu.e4 = false;
                 }
             }
@@ -764,6 +764,7 @@ empresaController.analisis = async (req, res) => {
             analisisPagado = 1
             propuesta.porcentaje = "100%";
             btnPagar.analisisPer = false
+            propuesta.precio_total = objAnalisis.precio;
         }
 
         btnPagar.obj1 = parseInt(objAnalisis1.estado)

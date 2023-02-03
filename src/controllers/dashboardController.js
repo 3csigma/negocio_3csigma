@@ -958,7 +958,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
 }
 
-dashboardController.conclusionDiag = async (req, res) => {
+dashboardController.conclusiones = async (req, res) => {
     const {id_empresa, etapa, conclusion} = req.body
     let row = await consultarDatos('conclusiones');
 

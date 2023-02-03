@@ -216,7 +216,6 @@ const nuevaEmpresa = (nombreAdmin, nombreEmpresa) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -481,7 +480,6 @@ const nuevoConsultorRegistrado = (nombreAdmin, nombreConsultor) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;font-size:16px;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-weight:700;line-height:200%;text-align:center;direction:ltr;letter-spacing:0px;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -793,7 +791,6 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1080,7 +1077,6 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1380,7 +1376,6 @@ const consultorAsignadoHTML = (nombre, imagen, mensaje) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1654,7 +1649,6 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1979,7 +1973,6 @@ const informesHTML = (empresa, informe) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -2352,7 +2345,6 @@ const etapaFinalizadaHTML = (empresa, etapa, link) => {
 															<td class="pad">
 																<div
 																	style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0;">3C Sigma ® 2022</p>
 																</div>
 															</td>
 														</tr>
@@ -2744,7 +2736,6 @@ const propuestaAnalisisHTML = (empresa) => {
 															<td class="pad">
 																<div
 																	style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0;">3C Sigma ® 2022</p>
 																</div>
 															</td>
 														</tr>
@@ -3064,7 +3055,6 @@ const pagoAnalisisPendienteHTML = (nombre, texto) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -3307,7 +3297,6 @@ const restablecerCuentaHTML = (token) => {
 	<table border="0" cellpadding="10" cellspacing="0" class="heading_block block-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 	<tr>
 	<td class="pad">
-	<h1 style="margin: 0; color: #000000; font-size: 16px; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; line-height: 120%; text-align: center; direction: ltr; font-weight: 700; letter-spacing: normal; margin-top: 0; margin-bottom: 0;">3C Sigma ® 2022</h1>
 	</td>
 	</tr>
 	</table>
@@ -3639,7 +3628,6 @@ const tareaCompletadaHTML = (nombreTarea) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -3950,7 +3938,6 @@ const tareaNuevaHTML = (nombreTarea, empresa) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -4253,7 +4240,6 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
