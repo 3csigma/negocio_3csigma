@@ -10,23 +10,23 @@ const mail = {
 }
 
 // create reusable transporter object using the default SMTP transport
-// let transporter = nodemailer.createTransport({
-// 	host: "3csigma.com",
-// 	port: 465,
-// 	secure: true,
-// 	auth: {
-// 		user: mail.user,
-// 		pass: mail.pass,
-// 	},
-// });
-// ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	service: 'Godaddy',
+	host: "3csigma.com",
+	port: 465,
+	secure: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
 });
+// ---------------------------------------------------
+// let transporter = nodemailer.createTransport({
+// 	service: 'Godaddy',
+// 	auth: {
+// 		user: mail.user,
+// 		pass: mail.pass,
+// 	},
+// });
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
