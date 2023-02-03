@@ -2,10 +2,10 @@ const nodemailer = require("nodemailer");
 const { my_domain } = require("../keys").config
 
 const mail = {
-	// user: 'noreply@3csigma.com',
-	// pass: '&gxq6DOCYk$I'
-	user: 'hello@3csigma.com',
-	pass: 'OAjN-3jQd*y-t#eq',
+	user: 'noreply@3csigma.com',
+	pass: '&gxq6DOCYk$I'
+	// user: 'hello@3csigma.com',
+	// pass: 'OAjN-3jQd*y-t#eq',
 	// pass: 'lrrbbvcvrhmvpzmf',
 }
 
