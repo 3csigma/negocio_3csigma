@@ -174,7 +174,7 @@
     }
 
     // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
-    function pagoManualEmpresas(num, id, tipo) {
+    function pagoManualEmpresas(num, id, tipo, precio) {
         let txt = 'pago único';
         let etapa = 2;
         if (tipo == 'plan estratégico') etapa = 3;
@@ -196,7 +196,7 @@
             if (result.isConfirmed) {
                 fetch('/pagoManual-Empresas', {
                     method: 'POST',
-                    body: JSON.stringify({num, id, etapa}),
+                    body: JSON.stringify({num, id, etapa, precio}),
                     headers: {'Content-Type': 'application/json'}
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))

@@ -15,7 +15,7 @@ router.post('/addficha', checkLogin, empresaController.addFichaCliente)
 router.post('/eliminarFicha', checkLogin, empresaController.eliminarFicha)
 
 // Acuerdo de Confidencialidad
-router.get('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerdo)
+// router.get('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerdo)
 // router.post('/acuerdo-de-confidencialidad', checkLogin, signingViaEmail.createController)
 router.post('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerdoCheck)
 

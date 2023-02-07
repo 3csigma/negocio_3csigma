@@ -19,6 +19,14 @@ let transporter = nodemailer.createTransport({
 		pass: mail.pass,
 	},
 });
+// ---------------------------------------------------
+// let transporter = nodemailer.createTransport({
+// 	service: 'Godaddy',
+// 	auth: {
+// 		user: mail.user,
+// 		pass: mail.pass,
+// 	},
+// });
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
@@ -216,7 +224,6 @@ const nuevaEmpresa = (nombreAdmin, nombreEmpresa) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -481,7 +488,6 @@ const nuevoConsultorRegistrado = (nombreAdmin, nombreConsultor) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;font-size:16px;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-weight:700;line-height:200%;text-align:center;direction:ltr;letter-spacing:0px;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -793,7 +799,6 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1080,7 +1085,6 @@ const consultorAprobadoHTML = (nombre, clave) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1380,7 +1384,6 @@ const consultorAsignadoHTML = (nombre, imagen, mensaje) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1549,7 +1552,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #812082; background-image: url('https://3csigma.com/app_public_files/img/Banner_Asignado.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #812082; background-image: url('https://3csigma.com/app_public_files/img/Banner_Has_Sido_Asignado_Consultor.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="50%">
@@ -1558,7 +1561,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <td class="column column-2" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="50%">
 <table border="0" cellpadding="0" cellspacing="0" class="image_block block-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;padding-top:35px;">
+<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;padding-top:25px;">
 <div align="left" class="alignment" style="line-height:10px"><img src="https://3csigma.com/app_public_files/img/Logo%20blanco%203C%20Sigma.png" style="display: block; height: auto; border: 0; width: 108px; max-width: 100%;" width="108"/></div>
 </td>
 </tr>
@@ -1577,10 +1580,10 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block mobile_hide" style="height:20px;line-height:20px;font-size:1px;"> </div>
+<div class="spacer_block mobile_hide" style="height:20px;line-height:20px;font-size:1px;"></div>
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block block-8" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
-<td class="pad" style="padding-right:40px;text-align:center;width:100%;padding-bottom:50px;">
+<td class="pad" style="padding-right:40px;text-align:center;width:100%;padding-bottom:60px;">
 <h1 style="margin: 0; color: #ffffff; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 23px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: left; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">Has sido asignado a una empresa</span></h1>
 </td>
 </tr>
@@ -1621,7 +1624,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tr>
 <td class="pad" style="text-align:center;padding-top:45px;padding-bottom:45px;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/empresas" style="height:42px;width:256px;v-text-anchor:middle;" arcsize="15%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a href="Reemplazar URL" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:6px;width:80%;border-top:0px solid transparent;font-weight:700;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 32px;">Revisar empresas</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="Reemplazar URL" style="height:42px;width:480px;v-text-anchor:middle;" arcsize="15%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:16px"><![endif]--><a href="Reemplazar URL" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:6px;width:80%;border-top:0px solid transparent;font-weight:700;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 32px;">Revisar empresas</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -1654,7 +1657,6 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:32px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -1684,7 +1686,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="25%">
-<div class="spacer_block" style="height:1px;line-height:0px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:1px;line-height:0px;font-size:1px;"></div>
 </td>
 <td class="column column-2" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="16.666666666666668%">
 <table border="0" cellpadding="0" cellspacing="0" class="image_block block-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
@@ -1715,6 +1717,22 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </td>
 <td class="column column-5" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="25%">
 <div class="spacer_block" style="height:11px;line-height:5px;font-size:1px;"></div>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-5" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+<tbody>
+<tr>
+<td>
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 600px;" width="600">
+<tbody>
+<tr>
+<td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
 </td>
 </tr>
 </tbody>
@@ -1979,7 +1997,6 @@ const informesHTML = (empresa, informe) => {
 <tr>
 <td>
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -2352,7 +2369,6 @@ const etapaFinalizadaHTML = (empresa, etapa, link) => {
 															<td class="pad">
 																<div
 																	style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0;">3C Sigma ® 2022</p>
 																</div>
 															</td>
 														</tr>
@@ -2744,7 +2760,6 @@ const propuestaAnalisisHTML = (empresa) => {
 															<td class="pad">
 																<div
 																	style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-																	<p style="margin: 0;">3C Sigma ® 2022</p>
 																</div>
 															</td>
 														</tr>
@@ -3064,7 +3079,6 @@ const pagoAnalisisPendienteHTML = (nombre, texto) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -3307,7 +3321,6 @@ const restablecerCuentaHTML = (token) => {
 	<table border="0" cellpadding="10" cellspacing="0" class="heading_block block-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 	<tr>
 	<td class="pad">
-	<h1 style="margin: 0; color: #000000; font-size: 16px; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; line-height: 120%; text-align: center; direction: ltr; font-weight: 700; letter-spacing: normal; margin-top: 0; margin-bottom: 0;">3C Sigma ® 2022</h1>
 	</td>
 	</tr>
 	</table>
@@ -3639,7 +3652,6 @@ const tareaCompletadaHTML = (nombreTarea) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -3950,7 +3962,6 @@ const tareaNuevaHTML = (nombreTarea, empresa) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>
@@ -4253,7 +4264,6 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 <tr>
 <td class="pad">
 <div style="color:#393d47;direction:ltr;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;font-weight:700;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:19.2px;">
-<p style="margin: 0;">3C Sigma ® 2022</p>
 </div>
 </td>
 </tr>

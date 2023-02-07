@@ -4,7 +4,7 @@ const { my_domain, id_producto_estrategico, clientSecretStripe } = require('../k
 const stripe = require('stripe')(clientSecretStripe);
 const { consultarDatos } = require('../lib/helpers')
 
-let precioDiag = 0;
+let precioDiag = 0, precioE2 = 0;
 
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
@@ -66,8 +66,9 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precio = pay.precio_total + '00'
-        precio = (parseFloat(precio*0.9))
+        precio = (parseFloat(pay.precio_total*0.9))
+        precioE2 = precio;
+        precio = precio + '00'
         console.log("Precio => ", precio)
     }
 
@@ -115,6 +116,7 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
+        precioE2 = precio;
         precio = pay.precio_per1 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -169,6 +171,7 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
+        precioE2 = precio;
         precio = pay.precio_per2 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -224,6 +227,7 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
+        precioE2 = precio;
         precio = pay.precio_per3 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -351,6 +355,7 @@ pagosController.pagoExitoso = async (req, res) => {
         let pagoAnalisis = { estado: 1, fecha }
         if (req.session.analisis0) {
             pagoAnalisis.estado = 1;
+            pagoAnalisis.precio = precioE2;
             actualizarAnalisis = {
                 analisis_negocio: JSON.stringify(pagoAnalisis),
                 analisis_negocio1: JSON.stringify({ estado: 0 })
