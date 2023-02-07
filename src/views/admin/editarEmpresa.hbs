@@ -675,7 +675,7 @@
                                                             <th>FECHA PAGO</th>
                                                             <th>VALOR</th>
                                                             <th>ESTADO DE PAGO</th>
-                                                            {{#if pago_diagnostico.btn}}
+                                                            {{#if rolAdmin}}
                                                             <th>PAGAR</th>
                                                             {{/if}}
                                                         </tr>
@@ -687,7 +687,7 @@
                                                             <td><span class="badge light {{pago_diagnostico.color}}"
                                                                 style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
                                                             </td>
-                                                            {{#if pago_diagnostico.btn}}
+                                                            {{#if rolAdmin}}
                                                             <td>
                                                                 <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
                                                             </td>
@@ -1119,7 +1119,7 @@
                                 {{/if}}
                                 
                                 {{#if propuesta.analisis.pago}}
-                                    <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
+                                    <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO PARA EL ANÁLISIS ======================== -->
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="card-header">
