@@ -920,7 +920,15 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
     }
-
+    let tab_tareaAsignada
+        if (botonesEtapas.uno) tab_tareaAsignada = "color: #85bb65;"
+        
+        if(botonesEtapas.dos) tab_tareaAsignada = "color: #85bb65;"
+        
+        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #85bb65;"
+        
+        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #85bb65;"
+   
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
     tareas.todas.forEach(x => {
         botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
@@ -953,7 +961,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pago_diagnostico, pagos_empresarial,
-        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user)
+        rolAdmin,tab_tareaAsignada, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user)
     })
 
 }

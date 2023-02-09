@@ -58,40 +58,22 @@ consultorController.empresasAsignadas = async (req, res) => {
     consulActual = consulActual.find(x => x.codigo == req.user.codigo)
     const consultoresAsignados = await consultarDatos('consultores_asignados')
 
-    let tablaEmpresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas')
-
+    let tablaEmpresas = await pool.query('SELECT e.*, f.telefono FROM empresas e LEFT OUTER JOIN ficha_cliente f ON e.id_empresas = f.id_empresa INNER JOIN users u ON e.codigo = u.codigo AND rol = "Empresa"')
+    // let tablaEmpresas = await pool.query('SELECT e.*, u.codigo, u.estadoAdm, f.telefono, f.id_empresa, p.id_empresa, p.diagnostico_negocio, p.analisis_negocio, a.id_empresa, a.estadoAcuerdo, d.consecutivo, d.id_empresa FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" LEFT OUTER JOIN dg_empresa_establecida d ON d.id_empresa = e.id_empresas')
+    
     tablaEmpresas.forEach(data => {
         const tieneConsultor = consultoresAsignados.filter(x => x.consultor == consulActual.id_consultores && x.empresa == data.id_empresas)
-
-        console.group("\nEmpresa ID -> ", data.id_empresas)
-        console.log("Info tiene consultor: ", tieneConsultor)
-        console.groupEnd()
+        // console.log("\nEmpresa ID -> ", data.id_empresas)
+        // console.log("Info tiene consultor: ", tieneConsultor)
 
         if (tieneConsultor.length > 0) {
+            data.etapa = ''
+            tieneConsultor.forEach(c => {
+                data.etapa +=   " - " + c.etapa 
+            });
             empresas.push(data)
         }
-
-    });
-
-    if (empresas.length > 0) {
-        const informe = await consultarDatos('informes')
-        empresas.forEach(e => {
-            e.etapa = 'Email sin confirmar';
-            e.estadoEmail == 1 ? e.etapa = 'Email confirmado' : e.etapa = e.etapa;
-            e.diagnostico_negocio == 1 ? e.etapa = 'Diagnóstico pagado' : e.etapa = e.etapa;
-            e.analisis_negocio == 1 ? e.etapa = 'Análisis pagado' : e.etapa = e.etapa;
-            e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
-            e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
-            e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
-    
-            informe.forEach(i => {
-                if (i.id_empresa == e.id_empresas) {
-                    e.etapa = 'Informe diagnóstico';
-                }
-            })
-        })
-    }
-
+    })
     res.render('consultor/empresas', { consultorDash: true, itemActivo: 2, empresas })
 }
 

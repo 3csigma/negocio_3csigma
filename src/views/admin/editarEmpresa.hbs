@@ -386,10 +386,26 @@
                     <div class="custom-tab-1">
                         <ul class="nav nav-tabs">
                             <li class="nav-item"><a href="#empresa" data-toggle="tab" class="nav-link active show">Empresa</a></li>
+                            {{#if botonesEtapas.uno}}
+                            <li class="nav-item"><a href="#diagnostico" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
+                            {{else}}
                             <li class="nav-item"><a href="#diagnostico" data-toggle="tab" class="nav-link" id="item-diagnostico">Diagnóstico</a></li>
+                            {{/if}}
+                            {{#if botonesEtapas.dos}}
+                            <li class="nav-item"><a href="#analisis" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-analisis">Análisis</a></li>
+                            {{else}}
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
+                            {{/if}}
+                            {{#if botonesEtapas.plan1}}
+                            {{!-- <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Plan Empresarial</a></li> --}}
+                            {{else}}
                             {{!-- <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li> --}}
+                            {{/if}}
+                            {{#if botonesEtapas.plan2}}
+                            <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
+                            {{else}}
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
+                            {{/if}}
                         </ul>
                     </div>
                 </div>
