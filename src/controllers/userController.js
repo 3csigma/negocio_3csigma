@@ -196,7 +196,7 @@ userController.update_user = async (req, res) => {
         let email = email_consultor
         let clave = clave_consultor
 
-        let resultDatos = await pool.query("SELECT u.email, u.clave, c.tel_consultor, c.direccion_consultor FROM users u JOIN consultores c ON u.id_usuarios = c.id_consultores WHERE u.codigo = ?", [codigo]);
+        let resultDatos = await pool.query("SELECT u.*, c.* FROM users u JOIN consultores c ON u.codigo = c.codigo WHERE u.codigo = ?", [codigo]);
         resultDatos = resultDatos[0];
         const email_db = resultDatos.email;
         const clave_db = resultDatos.clave;

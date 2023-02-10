@@ -69,7 +69,7 @@ consultorController.empresasAsignadas = async (req, res) => {
         if (tieneConsultor.length > 0) {
             data.etapa = ''
             tieneConsultor.forEach(c => {
-                data.etapa +=   " - " + c.etapa 
+                data.etapa += c.etapa + "<br>" 
             });
             empresas.push(data)
         }
