@@ -336,55 +336,77 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 /********************************************************************************/
 // AGREGAR NUEVAS TAREAS x EMPRESA
 consultorController.agregarTarea = async (req, res) => {
-    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email, prioridad } = req.body
+    const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email } = req.body
     // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
-    const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa, prioridad }
-    /** Enviando Notificación al Email de nueva tarea */
-    const asunto = 'Se ha agregado una nueva tarea';
-    const template = tareaNuevaHTML(actividad, nombreEmpresa);
-    const resultEmail = await sendEmail(email, asunto, template);
-    if (resultEmail == false) {
-        console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea nueva >>>> \n")
+    if (dimension != undefined) {
+        /** Enviando Notificación al Email de nueva tarea */
+        const asunto = 'Se ha agregado una nueva tarea';
+        const template = tareaNuevaHTML(actividad, nombreEmpresa);
+        const resultEmail = await sendEmail(email, asunto, template);
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea nueva >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado al email ("+email+") que se ha agregado una nueva tarea >>>>>\n")
+        }
+        /******************************************************* */
+        const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa }
+        const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
+        console.log("INFO TAREA DB >>> ", tarea)
+        res.send(tarea)
     } else {
-        console.log("\n<<<<< Se ha notificado al email ("+email+") que se ha agregado una nueva tarea >>>>>\n")
+        const nuevaTarea = { empresa, actividad, fecha_inicio, fecha_entrega }
+        const tarea = await pool.query('INSERT INTO tareas_plan_empresarial SET ?', [nuevaTarea])
+        console.log("INFO TAREA DB >>> ", tarea)
+        res.send(tarea)
     }
-    /******************************************************* */
-    const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
-    console.log("INFO TAREA DB >>> ", tarea)
-    res.send(tarea)
 }
 
 consultorController.editarTarea = async (req, res) => {
-    const { idTarea } = req.body
-    console.log("controller id tarea")
-    let infoTarea = await consultarDatos('plan_estrategico')
-    infoTarea = infoTarea.find(x => x.id === idTarea)
-    console.log("\n *********** INFO TAREA DB >>> ", infoTarea)
-    res.send(infoTarea)
+    const { idTarea, item } = req.body
+    if (item == 1) {
+        let infoTarea = await consultarDatos('tareas_plan_empresarial')
+        infoTarea = infoTarea.find(x => x.id === idTarea)
+        console.log("\n *********** INFO TAREA EMPRESARIAL DB >>> ", infoTarea)
+        res.send(infoTarea)
+    } else {
+        let infoTarea = await consultarDatos('plan_estrategico')
+        infoTarea = infoTarea.find(x => x.id === idTarea)
+        console.log("\n *********** INFO TAREA ESTRATEGICO DB >>> ", infoTarea)
+        res.send(infoTarea)
+    }
 }
 
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
-    const { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad } = req.body
-    const actualizarTarea = { actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
+    const { idTarea, actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, prioridad, item } = req.body
     
-    const { idTarea } = req.body
-
-    if (estado == 2) {
-        const email = req.body.email;
-        const asunto = 'Haz completado una tarea';
-        const template = tareaCompletadaHTML(actividad);
-        const resultEmail = await sendEmail(email, asunto, template)
-        if (resultEmail == false) {
-            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea completada >>>> \n")
-        } else {
-            console.log("\n<<<<< Se ha notificado la tarea completada al email de la empresa >>>>>\n")
+    // Para Plan Empresarial
+    if (item == 1) {
+        const actualizarTarea = { actividad, descripcion, fecha_inicio, fecha_entrega, estado, prioridad }
+        const tarea = await pool.query('UPDATE tareas_plan_empresarial SET ? WHERE id = ?', [actualizarTarea, idTarea])
+        console.log("INFO TAREA PLAN EMPRESARIAL DB >>> ", tarea)
+        res.send(tarea)
+        
+    } 
+    // Para Plan Estrategico
+    else {
+        const actualizarTarea = { actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
+        if (estado == 2) {
+            const email = req.body.email;
+            const asunto = 'Haz completado una tarea';
+            const template = tareaCompletadaHTML(actividad);
+            const resultEmail = await sendEmail(email, asunto, template)
+            if (resultEmail == false) {
+                console.log("\n<<<<< Ocurrio un error inesperado al enviar el email tarea completada >>>> \n")
+            } else {
+                console.log("\n<<<<< Se ha notificado la tarea completada al email de la empresa >>>>>\n")
+            }
         }
-    }
 
-    const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
-    console.log("INFO TAREA DB >>> ", tarea)
-    res.send(tarea)
+        const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
+        console.log("INFO TAREA PLAN ESTRATÉGICO DB >>> ", tarea)
+        res.send(tarea)
+    }
 }
 
 // COMENTARIO DE TAREAS 
@@ -427,9 +449,14 @@ consultorController.comentarioTareas = async (req, res) => {
 
 // ELIMINAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.eliminarTarea = async (req, res) => {
-    const { idTarea } = req.body
-    const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
-    console.log("INFO ELIMINAR >> ", infoTarea)
+    const { idTarea, item } = req.body
+    if (item == 1) {
+        const infoTarea = await pool.query('DELETE FROM tareas_plan_empresarial WHERE id = ?', [idTarea])
+        console.log("ELIMINAR => INFO PLAN EMPRESARIAL ---- ", infoTarea)
+    } else {
+        const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
+        console.log("ELIMINAR => INFO PLAN ESTRATÉGICO ---- ", infoTarea)
+    }
     res.send(true)
 }
 

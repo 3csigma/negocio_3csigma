@@ -93,7 +93,7 @@ helpers.delDuplicados = (array) => {
 
 /************************************************************************************************************** */
 /** CARGA DE ARCHIVOS */
-helpers.uploadFiles = (preNombre, inputName, carpeta) => {
+helpers.uploadFiles = (preNombre, inputName, carpeta, fecha) => {
     const rutaAlmacen = multer.diskStorage({
         destination: (_req, file, cb) => {
             const ruta = path.join(__dirname, '../public/'+carpeta)
@@ -101,13 +101,18 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
         },
     
         filename: (_req, file, cb) => {
-            const fechaActual = Math.floor(Date.now() / 1000)
-            const nomFile = preNombre + fechaActual + '_' + file.originalname;
+            let nomFile = preNombre + file.originalname;
+            if (fecha) {
+                const fechaActual = Math.floor(Date.now() / 1000)
+                nomFile = preNombre + fechaActual + '_' + file.originalname;
+            }
             cb(null, nomFile)
         }
     });
-
-    const upload = multer({ storage: rutaAlmacen }).array(inputName)
+    let upload = multer({ storage: rutaAlmacen }).single('file')
+    if (inputName) {
+        upload = multer({ storage: rutaAlmacen }).array(inputName)
+    }
     return upload;
 }
 
@@ -115,7 +120,7 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 /*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
 
 // CAPTURAR MES ANTERIOR Y ABREVIATURA DEL MES ACTUAL (ej: Dic)
- capturarMes = () => {
+capturarMes = () => {
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
     let mesAnterior = mesActual - 1
@@ -421,7 +426,7 @@ helpers.historial_informes_consultor = async () => {
     console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
 };
 
-// Consultar Tareas Retrasadas x Empresas y Enviar Email
+// Consultar Tareas Retrasadas x Empresas y Enviar Email (PLAN ESTRATÉGICO)
 helpers.consultar_tiempo_tareas = async () => {
     console.log("\n******************************************************");
     console.log("CRON JOB - CONSULTAR TAREAS RETRASADAS");
@@ -467,6 +472,66 @@ helpers.consultarInformes = async (empresa, nombreInforme) => {
     return informe[0];
 }
 
+// CONSULTAR TAREAS DE PLAN EMPRESARIAL
+helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
+    const tareas = await pool.query('SELECT * FROM tareas_plan_empresarial WHERE empresa = ? ORDER BY fecha_inicio ASC', [empresa])
+    tareas.forEach(x => {
+
+        //**** VALIDANDO ESTADOS *****
+        if (x.estado == 0) {
+            x.estado = 'Pendiente'; x.color = 'primary';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 1) {
+            x.estado = 'En Proceso'; x.color = 'warning';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
+
+        //**** VALIDANDO PRIORIDADES *****
+        if (x.prioridad == 0) {
+            x.prioridad = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px";
+        } else if (x.prioridad == 1) {
+            x.prioridad = 'Baja'; x.background = "background: #a184e3";
+        } else if (x.prioridad == 2) {
+            x.prioridad = 'Media'; x.background = "background: #825fd3;"
+        } else if (x.prioridad == 3) {
+            x.prioridad = 'Alta'; x.background = "background: #6647af;"
+        } else if (x.prioridad == 4) {
+            x.prioridad = 'Crítica'; x.background = "background: #50368c;"
+        }
+
+        const dateObj = new Date(x.fecha_entrega);
+        const mes = dateObj.toLocaleString("es-US", { month: "short" });
+        x.dia = dateObj.getDate()
+        x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+
+        //  *** DIFERENCIA ENTRE LAS 2 FECHA  ****
+        x.fechaini = new Date(x.fecha_inicio);
+        x.fechaini = x.fechaini.getTime();
+        x.fechaini = (((x.fechaini / 1000) / 60) / 60) / 24
+
+        x.fechafin = new Date(x.fecha_entrega);
+        x.fechafin = x.fechafin.getTime();
+        x.fechafin = (((x.fechafin / 1000) / 60) / 60) / 24
+
+        //  *** FECHA ACTUAL ****
+        x.fecha_actual = new Date().getTime();
+        x.fecha_actual = (((x.fecha_actual / 1000) / 60) / 60) / 24
+        let plazo = x.fechafin - x.fechaini
+        let diasCorridos = 0
+        if ( x.fechaini > x.fecha_actual ) {diasCorridos }else {diasCorridos = x.fecha_actual - x.fechaini}
+        diasCorridos = parseInt(diasCorridos)
+        x.resultado = (diasCorridos * 100) / plazo
+        if (x.resultado > 100) {x.resultado = 100}
+    })
+
+    return tareas;
+}
+
+// (PLAN ESTRATÉGICO)
 helpers.consultarTareas = async (empresa, fechaActual) => {
     const tareas = {};
     tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY dimension ASC', [empresa])
@@ -547,7 +612,7 @@ helpers.consultarDatos = async (tabla, extra = null) => {
 }
 
 /******************************************************************** */
-// FUNCIÓN MULTIPLE
+// FUNCIÓN MULTIPLE (PLAN ESTRATÉGICO)
 helpers.tareasGenerales = async (empresa, fechaActual) => {
     const tareas = await helpers.consultarTareas(empresa, fechaActual)
     let d1 = tareas.todas.filter(i => i.dimension == 'Producto');

@@ -219,7 +219,7 @@ userController.update_user = async (req, res) => {
 // Actualizar foto
 userController.actualizarFotoPerfil = async (req, res) => {
     const { rol, codigo } = req.user;
-    const actualizar = { foto: "../foto_profile/" + urlProfile, };
+    const actualizar = { foto: "../foto_profile/" + urlProfile };
 
     if (rol == 'Empresa') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { checkLogin, validarIDFicha } = require('../lib/auth');
 const empresaController = require('../controllers/empresaController');
-const signingViaEmail = require('../controllers/envelopeController');
+// const signingViaEmail = require('../controllers/envelopeController');
 const { uploadFiles } = require('../lib/helpers')
 
 // Diagnóstico de Negocio
@@ -21,7 +21,7 @@ router.post('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerd
 
 // Análisis de Negocio
 router.get('/analisis-de-negocio', checkLogin, empresaController.analisis)
-router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'), empresaController.guardarArchivos)
+router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa', true), empresaController.guardarArchivos)
 
 // Plan Estratégico de Negocio
 router.get('/plan-estrategico', checkLogin, empresaController.planEstrategico)

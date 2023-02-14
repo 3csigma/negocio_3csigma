@@ -4,9 +4,9 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial } = require('../lib/helpers')
 
-const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa  } = require('../lib/mail.config');
+const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 
@@ -274,6 +274,7 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
 dashboardController.editarEmpresa = async (req, res) => {
     const codigo = req.params.codigo, datos = {};
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
     let userEmpresa = await consultarDatos('users')
     userEmpresa = userEmpresa.find(x => x.codigo == codigo && x.rol == 'Empresa')
     // Empresa tabla Usuarios
@@ -340,7 +341,6 @@ dashboardController.editarEmpresa = async (req, res) => {
                 datos.etapa = 'Diagnóstico pagado'
                 pago_diagnostico.color = 'badge-success'
                 pago_diagnostico.texto = 'Pagado'
-                pago_diagnostico.btn = false
                 pago_diagnostico.valor = pagoDiagnostico.precio;
                 pago_diagnostico.fecha = pagoDiagnostico.fecha
             }
@@ -564,7 +564,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (informeProd) {
         info.prod.fecha = informeProd.fecha;
         info.prod.ver = 'block';
-        info.prod.url = informeProd  .url;
+        info.prod.url = informeProd.url;
         datos.etapa = 'Informe análisis dimensión producto'
     }
 
@@ -747,10 +747,18 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     /**************************************************************************************** */
-    // PLAN EMPRESARIAL *************/
+    /* => PLAN EMPRESARIAL ***************************************************************** */
     // PROPUESTA
     propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
-    let pagos_empresarial = {};
+    let pagos_empresarial = {}, tareasEmpresarial = {};
+    const empresarial = {                     
+        negocio: { ver: 'none' },
+        marketing: { ver: 'none' },
+        branding: { ver: 'none' },
+        renders: { ver: 'none' },
+        website: { ver: 'none' },
+        otro: { ver: 'none' }
+    }
     if (propuesta.empresarial) {
         datos.etapa = 'Propuesta de plan empresarial enviada'
 
@@ -798,11 +806,65 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_empresarial.tres.txt = 'Pagado 100%'
             pagos_empresarial.tres.btn = false;
         }
+
+        const archivosEmpresarial = await consultarDatos("archivos_plan_empresarial", `WHERE empresa = ${idEmpresa}`)
+        // PLAN DE NEGOCIO
+        let archivo = archivosEmpresarial.find(x => x.tipo == "Plan de negocio")
+        if (archivo) {
+            empresarial.negocio.fecha = archivo.fecha;
+            empresarial.negocio.ver = 'block';
+            empresarial.negocio.url = archivo.url;
+            datos.etapa = 'Archivo de Plan de negocio - Plan Empresarial'
+        }
+        // PLAN DE MARKETING
+        archivo = archivosEmpresarial.find(x => x.tipo == "Plan de marketing")
+        if (archivo) {
+            empresarial.marketing.fecha = archivo.fecha;
+            empresarial.marketing.ver = 'block';
+            empresarial.marketing.url = archivo.url;
+            datos.etapa = 'Archivo de Plan de marketing - Plan Empresarial'
+        }
+        // BRANDING
+        archivo = archivosEmpresarial.find(x => x.tipo == "Branding")
+        if (archivo) {
+            empresarial.branding.fecha = archivo.fecha;
+            empresarial.branding.ver = 'block';
+            empresarial.branding.url = archivo.url;
+            datos.etapa = 'Archivo de Branding - Plan Empresarial'
+        }
+        // RENDERS
+        archivo = archivosEmpresarial.find(x => x.tipo == "Renders")
+        if (archivo) {
+            empresarial.renders.fecha = archivo.fecha;
+            empresarial.renders.ver = 'block';
+            empresarial.renders.url = archivo.url;
+            datos.etapa = 'Archivo de Renders - Plan Empresarial'
+        }
+        // WEBSITE
+        archivo = archivosEmpresarial.find(x => x.tipo == "Website")
+        if (archivo) {
+            empresarial.website.fecha = archivo.fecha;
+            empresarial.website.ver = 'block';
+            empresarial.website.url = archivo.url;
+            datos.etapa = 'Link de website - Plan Empresarial'
+        }
+        // OTRO
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro")
+        if (archivo) {
+            empresarial.otro.fecha = archivo.fecha;
+            empresarial.otro.ver = 'block';
+            empresarial.otro.url = archivo.url;
+            empresarial.otro.nombre = archivo.nombre;
+            datos.etapa = 'Archivo Otro - Plan Empresarial'
+        }
+
+        // PROCESO PARA LAS TAREAS (PLAN EMPRESARIAL)
+        tareasEmpresarial = await consultarTareasEmpresarial(idEmpresa, empresa)
+        console.log("\nTAREAS EMPRESARIAL >> ", tareasEmpresarial)
     }
 
     /************************************************************************************* */
-    // PLAN ESTRATÉGICO DE NEGOCIO *************/
-
+    // => PLAN ESTRATÉGICO DE NEGOCIO *****************************************************/
     // PROPUESTA
     propuesta.estrategico = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan estratégico')
     let pagoEstrategico = {};
@@ -861,8 +923,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     }
 
-    // PROCESO PARA LAS TAREAS DE LA EMPRESA
-    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    // PROCESO PARA LAS TAREAS DE LA EMPRESA (PLAN ESTRATÉGICO)
     const dimObj = await tareasGenerales(idEmpresa, fechaActual)
     const tareas = dimObj.tareas;
     let jsonDim = false;
@@ -926,6 +987,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
     })
 
+    tareasEmpresarial.forEach(x => {
+        botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
+    })
+
     let tblConclusiones = await consultarDatos('conclusiones');
     tblConclusiones = tblConclusiones.filter(x => x.id_empresa == idEmpresa)
     let objconclusion = {}
@@ -952,7 +1017,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
-        pago_diagnostico, pagos_empresarial,
+        pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
         rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user)
     })
 
@@ -1489,8 +1554,7 @@ dashboardController.guardarInforme = async (req, res) => {
     console.log(req.body)
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
-    const empresasNuevas = await consultarDatos('dg_empresa_nueva')
-    // const eNueva = empresasNuevas.find(x => x.id_empresa == e.id_empresas)
+
     const fecha = new Date()
     const nuevoInforme = {
         id_empresa: e.id_empresas,
@@ -1509,7 +1573,6 @@ dashboardController.guardarInforme = async (req, res) => {
     }
 
     // Validando si ya tiene un informe montado
-    // const tieneInforme = await pool.query('SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? ', [e.id_empresas, nombreInforme])
     const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
     let informe = null;
 
@@ -1520,7 +1583,6 @@ dashboardController.guardarInforme = async (req, res) => {
     }
 
     if (informe.affectedRows > 0) {
-
         const nombreEmpresa_ = e.nombre_empresa;
         const email = e.email
         let tipoInforme = nombreInforme.toLowerCase();
@@ -1558,6 +1620,125 @@ dashboardController.guardarInforme = async (req, res) => {
         r.ok = true;
         r.fecha = nuevoInforme.fecha;
         r.url = nuevoInforme.url
+    }
+
+    res.send(r)
+}
+
+dashboardController.guardarArchivo_Empresarial = async (req, res) => {
+    const r = { ok: false }
+    const { codigoEmpresa, tipo, nombreArchivo, zonaHoraria } = req.body
+    console.log("\nDATA FILE >>>");
+    console.log(req.file);
+
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.codigo == codigoEmpresa)
+    const fecha = new Date()
+    let nombre = ''
+    tipo == 'Otro' ? nombre = nombreArchivo : nombre = req.file.originalname;
+    const nuevoArchivo = {
+        empresa: e.id_empresas,
+        tipo,
+        nombre,
+        url: '../archivos_plan_empresarial/' + req.file.filename,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
+    }
+
+    const actualizar = {
+        nombre,
+        url: '../archivos_plan_empresarial/' + req.file.originalname,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
+    }
+
+    // Validando si ya tiene un informe montado
+    const tieneArchivo = await consultarDatos('archivos_plan_empresarial', `WHERE empresa = "${e.id_empresas}" AND tipo = "${tipo}"`)
+    let archivoActual = null;
+
+    if (tieneArchivo.length > 0) {
+        archivoActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND tipo = ?', [actualizar, e.id_empresas, tipo])
+    } else {
+        archivoActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
+    }
+
+    if (archivoActual.affectedRows > 0) {
+        const email = e.email
+        let asunto = 'Se ha cargado un nuevo archivo en Plan Empresarial'
+        let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
+        
+        // Enviar Email
+        const resultEmail = await sendEmail(email, asunto, template)
+
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de archivo subido a la empresa >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado la subida de un archivo al email de la empresa >>>>>\n")
+        }
+
+        r.ok = true;
+        r.fecha = nuevoArchivo.fecha;
+        r.url = nuevoArchivo.url
+    }
+
+    res.send(r)
+}
+
+dashboardController.websiteEmpresarial = async (req, res) => {
+    const r = { ok: false }
+    const { codigoEmpresa, link, zonaHoraria } = req.body
+
+    console.log(req.body);
+    
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.codigo == codigoEmpresa)
+    const fecha = new Date()
+    const nuevoArchivo = {
+        empresa: e.id_empresas,
+        tipo: 'Website',
+        nombre: 'Website',
+        url: link,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
+    }
+
+    const actualizar = {
+        url: link,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear()
+    }
+
+    // Validando si ya tiene un informe montado
+    const tieneLink = await consultarDatos('archivos_plan_empresarial', `WHERE empresa = "${e.id_empresas}" AND tipo = "Website"`)
+    let linkActual = null;
+
+    if (tieneLink.length > 0) {
+        linkActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND nombre = ?', [actualizar, e.id_empresas, link])
+    } else {
+        linkActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
+    }
+
+    if (linkActual.affectedRows > 0) {
+        const email = e.email
+        let asunto = 'Se ha cargado un nuevo link en Plan Empresarial'
+        let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
+        
+        // Enviar Email
+        const resultEmail = await sendEmail(email, asunto, template)
+
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de link subido a la empresa >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado la subida de un nuevo link de Plan Empresarial al email de la empresa >>>>>\n")
+        }
+
+        r.ok = true;
+        r.fecha = nuevoArchivo.fecha;
+        r.url = nuevoArchivo.url
     }
 
     res.send(r)

@@ -10,7 +10,6 @@ src/public/archivos_analisis_empresa/*.pdf
 src/public/archivos_analisis_empresa/*.xlsx
 src/public/archivos_analisis_empresa/*.pdf
 src/public/archivos_analisis_empresa/*.docx
-src/public/archivos_analisis_empresa/*.txt
 src/public/archivos_analisis_empresa/*.zip
 src/public/propuestas_empresa/*.pdf
 src/public/certificados_consultores/*.pdf
@@ -18,3 +17,11 @@ src/public/informes_empresas/*.pdf
 src/public/foto_profile/*.jpg
 src/public/foto_profile/*.jpeg
 src/public/foto_profile/*.png
+src/public/archivos_plan_empresarial/*.jpg
+src/public/archivos_plan_empresarial/*.jpeg
+src/public/archivos_plan_empresarial/*.png
+src/public/archivos_plan_empresarial/*.pdf
+src/public/archivos_plan_empresarial/*.xlsx
+src/public/archivos_plan_empresarial/*.pdf
+src/public/archivos_plan_empresarial/*.docx
+src/public/archivos_plan_empresarial/*.zip
