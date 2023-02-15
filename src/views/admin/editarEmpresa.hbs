@@ -121,7 +121,7 @@
                                             </select>
                                         </div>
                                         <div class="col-2 pt-3">
-                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm btn-primary text-white mt-4" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); border-color: transparent"><i class="fa fa-check"></i></button>
+                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm color_gradient text-white mt-4" style="border-color: transparent"><i class="fa fa-check"></i></button>
                                         </div>
 
                                         <div class="col-12" id="divTablaConsul" style="display: {{divConsultores}};">
@@ -151,9 +151,9 @@
                                         {{#if adminDash}}
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button type="button" class="btn btn-primary"
+                                                <button type="button" class="btn color_gradient text-white"
                                                     onclick="guardarConsulEtapas()"
-                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    style="margin-top: 1em; width: 100%; padding: 10px 15px;">
                                                     <p class="font-w500 m-auto">Guardar cambios</p>
                                                 </button>
                                             </div>
@@ -346,9 +346,8 @@
                                         </div>
                                         <div class="col-12" style="margin-top: -48px;">
                                             <!-- BOTÓN PARA MODAL NUEVO RENDIMIENTO -->
-                                            <button type="button" class="btn btn-primary"
-                                                data-toggle="modal" data-target="#modalNewRendimiento"
-                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff;">
+                                            <button type="button" class="btn color_gradient text-white"
+                                                data-toggle="modal" data-target="#modalNewRendimiento">
                                                 Nuevo Rendimiento </button>
                                         </div>
                                         {{else}}
@@ -413,11 +412,8 @@
 
                 {{!-- Contenido de pestañas --}}
                 <div class="profile-tab barra-scroll overflow-y-auto" id="altura_tabs">
-
                     <div class="custom-tab-1">
-
                         <div class="tab-content">
-
                             {{!-- PESTAÑA 1 - INFO DE LA EMPRESA --}}
                             <div id="empresa" class="tab-pane fade active show">
 
@@ -748,8 +744,8 @@
                                                             <td>
                                                                 {{#if botonesEtapas.uno}}
                                                                 <a href="/diagnostico-proyecto/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                    style="border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
                                                                 {{else}}
                                                                 <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -768,8 +764,8 @@
                                                             <td>
                                                                 {{#if botonesEtapas.uno}}
                                                                 <a href="/cuestionario-diagnostico/{{datos.code}}"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                    style="border-color: #812082;">
                                                                     <i class="fa fa-pencil"></i></a>
                                                                 {{else}}
                                                                 <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -789,9 +785,9 @@
                                                             <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
-                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                     data-toggle="modal" data-target="#modalNuevosProyectos"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    style="border-color: #FED061">
                                                                     <i class="fa fa-search"></i></a>
                                                         </tr>
                                                         {{/if}}
@@ -804,9 +800,9 @@
                                                             <td><span class="badge light {{frmDiag.color}}">{{frmDiag.texto}}</span></td>
                                                             <td>
                                                                 <!-- BOTÓN PARA MODAL RESULTADOS CUESTIONARIO -->
-                                                                <a class="btn btn-info shadow btn-xs sharp"
+                                                                <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                     data-toggle="modal" data-target=".bd-example-modal-lg"
-                                                                    style="color: white; background: #FED061; border-color: #FED061">
+                                                                    style="color: white;border-color: #FED061">
                                                                     <i class="fa fa-search"></i></a>
                                                             </td>
                                                         </tr>
@@ -854,8 +850,8 @@
                                                             <td>
                                                                 {{#if frmDiag.tablasVacias}}
                                                                     {{#if botonesEtapas.uno}}
-                                                                    <div class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;"
+                                                                    <div class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                        style="border-color: #812082;"
                                                                         id="btnInfDiag">
                                                                         <i class="fa fa-upload"></i>
                                                                     </div>
@@ -869,8 +865,8 @@
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <label for="informeDiag" >
                                                                                 <div id="btnSubirInforme"
-                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                    style="border-color: #812082;">
                                                                                     <i class="fa fa-upload"></i>
                                                                                 </div>
                                                                             </label>
@@ -878,7 +874,7 @@
                                                                         </td>
                                                                         {{/if}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp"><i class="fa fa-search"></i></a>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -904,7 +900,7 @@
                                                 {{#if botonesEtapas.uno}}
                                                 <input type="text" id="conclusion_diagnostico" value="{{objconclusion.e1}}" class="form-control">
                                                 <div class="col-md-3">
-                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(1)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                    <button class="btn color_gradient btn-save text-white" onclick="agregarConclusion(1)" style="margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
                                                         <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
                                                         <span class="text-btn">Guardar</span>
                                                     </button>
@@ -947,7 +943,7 @@
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
                                                 <input type="hidden" name="tipo_propuesta" value="Análisis de negocio">
                                                 <div class="col-md-3 mx-auto">
-                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <button type="submit" class="btn color_gradient text-white" style="margin-top: 1em; width: 100%;padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
                                                     </button>
                                                 </div>
@@ -975,8 +971,8 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.analisis.link_propuesta}}" target="_blank"
-                                                                class="btn btn-primary shadow btn-xs sharp"
-                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                class="btn color_gradient shadow btn-xs sharp text-white"
+                                                                style="margin: 0 auto">
                                                                 <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -1119,7 +1115,7 @@
                                                     <tr>
                                                         <td>{{nombre}}</td>
                                                         <td>
-                                                        <a href="{{link}}" target="_blank" class="btn btn-primary shadow btn-xs sharp" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                        <a href="{{link}}" target="_blank" class="btn color_gradient shadow btn-xs sharp text-white" style="margin: 0 auto">
                                                             <i class="fa fa-search"></i>
                                                         </a>
                                                         </td>
@@ -1165,15 +1161,15 @@
                                                                 </td>
                                                                 <td>
                                                                     {{#if dimProducto}}
-                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                    <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                         data-toggle="modal" data-target="#modalDimProducto"
-                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        style="border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
                                                                     {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-producto/{{datos.code}}"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                        style="border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
                                                                     {{else}}
                                                                     <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1194,15 +1190,15 @@
                                                                 </td>
                                                                 <td>
                                                                     {{#if dimAdmin}}
-                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                    <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                         data-toggle="modal" data-target="#modalDimAdministracion"
-                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        style="border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
                                                                     {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-administracion/{{datos.code}}"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                        style="border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
                                                                     {{else}}
                                                                     <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1223,15 +1219,15 @@
                                                                 </td>
                                                                 <td>
                                                                     {{#if dimOperacion}}
-                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                    <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                         data-toggle="modal" data-target="#modalDimOperaciones"
-                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        style="color: white; border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
                                                                     {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-operaciones/{{datos.code}}"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                        style="border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
                                                                     {{else}}
                                                                     <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1252,15 +1248,15 @@
                                                                 </td>
                                                                 <td>
                                                                     {{#if dimMarketing}}
-                                                                    <a class="btn btn-info shadow btn-xs sharp"
+                                                                    <a class="btn color_tertiary shadow btn-xs sharp text-white"
                                                                         data-toggle="modal" data-target="#modalDimMarketing"
-                                                                        style="color: white; background: #FED061; border-color: #FED061">
+                                                                        style="border-color: #FED061">
                                                                         <i class="fa fa-search"></i></a>
                                                                     {{else}}
                                                                     {{#if botonesEtapas.dos}}
                                                                     <a href="/analisis-dimension-marketing/{{datos.code}}"
-                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                        style="border-color: #812082;">
                                                                         <i class="fa fa-pencil"></i></a>
                                                                     {{else}}
                                                                     <button class="btn btn-primary shadow btn-xs sharp mr-1"
@@ -1317,8 +1313,8 @@
                                                                             {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeProd">
-                                                                                    <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <div id="btnSubirInformeProd" class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1333,8 +1329,8 @@
 
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
-                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                                                                                    target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061"
+                                                                                    target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                     <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1365,8 +1361,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAdmin" >
                                                                                     <div id="btnSubirInformeAdmin"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1379,7 +1375,7 @@
                                                                             {{/if}}
                                                                             
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1411,8 +1407,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeOpe" >
                                                                                     <div id="btnSubirInformeOpe"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1425,7 +1421,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1457,8 +1453,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeMarketing" >
                                                                                     <div id="btnSubirInformeMarketing"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1471,7 +1467,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1528,8 +1524,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAnalisisGeneral" >
                                                                                     <div id="btnSubirInforme"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1542,7 +1538,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1570,7 +1566,7 @@
                                                     {{#if botonesEtapas.dos}}
                                                     <input type="text" id="conclusion_analisis" value="{{objconclusion.e2}}" class="form-control">
                                                     <div class="col-md-3">
-                                                        <button class="btn btn-primary btn-save" onclick="agregarConclusion(2)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                        <button class="btn color_gradient btn-save" onclick="agregarConclusion(2)" style="margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
                                                             <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
                                                             <span class="text-btn">Guardar</span>
                                                         </button>
@@ -1614,7 +1610,7 @@
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
                                                 <input type="hidden" name="tipo_propuesta" value="Plan empresarial">
                                                 <div class="col-md-3 mx-auto">
-                                                    <button type="submit" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <button type="submit" class="btn color_gradient text-white" style="margin-top: 1em; width: 100%; padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
                                                     </button>
                                                 </div>
@@ -1642,8 +1638,8 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.empresarial.link_propuesta}}" target="_blank"
-                                                                class="btn btn-primary shadow btn-xs sharp"
-                                                                style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                class="btn color_gradient shadow btn-xs sharp text-white"
+                                                                style="margin: 0 auto">
                                                                 <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -1881,8 +1877,8 @@
                                                                             {{#if botonesEtapas.plan1}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeProd">
-                                                                                    <div id="btnSubirInformeProd" class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    <div id="btnSubirInformeProd" class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1897,8 +1893,8 @@
                                                                     
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
-                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                                                                                    target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061"
+                                                                                    target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                     <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -1929,8 +1925,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeAdmin" >
                                                                                     <div id="btnSubirInformeAdmin"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1939,7 +1935,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
 
                                                                             </td>
@@ -1972,8 +1968,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeOpe" >
                                                                                     <div id="btnSubirInformeOpe"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -1982,7 +1978,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -2014,8 +2010,8 @@
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="informeMarketing" >
                                                                                     <div id="btnSubirInformeMarketing"
-                                                                                        class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                        class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: #812082;">
                                                                                         <i class="fa fa-upload"></i>
                                                                                     </div>
                                                                                 </label>
@@ -2024,7 +2020,7 @@
                                                                             {{/if}}
 
                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -2079,8 +2075,8 @@
                                                                                 <td style="border-color: transparent; padding:3px">
                                                                                     <label for="informeAnalisisGeneral" >
                                                                                         <div id="btnSubirInforme"
-                                                                                            class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                            class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                            style="border-color: #812082;">
                                                                                             <i class="fa fa-upload"></i>
                                                                                         </div>
                                                                                     </label>
@@ -2089,7 +2085,7 @@
                                                                                 {{/if}}
 
                                                                                 <td style="border-color: transparent; padding:3px">
-                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp">
+                                                                                    <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                     <i class="fa fa-search"></i></a>
                                                                                 </td>
                                                                             </tr>
@@ -2118,7 +2114,7 @@
                                             <div class="row" style="justify-content: center;">
                                                 <input type="text" id="conclusion_planEmpresarial" value="{{objconclusion.e3}}" class="form-control">
                                                 <div class="col-md-3">
-                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(3)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                    <button class="btn color_gradient btn-save text-white" onclick="agregarConclusion(3)" style="margin-top: 1em; width: 100%; padding: 10px 15px;"> 
                                                         <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
                                                         <span class="text-btn">Guardar</span>
                                                     </button>
@@ -2169,8 +2165,8 @@
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
                                                 <input type="hidden" name="tipo_propuesta" value="Plan estratégico">
                                                 <div class="col-md-3 mx-auto">
-                                                    <button type="submit" class="btn btn-primary"
-                                                        style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                    <button type="submit" class="btn color_gradient text-white"
+                                                        style="margin-top: 1em; width: 100%; padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
                                                     </button>
                                                 </div>
@@ -2199,8 +2195,8 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 <a href="{{propuesta.estrategico.link_propuesta}}" target="_blank"
-                                                                    class="btn btn-primary shadow btn-xs sharp"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                                                                    class="btn color_gradient shadow btn-xs sharp text-white"
+                                                                    style="margin: 0 auto">
                                                                     <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -2265,8 +2261,7 @@
                                                                         style="background: #656c73;margin: 0 auto;border-color: #656c73;">
                                                                         <i class="fa fa-usd"></i></button> --}}
                                                                     {{#if pagoEstrategico.btn}}
-                                                                    <button type="button" onclick="cancelarSubscripcion('{{datos.idEmpresa}}','{{pagoEstrategico.subscription}}')" class="btn btn-danger btn-sm sharp"
-                                                                        style="background: red;color: white">Detener</button>
+                                                                    <button type="button" onclick="cancelarSubscripcion('{{datos.idEmpresa}}','{{pagoEstrategico.subscription}}')" class="btn btn-danger btn-sm sharp text-white">Detener</button>
                                                                     {{else}}
                                                                     <button type="button" class="btn btn-sm sharp"
                                                                         style="background: gray;color: white">Detener</button>
@@ -2321,8 +2316,8 @@
                                             </div>
                             
                                             <div class="col-md-3 mx-auto">
-                                                <button onclick="agregarTarea()" class="btn btn-primary"
-                                                    style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%; color:#fff !important; padding: 10px 15px;">
+                                                <button onclick="agregarTarea()" class="btn color_gradient text-white"
+                                                    style="margin-top: 1em; width: 100%; padding: 10px 15px;">
                                                     <p class="font-w500 m-auto">Agregar</p>
                                                 </button>
                                             </div>
@@ -2411,12 +2406,9 @@
                                                             <div class="d-flex justify-content-center align-items-center">
                                                                 {{#if taskBtns}}
                                                                 <a onclick="editarTarea({{id}})" title="Editar"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
-                                                                        style="color:white ;" class="fa fa-pencil"></i>
+                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"><i class="fa fa-pencil"></i>
                                                                 </a>
-                                                                <a onclick="eliminarTarea({{id}})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
-                                                                    style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                <a onclick="eliminarTarea({{id}})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp text-white"><svg xmlns="http://www.w3.org/2000/svg"
                                                                         width="12px" viewBox="0 0 448 512">
                                                                         <path
                                                                             d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
@@ -2425,9 +2417,7 @@
                                                                 </a>
                                                                 {{else}}
                                                                 <a onclick="mostrarTarea({{id}})" title="Mostrar"
-                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
-                                                                        style="color:white ;" class="fa fa-search"></i>
+                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"><i class="fa fa-search"></i>
                                                                 </a>
                                                                 {{/if}}
                                                             </div>
@@ -2479,8 +2469,8 @@
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <label for="informePlan">
                                                                                 <div id="btnSubirInforme"
-                                                                                    class="btn btn-primary shadow btn-xs sharp mr-1"
-                                                                                    style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); border-color: #812082;">
+                                                                                    class="btn color_gradient shadow btn-xs sharp mr-1 text-white"
+                                                                                    style="border-color: #812082;">
                                                                                     <i class="fa fa-upload"></i>
                                                                                 </div>
                                                                             </label>
@@ -2495,7 +2485,7 @@
                             
                                                                         {{!-- {{#if info.plan.url}} --}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061" target="_blank" class="btn btn-info shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                            <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white"><i class="fa fa-search"></i></a>
                                                                         </td>
                                                                         {{!-- {{/if}} --}}
                                                                     </tr>
@@ -2521,7 +2511,7 @@
                                                 {{#if botonesEtapas.plan2}}
                                                 <input type="text" id="conclusion_planEstrategico" value="{{objconclusion.e4}}" class="form-control">
                                                 <div class="col-md-3">
-                                                    <button class="btn btn-primary btn-save" onclick="agregarConclusion(4)" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; width: 100%;; color:#fff !important; padding: 10px 15px;"> 
+                                                    <button class="btn color_gradient btn-save text-white" onclick="agregarConclusion(4)" style="margin-top: 1em; width: 100%; padding: 10px 15px;"> 
                                                         <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
                                                         <span class="text-btn">Guardar</span>
                                                     </button>
