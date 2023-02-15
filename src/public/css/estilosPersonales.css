@@ -48,3 +48,6 @@
 .color_gradient {
     background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%) !important;
 }
+.card_gradient {
+    background: linear-gradient(20deg, rgba(80,54,140,1) 0%, rgba(129,32,130,1) 50%, rgba(254,208,97,1) 100%)!important;
+}
