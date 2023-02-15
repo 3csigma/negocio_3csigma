@@ -34,8 +34,10 @@
     overflow-y: hidden;
 }
 
-
-
+/* ****************************************************** 
+             ====>>  COLORES DE FONDOS  <<===
+- botones comunes y de iconos
+*/
 .color_primary {
     background: #812082 !important;
 }
@@ -51,3 +53,29 @@
 .card_gradient {
     background: linear-gradient(20deg, rgba(80,54,140,1) 0%, rgba(129,32,130,1) 50%, rgba(254,208,97,1) 100%)!important;
 }
+
+/* ****************************************************** 
+             ====>>  COLORES DE TEXTOS <<===
+- titulos, subtitulos, parrafos, color de iconos
+*/             
+.text-white {
+    color: #fff !important;
+  }
+  
+  .text-primary {
+    color: #812082 !important;
+  }
+  
+  a.text-primary:hover,
+  a.text-primary:focus {
+    color: #813c82 !important;
+  }
+  
+  .text-secondary {
+    color: #50368c !important;
+  }
+  
+  a.text-secondary:hover,
+  a.text-secondary:focus {
+    color: #50368c !important;
+  }

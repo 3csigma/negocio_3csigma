@@ -11821,28 +11821,6 @@ button.bg-dark:focus {
   font-style: italic !important;
 }
 
-.text-white {
-  color: #fff !important;
-}
-
-.text-primary {
-  color: #812082 !important;
-}
-
-a.text-primary:hover,
-a.text-primary:focus {
-  color: #061650 !important;
-}
-
-.text-secondary {
-  color: #50368c !important;
-}
-
-a.text-secondary:hover,
-a.text-secondary:focus {
-  color: #7a05d4 !important;
-}
-
 .text-success {
   color: #2BC155 !important;
 }
