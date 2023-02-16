@@ -23,6 +23,9 @@ router.post('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerd
 router.get('/analisis-de-negocio', checkLogin, empresaController.analisis)
 router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa', true), empresaController.guardarArchivos)
 
+// Plan Empresarial de Negocio
+router.get('/plan-empresarial', checkLogin, empresaController.planEmpresarial)
+
 // Plan Estratégico de Negocio
 router.get('/plan-estrategico', checkLogin, empresaController.planEstrategico)
 

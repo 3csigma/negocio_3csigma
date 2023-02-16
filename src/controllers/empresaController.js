@@ -1,8 +1,6 @@
 const pool = require('../database')
 const empresaController = exports;
-const dsConfig = require('../config/index.js').config;
-const { listEnvelope } = require('./listEnvelopes');
-const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
@@ -969,6 +967,167 @@ empresaController.guardarArchivos = async (req, res) => {
     res.redirect('/analisis-de-negocio');
 }
 
+/** PLAN EMPRESARIAL DE NEGOCIO + LISTADO DE TAREAS DEL CONSULTOR */
+empresaController.planEmpresarial = async (req, res) => {
+    const btnPagar = {};
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
+    const id_empresa = row[0].id_empresas;
+    const propuestas = await consultarDatos('propuestas')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pagos = await consultarDatos('pagos')
+    const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
+    const etapa2 = {lista: true}
+
+    // PROCESO PARA LAS TAREAS DEL CONSULTOR (PLAN EMPRESARIAL)
+    const tareas = await consultarTareasEmpresarial(id_empresa, fechaActual)
+
+    /************************************************************************************* */
+    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
+    msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
+    btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;", 
+    btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
+    /************************************************************************************* */
+
+    // PROPUESTA DE PLAN EMPRESARIAL DE NEGOCIO
+    let tienePropuesta = false
+    if (propuesta) {
+        tienePropuesta = true
+        btnPagar.etapa1 = false;
+        btnPagar.activar1 = false;
+        btnPagar.etapa2 = true;
+        btnPagar.activar2 = true;
+        propuesta.porcentaje = "0%";
+        
+        /************************************************************************************* */
+        let fechaAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
+        fechaAnalisis1 = fechaAnalisis1.fecha
+        let fechaDB = new Date(fechaAnalisis1)
+        let fechaDB2 = new Date(fechaAnalisis1)
+        
+        if (msgDesactivo2) {
+            fechaDB.setDate(fechaDB2.getDate() + 30);
+            fechaDB = fechaDB.toLocaleDateString("en-US")
+            msgDesactivo2 = "Pago disponible apartir de: "+fechaDB+""
+        }
+
+        if (msgDesactivo3) {
+            fechaDB2.setDate(fechaDB2.getDate() + 60);
+            fechaDB2 = fechaDB2.toLocaleDateString("en-US")
+            msgDesactivo3 = "Pago disponible apartir de: "+fechaDB2+""
+        }
+        /************************************************************************************* */
+
+        const objEmpresarial = JSON.parse(pago_empresa.empresarial0)
+        const objEmpresarial1 = JSON.parse(pago_empresa.empresarial1)
+        const objEmpresarial2 = JSON.parse(pago_empresa.empresarial2)
+        const objEmpresarial3 = JSON.parse(pago_empresa.empresarial3)
+
+        btnPagar.obj1 = parseInt(objEmpresarial1.estado)
+        btnPagar.obj2 = parseInt(objEmpresarial2.estado)
+        btnPagar.obj3 = parseInt(objEmpresarial3.estado)
+        
+        // PAGÓ EL PLAN EMPRESARIAL
+        if (objEmpresarial.estado == 1 ) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = false;
+            propuesta.porcentaje = "100%";
+            btnPagar.empresarialPer = false
+            propuesta.precio_total = objEmpresarial.precio;
+
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Plan empresarial pagado"
+            msgDesactivo2 = "Plan empresarial pagado"
+            msgDesactivo3 = "Plan empresarial pagado"
+        } else if  (objEmpresarial.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
+            escena1 = true
+            msgActivo = "Primera cuota lista para pagarse"
+            btnActivo  
+            msgDesactivo = "Pago no disponible aun"
+            btnDesactivo
+        } else if (objEmpresarial.estado != 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0){
+            escena2 = true
+            activarPagoUnico = false
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2
+            msgDesactivo3 
+            btnDesactivo
+        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 1 && objEmpresarial3.estado == 0) {
+            escena3 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgActivo = "Segunda cuota lista para pagarse"
+            btnActivo 
+            msgDesactivo3
+        } else if (objEmpresarial.estado== 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 0) {
+            escena4 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3
+        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 1) {
+            escena5 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgActivo = "Tercera cuota lista para pagarse"
+            btnActivo
+        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 2) {
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3 = "Tercera cuota pagada"
+        }
+
+        
+        
+        if (objEmpresarial1.estado == 2) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = true;
+            btnPagar.empresarialPer = true;
+            propuesta.porcentaje = "60%";
+        }
+        if (objEmpresarial2.estado == 2) {propuesta.porcentaje = "80%";}
+        if (objEmpresarial3.estado == 2) {propuesta.porcentaje = "100%";}
+
+    }
+
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = await consultarDatos('archivos_plan_empresarial')
+    archivos = archivos.filter(i => i.empresa == id_empresa)
+    
+    if (acuerdoFirmado) { linksMenu.e2 = linksMenu.e3 = linksMenu.e4 = false; }
+
+    console.group("\nTITULOS DE LINKS MENU PLAN EMPRESARIAL: ")
+    console.log(linksMenu)
+    console.log("-----------")
+    console.groupEnd()
+    console.log("-----------")
+
+    res.render('empresa/planEmpresarial', {
+        user_dash: true, pagoDiag: true, acuerdoFirmado: true,
+        actualYear: req.actualYear,
+        propuesta, btnPagar, etapa2, archivos,        
+        escena1, escena2, escena3, escena4, escena5, escena6, 
+        msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico, btnActivo, btnDesactivo, tienePropuesta,
+        consulAsignado: req.session.consulAsignado,
+        etapaCompleta: req.session.etapaCompleta,
+        itemEmpresarial: true, linksMenu, tareas
+    })
+}
+
 /** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
 empresaController.planEstrategico = async (req, res) => {
     let empresa = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
@@ -986,8 +1145,8 @@ empresaController.planEstrategico = async (req, res) => {
 
     // PROPUESTA DE PLAN ESTRATÉGICO
     const botones = {}
-    const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
+    let propuesta = await consultarDatos('propuestas')
+    propuesta = propuesta.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
     let pagos = await consultarDatos('pagos')
     pagos = pagos.find(i => i.id_empresa == empresa)
     let tienePropuesta = false

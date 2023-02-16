@@ -413,7 +413,7 @@
 <!--**********************************
             Scripts
 ***********************************-->
-<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+{{!-- <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet"> --}}
 
 <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script src="../vendor/js/chartist.min.js"></script>
@@ -509,6 +509,23 @@
         }();
 
         jQuery(document).ready(function(){
+            $("#close-sidebar-estrategico").on("click", () => {
+                $("#sidebarEstrategico").removeClass("active")
+                // PLAN ESTRATÉGICO
+                $('#cuerpoGeneral').css('overflow-y', 'auto')
+                $('#fechaIni-sidebar').css('display', 'inline-block')
+                $('#fechaFin-sidebar').css('display', 'inline-block')
+                $('#dimension-sidebar').css('display', 'inline-block')
+                $('#btnGuardar-sidebar').css('display', 'flex')
+                $("#estado").css('display', 'inline-block')
+                $('#actividad-sidebar').attr('readonly', false)
+                $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
+                $("#descripcion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $('#txtFechaIni').css('display', 'none')
+                $('#txtFechaFin').css('display', 'none')
+                $('#txtDimension').css('display', 'none')
+                $('#estado-sidebar').css('display', 'none')
+            })
         });
             
         jQuery(window).on('load',function(){

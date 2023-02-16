@@ -476,7 +476,6 @@ helpers.consultarInformes = async (empresa, nombreInforme) => {
 helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
     const tareas = await pool.query('SELECT * FROM tareas_plan_empresarial WHERE empresa = ? ORDER BY fecha_inicio ASC', [empresa])
     tareas.forEach(x => {
-
         //**** VALIDANDO ESTADOS *****
         if (x.estado == 0) {
             x.estado = 'Pendiente'; x.color = 'primary';
@@ -527,6 +526,13 @@ helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
         x.resultado = (diasCorridos * 100) / plazo
         if (x.resultado > 100) {x.resultado = 100}
     })
+
+    tareas.pendientes = tareas.filter(i => i.estado == 'Pendiente')
+    tareas.pendientes.cant = tareas.pendientes.length;
+    tareas.enProceso = tareas.filter(i => i.estado == 'En Proceso')
+    tareas.enProceso.cant = tareas.enProceso.length;
+    tareas.completadas = tareas.filter(i => i.estado == 'Completada')
+    tareas.completadas.cant = tareas.completadas.length;
 
     return tareas;
 }

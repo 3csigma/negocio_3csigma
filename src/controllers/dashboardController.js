@@ -859,7 +859,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
 
         // PROCESO PARA LAS TAREAS (PLAN EMPRESARIAL)
-        tareasEmpresarial = await consultarTareasEmpresarial(idEmpresa, empresa)
+        tareasEmpresarial = await consultarTareasEmpresarial(idEmpresa, fechaActual)
         console.log("\nTAREAS EMPRESARIAL >> ", tareasEmpresarial)
     }
 

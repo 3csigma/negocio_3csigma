@@ -782,6 +782,7 @@
             }
 
             $("#close-sidebar-empresarial").on("click", () => {
+                $("#sidebarEmpresarial").removeClass("active")
                 // PLAN EMPRESARIAL
                 $('#cuerpoTareasEmpresarial').css('overflow-y', 'auto')
                 $('#actividad-sidebar2').attr('readonly', false)
@@ -793,10 +794,10 @@
                 $('#fechaIni-sidebar2').css('display', 'inline-block')
                 $('#fechaFin-sidebar2').css('display', 'inline-block')
                 $('#btnGuardar-sidebar2').css('display', 'flex')
-                $(".chatbox").removeClass("active")
             })
             
             $("#close-sidebar-estrategico").on("click", () => {
+                $("#sidebarEstrategico").removeClass("active")
                 // PLAN ESTRATÉGICO
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
                 $('#fechaIni-sidebar').css('display', 'inline-block')
@@ -811,7 +812,6 @@
                 $('#txtFechaFin').css('display', 'none')
                 $('#txtDimension').css('display', 'none')
                 $('#estado-sidebar').css('display', 'none')
-                $(".chatbox").removeClass("active")
             })
 
 			{{#if frmDiag.tablasVacias}}
