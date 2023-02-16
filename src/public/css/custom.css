@@ -140,7 +140,6 @@ body.swal2-shown>[aria-hidden="true"] {
 .login-ingresar {
     width: 210px;
     height: 50px;
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
     border-radius: 31.5px !important;
     box-shadow: none !important;
 }
