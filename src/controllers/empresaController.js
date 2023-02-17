@@ -75,12 +75,6 @@ empresaController.index = async (req, res) => {
                 }
             }
 
-            /************************************************************************************* */
-            // PROPUESTA DE ANÁLISIS DE NEGOCIO
-            // const propuesta_analisis = await consultarDatos('propuestas')
-            // const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
-            /************************************************************************************* */
-
             const objAnalisis = JSON.parse(pago_empresa.analisis_negocio) // Pago único de Análisis
             const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1) // Pago #1 de Análisis
             const objPlanEstrat = JSON.parse(pago_empresa.estrategico) // Subscripción Plan Estratégico
@@ -91,7 +85,7 @@ empresaController.index = async (req, res) => {
                 if (!acuerdoFirmado) {
                     // linksMenu.e2 = '/acuerdo-de-confidencialidad'
                     linksMenu.e2 = true; // Linsk para activar el popup
-                    linksMenu.e4 = false;
+                    linksMenu.e3 = false;
                 }
             }
 
@@ -99,7 +93,7 @@ empresaController.index = async (req, res) => {
                 if (!acuerdoFirmado) {
                     // linksMenu.e4 = '/acuerdo-de-confidencialidad'
                     linksMenu.e2 = false;
-                    linksMenu.e4 = true;
+                    linksMenu.e3 = true;
                 }
             }
         }
@@ -161,13 +155,17 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1 = 100;
         etapaCompleta.e1 =  true
 
-        // VALIDANDO EL TIPO DE EMPRESA (NUEVA O ESTABLECIDA) - PARA HABILITAR EL MENÚ
+        /*****************************************************
+         * VALIDANDO EL TIPO DE EMPRESA (NUEVA O ESTABLECIDA) - PARA HABILITAR EL MENÚ
+        */
+        // Empresa Establecida
         if (diagEmpresa.length > 0) {
             etapaCompleta.verAnalisis = true;
-            etapaCompleta.verEstrategico = false;
+            etapaCompleta.verEmpresarial = true;
+        // Empresa Nueva
         } else if (diagEmpresa2.length > 0) {
             etapaCompleta.verAnalisis = false;
-            etapaCompleta.verEstrategico = true;
+            etapaCompleta.verEmpresarial = true;
         }
     }
 
@@ -211,12 +209,30 @@ empresaController.index = async (req, res) => {
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
-        etapaCompleta.verEstrategico = true;
+        etapaCompleta.verEmpresarial = true;
     }
-    /************************************************************************** */
 
+    /************************************************************************** */
     // PORCENTAJE ETAPA 3
     let porcentajeEtapa3 = 0
+    let tareas_plan_empresarial = await consultarDatos('tareas_plan_empresarial')
+    tareas_plan_empresarial = tareas_plan_empresarial.filter(x => x.empresa == id_empresa)
+    const totalTareas_empresarial = tareas_plan_empresarial.length;
+    let tareasCompletadas_empresarial = tareas_plan_empresarial.filter(x => x.estado == 2)
+    tareasCompletadas_empresarial = tareasCompletadas_empresarial.length
+    if (totalTareas_empresarial > 0) {
+        porcentajeEtapa3 = ((tareasCompletadas_empresarial/totalTareas_empresarial)*100)*0.75
+        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+    }
+    if (empresa.etapa_empresarial == 1) {
+        porcentajeEtapa3 = 100;
+        etapaCompleta.e3 = true;
+        etapaCompleta.verEstrategico = true;
+    }
+
+    /************************************************************************** */
+    // PORCENTAJE ETAPA 4
+    let porcentajeEtapa4 = 0
     let tareasEmpresa = await consultarDatos('plan_estrategico')
     tareasEmpresa = tareasEmpresa.filter(x => x.empresa == id_empresa)
     const totalTareas = tareasEmpresa.length;
@@ -224,18 +240,21 @@ empresaController.index = async (req, res) => {
     tareasCompletadas = tareasCompletadas.length
     let verGraficasCircular = false;
     if (totalTareas > 0) {
-        porcentajeEtapa3 = ((((tareasCompletadas*100)/totalTareas))*100)/75
-        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+        porcentajeEtapa4 = ((tareasCompletadas/totalTareas)*100)*0.75
+        porcentajeEtapa4 = Math.round(porcentajeEtapa4)
         verGraficasCircular = true;
     }
-    const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
-    if (informeEtapa3) {
-        porcentajeEtapa3 = 100;
+    const informeEtapa4 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
+    if (informeEtapa4) {
+        porcentajeEtapa4 = 100;
         etapaCompleta.e4 = true;
     }
 
+    /************************************************************************** */
+
+
     // PORCENTAJE GENERAL DE LA EMPRESA
-    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3)/3)
+    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3 + porcentajeEtapa4)/4)
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
@@ -313,7 +332,7 @@ empresaController.index = async (req, res) => {
         itemDashboard: true,
         consulAsignado,
         etapa1,
-        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
+        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeEtapa4, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes, verGraficasCircular,
         nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta, linksMenu
@@ -785,7 +804,7 @@ empresaController.analisis = async (req, res) => {
             btnPagar.activar2 = false;
             analisisPagado = 1
             propuesta.porcentaje = "100%";
-            btnPagar.analisisPer = false
+            btnPagar.analisisPer = true
             propuesta.precio_total = objAnalisis.precio;
         }
 
@@ -971,7 +990,7 @@ empresaController.guardarArchivos = async (req, res) => {
     res.redirect('/analisis-de-negocio');
 }
 
-/** PLAN EMPRESARIAL DE NEGOCIO + LISTADO DE TAREAS DEL CONSULTOR */
+/** PLAN EMPRESARIAL + LISTADO DE TAREAS DEL CONSULTOR */
 empresaController.planEmpresarial = async (req, res) => {
     const btnPagar = {};
     const fechaActual = new Date().toLocaleDateString('fr-CA');
@@ -993,7 +1012,7 @@ empresaController.planEmpresarial = async (req, res) => {
     btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
     /************************************************************************************* */
 
-    // PROPUESTA DE PLAN EMPRESARIAL DE NEGOCIO
+    // PROPUESTA DE PLAN EMPRESARIAL
     let tienePropuesta = false
     if (propuesta) {
         tienePropuesta = true

@@ -23,21 +23,10 @@ router.post('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerd
 router.get('/analisis-de-negocio', checkLogin, empresaController.analisis)
 router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa', true), empresaController.guardarArchivos)
 
-// Plan Empresarial de Negocio
+// Plan Empresarial
 router.get('/plan-empresarial', checkLogin, empresaController.planEmpresarial)
 
 // Plan Estratégico de Negocio
 router.get('/plan-estrategico', checkLogin, empresaController.planEstrategico)
-
-/*******************************************************************************************************/
-// // Ejecución Diaria (12pm)
-// cron.schedule('0 12 * * 0-6',() => {
-//     enabled_nextPay()
-// });
-
-// // router.get('/update-pay2', (req, res) => {
-// //     enabled_nextPay()
-// //     res.send("TODO OK -> END")
-// // });
 
 module.exports = router

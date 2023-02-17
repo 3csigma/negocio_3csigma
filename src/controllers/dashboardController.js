@@ -750,7 +750,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     /* => PLAN EMPRESARIAL ***************************************************************** */
     // PROPUESTA
     propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
-    let pagos_empresarial = {}, tareasEmpresarial = {};
+    let pagos_empresarial = {}, tareasEmpresarial = null;
     const empresarial = {                     
         negocio: { ver: 'none' },
         marketing: { ver: 'none' },
@@ -986,13 +986,21 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
-    tareas.todas.forEach(x => {
-        botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
-    })
+    // TAREAS PLAN EMPRESARIAL
+    if (tareasEmpresarial) {
+        tareasEmpresarial.forEach(x => {
+            botonesEtapas.plan1 ? x.taskBtns = true : x.taskBtns = false;
+        })
+    }
 
-    tareasEmpresarial.forEach(x => {
-        botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
-    })
+    // TAREAS PLAN ESTRATÉGICO
+    if (tareas) {
+        tareas.todas.forEach(x => {
+            botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
+        })
+    }
+
+    
 
     let tblConclusiones = await consultarDatos('conclusiones');
     tblConclusiones = tblConclusiones.filter(x => x.id_empresa == idEmpresa)

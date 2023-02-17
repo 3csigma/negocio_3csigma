@@ -34,8 +34,8 @@
     <!-- row -->
     <div class="container-fluid">
         <div class="row">
+            {{!-- Cuadros principales sobre las etapas --}}
             <div class="col-xl-6 col-xxl-12">
-                {{!-- Cuadros principales sobre las etapas --}}
                 <div class="row">
                     {{!-- Diagnóstico de negocio --}}
                     <div class="col-sm-6">
@@ -98,6 +98,35 @@
                             <div class="effect bg-secondary"></div>
                         </div>
                     </div>
+                    {{!-- Plan empresarial --}}
+                    <div class="col-sm-6">
+                        <div class="card avtivity-card">
+                            <div class="card-body">
+                                <div class="media align-items-center">
+                                    <span class="activity-icon bgl-plan mr-md-4 mr-3">
+                                        <svg width="40" height="37" viewBox="0 0 40 37" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15 35.0002C15 35.9168 15.75 36.6668 16.6667 36.6668H23.3334C24.25 36.6668 25 35.9168 25 35.0002V33.3335H15V35.0002ZM20 3.3335C13.5667 3.3335 8.33337 8.56683 8.33337 15.0002C8.33337 18.9668 10.3167 22.4502 13.3334 24.5668V28.3335C13.3334 29.2502 14.0834 30.0002 15 30.0002H25C25.9167 30.0002 26.6667 29.2502 26.6667 28.3335V24.5668C29.6834 22.4502 31.6667 18.9668 31.6667 15.0002C31.6667 8.56683 26.4334 3.3335 20 3.3335ZM23.3334 22.8335V26.6668H16.6667V22.8335C14.1334 21.0502 11.6667 19.2168 11.6667 15.0002C11.6667 10.4002 15.4 6.66683 20 6.66683C24.6 6.66683 28.3334 10.4002 28.3334 15.0002C28.3334 19.1502 25.8167 21.0835 23.3334 22.8335Z"
+                                                fill="#50368C" />
+                                        </svg>
+
+                                    </span>
+                                    <div class="media-body">
+                                        <p class="fs-14 mb-2">Plan empresarial</p>
+                                        <span class="title text-black font-w600">{{porcentajeEtapa3}}%</span>
+                                    </div>
+                                </div>
+                                <div class="progress" style="height:5px;">
+                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa3}}{{porcentajeEtapa3}}{{else}}5{{/if}}%; 
+                                        height:5px;" role="progressbar">
+                                        <span class="sr-only">{{porcentajeEtapa3}}% Completado</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="effect bg-plan"></div>
+                        </div>
+                    </div>
                     {{!-- Plan estratégico de negocio --}}
                     <div class="col-sm-6">
                         <div class="card avtivity-card">
@@ -114,13 +143,13 @@
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Plan estratégico de negocio</p>
-                                        <span class="title text-black font-w600">{{porcentajeEtapa3}}%</span>
+                                        <span class="title text-black font-w600">{{porcentajeEtapa4}}%</span>
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa3}}{{porcentajeEtapa3}}{{else}}5{{/if}}%; 
+                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa4}}{{porcentajeEtapa4}}{{else}}5{{/if}}%; 
                                         height:5px;" role="progressbar">
-                                        <span class="sr-only">{{porcentajeEtapa3}}% Completado</span>
+                                        <span class="sr-only">{{porcentajeEtapa4}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
@@ -129,7 +158,7 @@
                     </div>
 
                     {{!-- PORCENTAJE AVANCE GENERAL DE LA EMPRESA --}}
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">

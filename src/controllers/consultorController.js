@@ -1,6 +1,6 @@
 const consultorController = exports;
 const pool = require('../database')
-const { sendEmail, propuestaAnalisisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
+const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
@@ -52,7 +52,6 @@ consultorController.index = async (req, res) => {
 
 // EMPRESAS ASIGANADAS
 consultorController.empresasAsignadas = async (req, res) => {
-
     const empresas = []
     let consulActual = await consultarDatos('consultores')
     consulActual = consulActual.find(x => x.codigo == req.user.codigo)
@@ -113,10 +112,19 @@ consultorController.enviarPropuesta = async (req, res) => {
     const precio_per3 = parseFloat(precioPropuesta) * 0.2
 
     let hash = '#analisis_';
+    let asunto = 'Tenemos una propuesta de análisis de negocio para tu empresa'
+    let etapa = 'Análisis de Negocio'
+    let link = 'analisis-de-negocio'
     if (tipo_propuesta == 'Plan estratégico') {
         hash = '#plan-estrategico';
+        asunto = 'Tenemos una propuesta de plan estratégico para tu empresa'
+        etapa = 'Plan Estratégico'
+        link = 'plan-estrategico'
     } else if (tipo_propuesta == 'Plan empresarial') {
         hash = '#plan-empresarial';
+        asunto = 'Tenemos una propuesta de plan empresarial para tu empresa'
+        etapa = 'Plan Emrpesarial'
+        link = 'plan-empresarial'
     } else {
         hash = hash;
     }
@@ -129,10 +137,8 @@ consultorController.enviarPropuesta = async (req, res) => {
         await insertarDatos('propuestas', nuevaPropuesta)
     }
 
-    /** INFO PARA ENVÍO DE EMAIL */
-    const asunto = "Tenemos una propuesta para tu empresa"
     // Obtener la plantilla de Email
-    const template = propuestaAnalisisHTML(nombreEmpresa);
+    const template = propuestaCargadaHTML(nombreEmpresa, etapa, link);
 
     // Enviar Email
     const resultEmail = await sendEmail(email, asunto, template)

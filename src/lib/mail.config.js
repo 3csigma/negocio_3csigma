@@ -2493,7 +2493,7 @@ const etapaFinalizadaHTML = (empresa, etapa, texto, link) => {
 		`
 }
 
-const propuestaAnalisisHTML = (empresa) => {
+const propuestaCargadaHTML = (empresa, etapa, link) => {
 	return `
 	<!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -2673,7 +2673,7 @@ const propuestaAnalisisHTML = (empresa) => {
 																	style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:120%;text-align:center;mso-line-height-alt:16.8px;">
 																	<p style="margin: 0; margin-bottom: 5px;">¿Estas
 																		listo(a) para continuar con</p>
-																	<p style="margin: 0;">el análisis de negocio?</p>
+																	<p style="margin: 0;">el ${etapa}?</p>
 																</div>
 															</td>
 														</tr>
@@ -2684,8 +2684,8 @@ const propuestaAnalisisHTML = (empresa) => {
 														<tr>
 															<td class="pad">
 																<div class="alignment" align="center">
-																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://negocio.3csigma.com/login" style="height:50px;width:442px;v-text-anchor:middle;" arcsize="16%" strokeweight="0.75pt" strokecolor="#fed061" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a
-																		href="https://negocio.3csigma.com/analisis-de-negocio"
+																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:50px;width:442px;v-text-anchor:middle;" arcsize="16%" strokeweight="0.75pt" strokecolor="#fed061" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a
+																		href="${my_domain}/${link}"
 																		target="_blank"
 																		style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%;border-top:1px solid transparent;font-weight:700;border-right:1px solid transparent;border-bottom:1px solid transparent;border-left:1px solid transparent;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span
 																			style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span
@@ -2884,9 +2884,10 @@ const propuestaAnalisisHTML = (empresa) => {
 	`
 }
 
-const pagoAnalisisPendienteHTML = (nombre, texto) => {
+const proximoPagoPendienteHTML = (nombre, texto, etapa, link) => {
 	return `
-	<!DOCTYPE html>
+	
+<!DOCTYPE html>
 
 <html lang="en" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
 <head>
@@ -3012,7 +3013,7 @@ const pagoAnalisisPendienteHTML = (nombre, texto) => {
 <tr>
 <td class="pad">
 <div style="color:#101112;font-size:16px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-weight:400;line-height:180%;text-align:center;direction:ltr;letter-spacing:0px;mso-line-height-alt:28.8px;">
-<p style="margin: 0;">Han pasado 30 días desde que realizaste el pago de la ${texto} pago ya esta listo para realizarse, puedes hacerlo fácilmente desde nuestra plataforma, en la sección: <strong>Análisis de negocio</strong></p>
+<p style="margin: 0;">Han pasado 30 días desde que realizaste el pago de la ${texto} pago ya esta listo para realizarse, puedes hacerlo fácilmente desde nuestra plataforma, en la sección: <strong>${etapa}</strong></p>
 </div>
 </td>
 </tr>
@@ -3021,7 +3022,7 @@ const pagoAnalisisPendienteHTML = (nombre, texto) => {
 <tr>
 <td class="pad" style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:35px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="Reemplazar la url aqui" style="height:48px;width:464px;v-text-anchor:middle;" arcsize="17%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="Reemplazar la url aqui" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%;border-top:0px solid #8a3b8f;font-weight:700;border-right:0px solid #8a3b8f;border-bottom:0px solid #8a3b8f;border-left:0px solid #8a3b8f;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word;"><span data-mce-style="" dir="ltr" style="line-height: 28px;"><strong>PAGAR AHORA</strong></span></span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:48px;width:464px;v-text-anchor:middle;" arcsize="17%" stroke="false" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/${link}" style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%;border-top:0px solid #8a3b8f;font-weight:700;border-right:0px solid #8a3b8f;border-bottom:0px solid #8a3b8f;border-left:0px solid #8a3b8f;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word;"><span data-mce-style="" dir="ltr" style="line-height: 28px;"><strong>PAGAR AHORA</strong></span></span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -3135,7 +3136,7 @@ const pagoAnalisisPendienteHTML = (nombre, texto) => {
 </table><!-- End -->
 </body>
 </html>
-	`
+`
 }
 
 const restablecerCuentaHTML = (token) => {
@@ -4865,8 +4866,8 @@ const archivosPlanEmpresarialHTML = (empresa) => {
 
 module.exports = {
 	sendEmail, getTemplate, consultorAprobadoHTML, consultorAsignadoHTML, informesHTML,
-	pagoAnalisisPendienteHTML, restablecerCuentaHTML, tareaCompletadaHTML, tareaNuevaHTML, tareasRetrasadasHTML,
-	etapaFinalizadaHTML, propuestaAnalisisHTML,
+	proximoPagoPendienteHTML, restablecerCuentaHTML, tareaCompletadaHTML, tareaNuevaHTML, tareasRetrasadasHTML,
+	etapaFinalizadaHTML, propuestaCargadaHTML,
 	nuevaEmpresa, nuevoConsultorRegistrado, consultor_AsignadoEtapa,
 	archivosAnalisisHTML, archivosPlanEmpresarialHTML, 
 }

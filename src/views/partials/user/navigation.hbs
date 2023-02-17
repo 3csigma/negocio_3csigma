@@ -142,9 +142,8 @@
           </a>
         </li>
 
-        {{#if etapaCompleta.verAnalisis}}
-
         {{!-- ITEM ANÁLISIS --}}
+        {{#if etapaCompleta.verAnalisis}}
         {{#if itemAnalisis}}
         <li class="mm-active">
         {{else}}
@@ -169,12 +168,38 @@
             {{/if}}
           </a>
         </li>
-
         {{/if}}
 
-        {{#if etapaCompleta.verEstrategico}}
+        {{!-- ITEM PLAN EMPRESARIAL --}}
+        {{#if etapaCompleta.verEmpresarial}}
+        {{#if itemEmpresarial}}
+        <li class="mm-active">
+        {{else}}
+        <li>
+        {{/if}}
+          {{#if consulAsignado.c3}}
+          {{#if linksMenu.e3}}
+            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
+            {{else}}
+            <a href="/plan-empresarial" aria-expanded="false">
+            {{/if}}
+          {{else}}
+          <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
+          {{/if}}
+
+            {{#if etapaCompleta.e3}}
+            <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
+            <span class="nav-text" style="color: #6EBB0B">Plan empresarial</span>
+            {{else}}
+            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <span class="nav-text">Plan empresarial</span>
+            {{/if}}
+          </a>
+        </li>
+        {{/if}}
 
         {{!-- ITEM ESTRATÉGICO --}}
+        {{#if etapaCompleta.verEstrategico}}
         {{#if itemEstrategico}}
         <li class="mm-active">
         {{else}}
@@ -200,7 +225,6 @@
             {{/if}}
           </a>
         </li>
-
         {{/if}}
 
       </ul>
