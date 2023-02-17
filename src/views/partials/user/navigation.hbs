@@ -20,7 +20,7 @@
 
 <div id="main-wrapper">
   <!--**********************************
-                START Nav header start
+          START Nav header start
     ***********************************-->
 
   <div class="nav-header">
@@ -103,7 +103,7 @@
     ***********************************-->
 
   <!--**********************************
-              START Sidebar start
+    START MENÚ LATERAL IZQUIERDO - INICIO
     ***********************************-->
   <div class="deznav">
     <div class="deznav-scroll">
@@ -127,7 +127,11 @@
         <li>
         {{/if}}
           {{#if consulAsignado.c1}}
+            {{#if modalAcuerdo}}
+            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
+            {{else}}
             <a href="/diagnostico-de-negocio" aria-expanded="false">
+            {{/if}}
           {{else}}
             <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
@@ -150,11 +154,7 @@
         <li>
         {{/if}}
           {{#if consulAsignado.c2}}
-          {{#if linksMenu.e2}}
-            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
-            {{else}}
             <a href="/analisis-de-negocio" aria-expanded="false">
-            {{/if}}
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
@@ -178,11 +178,7 @@
         <li>
         {{/if}}
           {{#if consulAsignado.c3}}
-          {{#if linksMenu.e3}}
-            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
-            {{else}}
             <a href="/plan-empresarial" aria-expanded="false">
-            {{/if}}
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
@@ -191,7 +187,7 @@
             <i class="fa-solid fa-check" style="color:#6EBB0B"></i>
             <span class="nav-text" style="color: #6EBB0B">Plan empresarial</span>
             {{else}}
-            <i class="fa-solid fa-magnifying-glass-dollar"></i>
+            <i class="fa-solid fa-laptop-file"></i>
             <span class="nav-text">Plan empresarial</span>
             {{/if}}
           </a>
@@ -207,11 +203,7 @@
         {{/if}}
           
           {{#if consulAsignado.c4}}
-          {{#if linksMenu.e4}}
-            <a href="#" data-toggle="modal" data-target="#modal-acuerdo-confidencial">
-            {{else}}
             <a href="/plan-estrategico" aria-expanded="false">
-            {{/if}}
           {{else}}
           <a style="cursor:pointer" onclick="msgSinConsultor()" aria-expanded="false">
           {{/if}}
@@ -247,5 +239,5 @@
     </div>
   </div>
   <!--**********************************
-              END Sidebar end
+              END MENÚ LATERAL IZQUIERDO FIN
   ***********************************-->

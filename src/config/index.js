@@ -15,7 +15,6 @@ settings.impersonatedUserGuid =  process.env.DS_IMPERSONATED_USER_GUID || settin
 // let fechaActual = Math.floor(Date.now()/1000) // Fecha Actual
 // let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min (1440 min = 1 día)
 let authToken, args = {}, envelopeId;
-let acuerdoFirmado = {};
 
 let dsPayload = {
   "iss": settings.dsIntegrationKey,
@@ -62,7 +61,7 @@ const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil',
 
 exports.config = {
   dsOauthServer, dsPayload,
-  authToken, settings, args, acuerdoFirmado,
+  authToken, settings, args,
   envelopeId, clavePrivada,
   rutasEmpresa, rutasConsultor, rutasAdmin
 };

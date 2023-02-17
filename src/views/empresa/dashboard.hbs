@@ -42,7 +42,7 @@
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
-                                    <span class="activity-icon bgl-diagnostico mr-md-4 mr-3">
+                                    <span class="activity-icon mr-md-4 mr-3">
                                         <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -71,7 +71,7 @@
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
-                                    <span class="activity-icon bgl-secondary  mr-md-4 mr-3">
+                                    <span class="activity-icon mr-md-4 mr-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="40"
                                             height="37" preserveAspectRatio="xMidYMid meet" viewBox="0 0 512 512">
                                             <path fill="#A02CFA"
@@ -89,10 +89,6 @@
                                         height:5px;" role="progressbar">
                                         <span class="sr-only">{{porcentajeEtapa2}}% Completado</span>
                                     </div>
-                                    {{!-- <div class="progress-bar bg-secondary" style="width: 5%; height:5px;"
-                                        role="progressbar">
-                                        <span class="sr-only">0% Completado</span>
-                                    </div> --}}
                                 </div>
                             </div>
                             <div class="effect bg-secondary"></div>
@@ -103,14 +99,8 @@
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
-                                    <span class="activity-icon bgl-plan mr-md-4 mr-3">
-                                        <svg width="40" height="37" viewBox="0 0 40 37" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M15 35.0002C15 35.9168 15.75 36.6668 16.6667 36.6668H23.3334C24.25 36.6668 25 35.9168 25 35.0002V33.3335H15V35.0002ZM20 3.3335C13.5667 3.3335 8.33337 8.56683 8.33337 15.0002C8.33337 18.9668 10.3167 22.4502 13.3334 24.5668V28.3335C13.3334 29.2502 14.0834 30.0002 15 30.0002H25C25.9167 30.0002 26.6667 29.2502 26.6667 28.3335V24.5668C29.6834 22.4502 31.6667 18.9668 31.6667 15.0002C31.6667 8.56683 26.4334 3.3335 20 3.3335ZM23.3334 22.8335V26.6668H16.6667V22.8335C14.1334 21.0502 11.6667 19.2168 11.6667 15.0002C11.6667 10.4002 15.4 6.66683 20 6.66683C24.6 6.66683 28.3334 10.4002 28.3334 15.0002C28.3334 19.1502 25.8167 21.0835 23.3334 22.8335Z"
-                                                fill="#50368C" />
-                                        </svg>
-
+                                    <span class="activity-icon mr-md-4 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="37" viewBox="0 0 640 512"><path fill="#6C2986" d="M192 0H48C21.5 0 0 21.5 0 48V368c0 26.5 21.5 48 48 48H162.7c6.6-18.6 24.4-32 45.3-32V272c0-44.2 35.8-80 80-80h32V128H224c-17.7 0-32-14.3-32-32V0zm96 224c-26.5 0-48 21.5-48 48v16 96 32H208c-8.8 0-16 7.2-16 16v16c0 35.3 28.7 64 64 64H576c35.3 0 64-28.7 64-64V432c0-8.8-7.2-16-16-16H592V288c0-35.3-28.7-64-64-64H320 304 288zm32 64H528V416H304V288h16zM224 0V96h96L224 0z"/></svg>
                                     </span>
                                     <div class="media-body">
                                         <p class="fs-14 mb-2">Plan empresarial</p>
@@ -118,13 +108,13 @@
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa3}}{{porcentajeEtapa3}}{{else}}5{{/if}}%; 
+                                    <div class="progress-bar bg-empresarial" style="width:{{#if porcentajeEtapa3}}{{porcentajeEtapa3}}{{else}}5{{/if}}%; 
                                         height:5px;" role="progressbar">
                                         <span class="sr-only">{{porcentajeEtapa3}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="effect bg-plan"></div>
+                            <div class="effect bg-empresarial"></div>
                         </div>
                     </div>
                     {{!-- Plan estratégico de negocio --}}
@@ -132,7 +122,7 @@
                         <div class="card avtivity-card">
                             <div class="card-body">
                                 <div class="media align-items-center">
-                                    <span class="activity-icon bgl-plan mr-md-4 mr-3">
+                                    <span class="activity-icon mr-md-4 mr-3">
                                         <svg width="40" height="37" viewBox="0 0 40 37" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -147,13 +137,13 @@
                                     </div>
                                 </div>
                                 <div class="progress" style="height:5px;">
-                                    <div class="progress-bar bg-plan" style="width:{{#if porcentajeEtapa4}}{{porcentajeEtapa4}}{{else}}5{{/if}}%; 
+                                    <div class="progress-bar bg-estrategico" style="width:{{#if porcentajeEtapa4}}{{porcentajeEtapa4}}{{else}}5{{/if}}%; 
                                         height:5px;" role="progressbar">
                                         <span class="sr-only">{{porcentajeEtapa4}}% Completado</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="effect bg-plan"></div>
+                            <div class="effect bg-estrategico"></div>
                         </div>
                     </div>
 
