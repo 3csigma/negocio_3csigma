@@ -4,7 +4,7 @@ const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const { getTemplate, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
-const { consultarDatos } = require('../lib/helpers')
+const { consultarDatos, insertarDatos } = require('../lib/helpers')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id_usuarios);
@@ -73,10 +73,12 @@ passport.use('local.registro', new LocalStrategy({
             }
 
             // Guardar en la base de datos
-            const fila = await pool.query('INSERT INTO users SET ?', [newUser])
+            // const fila = await pool.query('INSERT INTO users SET ?', [newUser])
+            const fila = await insertarDatos('users', newUser)
             const empresa = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion, mes, year }
             if (fila.affectedRows > 0) {
-                await pool.query('INSERT INTO empresas SET ?', [empresa])
+                // await pool.query('INSERT INTO empresas SET ?', [empresa])
+                await insertarDatos('empresas', empresa)
             }
             return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
         }
@@ -136,9 +138,11 @@ passport.use('local.registroConsultores', new LocalStrategy({
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
             } else {
                 // Guardar en la base de datos
-                const fila1 = await pool.query('INSERT INTO users SET ?', [newUser]);
+                // const fila1 = await pool.query('INSERT INTO users SET ?', [newUser]);
+                const fila1 = await insertarDatos('users', newUser);
                 if (fila1.affectedRows > 0) {
-                    await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
+                    // await pool.query('INSERT INTO consultores SET ?', [nuevoConsultor]);
+                    await insertarDatos('consultores', nuevoConsultor);
                 }
 
                 return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));

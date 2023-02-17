@@ -86,10 +86,15 @@ router.post('/diagnostico-proyecto/', checkLogin, dashboardController.guardarRes
 // SUBIR INFORMES DE TODAS LAS ETAPAS
 router.post('/guardarInforme', checkLogin, dashboardController.subirInforme, dashboardController.guardarInforme)
 
+/********************************************************************************
+ * PLAN EMPRESARIAL
+ */
 // SUBIR ARCHIVOS PARA PLAN EMPRESARIAL
 router.post('/guardar-archivos-empresarial', checkLogin, uploadFiles('Plan-Empresarial_', false, 'archivos_plan_empresarial', false), dashboardController.guardarArchivo_Empresarial)
 // SUBIR ARCHIVOS PARA PLAN EMPRESARIAL
 router.post('/website-empresarial', checkLogin, dashboardController.websiteEmpresarial)
+// FINALIZAR ETAPA DE PLAN EMPRESARIAL
+router.post('/finalizarEtapa', checkLogin, dashboardController.finalizarEtapa)
 
 /*******************************************************************************************************/
 // Ejecución Diaria (12pm)

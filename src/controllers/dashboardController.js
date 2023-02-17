@@ -4,7 +4,7 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { clientSecretStripe } = require('../keys').config
@@ -761,6 +761,8 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
     if (propuesta.empresarial) {
         datos.etapa = 'Propuesta de plan empresarial enviada'
+        propuesta.empresarial.finalizada = false;
+        if (datosEmpresa.etapa_empresarial == 1) { propuesta.empresarial.finalizada = true; }
 
         /** PAGOS DE PLAN EMPRESARIAL (ÚNICO o DIVIDIDO*/
         pagos_empresarial.unico = JSON.parse(pay.empresarial0)
@@ -772,11 +774,11 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_empresarial.unico.txt = pagos_empresarial.uno.txt = pagos_empresarial.dos.txt = pagos_empresarial.tres.txt = 'Pendiente';
         pagos_empresarial.unico.btn = pagos_empresarial.uno.btn = true;
         pagos_empresarial.dos.btn = pagos_empresarial.tres.btn = false;
-
-        pagos_empresarial.unico.precio = propuesta.empresarial.precio_total
         pagos_empresarial.uno.precio = propuesta.empresarial.precio_per1
         pagos_empresarial.dos.precio = propuesta.empresarial.precio_per2
         pagos_empresarial.tres.precio = propuesta.empresarial.precio_per3
+
+        pagos_empresarial.unico.precio = parseFloat(propuesta.empresarial.precio_total*0.9);
 
         if (pagos_empresarial.unico.estado == 1) {
             datos.etapa = 'Plan empresarial pago único'
@@ -784,6 +786,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_empresarial.unico.txt = 'Pagado 100%'
             propuesta.empresarial.pago = true;
             pagos_empresarial.unico.btn = false;
+            precioPagado = pagos_empresarial.unico.precio;
         }
         if (pagos_empresarial.uno.estado == 2) {
             datos.etapa = 'Plan empresarial - Pagado 60%'
@@ -1034,7 +1037,8 @@ dashboardController.conclusiones = async (req, res) => {
         await pool.query('UPDATE conclusiones SET ? WHERE id_empresa = ? AND etapa = ?', [obj, id_empresa, etapa])
     } else {
         const objConclusion = {id_empresa, etapa, conclusion}
-        await pool.query('INSERT INTO conclusiones SET ?', [objConclusion])
+        // await pool.query('INSERT INTO conclusiones SET ?', [objConclusion])
+        await insertarDatos('conclusiones', objConclusion)
     }
     res.send(true)
 }
@@ -1087,7 +1091,8 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
         } else {
             const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
-            await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
+            // await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
+            await insertarDatos('consultores_asignados', datos)
             
             /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
@@ -1110,7 +1115,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             if (resultConsultor == false) {
                 console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
             } else {
-                console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + consultor.email + " >>>>>\n")
+                console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado a una empresa - Email Consultor: " + consultor.email + " >>>>>\n")
             }
         }
     }
@@ -1318,7 +1323,8 @@ dashboardController.enviarCuestionario = async (req, res) => {
     }
 
     // Guardando en la Base de datos
-    const cuestionario = await pool.query('INSERT INTO dg_empresa_establecida SET ?', [nuevoDiagnostico])
+    // const cuestionario = await pool.query('INSERT INTO dg_empresa_establecida SET ?', [nuevoDiagnostico])
+    const cuestionario = await insertarDatos('dg_empresa_establecida', nuevoDiagnostico)
     if (cuestionario.affectedRows > 0) {
         /************************************************************************************************* */
         // RENDIMIENTO DE LA EMPRESA
@@ -1332,10 +1338,13 @@ dashboardController.enviarCuestionario = async (req, res) => {
         const nuevoRendimiento = {
             empresa: id_empresa, total_ventas, total_compras, total_gastos, utilidad, fecha: new Date().toLocaleDateString("en-US")
         }
-        const rendimiento = await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+        // const rendimiento = await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+        const rendimiento = await insertarDatos('rendimiento_empresa', nuevoRendimiento)
         /************************************************************************************************* */
-        const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
-        const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
+        // const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
+        const aVitales = await insertarDatos('indicadores_areasvitales', areasVitales)
+        // const aDimensiones = await pool.query('INSERT INTO indicadores_dimensiones SET ?', [areasDimensiones])
+        const aDimensiones = await insertarDatos('indicadores_dimensiones', areasDimensiones)
         if ((aVitales.affectedRows > 0) && (aDimensiones.affectedRows > 0) && (rendimiento.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
@@ -1518,11 +1527,14 @@ dashboardController.guardarRespuestas = async (req, res) => {
     }
 
     // Guardando en la Base de datos
-    const cuestionario = await pool.query('INSERT INTO dg_empresa_nueva SET ?', [nuevoDiagnostico])
+    // const cuestionario = await pool.query('INSERT INTO dg_empresa_nueva SET ?', [nuevoDiagnostico])
+    const cuestionario = await insertarDatos('dg_empresa_nueva', nuevoDiagnostico)
     if (cuestionario.affectedRows > 0) {
 
-        const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
-        const resultado_categorias = await pool.query('INSERT INTO resultado_categorias SET ?', [resulCategorias])
+        // const aVitales = await pool.query('INSERT INTO indicadores_areasvitales SET ?', [areasVitales])
+        const aVitales = await insertarDatos('indicadores_areasvitales', areasVitales)
+        // const resultado_categorias = await pool.query('INSERT INTO resultado_categorias SET ?', [resulCategorias])
+        const resultado_categorias = await insertarDatos('resultado_categorias', resulCategorias)
         if ((aVitales.affectedRows > 0) && (resultado_categorias.affectedRows > 0)) {
             console.log("\nINSERCIÓN COMPLETA DE LOS INDICADORES DE LA EMPRESA\n")
             res.redirect('/empresas/' + codigoEmpresa + '#diagnostico_')
@@ -1579,7 +1591,8 @@ dashboardController.guardarInforme = async (req, res) => {
     if (tieneInforme.length > 0) {
         informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e.id_empresas, nombreInforme])
     } else {
-        informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+        // informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+        informe = await insertarDatos('informes', nuevoInforme)
     }
 
     if (informe.affectedRows > 0) {
@@ -1588,24 +1601,25 @@ dashboardController.guardarInforme = async (req, res) => {
         let tipoInforme = nombreInforme.toLowerCase();
         let asunto = 'Se ha cargado un nuevo ' + tipoInforme
         let template = informesHTML(nombreEmpresa_, tipoInforme);
+        const texto = "Tu consultor ha cargado el informe general."
         
         if (nombreInforme == 'Informe diagnóstico') {
             asunto = 'Diagnóstico de negocio finalizado'
             const etapa = 'Diagnóstico de negocio';
             const link = 'diagnostico-de-negocio';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
         }
         if (nombreInforme == 'Informe de análisis') {
             asunto = 'Análisis de negocio finalizado'
             const etapa = 'Análisis de negocio';
             const link = 'analisis-de-negocio';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
         }
         if (nombreInforme == 'Informe de plan estratégico') {
             asunto = 'Plan estratégico de negocio finalizado'
             const etapa = 'Plan estratégico de negocio';
             const link = 'plan-estrategico';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, link);
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
         }
         
         // Enviar Email
@@ -1661,7 +1675,8 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     if (tieneArchivo.length > 0) {
         archivoActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND tipo = ?', [actualizar, e.id_empresas, tipo])
     } else {
-        archivoActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
+        // archivoActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
+        archivoActual = await insertarDatos('archivos_plan_empresarial', nuevoArchivo)
     }
 
     if (archivoActual.affectedRows > 0) {
@@ -1705,21 +1720,24 @@ dashboardController.websiteEmpresarial = async (req, res) => {
         year: fecha.getFullYear()
     }
 
-    const actualizar = {
-        url: link,
-        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-        mes: fecha.getMonth() + 1,
-        year: fecha.getFullYear()
-    }
 
     // Validando si ya tiene un informe montado
     const tieneLink = await consultarDatos('archivos_plan_empresarial', `WHERE empresa = "${e.id_empresas}" AND tipo = "Website"`)
     let linkActual = null;
 
     if (tieneLink.length > 0) {
-        linkActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND nombre = ?', [actualizar, e.id_empresas, link])
+        console.log("\n\n----- Hola desde Actualizar WEBSITE\n\n----- ")
+        const actualizar = {
+            url: link,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
+        console.log(actualizar)
+        linkActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND tipo = ?', [actualizar, e.id_empresas, 'Website'])
     } else {
-        linkActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
+        console.log("\n\n----- Hola desde INSERTAR WEBSITE\n\n----- ")
+        linkActual = await insertarDatos('archivos_plan_empresarial', nuevoArchivo)
     }
 
     if (linkActual.affectedRows > 0) {
@@ -1742,4 +1760,27 @@ dashboardController.websiteEmpresarial = async (req, res) => {
     }
 
     res.send(r)
+}
+
+dashboardController.finalizarEtapa = async (req, res) => {
+    const { codigo } = req.body;
+    let empresa = await consultarDatos('empresas')
+    empresa = empresa.find(e => e.codigo == codigo)
+    let result = false;
+    if (empresa) {
+        const etapa = {etapa_empresarial: 1}
+        await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [etapa, codigo]);
+        const texto = 'Ingresa a tu cuenta para revisar los archivos cargados por tu consultor.'
+        const link = 'plan-empresarial';
+        template = etapaFinalizadaHTML(empresa.nombre_empresa, 'Plan Empresarial', texto, link);
+        // Enviar Email
+        const resultEmail = await sendEmail(empresa.email, 'Plan empresarial finalizado', template)
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de etapa de Plan Empresarial finalizada >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado al email de la empresa que ha finalizado la etapa de Plan Empresarial >>>>>\n")
+            result = true;
+        }
+    }
+    res.send(result)
 }

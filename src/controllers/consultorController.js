@@ -1,7 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
 const { sendEmail, propuestaAnalisisHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
-const { consultarDatos } = require('../lib/helpers')
+const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -44,7 +44,7 @@ consultorController.index = async (req, res) => {
     }
 
     res.render('consultor/panelConsultor', {
-        consultorDash: true, itemActivo: 1, empresas, graficas1: true, 
+        consultorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
         ultimosInformes
     });
@@ -83,7 +83,7 @@ consultorController.empresasAsignadas = async (req, res) => {
             e.estadoAcuerdo == 2 ? e.etapa = 'Acuerdo firmado' : e.etapa = e.etapa;
             e.telefono ? e.etapa = 'Ficha cliente' : e.etapa = e.etapa;
             e.id_diagnostico ? e.etapa = 'Cuestionario diagnóstico' : e.etapa = e.etapa;
-    
+
             informe.forEach(i => {
                 if (i.id_empresa == e.id_empresas) {
                     e.etapa = 'Informe diagnóstico';
@@ -126,7 +126,7 @@ consultorController.enviarPropuesta = async (req, res) => {
         await pool.query('UPDATE propuestas SET ? WHERE empresa = ? AND tipo_propuesta = ?', [actualizarPropuesta, idEmpresa, tipo_propuesta]);
     } else {
         const nuevaPropuesta = { empresa: idEmpresa, tipo_propuesta, precio_total: precioPropuesta, precio_per1, precio_per2, precio_per3, fecha, link_propuesta, limiteSub }
-        await pool.query('INSERT INTO propuestas SET ?', [nuevaPropuesta]);
+        await insertarDatos('propuestas', nuevaPropuesta)
     }
 
     /** INFO PARA ENVÍO DE EMAIL */
@@ -181,9 +181,9 @@ consultorController.guardarAnalisisProducto = async (req, res) => {
         } else {
             // Creando Objetos para guardar en la base de datos
             const nuevoAnalisis = { id_empresa, producto }
-            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+            await insertarDatos('analisis_empresa', nuevoAnalisis)
         }
-        
+
         res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
     }
 }
@@ -230,7 +230,7 @@ consultorController.guardarAnalisisAdministracion = async (req, res) => {
         } else {
             // Creando Objetos para guardar en la base de datos
             const nuevoAnalisis = { id_empresa, administracion }
-            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+            await insertarDatos('analisis_empresa', nuevoAnalisis)
         }
 
         res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
@@ -274,7 +274,7 @@ consultorController.guardarAnalisisOperacion = async (req, res) => {
         } else {
             // Creando Objetos para guardar en la base de datos
             const nuevoAnalisis = { id_empresa, operacion }
-            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+            await insertarDatos('analisis_empresa', nuevoAnalisis)
         }
 
         res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
@@ -322,7 +322,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
         } else {
             // Creando Objetos para guardar en la base de datos
             const nuevoAnalisis = { id_empresa, marketing }
-            await pool.query('INSERT INTO analisis_empresa SET ?', [nuevoAnalisis])
+            await insertarDatos('analisis_empresa', nuevoAnalisis)
         }
 
         res.redirect('/empresas/' + codigoEmpresa + '#analisis_')
@@ -350,12 +350,14 @@ consultorController.agregarTarea = async (req, res) => {
         }
         /******************************************************* */
         const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa }
-        const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
+        // const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
+        const tarea = await insertarDatos('plan_estrategico', nuevaTarea)
         console.log("INFO TAREA DB >>> ", tarea)
         res.send(tarea)
     } else {
         const nuevaTarea = { empresa, actividad, fecha_inicio, fecha_entrega }
-        const tarea = await pool.query('INSERT INTO tareas_plan_empresarial SET ?', [nuevaTarea])
+        // const tarea = await pool.query('INSERT INTO tareas_plan_empresarial SET ?', [nuevaTarea])
+        const tarea = await insertarDatos('tareas_plan_empresarial', nuevaTarea)
         console.log("INFO TAREA DB >>> ", tarea)
         res.send(tarea)
     }
@@ -379,15 +381,15 @@ consultorController.editarTarea = async (req, res) => {
 // ACTUALIZAR TAREA x EMPRESA CON BASE A SU ID
 consultorController.actualizarTarea = async (req, res) => {
     const { idTarea, actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, prioridad, item } = req.body
-    
+
     // Para Plan Empresarial
     if (item == 1) {
         const actualizarTarea = { actividad, descripcion, fecha_inicio, fecha_entrega, estado, prioridad }
         const tarea = await pool.query('UPDATE tareas_plan_empresarial SET ? WHERE id = ?', [actualizarTarea, idTarea])
         console.log("INFO TAREA PLAN EMPRESARIAL DB >>> ", tarea)
         res.send(tarea)
-        
-    } 
+
+    }
     // Para Plan Estrategico
     else {
         const actualizarTarea = { actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
@@ -409,7 +411,7 @@ consultorController.actualizarTarea = async (req, res) => {
     }
 }
 
-// COMENTARIO DE TAREAS 
+// COMENTARIO DE TAREAS
 consultorController.comentarioTareas = async (req, res) => {
     const {idTarea, fecha} = req.body
 
@@ -451,10 +453,12 @@ consultorController.comentarioTareas = async (req, res) => {
 consultorController.eliminarTarea = async (req, res) => {
     const { idTarea, item } = req.body
     if (item == 1) {
-        const infoTarea = await pool.query('DELETE FROM tareas_plan_empresarial WHERE id = ?', [idTarea])
+        // const infoTarea = await pool.query('DELETE FROM tareas_plan_empresarial WHERE id = ?', [idTarea])
+        const infoTarea = await eliminarDatos('tareas_plan_empresarial', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN EMPRESARIAL ---- ", infoTarea)
     } else {
-        const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
+        // const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
+        const infoTarea = await eliminarDatos('plan_estrategico', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN ESTRATÉGICO ---- ", infoTarea)
     }
     res.send(true)
@@ -476,6 +480,7 @@ consultorController.nuevoRendimiento = async (req, res) => {
     total_gastos = total_gastos.replace(/[,]/g, '.');
     const utilidad = parseFloat(total_ventas) - parseFloat(total_compras) - parseFloat(total_gastos)
     const nuevoRendimiento = { empresa, total_ventas, total_compras, total_gastos, utilidad, fecha }
-    await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+    // await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
+    await insertarDatos('rendimiento_empresa', nuevoRendimiento)
     res.redirect('/empresas/' + codigo)
 }

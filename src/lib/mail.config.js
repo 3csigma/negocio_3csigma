@@ -2055,7 +2055,7 @@ const informesHTML = (empresa, informe) => {
 		`
 }
 
-const etapaFinalizadaHTML = (empresa, etapa, link) => {
+const etapaFinalizadaHTML = (empresa, etapa, texto, link) => {
 	return `
 	<!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
@@ -2241,9 +2241,7 @@ const etapaFinalizadaHTML = (empresa, etapa, link) => {
 																style="padding-bottom:5px;padding-left:25px;padding-right:25px;padding-top:5px;">
 																<div
 																	style="color:#101112;direction:ltr;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:14px;font-weight:400;letter-spacing:0px;line-height:200%;text-align:center;mso-line-height-alt:28px;">
-																	<p style="margin: 0;">Tu consultor ha cargado el
-																		informe general. Ingresa a 3C Sigma para
-																		revisarlo</p>
+																	<p style="margin: 0;">${texto}</p>
 																</div>
 															</td>
 														</tr>
@@ -2277,7 +2275,7 @@ const etapaFinalizadaHTML = (empresa, etapa, link) => {
 															<td class="pad">
 																<div class="alignment" align="center">
 																	<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://negocio.3csigma.com/login" style="height:50px;width:466px;v-text-anchor:middle;" arcsize="16%" strokeweight="0.75pt" strokecolor="#fed061" fillcolor="#fed061"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Arial, sans-serif; font-size:14px"><![endif]--><a
-																		href="https://negocio.3csigma.com/${link}"
+																		href="${my_domain}/${link}"
 																		target="_blank"
 																		style="text-decoration:none;display:block;color:#000000;background-color:#fed061;border-radius:8px;width:80%;border-top:1px solid transparent;font-weight:700;border-right:1px solid transparent;border-bottom:1px solid transparent;border-left:1px solid transparent;padding-top:10px;padding-bottom:10px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;text-align:center;mso-border-alt:none;word-break:keep-all;"><span
 																			style="padding-left:0px;padding-right:0px;font-size:14px;display:inline-block;letter-spacing:normal;"><span

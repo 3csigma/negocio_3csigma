@@ -617,6 +617,18 @@ helpers.consultarDatos = async (tabla, extra = null) => {
     return data;
 }
 
+helpers.insertarDatos = async (tabla, datos) => {
+    return await pool.query(`INSERT INTO ${tabla} SET ?`, [datos]);
+}
+
+helpers.actualizarDatos = async (tabla, datos, extra) => {
+    return await pool.query(`UPDATE ${tabla} SET ${datos} ${extra}`);
+}
+
+helpers.eliminarDatos = async (tabla, extra) => {
+    return await pool.query(`DELETE FROM ${tabla} ${extra}`);
+}
+
 /******************************************************************** */
 // FUNCIÓN MULTIPLE (PLAN ESTRATÉGICO)
 helpers.tareasGenerales = async (empresa, fechaActual) => {

@@ -4,7 +4,7 @@ const { my_domain, id_producto_estrategico, clientSecretStripe } = require('../k
 const stripe = require('stripe')(clientSecretStripe);
 const { consultarDatos } = require('../lib/helpers')
 
-let precioDiag = 0, precioE2 = 0;
+let precioDiag = 0, precioE2 = 0, precioE3 = 0;
 
 /** PAGO ÚNICO - DIAGNÓSTICO DE NEGOCIO */
 pagosController.pagarDiagnostico = async (req, res) => {
@@ -273,6 +273,212 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     res.redirect(303, session.url);
 }
 
+/** PAGO ÚNICO - PLAN EMPRESARIAL */
+pagosController.pagarEmpresarialCompleto = async (req, res) => {
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    let precio = 0;
+    if (pay) {
+        precio = (parseFloat(pay.precio_total*0.9))
+        precioE3 = precio;
+        precio = precio + '00'
+        console.log("Precio => ", precio)
+    }
+
+    const session = await stripe.checkout.sessions.create({
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
+        line_items: [
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Pago Único - Plan Empresarial',
+                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
+                    },
+                    unit_amount: precio,
+                },
+                quantity: 1,
+                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+            },
+        ],
+        mode: 'payment',
+    });
+
+    console.log("RESPUESTA STRIPE SESSION", session.url)
+    req.session.intentPay = session.url;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.empresarial0 = true;
+    req.session.empresarial1 = false;
+    req.session.empresarial2 = false;
+    req.session.empresarial3 = false;
+    res.redirect(303, session.url);
+}
+
+/************** PAGOS DIVIDOS - PLAN EMPRESARIAL ****************/
+/** PAGO 1 - PORCENTAJE 60% */
+pagosController.pagarEmpresarial_parte1 = async (req, res) => {
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    let precio = 0;
+    if (pay) {
+        precioE2 = precio;
+        precio = pay.precio_per1 + ''
+        if (precio.includes('.')) {
+            precio = precio.split('.')
+            precio = precio[0] + '' + precio[1]
+            precio = precio + '0'
+        } else {
+            precio = precio + '00'
+        }
+        precio = parseInt(precio)
+    }
+
+    const session = await stripe.checkout.sessions.create({
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
+        line_items: [
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Pago primera cuota - Plan Empresarial',
+                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
+                    },
+                    unit_amount: precio,
+                },
+                quantity: 1,
+                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+            },
+        ],
+        mode: 'payment',
+    });
+
+    console.log("RESPUESTA STRIPE SESSION", session.url)
+    req.session.intentPay = session.url;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.empresarial0 = false;
+    req.session.empresarial1 = true;
+    req.session.empresarial2 = false;
+    req.session.empresarial3 = false;
+    res.redirect(303, session.url);
+}
+
+/** PAGO 2 - PORCENTAJE 20% */
+pagosController.pagarEmpresarial_parte2 = async (req, res) => {
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    let precio = 0;
+    if (pay) {
+        precioE2 = precio;
+        precio = pay.precio_per2 + ''
+        if (precio.includes('.')) {
+            precio = precio.split('.')
+            precio = precio[0] + '' + precio[1]
+            precio = precio + '0'
+        } else {
+            precio = precio + '00'
+        }
+        precio = parseInt(precio)
+    }
+
+    const session = await stripe.checkout.sessions.create({
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
+        line_items: [
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Pago segunda cuota - PLan Empresarial',
+                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
+                    },
+                    unit_amount: precio,
+                },
+                quantity: 1,
+                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+            },
+        ],
+        mode: 'payment',
+    });
+
+
+    console.log("RESPUESTA STRIPE SESSION", session.url)
+    req.session.intentPay = session.url;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.empresarial0 = false;
+    req.session.empresarial1 = false;
+    req.session.empresarial2 = true;
+    req.session.empresarial3 = false;
+    res.redirect(303, session.url);
+}
+
+/** PAGO 3 - PORCENTAJE 20% */
+pagosController.pagarEmpresarial_parte3 = async (req, res) => {
+    /** CONSULTANDO EMPRESA LOGUEADA */
+    const empresas = await consultarDatos('empresas')
+    const e = empresas.find(x => x.email == req.user.email)
+    const id_empresa = e.id_empresas;
+    const propuesta = await consultarDatos('propuestas')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    let precio = 0;
+    if (pay) {
+        precioE2 = precio;
+        precio = pay.precio_per3 + ''
+        if (precio.includes('.')) {
+            precio = precio.split('.')
+            precio = precio[0] + '' + precio[1]
+            precio = precio + '0'
+        } else {
+            precio = precio + '00'
+        }
+        precio = parseInt(precio)
+    }
+
+    const session = await stripe.checkout.sessions.create({
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
+        line_items: [
+            {
+                price_data: {
+                    currency: 'usd',
+                    product_data: {
+                        name: 'Pago tercera cuota - Plan Empresarial',
+                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
+                    },
+                    unit_amount: precio,
+                },
+                quantity: 1,
+                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+            },
+        ],
+        mode: 'payment',
+    });
+
+
+    console.log("RESPUESTA STRIPE SESSION", session.url)
+    req.session.intentPay = session.url;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.empresarial0 = false;
+    req.session.empresarial1 = false;
+    req.session.empresarial2 = false;
+    req.session.empresarial3 = true;
+    res.redirect(303, session.url);
+}
+
+/** PAGO ÚNICO - PLAN ESTRATÉGICO */
 pagosController.pagarPlanEstrategico = async (req, res) => {
     /** CONSULTANDO EMPRESA LOGUEADA */
     const empresas = await consultarDatos('empresas')
@@ -305,13 +511,14 @@ pagosController.pagarPlanEstrategico = async (req, res) => {
     
     req.session.idSesion = session.id
     req.session.intentPay = session.url;
-    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = false;
+    req.session.payDg0 = req.session.analisis0 = req.session.analisis1 = req.session.analisis2 = req.session.analisis3 = req.session.empresarial0 = req.session.empresarial1 = req.session.empresarial2 = req.session.empresarial3 = false;
     req.session.planEstrategico = true;
     req.session.limiteSub = pay.limiteSub;
     console.log(req.session.limiteSub);
     res.redirect(303, session.url);
 }
 
+// CANCELAR SUBSCRIPCIÓN - PLAN ESTRATÉGICO
 pagosController.cancelarSub = async (req, res) => {
     const { empresa, id_sub } = req.body;
     console.log("\nID de la Sub: " + id_sub)
@@ -331,7 +538,7 @@ pagosController.cancelarSub = async (req, res) => {
 
 /********************************************************************/
 pagosController.pagoExitoso = async (req, res) => {
-    let pagoEtapa1_ok = false, pagoEtapa2_ok = false, pagoEtapa3_ok = false;
+    let pagoEtapa1_ok = false, pagoOtras_etapas = false;
     req.session.intentPay = undefined;
 
     /** CONSULTANDO EMPRESA LOGUEADA */
@@ -345,12 +552,14 @@ pagosController.pagoExitoso = async (req, res) => {
 
     if (pago) {
         const fecha = new Date().toLocaleDateString("en-US")
+        // Pago exitoso para Diagnóstico de Negocio
         if (req.session.payDg0) {
             const actualizar = { diagnostico_negocio: JSON.stringify({ estado: 1, fecha, precio: precioDiag }) }
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
-            pagoEtapa1_ok = true
+            pagoEtapa1_ok = true;
         }
 
+        // Pago exitoso para Análisis de Negocio
         let actualizarAnalisis = undefined;
         let pagoAnalisis = { estado: 1, fecha }
         if (req.session.analisis0) {
@@ -369,12 +578,39 @@ pagosController.pagoExitoso = async (req, res) => {
         } else if (req.session.analisis3) {
             pagoAnalisis.estado = 2;
             actualizarAnalisis = { analisis_negocio3: JSON.stringify(pagoAnalisis) }
-        } 
+        }
 
         if (actualizarAnalisis != undefined) {
             pagoEtapa1_ok = false
-            pagoEtapa2_ok = true;
+            pagoOtras_etapas = true;
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarAnalisis, id_empresa])
+        }
+
+        // Pago exitoso para Plan Empresarial
+        let actualizarEmpresarial = undefined;
+        let pagoEmpresarial = { estado: 1, fecha }
+        if (req.session.empresarial0) {
+            pagoEmpresarial.estado = 1;
+            pagoEmpresarial.precio = precioE3;
+            actualizarEmpresarial = {
+                empresarial0: JSON.stringify(pagoEmpresarial),
+                empresarial1: JSON.stringify({ estado: 0 })
+            }
+        } else if (req.session.empresarial1) {
+            pagoEmpresarial.estado = 2;
+            actualizarEmpresarial = { empresarial1: JSON.stringify(pagoEmpresarial) }
+        } else if (req.session.empresarial2) {
+            pagoEmpresarial.estado = 2;
+            actualizarEmpresarial = { empresarial2: JSON.stringify(pagoEmpresarial) }
+        } else if (req.session.empresarial3) {
+            pagoEmpresarial.estado = 2;
+            actualizarEmpresarial = { empresarial3: JSON.stringify(pagoEmpresarial) }
+        } 
+
+        if (actualizarEmpresarial != undefined) {
+            pagoEtapa1_ok = false
+            pagoOtras_etapas = true;
+            await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarEmpresarial, id_empresa])
         }
         
         if (req.session.planEstrategico) {
@@ -400,14 +636,13 @@ pagosController.pagoExitoso = async (req, res) => {
             await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, id_empresa])
 
             pagoEtapa1_ok = false;
-            pagoEtapa2_ok = false;
-            pagoEtapa3_ok = true;
+            pagoOtras_etapas = true;
         }
 
     }
 
     res.render('empresa/dashboard', {
-        pagoEtapa1_ok, pagoEtapa2_ok, pagoEtapa3_ok,
+        pagoEtapa1_ok, pagoOtras_etapas,
         user_dash: true, wizarx: false, login: false,
         itemDashboard: true,
     })

@@ -1,6 +1,6 @@
 const pool = require('../database')
 const empresaController = exports;
-const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
@@ -57,7 +57,8 @@ empresaController.index = async (req, res) => {
             empresarial3: estado,
             id_empresa
         }
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
+        // await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
+        await insertarDatos('pagos', nuevoPago)
     } else {
         const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
         if (objDiagnostico.estado == 1) {
@@ -492,7 +493,8 @@ empresaController.acuerdoCheck = async (req, res) => {
     // Efectuando firma del acuerdo
     console.log("\nEfectuando firma del acuerdo.....")
     const insertarAcuerdo = {id_empresa: datosEmpresa.id_empresas, estadoAcuerdo: estado}
-    await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
+    // await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
+    await insertarDatos('acuerdo_confidencial', insertarAcuerdo)
     if (linksMenu.e2) {
         objRes.ok = true;
         objRes.txt = '/analisis-de-negocio'
@@ -726,7 +728,8 @@ empresaController.addFichaCliente = async (req, res) => {
     if (ficha.length > 0) {
         await pool.query('UPDATE ficha_cliente SET ? WHERE id_empresa = ?', [nuevaFichaCliente, id_empresa])
     } else {
-        await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
+        // await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
+        await insertarDatos('ficha_cliente', nuevaFichaCliente)
     }
     // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
     res.redirect('/diagnostico-de-negocio')
@@ -734,7 +737,8 @@ empresaController.addFichaCliente = async (req, res) => {
 
 empresaController.eliminarFicha = async (req, res) => {
     const { id } = req.body;
-    const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_empresa = ?', [id])
+    // const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_empresa = ?', [id])
+    const ficha = await eliminarDatos('ficha_cliente', `WHERE id = ${id}`)
     let respu = undefined;
     // console.log(ficha.affectedRows)
     if (ficha.affectedRows > 0) {
@@ -1000,10 +1004,10 @@ empresaController.planEmpresarial = async (req, res) => {
         propuesta.porcentaje = "0%";
         
         /************************************************************************************* */
-        let fechaAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
-        fechaAnalisis1 = fechaAnalisis1.fecha
-        let fechaDB = new Date(fechaAnalisis1)
-        let fechaDB2 = new Date(fechaAnalisis1)
+        let fechaEmpresarial = JSON.parse(pago_empresa.empresarial1)
+        fechaEmpresarial = fechaEmpresarial.fecha
+        let fechaDB = new Date(fechaEmpresarial)
+        let fechaDB2 = new Date(fechaEmpresarial)
         
         if (msgDesactivo2) {
             fechaDB.setDate(fechaDB2.getDate() + 30);
@@ -1043,20 +1047,20 @@ empresaController.planEmpresarial = async (req, res) => {
             msgDesactivo = "Plan empresarial pagado"
             msgDesactivo2 = "Plan empresarial pagado"
             msgDesactivo3 = "Plan empresarial pagado"
-        } else if  (objEmpresarial.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
+        } else if  (objEmpresarial1.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
             escena1 = true
             msgActivo = "Primera cuota lista para pagarse"
             btnActivo  
             msgDesactivo = "Pago no disponible aun"
             btnDesactivo
-        } else if (objEmpresarial.estado != 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0){
+        } else if (objEmpresarial1.estado != 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0){
             escena2 = true
             activarPagoUnico = false
             msgDesactivo = "Primera cuota pagada"
             msgDesactivo2
             msgDesactivo3 
             btnDesactivo
-        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 1 && objEmpresarial3.estado == 0) {
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 1 && objEmpresarial3.estado == 0) {
             escena3 = true
             activarPagoUnico = false
             btnDesactivo
@@ -1064,14 +1068,14 @@ empresaController.planEmpresarial = async (req, res) => {
             msgActivo = "Segunda cuota lista para pagarse"
             btnActivo 
             msgDesactivo3
-        } else if (objEmpresarial.estado== 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 0) {
+        } else if (objEmpresarial1.estado== 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 0) {
             escena4 = true
             activarPagoUnico = false
             btnDesactivo
             msgDesactivo = "Primera cuota pagada"
             msgDesactivo2 = "Segunda cuota pagada"
             msgDesactivo3
-        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 1) {
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 1) {
             escena5 = true
             activarPagoUnico = false
             btnDesactivo
@@ -1079,7 +1083,7 @@ empresaController.planEmpresarial = async (req, res) => {
             msgDesactivo2 = "Segunda cuota pagada"
             msgActivo = "Tercera cuota lista para pagarse"
             btnActivo
-        } else if (objEmpresarial.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 2) {
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 2) {
             escena6 = true
             activarPagoUnico = false
             btnDesactivo
@@ -1088,8 +1092,6 @@ empresaController.planEmpresarial = async (req, res) => {
             msgDesactivo3 = "Tercera cuota pagada"
         }
 
-        
-        
         if (objEmpresarial1.estado == 2) {
             btnPagar.etapa1 = false;
             btnPagar.activar1 = false;
@@ -1107,6 +1109,11 @@ empresaController.planEmpresarial = async (req, res) => {
     // ARCHIVOS CARGADOS
     let archivos = await consultarDatos('archivos_plan_empresarial')
     archivos = archivos.filter(i => i.empresa == id_empresa)
+    archivos.forEach(x => {
+        if (x.tipo == 'Otro') {
+            x.tipo = x.nombre;
+        }
+    });
     
     if (acuerdoFirmado) { linksMenu.e2 = linksMenu.e3 = linksMenu.e4 = false; }
 

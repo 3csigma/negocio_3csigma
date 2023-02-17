@@ -576,6 +576,35 @@
         });
     }
 
+    /*************************************************************************/
+    function finalizarEtapa_Empresarial(codigo) {
+        Swal.fire({
+            title: '¿Deseas marcar el Plan Empresarial como finalizado?',
+            html: 'La empresa recibirá una notificación de esto.</br>' +
+                'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, finalizar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/finalizarEtapa', {
+                    method: 'POST',
+                    body: JSON.stringify({codigo}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                .catch(error => console.error('Error Finalizar Etapa: ', error))
+                .then(response => {
+                    //item == 1 ? location.hash = '#plan-empresarial' : location.hash = '#plan-estrategico';
+                    location.hash = '#plan-empresarial';
+                    location.reload(true);
+                })
+            }
+        })
+    }
+
     (function () {
 
         const dzChartlist = function () {

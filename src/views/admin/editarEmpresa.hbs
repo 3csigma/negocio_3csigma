@@ -116,7 +116,7 @@
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
-                                                {{!-- <option value="Plan_Empresarial">Plan Empresarial</option> --}}
+                                                <option value="Plan_Empresarial">Plan Empresarial</option>
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
@@ -948,7 +948,7 @@
                                                         <th>FECHA</th>
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
-                                                        <th>REVISAR PROPUESTA</th>
+                                                        <th>REVISAR</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1609,7 +1609,8 @@
                                                         <th>FECHA</th>
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
-                                                        <th>REVISAR PROPUESTA</th>
+                                                        <th>REVISAR</th>
+                                                        <th>FINALIZAR ETAPA</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -1619,13 +1620,24 @@
                                                         <td>Plan empresarial</td>
                                                         <td class="precios_celdas">{{propuesta.empresarial.precio_total}}</td>
                                                         <td>
-                                                            <div class="d-flex">
+                                                            <div class="d-flex justify-content-center align-items-center">
                                                                 <a href="{{propuesta.empresarial.link_propuesta}}" target="_blank"
                                                                 class="btn btn-primary shadow btn-xs sharp"
                                                                 style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
                                                                 <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
+                                                        </td>
+                                                        <td>
+                                                            {{#if propuesta.empresarial.finalizada}}
+                                                            <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" title="Etapa finalizada"><i class="fa-solid fa-check"></i></button>
+                                                            {{else}}
+                                                            <div class="d-flex justify-content-center align-items-center">
+                                                                <a onclick="finalizarEtapa_Empresarial('{{datos.code}}')" class="btn btn-success text-white shadow btn-xs sharp">
+                                                                    <i class="fa-solid fa-check"></i>
+                                                                </a>
+                                                            </div>
+                                                            {{/if}}
                                                         </td>
                                                         {{else}}
                                                         <td colspan="4"><span class="mx-auto">No se ha subido una propuesta aún</span></td>
@@ -1665,7 +1677,7 @@
                                                         {{#unless pagos_empresarial.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Pago Único</td>
+                                                            <td>Pago Único (10% OFF)</td>
                                                             <td class="precios_celdas">{{pagos_empresarial.unico.precio}}</td>
                                                             <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
@@ -2224,7 +2236,7 @@
                                                         <th>NOMBRE</th>
                                                         <th>PRECIO</th>
                                                         <th>DURACIÓN</th>
-                                                        <th>REVISAR PROPUESTA</th>
+                                                        <th>REVISAR</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
