@@ -14,12 +14,11 @@
         $('#col_der').removeClass('col-xl-12')
         $('#col_der').addClass('col-xl-8')
     }
-
-    function addTaskToList(id, fecha_inicio, fecha_entrega, dimension) {
+    
+    // => FUNCIONES PARA LAS TAREAS DE PLAN EMPRESARIAL
+    function addTaskToList_Empresarial(id, fecha_inicio, fecha_entrega) {
         return `
         <tr>
-            <td>N/A</td>
-            <td>${dimension}</td>
             <td class="text-primary font-w600" style="font-size: 14px;">Pendiente</td>
             <td>
                 <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
@@ -31,12 +30,12 @@
             <td class="text-white" style="background: #585858;font-size: 11px; text-align:center">Sin especificar</td>
             <td>
                 <div class="d-flex justify-content-center align-items-center">
-                    <a onclick="editarTarea(${id})" title="Editar"
+                    <a onclick="editarTarea_Empresarial(${id})" title="Editar"
                         class="btn btn-primary shadow btn-xs sharp mr-1"
                         style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
                             style="color:white ;" class="fa fa-pencil"></i>
                     </a>
-                    <a onclick="eliminarTarea(${id})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
+                    <a onclick="eliminarTarea(${id}, 1)" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
                         style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
                             width="12px" viewBox="0 0 448 512">
                             <path
@@ -50,22 +49,18 @@
         `
     }
 
-    function agregarTarea() {
-        const actividad = $("#actividad").val();
-        const fecha_inicio = $("#fecha_inicio").val();
-        const fecha_entrega = $("#fecha_entrega").val();
-        const dimension = $("#dimension").val();
+    function agregarTarea_Empresarial() {
+        const actividad = $("#actividad-empresarial").val();
+        const fecha_inicio = $("#fecha_inicio-empresarial").val();
+        const fecha_entrega = $("#fecha_entrega-empresarial").val();
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
-        $('#tiempoTxt-sidebar').text('A tiempo')
-        document.getElementById("comentario").value = "";
+        $('#tiempoTxt-sidebar2').text('A tiempo')
 
         let fechaini, fechafin;
-
         fechaini = new Date(fecha_inicio);
         fechaini = fechaini.getTime();
         fechaini = (((fechaini / 1000) / 60) / 60) / 24
-
         fechafin = new Date(fecha_entrega);
         fechafin = fechafin.getTime();
         fechafin = (((fechafin / 1000) / 60) / 60) / 24
@@ -89,7 +84,7 @@
                 hideMethod: "fadeOut",
                 tapToDismiss: !1
             })
-        }else if (actividad == '' || fecha_entrega == '' || dimension == '') {
+        } else if (actividad == '' || fecha_inicio == '' || fecha_entrega == '') {
             toastr.warning("Hay campos vacíos", "Atención", {
                 positionClass: "toast-top-full-width",
                 timeOut: 3e3,
@@ -110,12 +105,11 @@
             })
         } else {
             // Activar Sidebar
-            $('.chatbox').addClass('active');
-            $('#cuerpoGeneral').css('overflow-y', 'hidden');
-
+            $('#sidebarEmpresarial').addClass('active');
+            $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
-            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, prioridad: 0, email })
+            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, empresa, nombreEmpresa, email })
             fetch('/agregarTarea', {
                 method: 'POST',
                 body: data,
@@ -125,24 +119,253 @@
             .then(response => {
                 if (response) {
                     const idTarea = response.insertId
-                    
+                    const itemTaskList = addTaskToList_Empresarial(idTarea, fecha_inicio, fecha_entrega)
+                    $('#cuerpoTareasEmpresarial').prepend(itemTaskList);
+                    $('#actividad-sidebar2').val(actividad)
+                    $('#descripcion-sidebar2').val('')
+                    $('#estado2').val(0)
+                    $('#prioridad2').val(0)
+                    $('#idTarea-sidebar2').val(idTarea)
+                    $('#fechaIni-sidebar2').val(fecha_inicio)
+                    $('#fechaFin-sidebar2').val(fecha_entrega)
+                    $("#actividad-empresarial").val(''); $("#fecha_inicio-empresarial").val(''); $("#fecha_entrega-empresarial").val(''); 
+
+                } else {
+                    toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
+                        positionClass: "toast-top-full-width",
+                        timeOut: 3e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "200",
+                        hideDuration: "200",
+                        extendedTimeOut: "200",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                }
+            });
+        }
+    }
+
+    function editarTarea_Empresarial(idTarea){
+        const tiempo = $('#tiempo-sidebar')
+        tiempo.css('display', 'none')
+        $('#sidebarEmpresarial').addClass('active');
+        $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
+        fetch('/editarTarea', {
+            method: 'POST',
+            body: JSON.stringify({idTarea, item:1}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Editar Tarea: ', error))
+        .then(r => {
+            $('#idTarea-sidebar2').val(idTarea)
+            $("#idEmpresa").val(r.empresa)
+            $('#actividad-sidebar2').val(r.actividad)
+            $("descripcion-sidebar2").val(r.descripcion)
+            $('#fechaIni-sidebar2').val(r.fecha_inicio)
+            $('#fechaFin-sidebar2').val(r.fecha_entrega)
+            $("#estado2").val(r.estado)
+            $("#prioridad2").val(r.prioridad)
+
+            if (r.estado == 0 || r.estado == 1) {
+                const fechaActual = new Date().toLocaleDateString('fr-CA')
+                $('#tiempoTxt-sidebar2').text('A tiempo')
+                tiempo.css('display', 'inline-table')
+                if (fechaActual > r.fecha_entrega){
+                    $('#tiempoTxt-sidebar2').text('Retrasada')
+                }
+            }
+        })
+    }
+
+    function actualizarTarea_Empresarial() {
+        const empresa = $("#idEmpresa").val();
+        const email = $("#emailEmpresa").text();
+        const idTarea = $("#idTarea-sidebar2").val();
+        const actividad = $("#actividad-sidebar2").val();
+        const descripcion = $("#descripcion-sidebar2").val();
+        let fecha_inicio = $("#fechaIni-sidebar2").val();
+        let fecha_entrega = $("#fechaFin-sidebar2").val();
+        const prioridad = $("#prioridad2").val();
+        const estado = $("#estado2").val();
+
+        let fechaini, fechafin
+        fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+        fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+            toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            const data = JSON.stringify({ idTarea, empresa, actividad, descripcion, fecha_inicio, fecha_entrega, estado, email, prioridad, item:1 })
+            fetch('/actualizarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Actualizar Tarea: ', error))
+            .then(response => {
+                location.hash = '#plan-empresarial';
+                location.reload(true)
+            })
+        }
+    }
+
+    // => FUNCIONES PARA LAS TAREAS DE PLAN ESTRATÉGICO
+    function addTaskToList(id, fecha_inicio, fecha_entrega, dimension) {
+        return `
+        <tr>
+            <td>N/A</td>
+            <td>${dimension}</td>
+            <td class="text-primary font-w600" style="font-size: 14px;">Pendiente</td>
+            <td>
+                <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
+                    ${fecha_inicio} - ${fecha_entrega}
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        style="width:0%;height: 16px;margin-top: -13px;"></div>
+                </div>
+            </td>
+            <td class="text-white" style="background: #585858;font-size: 11px; text-align:center">Sin especificar</td>
+            <td>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a onclick="editarTarea(${id})" title="Editar"
+                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                            style="color:white ;" class="fa fa-pencil"></i>
+                    </a>
+                    <a onclick="eliminarTarea(${id}, 2)" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
+                        style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="12px" viewBox="0 0 448 512">
+                            <path
+                                d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                fill="white" />
+                        </svg>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        `
+    }
+
+    function agregarTarea() {
+        const actividad = $("#actividad").val();
+        const fecha_inicio = $("#fecha_inicio").val();
+        const fecha_entrega = $("#fecha_entrega").val();
+        const dimension = $("#dimension").val()
+        const nombreEmpresa = $("#nombreEmpresa").text();
+        const email = $("#emailEmpresa").text();
+        $('#tiempoTxt-sidebar').text('A tiempo')
+        document.getElementById("comentario").value = "";
+
+        let fechaini, fechafin;
+        fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+        fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+            toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else if (actividad == '' || fecha_inicio == '' || fecha_entrega == '' || dimension == '') {
+            toastr.warning("Hay campos vacíos", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            // Activar Sidebar
+            $('#sidebarEstrategico').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden');
+
+            // Enviar info a la base de datos
+            const empresa = $("#idEmpresa").val();
+            const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email })
+
+            fetch('/agregarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Agregar Tarea: ', error))
+            .then(response => {
+                if (response) {
+                    const idTarea = response.insertId
+
                     const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
                     $('#cuerpoTareas').prepend(itemTaskList);
-
-                    $('#observacion').val('')
+                    $('descripcion').val('')
                     $('#estado').val(0)
                     $('#prioridad').val(0)
-                    $('#responsable').val('')
-
                     $('#idTarea').val(idTarea)
                     $('#actividad-sidebar').val(actividad)
                     $('#fechaIni-sidebar').val(fecha_inicio)
                     $('#fechaFin-sidebar').val(fecha_entrega)
+                    $("#actividad").val(''); $("#fecha_inicio").val(''); $("#fecha_entrega").val(''); 
+                    $('#responsable').val('')
                     $('#dimension-sidebar').val(dimension)
+                    $("#dimension").val('');
 
-                    $("#actividad").val(''); $("#fecha_inicio").val(''); $("#fecha_entrega").val(''); $("#dimension").val('');
                 } else {
-                    toastr.danger("Hubo una inconsistencia al agregar la tarea.", "Error", {
+                    toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
                         positionClass: "toast-top-full-width",
                         timeOut: 3e3,
                         closeButton: !0,
@@ -169,14 +392,13 @@
         const listaComentarios = document.querySelector('#listaComentarios')
         listaComentarios.innerHTML = ''
         document.getElementById("comentario").value = "";
-
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
-        $('.chatbox').addClass('active');
+        $('#sidebarEstrategico').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
         fetch('/editarTarea', {
             method: 'POST',
-            body: JSON.stringify({idTarea}),
+            body: JSON.stringify({idTarea, item:2}),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json())
         .catch(error => console.error('Error Editar Tarea: ', error))
@@ -185,13 +407,12 @@
             $("#idEmpresa").val(r.empresa)
             $('#actividad-sidebar').val(r.actividad)
             $("#responsable").val(r.responsable)
-            $("#observacion").val(r.observacion)
+            $("descripcion").val(r.descripcion)
             $('#fechaIni-sidebar').val(r.fecha_inicio)
             $('#fechaFin-sidebar').val(r.fecha_entrega)
             $('#dimension-sidebar').val(r.dimension)
             $("#estado").val(r.estado)
             $("#prioridad").val(r.prioridad)
-
             const comentarios = JSON.parse(r.mensaje)
             if (comentarios) {
                 $('#divComentarios').css('display', 'inline-block')
@@ -225,7 +446,6 @@
     }
 
     function actualizarTarea() {
-
         const listaComentarios = document.querySelector('#listaComentarios')
         listaComentarios.innerHTML = ''
         $('#divComentarios').css('display', 'none')
@@ -233,20 +453,18 @@
         const empresa = $("#idEmpresa").val();
         const actividad = $("#actividad-sidebar").val();
         const responsable = $("#responsable").val();
-        const observacion = $("#observacion").val();
+        const descripcion = $("#descripcion").val();
         let fecha_inicio = $("#fechaIni-sidebar").val();
         let fecha_entrega = $("#fechaFin-sidebar").val();
         const dimension = $("#dimension-sidebar").val();
         const prioridad = $("#prioridad").val();
         const email = $("#emailEmpresa").text();
-        //const mensaje = $("#mensaje").val();
         const estado = $("#estado").val();
         let fechaini, fechafin
 
         fechaini = new Date(fecha_inicio);
         fechaini = fechaini.getTime();
         fechaini = (((fechaini / 1000) / 60) / 60) / 24
-
         fechafin = new Date(fecha_entrega);
         fechafin = fechafin.getTime();
         fechafin = (((fechafin / 1000) / 60) / 60) / 24
@@ -271,7 +489,7 @@
                 tapToDismiss: !1
             })
         } else {
-            const data = JSON.stringify({ idTarea, empresa, actividad, responsable, observacion, fecha_inicio, fecha_entrega, dimension, estado, email, prioridad })
+            const data = JSON.stringify({ idTarea, empresa, actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, email, prioridad, item:2 })
             fetch('/actualizarTarea', {
                 method: 'POST',
                 body: data,
@@ -285,7 +503,8 @@
         }
     }
 
-    function eliminarTarea(idTarea) {
+    /*************************************************************************/
+    function eliminarTarea(idTarea, item) {
         Swal.fire({
             title: '¿Deseas eliminar la tarea?',
             text: "Esta acción no es reversible.",
@@ -299,18 +518,19 @@
             if (result.isConfirmed) {
                 fetch('/eliminarTarea', {
                     method: 'POST',
-                    body: JSON.stringify({idTarea}),
+                    body: JSON.stringify({idTarea, item}),
                     headers: {'Content-Type': 'application/json'}
                 }).then(res => res.json())
                 .catch(error => console.error('Error Eliminar Tarea: ', error))
                 .then(response => {
-                    location.hash = '#plan-estrategico';
+                    item == 1 ? location.hash = '#plan-empresarial' : location.hash = '#plan-estrategico';
                     location.reload(true)
                 })
             }
         })
     }
 
+    /*************************************************************************/
     // => Función para el envio de los comentarios a la base de datos
     function addComentario() {
         const comentario = $("#comentario").val();
@@ -354,6 +574,35 @@
                 document.getElementById("comentario").value = msg;
             }
         });
+    }
+
+    /*************************************************************************/
+    function finalizarEtapa_Empresarial(codigo) {
+        Swal.fire({
+            title: '¿Deseas marcar el Plan Empresarial como finalizado?',
+            html: 'La empresa recibirá una notificación de esto.</br>' +
+                'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, finalizar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/finalizarEtapa', {
+                    method: 'POST',
+                    body: JSON.stringify({codigo}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                .catch(error => console.error('Error Finalizar Etapa: ', error))
+                .then(response => {
+                    //item == 1 ? location.hash = '#plan-empresarial' : location.hash = '#plan-estrategico';
+                    location.hash = '#plan-empresarial';
+                    location.reload(true);
+                })
+            }
+        })
     }
 
     (function () {
@@ -560,18 +809,34 @@
             if (URLhash === '#plan-empresarial') {
                 $('#item-empresarial').trigger("click");
             }
+
+            $("#close-sidebar-empresarial").on("click", () => {
+                $("#sidebarEmpresarial").removeClass("active")
+                // PLAN EMPRESARIAL
+                $('#cuerpoTareasEmpresarial').css('overflow-y', 'auto')
+                $('#actividad-sidebar2').attr('readonly', false)
+                $("#descripcion-sidebar2").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $("#estado2").css('display', 'inline-block')
+                $('#txtFechaIni').css('display', 'none')
+                $('#txtFechaFin').css('display', 'none')
+                $('#estado-sidebar').css('display', 'none')
+                $('#fechaIni-sidebar2').css('display', 'inline-block')
+                $('#fechaFin-sidebar2').css('display', 'inline-block')
+                $('#btnGuardar-sidebar2').css('display', 'flex')
+            })
             
-            $(".chatbox-close").on("click", () => {
+            $("#close-sidebar-estrategico").on("click", () => {
+                $("#sidebarEstrategico").removeClass("active")
+                // PLAN ESTRATÉGICO
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
                 $('#fechaIni-sidebar').css('display', 'inline-block')
                 $('#fechaFin-sidebar').css('display', 'inline-block')
                 $('#dimension-sidebar').css('display', 'inline-block')
                 $('#btnGuardar-sidebar').css('display', 'flex')
                 $("#estado").css('display', 'inline-block')
-                //$("#actividad-sidebar").attr('readonly', true)
                 $('#actividad-sidebar').attr('readonly', false)
                 $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
-                $("#observacion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $("#descripcion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
                 $('#txtFechaIni').css('display', 'none')
                 $('#txtFechaFin').css('display', 'none')
                 $('#txtDimension').css('display', 'none')
@@ -591,7 +856,7 @@
 			
 				{{#if graficas2}}
 
-                function guardarInforme(formData, estado, fecha, boton){
+                function guardarInforme(formData, estado, fecha, boton) {
                     fetch('/guardarInforme', {
                         method: 'POST',
                         body: formData,
@@ -623,37 +888,30 @@
                                 if (boton == 1){
                                     btnVerInforme.style.display = 'block'
                                     btnVerInforme.href = response.url
-                                    $("#btnHidden1").hide()
                                 } 
                                 if (boton == 2){
                                     btnVerInformeProd.style.display = 'block'
                                     btnVerInformeProd.href = response.url
-                                    $("#btnHidden2").hide()
                                 } 
                                 if (boton == 3){
                                     btnVerInformeAdmin.style.display = 'block'
                                     btnVerInformeAdmin.href = response.url
-                                    $("#btnHidden3").hide()
                                 } 
                                 if (boton == 4){
                                     btnVerInformeOpe.style.display = 'block'
                                     btnVerInformeOpe.href = response.url
-                                    $("#btnHidden4").hide()
                                 } 
                                 if (boton == 5){
                                     btnVerInformeMarketing.style.display = 'block'
                                     btnVerInformeMarketing.href = response.url
-                                    $("#btnHidden5").hide()
                                 } 
                                 if (boton == 6){
                                     btnVerInformeGeneral.style.display = 'block'
                                     btnVerInformeGeneral.href = response.url
-                                    $("#btnHidden6").hide()
                                 } 
                                 if (boton == 7){
                                     btnVerInformePlan.style.display = 'block'
                                     btnVerInformePlan.href = response.url
-                                    $("#btnHidden7").hide()
                                 } 
 
                                 estado.classList.remove("badge-warning")
@@ -684,175 +942,459 @@
                             }
                         });
                 }
-
+                
                 /* Etapa 1 - Informe Diagnóstico */
-                const infoEstado = document.getElementById("infoEstado");
+                const informeDiag = document.getElementById('inputInformeDiag');
                 const btnVerInforme = document.getElementById('btnVerInforme');
-                const spanFecha = document.getElementById("spanFecha");
                 const codigoEmpresa = document.getElementById("codigoEmpresa").value;
-                const informeDiag = document.querySelector('.inputInformeDiag');
-                const nomInformeDiag = 'Informe diagnóstico';
 
                 if (informeDiag) {
                     informeDiag.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstado = document.getElementById("infoEstado");
+                        const spanFecha = document.getElementById("spanFecha");
+                        const nomInformeDiag = 'Informe diagnóstico';
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomInformeDiag);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstado, spanFecha, 1)
                     });
                 }
 				
                 /* ----------------------------- Etapa 2 - Informe Análisis ----------------------------- */
                 // Dimensión Producto
-                const infoEstadoProd = document.getElementById("infoEstadoProd");
+                const informeProd = document.getElementById('inputInformeProd');
                 const btnVerInformeProd = document.getElementById('btnVerInformeProd');
-                const spanFechaProd = document.getElementById("spanFechaProd");
-                const informeProd = document.getElementById('informeProd');
-                const nomProducto = 'Informe de dimensión producto'
-
                 if (informeProd) {
                     informeProd.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoProd = document.getElementById("infoEstadoProd");
+                        const spanFechaProd = document.getElementById("spanFechaProd");
+                        const nomProducto = 'Informe de dimensión producto'
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomProducto);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoProd, spanFechaProd, 2)
-
                     });
                 }
 
                 // Dimensión Administración
-                const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
-                const btnVerInformeAdmin = document.getElementById('btnVerInformeAdmin');
-                const spanFechaAdmin = document.getElementById("spanFechaAdmin");
-                const informeAdmin = document.querySelector('.inputInformeAdmin');
-                const nomAdmin = 'Informe de dimensión administración';
-
+                const informeAdmin = document.getElementById("inputInformeAdmin");
+                const btnVerInformeAdmin = document.getElementById("btnVerInformeAdmin");
                 if (informeAdmin) {
                     informeAdmin.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoAdmin = document.getElementById("infoEstadoAdmin");
+                        const spanFechaAdmin = document.getElementById("spanFechaAdmin");
+                        const nomAdmin = 'Informe de dimensión administración';
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomAdmin);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, 3)
                     });
                 }
 
                 // Dimensión Operaciones
-                const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+                const informeOpe = document.getElementById('inputInformeOperaciones');
                 const btnVerInformeOpe = document.getElementById('btnVerInformeOpe');
-                const spanFechaOpe = document.getElementById("spanFechaOpe");
-                const informeOpe = document.querySelector('.inputInformeOperaciones');
-                const nomOperacion = 'Informe de dimensión operaciones'
-
                 if (informeOpe) {
                     informeOpe.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoOpe = document.getElementById("infoEstadoOpe");
+                        const spanFechaOpe = document.getElementById("spanFechaOpe");
+                        const nomOperacion = 'Informe de dimensión operaciones'
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomOperacion);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoOpe, spanFechaOpe, 4)
                     });
                 }
 
                 // Dimensión Marketing
-                const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
-                const btnVerInformeMarketing = document.getElementById('btnVerInformeMarketing');
-                const spanFechaMarketing = document.getElementById("spanFechaMarketing");
-                const informeMarketing = document.querySelector('.inputInformeMarketing');
-                const nomMarketing = 'Informe de dimensión marketing'
-
+                const informeMarketing = document.getElementById("inputInformeMarketing");
+                const btnVerInformeMarketing = document.getElementById("btnVerInformeMarketing");
                 if (informeMarketing) {
                     informeMarketing.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoMarketing = document.getElementById("infoEstadoMarketing");
+                        const spanFechaMarketing = document.getElementById("spanFechaMarketing");
+                        const nomMarketing = 'Informe de dimensión marketing'
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomMarketing);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, 5)
                     });
                 }
 
                 // Informe Análisis General
-                const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
-                const btnVerInformeGeneral = document.getElementById('btnVerInformeGeneral');
-                const spanFechaGeneral = document.getElementById("spanFechaGeneral");
-                const inputInformeGeneral = document.querySelector('.inputInformeGeneral');
-                const nomInformeAnalisis = 'Informe de análisis'
-
+                const inputInformeGeneral = document.getElementById("inputInformeGeneral");
+                const btnVerInformeGeneral = document.getElementById("btnVerInformeGeneral");
                 if (inputInformeGeneral) {
                     inputInformeGeneral.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoGeneral = document.getElementById("infoEstadoGeneral");
+                        const spanFechaGeneral = document.getElementById("spanFechaGeneral");
+                        const nomInformeAnalisis = 'Informe de análisis'
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomInformeAnalisis);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, 6)
                     });
                 }
 
+                /* ----------------------------- Etapa 4 - PLAN ESTRATÉGICO ----------------------------- */
                 // Informe Plan Estratégico
-                const infoEstadoPlan = document.getElementById("infoEstadoPlan");
+                const inputInformePlan = document.getElementById('inputInformePlan');
                 const btnVerInformePlan = document.getElementById('btnVerInformePlan');
-                const spanFechaPlan = document.getElementById("spanFechaPlan");
-                const inputInformePlan = document.querySelector('.inputInformePlan');
-                const nomInformePlan = 'Informe de plan estratégico'
-
                 if (inputInformePlan) {
                     inputInformePlan.addEventListener('change', (e) => {
                         console.log(e)
                         const file = e.target.files[0]
+                        const infoEstadoPlan = document.getElementById("infoEstadoPlan");
+                        const spanFechaPlan = document.getElementById("spanFechaPlan");
+                        const nomInformePlan = 'Informe de plan estratégico';
                         // Capturando Zona Horaria Local
                         const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
                         formData.append('nombreInforme', nomInformePlan);
                         formData.append('zonaHoraria', tzLocal);
-
                         guardarInforme(formData, infoEstadoPlan, spanFechaPlan, 7)
+                    });
+                }
+
+                /* ----------------------------- Etapa 3 - PLAN EMPRESARIAL ----------------------------- */
+                function guardarArchivo_Empresarial(formData, estado, fecha, boton) {
+                    fetch('/guardar-archivos-empresarial', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response.ok) {
+
+                                toastr.success("El archivo ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+                                if (boton == 1){
+                                    btnArchivoNegocio.style.display = 'block'
+                                    btnArchivoNegocio.href = response.url
+                                } 
+                                if (boton == 2){
+                                    btnArchivoMarketing.style.display = 'block'
+                                    btnArchivoMarketing.href = response.url
+                                } 
+                                if (boton == 3){
+                                    btnArchivoBranding.style.display = 'block'
+                                    btnArchivoBranding.href = response.url
+                                } 
+                                if (boton == 4){
+                                    btnArchivoRenders.style.display = 'block'
+                                    btnArchivoRenders.href = response.url
+                                }
+                                if (boton == 5){
+                                    btnArchivoOtro.style.display = 'block'
+                                    btnArchivoOtro.href = response.url
+                                } 
+
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                fecha.innerHTML = response.fecha;
+                                
+                            } else {
+                                toastr.warning("No sé pudo subir el archivo, contacte a soporte", "Error", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+                            }
+                        });
+                }
+                
+                // Plan de negocio (Archivo)
+                const input_PlanNegocio = document.getElementById("input_PlanNegocio");
+                const btnArchivoNegocio = document.getElementById("btnArchivoNegocio");
+                if (input_PlanNegocio) {
+                    const fecha = document.getElementById("spanFecha_PlanNegocio");
+                    const estado = document.getElementById("estado_PlanNegocio");
+                    input_PlanNegocio.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('tipo', 'Plan de negocio');
+                        formData.append('nombreArchivo', null);
+                        formData.append('zonaHoraria', tzLocal);
+                        guardarArchivo_Empresarial(formData, estado, fecha, 1)
+                    });
+                }
+
+                // Plan de Marketing (Archivo)
+                const input_PlanMarketing = document.getElementById("input_PlanMarketing");
+                const btnArchivoMarketing = document.getElementById("btnArchivoMarketing");
+                if (input_PlanMarketing) {
+                    const fecha = document.getElementById("spanFecha_PlanMarketing");
+                    const estado = document.getElementById("estado_PlanMarketing");
+                    input_PlanMarketing.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('tipo', 'Plan de marketing');
+                        formData.append('nombreArchivo', null);
+                        formData.append('zonaHoraria', tzLocal);
+                        guardarArchivo_Empresarial(formData, estado, fecha, 2)
+                    });
+                }
+
+                // Branding (Archivo)
+                const input_PlanBranding = document.getElementById("input_PlanBranding");
+                const btnArchivoBranding = document.getElementById("btnArchivoBranding");
+                if (input_PlanBranding) {
+                    const fecha = document.getElementById("spanFecha_PlanBranding");
+                    const estado = document.getElementById("estado_PlanBranding");
+                    input_PlanBranding.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('tipo', 'Branding');
+                        formData.append('nombreArchivo', null);
+                        formData.append('zonaHoraria', tzLocal);
+                        guardarArchivo_Empresarial(formData, estado, fecha, 3)
+                    });
+                }
+
+                // Renders (Archivo)
+                const input_PlanRenders = document.getElementById("input_PlanRenders");
+                const btnArchivoRenders = document.getElementById("btnArchivoRenders");
+                if (input_PlanRenders) {
+                    const fecha = document.getElementById("spanFecha_PlanRenders");
+                    const estado = document.getElementById("estado_PlanRenders");
+                    input_PlanRenders.addEventListener('change', (e) => {
+                        console.log(e)
+                        const file = e.target.files[0]
+                        // Capturando Zona Horaria Local
+                        const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                        const formData = new FormData();
+                        formData.append('file', file);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('tipo', 'Renders');
+                        formData.append('nombreArchivo', null);
+                        formData.append('zonaHoraria', tzLocal);
+                        guardarArchivo_Empresarial(formData, estado, fecha, 4)
+                    });
+                }
+
+                // Website (Link)
+                const input_PlanWebsite = document.getElementById("input_PlanWebsite");
+                if (input_PlanWebsite) {
+                    const input_txt = document.getElementById("input_txtWebsite");
+                    const fecha = document.getElementById("spanFecha_PlanWebsite");
+                    const estado = document.getElementById("estado_PlanWebsite");
+                    const btnArchivoWebsite = document.getElementById("btnArchivoWebsite");
+
+                    input_PlanWebsite.addEventListener('click', (e) => {
+                        if (input_txt.value != '') {
+                            // Capturando Zona Horaria Local
+                            const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            const link = input_txt.value;
+
+                            fetch('/website-empresarial', {
+                                method: 'POST',
+                                body: JSON.stringify({codigoEmpresa, tzLocal, link}),
+                                headers: {'Content-Type': 'application/json'},
+                            })
+                                .then(res => res.json())
+                                .catch(error => console.error('Error:', error))
+                                .then(response => {
+                                    if (response.ok) {
+                                        toastr.success("El link ha sido cargado exitosamente", "Atención", {
+                                            positionClass: "toast-top-center",
+                                            timeOut: 5e3,
+                                            closeButton: !0,
+                                            debug: !1,
+                                            newestOnTop: !0,
+                                            progressBar: !0,
+                                            preventDuplicates: !0,
+                                            onclick: null,
+                                            showDuration: "300",
+                                            hideDuration: "1000",
+                                            extendedTimeOut: "1000",
+                                            showEasing: "swing",
+                                            hideEasing: "linear",
+                                            showMethod: "fadeIn",
+                                            hideMethod: "fadeOut",
+                                            tapToDismiss: !1
+                                        })
+
+                                        estado.classList.remove("badge-warning")
+                                        estado.classList.add("badge-success")
+                                        estado.innerHTML = "Cargado"
+                                        fecha.innerHTML = response.fecha;
+                                        btnArchivoWebsite.style.display = 'block'
+                                        btnArchivoWebsite.href = response.url
+
+                                    } else {
+                                        toastr.danger("No sé pudo guardar el link, contacte a soporte", "Error", {
+                                            positionClass: "toast-top-center",
+                                            timeOut: 5e3,
+                                            closeButton: !0,
+                                            debug: !1,
+                                            newestOnTop: !0,
+                                            progressBar: !0,
+                                            preventDuplicates: !0,
+                                            onclick: null,
+                                            showDuration: "300",
+                                            hideDuration: "1000",
+                                            extendedTimeOut: "1000",
+                                            showEasing: "swing",
+                                            hideEasing: "linear",
+                                            showMethod: "fadeIn",
+                                            hideMethod: "fadeOut",
+                                            tapToDismiss: !1
+                                        })
+                                    }
+                                });
+                        } else {
+                            toastr.warning("El campo de Website no puede estar vacío", "Error", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+                        }
+                    });
+                }
+
+                // Otro (Archivo)
+                const input_PlaOtro = document.getElementById("input_PlanOtro");
+                const btnArchivOtro= document.getElementById("btnArchivoOtro");
+                if (input_PlanOtro) {
+                    const input_txt = document.getElementById("input_txtOtro");
+                    const fecha = document.getElementById("spanFecha_PlanOtro");
+                    const estado = document.getElementById("estado_PlanOtro");
+                    input_PlanOtro.addEventListener('change', (e) => {
+                        console.log("entrada")
+                        console.log(e)
+                        if (input_txt.value == '') {
+                            toastr.warning("El campo de Otro no puede estar vacío", "Error", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+                            e = null;
+                        } else {
+                            const file = e.target.files[0]
+                            // Capturando Zona Horaria Local
+                            const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            formData.append('codigoEmpresa', codigoEmpresa);
+                            formData.append('tipo', 'Otro');
+                            formData.append('nombreArchivo', input_txt.value);
+                            formData.append('zonaHoraria', tzLocal);
+                            guardarArchivo_Empresarial(formData, estado, fecha, 5)
+                        }
+                        console.log("\nSalida")
+                        console.log(e)
                     });
                 }
 

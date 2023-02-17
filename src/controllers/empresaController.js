@@ -1,30 +1,25 @@
 const pool = require('../database')
 const empresaController = exports;
-const dsConfig = require('../config/index.js').config;
-const { listEnvelope } = require('./listEnvelopes');
-const { authToken, encriptarTxt, desencriptarTxt, consultarTareas, consultarInformes, consultarDatos, tareasGenerales } = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 const { clientSecretStripe } = require('../keys').config
 const stripe = require('stripe')(clientSecretStripe);
 
-let acuerdoFirmado = false, pagoPendiente = true, diagnosticoPagado = false, analisisPagado = 0, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
-let linksMenu = {e2: false, e3: false, e4: false};
-// let linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: 'href="/plan-estrategico"'};
+let pagoPendiente = true, diagnosticoPagado = false, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
+let modalAcuerdo = false;
 
 /** Función para mostrar Dashboard de Empresas */
 empresaController.index = async (req, res) => {
-    diagnosticoPagado = false, analisisPagado = 0;
-    acuerdoFirmado = false;
+    diagnosticoPagado = false;
     etapaCompleta = {};
     consulAsignado = {};
-    // linksMenu = {e2: 'href="/analisis-de-negocio"', e3: 'href="/plan-empresarial"', e4: `href="/plan-estrategico"`};
-    linksMenu = {e2: false, e3: false, e4: false}
+    modalAcuerdo = false;
     req.session.intentPay = undefined; // Intento de pago
     const empresas = await consultarDatos('empresas')
     const empresa = empresas.find(x => x.email == req.user.email)
     id_empresa = empresa.id_empresas;
     let idEmpresaActual = empresa.id_empresas;
-    req.pagoDiag = false, pagoAnalisis = false, etapa1 = {};
+    etapa1 = {};
 
     // VALIDACIÓN PARA SABER SI LA EMPRESA TIENE CONSULTOR DE DIAGNÓSTICO ASIGNADO
     let cAsignado = await consultarDatos("consultores_asignados")
@@ -61,7 +56,8 @@ empresaController.index = async (req, res) => {
             empresarial3: estado,
             id_empresa
         }
-        await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
+        // await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
+        await insertarDatos('pagos', nuevoPago)
     } else {
         const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
         if (objDiagnostico.estado == 1) {
@@ -70,39 +66,8 @@ empresaController.index = async (req, res) => {
             /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
             let acuerdo = await consultarDatos('acuerdo_confidencial')
             acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
-            if (acuerdo) {
-                if (acuerdo.estadoAcuerdo == 2) {
-                    acuerdoFirmado = true;
-                    noPago = false;
-                }
-            }
-
-            /************************************************************************************* */
-            // PROPUESTA DE ANÁLISIS DE NEGOCIO
-            // const propuesta_analisis = await consultarDatos('propuestas')
-            // const propuesta = propuesta_analisis.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio');
-            /************************************************************************************* */
-
-            const objAnalisis = JSON.parse(pago_empresa.analisis_negocio) // Pago único de Análisis
-            const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1) // Pago #1 de Análisis
-            const objPlanEstrat = JSON.parse(pago_empresa.estrategico) // Subscripción Plan Estratégico
-
-            // PAGÓ EL ANÁLISIS
-            if (objAnalisis.estado == 1 || objAnalisis1.estado == 2) {
-                analisisPagado = 1
-                if (!acuerdoFirmado) {
-                    // linksMenu.e2 = '/acuerdo-de-confidencialidad'
-                    linksMenu.e2 = true;
-                    linksMenu.e4 = false;
-                }
-            }
-
-            if (objPlanEstrat.estado == 1) {
-                if (!acuerdoFirmado) {
-                    // linksMenu.e4 = '/acuerdo-de-confidencialidad'
-                    linksMenu.e2 = false;
-                    linksMenu.e4 = true;
-                }
+            if (!acuerdo) {
+                modalAcuerdo = true;
             }
         }
 
@@ -157,13 +122,17 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa1 = 100;
         etapaCompleta.e1 =  true
 
-        // VALIDANDO EL TIPO DE EMPRESA (NUEVA O ESTABLECIDA) - PARA HABILITAR EL MENÚ
+        /*****************************************************
+         * VALIDANDO EL TIPO DE EMPRESA (NUEVA O ESTABLECIDA) - PARA HABILITAR EL MENÚ
+        */
+        // Empresa Establecida
         if (diagEmpresa.length > 0) {
             etapaCompleta.verAnalisis = true;
-            etapaCompleta.verEstrategico = false;
+            etapaCompleta.verEmpresarial = true;
+        // Empresa Nueva
         } else if (diagEmpresa2.length > 0) {
             etapaCompleta.verAnalisis = false;
-            etapaCompleta.verEstrategico = true;
+            etapaCompleta.verEmpresarial = true;
         }
     }
 
@@ -207,12 +176,32 @@ empresaController.index = async (req, res) => {
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
-        etapaCompleta.verEstrategico = true;
+        etapaCompleta.verEmpresarial = true;
     }
-    /************************************************************************** */
 
+    /************************************************************************** */
     // PORCENTAJE ETAPA 3
     let porcentajeEtapa3 = 0
+    let tareas_plan_empresarial = await consultarDatos('tareas_plan_empresarial')
+    tareas_plan_empresarial = tareas_plan_empresarial.filter(x => x.empresa == id_empresa)
+    const totalTareas_empresarial = tareas_plan_empresarial.length;
+    let tareasCompletadas_empresarial = tareas_plan_empresarial.filter(x => x.estado == 2)
+    tareasCompletadas_empresarial = tareasCompletadas_empresarial.length
+    if (totalTareas_empresarial > 0) {
+        porcentajeEtapa3 = ((tareasCompletadas_empresarial/totalTareas_empresarial)*100)*0.75
+        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+    }
+    if (empresa.etapa_empresarial == 1) {
+        porcentajeEtapa3 = 100;
+        etapaCompleta.e3 = true;
+        if (etapaCompleta.verEmpresarial) {
+            etapaCompleta.verEstrategico = true;
+        }
+    }
+
+    /************************************************************************** */
+    // PORCENTAJE ETAPA 4
+    let porcentajeEtapa4 = 0
     let tareasEmpresa = await consultarDatos('plan_estrategico')
     tareasEmpresa = tareasEmpresa.filter(x => x.empresa == id_empresa)
     const totalTareas = tareasEmpresa.length;
@@ -220,18 +209,21 @@ empresaController.index = async (req, res) => {
     tareasCompletadas = tareasCompletadas.length
     let verGraficasCircular = false;
     if (totalTareas > 0) {
-        porcentajeEtapa3 = ((((tareasCompletadas*100)/totalTareas))*100)/75
-        porcentajeEtapa3 = Math.round(porcentajeEtapa3)
+        porcentajeEtapa4 = ((tareasCompletadas/totalTareas)*100)*0.75
+        porcentajeEtapa4 = Math.round(porcentajeEtapa4)
         verGraficasCircular = true;
     }
-    const informeEtapa3 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
-    if (informeEtapa3) {
-        porcentajeEtapa3 = 100;
+    const informeEtapa4 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
+    if (informeEtapa4) {
+        porcentajeEtapa4 = 100;
         etapaCompleta.e4 = true;
     }
 
+    /************************************************************************** */
+
+
     // PORCENTAJE GENERAL DE LA EMPRESA
-    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3)/3)
+    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3 + porcentajeEtapa4)/4)
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
@@ -305,14 +297,13 @@ empresaController.index = async (req, res) => {
         user_dash: true,
         pagoPendiente,
         diagnosticoPagado,
-        analisisPagado,
         itemDashboard: true,
         consulAsignado,
         etapa1,
-        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeTotal,
+        porcentajeEtapa1, porcentajeEtapa2, porcentajeEtapa3, porcentajeEtapa4, porcentajeTotal,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2,
         tareas, ultimosInformes, verGraficasCircular,
-        nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta, linksMenu
+        nuevosProyectos, rendimiento, jsonDim_empresa, etapaCompleta, modalAcuerdo
     })
 }
 
@@ -353,123 +344,13 @@ empresaController.perfilUsuarios = async (req, res) => {
 
     let acuerdo = await consultarDatos('acuerdo_confidencial')
     acuerdo = acuerdo.find(x => x.id_empresa == empresa)
-    if (acuerdo) {
-        if (acuerdo.estadoAcuerdo == 2) {
-            acuerdoFirmado = true;
-            noPago = false;
-        }
-    }
 
     res.render('pages/profile', {
         rol, adminDash, user_dash, consultorDash, consultor, empresa,
         pagoPendiente,
         diagnosticoPagado,
-        analisisPagado,
-        acuerdoFirmado,
-        etapa1,
+        etapa1, modalAcuerdo,
         consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
-        linksMenu
-    })
-}
-
-/** Creación & validación del proceso Acuerdo de Confidencialidad */
-empresaController.acuerdo = async (req, res) => {
-    /**
-     * Estados (Acuerdo de Confidencialidad):
-     * Sin enviar: 0, Enviado: 1, Firmado: 2
-     */
-    const row = await pool.query('SELECT * FROM empresas WHERE email = ? LIMIT 1', [req.user.email])
-    const id_empresa = row[0].id_empresas;
-    const tipoUser = req.user.rol;
-    let estado = {}, email, statusSign = '';
-    let acuerdo = await consultarDatos('acuerdo_confidencial')
-    acuerdo = acuerdo.find(x => x.id_empresa == id_empresa)
-
-    if (acuerdo) {
-        // console.log("ARGS DATABASE >>>> ", JSON.parse(acuerdo[0].args))
-        /** Validando si ya está firmado el documento y su estado de firmado (2) se encuentra en la base de datos */
-        if (acuerdo.estadoAcuerdo == 2) {
-            estado.valor = 2; //Documento Firmado
-            estado.firmado = true;
-            acuerdoFirmado = true;
-            estado.sinEnviar = false; // Documento sin enviar 
-            estado.form = false;
-            estado.enviado = false;
-
-        } else if (acuerdo.estadoAcuerdo == 1) { // Validando desde Base de datos
-            acuerdoFirmado = false;
-            estado.valor = 1; // Documento enviado
-            estado.form = true; // Debe mostrar el formulario
-            estado.enviado = true;
-            estado.firmado = false;
-            estado.sinEnviar = false; // Documento sin enviar 
-
-            email = acuerdo.email_signer;
-            const args = JSON.parse(acuerdo.args) // CONVERTIR  JSON A UN OBJETO
-            const newToken = await authToken() // Generando nuevo Token para enviar a Docusign
-            args.accessToken = newToken.access_token;
-            const new_args = { args: JSON.stringify(args) }
-
-            // console.log("ASDASODIHASIDUHASIOD --> " + new_args.args);
-
-            await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [new_args, id_empresa])
-
-            /** Consultando el estado del documento en Docusign */
-            await listEnvelope(args, acuerdo.envelopeId).then((values) => {
-                statusSign = values.envelopes[0].status //Capturando el estado desde Docusign
-                console.log("STATUS DOCUMENT FROM DOCUSIGN ==> ", statusSign) // sent or completed
-            })
-
-            /** Validando si el estado devuelto es enviado o firmado */
-            if (statusSign == 'completed') { // Estado desde docusign (completed)
-                estado.valor = 2; //Documento Firmado
-                estado.firmado = true;
-                acuerdoFirmado = true;
-                estado.sinEnviar = false; // Documento sin enviar 
-                estado.form = false;
-                estado.enviado = false;
-                const actualizarEstado = { estadoAcuerdo: estado.valor }
-                // Actualizando Estado del acuerdo a 2 (Firmado)
-                await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [actualizarEstado, id_empresa])
-            }
-
-        } else {
-            console.log("\nNo existe la variable de sesión email o No ha solicitado el documento a firmar\n")
-            estado.sinEnviar = true; // Documento sin enviar 
-            estado.valor = 0;
-            estado.form = true;
-            dsConfig.envelopeId = ''
-            acuerdoFirmado = false;
-            estado.enviado = false;
-        }
-
-        // Si no se ha solicitado el documento a firmar desde el formulario Acuerdo de Confidencialidad
-    } else {
-        const nuevoAcuerdo = { id_empresa } // Campo id_empresa para la tabla acuerdo_confidencial
-        estado.sinEnviar = true; // Documento sin enviar 
-        estado.valor = 0;
-        estado.form = true; // Debe mostrar el formulario
-        acuerdoFirmado = false;
-        dsConfig.envelopeId = ''
-        await pool.query('INSERT INTO acuerdo_confidencial SET ?', [nuevoAcuerdo], (err, result) => {
-            if (err) throw err;
-            console.log("1 Registro insertado");
-            res.redirect('/acuerdo-de-confidencialidad')
-        })
-    }
-
-    // let btnAqui = '#default-link'
-    // if (linksMenu.e2 == '/acuerdo-de-confidencialidad') {
-    //     btnAqui = '/analisis-de-negocio'
-    // }
-    // if (linksMenu.e4 == '/acuerdo-de-confidencialidad') {
-    //     btnAqui = '/plan-estrategico'
-    // }
-
-    res.render('empresa/acuerdoConfidencial', { 
-        user_dash: true, wizarx: false, tipoUser, email, estado, acuerdoFirmado, etapa1,
-        consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
-        linksMenu,
     })
 }
 
@@ -484,56 +365,14 @@ empresaController.acuerdoCheck = async (req, res) => {
     let acuerdo = await consultarDatos('acuerdo_confidencial')
     acuerdo = acuerdo.find(x => x.id_empresa == datosEmpresa.id_empresas)
     let objRes = {}
-    acuerdoFirmado = false;
     console.log("\nNo existen datos en la tabla de acuerdo para esta empresa\n")
     // Efectuando firma del acuerdo
     console.log("\nEfectuando firma del acuerdo.....")
     const insertarAcuerdo = {id_empresa: datosEmpresa.id_empresas, estadoAcuerdo: estado}
-    await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
-    if (linksMenu.e2) {
-        objRes.ok = true;
-        objRes.txt = '/analisis-de-negocio'
-        acuerdoFirmado = true;
-    }
-    if (linksMenu.e4) {
-        objRes.ok = true;
-        objRes.txt = '/plan-estrategico'
-        acuerdoFirmado = true;
-    }
-    // if (acuerdo) {
-    //     if (acuerdo.estadoAcuerdo == 2) {
-    //         acuerdoFirmado = true;
-    //     } else {
-    //         console.log("\nNo se ha aceptado el modal de acuerdo de confidencialidad\n")
-    //         acuerdoFirmado = false;
-    //     }
-    //     // // Efectuando firma del acuerdo
-    //     // console.log("\nEfectuando firma del acuerdo.....")
-    //     // await pool.query('UPDATE acuerdo_confidencial SET ? WHERE id_empresa = ?', [{ estadoAcuerdo: estado }, datosEmpresa.id_empresas])
-    //     // if (linksMenu.e2) {
-    //     //     res.redirect('/analisis-de-negocio')
-    //     // }
-    //     // if (linksMenu.e4) {
-    //     //     res.redirect('/plan-estrategico')
-    //     // }
-    // } else {
-    //     acuerdoFirmado = false;
-    //     console.log("\nNo existen datos en la tabla de acuerdo para esta empresa\n")
-    //     // Efectuando firma del acuerdo
-    //     console.log("\nEfectuando firma del acuerdo.....")
-    //     const insertarAcuerdo = {id_empresa: datosEmpresa.id_empresas, estadoAcuerdo: estado}
-    //     await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
-    //     if (linksMenu.e2) {
-    //         objRes.ok = true;
-    //         objRes.txt = '/analisis-de-negocio'
-    //         acuerdoFirmado = true;
-    //     }
-    //     if (linksMenu.e4) {
-    //         objRes.ok = true;
-    //         objRes.txt = '/plan-estrategico'
-    //         acuerdoFirmado = true;
-    //     }
-    // }
+    // await pool.query('INSERT INTO acuerdo_confidencial SET ?', [insertarAcuerdo])
+    await insertarDatos('acuerdo_confidencial', insertarAcuerdo)
+    objRes.ok = true;
+    objRes.txt = '/diagnostico-de-negocio'
     res.send(objRes)
 }
 
@@ -552,13 +391,13 @@ empresaController.diagnostico = async (req, res) => {
 
     let infoConsul = await consultarDatos('consultores')
     infoConsul = infoConsul.find(x => x.id_consultores == consulAsignado.c1.consultor)
-    let costo = '$197';
+    let costo = '197';
     if (infoConsul.nivel == '2'){
-        costo = '$297';
+        costo = '297';
     } else if (infoConsul.nivel == '3'){
-        costo = '$497';
+        costo = '497';
     } else if (infoConsul.nivel == '4'){
-        costo = '$697';
+        costo = '697';
     }
 
     // Validando Diagnóstico de negocio ha sido pagado
@@ -569,6 +408,15 @@ empresaController.diagnostico = async (req, res) => {
         estadoPago.btn = 'background: #656c73; color: white; disabled= "true" '
         costo = diagnosticoPagado.precio;
         estadoPago.fecha = diagnosticoPagado.fecha
+    }
+
+    /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+    let acuerdo = await consultarDatos('acuerdo_confidencial')
+    acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
+    if (acuerdo) {
+        if (acuerdo.estadoAcuerdo == 2) {
+            modalAcuerdo = false;
+        }
     }
 
     const formDiag = {}
@@ -612,8 +460,7 @@ empresaController.diagnostico = async (req, res) => {
         etapa1, informe: informeEmpresa[0],
         itemDiagnostico: true,
         consulAsignado: req.session.consulAsignado,
-        etapaCompleta: req.session.etapaCompleta,
-        linksMenu
+        etapaCompleta: req.session.etapaCompleta, modalAcuerdo,
     })
 }
 
@@ -708,7 +555,8 @@ empresaController.addFichaCliente = async (req, res) => {
     if (ficha.length > 0) {
         await pool.query('UPDATE ficha_cliente SET ? WHERE id_empresa = ?', [nuevaFichaCliente, id_empresa])
     } else {
-        await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
+        // await pool.query('INSERT INTO ficha_cliente SET ?', [nuevaFichaCliente])
+        await insertarDatos('ficha_cliente', nuevaFichaCliente)
     }
     // JSON.parse(redes_sociales) // CONVERTIR  JSON A UN OBJETO
     res.redirect('/diagnostico-de-negocio')
@@ -716,7 +564,8 @@ empresaController.addFichaCliente = async (req, res) => {
 
 empresaController.eliminarFicha = async (req, res) => {
     const { id } = req.body;
-    const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_empresa = ?', [id])
+    // const ficha = await pool.query('DELETE FROM ficha_cliente WHERE id_empresa = ?', [id])
+    const ficha = await eliminarDatos('ficha_cliente', `WHERE id = ${id}`)
     let respu = undefined;
     // console.log(ficha.affectedRows)
     if (ficha.affectedRows > 0) {
@@ -761,9 +610,9 @@ empresaController.analisis = async (req, res) => {
             btnPagar.activar1 = false;
             btnPagar.etapa2 = true;
             btnPagar.activar2 = false;
-            analisisPagado = 1
             propuesta.porcentaje = "100%";
-            btnPagar.analisisPer = false
+            btnPagar.analisisPer = true
+            propuesta.precio_total = objAnalisis.precio;
         }
 
         btnPagar.obj1 = parseInt(objAnalisis1.estado)
@@ -888,7 +737,7 @@ empresaController.analisis = async (req, res) => {
     }
 
     res.render('empresa/analisis', {
-        user_dash: true, pagoDiag: true, acuerdoFirmado: true,
+        user_dash: true, pagoDiag: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
         etapa1, archivos,
@@ -900,8 +749,7 @@ empresaController.analisis = async (req, res) => {
         btnActivo, btnDesactivo, tienePropuesta,
         itemAnalisis: true,
         consulAsignado: req.session.consulAsignado,
-        etapaCompleta: req.session.etapaCompleta,
-        linksMenu
+        etapaCompleta: req.session.etapaCompleta, modalAcuerdo,
     })
 }
 
@@ -938,6 +786,162 @@ empresaController.guardarArchivos = async (req, res) => {
     res.redirect('/analisis-de-negocio');
 }
 
+/** PLAN EMPRESARIAL + LISTADO DE TAREAS DEL CONSULTOR */
+empresaController.planEmpresarial = async (req, res) => {
+    const btnPagar = {};
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
+    const id_empresa = row[0].id_empresas;
+    const propuestas = await consultarDatos('propuestas')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pagos = await consultarDatos('pagos')
+    const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
+    const etapa2 = {lista: true}
+
+    // PROCESO PARA LAS TAREAS DEL CONSULTOR (PLAN EMPRESARIAL)
+    const tareas = await consultarTareasEmpresarial(id_empresa, fechaActual)
+
+    /************************************************************************************* */
+    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
+    msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
+    btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;", 
+    btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
+    /************************************************************************************* */
+
+    // PROPUESTA DE PLAN EMPRESARIAL
+    let tienePropuesta = false
+    if (propuesta) {
+        tienePropuesta = true
+        btnPagar.etapa1 = false;
+        btnPagar.activar1 = false;
+        btnPagar.etapa2 = true;
+        btnPagar.activar2 = true;
+        propuesta.porcentaje = "0%";
+        
+        /************************************************************************************* */
+        let fechaEmpresarial = JSON.parse(pago_empresa.empresarial1)
+        fechaEmpresarial = fechaEmpresarial.fecha
+        let fechaDB = new Date(fechaEmpresarial)
+        let fechaDB2 = new Date(fechaEmpresarial)
+        
+        if (msgDesactivo2) {
+            fechaDB.setDate(fechaDB2.getDate() + 30);
+            fechaDB = fechaDB.toLocaleDateString("en-US")
+            msgDesactivo2 = "Pago disponible apartir de: "+fechaDB+""
+        }
+
+        if (msgDesactivo3) {
+            fechaDB2.setDate(fechaDB2.getDate() + 60);
+            fechaDB2 = fechaDB2.toLocaleDateString("en-US")
+            msgDesactivo3 = "Pago disponible apartir de: "+fechaDB2+""
+        }
+        /************************************************************************************* */
+
+        const objEmpresarial = JSON.parse(pago_empresa.empresarial0)
+        const objEmpresarial1 = JSON.parse(pago_empresa.empresarial1)
+        const objEmpresarial2 = JSON.parse(pago_empresa.empresarial2)
+        const objEmpresarial3 = JSON.parse(pago_empresa.empresarial3)
+
+        btnPagar.obj1 = parseInt(objEmpresarial1.estado)
+        btnPagar.obj2 = parseInt(objEmpresarial2.estado)
+        btnPagar.obj3 = parseInt(objEmpresarial3.estado)
+        
+        // PAGÓ EL PLAN EMPRESARIAL
+        if (objEmpresarial.estado == 1 ) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = false;
+            propuesta.porcentaje = "100%";
+            btnPagar.empresarialPer = false
+            propuesta.precio_total = objEmpresarial.precio;
+
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Plan empresarial pagado"
+            msgDesactivo2 = "Plan empresarial pagado"
+            msgDesactivo3 = "Plan empresarial pagado"
+        } else if  (objEmpresarial1.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
+            escena1 = true
+            msgActivo = "Primera cuota lista para pagarse"
+            btnActivo  
+            msgDesactivo = "Pago no disponible aun"
+            btnDesactivo
+        } else if (objEmpresarial1.estado != 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0){
+            escena2 = true
+            activarPagoUnico = false
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2
+            msgDesactivo3 
+            btnDesactivo
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 1 && objEmpresarial3.estado == 0) {
+            escena3 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgActivo = "Segunda cuota lista para pagarse"
+            btnActivo 
+            msgDesactivo3
+        } else if (objEmpresarial1.estado== 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 0) {
+            escena4 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 1) {
+            escena5 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgActivo = "Tercera cuota lista para pagarse"
+            btnActivo
+        } else if (objEmpresarial1.estado == 2 && objEmpresarial2.estado == 2 && objEmpresarial3.estado == 2) {
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3 = "Tercera cuota pagada"
+        }
+
+        if (objEmpresarial1.estado == 2) {
+            btnPagar.etapa1 = false;
+            btnPagar.activar1 = false;
+            btnPagar.etapa2 = true;
+            btnPagar.activar2 = true;
+            btnPagar.empresarialPer = true;
+            propuesta.porcentaje = "60%";
+        }
+        if (objEmpresarial2.estado == 2) {propuesta.porcentaje = "80%";}
+        if (objEmpresarial3.estado == 2) {propuesta.porcentaje = "100%";}
+
+    }
+
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = await consultarDatos('archivos_plan_empresarial')
+    archivos = archivos.filter(i => i.empresa == id_empresa)
+    archivos.forEach(x => {
+        if (x.tipo == 'Otro') {
+            x.tipo = x.nombre;
+        }
+    });
+    
+    res.render('empresa/planEmpresarial', {
+        user_dash: true, pagoDiag: true,
+        actualYear: req.actualYear,
+        propuesta, btnPagar, etapa2, archivos,        
+        escena1, escena2, escena3, escena4, escena5, escena6, 
+        msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico, btnActivo, btnDesactivo, tienePropuesta,
+        consulAsignado: req.session.consulAsignado,
+        etapaCompleta: req.session.etapaCompleta,
+        itemEmpresarial: true, tareas, modalAcuerdo
+    })
+}
+
 /** PLAN ESTRATÉGICO DE NEGOCIO - LISTADOD DE TAREAS + GRÁFICAS */
 empresaController.planEstrategico = async (req, res) => {
     let empresa = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
@@ -955,8 +959,8 @@ empresaController.planEstrategico = async (req, res) => {
 
     // PROPUESTA DE PLAN ESTRATÉGICO
     const botones = {}
-    const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
+    let propuesta = await consultarDatos('propuestas')
+    propuesta = propuesta.find(i => i.empresa == empresa && i.tipo_propuesta == 'Plan estratégico')
     let pagos = await consultarDatos('pagos')
     pagos = pagos.find(i => i.id_empresa == empresa)
     let tienePropuesta = false
@@ -1012,13 +1016,13 @@ empresaController.planEstrategico = async (req, res) => {
     }
 
     res.render('empresa/planEstrategico', {
-        user_dash: true, pagoDiag: true, acuerdoFirmado: true,
+        user_dash: true, pagoDiag: true,
         actualYear: req.actualYear, botones,
         tareas, informePlan, propuesta,
         dimObj, jsonRendimiento, tienePropuesta,
         itemEstrategico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        linksMenu, subCancelada
+        subCancelada, modalAcuerdo
     })
 }

@@ -1,92 +1,14 @@
-<style>
-    .chatbox.active {
-        width: 520px;
-        backdrop-filter: blur(17px);
-        box-shadow: 0px 0px 30px 0px rgb(82 63 105 / 45%);
-        background: linear-gradient(20deg, rgba(80,54,140,0.85) 0%, rgba(129,32,130,0.85) 50%, rgba(254,208,97,0.85) 100%);
-    }
-    .chatbox .chatbox-close {
-        right: 520px;
-    }
-    #custom-sidebar {
-        margin-left: 4em;
-        margin-right: 4em;
-        margin-top: 6em;
-    }
-    #actividad-sidebar {
-        font-size: 30px;
-        font-weight: 900;
-        color: #fff;
-        letter-spacing: -0.7px;
-    }
-    .txtSidebar {
-        color: #fff;
-    }
-    textarea#actividad-sidebar {
-        height: 4em;
-    }
-    textarea#actividad-sidebar, textarea#observacion {
-        width: 100%;
-        padding: 1em 2px;
-        border: 0px solid transparent;
-        background: transparent;
-        color: #fff;
-        border-radius: 0;
-        overflow-y: hidden;
-    }
-    textarea#actividad-sidebar::placeholder, textarea#observacion::placeholder, input#responsable::placeholder {
-	  color: #E1D9E1;
-    }
-    .subtitulos-Sidebar {
-        text-transform: capitalize;
-        font-weight: 900;
-        font-size: 18px;
-        border-radius: 1em;
-        color: #fff;
-        border: 0;
-        background: transparent;
-        padding-left: 10px;
-        width: 17em;
-    }
-    .widget-timeline.style-1 .timeline .timeline-badge.primary+.timeline-panel {
-        border-color: #FED061;
-    }
-    .widget-timeline.style-1 .timeline .timeline-badge.primary+.timeline-panel:after {
-        background: #FED061;
-    }
-    .widget-timeline .timeline-badge.primary:after {
-        background-color: #FED061 !important;
-        box-shadow: 0 5px 10px 0 rgb(254 208 97 / 20%);
-    }
-    .widget-timeline .timeline-badge.primary {
-        border-color: #FED061;
-    }
-    .widget-timeline .timeline>li>.timeline-badge {
-        background: transparent;
-    }
-    .widget-timeline .timeline:before {
-        background: rgb(254 208 97 / 20%);
-    }
-    .fechaMensajes {
-        color: #E1D9E1;
-    }
-    .txtYellow {
-        color: #FED061;
-    }
-    #contentAll {
-        height: calc(100vh - 30px);
-    }
-</style>
+<link rel="stylesheet" href="../css/sidebarRight.css">
 
-<div class="pb-5 chatbox">
-    <div class="chatbox-close"></div>
-    <div id="contentAll" class="p-0 dz-scroll ps ps--active-y">
-        <div id="custom-sidebar">
+<div class="pb-5 chatbox" id="sidebarEstrategico">
+    <div id="close-sidebar-estrategico" class="chatbox-close"></div>
+    <div class="contentAll p-0 dz-scroll ps ps--active-y">
+        <div class="custom-sidebar">
             <div class="mb-4">
                 <input type="hidden" id="idTarea">
                 <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
                 <textarea id="actividad-sidebar" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
-                <textarea id="observacion" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
+                <textarea id="descripcion" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
             </div>
 
             <div id="contenido-sidebar" class="">
@@ -212,7 +134,7 @@
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar">
                     <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
-                        <button onclick="actualizarTarea()" onblur="clearTextArea()" class="btn color_gradient text-white" style="margin-top: 1em; padding: 10px 15px;border:none">
+                        <button onclick="actualizarTarea()" class="btn color_gradient text-white" style="margin-top: 1em; padding: 10px 15px;border:none">
                             <p class="font-w500 m-auto">Guardar Cambios</p>
                         </button>
                     </div>

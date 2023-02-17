@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="../css/sidebarRight.css">
+
+<div class="pb-5 chatbox" id="sidebarEmpresarial">
+    <div id="close-sidebar-empresarial" class="chatbox-close"></div>
+    <div class="contentAll p-0 dz-scroll ps ps--active-y">
+        <div class="custom-sidebar">
+            <div class="mb-4">
+                <input type="hidden" id="idTarea-sidebar2">
+                <input type="hidden" id="datosUsuario-sidebar2" value="{{datosUsuario}}">
+                <textarea id="actividad-sidebar2" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
+                <textarea id="descripcion-sidebar2" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-5">
+                    <select class="form-select" id="estado2" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em;">
+                        <option value="0">Pendiente</option>
+                        <option value="1">En Proceso</option>
+                        <option value="2">Completada</option>
+                    </select>
+                    <span id="estado-sidebar2" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
+                </div>
+                <div class="col-5" id="prioridad-sidebar-div2">
+                    <select class="form-select" id="prioridad2" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
+                        <option value="0">Sin especificar</option>
+                        <option value="1">Baja</option>
+                        <option value="2">Media</option>
+                        <option value="3">Alta</option>
+                        <option value="4">Crítica</option>
+                    </select>
+                </div>
+                <div class="col-2" style="margin-left: -52px;">
+                    <span id="tiempo-sidebar2" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar2"></span>
+                </div>
+                <div class="col-12">
+                    <hr style="border-top: 1px solid #fff !important;">                                
+                </div>
+            </div>
+
+            {{!-- FECHA DE INICIO --}}
+            <div class="row">
+                <div class="col-2">
+                    <svg width="60" height="52" viewBox="0 0 33 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.15869 14.1836H31.5585" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.9263 20.8457H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.3584 20.8457H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.77393 20.8457H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.9263 27.4736H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.3584 27.4736H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.77393 27.4736H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.2471 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.46973 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M23.5786 4.24951H9.13715C4.12846 4.24951 1 7.03969 1 12.1685V27.6031C1 32.8125 4.12846 35.6672 9.13715 35.6672H23.5628C28.5873 35.6672 31.7 32.8609 31.7 27.7322V12.1685C31.7158 7.03969 28.6031 4.24951 23.5786 4.24951Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="col-10" style="padding-left: 2em;">
+                    <p class="txtSidebar">
+                        <span style="padding-left: 10px;">Fecha de inicio: </span><br>
+                        <duet-date-picker id="fechaIni-sidebar2" value="{{#if tarea.fecha_inicio}}{{tarea.fecha_inicio}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                        <span id="txtFechaIni2" style="display: none;padding-left: 10px;"></span>
+                    </p>
+                </div>
+            </div>
+            {{!-- FECHA DE ENTREGA --}}
+            <div class="row">
+                <div class="col-2">
+                    <svg width="60" height="52" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M27.8904 2.65313H26.2118V2.32826C26.2118 1.04501 25.1668 0 23.8836 0C22.6003 0 21.5553 1.04501 21.5553 2.32826V2.65313H10.4447V2.32826C10.4447 1.04501 9.39966 0 8.11641 0C6.83316 0 5.78816 1.04501 5.78816 2.32826V2.65313H4.10964C1.84095 2.65313 0 4.49949 0 6.76277V30.5435C0 32.8122 1.84636 34.6531 4.10964 34.6531H27.8904C30.1591 34.6531 32 32.8068 32 30.5435V6.76277C32 4.49408 30.1591 2.65313 27.8904 2.65313ZM22.8927 2.32826C22.8927 1.78139 23.3367 1.33739 23.8836 1.33739C24.4305 1.33739 24.8744 1.78139 24.8744 2.32826V5.8423C24.8744 6.38917 24.4305 6.83316 23.8836 6.83316C23.3367 6.83316 22.8927 6.38917 22.8927 5.8423V2.32826ZM7.12555 2.32826C7.12555 1.78139 7.56954 1.33739 8.11641 1.33739C8.66328 1.33739 9.10728 1.78139 9.10728 2.32826V5.8423C9.10728 6.38917 8.66328 6.83316 8.11641 6.83316C7.56954 6.83316 7.12555 6.38917 7.12555 5.8423V2.32826V2.32826ZM30.6626 30.5435C30.6626 32.0704 29.4173 33.3157 27.8904 33.3157H4.10964C2.58274 33.3157 1.33739 32.0704 1.33739 30.5435V11.0782H30.668V30.5435H30.6626ZM30.6626 9.74078H1.33739V6.76277C1.33739 5.23046 2.58274 3.99052 4.10964 3.99052H5.78816V5.84772C5.78816 7.13096 6.83316 8.17597 8.11641 8.17597C9.39966 8.17597 10.4447 7.13096 10.4447 5.84772V3.99052H21.5553V5.84772C21.5553 7.13096 22.6003 8.17597 23.8836 8.17597C25.1668 8.17597 26.2118 7.13096 26.2118 5.84772V3.99052H27.8904C29.4227 3.99052 30.6626 5.23587 30.6626 6.76277V9.74078V9.74078Z" fill="white"/>
+                        <path d="M11.977 28.0041L26.997 14.511C27.2731 14.2619 27.2948 13.8396 27.0457 13.5689C26.7966 13.2927 26.3743 13.2711 26.1036 13.5202L12.0853 26.109L6.77903 20.0934C6.53537 19.8173 6.11304 19.7902 5.8369 20.0339C5.56075 20.2775 5.53368 20.6998 5.77734 20.976L11.977 28.0041Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="col-10" style="padding-left: 2em;">
+                    <p class="txtSidebar"><span style="padding-left: 10px;">Fecha de entrega: </span><br>
+                        <duet-date-picker id="fechaFin-sidebar2" value="{{#if tarea.fecha_entrega}}{{tarea.fecha_entrega}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                        <span id="txtFechaFin2" style="display: none;padding-left: 10px;"></span>
+                    </p>
+                </div>
+            </div>
+
+            {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
+            <div class="row" id="btnGuardar-sidebar2">
+                <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
+                    <button onclick="actualizarTarea_Empresarial()" class="btn btn-primary" style="background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%); margin-top: 1em; color:#fff !important; padding: 10px 15px;border:none">
+                        <p class="font-w500 m-auto">Guardar Cambios</p>
+                    </button>
+                </div>
+            </div>
+
+            <div class="ps__rail-y" style="top: 159px; height: 831px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 134px; height: 697px;"></div></div>
+
+        </div>
+    </div>
+</div>

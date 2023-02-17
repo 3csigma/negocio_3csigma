@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const empresaController = require('../controllers/empresaController');
-const consultorController = require('../controllers/consultorController');
 const dashboardController = require('../controllers/dashboardController');
 const userController = require('../controllers/userController');
 const { checkLogin, noLogueado, requireRole } = require('../lib/auth')
@@ -10,7 +8,7 @@ const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 const cron = require('node-cron');
-const { enabled_nextPay, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas } = require('../lib/helpers')
+const { habilitar_siguientePago, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas, uploadFiles } = require('../lib/helpers')
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -73,7 +71,7 @@ router.get('/empresas/:codigo', checkLogin, dashboardController.editarEmpresa)
 router.get('/empresas-asignadas/:codigo', checkLogin, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
-router.post('/conclusiones', checkLogin, dashboardController.conclusionDiag)
+router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
 // PAGOS MANUALES (EXTERNOS)
 router.post('/pagoManual-Diagnostico', checkLogin, dashboardController.pagoManualDiagnostico)
 router.post('/pagoManual-Empresas', checkLogin, dashboardController.pagoManualEmpresas)
@@ -88,10 +86,20 @@ router.post('/diagnostico-proyecto/', checkLogin, dashboardController.guardarRes
 // SUBIR INFORMES DE TODAS LAS ETAPAS
 router.post('/guardarInforme', checkLogin, dashboardController.subirInforme, dashboardController.guardarInforme)
 
+/********************************************************************************
+ * PLAN EMPRESARIAL
+ */
+// SUBIR ARCHIVOS PARA PLAN EMPRESARIAL
+router.post('/guardar-archivos-empresarial', checkLogin, uploadFiles('Plan-Empresarial_', false, 'archivos_plan_empresarial', false), dashboardController.guardarArchivo_Empresarial)
+// SUBIR ARCHIVOS PARA PLAN EMPRESARIAL
+router.post('/website-empresarial', checkLogin, dashboardController.websiteEmpresarial)
+// FINALIZAR ETAPA DE PLAN EMPRESARIAL
+router.post('/finalizarEtapa', checkLogin, dashboardController.finalizarEtapa)
+
 /*******************************************************************************************************/
 // Ejecución Diaria (12pm)
 cron.schedule('0 12 * * 0-6',() => {
-    enabled_nextPay()
+    habilitar_siguientePago()
 });
 
 // Ejecución Mensual
@@ -116,8 +124,8 @@ router.get('/retrasadas', (req, res) => {
 });
 
 router.get('/consultarPagos', (req, res) => {
-    enabled_nextPay()
-    res.send("Consulta de pagos pendientes finalizada.. -> Todo Ok")
+    habilitar_siguientePago()
+    res.send("Consulta de pagos pendientes (ANÁLISIS Y EMPRESARIAL) finalizada.. -> Todo Ok")
 });
 
 module.exports = router;

@@ -249,11 +249,6 @@ input:checked+.slider:before {
     font-size: 14px !important;
 }
 
-.bgl-diagnostico {
-    background: rgba(254, 208, 97, 0.2);
-    border-color: rgba(254, 208, 97, 0.2);
-}
-
 .bg-diagnostico {
     background-color: #FED061 !important;
 }
@@ -265,22 +260,25 @@ button.bg-diagnostico:focus {
     background-color: #FED061 !important;
 }
 
-.bgl-plan {
-    background: rgba(80, 54, 140, 0.2);
-    ;
-    ;
-    border-color: rgba(80, 54, 140, 0.2);
-    ;
+.bg-empresarial {
+    background-color: #6C2986 !important;
 }
 
-.bg-plan {
+a.bg-empresarial:hover,
+a.bg-empresarial:focus,
+button.bg-empresarial:hover,
+button.bg-empresarial:focus {
+    background-color: #6C2986 !important;
+}
+
+.bg-estrategico {
     background-color: #50368C !important;
 }
 
-a.bg-plan:hover,
-a.bg-plan:focus,
-button.bg-plan:hover,
-button.bg-plan:focus {
+a.bg-estrategico:hover,
+a.bg-estrategico:focus,
+button.bg-estrategico:hover,
+button.bg-estrategico:focus {
     background-color: #50368C !important;
 }
 

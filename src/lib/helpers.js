@@ -10,7 +10,7 @@ const iv = crypto.randomBytes(16);
 const multer = require('multer');
 const path = require('path');
 
-const { sendEmail, pagoAnalisisPendienteHTML, tareasRetrasadasHTML } = require('../lib/mail.config')
+const { sendEmail, proximoPagoPendienteHTML, tareasRetrasadasHTML } = require('../lib/mail.config')
 const helpers = {}
 
 // Encriptar clave
@@ -93,7 +93,7 @@ helpers.delDuplicados = (array) => {
 
 /************************************************************************************************************** */
 /** CARGA DE ARCHIVOS */
-helpers.uploadFiles = (preNombre, inputName, carpeta) => {
+helpers.uploadFiles = (preNombre, inputName, carpeta, fecha) => {
     const rutaAlmacen = multer.diskStorage({
         destination: (_req, file, cb) => {
             const ruta = path.join(__dirname, '../public/'+carpeta)
@@ -101,13 +101,18 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
         },
     
         filename: (_req, file, cb) => {
-            const fechaActual = Math.floor(Date.now() / 1000)
-            const nomFile = preNombre + fechaActual + '_' + file.originalname;
+            let nomFile = preNombre + file.originalname;
+            if (fecha) {
+                const fechaActual = Math.floor(Date.now() / 1000)
+                nomFile = preNombre + fechaActual + '_' + file.originalname;
+            }
             cb(null, nomFile)
         }
     });
-
-    const upload = multer({ storage: rutaAlmacen }).array(inputName)
+    let upload = multer({ storage: rutaAlmacen }).single('file')
+    if (inputName) {
+        upload = multer({ storage: rutaAlmacen }).array(inputName)
+    }
     return upload;
 }
 
@@ -115,7 +120,7 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 /*********************************** FUNCIONES PARA CRON JOB ****************************************************** */
 
 // CAPTURAR MES ANTERIOR Y ABREVIATURA DEL MES ACTUAL (ej: Dic)
- capturarMes = () => {
+capturarMes = () => {
     let mesActual = new Date().getMonth();
     mesActual == 0 ? (mesActual = 1) : (mesActual = mesActual + 1);
     let mesAnterior = mesActual - 1
@@ -129,92 +134,186 @@ helpers.uploadFiles = (preNombre, inputName, carpeta) => {
 
 }
 
-// ACTUALIZAR PAGOS ANÁLISIS DE NEGOCIO
-helpers.enabled_nextPay = async () => {
+// ACTUALIZACIÓN AUTOMATICA DE PAGOS PARA ANÁLISIS DE NEGOCIO Y PLAN EMPRESARIAL
+helpers.habilitar_siguientePago = async () => {
     
     const propuestas = await helpers.consultarDatos('propuestas')
     const pagos = await helpers.consultarDatos('pagos');
     const empresas = await helpers.consultarDatos('empresas')
 
     if (propuestas.length > 0) {
-        propuestas.forEach(async (x) => {
-            const isFound = pagos.find(p => p.id_empresa == x.empresa)
-            if (isFound) {
-                console.log("\nHAY COINCIDENCIAS DE EMPRESAS REGISTRADAS EN LA TABLA PAGOS CON LA TABLA PROPUESTA_ANALISIS\n")
-                const fechaActual = new Date().toLocaleDateString("en-US")
-                console.log("FECHA SGTE: " + fechaActual);
-                const obj1 = JSON.parse(isFound.analisis_negocio1)
-                const obj2 = JSON.parse(isFound.analisis_negocio2)
-                const obj3 = JSON.parse(isFound.analisis_negocio3)
+        // PROCESO PARA VALIDAR PAGO EN PROPUESTAS DE ANÁLISIS
+        const propuestas_analisis = propuestas.filter(x => x.tipo_propuesta == 'Análisis de negocio')
+        if (propuestas_analisis.length > 0) {
+            propuestas_analisis.forEach(async (x) => {
+                const isFound = pagos.find(p => p.id_empresa == x.empresa)
+                if (isFound) {
+                    console.log("\nHAY COINCIDENCIAS DE EMPRESAS REGISTRADAS EN LA TABLA PAGOS CON LA TABLA PROPUESTA_ANALISIS\n")
+                    const fechaActual = new Date().toLocaleDateString("en-US")
+                    console.log("FECHA ACTUAL(SGTE) PARA COMPARAR: " + fechaActual);
+                    const obj1 = JSON.parse(isFound.analisis_negocio1)
+                    const obj2 = JSON.parse(isFound.analisis_negocio2)
+                    const obj3 = JSON.parse(isFound.analisis_negocio3)
 
-                if (obj1.fecha && obj2.estado == 0) {
-                    console.log("COMPARACIÓN DE ANÁLISIS 1 PAGADO", obj1.fecha)
-                    let fechaDB = new Date(obj1.fecha)
-                    fechaDB.setDate(fechaDB.getDate() + 30);
-                    fechaDB = fechaDB.toLocaleDateString("en-US")
-
-                    if (fechaDB == fechaActual) {
-                        const actualizar = {analisis_negocio2: JSON.stringify({estado: 1})}
-                        const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
-
-                        if (estadoDB.affectedRows > 0) {
-                            const empresa = empresas.find(i => i.id_empresas == x.empresa)
-                            const email = empresa.email
-                            const nombre_empresa = empresa.nombre_empresa
-                            const texto = 'primera cuota de tu análisis de negocio en 3C Sigma, tu segundo'
-                            
-                            // Obtener la plantilla de Email
-                            const template = pagoAnalisisPendienteHTML(nombre_empresa, texto);
-                    
-                            // Enviar Email
-                            const resultEmail = await sendEmail(email, 'Tu segundo cobro de análisis de negocio está listo', template)
-                
-                            if (resultEmail == false){
-                                console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de análisis de negocio")
-                            } else {
-                                console.log("Email del 2do cobro enviado satisfactoriamente")
-                            }
-                        }
-                    }
-                } else if (obj2.fecha && obj3.estado == 0) {
-                    console.log("COMPARACIÓN DE ANÁLISIS 2 PAGADO")
-                    let fechaDB = new Date(obj2.fecha)
-                    fechaDB.setDate(fechaDB.getDate() + 30);
-                    fechaDB = fechaDB.toLocaleDateString("en-US")
-                    if (fechaDB == fechaActual) {
-                        const actualizar = {analisis_negocio3: JSON.stringify({estado: 1})}
-                        const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+                    const etapa = 'Análisis de negocio'; const link = 'analisis-de-negocio';
+    
+                    if (obj1.fecha && obj2.estado == 0) {
+                        console.log("COMPARACIÓN DE ANÁLISIS 1ER PAGO", obj1.fecha)
+                        let fechaDB = new Date(obj1.fecha)
+                        fechaDB.setDate(fechaDB.getDate() + 30);
+                        fechaDB = fechaDB.toLocaleDateString("en-US")
+                        console.log("FECHA NUEVA DB => ", fechaDB);
+    
+                        if (fechaDB == fechaActual) {
+                            console.log("\n--- LAS FECHAS SON IGUALES >> ANÁLISIS DE NEGOCIO");
+                            const actualizar = {analisis_negocio2: JSON.stringify({estado: 1})}
+                            const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+    
+                            if (estadoDB.affectedRows > 0) {
+                                const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                                const email = empresa.email
+                                const nombre_empresa = empresa.nombre_empresa
+                                const texto = 'primera cuota de tu análisis de negocio en 3C Sigma, tu segundo'
+                                
+                                // Obtener la plantilla de Email
+                                const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
                         
-                        if (estadoDB.affectedRows > 0) {
-                            const empresa = empresas.find(i => i.id_empresas == x.empresa)
-                            const email = empresa.email
-                            const nombre_empresa = empresa.nombre_empresa
-                            const texto = 'segunda cuota de tu análisis de negocio en 3C Sigma, tu tercer y último'
-                            
-                            // Obtener la plantilla de Email
-                            const template = pagoAnalisisPendienteHTML(nombre_empresa, texto);
+                                // Enviar Email
+                                const resultEmail = await sendEmail(email, 'Tu segundo cobro de análisis de negocio está listo', template)
                     
-                            // Enviar Email
-                            const resultEmail = await sendEmail(email, 'Tu último cobro de análisis de negocio está listo', template)
-                
-                            if (resultEmail == false){
-                                console.log("Ocurrio un error inesperado al enviar el email del último Cobro de análisis de negocio")
-                            } else {
-                                console.log("Email del último cobro enviado satisfactoriamente")
+                                if (resultEmail == false){
+                                    console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de análisis de negocio")
+                                } else {
+                                    console.log("Email del 2do cobro ANÁLISIS DE NEGOCIO enviado satisfactoriamente")
+                                }
                             }
                         }
+                    } else if (obj2.fecha && obj3.estado == 0) {
+                        console.log("COMPARACIÓN DE ANÁLISIS 2DO PAGO")
+                        let fechaDB = new Date(obj2.fecha)
+                        fechaDB.setDate(fechaDB.getDate() + 30);
+                        fechaDB = fechaDB.toLocaleDateString("en-US")
+                        console.log("FECHA NUEVA DB => ", fechaDB);
+                        if (fechaDB == fechaActual) {
+                            const actualizar = {analisis_negocio3: JSON.stringify({estado: 1})}
+                            const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+                            
+                            if (estadoDB.affectedRows > 0) {
+                                const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                                const email = empresa.email
+                                const nombre_empresa = empresa.nombre_empresa
+                                const texto = 'segunda cuota de tu análisis de negocio en 3C Sigma, tu tercer y último'
+                                
+                                // Obtener la plantilla de Email
+                                const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
+                        
+                                // Enviar Email
+                                const resultEmail = await sendEmail(email, 'Tu último cobro de análisis de negocio está listo', template)
+                    
+                                if (resultEmail == false){
+                                    console.log("Ocurrio un error inesperado al enviar el email del último Cobro de análisis de negocio")
+                                } else {
+                                    console.log("Email del último cobro ANÁLISIS DE NEGOCIO  enviado satisfactoriamente")
+                                }
+                            }
+                        }
+                    } else{
+                        console.log("\nLA FECHA ACTUAL NO ES IGUAL A LA DEL PAGO\n")     
                     }
-                } else{
-                    console.log("\nLA FECHA ACTUAL NO ES IGUAL A LA DEL PAGO\n")     
+    
+                } else {
+                    console.log("\nALGUNAS EMPRESAS NO TIENEN PROPUESTA_ANALISIS\n") 
                 }
+    
+            })
+        }
 
-            } else {
-                console.log("\nALGUNAS EMPRESAS NO TIENEN PROPUESTA_ANALISIS\n") 
-            }
+        // PROCESO PARA VALIDAR PAGO EN PROPUESTAS DE PLAN EMPRESARIAL
+        const propuestas_empresarial = propuestas.filter(x => x.tipo_propuesta == 'Plan empresarial')
+        if (propuestas_empresarial.length > 0) {
+            propuestas_empresarial.forEach(async (x) => {
+                const isFound = pagos.find(p => p.id_empresa == x.empresa)
+                if (isFound) {
+                    console.log("\n--- HAY COINCIDENCIAS DE EMPRESAS REGISTRADAS EN LA TABLA PAGOS CON LA TABLA PROPUESTA_PLAN_EMPRESARIAL ---\n")
+                    const fechaActual = new Date().toLocaleDateString("en-US")
+                    console.log("FECHA ACTUAL(SGTE) PARA COMPARAR: " + fechaActual);
+                    const obj1 = JSON.parse(isFound.empresarial1)
+                    const obj2 = JSON.parse(isFound.empresarial2)
+                    const obj3 = JSON.parse(isFound.empresarial3)
 
-        })
+                    const etapa = 'Plan Empresarial'; const link = 'plan-empresarial';
+    
+                    if (obj1.fecha && obj2.estado == 0) {
+                        console.log("COMPARACIÓN DE PLAN EMPRESARIAL 1ER PAGO --", obj1.fecha)
+                        let fechaDB = new Date(obj1.fecha)
+                        fechaDB.setDate(fechaDB.getDate() + 30);
+                        fechaDB = fechaDB.toLocaleDateString("en-US")
+                        console.log("FECHA NUEVA DB => ", fechaDB);
+    
+                        if (fechaDB == fechaActual) {
+                            const actualizar = {empresarial2: JSON.stringify({estado: 1})}
+                            const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+    
+                            if (estadoDB.affectedRows > 0) {
+                                const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                                const email = empresa.email
+                                const nombre_empresa = empresa.nombre_empresa
+                                const texto = 'primera cuota de tu plan empresarial en 3C Sigma, tu segundo'
+                                
+                                // Obtener la plantilla de Email
+                                const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
+                        
+                                // Enviar Email
+                                const resultEmail = await sendEmail(email, 'Tu segundo cobro de plan empresarial está listo', template)
+                    
+                                if (resultEmail == false) {
+                                    console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de plan empresarial")
+                                } else {
+                                    console.log("Email del 2do cobro PLAN EMPRESARIAL enviado satisfactoriamente")
+                                }
+                            }
+                        }
+                    } else if (obj2.fecha && obj3.estado == 0) {
+                        console.log("COMPARACIÓN DE PLAN EMPRESARIAL 2DO PAGO -- ")
+                        let fechaDB = new Date(obj2.fecha)
+                        fechaDB.setDate(fechaDB.getDate() + 30);
+                        fechaDB = fechaDB.toLocaleDateString("en-US")
+                        console.log("FECHA NUEVA DB => ", fechaDB);
+                        if (fechaDB == fechaActual) {
+                            const actualizar = {empresarial3: JSON.stringify({estado: 1})}
+                            const estadoDB = await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizar, x.empresa])
+                            
+                            if (estadoDB.affectedRows > 0) {
+                                const empresa = empresas.find(i => i.id_empresas == x.empresa)
+                                const email = empresa.email
+                                const nombre_empresa = empresa.nombre_empresa
+                                const texto = 'segunda cuota de tu plan empresarial en 3C Sigma, tu tercer y último'
+                                
+                                // Obtener la plantilla de Email
+                                const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
+                        
+                                // Enviar Email
+                                const resultEmail = await sendEmail(email, 'Tu último cobro de plan empresarial está listo', template)
+                    
+                                if (resultEmail == false){
+                                    console.log("Ocurrio un error inesperado al enviar el email del último Cobro de plan empresarialo")
+                                } else {
+                                    console.log("Email del último cobro PLAN EMPRESARIAL enviado satisfactoriamente")
+                                }
+                            }
+                        }
+                    } else{
+                        console.log("\nLA FECHA ACTUAL NO ES IGUAL A LA DEL PAGO\n")     
+                    }
+    
+                } else {
+                    console.log("\nALGUNAS EMPRESAS NO TIENEN PROPUESTA_PLAN_EMPRESARIAL\n") 
+                }
+    
+            })
+        }
     }
-    console.log("\n***************\nEJECUCIÓN CRON JOB FINALIZADA - PAGO ANÁLISIS\n***************\n");
+    console.log("\n***************\nEJECUCIÓN CRON JOB FINALIZADA - PAGOS (ANÁLISIS & EMPRESARIAL) \n***************\n");
 }
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
@@ -421,7 +520,7 @@ helpers.historial_informes_consultor = async () => {
     console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
 };
 
-// Consultar Tareas Retrasadas x Empresas y Enviar Email
+// Consultar Tareas Retrasadas x Empresas y Enviar Email (PLAN ESTRATÉGICO)
 helpers.consultar_tiempo_tareas = async () => {
     console.log("\n******************************************************");
     console.log("CRON JOB - CONSULTAR TAREAS RETRASADAS");
@@ -467,6 +566,72 @@ helpers.consultarInformes = async (empresa, nombreInforme) => {
     return informe[0];
 }
 
+// CONSULTAR TAREAS DE PLAN EMPRESARIAL
+helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
+    const tareas = await pool.query('SELECT * FROM tareas_plan_empresarial WHERE empresa = ? ORDER BY fecha_inicio ASC', [empresa])
+    tareas.forEach(x => {
+        //**** VALIDANDO ESTADOS *****
+        if (x.estado == 0) {
+            x.estado = 'Pendiente'; x.color = 'primary';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 1) {
+            x.estado = 'En Proceso'; x.color = 'warning';
+            x.tiempo = 'A tiempo'
+            if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
+        }
+        if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
+
+        //**** VALIDANDO PRIORIDADES *****
+        if (x.prioridad == 0) {
+            x.prioridad = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px";
+        } else if (x.prioridad == 1) {
+            x.prioridad = 'Baja'; x.background = "background: #a184e3";
+        } else if (x.prioridad == 2) {
+            x.prioridad = 'Media'; x.background = "background: #825fd3;"
+        } else if (x.prioridad == 3) {
+            x.prioridad = 'Alta'; x.background = "background: #6647af;"
+        } else if (x.prioridad == 4) {
+            x.prioridad = 'Crítica'; x.background = "background: #50368c;"
+        }
+
+        const dateObj = new Date(x.fecha_entrega);
+        const mes = dateObj.toLocaleString("es-US", { month: "short" });
+        x.dia = dateObj.getDate()
+        x.mes = mes.replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase());
+
+        //  *** DIFERENCIA ENTRE LAS 2 FECHA  ****
+        x.fechaini = new Date(x.fecha_inicio);
+        x.fechaini = x.fechaini.getTime();
+        x.fechaini = (((x.fechaini / 1000) / 60) / 60) / 24
+
+        x.fechafin = new Date(x.fecha_entrega);
+        x.fechafin = x.fechafin.getTime();
+        x.fechafin = (((x.fechafin / 1000) / 60) / 60) / 24
+
+        //  *** FECHA ACTUAL ****
+        x.fecha_actual = new Date().getTime();
+        x.fecha_actual = (((x.fecha_actual / 1000) / 60) / 60) / 24
+        let plazo = x.fechafin - x.fechaini
+        let diasCorridos = 0
+        if ( x.fechaini > x.fecha_actual ) {diasCorridos }else {diasCorridos = x.fecha_actual - x.fechaini}
+        diasCorridos = parseInt(diasCorridos)
+        x.resultado = (diasCorridos * 100) / plazo
+        if (x.resultado > 100) {x.resultado = 100}
+    })
+
+    tareas.pendientes = tareas.filter(i => i.estado == 'Pendiente')
+    tareas.pendientes.cant = tareas.pendientes.length;
+    tareas.enProceso = tareas.filter(i => i.estado == 'En Proceso')
+    tareas.enProceso.cant = tareas.enProceso.length;
+    tareas.completadas = tareas.filter(i => i.estado == 'Completada')
+    tareas.completadas.cant = tareas.completadas.length;
+
+    return tareas;
+}
+
+// (PLAN ESTRATÉGICO)
 helpers.consultarTareas = async (empresa, fechaActual) => {
     const tareas = {};
     tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY dimension ASC', [empresa])
@@ -546,8 +711,20 @@ helpers.consultarDatos = async (tabla, extra = null) => {
     return data;
 }
 
+helpers.insertarDatos = async (tabla, datos) => {
+    return await pool.query(`INSERT INTO ${tabla} SET ?`, [datos]);
+}
+
+helpers.actualizarDatos = async (tabla, datos, extra) => {
+    return await pool.query(`UPDATE ${tabla} SET ${datos} ${extra}`);
+}
+
+helpers.eliminarDatos = async (tabla, extra) => {
+    return await pool.query(`DELETE FROM ${tabla} ${extra}`);
+}
+
 /******************************************************************** */
-// FUNCIÓN MULTIPLE
+// FUNCIÓN MULTIPLE (PLAN ESTRATÉGICO)
 helpers.tareasGenerales = async (empresa, fechaActual) => {
     const tareas = await helpers.consultarTareas(empresa, fechaActual)
     let d1 = tareas.todas.filter(i => i.dimension == 'Producto');

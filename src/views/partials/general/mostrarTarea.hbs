@@ -4,12 +4,12 @@
         tiempo.css('display', 'none')
         $('#prioridad-sidebar-div').css('display', 'none');
         $('#divTxtComentario').css('display', 'none');
-        $('.chatbox').addClass('active');
+        $('#sidebarEstrategico').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
 
         fetch('/editarTarea', {
             method: 'POST',
-            body: JSON.stringify({idTarea}),
+            body: JSON.stringify({idTarea, item:2}),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json())
         .catch(error => console.error('Error Mostrar Tarea: ', error))
@@ -64,6 +64,47 @@
                 if (r.estado == 1) txtEstado = 'En Proceso'
             }
             $('#estado-sidebar').text(txtEstado).css('display', 'inline-block')
+        })
+    }
+
+    function verTareaEmpresarial(idTarea) {
+        const tiempo = $('#tiempo-sidebar2')
+        tiempo.css('display', 'none')
+        $('#prioridad-sidebar-div2').css('display', 'none');
+        $('#sidebarEmpresarial').addClass('active');
+        $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
+
+        fetch('/editarTarea', {
+            method: 'POST',
+            body: JSON.stringify({idTarea, item:1}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Mostrar Tarea: ', error))
+        .then(r => {
+            console.group("INFO DE LA TAREA >> ")
+            console.log(r)
+            console.log("\n")
+            console.groupEnd()
+            $('#fechaIni-sidebar2').css('display', 'none')
+            $('#fechaFin-sidebar2').css('display', 'none')
+            $('#btnGuardar-sidebar2').css('display', 'none')
+            $("#estado2").css('display', 'none')
+            $('#actividad-sidebar2').val(r.actividad).attr('readonly', true)
+            $('#txtFechaIni2').text(r.fecha_inicio).css('display', 'inline-block')
+            $('#txtFechaFin2').text(r.fecha_entrega).css('display', 'inline-block')
+
+            let txtEstado = 'Completado'
+            if (r.estado == 0 || r.estado == 1) {
+                const fechaActual = new Date().toLocaleDateString('fr-CA')
+                $('#tiempoTxt-sidebar2').text('A tiempo')
+                tiempo.css('display', 'inline-table')
+                if (fechaActual > r.fecha_entrega){
+                    $('#tiempoTxt-sidebar2').text('Retrasada')
+                }
+                txtEstado = 'Pendiente'
+                if (r.estado == 1) txtEstado = 'En Proceso'
+            }
+            $('#estado-sidebar2').text(txtEstado).css('display', 'inline-block')
         })
     }
 </script>

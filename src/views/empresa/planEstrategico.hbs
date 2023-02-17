@@ -16,10 +16,10 @@
                             <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una
                                 lista de tareas para mejorar tu empresa, a través de las dimensiones:</p>
                             <p style="color: #000; font-weight: bold;">
-                                <i class="fa-solid fa-box"></i> Producto ({{dimObj.d1}})</li></br>
-                                <i class="fa-solid fa-user-tie"></i> Administración ({{dimObj.d2}})</br>
-                                <i class="fa-solid fa-gear"></i> Operaciones ({{dimObj.d3}})</br>
-                                <i class="fa-solid fa-bullhorn"></i> Marketing ({{dimObj.d4}})</br>
+                                <i class="fa-solid fa-box"></i> Producto ({{dimObj.d1}} tareas)</li></br>
+                                <i class="fa-solid fa-user-tie"></i> Administración ({{dimObj.d2}} tareas)</br>
+                                <i class="fa-solid fa-gear"></i> Operaciones ({{dimObj.d3}} tareas)</br>
+                                <i class="fa-solid fa-bullhorn"></i> Marketing ({{dimObj.d4}} tareas)</br>
                             </p>
                             {{else}}
                             <h2 style="color: #000; font-weight: bold;">Todo listo para empezar</h2>
@@ -413,8 +413,6 @@
 <!--**********************************
             Scripts
 ***********************************-->
-<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-
 <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
 <script src="../vendor/js/chartist.min.js"></script>
 <script src="../vendor/js/chartist-plugin-tooltip.min.js"></script>
@@ -509,6 +507,23 @@
         }();
 
         jQuery(document).ready(function(){
+            $("#close-sidebar-estrategico").on("click", () => {
+                $("#sidebarEstrategico").removeClass("active")
+                // PLAN ESTRATÉGICO
+                $('#cuerpoGeneral').css('overflow-y', 'auto')
+                $('#fechaIni-sidebar').css('display', 'inline-block')
+                $('#fechaFin-sidebar').css('display', 'inline-block')
+                $('#dimension-sidebar').css('display', 'inline-block')
+                $('#btnGuardar-sidebar').css('display', 'flex')
+                $("#estado").css('display', 'inline-block')
+                $('#actividad-sidebar').attr('readonly', false)
+                $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
+                $("#descripcion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $('#txtFechaIni').css('display', 'none')
+                $('#txtFechaFin').css('display', 'none')
+                $('#txtDimension').css('display', 'none')
+                $('#estado-sidebar').css('display', 'none')
+            })
         });
             
         jQuery(window).on('load',function(){

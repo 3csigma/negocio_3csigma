@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { checkLogin, validarIDFicha } = require('../lib/auth');
 const empresaController = require('../controllers/empresaController');
-const signingViaEmail = require('../controllers/envelopeController');
+// const signingViaEmail = require('../controllers/envelopeController');
 const { uploadFiles } = require('../lib/helpers')
 
 // Diagnóstico de Negocio
@@ -15,26 +15,17 @@ router.post('/addficha', checkLogin, empresaController.addFichaCliente)
 router.post('/eliminarFicha', checkLogin, empresaController.eliminarFicha)
 
 // Acuerdo de Confidencialidad
-router.get('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerdo)
 // router.post('/acuerdo-de-confidencialidad', checkLogin, signingViaEmail.createController)
 router.post('/acuerdo-de-confidencialidad', checkLogin, empresaController.acuerdoCheck)
 
 // Análisis de Negocio
 router.get('/analisis-de-negocio', checkLogin, empresaController.analisis)
-router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa'), empresaController.guardarArchivos)
+router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Analisis-de-negocio_', 'archivosAnalisis[]', 'archivos_analisis_empresa', true), empresaController.guardarArchivos)
+
+// Plan Empresarial
+router.get('/plan-empresarial', checkLogin, empresaController.planEmpresarial)
 
 // Plan Estratégico de Negocio
 router.get('/plan-estrategico', checkLogin, empresaController.planEstrategico)
-
-/*******************************************************************************************************/
-// // Ejecución Diaria (12pm)
-// cron.schedule('0 12 * * 0-6',() => {
-//     enabled_nextPay()
-// });
-
-// // router.get('/update-pay2', (req, res) => {
-// //     enabled_nextPay()
-// //     res.send("TODO OK -> END")
-// // });
 
 module.exports = router

@@ -1,48 +1,57 @@
+<link rel="stylesheet" href="../css/estilosAnalisis.css">
 <!--**********************************
-                    Content body start
+        Content body start
 ***********************************-->
 <div class="content-body">
   <!-- row -->
   <div class="container-fluid">
+    {{!-- MENSAJES INFORMATIVOS DE LA 1ERA FILA --}}
     <div class="row">
       <div class="col-md-12 col-xl-6 col-xxl-6">
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
           <div class="card-body">
-            <h2 style="color: #000; font-weight: bold;">Lorem ipsum dolor sit amet</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Consectetur adipisicing elit. Quos temporibus iste laboriosam deleniti expedita maxime nesciunt facilis, assumenda, odio magni voluptates. Vero nesciunt fugiat aliquam molestiae quidem distinctio cumque voluptatem</p>
+            {{#if tienePropuesta}}
+            <h2 style="color: #000; font-weight: bold;">Realicemos tu plan empresarial</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa</p>
+            {{else}}
+            <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu plan empresarial.</p>
+            {{/if}}
           </div>
         </div>
       </div>
       <div class="col-md-12 col-xl-6 col-xxl-6">
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
+          {{#if tienePropuesta}}
           {{#if btnPagar.empresarialPer}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de plan empresarial. Agenda una cita con tu consultor si tienes alguna duda.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de plan empresarial. Tu consultor agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
           </div>
           {{else}}
           <div class="card-body">
             {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
-            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pago único Plan empresarial"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
+            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pagar con 10% OFF"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
             <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
+          {{/if}}
           {{/if}}
         </div>
       </div>
     </div>
     {{!-- Fin de la 1era fila --}}
-
+    {{#if tienePropuesta}}
     <div class="row">
-      {{!-- TARJETAS IZQUIERDA (PROPUESTAS - PAGOS - INFORMES) --}}
+      {{!-- TARJETAS IZQUIERDA (PROPUESTAS - PAGOS) --}}
       <div class="col-xl-6 col-xxl-6">
         {{!-- PROPUESTA --}}
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Propuesta de plan empresarial</h4>
+                <h4 class="card-title">Propuesta técnica</h4>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -53,6 +62,7 @@
                         <th>ESTADO DE PAGO</th>
                         {{#unless propuesta.pago}}
                         <th>PAGO EN COUTAS</th>
+                        <th>PAGO ÚNICO</th>
                         {{/unless}}
                         <th>VALOR TOTAL</th>
                         <th>REVISAR PROPUESTA</th>
@@ -71,55 +81,112 @@
                         {{#unless propuesta.pago}}
                         <td>
                           <div class="d-flex">
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj1 "!=" 1}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj1 "==" 1}}
-                              <form action="/pagar-empresarial-per1" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                            </div>
-
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj2 "==" 0}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj2 "==" 1}}
-                              <form action="/pagar-empresarial-per2" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj2 "==" 2}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>                            
-                              {{/comparar}}
-                            </div>
-
-                            <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{#comparar btnPagar.obj3 "==" 0}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago no está disponible" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj3 "==" 1}}
-                              <form action="/pagar-empresarial-per3" method="POST">
-                                <button type="submit" class="btn btn-primary btn-xs sharp" style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                <i class="fa fa-usd"></i>
-                                </button>
-                              </form>
-                              {{/comparar}}
-                              {{#comparar btnPagar.obj3 "==" 2}}
-                              <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor." title="" data-original-title="Este pago ya fue realizado" aria-describedby="popover988363"><i class="fa fa-usd"></i></button>
-                              {{/comparar}}
-                            </div>
                             
+                            {{#if escena1}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <form action="/pagar-empresarial-per1" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}">
+                                    <i class="fa fa-usd"></i>
+                                  </button>
+                                </form>
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena2}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena3}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <form action="/pagar-empresarial-per2" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
+                                </form>
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena4}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena5}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <form action="/pagar-empresarial-per3" method="POST">
+                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
+                                </form>
+                              </div>
+                            {{/if}}
+
+                            {{#if escena6}}
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
+                              </div>
+                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
+                              </div>
+                            {{/if}}
                           </div>
                         </td>
+
+                        {{!-- CELDA DE PAGO ÚNICO PLAN EMPRESARIAL --}}
+                        <td>
+                          <div class="col" style="padding-right: 7px;padding-left: 7px;">
+                            {{#if activarPagoUnico}}
+                            <form action="/pagar-empresarial" method="POST">
+                              <button type="submit" class="btn btn-sm btn-pago-analisis" title="Pagar ahora">Pagar con 10% OFF</button>
+                            </form>
+                            {{else}}
+                            {{#if escena6}}
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="Plan empresarial pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                              <i class="fa fa-usd"></i>
+                            </button>
+                            {{else}}
+                            <button type="button" class="btn btn-primary btn-xs sharp" title="Pago de cuotas en proceso" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                              <i class="fa fa-usd"></i>
+                            </button>
+                            {{/if}}
+                            {{/if}}
+                          </div>
+                        </td>
+
                         {{/unless}}
-                        <td>${{propuesta.precio_total}}</td>
+                        <td class="precios_celdas">{{propuesta.precio_total}}</td>
                         <td>
                           <a href="{{propuesta.link_propuesta}}" target="_blank"
                               class="btn btn-primary shadow btn-xs sharp"
@@ -136,12 +203,15 @@
           </div>
         </div>
 
-        {{!-- INFORMES GENERADOS --}}
+      </div>
+
+      {{!-- TARJETA DERECHA (ARCHIVOS CARGADOS POR EL CONSULTOR) --}}
+      <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Informes generados</h4>
+                <h4 class="card-title">Archivos cargados</h4>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
@@ -149,27 +219,28 @@
                     <thead>
                       <tr>
                         <th>FECHA</th>
-                        <th>ETAPA</th>
                         <th>NOMBRE</th>
-                        <th>ACCIÓN</th>
+                        <th>REVISAR</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {{#if informeEmpresarial.fecha}}
+                      {{#if archivos}}
+                      {{#each archivos}}
                       <tr>
-                        <td>{{informeEmpresarial.fecha}}</td>
-                        <td>Diagnóstico de negocio</td>
-                        <td>{{informeEmpresarial.nombre}}</td>
+                        <td>{{fecha}}</td>
+                        <td>{{tipo}}</td>
                         <td>
-                          <a href="{{informeEmpresarial.url}}"
-                            style="margin: 0 auto; margin-top: -8px;color: white; background: #FED061; border-color: #FED061"
-                            target="_blank" class="btn btn-info shadow btn-xs sharp">
-                            <i class="fa fa-search"></i></a>
+                          <a href="{{url}}" target="_blank"
+                            class="btn btn-primary shadow btn-xs sharp"
+                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                            <i class="fa fa-search"></i>
+                          </a>
                         </td>
                       </tr>
+                      {{/each}}
                       {{else}}
                       <tr>
-                        <td colspan="4">Aún no hay informes generados.</td>
+                        <td colspan="3">El consultor no ha cargado archivos aún</td>
                       </tr>
                       {{/if}}
                     </tbody>
@@ -179,22 +250,199 @@
             </div>
           </div>
         </div>
+
       </div>
 
-      <div class="col-xl-6 col-xxl-6">
-        <div class="row">
-          <div class="col-xl-12">
-            
+      {{!-- TAREAS ASIGNADAS --}}
+      {{#if propuesta.porcentaje}}
+      <div class="col-xl-12 mt-2">
+        <div class="card plan-list">
+          <div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
+            <div class="mr-auto pr-3 mb-3">
+              <h4 class="text-black fs-20">Lista de Tareas del Consultor</h4>
+              <p class="fs-13 mb-0 text-black">Haz clic en una tarea para verla</p>
+            </div>
+            <div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
+              <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link tabs-Task active" data-toggle="tab" href="#Pendientes" role="tab"
+                    aria-selected="true">Pendientes ({{tareas.pendientes.cant}})</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link tabs-Task" data-toggle="tab" href="#EnProceso" role="tab">En Proceso
+                    ({{tareas.enProceso.cant}})</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link tabs-Task" data-toggle="tab" href="#Completadas" role="tab">Completadas
+                    ({{tareas.completadas.cant}})</a>
+                </li>
+              </ul>
+            </div>
+      
           </div>
-          
+      
+          <div class="card-body tab-content pt-2">
+            {{!-- TAREAS PENDIENTES --}}
+            <div class="tab-pane active show fade" id="Pendientes">
+              {{#if tareas.pendientes}}
+              {{#each tareas.pendientes}}
+              <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                <div class="col-xl-5 col-xxl-6 col-lg-6 col-sm-8 d-flex align-items-center">
+                  <div class="list-icon bgl-primary mr-3 mb-3">
+                    <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                    <span class="fs-14 text-secondary">{{mes}}</span>
+                  </div>
+                  <div class="info mb-3">
+                    <h4 onclick="verTareaEmpresarial({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                    <span class="text-{{color}} font-w600">{{estado}}</span>
+                    {{!-- TIEMPO --}}
+                    <span class="badge light"
+                      style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;">
+                      <i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                    {{!-- PRIORIDAD --}}
+                    <span>Prioridad: {{prioridad}}</span>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-xxl-2 col-lg-3 col-sm-12 d-flex align-items-center">
+                  <a onclick="verTareaEmpresarial({{id}})" class="btn mb-3 play-button rounded mr-3">
+                    <i class="fa-regular fa-eye"></i> Ver Detalles
+                  </a>
+                </div>
+              </div>
+              {{/each}}
+              {{else}}
+              <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No
+                  hay tareas pendientes</label>
+              </div>
+              {{/if}}
+            </div>
+      
+            {{!-- TAREAS EN PROCESO --}}
+            <div class="tab-pane fade" id="EnProceso">
+              {{#if tareas.enProceso}}
+              {{#each tareas.enProceso}}
+              <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                  <div class="list-icon bgl-primary mr-3 mb-3">
+                    <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                    <span class="fs-14 text-secondary">{{mes}}</span>
+                  </div>
+                  <div class="info mb-3">
+                    <h4 onclick="verTareaEmpresarial({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                    <span class="text-{{color}} font-w600">{{estado}}</span>
+                    {{!-- TIEMPO --}}
+                    <span class="badge light badge-success"
+                      style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
+                        class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                    {{!-- PRIORIDAD --}}
+                    <span>Prioridad: {{prioridad}}</span>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                  <a onclick="verTareaEmpresarial({{id}})" class="btn mb-3 play-button rounded mr-3">
+                    <i class="fa-regular fa-eye"></i> Ver Detalles
+                  </a>
+                </div>
+              </div>
+              {{/each}}
+              {{else}}
+              <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No
+                  hay tareas en proceso</label>
+              </div>
+              {{/if}}
+            </div>
+      
+            {{!-- TAREAS COMPLETADAS --}}
+            <div class="tab-pane fade" id="Completadas">
+              {{#if tareas.completadas}}
+              {{#each tareas.completadas}}
+              <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                  <div class="list-icon bgl-primary mr-3 mb-3">
+                    <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                    <span class="fs-14 text-secondary">{{mes}}</span>
+                  </div>
+                  <div class="info mb-3">
+                    <h4 onclick="verTareaEmpresarial({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                    <span class="text-{{color}} font-w600">{{estado}}</span>
+                  </div>
+                </div>
+                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                  <a onclick="verTareaEmpresarial({{id}})" class="btn mb-3 play-button rounded mr-3">
+                    <i class="fa-regular fa-eye"></i> Ver Detalles
+                  </a>
+                </div>
+              </div>
+              {{/each}}
+              {{else}}
+              <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">Aún
+                  no hay tareas completadas</label>
+              </div>
+              {{/if}}
+            </div>
+      
+            {{!-- TODAS LAS TAREAS --}}
+            <div class="tab-pane fade" id="Todas">
+              {{#each tareas.todas}}
+              <div class="d-flex border-bottom flex-wrap pt-3 list-row align-items-center mb-2">
+                <div class="col-xl-5 col-xxl-8 col-lg-6 col-sm-8 d-flex align-items-center">
+                  <div class="list-icon bgl-primary mr-3 mb-3">
+                    <p class="fs-24 text-secondary mb-0 mt-2">{{dia}}</p>
+                    <span class="fs-14 text-secondary">{{mes}}</span>
+                  </div>
+                  <div class="info mb-3">
+                    <h4 onclick="verTareaEmpresarial({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
+                    <span class="text-{{color}} font-w600">{{estado}}</span>
+                    {{!-- TIEMPO --}}
+                    {{#unless tareaOk}}
+                    <span class="badge light badge-success"
+                      style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;"><i
+                        class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
+                    {{!-- PRIORIDAD --}}
+                    <span class="badge light badge-success">Prioridad: {{prioridad}}</span>
+                    {{/unless}}
+                  </div>
+                </div>
+                <div class="col-xl-4 col-xxl-12 col-lg-3 col-sm-12 d-flex align-items-center">
+                  <a onclick="verTareaEmpresarial({{id}})" class="btn mb-3 play-button rounded mr-3">
+                    <i class="fa-regular fa-eye"></i> Ver Detalles
+                  </a>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+      
         </div>
-        
       </div>
+      {{/if}}
+
     </div>
+    {{/if}}
   </div>
 </div>
 
-<!--**********************************
-            Scripts
-***********************************-->
-<link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+{{> general/mostrarTarea}}
+{{> general/sidebarEmpresarial}}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    $("#close-sidebar-empresarial").on("click", () => {
+      $("#sidebarEmpresarial").removeClass("active")
+      // PLAN EMPRESARIAL
+      $('#cuerpoTareasEmpresarial').css('overflow-y', 'auto')
+      $('#actividad-sidebar2').attr('readonly', false)
+      $("#descripcion-sidebar2").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+      $("#estado2").css('display', 'inline-block')
+      $('#txtFechaIni').css('display', 'none')
+      $('#txtFechaFin').css('display', 'none')
+      $('#estado-sidebar').css('display', 'none')
+      $('#fechaIni-sidebar2').css('display', 'inline-block')
+      $('#fechaFin-sidebar2').css('display', 'inline-block')
+      $('#btnGuardar-sidebar2').css('display', 'flex')
+    })
+  });
+</script>

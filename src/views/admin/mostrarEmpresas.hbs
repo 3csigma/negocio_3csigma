@@ -21,7 +21,6 @@
                                         <th>Nombre</th>
                                         <th>Correo</th>
                                         <th>Teléfono</th>
-                                        {{!-- <th>Consultor</th> --}}
                                         <th>Estado</th>
                                         <th>Etapa</th>
                                         <th>Acción</th>
@@ -35,7 +34,6 @@
                                         <td>{{nombres}} {{apellidos}}</td>
                                         <td>{{email}}</td>
                                         <td>{{#if telefono}}{{telefono}}{{else}}N/A{{/if}}</td>
-                                        {{!-- <td>{{#if nombre_consultor}} <a href="/consultores/{{codigo_consultor}}" class="btn btn-primary shadow btn-xs mr-1" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"> {{ nombre_consultor }} </a>{{else}}N/A{{/if}}</td> --}}
                                         <td>
                                             {{#comparar estadoAdm '==' 0}}
                                             <span class="badge light badge-danger">Bloqueada</span>
