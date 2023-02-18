@@ -984,7 +984,8 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
     }
-    let tab_tareaAsignada
+
+        let tab_tareaAsignada
         if (botonesEtapas.uno) tab_tareaAsignada = "color: #85bb65;"
         
         if(botonesEtapas.dos) tab_tareaAsignada = "color: #85bb65;"
@@ -1037,7 +1038,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual,
         pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
-        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user)
+        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada
     })
 
 }
