@@ -51,7 +51,7 @@ empresaController.index = async (req, res) => {
             analisis_negocio3: estado,
             estrategico: estado,
             empresarial0: estado,
-            empresarial1: estado,
+            empresarial1: JSON.stringify({estado:1}),
             empresarial2: estado,
             empresarial3: estado,
             id_empresa
@@ -853,7 +853,7 @@ empresaController.planEmpresarial = async (req, res) => {
             btnPagar.etapa2 = true;
             btnPagar.activar2 = false;
             propuesta.porcentaje = "100%";
-            btnPagar.empresarialPer = false
+            btnPagar.empresarialPer = true
             propuesta.precio_total = objEmpresarial.precio;
 
             escena6 = true

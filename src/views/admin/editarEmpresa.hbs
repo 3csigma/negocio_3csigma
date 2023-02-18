@@ -700,9 +700,16 @@
                                                                 style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
                                                             </td>
                                                             {{#if rolAdmin}}
+                                                            {{#if pagoRealizado}}
+                                                            <td>
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                <i class="fa fa-usd"></i></button>
+                                                            </td>
+                                                            {{else}}
                                                             <td>
                                                                 <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
                                                             </td>
+                                                            {{/if}}
                                                             {{/if}}
                                                         </tr>
                                                     </tbody>

@@ -309,6 +309,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     const pay = pagos.find(i => i.id_empresa == idEmpresa)
 
     // INFO DE LA EMPRESA HASTA LA FICHA CLIENTE
+    let pagoRealizado = false // variable para activar el pago de forma manual desde el admin
     if (datosEmpresa) {
         datosEmpresa.estadoEmail == 1 ? datos.etapa = 'Email confirmado' : datos.etapa = datos.etapa;
         // datosEmpresa.consultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
@@ -343,6 +344,7 @@ dashboardController.editarEmpresa = async (req, res) => {
                 pago_diagnostico.texto = 'Pagado'
                 pago_diagnostico.valor = pagoDiagnostico.precio;
                 pago_diagnostico.fecha = pagoDiagnostico.fecha
+                pagoRealizado = true // pago fue registrado 
             }
         }
 
@@ -1036,7 +1038,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        tareas, jsonDim, jsonRendimiento, fechaActual,
+        tareas, jsonDim, jsonRendimiento, fechaActual, pagoRealizado,
         pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
         rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada
     })
