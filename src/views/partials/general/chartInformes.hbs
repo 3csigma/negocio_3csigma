@@ -106,7 +106,7 @@
         } else {
             // Activar Sidebar
             $('#sidebarEmpresarial').addClass('active');
-            $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden')
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
             const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, empresa, nombreEmpresa, email })
@@ -158,7 +158,7 @@
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
         $('#sidebarEmpresarial').addClass('active');
-        $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
+        $('#cuerpoGeneral').css('overflow-y', 'hidden')
         fetch('/editarTarea', {
             method: 'POST',
             body: JSON.stringify({idTarea, item:1}),
@@ -166,10 +166,14 @@
         }).then(res => res.json())
         .catch(error => console.error('Error Editar Tarea: ', error))
         .then(r => {
+            console.group("Info de la Tarea: ")
+            console.log(r)
+            console.log('---')
+            console.groupEnd()
             $('#idTarea-sidebar2').val(idTarea)
             $("#idEmpresa").val(r.empresa)
             $('#actividad-sidebar2').val(r.actividad)
-            $("descripcion-sidebar2").val(r.descripcion)
+            $("#descripcion-sidebar2").val(r.descripcion)
             $('#fechaIni-sidebar2').val(r.fecha_inicio)
             $('#fechaFin-sidebar2').val(r.fecha_entrega)
             $("#estado2").val(r.estado)
@@ -282,7 +286,7 @@
         const dimension = $("#dimension").val()
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
-        $('#tiempoTxt-sidebar').text('A tiempo')
+        $("#tiempoTxt-sidebar").text("A tiempo")
         document.getElementById("comentario").value = "";
 
         let fechaini, fechafin;
@@ -349,20 +353,19 @@
             .then(response => {
                 if (response) {
                     const idTarea = response.insertId
-
                     const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
                     $('#cuerpoTareas').prepend(itemTaskList);
-                    $('descripcion').val('')
+                    $('#descripcion').val('')
                     $('#estado').val(0)
                     $('#prioridad').val(0)
                     $('#idTarea').val(idTarea)
                     $('#actividad-sidebar').val(actividad)
                     $('#fechaIni-sidebar').val(fecha_inicio)
                     $('#fechaFin-sidebar').val(fecha_entrega)
-                    $("#actividad").val(''); $("#fecha_inicio").val(''); $("#fecha_entrega").val(''); 
+                    $('#actividad').val(''); $('#fecha_inicio').val(''); $('#fecha_entrega').val(''); 
                     $('#responsable').val('')
                     $('#dimension-sidebar').val(dimension)
-                    $("#dimension").val('');
+                    $('#dimension').val('');
 
                 } else {
                     toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
@@ -391,7 +394,7 @@
     function editarTarea(idTarea){
         const listaComentarios = document.querySelector('#listaComentarios')
         listaComentarios.innerHTML = ''
-        document.getElementById("comentario").value = "";
+        document.getElementById('comentario').value = "";
         const tiempo = $('#tiempo-sidebar')
         tiempo.css('display', 'none')
         $('#sidebarEstrategico').addClass('active');
@@ -404,15 +407,15 @@
         .catch(error => console.error('Error Editar Tarea: ', error))
         .then(r => {
             $('#idTarea').val(idTarea)
-            $("#idEmpresa").val(r.empresa)
+            $('#idEmpresa').val(r.empresa)
             $('#actividad-sidebar').val(r.actividad)
-            $("#responsable").val(r.responsable)
-            $("descripcion").val(r.descripcion)
+            $('#responsable').val(r.responsable)
+            $('#descripcion').val(r.descripcion)
             $('#fechaIni-sidebar').val(r.fecha_inicio)
             $('#fechaFin-sidebar').val(r.fecha_entrega)
             $('#dimension-sidebar').val(r.dimension)
-            $("#estado").val(r.estado)
-            $("#prioridad").val(r.prioridad)
+            $('#estado').val(r.estado)
+            $('#prioridad').val(r.prioridad)
             const comentarios = JSON.parse(r.mensaje)
             if (comentarios) {
                 $('#divComentarios').css('display', 'inline-block')
@@ -813,7 +816,7 @@
             $("#close-sidebar-empresarial").on("click", () => {
                 $("#sidebarEmpresarial").removeClass("active")
                 // PLAN EMPRESARIAL
-                $('#cuerpoTareasEmpresarial').css('overflow-y', 'auto')
+                $('#cuerpoGeneral').css('overflow-y', 'auto')
                 $('#actividad-sidebar2').attr('readonly', false)
                 $("#descripcion-sidebar2").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
                 $("#estado2").css('display', 'inline-block')

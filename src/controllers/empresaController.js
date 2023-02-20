@@ -176,7 +176,7 @@ empresaController.index = async (req, res) => {
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
-        etapaCompleta.verEmpresarial = true;
+        etapaCompleta.verEstrategico = true;
     }
 
     /************************************************************************** */

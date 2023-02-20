@@ -14,7 +14,7 @@
         }).then(res => res.json())
         .catch(error => console.error('Error Mostrar Tarea: ', error))
         .then(r => {
-            console.group("INFO DE LA TAREA >> ")
+            console.group("INFO DE LA TAREA -- PLAN ESTRATÉGICO >> ")
             console.log(r)
             console.log("\n")
             console.groupEnd()
@@ -24,6 +24,7 @@
             $('#btnGuardar-sidebar').css('display', 'none')
             $("#estado").css('display', 'none')
             $('#actividad-sidebar').val(r.actividad).attr('readonly', true)
+            $("#descripcion").val(r.descripcion).attr('readonly', true)
             $("#responsable").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
             $("#observacion").val(r.observacion).attr({'readonly': true, 'placeholder': ''})
             $('#txtFechaIni').text(r.fecha_inicio).css('display', 'inline-block')
@@ -72,7 +73,7 @@
         tiempo.css('display', 'none')
         $('#prioridad-sidebar-div2').css('display', 'none');
         $('#sidebarEmpresarial').addClass('active');
-        $('#cuerpoTareasEmpresarial').css('overflow-y', 'hidden');
+        $('#cuerpoGeneral').css('overflow-y', 'hidden')
 
         fetch('/editarTarea', {
             method: 'POST',
@@ -90,6 +91,7 @@
             $('#btnGuardar-sidebar2').css('display', 'none')
             $("#estado2").css('display', 'none')
             $('#actividad-sidebar2').val(r.actividad).attr('readonly', true)
+            $("#descripcion-sidebar2").val(r.descripcion).attr('readonly', true)
             $('#txtFechaIni2').text(r.fecha_inicio).css('display', 'inline-block')
             $('#txtFechaFin2').text(r.fecha_entrega).css('display', 'inline-block')
 
