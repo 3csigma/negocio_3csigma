@@ -81,6 +81,7 @@
 
                                 <div class="mt-4">
                                     <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
+                                    <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
                                     {{#if adminDash}}
                                     {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
                                     <div class="row">
@@ -2122,6 +2123,8 @@
                                                 <table class="table table-bordered verticle-middle table-responsive-sm">
                                                     <thead>
                                                         <tr>
+                                                            <th scope="col" style="width: 17em;">Nombre</th>
+                                                            <th scope="col">Responsable</th>
                                                             <th scope="col">Estado</th>
                                                             <th scope="col">Cronograma</th>
                                                             <th scope="col">Prioridad</th>
@@ -2132,6 +2135,8 @@
                                                         {{#if tareasEmpresarial}}
                                                         {{#each tareasEmpresarial}}
                                                         <tr>
+                                                            <td>{{actividad}}</td>
+                                                            <td>{{responsable}}</td>
                                                             <td class="text-{{color}} font-w600" style="font-size: 14px;">{{estado}}</td>
                                                             <td>
                                                                 <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">

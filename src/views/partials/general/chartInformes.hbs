@@ -16,9 +16,11 @@
     }
     
     // => FUNCIONES PARA LAS TAREAS DE PLAN EMPRESARIAL
-    function addTaskToList_Empresarial(id, fecha_inicio, fecha_entrega) {
+    function addTaskToList_Empresarial(id, actividad, fecha_inicio, fecha_entrega) {
         return `
         <tr>
+            <td>${actividad}</td>
+            <td>N/A</td>
             <td class="text-primary font-w600" style="font-size: 14px;">Pendiente</td>
             <td>
                 <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
@@ -119,7 +121,7 @@
             .then(response => {
                 if (response) {
                     const idTarea = response.insertId
-                    const itemTaskList = addTaskToList_Empresarial(idTarea, fecha_inicio, fecha_entrega)
+                    const itemTaskList = addTaskToList_Empresarial(idTarea, actividad, fecha_inicio, fecha_entrega)
                     $('#cuerpoTareasEmpresarial').prepend(itemTaskList);
                     $('#actividad-sidebar2').val(actividad)
                     $('#descripcion-sidebar2').val('')
@@ -129,6 +131,7 @@
                     $('#fechaIni-sidebar2').val(fecha_inicio)
                     $('#fechaFin-sidebar2').val(fecha_entrega)
                     $("#actividad-empresarial").val(''); $("#fecha_inicio-empresarial").val(''); $("#fecha_entrega-empresarial").val(''); 
+                    $('#responsable-sidebar1').val('')
 
                 } else {
                     toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
@@ -155,7 +158,10 @@
     }
 
     function editarTarea_Empresarial(idTarea){
-        const tiempo = $('#tiempo-sidebar')
+        const listaComentarios = document.querySelector('#listaComentarios1')
+        listaComentarios.innerHTML = ''
+        $("#comentario1").val("");
+        const tiempo = $('#tiempo-sidebar1')
         tiempo.css('display', 'none')
         $('#sidebarEmpresarial').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden')
@@ -170,21 +176,43 @@
             console.log(r)
             console.log('---')
             console.groupEnd()
-            $('#idTarea-sidebar2').val(idTarea)
             $("#idEmpresa").val(r.empresa)
-            $('#actividad-sidebar2').val(r.actividad)
-            $("#descripcion-sidebar2").val(r.descripcion)
-            $('#fechaIni-sidebar2').val(r.fecha_inicio)
-            $('#fechaFin-sidebar2').val(r.fecha_entrega)
-            $("#estado2").val(r.estado)
-            $("#prioridad2").val(r.prioridad)
+            $('#idTarea-sidebar1').val(idTarea)
+            $('#actividad-sidebar1').val(r.actividad)
+            $('#responsable-sidebar1').val(r.responsable)
+            $("#descripcion-sidebar1").val(r.descripcion)
+            $("#responsable-sidebar1").val(r.responsable)
+            $('#fechaIni-sidebar1').val(r.fecha_inicio)
+            $('#fechaFin-sidebar1').val(r.fecha_entrega)
+            $("#estado1").val(r.estado)
+            $("#prioridad1").val(r.prioridad)
+
+            const comentarios = JSON.parse(r.mensajes)
+            if (comentarios) {
+                $('#divComentarios1').css('display', 'inline-block')
+            } else {
+                $('#divComentarios1').css('display', 'none')
+            }
+            comentarios.forEach(x => {
+                listaComentarios.innerHTML += `
+                    <li>
+                        <div class="timeline-badge primary"></div>
+                        <a class="timeline-panel text-muted">
+                            <span class="fechaMensajes">${x.fecha}</span>
+                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                            </h6>
+                        </a>
+                    </li>
+                `
+            })
 
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
-                $('#tiempoTxt-sidebar2').text('A tiempo')
+                $('#tiempoTxt-sidebar1').text('A tiempo')
                 tiempo.css('display', 'inline-table')
                 if (fechaActual > r.fecha_entrega){
-                    $('#tiempoTxt-sidebar2').text('Retrasada')
+                    $('#tiempoTxt-sidebar1').text('Retrasada')
                 }
             }
         })
@@ -193,13 +221,14 @@
     function actualizarTarea_Empresarial() {
         const empresa = $("#idEmpresa").val();
         const email = $("#emailEmpresa").text();
-        const idTarea = $("#idTarea-sidebar2").val();
-        const actividad = $("#actividad-sidebar2").val();
-        const descripcion = $("#descripcion-sidebar2").val();
-        let fecha_inicio = $("#fechaIni-sidebar2").val();
-        let fecha_entrega = $("#fechaFin-sidebar2").val();
-        const prioridad = $("#prioridad2").val();
-        const estado = $("#estado2").val();
+        const idTarea = $("#idTarea-sidebar1").val();
+        const actividad = $("#actividad-sidebar1").val();
+        const responsable = $("#responsable-sidebar1").val();
+        const descripcion = $("#descripcion-sidebar1").val();
+        let fecha_inicio = $("#fechaIni-sidebar1").val();
+        let fecha_entrega = $("#fechaFin-sidebar1").val();
+        const prioridad = $("#prioridad1").val();
+        const estado = $("#estado1").val();
 
         let fechaini, fechafin
         fechaini = new Date(fecha_inicio);
@@ -229,7 +258,7 @@
                 tapToDismiss: !1
             })
         } else {
-            const data = JSON.stringify({ idTarea, empresa, actividad, descripcion, fecha_inicio, fecha_entrega, estado, email, prioridad, item:1 })
+            const data = JSON.stringify({ idTarea, empresa, actividad, descripcion, responsable, fecha_inicio, fecha_entrega, estado, email, prioridad, item:1 })
             fetch('/actualizarTarea', {
                 method: 'POST',
                 body: data,
@@ -280,14 +309,14 @@
     }
 
     function agregarTarea() {
-        const actividad = $("#actividad").val();
-        const fecha_inicio = $("#fecha_inicio").val();
-        const fecha_entrega = $("#fecha_entrega").val();
-        const dimension = $("#dimension").val()
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
-        $("#tiempoTxt-sidebar").text("A tiempo")
-        document.getElementById("comentario").value = "";
+        const actividad = $("#actividad2").val();
+        const fecha_inicio = $("#fecha_inicio2").val();
+        const fecha_entrega = $("#fecha_entrega2").val();
+        const dimension = $("#dimension2").val()
+        $("#tiempoTxt-sidebar2").text("A tiempo")
+        $("#comentario2").val("");
 
         let fechaini, fechafin;
         fechaini = new Date(fecha_inicio);
@@ -355,17 +384,17 @@
                     const idTarea = response.insertId
                     const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
                     $('#cuerpoTareas').prepend(itemTaskList);
-                    $('#descripcion').val('')
-                    $('#estado').val(0)
-                    $('#prioridad').val(0)
-                    $('#idTarea').val(idTarea)
-                    $('#actividad-sidebar').val(actividad)
-                    $('#fechaIni-sidebar').val(fecha_inicio)
-                    $('#fechaFin-sidebar').val(fecha_entrega)
-                    $('#actividad').val(''); $('#fecha_inicio').val(''); $('#fecha_entrega').val(''); 
-                    $('#responsable').val('')
-                    $('#dimension-sidebar').val(dimension)
-                    $('#dimension').val('');
+                    $('#descripcion2').val('')
+                    $('#estado2').val(0)
+                    $('#prioridad2').val(0)
+                    $('#idTarea-sidebar2').val(idTarea)
+                    $('#actividad-sidebar2').val(actividad)
+                    $('#fechaIni-sidebar2').val(fecha_inicio)
+                    $('#fechaFin-sidebar2').val(fecha_entrega)
+                    $('#actividad2').val(''); $('#fecha_inicio2').val(''); $('#fecha_entrega').val(''); 
+                    $('#responsable-sidebar2').val('')
+                    $('#dimension-sidebar2').val(dimension)
+                    $('#dimension2').val('');
 
                 } else {
                     toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
@@ -392,10 +421,10 @@
     }
 
     function editarTarea(idTarea){
-        const listaComentarios = document.querySelector('#listaComentarios')
+        const listaComentarios = document.querySelector('#listaComentarios2')
         listaComentarios.innerHTML = ''
-        document.getElementById('comentario').value = "";
-        const tiempo = $('#tiempo-sidebar')
+        $("#comentario2").val("");
+        const tiempo = $('#tiempo-sidebar2')
         tiempo.css('display', 'none')
         $('#sidebarEstrategico').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden');
@@ -406,23 +435,23 @@
         }).then(res => res.json())
         .catch(error => console.error('Error Editar Tarea: ', error))
         .then(r => {
-            $('#idTarea').val(idTarea)
             $('#idEmpresa').val(r.empresa)
-            $('#actividad-sidebar').val(r.actividad)
-            $('#responsable').val(r.responsable)
-            $('#descripcion').val(r.descripcion)
-            $('#fechaIni-sidebar').val(r.fecha_inicio)
-            $('#fechaFin-sidebar').val(r.fecha_entrega)
-            $('#dimension-sidebar').val(r.dimension)
-            $('#estado').val(r.estado)
-            $('#prioridad').val(r.prioridad)
-            const comentarios = JSON.parse(r.mensaje)
-            if (comentarios) {
-                $('#divComentarios').css('display', 'inline-block')
-            } else {
-                $('#divComentarios').css('display', 'none')
-            }
+            $('#idTarea-sidebar2').val(idTarea)
+            $('#actividad-sidebar2').val(r.actividad)
+            $('#responsable-sidebar2').val(r.responsable)
+            $('#descripcion-sidebar2').val(r.descripcion)
+            $('#fechaIni-sidebar2').val(r.fecha_inicio)
+            $('#fechaFin-sidebar2').val(r.fecha_entrega)
+            $('#dimension-sidebar2').val(r.dimension)
+            $('#estado2').val(r.estado)
+            $('#prioridad2').val(r.prioridad)
 
+            const comentarios = JSON.parse(r.mensajes)
+            if (comentarios) {
+                $('#divComentarios2').css('display', 'inline-block')
+            } else {
+                $('#divComentarios2').css('display', 'none')
+            }
             comentarios.forEach(x => {
                 listaComentarios.innerHTML += `
                     <li>
@@ -439,30 +468,30 @@
 
             if (r.estado == 0 || r.estado == 1) {
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
-                $('#tiempoTxt-sidebar').text('A tiempo')
+                $('#tiempoTxt-sidebar2').text('A tiempo')
                 tiempo.css('display', 'inline-table')
                 if (fechaActual > r.fecha_entrega){
-                    $('#tiempoTxt-sidebar').text('Retrasada')
+                    $('#tiempoTxt-sidebar2').text('Retrasada')
                 }
             }
         })
     }
 
     function actualizarTarea() {
-        const listaComentarios = document.querySelector('#listaComentarios')
-        listaComentarios.innerHTML = ''
-        $('#divComentarios').css('display', 'none')
-        const idTarea = $("#idTarea").val();
         const empresa = $("#idEmpresa").val();
-        const actividad = $("#actividad-sidebar").val();
-        const responsable = $("#responsable").val();
-        const descripcion = $("#descripcion").val();
-        let fecha_inicio = $("#fechaIni-sidebar").val();
-        let fecha_entrega = $("#fechaFin-sidebar").val();
-        const dimension = $("#dimension-sidebar").val();
-        const prioridad = $("#prioridad").val();
         const email = $("#emailEmpresa").text();
-        const estado = $("#estado").val();
+        const listaComentarios = document.querySelector('#listaComentarios2')
+        listaComentarios.innerHTML = ''
+        $('#divComentarios2').css('display', 'none')
+        const idTarea = $("#idTarea-sidebar2").val();
+        const actividad = $("#actividad-sidebar2").val();
+        const responsable = $("#responsable-sidebar2").val();
+        const descripcion = $("#descripcion-sidebar2").val();
+        let fecha_inicio = $("#fechaIni-sidebar2").val();
+        let fecha_entrega = $("#fechaFin-sidebar2").val();
+        const dimension = $("#dimension-sidebar2").val();
+        const prioridad = $("#prioridad2").val();
+        const estado = $("#estado2").val();
         let fechaini, fechafin
 
         fechaini = new Date(fecha_inicio);
@@ -535,19 +564,17 @@
 
     /*************************************************************************/
     // => Función para el envio de los comentarios a la base de datos
-    function addComentario() {
-        const comentario = $("#comentario").val();
-        const idTarea = $("#idTarea").val();
-        const listaComentarios = document.querySelector('#listaComentarios')
+    function addComentario(item) {
+        const comentario = $("#comentario"+item).val();
+        const idTarea = parseInt($("#idTarea-sidebar"+item).val())
+        const listaComentarios = document.getElementById('listaComentarios'+item)
+        $('#divComentarios'+item).css('display', 'inline-block')
+        const btnComentario = document.getElementById('btnComentario'+item)
 
-        $('#divComentarios').css('display', 'inline-block')
-
-        const btnComentario = document.querySelector('#btnComentario')
         let datosUsuario = document.getElementById('datosUsuario').value
         datosUsuario = JSON.parse(datosUsuario)
-
-        const fecha = new Date().toLocaleDateString("en-US")
         const consultor = datosUsuario.nombres +' '+ datosUsuario.apellidos
+        const fecha = new Date().toLocaleDateString("en-US")
 
         listaComentarios.innerHTML += `
             <li class="animate__animated animate__fadeInUp">
@@ -563,18 +590,18 @@
 
         fetch('/comentarioTareas', {
             method: 'POST',
-            body: JSON.stringify({comentario, idTarea, fecha}),
+            body: JSON.stringify({comentario, idTarea, fecha, item}),
             headers: {'Content-Type': 'application/json'}
         }).then(res => res.json())
         .catch(error => console.error('Error:', error))
         .then(response => {
             if (response){
                 //console.log("\nCOMENTARIO AGREGADO A DB EXITOSAMENTE !!\n");
-                document.getElementById("comentario").value = "";
+                document.getElementById("comentario"+item).value = "";
             } else {
                 const msg = "Ocurrió un error inesperado al agregar el mensaje por favor recargue la página e intente nuevamente. Si el error persiste contactar a soporte."
-                //console.log("\n"+msg+"\n");
-                document.getElementById("comentario").value = msg;
+                console.log("\n"+msg+"\n");
+                document.getElementById("comentario"+item).value = msg;
             }
         });
     }
@@ -817,33 +844,33 @@
                 $("#sidebarEmpresarial").removeClass("active")
                 // PLAN EMPRESARIAL
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
-                $('#actividad-sidebar2').attr('readonly', false)
-                $("#descripcion-sidebar2").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
-                $("#estado2").css('display', 'inline-block')
-                $('#txtFechaIni').css('display', 'none')
-                $('#txtFechaFin').css('display', 'none')
-                $('#estado-sidebar').css('display', 'none')
-                $('#fechaIni-sidebar2').css('display', 'inline-block')
-                $('#fechaFin-sidebar2').css('display', 'inline-block')
-                $('#btnGuardar-sidebar2').css('display', 'flex')
+                $('#actividad-sidebar1').attr('readonly', false)
+                $("#descripcion-sidebar1").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $("#estado1").css('display', 'inline-block')
+                $('#txtFechaIni1').css('display', 'none')
+                $('#txtFechaFin1').css('display', 'none')
+                $('#estado-sidebar1').css('display', 'none')
+                $('#fechaIni-sidebar1').css('display', 'inline-block')
+                $('#fechaFin-sidebar1').css('display', 'inline-block')
+                $('#btnGuardar-sidebar1').css('display', 'flex')
             })
             
             $("#close-sidebar-estrategico").on("click", () => {
                 $("#sidebarEstrategico").removeClass("active")
                 // PLAN ESTRATÉGICO
                 $('#cuerpoGeneral').css('overflow-y', 'auto')
-                $('#fechaIni-sidebar').css('display', 'inline-block')
-                $('#fechaFin-sidebar').css('display', 'inline-block')
-                $('#dimension-sidebar').css('display', 'inline-block')
-                $('#btnGuardar-sidebar').css('display', 'flex')
-                $("#estado").css('display', 'inline-block')
-                $('#actividad-sidebar').attr('readonly', false)
-                $("#responsable").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
-                $("#descripcion").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
-                $('#txtFechaIni').css('display', 'none')
-                $('#txtFechaFin').css('display', 'none')
-                $('#txtDimension').css('display', 'none')
-                $('#estado-sidebar').css('display', 'none')
+                $('#fechaIni-sidebar2').css('display', 'inline-block')
+                $('#fechaFin-sidebar2').css('display', 'inline-block')
+                $('#dimension-sidebar2').css('display', 'inline-block')
+                $('#btnGuardar-sidebar2').css('display', 'flex')
+                $("#estado2").css('display', 'inline-block')
+                $('#actividad-sidebar2').attr('readonly', false)
+                $("#responsable2").attr({'readonly': false, 'placeholder': 'Escribe un título..'})
+                $("#descripcion-sidebar2").attr({'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..'})
+                $('#txtFechaIni2').css('display', 'none')
+                $('#txtFechaFin2').css('display', 'none')
+                $('#txtDimension2').css('display', 'none')
+                $('#estado-sidebar2').css('display', 'none')
             })
 
 			{{#if frmDiag.tablasVacias}}

@@ -15,7 +15,7 @@
     margin-top: 6em;
 }
 
-#actividad-sidebar, #actividad-sidebar2 {
+#actividad-sidebar1, #actividad-sidebar2 {
     font-size: 30px;
     font-weight: 900;
     color: #fff;
@@ -26,12 +26,12 @@
     color: #fff;
 }
 
-textarea#actividad-sidebar, #actividad-sidebar2 {
+textarea#actividad-sidebar1, #actividad-sidebar2 {
     height: 4em;
 }
 
-textarea#actividad-sidebar, #actividad-sidebar2,
-textarea#descripcion, #descripcion-sidebar2 {
+textarea#actividad-sidebar1, #actividad-sidebar2,
+textarea#descripcion-sidebar1, #descripcion-sidebar2 {
     width: 100%;
     padding: 1em 2px;
     border: 0px solid transparent;
@@ -41,9 +41,9 @@ textarea#descripcion, #descripcion-sidebar2 {
     overflow-y: hidden;
 }
 
-textarea#actividad-sidebar::placeholder, textarea#actividad-sidebar2::placeholder,
-textarea#descripcion::placeholder, textarea#descripcion-sidebar2::placeholder,
-input#responsable::placeholder {
+textarea#actividad-sidebar1::placeholder, textarea#actividad-sidebar2::placeholder,
+textarea#descripcion-sidebar1::placeholder, textarea#descripcion-sidebar2::placeholder,
+input#responsable-sidebar1::placeholder, input#responsable-sidebar2::placeholder {
     color: #E1D9E1;
 }
 

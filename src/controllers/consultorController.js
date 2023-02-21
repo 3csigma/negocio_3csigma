@@ -338,13 +338,11 @@ consultorController.agregarTarea = async (req, res) => {
         }
         /******************************************************* */
         const nuevaTarea = { actividad, fecha_inicio, fecha_entrega, dimension, empresa }
-        // const tarea = await pool.query('INSERT INTO plan_estrategico SET ?', [nuevaTarea])
-        const tarea = await insertarDatos('plan_estrategico', nuevaTarea)
+        const tarea = await insertarDatos('tareas_plan_estrategico', nuevaTarea)
         console.log("INFO TAREA DB >>> ", tarea)
         res.send(tarea)
     } else {
         const nuevaTarea = { empresa, actividad, fecha_inicio, fecha_entrega }
-        // const tarea = await pool.query('INSERT INTO tareas_plan_empresarial SET ?', [nuevaTarea])
         const tarea = await insertarDatos('tareas_plan_empresarial', nuevaTarea)
         console.log("INFO TAREA DB >>> ", tarea)
         res.send(tarea)
@@ -359,7 +357,7 @@ consultorController.editarTarea = async (req, res) => {
         console.log("\n *********** INFO TAREA EMPRESARIAL DB >>> ", infoTarea)
         res.send(infoTarea)
     } else {
-        let infoTarea = await consultarDatos('plan_estrategico')
+        let infoTarea = await consultarDatos('tareas_plan_estrategico')
         infoTarea = infoTarea.find(x => x.id === idTarea)
         console.log("\n *********** INFO TAREA ESTRATEGICO DB >>> ", infoTarea)
         res.send(infoTarea)
@@ -372,11 +370,10 @@ consultorController.actualizarTarea = async (req, res) => {
 
     // Para Plan Empresarial
     if (item == 1) {
-        const actualizarTarea = { actividad, descripcion, fecha_inicio, fecha_entrega, estado, prioridad }
+        const actualizarTarea = { actividad, responsable, descripcion, fecha_inicio, fecha_entrega, estado, prioridad }
         const tarea = await pool.query('UPDATE tareas_plan_empresarial SET ? WHERE id = ?', [actualizarTarea, idTarea])
         console.log("INFO TAREA PLAN EMPRESARIAL DB >>> ", tarea)
         res.send(tarea)
-
     }
     // Para Plan Estrategico
     else {
@@ -393,7 +390,7 @@ consultorController.actualizarTarea = async (req, res) => {
             }
         }
 
-        const tarea = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
+        const tarea = await pool.query('UPDATE tareas_plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
         console.log("INFO TAREA PLAN ESTRATÉGICO DB >>> ", tarea)
         res.send(tarea)
     }
@@ -401,38 +398,58 @@ consultorController.actualizarTarea = async (req, res) => {
 
 // COMENTARIO DE TAREAS
 consultorController.comentarioTareas = async (req, res) => {
-    const {idTarea, fecha} = req.body
+    console.log("\n---***--\**--**\nINFO DE TAREA A EDITAR -- COMENTARIOS -- ", req.body);
+    const { comentario, idTarea, fecha, item } = req.body
+    let objActualizar = {mensajes:null}, resultado = false;
+    let datosTareas = false;
 
-    let row = await consultarDatos('plan_estrategico')
-    row = row.find(x => x.id == idTarea)
-
-    let mensaje = row.mensaje
-    const objMensaje = {
-        fecha: fecha,
-        mensaje: req.body.comentario,
-        rol: req.user.rol,
-        nombres: req.user.nombres,
-        apellidos: req.user.apellidos,
-    }
-    let objActualizar = {mensaje:null}
-    if (mensaje == null) {
-        let arregloComentarios = []
-        arregloComentarios.push(objMensaje)
-        arregloComentarios = JSON.stringify(arregloComentarios)
-        objActualizar = {mensaje: arregloComentarios}
+    if (item == 1) {
+        datosTareas = await consultarDatos('tareas_plan_empresarial')
+        datosTareas = datosTareas.find(x => x.id == idTarea)
     } else {
-        mensaje = JSON.parse(mensaje)
-        mensaje.push(objMensaje)
-        mensaje = JSON.stringify(mensaje)
-        objActualizar = {mensaje}
+        datosTareas = await consultarDatos('tareas_plan_estrategico')
+        datosTareas = datosTareas.find(x => x.id == idTarea)
     }
-    const addMensaje = await pool.query('UPDATE plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
-    console.log("\nMENSAJE AGREGADO A DB: ", addMensaje)
-    console.log("------------------------------------------------");
-    let resultado = false;
-    if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
-        resultado = true;
+
+    if (datosTareas != false){
+        let mensajes = datosTareas.mensajes
+        const objMensaje = {
+            fecha: fecha,
+            mensaje: comentario,
+            rol: req.user.rol,
+            nombres: req.user.nombres,
+            apellidos: req.user.apellidos,
+        }
+        
+        if (mensajes == null) {
+            let arregloComentarios = []
+            arregloComentarios.push(objMensaje)
+            arregloComentarios = JSON.stringify(arregloComentarios)
+            objActualizar = {mensajes: arregloComentarios}
+        } else {
+            mensajes = JSON.parse(mensajes)
+            mensajes.push(objMensaje)
+            mensajes = JSON.stringify(mensajes)
+            objActualizar = {mensajes}
+        }
     }
+
+    if (item == 1) {
+        const addMensaje = await pool.query('UPDATE tareas_plan_empresarial SET ? WHERE id = ?', [objActualizar, idTarea])
+        console.log("\nMENSAJE AGREGADO A DB PLAN EMPRESARIAL: ", addMensaje)
+        console.log("------------------------------------------------");
+        if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
+            resultado = true;
+        }
+    } else {
+        const addMensaje = await pool.query('UPDATE tareas_plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
+        console.log("\nMENSAJE AGREGADO A DB PLAN ESTRATÉGICO: ", addMensaje)
+        console.log("------------------------------------------------");
+        if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
+            resultado = true;
+        }
+    }
+
     res.send(resultado)
 }
 
@@ -441,12 +458,10 @@ consultorController.comentarioTareas = async (req, res) => {
 consultorController.eliminarTarea = async (req, res) => {
     const { idTarea, item } = req.body
     if (item == 1) {
-        // const infoTarea = await pool.query('DELETE FROM tareas_plan_empresarial WHERE id = ?', [idTarea])
         const infoTarea = await eliminarDatos('tareas_plan_empresarial', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN EMPRESARIAL ---- ", infoTarea)
     } else {
-        // const infoTarea = await pool.query('DELETE FROM plan_estrategico WHERE id = ?', [idTarea])
-        const infoTarea = await eliminarDatos('plan_estrategico', `WHERE id = ${idTarea}`)
+        const infoTarea = await eliminarDatos('tareas_plan_estrategico', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN ESTRATÉGICO ---- ", infoTarea)
     }
     res.send(true)

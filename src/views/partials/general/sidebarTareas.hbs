@@ -5,24 +5,23 @@
     <div class="contentAll p-0 barra-scroll overflow-y-auto">
         <div class="custom-sidebar">
             <div class="mb-4">
-                <input type="hidden" id="idTarea">
-                <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
-                <textarea id="actividad-sidebar" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
-                <textarea id="descripcion" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
+                <input type="hidden" id="idTarea-sidebar2">
+                <textarea id="actividad-sidebar2" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
+                <textarea id="descripcion-sidebar2" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
             </div>
 
-            <div id="contenido-sidebar" class="">
+                {{!-- MINI TARJETAS (SELECTORES e INFO DEL TIEMPO DE LA TAREA --}}
                 <div class="row mb-1">
                     <div class="col-5">
-                        <select class="form-select" id="estado" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em;">
+                        <select class="form-select" id="estado2" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em;">
                             <option value="0">Pendiente</option>
                             <option value="1">En Proceso</option>
                             <option value="2">Completada</option>
                         </select>
-                        <span id="estado-sidebar" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
+                        <span id="estado-sidebar2" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
                     </div>
-                    <div class="col-5" id="prioridad-sidebar-div">
-                        <select class="form-select" id="prioridad" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
+                    <div class="col-5" id="prioridad-sidebar-div2">
+                        <select class="form-select" id="prioridad2" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
                             <option value="0">Sin especificar</option>
                             <option value="1">Baja</option>
                             <option value="2">Media</option>
@@ -31,7 +30,7 @@
                         </select>
                     </div>
                     <div class="col-2" style="margin-left: -52px;">
-                        <span id="tiempo-sidebar" class="badge light badge-success color_gradient text-white" style="padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar"></span>
+                        <span id="tiempo-sidebar2" class="badge light badge-success color_gradient text-white" style="padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar2"></span>
                     </div>
                     <div class="col-12">
                         <hr style="border-top: 1px solid #fff !important;">                                
@@ -49,7 +48,7 @@
                     </div>
                     <div class="col-10" style="padding-left: 2em;">
                         <p class="txtSidebar"><span style="padding-left: 10px;">Asignado a: </span><br>
-                            <input type="text" id="responsable" placeholder="Escribe un nombre.." class="subtitulos-Sidebar" value="{{#if tarea.responsable}}{{tarea.responsable}}{{/if}}" maxlength="25" />
+                            <input type="text" id="responsable-sidebar2" placeholder="Escribe un nombre.." class="subtitulos-Sidebar" value="{{tarea.responsable}}" maxlength="25" />
                         </p>
                     </div>
                 </div>
@@ -72,8 +71,8 @@
                     <div class="col-10" style="padding-left: 2em;">
                         <p class="txtSidebar">
                             <span style="padding-left: 10px;">Fecha de inicio: </span><br>
-                            <duet-date-picker id="fechaIni-sidebar" value="{{#if tarea.fecha_inicio}}{{tarea.fecha_inicio}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
-                            <span id="txtFechaIni" style="display: none;padding-left: 10px;"></span>
+                            <duet-date-picker id="fechaIni-sidebar2" value="{{#if tarea.fecha_inicio}}{{tarea.fecha_inicio}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                            <span id="txtFechaIni2" style="display: none;padding-left: 10px;"></span>
                         </p>
                     </div>
                 </div>
@@ -87,8 +86,8 @@
                     </div>
                     <div class="col-10" style="padding-left: 2em;">
                         <p class="txtSidebar"><span style="padding-left: 10px;">Fecha de entrega: </span><br>
-                            <duet-date-picker id="fechaFin-sidebar" value="{{#if tarea.fecha_entrega}}{{tarea.fecha_entrega}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
-                            <span id="txtFechaFin" style="display: none;padding-left: 10px;"></span>
+                            <duet-date-picker id="fechaFin-sidebar2" value="{{#if tarea.fecha_entrega}}{{tarea.fecha_entrega}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                            <span id="txtFechaFin2" style="display: none;padding-left: 10px;"></span>
                         </p>
                     </div>
                 </div>
@@ -107,32 +106,32 @@
                     </div>
                     <div class="col-10" style="padding-left: 2em;">
                         <p class="txtSidebar"><span style="padding-left: 10px;">Dimensión: </span><br>
-                            <select id="dimension-sidebar" class="text-center" style="width: 100%;border-radius: 5px;height: 44px;">
+                            <select id="dimension-sidebar2" class="text-center" style="width: 100%;border-radius: 5px;height: 44px;">
                                 <option value="Producto">Producto</option>
                                 <option value="Administración">Administración</option>
                                 <option value="Operaciones">Operaciones</option>
                                 <option value="Marketing">Marketing</option>
                             </select>
-                            <span id="txtDimension" style="display: none;padding-left: 10px;"></span>
+                            <span id="txtDimension2" style="display: none;padding-left: 10px;"></span>
                         </p>
                     </div>
                 </div>
 
                 {{!-- MENSAJES --}}
                 <div class="row">
-                    <div id="divComentarios" class="widget-timeline dz-scroll style-1 height180 w-100 ps ps--active-y" style="display: none;">
-                        <ul class="timeline" id="listaComentarios" ></ul>
+                    <div id="divComentarios2" class="widget-timeline dz-scroll style-1 height180 w-100 ps ps--active-y" style="display: none;">
+                        <ul class="timeline" id="listaComentarios2" ></ul>
                     </div>
                 </div>
-                <div class="row" id="divTxtComentario" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
-                    <textarea id="comentario" rows="2" class="form-control" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em; border:none;"></textarea>
-                        <button id="btnComentario" class="color_gradient text-white" onclick="addComentario()" style="width: 28%;border: none;height: 32px; margin-right: 10px;font-size: 13px;">
+                <div class="row" id="divTxtComentario2" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
+                    <textarea id="comentario2" rows="2" class="form-control" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em; border:none;"></textarea>
+                        <button id="btnComentario2" class="color_gradient text-white" onclick="addComentario(2)" style="width: 28%;border: none;height: 32px; margin-right: 10px;font-size: 13px;">
                             Comentar
                         </button>
                 </div>
 
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
-                <div class="row" id="btnGuardar-sidebar">
+                <div class="row" id="btnGuardar-sidebar2">
                     <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
                         <button onclick="actualizarTarea()" class="btn color_gradient text-white" style="margin-top: 1em; padding: 10px 15px;border:none">
                             <p class="font-w500 m-auto">Guardar Cambios</p>
@@ -142,7 +141,6 @@
 
                 <div class="ps__rail-y" style="top: 159px; height: 831px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 134px; height: 697px;"></div></div>
 
-            </div>
         </div>
     </div>
 </div>

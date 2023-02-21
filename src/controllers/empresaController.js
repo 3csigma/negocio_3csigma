@@ -202,7 +202,7 @@ empresaController.index = async (req, res) => {
     /************************************************************************** */
     // PORCENTAJE ETAPA 4
     let porcentajeEtapa4 = 0
-    let tareasEmpresa = await consultarDatos('plan_estrategico')
+    let tareasEmpresa = await consultarDatos('tareas_plan_estrategico')
     tareasEmpresa = tareasEmpresa.filter(x => x.empresa == id_empresa)
     const totalTareas = tareasEmpresa.length;
     let tareasCompletadas = tareasEmpresa.filter(x => x.estado == 2)
@@ -222,8 +222,16 @@ empresaController.index = async (req, res) => {
     /************************************************************************** */
 
 
-    // PORCENTAJE GENERAL DE LA EMPRESA
-    const porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3 + porcentajeEtapa4)/4)
+    /**************************************
+     * PORCENTAJE GENERAL DE LA EMPRESA
+    */
+    // Empresa Establecida
+    let porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa2 + porcentajeEtapa3 + porcentajeEtapa4)/4)
+    // Empresa Nueva
+    if (diagEmpresa2.length > 0) {
+        porcentajeTotal = Math.round((porcentajeEtapa1 + porcentajeEtapa3 + porcentajeEtapa4)/3)
+    }
+    
 
     /************** DATOS PARA LAS GRÁFICAS AREAS VITALES & POR DIMENSIONES ****************/
     let jsonDimensiones1, jsonDimensiones2, nuevosProyectos = 0, rendimiento = {};
@@ -270,7 +278,7 @@ empresaController.index = async (req, res) => {
 
     /************************************************************************************* */
     /** TAREAS ASIGNADAS ETAPA 3 - PLAN ESTRATÉGICO DE NEGOCIO */
-    let tareas = await consultarDatos('plan_estrategico', 'ORDER BY id DESC LIMIT 2')
+    let tareas = await consultarDatos('tareas_plan_estrategico', 'ORDER BY id DESC LIMIT 2')
     tareas = tareas.filter(x => x.empresa == id_empresa)
     tareas.forEach(x => {
         x.fecha_entrega = new Date(x.fecha_entrega).toLocaleDateString('en-US')

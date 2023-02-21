@@ -526,7 +526,7 @@ helpers.consultar_tiempo_tareas = async () => {
     console.log("CRON JOB - CONSULTAR TAREAS RETRASADAS");
     console.log("******************************************************\n");
     let empresas = await helpers.consultarDatos('empresas')
-    const allTask = await helpers.consultarDatos('plan_estrategico')
+    const allTask = await helpers.consultarDatos('tareas_plan_estrategico')
     empresas = empresas.filter(x => x.consultor != null)
     const tareasRetrasadas = allTask.filter(x => x.estado != 2)
     if (tareasRetrasadas.length > 0) {
@@ -582,6 +582,7 @@ helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
             if (fechaActual > x.fecha_entrega) x.tiempo = 'Retrasada'
         }
         if (x.estado == 2) { x.estado = 'Completada'; x.color = 'success'; x.tareaOk = true; }
+        x.responsable ? x.responsable : x.responsable = "N/A"
 
         //**** VALIDANDO PRIORIDADES *****
         if (x.prioridad == 0) {
@@ -634,7 +635,7 @@ helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
 // (PLAN ESTRATÉGICO)
 helpers.consultarTareas = async (empresa, fechaActual) => {
     const tareas = {};
-    tareas.todas = await pool.query('SELECT * FROM plan_estrategico WHERE empresa = ? ORDER BY dimension ASC', [empresa])
+    tareas.todas = await pool.query('SELECT * FROM tareas_plan_estrategico WHERE empresa = ? ORDER BY dimension ASC', [empresa])
     tareas.todas.forEach(x => {
 
         //**** VALIDANDO ESTADOS *****
