@@ -57,7 +57,6 @@
         const fecha_entrega = $("#fecha_entrega-empresarial").val();
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
-        $('#tiempoTxt-sidebar2').text('A tiempo')
 
         let fechaini, fechafin;
         fechaini = new Date(fecha_inicio);
@@ -109,6 +108,13 @@
             // Activar Sidebar
             $('#sidebarEmpresarial').addClass('active');
             $('#cuerpoGeneral').css('overflow-y', 'hidden')
+            $('#tiempoTxt-sidebar1').text('A tiempo')
+
+            // CAMPOS FUERA DEL SIDEBAR
+            $("#actividad-empresarial").val('');
+            $("#fecha_inicio-empresarial").val('');
+            $("#fecha_entrega-empresarial").val('');
+
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
             const data = JSON.stringify({ actividad, fecha_inicio, fecha_entrega, empresa, nombreEmpresa, email })
@@ -123,15 +129,12 @@
                     const idTarea = response.insertId
                     const itemTaskList = addTaskToList_Empresarial(idTarea, actividad, fecha_inicio, fecha_entrega)
                     $('#cuerpoTareasEmpresarial').prepend(itemTaskList);
-                    $('#actividad-sidebar2').val(actividad)
-                    $('#descripcion-sidebar2').val('')
-                    $('#estado2').val(0)
-                    $('#prioridad2').val(0)
-                    $('#idTarea-sidebar2').val(idTarea)
-                    $('#fechaIni-sidebar2').val(fecha_inicio)
-                    $('#fechaFin-sidebar2').val(fecha_entrega)
-                    $("#actividad-empresarial").val(''); $("#fecha_inicio-empresarial").val(''); $("#fecha_entrega-empresarial").val(''); 
-                    $('#responsable-sidebar1').val('')
+                    $('#actividad-sidebar1').val(actividad)
+                    $('#estado1').val(0)
+                    $('#prioridad1').val(0)
+                    $('#idTarea-sidebar1').val(idTarea)
+                    $('#fechaIni-sidebar1').val(fecha_inicio)
+                    $('#fechaFin-sidebar1').val(fecha_entrega)
 
                 } else {
                     toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
@@ -163,6 +166,7 @@
         $("#comentario1").val("");
         const tiempo = $('#tiempo-sidebar1')
         tiempo.css('display', 'none')
+        $('#tiempoTxt-sidebar1').text('A tiempo')
         $('#sidebarEmpresarial').addClass('active');
         $('#cuerpoGeneral').css('overflow-y', 'hidden')
         fetch('/editarTarea', {
@@ -190,27 +194,27 @@
             const comentarios = JSON.parse(r.mensajes)
             if (comentarios) {
                 $('#divComentarios1').css('display', 'inline-block')
+                comentarios.forEach(x => {
+                    listaComentarios.innerHTML += `
+                        <li>
+                            <div class="timeline-badge primary"></div>
+                            <a class="timeline-panel text-muted">
+                                <span class="fechaMensajes">${x.fecha}</span>
+                                <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                    <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                                </h6>
+                            </a>
+                        </li>
+                    `
+                })
             } else {
                 $('#divComentarios1').css('display', 'none')
             }
-            comentarios.forEach(x => {
-                listaComentarios.innerHTML += `
-                    <li>
-                        <div class="timeline-badge primary"></div>
-                        <a class="timeline-panel text-muted">
-                            <span class="fechaMensajes">${x.fecha}</span>
-                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
-                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
-                            </h6>
-                        </a>
-                    </li>
-                `
-            })
 
             if (r.estado == 0 || r.estado == 1) {
+                tiempo.css('display', 'inline-block')
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
                 $('#tiempoTxt-sidebar1').text('A tiempo')
-                tiempo.css('display', 'inline-table')
                 if (fechaActual > r.fecha_entrega){
                     $('#tiempoTxt-sidebar1').text('Retrasada')
                 }
@@ -311,12 +315,10 @@
     function agregarTarea() {
         const nombreEmpresa = $("#nombreEmpresa").text();
         const email = $("#emailEmpresa").text();
-        const actividad = $("#actividad2").val();
-        const fecha_inicio = $("#fecha_inicio2").val();
-        const fecha_entrega = $("#fecha_entrega2").val();
-        const dimension = $("#dimension2").val()
-        $("#tiempoTxt-sidebar2").text("A tiempo")
-        $("#comentario2").val("");
+        const actividad = $("#actividad-estrategico").val();
+        const fecha_inicio = $("#fecha_inicio-estrategico").val();
+        const fecha_entrega = $("#fecha_entrega-estrategico").val();
+        const dimension = $("#dimension").val()
 
         let fechaini, fechafin;
         fechaini = new Date(fecha_inicio);
@@ -368,6 +370,14 @@
             // Activar Sidebar
             $('#sidebarEstrategico').addClass('active');
             $('#cuerpoGeneral').css('overflow-y', 'hidden');
+            $("#tiempoTxt-sidebar2").text("A tiempo")
+            $("#comentario2").val("");
+
+            // Fuera del Sidebar
+            $('#actividad2').val(''); 
+            $('#fecha_inicio-estrategico').val('');
+            $('#fecha_entrega-estrategico').val(''); 
+            $('#dimension').val('');
 
             // Enviar info a la base de datos
             const empresa = $("#idEmpresa").val();
@@ -384,18 +394,14 @@
                     const idTarea = response.insertId
                     const itemTaskList = addTaskToList(idTarea, fecha_inicio, fecha_entrega, dimension)
                     $('#cuerpoTareas').prepend(itemTaskList);
-                    $('#descripcion2').val('')
                     $('#estado2').val(0)
                     $('#prioridad2').val(0)
                     $('#idTarea-sidebar2').val(idTarea)
                     $('#actividad-sidebar2').val(actividad)
+                    $('#dimension-sidebar2').val(dimension)
                     $('#fechaIni-sidebar2').val(fecha_inicio)
                     $('#fechaFin-sidebar2').val(fecha_entrega)
-                    $('#actividad2').val(''); $('#fecha_inicio2').val(''); $('#fecha_entrega').val(''); 
                     $('#responsable-sidebar2').val('')
-                    $('#dimension-sidebar2').val(dimension)
-                    $('#dimension2').val('');
-
                 } else {
                     toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
                         positionClass: "toast-top-full-width",
@@ -449,27 +455,27 @@
             const comentarios = JSON.parse(r.mensajes)
             if (comentarios) {
                 $('#divComentarios2').css('display', 'inline-block')
+                comentarios.forEach(x => {
+                    listaComentarios.innerHTML += `
+                        <li>
+                            <div class="timeline-badge primary"></div>
+                            <a class="timeline-panel text-muted">
+                                <span class="fechaMensajes">${x.fecha}</span>
+                                <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                    <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                                </h6>
+                            </a>
+                        </li>
+                    `
+                })
             } else {
                 $('#divComentarios2').css('display', 'none')
             }
-            comentarios.forEach(x => {
-                listaComentarios.innerHTML += `
-                    <li>
-                        <div class="timeline-badge primary"></div>
-                        <a class="timeline-panel text-muted">
-                            <span class="fechaMensajes">${x.fecha}</span>
-                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
-                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
-                            </h6>
-                        </a>
-                    </li>
-                `
-            })
 
             if (r.estado == 0 || r.estado == 1) {
+                tiempo.css('display', 'inline-table')
                 const fechaActual = new Date().toLocaleDateString('fr-CA')
                 $('#tiempoTxt-sidebar2').text('A tiempo')
-                tiempo.css('display', 'inline-table')
                 if (fechaActual > r.fecha_entrega){
                     $('#tiempoTxt-sidebar2').text('Retrasada')
                 }
