@@ -7641,7 +7641,7 @@ button.bg-dark:focus {
 }
 
 .rounded {
-  border-radius: 0.75rem !important;
+  border-radius: 0.35rem !important;
 }
 
 .rounded-top {
@@ -13286,7 +13286,7 @@ a.active {
 
 .nav-header .brand-title {
   margin-left: 10px;
-  max-width: 120px;
+  max-width: 165px;
   margin-top: 0px;
 }
 
@@ -18079,8 +18079,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li>a {
   font-size: 16px;
   padding: 20px 20px;
-  border-top-left-radius: 1.25rem;
-  border-bottom-left-radius: 1.25rem;
+  border-top-left-radius: 0.6rem;
+  border-bottom-left-radius: 0.6rem;
   -webkit-transition: all 0.5s;
   -ms-transition: all 0.5s;
   transition: all 0.5s;
@@ -38141,7 +38141,7 @@ button:focus {
 
 .btn {
   padding: 0.938rem 1.5rem;
-  border-radius: 1.25rem;
+  border-radius: 0.35rem;
   font-weight: 500;
   font-size: 1rem;
 }
@@ -43760,7 +43760,7 @@ table.dataTable thead .sorting {
 }
 
 .rounded {
-  border-radius: 1.25rem !important;
+  border-radius: 0.35rem !important;
 }
 
 .btn-link {
@@ -44137,7 +44137,7 @@ span#counter {
   padding: 20px 18px;
   display: flex;
   align-items: center;
-  border-radius: 1.25rem;
+  border-radius: 0.35rem;
   position: relative;
   margin: 50px 50px;
   border: none;
