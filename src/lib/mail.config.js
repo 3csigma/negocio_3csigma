@@ -21,24 +21,25 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	host: 'smtp.office365.com',
+	host: 'smtpout.secureserver.net',
     port: 587,
     secure: false,
+	requireTLS: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
 	tls: {
-        ciphers: 'SSLv3'
+        rejectUnauthorized: false
     }
 });
 
 // verify connection configuration
 transporter.verify(function (error, success) {
     if (error) {
-        console.log("ERROR DEL TRANPSORTER NODEMAILER ==> ", error);
+        console.log("\nERROR DEL TRANPSORTER NODEMAILER ==> ", error);
     } else {
-        console.log("Server is ready to take our messages");
+        console.log("\nEL SERVIDOR ESTÁ LISTO");
     }
 });
 
