@@ -5,8 +5,9 @@ const mail = {
 	// user: 'noreply@3csigma.com',
 	// pass: '&gxq6DOCYk$I'
 	user: 'hello@3csigma.com',
-	pass: 'OAjN-3jQd*y-t#eq',
+	// pass: 'OAjN-3jQd*y-t#eq',
 	// pass: 'lrrbbvcvrhmvpzmf',
+	pass: 'kjaskdj1i21sklad'
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -27,6 +28,7 @@ let transporter = nodemailer.createTransport({
 		pass: mail.pass,
 	},
 });
+
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
