@@ -5,9 +5,8 @@ const mail = {
 	// user: 'noreply@3csigma.com',
 	// pass: '&gxq6DOCYk$I'
 	user: 'hello@3csigma.com',
-	// pass: 'OAjN-3jQd*y-t#eq',
+	pass: 'OAjN-3jQd*y-t#eq',
 	// pass: 'lrrbbvcvrhmvpzmf',
-	pass: 'kjaskdj1i21sklad'
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -22,11 +21,22 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	service: 'Godaddy',
+	host: 'smtp.office365.com',
+	port: 465,
+    secure: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
+});
+
+// verify connection configuration
+transporter.verify(function (error, success) {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log("Server is ready to take our messages");
+    }
 });
 
 
