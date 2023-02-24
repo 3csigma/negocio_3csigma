@@ -2,13 +2,13 @@ const nodemailer = require("nodemailer");
 const { my_domain } = require("../keys").config
 
 const mail = {
-	// user: 'noreply@3csigma.com',
-	// pass: '&gxq6DOCYk$I'
-	// user: 'hello@3csigma.com',
-	// pass: 'OAjN-3jQd*y-t#eq',
-	// pass: 'lrrbbvcvrhmvpzmf',
-	user: 'inaweza97@hotmail.com',
-	pass: 'd.97092526600**'
+	// user: "noreply@3csigma.com",
+	// pass: "&gxq6DOCYk$I"
+	// user: "hello@3csigma.com",
+	// pass: "OAjN-3jQd*y-t#eq",
+	// pass: "lrrbbvcvrhmvpzmf",
+	user: "dalorz.gamer@gmail.com",
+	pass: "chimichangas.key"
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -23,7 +23,7 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	service: "Office365",
+	service: "Gmail",
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
