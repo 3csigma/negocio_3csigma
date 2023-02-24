@@ -2,31 +2,31 @@ const nodemailer = require("nodemailer");
 const { my_domain } = require("../keys").config
 
 const mail = {
-	user: 'noreply@3csigma.com',
-	pass: '&gxq6DOCYk$I'
-	// user: 'hello@3csigma.com',
-	// pass: 'OAjN-3jQd*y-t#eq',
+	// user: 'noreply@3csigma.com',
+	// pass: '&gxq6DOCYk$I'
+	user: 'hello@3csigma.com',
+	pass: 'OAjN-3jQd*y-t#eq',
 	// pass: 'lrrbbvcvrhmvpzmf',
 }
 
 // create reusable transporter object using the default SMTP transport
-let transporter = nodemailer.createTransport({
-	host: "3csigma.com",
-	port: 465,
-	secure: true,
-	auth: {
-		user: mail.user,
-		pass: mail.pass,
-	},
-});
-// ---------------------------------------------------
 // let transporter = nodemailer.createTransport({
-// 	service: 'Godaddy',
+// 	host: "3csigma.com",
+// 	port: 465,
+// 	secure: true,
 // 	auth: {
 // 		user: mail.user,
 // 		pass: mail.pass,
 // 	},
 // });
+// ---------------------------------------------------
+let transporter = nodemailer.createTransport({
+	service: 'Godaddy',
+	auth: {
+		user: mail.user,
+		pass: mail.pass,
+	},
+});
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
