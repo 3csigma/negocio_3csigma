@@ -4,9 +4,11 @@ const { my_domain } = require("../keys").config
 const mail = {
 	// user: 'noreply@3csigma.com',
 	// pass: '&gxq6DOCYk$I'
-	user: 'hello@3csigma.com',
+	// user: 'hello@3csigma.com',
 	// pass: 'OAjN-3jQd*y-t#eq',
-	pass: 'lrrbbvcvrhmvpzmf',
+	// pass: 'lrrbbvcvrhmvpzmf',
+	user: 'inaweza97@hotmail.com',
+	pass: 'd.97092526600**'
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -21,17 +23,11 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	host: 'smtpout.secureserver.net',
-    port: 587,
-    secure: false,
-	requireTLS: true,
+	service: "Office365",
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
 	},
-	tls: {
-        rejectUnauthorized: false
-    }
 });
 
 // verify connection configuration
