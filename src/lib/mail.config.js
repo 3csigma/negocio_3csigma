@@ -5,7 +5,9 @@ const mail = {
 	// user: "noreply@3csigma.com",
 	// pass: "&gxq6DOCYk$I"
 	user: "hello@3csigma.com",
-	pass: "OAjN-3jQd*y-t#eq"
+	// pass: "OAjN-3jQd*y-t#eq",
+	// pass: "lrrbbvcvrhmvpzmf"
+	// pass: "ojJ8Q~._6EGbNhdhy8izs5MWwJrAQjIOY_6J1bRH"
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -22,10 +24,12 @@ const mail = {
 let transporter = nodemailer.createTransport({
 	host: "smtp.office365.com",
 	port: 587,
-    secure: false, // StartTLS is enabled by setting this to false
+    secure: true, // StartTLS is enabled by setting this to false
 	auth: {
+		type: 'OAuth2',
 		user: mail.user,
-		pass: mail.pass,
+		serviceClient: '1dfd10f9-992d-4f37-b103-d27062016147',
+		privateKey: 'ojJ8Q~._6EGbNhdhy8izs5MWwJrAQjIOY_6J1bRH'
 	},
 });
 
