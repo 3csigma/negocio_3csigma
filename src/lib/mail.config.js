@@ -20,7 +20,7 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	host: "smtpout.secureserver.net",
+	host: "3csigma.com",
 	port: 465,
     secure: true, // StartTLS is enabled by setting this to false
 	debug: true,
