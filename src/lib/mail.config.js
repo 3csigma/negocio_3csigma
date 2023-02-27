@@ -6,7 +6,6 @@ const mail = {
 	// pass: "&gxq6DOCYk$I"
 	user: "hello@3csigma.com",
 	pass: "OAjN-3jQd*y-t#eq"
-	// pass: "lrrbbvcvrhmvpzmf"
 }
 
 // create reusable transporter object using the default SMTP transport
@@ -24,7 +23,6 @@ let transporter = nodemailer.createTransport({
 	host: "smtpout.secureserver.net",
 	port: 587,
     secure: true,
-    secureConnection: false, // TLS requires secureConnection to be false
     requireTLS: true,
 	debug: true,
 	auth: {
