@@ -22,8 +22,7 @@ const mail = {
 let transporter = nodemailer.createTransport({
 	host: "smtpout.secureserver.net",
 	port: 587,
-    secure: true,
-    requireTLS: true,
+    secureConnection: true,
 	debug: true,
 	auth: {
 		user: mail.user,
@@ -39,7 +38,6 @@ transporter.verify(function (error, success) {
         console.log("\nEL SERVIDOR ESTÁ LISTO ==> ", success);
     }
 });
-
 
 /** Enviar el email */
 const sendEmail = async (email, subject, html) => {
