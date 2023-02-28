@@ -22,10 +22,9 @@ const mail = {
 // });
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
-	host: "smtp.office365.com",
-	port: 587,
-    secure: true, // StartTLS is enabled by setting this to false
-	debug: true,
+	host: "smtpout.secureserver.net",
+	port: 465,
+    secure: true,
 	auth: {
 		user: mail.user,
 		pass: mail.pass,
