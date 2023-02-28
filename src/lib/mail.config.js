@@ -5,7 +5,7 @@ const mail = {
 	// user: "noreply@3csigma.com",
 	// pass: "&gxq6DOCYk$I"
 	user: "hello@3csigma.com",
-	// pass: "OAjN-3jQd*y-t#eq",
+	pass: "OAjN-3jQd*y-t#eq",
 	// pass: "lrrbbvcvrhmvpzmf"
 	// pass: "ojJ8Q~._6EGbNhdhy8izs5MWwJrAQjIOY_6J1bRH"
 }
