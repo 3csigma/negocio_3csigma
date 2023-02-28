@@ -24,7 +24,7 @@ const mail = {
 let transporter = nodemailer.createTransport({
 	host: "smtp.office365.com",
 	port: 587,
-    secure: false, // StartTLS is enabled by setting this to false
+    secure: true, // StartTLS is enabled by setting this to false
 	debug: true,
 	auth: {
 		user: mail.user,
@@ -34,7 +34,6 @@ let transporter = nodemailer.createTransport({
 
 // verify connection configuration
 transporter.verify(function (error, success) {
-	console.log("Transporter", transporter)
     if (error) {
         console.log("\nERROR DEL TRANPSORTER NODEMAILER ==> ", error);
     } else {
