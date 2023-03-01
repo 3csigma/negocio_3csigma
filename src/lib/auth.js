@@ -1,4 +1,4 @@
-const rutasObj = require('../config/index.js').config;
+const rutasObj = require('../config/index.js');
 const empresaController = require('../controllers/empresaController');
 const consultorController = require('../controllers/consultorController');
 const dashboardController = require('../controllers/dashboardController');

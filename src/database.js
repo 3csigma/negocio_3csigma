@@ -1,7 +1,12 @@
 const mysql = require('mysql');
 const {promisify} = require('util');
 
-const {database} = require('./keys')
+const database = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+}
 
 // Método para ejecutar diferentes hilos para varias tareas al tiempo
 const pool = mysql.createPool(database)

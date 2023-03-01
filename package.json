@@ -1,6 +1,6 @@
 {
-  "name": "negocio-3csigma",
-  "version": "1.0.0",
+  "name": "app-negocio-3sigma",
+  "version": "1.0.1",
   "description": "Plataforma para Automatización de Documentos",
   "main": "src/app.js",
   "scripts": {
@@ -18,8 +18,7 @@
     "country-state-city": "^3.0.1",
     "cross-fetch": "^3.1.5",
     "csurf": "^1.11.0",
-    "docusign-esign": "^6.1.0",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.3",
     "express": "^4.17.3",
     "express-handlebars": "^6.0.2",
     "express-myconnection": "^1.0.4",
@@ -40,7 +39,6 @@
     "path": "^0.12.7",
     "rand-token": "^1.0.1",
     "stripe": "^8.218.0",
-    "superagent": "^7.1.2",
     "validator": "^13.7.0"
   },
   "devDependencies": {

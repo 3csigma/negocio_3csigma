@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetch = require('cross-fetch');
-const dsConfig = require('../config/index.js').config;
+const dsConfig = require('../config/index.js');
 const pool = require('../database')
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc'; //Using AES encryption
