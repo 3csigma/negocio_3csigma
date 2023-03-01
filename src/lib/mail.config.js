@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { my_domain } = require("../keys").config
+const my_domain = process.env.MY_DOMAIN;
 
 const mail = {
 	// user: "noreply@3csigma.com",
@@ -23,12 +23,13 @@ const mail = {
 // ---------------------------------------------------
 let transporter = nodemailer.createTransport({
 	// host: "smtp.office365.com",
-	host: "smtpout.secureserver.net",
-	port: 465,
-    secure: true,
+	host: "localhost",
+	port: 25,
+    secure: false,
+	ignoreTLS: true,
 	auth: {
-		user: mail.user,
-		pass: mail.pass,
+		user: '',
+		pass: '',
 	},
 });
 
