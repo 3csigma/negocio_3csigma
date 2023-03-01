@@ -720,14 +720,14 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_002.jpg'); width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-repeat: no-repeat; background-size: cover; color: #000000; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_002.jpg'); width: 600px;" width="600" title="Bienvenido a 3C Sigma" aria-label="Bienvenido a 3C Sigma" alt="Bienvenido a 3C Sigma">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 0px; padding-bottom: 0px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="width:100%;padding-right:0px;padding-left:0px;">
-<div align="center" style="line-height:10px"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_002.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600"/></div>
+<div align="center" style="line-height:10px"><img class="fullMobileWidth big" src="https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_002.jpg" style="display: block; height: auto; border: 0; width: 600px; max-width: 100%;" width="600" title="Bienvenido a 3C Sigma" aria-label="Bienvenido a 3C Sigma" alt="Bienvenido a 3C Sigma"/></div>
 </td>
 </tr>
 </table>
