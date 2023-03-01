@@ -1,7 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const fetch = require('cross-fetch');
-const dsConfig = require('../config/index.js');
 const pool = require('../database')
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc'; //Using AES encryption
@@ -26,40 +23,6 @@ helpers.matchPass = async (password, passDB) => {
     } catch (error) {
         console.log(error)
     }
-}
-
-// Generar Token de Autenticación en API Docusing
-helpers.authToken = async () => {
-    try {
-        let fechaActual = Math.floor(Date.now()/1000) // Fecha Actual
-        let fechaExp = Math.floor(Date.now()/1000)+(60*15); // Expiración de 15 min
-        dsConfig.dsPayload.iat = fechaActual;
-        dsConfig.dsPayload.exp = fechaExp;
-        //Generando Token de Autenticación para DocuSign
-        dsConfig.authToken = jwt.sign(dsConfig.dsPayload, dsConfig.clavePrivada, { algorithm: 'RS256' })
-        console.log("\n<<<< TOKEN GENERADO PARA AUTH >>>>", dsConfig.authToken)
-    } catch (error) {
-        console.log(error)
-    }
-
-    const url = 'https://' + dsConfig.dsOauthServer + '/oauth/token'
-    const data = {
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion: dsConfig.authToken
-    }
-
-    const responseTK = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-    }).then(res => res.json())
-        .catch(error => console.error('Error:', error))
-        .then(response => {
-            console.log("\n<<<< RESPUESTA DESDE DOCUSIGN >>>", response)
-            return response;
-        });
-
-    return responseTK;
 }
 
 // Encriptando texto

@@ -2,37 +2,40 @@ const nodemailer = require("nodemailer");
 const my_domain = process.env.MY_DOMAIN;
 
 const mail = {
-	// user: "noreply@3csigma.com",
-	// pass: "&gxq6DOCYk$I"
-	user: "hello@3csigma.com",
-	pass: "OAjN-3jQd*y-t#eq",
+	user: "noreply@3csigma.com",
+	pass: "&gxq6DOCYk$I"
+	// user: "hello@3csigma.com",
+	// pass: "OAjN-3jQd*y-t#eq",
 	// pass: "lrrbbvcvrhmvpzmf"
 	// pass: "ojJ8Q~._6EGbNhdhy8izs5MWwJrAQjIOY_6J1bRH"
 }
 
+let transporter;
 // create reusable transporter object using the default SMTP transport
-// let transporter = nodemailer.createTransport({
-// 	host: "3csigma.com",
-// 	port: 465,
-// 	secure: true,
-// 	auth: {
-// 		user: mail.user,
-// 		pass: mail.pass,
-// 	},
-// });
-// ---------------------------------------------------
-let transporter = nodemailer.createTransport({
-	// host: "smtp.office365.com",
-	host: "localhost",
-	port: 25,
-    secure: false,
-	ignoreTLS: true,
-	auth: {
-		user: '',
-		pass: '',
-	},
-});
+if (my_domain == "http://localhost:4000") {
+	transporter = nodemailer.createTransport({
+		host: "3csigma.com",
+		port: 465,
+		secure: true,
+		auth: {
+			user: mail.user,
+			pass: mail.pass,
+		},
+	});
+} else {
+	transporter = nodemailer.createTransport({
+		host: "localhost",
+		port: 25,
+		secure: false,
+		ignoreTLS: true,
+		auth: {
+			user: '',
+			pass: '',
+		},
+	});
+}
 
+// ---------------------------------------------------
 // verify connection configuration
 transporter.verify(function (error, success) {
     if (error) {

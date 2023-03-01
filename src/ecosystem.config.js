@@ -1,6 +1,8 @@
+const name = process.env.APP_NAME;
+console.log("APP_NAME: " + name);
 module.exports = {
     apps: [{
-        name: process.env.APP_NAME,
+        name: process.env.APP_NAME || "TestApp 3CSigma",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart
