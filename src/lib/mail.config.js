@@ -686,7 +686,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #fceff7; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #fceff7; background-image: url('https://3csigma.com/app_public_files/email_verification/Verificacion-de-correo_01.jpg'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" width="600" aria-label="Bienvenido a 3C Sigma" title="Bienvenido a 3C Sigma">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-left: 10px; padding-right: 10px; padding-bottom: 10px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
@@ -799,7 +799,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 <table border="0" cellpadding="0" cellspacing="0" class="image_block" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:30px;width:100%;">
-<div align="center" style="line-height:10px"><img src="https://3csigma.com/app_public_files/img/Logo.png" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
+<div align="center" style="line-height:10px"><img src="https://3csigma.com/app_public_files/img/Logo.png" alt="Logo 3C Sigma consultorias empresariales" style="display: block; height: auto; border: 0; width: 120px; max-width: 100%;" width="120"/></div>
 </td>
 </tr>
 </table>
@@ -879,7 +879,7 @@ const getTemplate = (nombre, empresa, codigo) => {
 </table><!-- End -->
 </body>
 </html>
-      `;
+`;
 }
 
 const consultorAprobadoHTML = (nombre, clave) => {
