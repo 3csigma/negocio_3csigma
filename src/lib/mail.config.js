@@ -1,41 +1,32 @@
 const nodemailer = require("nodemailer");
 const my_domain = process.env.MY_DOMAIN;
 
-const mail = {
-	user: "noreply@3csigma.com",
-	pass: "&gxq6DOCYk$I"
-	// user: "hello@3csigma.com",
-	// pass: "OAjN-3jQd*y-t#eq",
-	// pass: "lrrbbvcvrhmvpzmf"
-	// pass: "ojJ8Q~._6EGbNhdhy8izs5MWwJrAQjIOY_6J1bRH"
+/************************************************
+ *  TRANSPORTER PARA ENVÍOS EN LOCAL
+*/
+let data = {
+	host: "3csigma.com",
+	port: 465,
+	secure: true,
+	auth: {
+		user: process.env.USER_EMAIL,
+		pass: process.env.PASS_EMAIL,
+	},
 }
-
-let transporter;
-// create reusable transporter object using the default SMTP transport
-if (my_domain == "http://localhost:4000") {
-	transporter = nodemailer.createTransport({
-		host: "3csigma.com",
-		port: 465,
-		secure: true,
-		auth: {
-			user: mail.user,
-			pass: mail.pass,
-		},
-	});
-} else {
-	transporter = nodemailer.createTransport({
+if (my_domain != 'http://localhost:4000') {
+	/************************************************
+	 *  TRANSPORTER PARA ENVÍOS DESDE EL SERVER
+	*/
+	data = {
 		host: "localhost",
 		port: 25,
 		secure: false,
 		ignoreTLS: true,
-		auth: {
-			user: '',
-			pass: '',
-		},
-	});
+	}
 }
 
-// ---------------------------------------------------
+let transporter = nodemailer.createTransport(data);
+
 // verify connection configuration
 transporter.verify(function (error, success) {
     if (error) {
@@ -49,7 +40,7 @@ transporter.verify(function (error, success) {
 const sendEmail = async (email, subject, html) => {
 	try {
 		await transporter.sendMail({
-			from: `3C Sigma <${mail.user}>`, // sender address
+			from: `3C Sigma <${process.env.USER_EMAIL}>`, // sender address
 			to: email, // list of receivers
 			subject, // Subject line
 			html, // html body
