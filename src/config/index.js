@@ -4,6 +4,6 @@ const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperf
 
 const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagomanual-diagnostico', 'pagomanual-empresas', 'cancelarsub']
 
-exports = {
+module.exports = {
   rutasEmpresa, rutasConsultor, rutasAdmin
 };
