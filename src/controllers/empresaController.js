@@ -452,7 +452,7 @@ empresaController.diagnostico = async (req, res) => {
             formDiag.estado = true;
         } else {
             formDiag.color = 'badge-success'
-            formDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
+            formDiag.estilo = '#000000; color: #FFFF'
             formDiag.texto = 'Completado'
             formDiag.estado = true;
         }

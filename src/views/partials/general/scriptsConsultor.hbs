@@ -34,7 +34,7 @@
                 <div class="d-flex justify-content-center align-items-center">
                     <a onclick="editarTarea_Empresarial(${id})" title="Editar"
                         class="btn btn-primary shadow btn-xs sharp mr-1"
-                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%);"><i
                             style="color:white ;" class="fa fa-pencil"></i>
                     </a>
                     <a onclick="eliminarTarea(${id}, 1)" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
@@ -295,7 +295,7 @@
                 <div class="d-flex justify-content-center align-items-center">
                     <a onclick="editarTarea(${id})" title="Editar"
                         class="btn btn-primary shadow btn-xs sharp mr-1"
-                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);"><i
+                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%);"><i
                             style="color:white ;" class="fa fa-pencil"></i>
                     </a>
                     <a onclick="eliminarTarea(${id}, 2)" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
@@ -548,7 +548,7 @@
             text: "Esta acción no es reversible.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#50368C',
+            confirmButtonColor: '#000000',
             cancelButtonColor: '#d33',
             cancelButtonText: 'Cancelar',
             confirmButtonText: '¡Sí, eliminar!'
@@ -620,7 +620,7 @@
                 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#50368C',
+            confirmButtonColor: '#000000',
             cancelButtonColor: '#d33',
             cancelButtonText: 'Cancelar',
             confirmButtonText: '¡Sí, finalizar!'
@@ -675,12 +675,12 @@
                     new Chart(chartEmpresaAdm1, {
                         type: 'bar',
                         data: {
-                            defaultFontFamily: 'Oblivian',
+                            defaultFontFamily: 'Montserrat',
                             labels: ["Producto", "Admin", "Talento Humano", "Finanzas", "Servicio al cliente", "Operaciones", "Ambiente Laboral", "Innovación", "Marketing", "Ventas"],
                             datasets: [{
                                 label: "Puntaje",
-                                backgroundColor: "#50368C",
-                                borderColor: "#50368C",
+                                backgroundColor: "#000000",
+                                borderColor: "#",
                                 data: chartAnalisis1,
                                 fill: false,
                             },
@@ -760,12 +760,12 @@
                     new Chart(chartEmpresaAdm2, {
                         type: 'bar',
                         data: {
-                            defaultFontFamily: 'Oblivian',
+                            defaultFontFamily: 'Montserrat',
                             labels: titulos,
                             datasets: [{
                                 label: "Puntaje",
-                                backgroundColor: "#50368C",
-                                borderColor: "#50368C",
+                                backgroundColor: "#000000",
+                                borderColor: "#000000",
                                 data: chartDimensiones1,
                                 fill: false,
                             },

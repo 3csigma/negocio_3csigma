@@ -615,7 +615,7 @@ h6,
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-  color: #3d4465;
+  color: #000000;
 }
 
 h1,
@@ -2624,7 +2624,7 @@ pre code {
 .form-control:focus {
   color: #495057;
   background-color: #fff;
-  border-color: #315cf0;
+  border-color: #000000;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(11, 42, 151, 0.25);
 }
@@ -6097,7 +6097,7 @@ a.badge-dark.focus {
 .alert-warning {
   color: #856209;
   background-color: #fff2cf;
-  border-color: #ffecbc;
+  border-color: #FFE000;
 }
 
 .alert-warning hr {
@@ -7476,14 +7476,14 @@ button.bg-primary:focus {
 }
 
 .bg-secondary {
-  background-color: #A02CFA !important;
+  background-color: #f9e86c !important;
 }
 
 a.bg-secondary:hover,
 a.bg-secondary:focus,
 button.bg-secondary:hover,
 button.bg-secondary:focus {
-  background-color: #8806ed !important;
+  background-color: #f9e86c !important;
 }
 
 .bg-success {
@@ -12040,7 +12040,7 @@ a.text-dark:focus {
 
 ::selection {
   color: #fff;
-  background: #50368c;
+  background: #000000;
 }
 
 body {
@@ -18099,7 +18099,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   position: absolute;
   border-radius: 4px;
   width: 6px;
-  background: #50368C;
+  background: #000000;
   top: 0;
   right: 0;
   opacity: 0;
@@ -18110,12 +18110,12 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li.mm-active>a {
-  color: #50368C;
-  background: #EAE6F4;
+  color: #000000;
+  background: #c9c9c9;
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li.mm-active>a i {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li.mm-active>a:before {
@@ -18150,7 +18150,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .nav-control .hamburger .line {
-  background-color: #50368c !important;
+  background-color: #000000 !important;
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .copyright,
@@ -18189,7 +18189,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu li a {
   padding: 13px;
-  border-radius: 1.25rem;
+  border-radius: 8px;
   margin: 2px 0;
 }
 
@@ -18276,8 +18276,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu>li.mm-active>a {
-  background: #50368c;
-  border-radius: 1.25rem;
+  background: #000000;
+  border-radius: 8px;
   color: #fff;
 }
 
@@ -18293,7 +18293,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu>li:hover>a {
   border-radius: 1.25rem;
-  background: #50368c;
+  background: #000000;
   color: #fff;
 }
 
@@ -23681,7 +23681,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-headerbg="color_1"] .nav-header .hamburger.is-active .line,
 [data-headerbg="color_1"] .nav-header .hamburger .line {
-  background: #50368c !important;
+  background: #000000 !important;
 }
 
 @media (min-width: 992px) {
@@ -33865,7 +33865,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 .profile-info h4.text-primary {
-  color: #50368c !important;
+  color: #000000 !important;
 }
 
 .profile-info p {
@@ -33922,7 +33922,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   transition: all 0.5s ease-in-out;
   border: none;
   border-bottom: .20px solid transparent;
-  color: #828690;
+  color: #000000;
 }
 
 .profile-tab .nav-item .nav-link:hover,
@@ -33930,8 +33930,8 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   border: 0;
   background: transparent;
   background: transparent;
-  border-bottom: 0.2px solid #50368c;
-  color: #50368c;
+  border-bottom: 0.2px solid #000000;
+  color: #000000;
 }
 
 @media only screen and (max-width: 575px) {
@@ -34810,12 +34810,12 @@ svg text {
 
 [data-theme-version="light"] .input-primary .form-control,
 [data-theme-version="dark"] .input-primary .form-control {
-  border-color: #50368c;
+  border-color: #000000;
 }
 
 [data-theme-version="light"] .input-primary .input-group-text,
 [data-theme-version="dark"] .input-primary .input-group-text {
-  background-color: #50368c;
+  background-color: #000000;
   color: #fff;
 }
 
@@ -36929,7 +36929,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .toast-success {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 .toast-info {
@@ -37463,7 +37463,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .alert {
-  border-radius: 1.25rem;
+  border-radius: 5px;
   padding: 1rem 3rem 1rem 1.5rem;
 }
 
@@ -37512,7 +37512,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .alert-warning {
   background: #fff5dd;
   border-color: #fff5dd;
-  color: #FFBC11;
+  color: #FFE000;
 }
 
 [data-theme-version="dark"] .alert-warning {
@@ -37573,7 +37573,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .alert-alt.alert-warning {
-  border-left: 4px solid #FFBC11;
+  border-left: 4px solid #FFE000;
 }
 
 .alert-alt.alert-danger {
@@ -37648,9 +37648,9 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .alert.alert-warning.solid {
-  background: #FFBC11;
+  background: #FFE000;
   color: #fff;
-  border-color: #FFBC11;
+  border-color: #FFE000;
 }
 
 .alert.alert-danger.solid {
@@ -39540,13 +39540,17 @@ button:focus {
 .dropdown-menu .dropdown-item:focus,
 .dropdown-menu .dropdown-item:active,
 .dropdown-menu .dropdown-item.active {
-  color: #50368c;
+  color: #000000;
   background: #F4F5F9;
+}
+
+.dropdown-menu .dropdown-item:hover{
+  color: #000000 !important;
 }
 
 .dropdown-menu .dropdown-item.active,
 .dropdown-menu .dropdown-item:active {
-  color: #50368c !important;
+  color: #000000 !important;
 }
 
 [direction="rtl"] .dropdown-menu {
@@ -40359,11 +40363,11 @@ code {
 }
 
 .progress-bar {
-  background-color: #812082;
+  background-color: #000000;
 }
 
 .progress-bar-primary {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 .progress-bar-success {
@@ -40728,7 +40732,7 @@ code {
 .default-tab .nav-link i {
   display: inline-block;
   transform: scale(1.5);
-  color: #50368c;
+  color: #000000;
 }
 
 .default-tab .nav-link:focus,
@@ -40738,7 +40742,7 @@ code {
   background-color: #fff;
   border-color: #dee2e6 #dee2e6 #fff #ebeef6;
   border-radius: 1.25rem 1.25rem 0 0;
-  color: #50368c;
+  color: #000000;
 }
 
 [data-theme-version="dark"] .default-tab .nav-link:focus,
@@ -41443,8 +41447,8 @@ code {
 }
 
 .bgl-primary {
-  background: #d8e0fc;
-  border-color: #d8e0fc;
+  background: #fff7bf;
+  border-color: #fff7bf;
 }
 
 [data-theme-version="dark"] .bgl-primary {
@@ -42533,20 +42537,20 @@ table.dataTable thead .sorting {
 .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover,
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
   color: #fff !important;
-  background: #50368c !important;
+  background: #000000 !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
   background: #fff !important;
-  color: #50368c !important;
+  color: #000000 !important;
   margin: 0 10px;
   border: 0px solid #50368c !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
 .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover {
-  background: #50368c !important;
+  background: #000000 !important;
   color: #fff !important;
 }
 
@@ -43186,7 +43190,7 @@ table.dataTable thead .sorting {
   -webkit-transition: all 0.5s;
   -ms-transition: all 0.5s;
   transition: all 0.5s;
-  background: #F4F5F9;
+  background: #fff7bf;
   margin-left: auto;
 }
 
@@ -43277,7 +43281,7 @@ table.dataTable thead .sorting {
 }
 
 .plan-list .list-row:hover {
-  background: #50368c;
+    background: linear-gradient(20deg, rgba(6, 6, 6, 0.85) 0%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.85) 100%);
 }
 
 .plan-list .list-row:hover .info h4 a,
@@ -43286,8 +43290,8 @@ table.dataTable thead .sorting {
 }
 
 .plan-list .list-row:hover .play-button {
-  color: #fff;
-  background: #FFBC11;
+  color: #000;
+  background: #FFE000;
 }
 
 .plan-list .list-row:hover .more-button {
@@ -43969,7 +43973,7 @@ table.dataTable thead .sorting {
 
 .card-tabs .nav-tabs .nav-link.active {
   background: #fff;
-  color: #50368c;
+  color: #000000;
 }
 
 @media only screen and (max-width: 1400px) {

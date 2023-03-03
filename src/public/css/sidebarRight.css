@@ -2,7 +2,7 @@
     width: 520px;
     backdrop-filter: blur(17px);
     box-shadow: 0px 0px 30px 0px rgb(82 63 105 / 45%);
-    background: linear-gradient(20deg, rgba(80, 54, 140, 0.85) 0%, rgba(129, 32, 130, 0.85) 50%, rgba(254, 208, 97, 0.85) 100%);
+    background: linear-gradient(20deg, rgba(6, 6, 6, 0.85) 0%, rgba(0, 0, 0, 0.85) 50%, rgba(0, 0, 0, 0.85) 100%);
 }
 
 .chatbox .chatbox-close {

@@ -60,7 +60,7 @@ label {
     margin-right: 25px;
 }
 .nav-tabs .nav-item .nav-link.active:before {
-    background-color: #50368c;
+    background-color: #000;
 }
 .tab-content {
     margin-top: 1em;
@@ -74,7 +74,7 @@ a.nav-link.btnIndicadoresAll {
 }
 
 a.nav-link.btnIndicadoresAll.active {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%) !important;
+    background: #000 !important;
     color: white !important;
     border-radius: 22px;
 }
@@ -82,14 +82,14 @@ a.nav-link.btnIndicadoresAll.active {
 .nav-link.btnIndicadoresAll:focus,
 .nav-link.btnIndicadoresAll:hover {
     background-color: #f2f2f2 !important;
-    border-color: #50368c;
+    border-color: #000;
     border-radius: 22px !important;
-    color: #50368c;
+    color: #000;
     border-width: 0 0px 3px 0;
 }
 
 .toast-success {
-    background-color: #50368D;
+    background-color: #000;
 }
 
 .default-tab .nav-link:focus,
@@ -99,7 +99,7 @@ a.nav-link.btnIndicadoresAll.active {
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff #ebeef6;
     border-radius: 1.25rem 1.25rem 0 0;
-    color: #0B2A97;
+    color: #000;
 }
 
 /* Barra Scroll Personalizada para el Modal */
@@ -109,7 +109,7 @@ a.nav-link.btnIndicadoresAll.active {
 }
 
 .modal-open .modal::-webkit-scrollbar-thumb {
-    background-color: #50368c !important;
+    background-color: #000 !important;
     border-radius: 10px !important;
     border: 1px solid rgba(155, 155, 155, 0.747) !important;
 }
@@ -150,14 +150,14 @@ a.nav-link.btnIndicadoresAll.active {
 }
 
 .ct-chart .ct-series.ct-series-a .ct-bar{
-    stroke: #fed061 ;
+    stroke: #fff294 ;
 }
 .ct-chart .ct-series.ct-series-b .ct-bar{
-    stroke: #50368c ;
+    stroke: #fde950 ;
     
 }
 .ct-chart .ct-series.ct-series-c .ct-bar{
-    stroke: #812082 ;
+    stroke: #FFE000 ;
     
 }
 
