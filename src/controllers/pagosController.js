@@ -1,8 +1,9 @@
 const pagosController = exports;
 const pool = require('../database')
-const { my_domain, id_producto_estrategico, clientSecretStripe } = require('../keys').config
-const stripe = require('stripe')(clientSecretStripe);
+const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 const { consultarDatos } = require('../lib/helpers')
+const my_domain = process.env.MY_DOMAIN
+const id_producto_estrategico = process.env.ID_PRODUCTO_ESTRATEGICO
 
 let precioDiag = 0, precioE2 = 0, precioE3 = 0;
 

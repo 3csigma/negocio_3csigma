@@ -1,8 +1,6 @@
 node_modules
 src/keys.js
-src/ecosystem_config.js
-src/private.key
-package-lock.json
+.env
 src/public/archivos_analisis_empresa/*.jpg
 src/public/archivos_analisis_empresa/*.jpeg
 src/public/archivos_analisis_empresa/*.png
