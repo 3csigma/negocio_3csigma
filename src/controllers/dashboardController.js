@@ -398,7 +398,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     dgNuevasEmpresas = dgNuevasEmpresas.find(x => x.id_empresa == idEmpresa)
     
     if (!diagnostico && !dgNuevasEmpresas) {
-        frmDiag.color = 'badge-danger'
+        frmDiag.color = 'badge-warning'
         frmDiag.texto = 'Pendiente'
         frmDiag.fechaLocal = true;
         frmDiag.tablasVacias = true;
