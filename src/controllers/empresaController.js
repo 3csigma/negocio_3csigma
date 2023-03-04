@@ -435,7 +435,7 @@ empresaController.diagnostico = async (req, res) => {
     const ficha = fichaCliente[0]
 
     if (fichaCliente.length == 0) {
-        formDiag.color = 'badge-danger'
+        formDiag.color = 'badge-warning'
         formDiag.texto = 'Pendiente'
         formDiag.fechaLocal = true;
     } else {

@@ -14,7 +14,7 @@ h4,
 h5,
 h6 {
     font-family: 'Montserrat' !important;
-    font-weight: 300;
+    font-weight: 400;
 }
 
 /* Barra scroll personalizada */
@@ -247,6 +247,7 @@ input:checked+.slider:before {
 
 .nav-text {
     font-size: 14px !important;
+    font-weight: 400;
 }
 
 .bg-diagnostico {
