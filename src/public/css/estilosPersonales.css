@@ -14,7 +14,7 @@
     height: 10px;
 }
 .barra-scroll::-webkit-scrollbar-thumb {
-    background-color: #50368c;
+    background-color: #000000;
     border-radius: 10px;
     border: 1px solid rgba(155, 155, 155, 0.747);
 }
@@ -39,13 +39,13 @@
 - botones comunes y de iconos
 */
 .color_primary {
-    background: #812082 !important;
+    background: #000000 !important;
 }
 .color_secondary {
     background: #50368c !important;
 }
 .color_tertiary {
-    background: #FED061 !important;
+    background: #FFE000 !important;
 }
 .color_gradient {
     background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%) !important;
@@ -63,12 +63,12 @@
   }
   
   .text-primary {
-    color: #812082 !important;
+    color: #000000 !important;
   }
   
   a.text-primary:hover,
   a.text-primary:focus {
-    color: #813c82 !important;
+    color: #000000 !important;
   }
   
   .text-secondary {
@@ -78,4 +78,8 @@
   a.text-secondary:hover,
   a.text-secondary:focus {
     color: #50368c !important;
+  }
+
+  .text-tertiary {
+    color: #FFE000 !important;
   }

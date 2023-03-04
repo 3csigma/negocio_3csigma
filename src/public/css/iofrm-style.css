@@ -15,12 +15,12 @@
 1. General Styles.
 2. Responsive Styles.
 -------------------------------------------------------------------*/
-@import url("https://fonts.cdnfonts.com/css/oblivian-text");
+@import url('https://fonts.cdnfonts.com/css/montserrat');
 /* -----------------------------------
     1 - General Styles
 ------------------------------------*/
 *, body {
-    font-family: 'Oblivian Text';
+    font-family: 'Montserrat';
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;

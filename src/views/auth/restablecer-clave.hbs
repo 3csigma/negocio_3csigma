@@ -2,7 +2,6 @@
     <div class="top_logo">
         <a href="/">
             <div class="logo-Login" >
-                {{!-- <img class="logo-size-Login" src="https://3csigma.com/app_public_files/img/3C-sigma-logo-full.png" alt="Logo 3CSigma"> --}}
                 <img class="logo-size-Login" src="/img/logo.svg" alt="Logo 3CSigma">
             </div>
         </a>
@@ -14,7 +13,6 @@
             </div>
         </div>
         <div class="loginBanner">
-            {{!-- <img class="loginBanner-size" src="https://3csigma.com/app_public_files/img/Login_Banner_movil.jpg" alt="Banner Móvil"> --}}
             <img class="loginBanner-size" src="/img/Login_Banner_movil.jpg" alt="Banner Móvil">
         </div>
         
@@ -24,21 +22,21 @@
                     {{> general/message }}
                     <h3 class="tituH3">Restablacer cuenta</h3>
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
-                    <p class="msg-Login-Top">Ingresa tu correo registrado en la platforma!</p>
+                    <p class="msg-Login-Top">Ingresa tu correo registrado en la plataforma!</p>
                     <br>
                     <form action="/reset-password-email" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Correo electrónico</label>*</label>
                         <input class="form-control" type="email" id="email" name="email" placeholder="ejemplo@tusitioweb.com" required autofocus>
                        
-                        <p id="message" style = "color:#6B2986; font-size: 12px; font-weight: bold;"> </p>
+                        <p id="message" style = "font-size: 12px; font-weight: bold;" class="text-primary"></p>
                         <div class="row">
                             <div class="col-12 col-sm-5" style="margin-top: -15px; font-size: 14px;">¿Recordaste? 
-                                <a href="/login" class="text-secondary">Ingresa aquí</a>
+                                <a href="/login" class="text-tertiary">Ingresa aquí</a>
                             </div>
                         </div>
                         <div class="form-button d-flex align-items-center">
-                            <button id="submit" type="submit"class="ibtn login-ingresar color_gradient text-center fw-bold mx-auto mb-4">Enviar</button>
+                            <button id="submit" type="submit"class="ibtn login-ingresar color_primary text-center fw-bold mx-auto mb-4">Enviar</button>
                         </div>
                     </form>
                     {{#if messages.error}}
@@ -57,8 +55,8 @@
 
                     <div class="other-links d-flex align-items-center my-4">
                         <span class="text-center fw-bold mx-auto" style="color:#000;font-weight: bold !important;">¿No
-                            estas registrado?<a href="/registro"><span
-                                    style="color:#812082;font-weight: bold !important;"> Crea una cuenta hoy</span>
+                            estas registrado?<a href="/registro"><span class="text-tertiary"
+                                    style="font-weight: bold !important;"> Crea una cuenta hoy</span>
                         </span></a>
                     </div>
                     {{!-- Copyright --}}

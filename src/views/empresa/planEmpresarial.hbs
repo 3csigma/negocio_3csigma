@@ -189,8 +189,8 @@
                         <td class="precios_celdas">{{propuesta.precio_total}}</td>
                         <td>
                           <a href="{{propuesta.link_propuesta}}" target="_blank"
-                              class="btn btn-primary shadow btn-xs sharp"
-                              style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                              class="btn color_primary shadow btn-xs sharp text-white"
+                              style="margin: 0 auto">
                               <i class="fa fa-search"></i>
                           </a>
                         </td>
@@ -231,8 +231,8 @@
                         <td>{{tipo}}</td>
                         <td>
                           <a href="{{url}}" target="_blank"
-                            class="btn btn-primary shadow btn-xs sharp"
-                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
+                            class="btn color_primary shadow btn-xs sharp text-white"
+                            style="margin: 0 auto">
                             <i class="fa fa-search"></i>
                           </a>
                         </td>
@@ -296,15 +296,15 @@
                     <h4 onclick="verTareaEmpresarial({{id}})" class="fs-20"><span class="text-black">{{actividad}}</span></h4>
                     <span class="text-{{color}} font-w600">{{estado}}</span>
                     {{!-- TIEMPO --}}
-                    <span class="badge light"
-                      style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 4px 14px;    padding-left: 7px;">
+                    <span class="badge light color_tertiary text-black"
+                      style="padding: 4px 14px; padding-left: 7px;">
                       <i class="fa-regular fa-clock pr-2"></i> {{tiempo}}</span>
                     {{!-- PRIORIDAD --}}
                     <span>Prioridad: {{prioridad}}</span>
                   </div>
                 </div>
                 <div class="col-xl-4 col-xxl-2 col-lg-3 col-sm-12 d-flex align-items-center">
-                  <a onclick="verTareaEmpresarial('{{id}}')" class="btn mb-3 play-button rounded mr-3">
+                  <a onclick="verTareaEmpresarial({{id}})" class="btn mb-3 play-button rounded mr-3 text-black">
                     <i class="fa-regular fa-eye"></i> Ver Detalles
                   </a>
                 </div>
