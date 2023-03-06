@@ -988,13 +988,13 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
         let tab_tareaAsignada
-        if (botonesEtapas.uno) tab_tareaAsignada = "color: #FFE000;"
+        if (botonesEtapas.uno) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000;"
+        if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000;"
+        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000;"
+        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
    
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
     // TAREAS PLAN EMPRESARIAL
