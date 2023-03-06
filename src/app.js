@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const session = require('express-session')
 const { engine } = require('express-handlebars');
@@ -8,14 +9,13 @@ const path = require('path');
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser');
 const MemoryStore = require('memorystore')(session);
-const {port} = require('./keys')
 
 // Inicializaciones
 const app = express();
 require('./lib/passport')
 
 // Configuraciones
-app.set('port', port);
+app.set('port', process.env.PORT);
 
 app.set('views', __dirname + '/views');
 app.engine('hbs', engine({

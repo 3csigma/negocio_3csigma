@@ -2,8 +2,7 @@ const pool = require('../database')
 const empresaController = exports;
 const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
-const { clientSecretStripe } = require('../keys').config
-const stripe = require('stripe')(clientSecretStripe);
+const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
 let pagoPendiente = true, diagnosticoPagado = false, etapa1, consulAsignado = {}, id_empresa = false, etapaCompleta = {};
 let modalAcuerdo = false;

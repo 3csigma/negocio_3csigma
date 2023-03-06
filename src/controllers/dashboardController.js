@@ -7,8 +7,7 @@ const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
-const { clientSecretStripe } = require('../keys').config
-const stripe = require('stripe')(clientSecretStripe);
+const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
 let aprobarConsultor = false;
 

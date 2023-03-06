@@ -1,135 +1,140 @@
 <script>
     function verTareaEmpresarial(idTarea) {
-        const tiempo = $('#tiempo-sidebar1')
-        tiempo.css('display', 'none')
-        $('#prioridad-sidebar-div1').css('display', 'none');
-        $('#sidebarEmpresarial').addClass('active');
-        $('#cuerpoGeneral').css('overflow-y', 'hidden')
+        if ($('#sidebarEmpresarial').length > 0) {
+            const tiempo = $('#tiempo-sidebar1')
+            tiempo.css('display', 'none')
+            $('#prioridad-sidebar-div1').css('display', 'none');
+            $("#divTxtComentario1").css('display', 'none')
+            $('#sidebarEmpresarial').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden')
 
-        fetch('/editarTarea', {
-            method: 'POST',
-            body: JSON.stringify({idTarea, item:1}),
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json())
-        .catch(error => console.error('Error Mostrar Tarea: ', error))
-        .then(r => {
-            console.group("INFO DE LA TAREA >> ")
-            console.log(r)
-            console.log("\n")
-            console.groupEnd()
-            $('#fechaIni-sidebar1').css('display', 'none')
-            $('#fechaFin-sidebar1').css('display', 'none')
-            $('#btnGuardar-sidebar1').css('display', 'none')
-            $("#estado1").css('display', 'none')
-            $('#actividad-sidebar1').val(r.actividad).attr('readonly', true)
-            $("#descripcion-sidebar1").val(r.descripcion).attr('readonly', true)
-            $("#responsable1").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
-            $('#txtFechaIni1').text(r.fecha_inicio).css('display', 'inline-block')
-            $('#txtFechaFin1').text(r.fecha_entrega).css('display', 'inline-block')
+            fetch('/editarTarea', {
+                method: 'POST',
+                body: JSON.stringify({idTarea, item:1}),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Mostrar Tarea: ', error))
+            .then(r => {
+                console.group("INFO DE LA TAREA >> ")
+                console.log(r)
+                console.log("\n")
+                console.groupEnd()
+                $('#fechaIni-sidebar1').css('display', 'none')
+                $('#fechaFin-sidebar1').css('display', 'none')
+                $('#btnGuardar-sidebar1').css('display', 'none')
+                $("#estado1").css('display', 'none')
+                $('#actividad-sidebar1').val(r.actividad).attr('readonly', true)
+                $("#descripcion-sidebar1").val(r.descripcion).attr('readonly', true)
+                $("#responsable-sidebar1").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
+                $('#txtFechaIni1').text(r.fecha_inicio).css('display', 'inline-block')
+                $('#txtFechaFin1').text(r.fecha_entrega).css('display', 'inline-block')
 
-            const listaComentarios = document.querySelector('#listaComentarios1')
-            listaComentarios.innerHTML = ''
-            const comentarios = JSON.parse(r.mensajes)
-            if (comentarios) {
-                $('#divComentarios1').css('display', 'inline-block')
-            } else {
-                $('#divComentarios1').css('display', 'none')
-            }
-            comentarios.forEach(x => {
-                listaComentarios.innerHTML += `
-                    <li>
-                        <div class="timeline-badge primary"></div>
-                        <a class="timeline-panel text-muted">
-                            <span class="fechaMensajes">${x.fecha}</span>
-                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
-                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
-                            </h6>
-                        </a>
-                    </li>
-                `
-            })
-
-            let txtEstado = 'Completado'
-            if (r.estado == 0 || r.estado == 1) {
-                const fechaActual = new Date().toLocaleDateString('fr-CA')
-                $('#tiempoTxt-sidebar1').text('A tiempo')
-                tiempo.css('display', 'inline-table')
-                if (fechaActual > r.fecha_entrega){
-                    $('#tiempoTxt-sidebar1').text('Retrasada')
+                const listaComentarios = document.querySelector('#listaComentarios1')
+                listaComentarios.innerHTML = ''
+                const comentarios = JSON.parse(r.mensajes)
+                if (comentarios) {
+                    $('#divComentarios1').css('display', 'inline-block')
+                    comentarios.forEach(x => {
+                        listaComentarios.innerHTML += `
+                            <li>
+                                <div class="timeline-badge primary"></div>
+                                <a class="timeline-panel text-muted">
+                                    <span class="fechaMensajes">${x.fecha}</span>
+                                    <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                        <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                                    </h6>
+                                </a>
+                            </li>
+                        `
+                    })
+                } else {
+                    $('#divComentarios1').css('display', 'none')
                 }
-                txtEstado = 'Pendiente'
-                if (r.estado == 1) txtEstado = 'En Proceso'
-            }
-            $('#estado-sidebar1').text(txtEstado).css('display', 'inline-block')
-        })
+                
+                let txtEstado = 'Completado'
+                if (r.estado == 0 || r.estado == 1) {
+                    const fechaActual = new Date().toLocaleDateString('fr-CA')
+                    $('#tiempoTxt-sidebar1').text('A tiempo')
+                    tiempo.css('display', 'inline-table')
+                    if (fechaActual > r.fecha_entrega){
+                        $('#tiempoTxt-sidebar1').text('Retrasada')
+                    }
+                    txtEstado = 'Pendiente'
+                    if (r.estado == 1) txtEstado = 'En Proceso'
+                }
+                $('#estado-sidebar1').text(txtEstado).css('display', 'inline-block')
+            })
+        }        
     }
 
     function mostrarTarea(idTarea) {
-        const tiempo = $('#tiempo-sidebar2')
-        tiempo.css('display', 'none')
-        $('#prioridad-sidebar-div2').css('display', 'none');
-        $('#divTxtComentario2').css('display', 'none');
-        $('#sidebarEstrategico').addClass('active');
-        $('#cuerpoGeneral').css('overflow-y', 'hidden');
+        if ($('#sidebarEstrategico').length > 0) {
+            const tiempo = $('#tiempo-sidebar2')
+            tiempo.css('display', 'none')
+            $('#prioridad-sidebar-div2').css('display', 'none');
+            $('#divTxtComentario2').css('display', 'none');
+            $('#sidebarEstrategico').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden');
 
-        fetch('/editarTarea', {
-            method: 'POST',
-            body: JSON.stringify({idTarea, item:2}),
-            headers: {'Content-Type': 'application/json'}
-        }).then(res => res.json())
-        .catch(error => console.error('Error Mostrar Tarea: ', error))
-        .then(r => {
-            console.group("INFO DE LA TAREA -- PLAN ESTRATÉGICO >> ")
-            console.log(r)
-            console.log("\n")
-            console.groupEnd()
-            $('#fechaIni-sidebar2').css('display', 'none')
-            $('#fechaFin-sidebar2').css('display', 'none')
-            $('#dimension-sidebar2').css('display', 'none')
-            $('#btnGuardar-sidebar2').css('display', 'none')
-            $("#estado2").css('display', 'none')
-            $('#actividad-sidebar2').val(r.actividad).attr('readonly', true)
-            $("#descripcion-sidebar2").val(r.descripcion).attr('readonly', true, 'placeholder': '')
-            $("#responsable2").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
-            $('#txtFechaIni2').text(r.fecha_inicio).css('display', 'inline-block')
-            $('#txtFechaFin2').text(r.fecha_entrega).css('display', 'inline-block')
-            $('#txtDimension2').text(r.dimension).css('display', 'inline-block')
+            fetch('/editarTarea', {
+                method: 'POST',
+                body: JSON.stringify({idTarea, item:2}),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Mostrar Tarea: ', error))
+            .then(r => {
+                console.group("INFO DE LA TAREA -- PLAN ESTRATÉGICO >> ")
+                console.log(r)
+                console.log("\n")
+                console.groupEnd()
+                $('#fechaIni-sidebar2').css('display', 'none')
+                $('#fechaFin-sidebar2').css('display', 'none')
+                $('#dimension-sidebar2').css('display', 'none')
+                $('#btnGuardar-sidebar2').css('display', 'none')
+                $("#estado2").css('display', 'none')
+                $('#actividad-sidebar2').val(r.actividad).attr('readonly', true)
+                $("#descripcion-sidebar2").val(r.descripcion).attr({'readonly': true, 'placeholder': ''})
+                $("#responsable-sidebar2").val(r.responsable).attr({'readonly': true, 'placeholder': ''})
+                $('#txtFechaIni2').text(r.fecha_inicio).css('display', 'inline-block')
+                $('#txtFechaFin2').text(r.fecha_entrega).css('display', 'inline-block')
+                $('#txtDimension2').text(r.dimension).css('display', 'inline-block')
 
-            const listaComentarios = document.querySelector('#listaComentarios2')
-            listaComentarios.innerHTML = ''
-            const comentarios = JSON.parse(r.mensaje)
-            if (comentarios) {
-                $('#divComentarios2').css('display', 'inline-block')
-            } else {
-                $('#divComentarios2').css('display', 'none')
-            }
-            comentarios.forEach(x => {
-                listaComentarios.innerHTML += `
-                    <li>
-                        <div class="timeline-badge primary"></div>
-                        <a class="timeline-panel text-muted">
-                            <span class="fechaMensajes">${x.fecha}</span>
-                            <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
-                                <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
-                            </h6>
-                        </a>
-                    </li>
-                `
-            })
-            
-            let txtEstado = 'Completado'
-            if (r.estado == 0 || r.estado == 1) {
-                const fechaActual = new Date().toLocaleDateString('fr-CA')
-                $('#tiempoTxt-sidebar2').text('A tiempo')
-                tiempo.css('display', 'inline-table')
-                if (fechaActual > r.fecha_entrega){
-                    $('#tiempoTxt-sidebar2').text('Retrasada')
+                const listaComentarios = document.querySelector('#listaComentarios2')
+                listaComentarios.innerHTML = ''
+                const comentarios = JSON.parse(r.mensajes)
+                if (comentarios) {
+                    $('#divComentarios2').css('display', 'inline-block')
+                    comentarios.forEach(x => {
+                        listaComentarios.innerHTML += `
+                            <li>
+                                <div class="timeline-badge primary"></div>
+                                <a class="timeline-panel text-muted">
+                                    <span class="fechaMensajes">${x.fecha}</span>
+                                    <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                        <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                                    </h6>
+                                </a>
+                            </li>
+                        `
+                    })
+                } else {
+                    $('#divComentarios2').css('display', 'none')
                 }
-                txtEstado = 'Pendiente'
-                if (r.estado == 1) txtEstado = 'En Proceso'
-            }
-            $('#estado-sidebar2').text(txtEstado).css('display', 'inline-block')
-        })
+                
+                let txtEstado = 'Completado'
+                if (r.estado == 0 || r.estado == 1) {
+                    const fechaActual = new Date().toLocaleDateString('fr-CA')
+                    $('#tiempoTxt-sidebar2').text('A tiempo')
+                    tiempo.css('display', 'inline-table')
+                    if (fechaActual > r.fecha_entrega){
+                        $('#tiempoTxt-sidebar2').text('Retrasada')
+                    }
+                    txtEstado = 'Pendiente'
+                    if (r.estado == 1) txtEstado = 'En Proceso'
+                }
+                $('#estado-sidebar2').text(txtEstado).css('display', 'inline-block')
+            })
+        }
     }
 
 </script>
