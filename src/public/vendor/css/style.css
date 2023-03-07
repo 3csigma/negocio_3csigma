@@ -13121,7 +13121,7 @@ a.active {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  background-color: #50368c;
+  background-color: #000000;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-three-bounce 1.4s ease-in-out 0s infinite both;
@@ -24839,57 +24839,57 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"] .chart_widget_tab_one .nav-link.active {
-  background-color: #50368c;
-  border: 1px solid #50368c;
+  background-color: #000000;
+  border: 1px solid #000000;
 }
 
 [data-primary="color_3"] .chart_widget_tab_one .nav-link.active:hover {
-  border: 1px solid #50368c;
+  border: 1px solid #000000;
 }
 
 [data-primary="color_3"] .social-icon2 a {
-  border: 0.1rem solid #50368c;
+  border: 0.1rem solid #000000;
 }
 
 [data-primary="color_3"] .social-icon2 i {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .social-icon3 ul li a:hover i {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .bgl-primary {
   background: #496ff2;
   border-color: #496ff2;
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .tdl-holder input[type=checkbox]:checked+i {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"] .footer .copyright a {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .hamburger .line {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"] svg.pulse-svg .first-circle,
 [data-primary="color_3"] svg.pulse-svg .second-circle,
 [data-primary="color_3"] svg.pulse-svg .third-circle {
-  fill: #50368c;
+  fill: #000000;
 }
 
 [data-primary="color_3"] .pulse-css {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"] .pulse-css:after,
 [data-primary="color_3"] .pulse-css:before {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 [data-primary="color_3"] .notification_dropdown .dropdown-menu-right .notification_title {
@@ -24903,30 +24903,30 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"] .header-right .header-profile .profile_title {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"][data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .nav-control .hamburger .line {
-  background-color: #50368c !important;
+  background-color: #000000 !important;
 }
 
 [data-primary="color_3"] .deznav .metismenu>li>a svg {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .deznav .metismenu>li:hover>a,
 [data-primary="color_3"] .deznav .metismenu>li:focus>a {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .deznav .metismenu>li.mm-active>a {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .deznav .metismenu ul a:hover,
 [data-primary="color_3"] .deznav .metismenu ul a:focus,
 [data-primary="color_3"] .deznav .metismenu ul a.mm-active {
-  color: #50368c;
+  color: #000000;
 }
 
 @media (min-width: 767px) {
@@ -24940,7 +24940,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"][data-sidebar-style="overlay"] .nav-header .hamburger.is-active .line {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 [data-primary="color_3"] .nav-user {
@@ -24961,20 +24961,20 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"][data-theme-version="dark"] .pagination .page-item.active .page-link {
-  background: #50368c;
-  border-color: #50368c;
+  background: #000000;
+  border-color: #000000;
 }
 
 [data-primary="color_3"][data-theme-version="dark"] .header-left input:focus {
-  border-color: #50368c;
+  border-color: #000000;
 }
 
 [data-primary="color_3"][data-theme-version="dark"] .loader__bar {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"][data-theme-version="dark"] .loader__ball {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"][data-theme-version="transparent"] .header-left input:focus {
@@ -24982,28 +24982,28 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"] .new-arrival-content .price {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .chart-link a i.text-primary {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] #user-activity .nav-tabs .nav-link.active {
-  background: #50368c;
-  border-color: #50368c;
+  background: #000000;
+  border-color: #000000;
 }
 
 [data-primary="color_3"] span#counter {
-  color: #50368c;
+  color: #000000;
 }
 
 [data-primary="color_3"] .welcome-content:after {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"] .timeline-badge {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 [data-primary="color_3"] .page-timeline .timeline-workplan[data-primary="color_3"] .page-timeline .timeline .timeline-badge:after {
@@ -25011,17 +25011,17 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 [data-primary="color_3"] .sk-three-bounce .sk-child {
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 [data-primary="color_3"] .dropdown-item.active,
 [data-primary="color_3"] .dropdown-item:active {
   color: #fff;
-  background-color: #50368c;
+  background-color: #000000;
 }
 
 [data-primary="color_3"] .overlay-box:after {
-  background: #50368c;
+  background: #000000;
 }
 
 [data-primary="color_3"] .btn-primary {
@@ -42373,6 +42373,7 @@ table.dataTable thead th {
   table.dataTable tbody td {
     padding: 8px 10px;
     font-size: 14px;
+    font-weight: 400;
   }
 }
 
