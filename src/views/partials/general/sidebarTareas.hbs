@@ -18,7 +18,7 @@
                             <option value="1">En Proceso</option>
                             <option value="2">Completada</option>
                         </select>
-                        <span id="estado-sidebar2" class="badge light badge-success" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #fff; padding: 10px 30px; padding-left: 20px; display:none;"></span>
+                        <span id="estado-sidebar2" class="badge light badge-success color_tertiary" style="color: #000000; padding: 10px 30px; padding-left: 20px; display:none; margin: 0px -17px"></span>
                     </div>
                     <div class="col-5" id="prioridad-sidebar-div2">
                         <select class="form-select" id="prioridad2" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
@@ -30,7 +30,7 @@
                         </select>
                     </div>
                     <div class="col-2" style="margin-left: -52px;">
-                        <span id="tiempo-sidebar2" class="badge light badge-success color_gradient text-white" style="padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar2"></span>
+                        <span id="tiempo-sidebar2" class="badge light badge-success color_tertiary text-primary" style="padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar2"></span>
                     </div>
                     <div class="col-12">
                         <hr style="border-top: 1px solid #fff !important;">                                
@@ -125,7 +125,7 @@
                 </div>
                 <div class="row" id="divTxtComentario2" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
                     <textarea id="comentario2" rows="2" class="form-control" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em; border:none;"></textarea>
-                        <button id="btnComentario2" class="color_gradient text-white" onclick="addComentario(2)" style="width: 28%;border: none;height: 32px; margin-right: 10px;font-size: 13px;">
+                        <button id="btnComentario2" class="color_primary text-white" onclick="addComentario(2)" style="width: 28%;border: none;height: 32px; margin-right: 10px;font-size: 13px;">
                             Comentar
                         </button>
                 </div>
@@ -133,7 +133,7 @@
                 {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
                 <div class="row" id="btnGuardar-sidebar2">
                     <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
-                        <button onclick="actualizarTarea()" class="btn color_gradient text-white" style="margin-top: 1em; padding: 10px 15px;border:none">
+                        <button onclick="actualizarTarea()" class="btn color_primary text-white" style="margin-top: 1em; padding: 10px 15px;border:none">
                             <p class="font-w500 m-auto">Guardar Cambios</p>
                         </button>
                     </div>

@@ -41,17 +41,9 @@
 .color_primary {
     background: #000000 !important;
 }
-.color_secondary {
-    background: #50368c !important;
-}
+
 .color_tertiary {
     background: #FFE000 !important;
-}
-.color_gradient {
-    background: linear-gradient(180deg, #FED061 -149.33%, #812082 -19.27%, #50368C 158.67%) !important;
-}
-.card_gradient {
-    background: linear-gradient(20deg, rgba(80,54,140,1) 0%, rgba(129,32,130,1) 50%, rgba(254,208,97,1) 100%)!important;
 }
 
 /* ****************************************************** 
@@ -72,12 +64,12 @@
   }
   
   .text-secondary {
-    color: #50368c !important;
+    color: #000000 !important;
   }
   
   a.text-secondary:hover,
   a.text-secondary:focus {
-    color: #50368c !important;
+    color: #000000 !important;
   }
 
   .text-tertiary {

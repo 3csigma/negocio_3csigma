@@ -118,7 +118,7 @@ a.animated_link:before {
   bottom: -5px;
   opacity: 1;
   left: 0;
-  background-color: #50368C;
+  background-color: #000000;
   visibility: hidden;
   -webkit-transform: scaleX(0);
   transform: scaleX(0);

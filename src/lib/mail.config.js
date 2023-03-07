@@ -1883,7 +1883,7 @@ const consultorAsignadoHTML = (nombre, imagen, mensaje) => {
 <tbody>
 <tr>
 <td>
-<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #50368c; background-image: url('${imagen}'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" title="Bienvenido a 3C Sigma" aria-label="Bienvenido a 3C Sigma" width="600">
+<table align="center" border="0" cellpadding="0" cellspacing="0" class="row-content stack" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-size: auto; background-color: #000000; background-image: url('${imagen}'); background-position: top center; background-repeat: no-repeat; color: #000000; width: 600px;" title="Bienvenido a 3C Sigma" aria-label="Bienvenido a 3C Sigma" width="600">
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; vertical-align: top; padding-top: 5px; padding-bottom: 5px; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">

@@ -404,7 +404,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmDiag.tablasVacias = true;
     } else {        
         frmDiag.color = 'badge-success'
-        frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
+        frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
 

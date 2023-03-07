@@ -1,5 +1,5 @@
 node_modules
-src/keys.js
+src/.env
 .env
 src/public/archivos_analisis_empresa/*.jpg
 src/public/archivos_analisis_empresa/*.jpeg

@@ -108,7 +108,7 @@
     <linearGradient id="ef9ed6b3-2591-4e87-a3ec-2c70f12cfcdb" x1="42.1534" y1="49.8805" x2="53.7383" y2="-2.2515" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#fed061"/>
       <stop offset="0.4944" stop-color="#812082"/>
-      <stop offset="1" stop-color="#50368c"/>
+      <stop offset="1" stop-color="#000000"/>
     </linearGradient>
     <linearGradient id="a03f1c38-a0bf-4a76-ada2-ed2a2059d31c" x1="43.5577" y1="-6.0167" x2="18.4571" y2="47.0807" xlink:href="#ef9ed6b3-2591-4e87-a3ec-2c70f12cfcdb"/>
     <linearGradient id="fa04fd81-d548-43da-a412-bf29f2255da1" x1="79.1689" y1="10.8176" x2="54.0683" y2="63.9151" xlink:href="#ef9ed6b3-2591-4e87-a3ec-2c70f12cfcdb"/>
