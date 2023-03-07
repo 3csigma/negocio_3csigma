@@ -6,8 +6,8 @@
     font-weight: 600;
     padding: 4px 10px;
     border: 1px solid transparent; */
-    color: white;
-    background: linear-gradient(264deg, #222022, #7b7b7b);
+    color: rgb(0, 0, 0);
+    background: linear-gradient(264deg, #FFE000, #FFB800);
     background-size: 600% 600%;
     -webkit-animation: PagoUnico_BG 2s ease infinite;
     -moz-animation: PagoUnico_BG 2s ease infinite;
@@ -16,7 +16,7 @@
 }
 
 .btn-pago-analisis:hover {
-    color: white !important;
+    color: rgb(0, 0, 0) !important;
 }
 
 @-webkit-keyframes PagoUnico_BG {

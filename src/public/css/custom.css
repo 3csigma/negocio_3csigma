@@ -302,7 +302,7 @@ button.bg-estrategico:focus {
 }
 
 #btn-indicador1 {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%);
     border-radius: 22px;
     color: #fff;
     width: 125px;
@@ -315,13 +315,13 @@ button.bg-estrategico:focus {
 }
 
 #btn-indicador1:active {
-    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%);
+    background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%);
 }
 
 #btn-indicador2 {
     background: #f2f2f2;
     border-radius: 22px;
-    color: #50368C;
+    color: #000000;
     width: 140px;
     height: 50px;
     text-align: center;
