@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
-const { getTemplate, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
+const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos } = require('../lib/helpers')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
@@ -59,7 +59,7 @@ passport.use('local.registro', new LocalStrategy({
             newUser.clave = await helpers.encryptPass(clave)
 
             // Obtener la plantilla de Email
-            const template = getTemplate(nombres, nombre_empresa, codigo);
+            const template = confirmarRegistro(nombres, nombre_empresa, codigo);
             const templateNuevaEmpresa = nuevaEmpresa('Carlos', nombre_empresa)
 
             console.log("\nEnviando email al admin de nueva empresa registrada..\n")

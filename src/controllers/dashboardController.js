@@ -750,7 +750,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     /**************************************************************************************** */
     /* => PLAN EMPRESARIAL ***************************************************************** */
     // PROPUESTA
-    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
+    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Proyecto de consultoría')
     let pagos_empresarial = {}, tareasEmpresarial = null;
     const empresarial = {                     
         negocio: { ver: 'none' },
@@ -761,7 +761,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         otro: { ver: 'none' }
     }
     if (propuesta.empresarial) {
-        datos.etapa = 'Propuesta de plan empresarial enviada'
+        datos.etapa = 'Propuesta de Proyecto de consultoría enviada'
         propuesta.empresarial.finalizada = false;
         if (datosEmpresa.etapa_empresarial == 1) { propuesta.empresarial.finalizada = true; }
 
@@ -782,7 +782,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_empresarial.unico.precio = parseFloat(propuesta.empresarial.precio_total*0.9);
 
         if (pagos_empresarial.unico.estado == 1) {
-            datos.etapa = 'Plan empresarial pago único'
+            datos.etapa = 'Proyecto de consultoría pago único'
             pagos_empresarial.unico.color = 'success'
             pagos_empresarial.unico.txt = 'Pagado 100%'
             propuesta.empresarial.pago = true;
@@ -790,7 +790,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             precioPagado = pagos_empresarial.unico.precio;
         }
         if (pagos_empresarial.uno.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 60%'
+            datos.etapa = 'Proyecto de consultoría - Pagado 60%'
             pagos_empresarial.uno.color = 'success'
             pagos_empresarial.uno.txt = 'Pagado 60%'
             propuesta.empresarial.pago = true;
@@ -798,14 +798,14 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_empresarial.dos.btn = true;
         }
         if (pagos_empresarial.dos.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 80%'
+            datos.etapa = 'Proyecto de consultoría - Pagado 80%'
             pagos_empresarial.dos.color = 'success'
             pagos_empresarial.dos.txt = 'Pagado 80%'
             pagos_empresarial.dos.btn = false;
             pagos_empresarial.tres.btn = true;
         }
         if (pagos_empresarial.tres.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 100%'
+            datos.etapa = 'Proyecto de consultoría - Pagado 100%'
             pagos_empresarial.tres.color = 'success'
             pagos_empresarial.tres.txt = 'Pagado 100%'
             pagos_empresarial.tres.btn = false;
@@ -818,7 +818,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.negocio.fecha = archivo.fecha;
             empresarial.negocio.ver = 'block';
             empresarial.negocio.url = archivo.url;
-            datos.etapa = 'Archivo de Plan de negocio - Plan Empresarial'
+            datos.etapa = 'Archivo de Plan de negocio - Proyecto de consultoría'
         }
         // PLAN DE MARKETING
         archivo = archivosEmpresarial.find(x => x.tipo == "Plan de marketing")
@@ -826,7 +826,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.marketing.fecha = archivo.fecha;
             empresarial.marketing.ver = 'block';
             empresarial.marketing.url = archivo.url;
-            datos.etapa = 'Archivo de Plan de marketing - Plan Empresarial'
+            datos.etapa = 'Archivo de Plan de marketing - Proyecto de consultoría'
         }
         // BRANDING
         archivo = archivosEmpresarial.find(x => x.tipo == "Branding")
@@ -834,7 +834,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.branding.fecha = archivo.fecha;
             empresarial.branding.ver = 'block';
             empresarial.branding.url = archivo.url;
-            datos.etapa = 'Archivo de Branding - Plan Empresarial'
+            datos.etapa = 'Archivo de Branding - Proyecto de consultoría'
         }
         // RENDERS
         archivo = archivosEmpresarial.find(x => x.tipo == "Renders")
@@ -842,7 +842,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.renders.fecha = archivo.fecha;
             empresarial.renders.ver = 'block';
             empresarial.renders.url = archivo.url;
-            datos.etapa = 'Archivo de Renders - Plan Empresarial'
+            datos.etapa = 'Archivo de Renders - Proyecto de consultoría'
         }
         // WEBSITE
         archivo = archivosEmpresarial.find(x => x.tipo == "Website")
@@ -850,7 +850,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.website.fecha = archivo.fecha;
             empresarial.website.ver = 'block';
             empresarial.website.url = archivo.url;
-            datos.etapa = 'Link de website - Plan Empresarial'
+            datos.etapa = 'Link de website - Proyecto de consultoría'
         }
         // OTRO
         archivo = archivosEmpresarial.find(x => x.tipo == "Otro")
@@ -859,7 +859,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.otro.ver = 'block';
             empresarial.otro.url = archivo.url;
             empresarial.otro.nombre = archivo.nombre;
-            datos.etapa = 'Archivo Otro - Plan Empresarial'
+            datos.etapa = 'Archivo Otro - Proyecto de consultoría'
         }
 
         // PROCESO PARA LAS TAREAS (PLAN EMPRESARIAL)
@@ -1096,7 +1096,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             orden = 2;
             link_Imagen = linkBase+'Consultor-asignado_analisis.jpg';
         }
-        if (key == 'Plan Empresarial') {
+        if (key == 'Proyecto de consultoría') {
             orden = 3;
             link_Imagen = linkBase+'Consultor-asignado_Plan_Empresarial.jpg';
         }
@@ -1115,7 +1115,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
             const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
-            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
+            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, key);
             const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
             if (resultEmail == false) {
                 console.log("\nOcurrio un error inesperado al enviar el email consultor asignado")
@@ -1699,7 +1699,7 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
 
     if (archivoActual.affectedRows > 0) {
         const email = e.email
-        let asunto = 'Se ha cargado un nuevo archivo en Plan Empresarial'
+        let asunto = 'Se ha cargado un nuevo archivo en Proyecto de consultoría'
         let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
         
         // Enviar Email
@@ -1760,7 +1760,7 @@ dashboardController.websiteEmpresarial = async (req, res) => {
 
     if (linkActual.affectedRows > 0) {
         const email = e.email
-        let asunto = 'Se ha cargado un nuevo link en Plan Empresarial'
+        let asunto = 'Se ha cargado un nuevo link en Proyecto de consultoría'
         let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
         
         // Enviar Email
@@ -1769,7 +1769,7 @@ dashboardController.websiteEmpresarial = async (req, res) => {
         if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de link subido a la empresa >>>> \n")
         } else {
-            console.log("\n<<<<< Se ha notificado la subida de un nuevo link de Plan Empresarial al email de la empresa >>>>>\n")
+            console.log("\n<<<<< Se ha notificado la subida de un nuevo link de Proyecto de consultoría al email de la empresa >>>>>\n")
         }
 
         r.ok = true;
@@ -1790,13 +1790,13 @@ dashboardController.finalizarEtapa = async (req, res) => {
         await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [etapa, codigo]);
         const texto = 'Ingresa a tu cuenta para revisar los archivos cargados por tu consultor.'
         const link = 'plan-empresarial';
-        template = etapaFinalizadaHTML(empresa.nombre_empresa, 'Plan Empresarial', texto, link);
+        template = etapaFinalizadaHTML(empresa.nombre_empresa, 'Proyecto de consultoría', texto, link);
         // Enviar Email
-        const resultEmail = await sendEmail(empresa.email, 'Plan empresarial finalizado', template)
+        const resultEmail = await sendEmail(empresa.email, 'Proyecto de consultoría finalizado', template)
         if (resultEmail == false) {
-            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de etapa de Plan Empresarial finalizada >>>> \n")
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de etapa de Proyecto de consultoría finalizada >>>> \n")
         } else {
-            console.log("\n<<<<< Se ha notificado al email de la empresa que ha finalizado la etapa de Plan Empresarial >>>>>\n")
+            console.log("\n<<<<< Se ha notificado al email de la empresa que ha finalizado la etapa de Proyecto de consultoría >>>>>\n")
             result = true;
         }
     }

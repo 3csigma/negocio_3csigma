@@ -270,7 +270,7 @@
             }).then(res => res.json())
             .catch(error => console.error('Error Actualizar Tarea: ', error))
             .then(response => {
-                location.hash = '#plan-empresarial';
+                location.hash = '#proyecto-de-consultoria';
                 location.reload(true)
             })
         }
@@ -561,7 +561,7 @@
                 }).then(res => res.json())
                 .catch(error => console.error('Error Eliminar Tarea: ', error))
                 .then(response => {
-                    item == 1 ? location.hash = '#plan-empresarial' : location.hash = '#plan-estrategico';
+                    item == 1 ? location.hash = '#proyecto-de-consultoria' : location.hash = '#plan-estrategico';
                     location.reload(true)
                 })
             }
@@ -615,7 +615,7 @@
     /*************************************************************************/
     function finalizarEtapa_Empresarial(codigo) {
         Swal.fire({
-            title: '¿Deseas marcar el Plan Empresarial como finalizado?',
+            title: '¿Deseas marcar el Proyecto de Consultoría como finalizado?',
             html: 'La empresa recibirá una notificación de esto.</br>' +
                 'Esta acción no se puede deshacer',
             icon: 'warning',
@@ -633,8 +633,7 @@
                 }).then(res => res.json())
                 .catch(error => console.error('Error Finalizar Etapa: ', error))
                 .then(response => {
-                    //item == 1 ? location.hash = '#plan-empresarial' : location.hash = '#plan-estrategico';
-                    location.hash = '#plan-empresarial';
+                    location.hash = '#proyecto-de-consultoria';
                     location.reload(true);
                 })
             }
@@ -842,7 +841,7 @@
             if (URLhash === '#plan-estrategico') {
                 $('#item-estrategico').trigger("click");
             }
-            if (URLhash === '#plan-empresarial') {
+            if (URLhash === '#proyecto-de-consultoria') {
                 $('#item-empresarial').trigger("click");
             }
 

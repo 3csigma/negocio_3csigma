@@ -800,7 +800,7 @@ empresaController.planEmpresarial = async (req, res) => {
     const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa2 = {lista: true}
@@ -866,9 +866,9 @@ empresaController.planEmpresarial = async (req, res) => {
             escena6 = true
             activarPagoUnico = false
             btnDesactivo
-            msgDesactivo = "Plan empresarial pagado"
-            msgDesactivo2 = "Plan empresarial pagado"
-            msgDesactivo3 = "Plan empresarial pagado"
+            msgDesactivo = "Proyecto de consultoría pagado"
+            msgDesactivo2 = "Proyecto de consultoría pagado"
+            msgDesactivo3 = "Proyecto de consultoría pagado"
         } else if  (objEmpresarial1.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
             escena1 = true
             msgActivo = "Primera cuota lista para pagarse"

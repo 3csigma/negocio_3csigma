@@ -117,7 +117,7 @@
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
-                                                <option value="Plan_Empresarial">Plan Empresarial</option>
+                                                <option value="Plan_Empresarial">Proyecto de Consultoría</option>
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
@@ -379,9 +379,9 @@
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
                             {{/if}}
                             {{#if botonesEtapas.plan1}}
-                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab"  style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
+                            <li class="nav-item"><a href="#proyecto-de-consultoria" data-toggle="tab"  style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
                             {{else}}
-                            <li class="nav-item"><a href="#plan-empresarial" data-toggle="tab" class="nav-link" id="item-empresarial">Plan Empresarial</a></li>
+                            <li class="nav-item"><a href="#proyecto-de-consultoria" data-toggle="tab" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
                             {{/if}}
                             {{#if botonesEtapas.plan2}}
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
@@ -1568,13 +1568,13 @@
                             </div>
 
                             {{!-- PESTAÑA 4 - PLAN EMPRESARIAL --}}
-                            <div id="plan-empresarial" class="tab-pane fade">
+                            <div id="proyecto-de-consultoria" class="tab-pane fade">
 
                                 <!-- ======================== PROPUESTA EMPRESARIAL ======================== -->
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Propuesta de Plan Empresarial</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta de Proyecto de Consultoría</h4>
                                         </div>
                                         {{#if botonesEtapas.plan1}}
                                         {{#unless propuesta.empresarial.pago}}
@@ -1593,7 +1593,7 @@
                                                 </div>
                                                 <input type="hidden" name="idEmpresa" value="{{datos.idEmpresa}}">
                                                 <input type="hidden" name="codigo" value="{{datos.code}}">
-                                                <input type="hidden" name="tipo_propuesta" value="Plan empresarial">
+                                                <input type="hidden" name="tipo_propuesta" value="Proyecto de Consultoría">
                                                 <div class="col-md-3 mx-auto">
                                                     <button type="submit" class="btn color_primary text-white" style="margin-top: 1em; width: 108%; padding: 10px 15px;">
                                                         <p class="font-w500 m-auto">Enviar Propuesta</p>
@@ -1619,7 +1619,7 @@
                                                     <tr>
                                                         {{#if propuesta.empresarial.link_propuesta}}
                                                         <td>{{#if propuesta.empresarial.fecha}}{{propuesta.empresarial.fecha}}{{else}}N/A{{/if}}</td>
-                                                        <td>Plan empresarial</td>
+                                                        <td>Proyecto de Consultoría</td>
                                                         <td class="precios_celdas">{{propuesta.empresarial.precio_total}}</td>
                                                         <td>
                                                             <div class="d-flex justify-content-center align-items-center">
@@ -1685,7 +1685,7 @@
                                                             {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_empresarial.unico.btn}}
-                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(0, {{datos.idEmpresa}}, 'proyecto de consultoría')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
@@ -1704,7 +1704,7 @@
                                                             {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_empresarial.uno.btn}}
-                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(1, {{datos.idEmpresa}}, 'proyecto de consultoría')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
@@ -1721,7 +1721,7 @@
                                                             {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_empresarial.dos.btn}}
-                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(2, {{datos.idEmpresa}}, 'proyecto de consultoría')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
@@ -1738,7 +1738,7 @@
                                                             {{#if rolAdmin}}
                                                             <td>
                                                                 {{#if pagos_empresarial.tres.btn}}
-                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'plan empresarial')" class="btn btn-success shadow btn-xs sharp"
+                                                                <a onclick="pagoManualEmpresas(3, {{datos.idEmpresa}}, 'proyecto de consultoría')" class="btn btn-success shadow btn-xs sharp"
                                                                     style="color: white"><i class="fa fa-usd"></i></a>
                                                                 {{else}}
                                                                 <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">

@@ -281,7 +281,7 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
     let precio = 0;
     if (pay) {
         precio = (parseFloat(pay.precio_total*0.9))
@@ -298,7 +298,7 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago Único - Plan Empresarial',
+                        name: 'Pago Único - PProyecto de Consultoría',
                         images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                     },
                     unit_amount: precio,
@@ -328,7 +328,7 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
     let precio = 0;
     if (pay) {
         precioE2 = precio;
@@ -351,7 +351,7 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago primera cuota - Plan Empresarial',
+                        name: 'Pago primera cuota - Proyecto de Consultoría',
                         images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                     },
                     unit_amount: precio,
@@ -380,7 +380,7 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
     let precio = 0;
     if (pay) {
         precioE2 = precio;
@@ -403,7 +403,7 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago segunda cuota - PLan Empresarial',
+                        name: 'Pago segunda cuota - Proyecto de Consultoría',
                         images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                     },
                     unit_amount: precio,
@@ -433,7 +433,7 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
     let precio = 0;
     if (pay) {
         precioE2 = precio;
@@ -456,7 +456,7 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago tercera cuota - Plan Empresarial',
+                        name: 'Pago tercera cuota - Proyecto de Consultoría',
                         images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                     },
                     unit_amount: precio,
