@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
+const dkim = require("nodemailer-dkim");
 const my_domain = process.env.MY_DOMAIN;
+const { privateKey_DKIM } = require("../config/index.js");
 
 /************************************************
  *  TRANSPORTER PARA ENVÍOS EN LOCAL
@@ -12,6 +14,11 @@ let data = {
 		user: process.env.USER_EMAIL,
 		pass: process.env.PASS_EMAIL,
 	},
+	dkim: {
+        domainName: '3csigma.com',
+        keySelector: 'selector1-mail-noreply',
+        privateKey: privateKey_DKIM
+    }
 }
 if (my_domain != 'http://localhost:4000') {
 	/************************************************
@@ -22,6 +29,11 @@ if (my_domain != 'http://localhost:4000') {
 		port: 25,
 		secure: false,
 		ignoreTLS: true,
+		dkim: {
+			domainName: '3csigma.com',
+			keySelector: 'selector1-mail-noreply',
+			privateKey: privateKey_DKIM
+		}
 	}
 }
 
