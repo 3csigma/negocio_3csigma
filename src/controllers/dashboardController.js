@@ -748,9 +748,9 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     /**************************************************************************************** */
-    /* => PLAN EMPRESARIAL ***************************************************************** */
+    /* => PROYECTO DE CONSULTORÍA ***************************************************************** */
     // PROPUESTA
-    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let pagos_empresarial = {}, tareasEmpresarial = null;
     const empresarial = {                     
         negocio: { ver: 'none' },
@@ -761,7 +761,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         otro: { ver: 'none' }
     }
     if (propuesta.empresarial) {
-        datos.etapa = 'Propuesta de Proyecto de consultoría enviada'
+        datos.etapa = 'Propuesta de Proyecto de Consultoría enviada'
         propuesta.empresarial.finalizada = false;
         if (datosEmpresa.etapa_empresarial == 1) { propuesta.empresarial.finalizada = true; }
 
@@ -1086,23 +1086,14 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         const filtro = asignados.find(x => x.etapa == key)
         // console.log("\n FILTRO ---> ", filtro)
         let orden = 1;
-        let link_Imagen = '';
-        let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
-        if (key == 'Diagnóstico') {
-            link_Imagen = linkBase+'Consultor-asignado_Diagnostico.jpg';
-            mensaje = 'Ahora puedes realizar el pago del Diagnóstico de Negocio'
-        }
         if (key == 'Análisis') {
             orden = 2;
-            link_Imagen = linkBase+'Consultor-asignado_analisis.jpg';
         }
-        if (key == 'Proyecto de consultoría') {
+        if (key == 'Proyecto de Consultoría') {
             orden = 3;
-            link_Imagen = linkBase+'Consultor-asignado_Plan_Empresarial.jpg';
         }
         if (key == 'Plan Estratégico') {
             orden = 4;
-            link_Imagen = linkBase+'Consultor-asignado_Plan_Estrategico.jpg';
         }
         if (filtro) {
             const dato = {consultor: value.id}

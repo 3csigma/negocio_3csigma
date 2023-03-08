@@ -192,7 +192,7 @@ helpers.habilitar_siguientePago = async () => {
         }
 
         // PROCESO PARA VALIDAR PAGO EN PROPUESTAS DE PLAN EMPRESARIAL
-        const propuestas_empresarial = propuestas.filter(x => x.tipo_propuesta == 'Proyecto de consultoría')
+        const propuestas_empresarial = propuestas.filter(x => x.tipo_propuesta == 'Proyecto de Consultoría')
         if (propuestas_empresarial.length > 0) {
             propuestas_empresarial.forEach(async (x) => {
                 const isFound = pagos.find(p => p.id_empresa == x.empresa)

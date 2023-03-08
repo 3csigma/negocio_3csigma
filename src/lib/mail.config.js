@@ -15,7 +15,7 @@ let data = {
 }
 if (my_domain != 'http://localhost:4000') {
 	/************************************************
-	 *  TRANSPORTER PARA ENVÍOS DESDE EL SERVER
+	 *  TRANSPORTER PARA ENVÍOS DESDE EL SERVER - GODADDY
 	*/
 	data = {
 		host: "localhost",
@@ -40,7 +40,7 @@ transporter.verify(function (error, success) {
 const sendEmail = async (email, subject, html) => {
 	try {
 		await transporter.sendMail({
-			from: `3C Sigma <${process.env.USER_EMAIL}>`, // sender address
+			from: `PAOM SYSTEM <${process.env.USER_EMAIL}>`, // sender address
 			to: email, // list of receivers
 			subject, // Subject line
 			html, // html body
@@ -1950,7 +1950,7 @@ const consultorAsignadoHTML = (empresa, etapa) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:232px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">IR A MI CUENTA</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/login" style="height:48px;width:232px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/login" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">IR A MI CUENTA</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -2302,7 +2302,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:269px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/empresas-asignadas" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR EMPRESAS</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/empresas-asignadas" style="height:48px;width:269px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/empresas-asignadas" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR EMPRESAS</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>

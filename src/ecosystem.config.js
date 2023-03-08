@@ -2,7 +2,7 @@ const name = process.env.APP_NAME;
 console.log("APP_NAME: " + name);
 module.exports = {
     apps: [{
-        name: process.env.APP_NAME || "Test PAOM",
+        name: process.env.APP_NAME || "App PAOM",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart

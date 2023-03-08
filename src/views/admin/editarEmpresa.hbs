@@ -117,7 +117,7 @@
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
-                                                <option value="Plan_Empresarial">Proyecto de Consultoría</option>
+                                                <option value="Proyecto_de_Consultoría">Proyecto de Consultoría</option>
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
@@ -379,9 +379,9 @@
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
                             {{/if}}
                             {{#if botonesEtapas.plan1}}
-                            <li class="nav-item"><a href="#proyecto-de-consultoria" data-toggle="tab"  style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
+                            <li class="nav-item"><a href="#proyecto-consultoria" data-toggle="tab"  style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
                             {{else}}
-                            <li class="nav-item"><a href="#proyecto-de-consultoria" data-toggle="tab" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
+                            <li class="nav-item"><a href="#proyecto-consultoria" data-toggle="tab" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
                             {{/if}}
                             {{#if botonesEtapas.plan2}}
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
@@ -1567,8 +1567,8 @@
                                 {{/if}}
                             </div>
 
-                            {{!-- PESTAÑA 4 - PLAN EMPRESARIAL --}}
-                            <div id="proyecto-de-consultoria" class="tab-pane fade">
+                            {{!-- PESTAÑA 4 - PROYECTO DE CONSULTORÍA --}}
+                            <div id="proyecto-consultoria" class="tab-pane fade">
 
                                 <!-- ======================== PROPUESTA EMPRESARIAL ======================== -->
                                 <div class="card">

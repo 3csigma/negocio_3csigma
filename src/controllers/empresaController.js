@@ -800,7 +800,7 @@ empresaController.planEmpresarial = async (req, res) => {
     const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa2 = {lista: true}

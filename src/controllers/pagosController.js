@@ -117,7 +117,7 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per1;
         precio = pay.precio_per1 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -172,7 +172,7 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per2;
         precio = pay.precio_per2 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -228,7 +228,7 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per3;
         precio = pay.precio_per3 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -281,12 +281,20 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
         precio = (parseFloat(pay.precio_total*0.9))
         precioE3 = precio;
-        precio = precio + '00'
+        precio = precio + ''
+        if (precio.includes('.')) {
+            precio = precio.split('.')
+            precio = precio[0] + '' + precio[1]
+            precio = precio + '0'
+        } else {
+            precio = precio + '00'
+        }
+        precio = parseInt(precio)
         console.log("Precio => ", precio)
     }
 
@@ -298,10 +306,10 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
                 price_data: {
                     currency: 'usd',
                     product_data: {
-                        name: 'Pago Único - PProyecto de Consultoría',
+                        name: 'Pago Único - Proyecto de Consultoría',
                         images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                     },
-                    unit_amount: precio,
+                    unit_amount: parseInt(precio),
                 },
                 quantity: 1,
                 description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
@@ -328,10 +336,10 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per1;
         precio = pay.precio_per1 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -380,10 +388,10 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per2;
         precio = pay.precio_per2 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -433,10 +441,10 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de consultoría')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per3;
         precio = pay.precio_per3 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
