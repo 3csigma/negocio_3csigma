@@ -864,7 +864,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             datos.etapa = 'Archivos - Proyecto de consultoría'
         }
         // OTRO 2
-        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 2")
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro2")
         if (archivo) {
             empresarial.otro2.fecha = archivo.fecha;
             empresarial.otro2.ver = 'block';
@@ -873,7 +873,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             datos.etapa = 'Archivos - Proyecto de consultoría'
         }
         // OTRO 3
-        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 3")
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro3")
         if (archivo) {
             empresarial.otro3.fecha = archivo.fecha;
             empresarial.otro3.ver = 'block';
@@ -1677,21 +1677,13 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const fecha = new Date()
-    let nombre = ''
-    tipo == 'Otro' || tipo == 'Otro 2' || tipo == 'Otro 3' ? nombre = nombreArchivo : nombre = req.file.originalname;
+    let nombre = '', urlFile = '../archivos_plan_empresarial/' + req.file.filename;
+    tipo == 'Otro' || tipo == 'Otro2' || tipo == 'Otro3' ? nombre = nombreArchivo : nombre = req.file.originalname;
     const nuevoArchivo = {
         empresa: e.id_empresas,
         tipo,
         nombre,
-        url: '../archivos_plan_empresarial/' + req.file.filename,
-        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-        mes: fecha.getMonth() + 1,
-        year: fecha.getFullYear()
-    }
-
-    const actualizar = {
-        nombre,
-        url: '../archivos_plan_empresarial/' + req.file.originalname,
+        url: urlFile,
         fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
         mes: fecha.getMonth() + 1,
         year: fecha.getFullYear()
@@ -1702,18 +1694,27 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     let archivoActual = null;
 
     if (tieneArchivo.length > 0) {
+        urlFile = '../archivos_plan_empresarial/' + req.file.originalname; 
+        const actualizar = {
+            nombre,
+            url: urlFile,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
         archivoActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND tipo = ?', [actualizar, e.id_empresas, tipo])
     } else {
         archivoActual = await insertarDatos('archivos_plan_empresarial', nuevoArchivo)
     }
 
+    console.log("ARCHIVO ACTUAL PRO CON: >>>> ", archivoActual)
+
     if (archivoActual.affectedRows > 0) {
-        const email = e.email
         let asunto = 'Se ha cargado un nuevo archivo en Proyecto de consultoría'
         let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
         
         // Enviar Email
-        const resultEmail = await sendEmail(email, asunto, template)
+        const resultEmail = await sendEmail(e.email, asunto, template)
 
         if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de archivo subido a la empresa >>>> \n")
@@ -1722,8 +1723,8 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
         }
 
         r.ok = true;
-        r.fecha = nuevoArchivo.fecha;
-        r.url = nuevoArchivo.url
+        r.fecha = fecha.toLocaleString("en-US", { timeZone: zonaHoraria });
+        r.url = urlFile;
     }
 
     res.send(r)
