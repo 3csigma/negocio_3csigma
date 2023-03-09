@@ -758,7 +758,9 @@ dashboardController.editarEmpresa = async (req, res) => {
         branding: { ver: 'none' },
         renders: { ver: 'none' },
         website: { ver: 'none' },
-        otro: { ver: 'none' }
+        otro: { ver: 'none' },
+        otro2: { ver: 'none' },
+        otro2: { ver: 'none' }
     }
     if (propuesta.empresarial) {
         datos.etapa = 'Propuesta de plan empresarial enviada'
@@ -859,7 +861,25 @@ dashboardController.editarEmpresa = async (req, res) => {
             empresarial.otro.ver = 'block';
             empresarial.otro.url = archivo.url;
             empresarial.otro.nombre = archivo.nombre;
-            datos.etapa = 'Archivo Otro - Plan Empresarial'
+            datos.etapa = 'Archivos - Plan Empresarial'
+        }
+        // OTRO 2
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 2")
+        if (archivo) {
+            empresarial.otro2.fecha = archivo.fecha;
+            empresarial.otro2.ver = 'block';
+            empresarial.otro2.url = archivo.url;
+            empresarial.otro2.nombre = archivo.nombre;
+            datos.etapa = 'Archivos - Plan Empresarial'
+        }
+        // OTRO 3
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 3")
+        if (archivo) {
+            empresarial.otro3.fecha = archivo.fecha;
+            empresarial.otro3.ver = 'block';
+            empresarial.otro3.url = archivo.url;
+            empresarial.otro3.nombre = archivo.nombre;
+            datos.etapa = 'Archivos - Plan Empresarial'
         }
 
         // PROCESO PARA LAS TAREAS (PLAN EMPRESARIAL)
@@ -1667,7 +1687,7 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const fecha = new Date()
     let nombre = ''
-    tipo == 'Otro' ? nombre = nombreArchivo : nombre = req.file.originalname;
+    tipo == 'Otro' || tipo == 'Otro 2' || tipo == 'Otro 3' ? nombre = nombreArchivo : nombre = req.file.originalname;
     const nuevoArchivo = {
         empresa: e.id_empresas,
         tipo,

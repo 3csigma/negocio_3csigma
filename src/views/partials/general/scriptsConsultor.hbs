@@ -1179,6 +1179,14 @@
                                 if (boton == 5){
                                     btnArchivoOtro.style.display = 'block'
                                     btnArchivoOtro.href = response.url
+                                }
+                                if (boton == 6){
+                                    btnArchivoOtro2.style.display = 'block'
+                                    btnArchivoOtro2.href = response.url
+                                } 
+                                if (boton == 7){
+                                    btnArchivoOtro3.style.display = 'block'
+                                    btnArchivoOtro3.href = response.url
                                 } 
 
                                 estado.classList.remove("badge-warning")
@@ -1389,7 +1397,7 @@
 
                 // Otro (Archivo)
                 const input_PlaOtro = document.getElementById("input_PlanOtro");
-                const btnArchivOtro= document.getElementById("btnArchivoOtro");
+                const btnArchivoOtro = document.getElementById("btnArchivoOtro");
                 if (input_PlanOtro) {
                     const input_txt = document.getElementById("input_txtOtro");
                     const fecha = document.getElementById("spanFecha_PlanOtro");
@@ -1428,6 +1436,100 @@
                             formData.append('nombreArchivo', input_txt.value);
                             formData.append('zonaHoraria', tzLocal);
                             guardarArchivo_Empresarial(formData, estado, fecha, 5)
+                        }
+                        console.log("\nSalida")
+                        console.log(e)
+                    });
+                }
+
+                // Otro 2 (Archivo)
+                const input_PlaOtro2 = document.getElementById("input_PlanOtro2");
+                const btnArchivoOtro2 = document.getElementById("btnArchivoOtro2");
+                if (input_PlanOtro2) {
+                    const input_txt = document.getElementById("input_txtOtro2");
+                    const fecha = document.getElementById("spanFecha_PlanOtro2");
+                    const estado = document.getElementById("estado_PlanOtro2");
+                    input_PlanOtro2.addEventListener('change', (e) => {
+                        console.log("entrada")
+                        console.log(e)
+                        if (input_txt.value == '') {
+                            toastr.warning("El campo de Otro no puede estar vacío", "Error", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+                            e = null;
+                        } else {
+                            const file = e.target.files[0]
+                            // Capturando Zona Horaria Local
+                            const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            formData.append('codigoEmpresa', codigoEmpresa);
+                            formData.append('tipo', 'Otro 2');
+                            formData.append('nombreArchivo', input_txt.value);
+                            formData.append('zonaHoraria', tzLocal);
+                            guardarArchivo_Empresarial(formData, estado, fecha, 6)
+                        }
+                        console.log("\nSalida")
+                        console.log(e)
+                    });
+                }
+
+                // Otro 3 (Archivo)
+                const input_PlaOtro3 = document.getElementById("input_PlanOtro3");
+                const btnArchivoOtro3 = document.getElementById("btnArchivoOtro3");
+                if (input_PlanOtro3) {
+                    const input_txt = document.getElementById("input_txtOtro3");
+                    const fecha = document.getElementById("spanFecha_PlanOtro3");
+                    const estado = document.getElementById("estado_PlanOtro3");
+                    input_PlanOtro3.addEventListener('change', (e) => {
+                        console.log("entrada")
+                        console.log(e)
+                        if (input_txt.value == '') {
+                            toastr.warning("El campo de Otro no puede estar vacío", "Error", {
+                                positionClass: "toast-top-center",
+                                timeOut: 5e3,
+                                closeButton: !0,
+                                debug: !1,
+                                newestOnTop: !0,
+                                progressBar: !0,
+                                preventDuplicates: !0,
+                                onclick: null,
+                                showDuration: "300",
+                                hideDuration: "1000",
+                                extendedTimeOut: "1000",
+                                showEasing: "swing",
+                                hideEasing: "linear",
+                                showMethod: "fadeIn",
+                                hideMethod: "fadeOut",
+                                tapToDismiss: !1
+                            })
+                            e = null;
+                        } else {
+                            const file = e.target.files[0]
+                            // Capturando Zona Horaria Local
+                            const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            formData.append('codigoEmpresa', codigoEmpresa);
+                            formData.append('tipo', 'Otro 3');
+                            formData.append('nombreArchivo', input_txt.value);
+                            formData.append('zonaHoraria', tzLocal);
+                            guardarArchivo_Empresarial(formData, estado, fecha, 7)
                         }
                         console.log("\nSalida")
                         console.log(e)
