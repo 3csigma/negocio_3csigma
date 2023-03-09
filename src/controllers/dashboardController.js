@@ -760,7 +760,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         website: { ver: 'none' },
         otro: { ver: 'none' },
         otro2: { ver: 'none' },
-        otro2: { ver: 'none' }
+        otro3: { ver: 'none' }
     }
     if (propuesta.empresarial) {
         datos.etapa = 'Propuesta de plan empresarial enviada'
