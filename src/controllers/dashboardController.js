@@ -140,7 +140,7 @@ dashboardController.actualizarConsultor = async (req, res) => {
             const template = consultorAprobadoHTML(nombre, clave);
 
             // Enviar Email
-            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en 3C Sigma', template)
+            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en PAOM System', template)
 
             if (resultEmail == false) {
                 res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")

@@ -47,7 +47,7 @@ transporter.verify(function (error, success) {
 const sendEmail = async (email, subject, html) => {
 	try {
 		await transporter.sendMail({
-			from: `PAOM SYSTEM <${process.env.USER_EMAIL}>`, // sender address
+			from: `PAOM System <${process.env.USER_EMAIL}>`, // sender address
 			to: email, // list of receivers
 			subject, // Subject line
 			html, // html body

@@ -136,7 +136,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'primera cuota de tu análisis de negocio en 3C Sigma, tu segundo'
+                                const texto = 'primera cuota de tu análisis de negocio en PAOM System, tu segundo'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
@@ -165,7 +165,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'segunda cuota de tu análisis de negocio en 3C Sigma, tu tercer y último'
+                                const texto = 'segunda cuota de tu análisis de negocio en PAOM System, tu tercer y último'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
@@ -221,7 +221,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'primera cuota de tu Proyecto de consultoría en 3C Sigma, tu segundo'
+                                const texto = 'primera cuota de tu Proyecto de consultoría en PAOM System, tu segundo'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
@@ -250,7 +250,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'segunda cuota de tu Proyecto de consultoría en 3C Sigma, tu tercer y último'
+                                const texto = 'segunda cuota de tu Proyecto de consultoría en PAOM System, tu tercer y último'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);

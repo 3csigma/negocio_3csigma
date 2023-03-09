@@ -65,7 +65,7 @@ passport.use('local.registro', new LocalStrategy({
             console.log("\nEnviando email al admin de nueva empresa registrada..\n")
 
             // Enviar Email
-            const resultEmail = await sendEmail(email, 'Confirma tu registro en 3C Sigma', template)
+            const resultEmail = await sendEmail(email, 'Confirma tu registro en PAOM System', template)
             const resultEmail2 = await sendEmail(emailAdmin, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
 
             if (resultEmail == false || resultEmail2 == false) {
