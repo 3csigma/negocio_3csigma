@@ -260,9 +260,9 @@ const confirmarRegistro = (usuario, empresa, codigo) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -347,7 +347,7 @@ const confirmarRegistro = (usuario, empresa, codigo) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -597,7 +597,7 @@ const restablecerCuentaHTML = (token) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -682,7 +682,7 @@ const restablecerCuentaHTML = (token) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -937,9 +937,9 @@ const nuevaEmpresa = (admin, empresa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1024,7 +1024,7 @@ const nuevaEmpresa = (admin, empresa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1279,9 +1279,9 @@ const nuevoConsultorRegistrado = (admin, consultor) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1366,7 +1366,7 @@ const nuevoConsultorRegistrado = (admin, consultor) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1388,7 +1388,7 @@ const nuevoConsultorRegistrado = (admin, consultor) => {
 <td class="pad" style="padding-bottom:5px;padding-left:5px;padding-right:5px;padding-top:30px;">
 <div style="font-family: Tahoma, sans-serif">
 <div class="" style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #262b30; line-height: 1.2;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
 </div>
 </div>
 </td>
@@ -1641,7 +1641,7 @@ const consultorAprobadoHTML = (consultor, clave) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1726,7 +1726,7 @@ const consultorAprobadoHTML = (consultor, clave) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -1993,7 +1993,7 @@ const consultorAsignadoHTML = (empresa, etapa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2078,7 +2078,7 @@ const consultorAsignadoHTML = (empresa, etapa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2345,7 +2345,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2430,7 +2430,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2694,7 +2694,7 @@ const informesHTML = (empresa, informe) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2779,7 +2779,7 @@ const informesHTML = (empresa, informe) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -2801,7 +2801,7 @@ const informesHTML = (empresa, informe) => {
 <td class="pad" style="padding-bottom:5px;padding-left:5px;padding-right:5px;padding-top:30px;">
 <div style="font-family: Tahoma, sans-serif">
 <div class="" style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #262b30; line-height: 1.2;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
 </div>
 </div>
 </td>
@@ -3020,7 +3020,7 @@ const etapaFinalizadaHTML = (empresa, etapa, texto, link) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:232px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">IR A MI CUENTA</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:48px;width:232px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">IR A MI CUENTA</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -3056,7 +3056,7 @@ const etapaFinalizadaHTML = (empresa, etapa, texto, link) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -3141,7 +3141,7 @@ const etapaFinalizadaHTML = (empresa, etapa, texto, link) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -3370,7 +3370,7 @@ const propuestaCargadaHTML = (empresa, etapa, link) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:278px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR PROPUESTA</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:48px;width:278px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR PROPUESTA</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -3406,7 +3406,7 @@ const propuestaCargadaHTML = (empresa, etapa, link) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -3491,7 +3491,7 @@ const propuestaCargadaHTML = (empresa, etapa, link) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -3513,7 +3513,7 @@ const propuestaCargadaHTML = (empresa, etapa, link) => {
 <td class="pad" style="padding-bottom:5px;padding-left:5px;padding-right:5px;padding-top:30px;">
 <div style="font-family: Tahoma, sans-serif">
 <div class="" style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #262b30; line-height: 1.2;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
 </div>
 </div>
 </td>
@@ -3710,7 +3710,7 @@ const proximoPagoPendienteHTML = (nombre, texto, etapa, link) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:227px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">PAGAR AHORA</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:48px;width:227px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/${link}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">PAGAR AHORA</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -3746,7 +3746,7 @@ const proximoPagoPendienteHTML = (nombre, texto, etapa, link) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -3831,7 +3831,7 @@ const proximoPagoPendienteHTML = (nombre, texto, etapa, link) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4085,7 +4085,7 @@ const tareaCompletadaHTML = (nombreTarea) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4170,7 +4170,7 @@ const tareaCompletadaHTML = (nombreTarea) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4435,7 +4435,7 @@ const tareaNuevaHTML = (nombreTarea, empresa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4520,7 +4520,7 @@ const tareaNuevaHTML = (nombreTarea, empresa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4749,7 +4749,7 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${link}" style="height:48px;width:242px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/plan-estrategico" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">VER MIS TAREAS</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/${link}" style="height:48px;width:242px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/plan-estrategico" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">VER MIS TAREAS</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -4785,7 +4785,7 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -4870,7 +4870,7 @@ const tareasRetrasadasHTML = (numTareas, empresa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -5124,7 +5124,7 @@ const archivosAnalisisHTML = (consultor, empresa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -5209,7 +5209,7 @@ const archivosAnalisisHTML = (consultor, empresa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -5463,7 +5463,7 @@ const archivosPlanEmpresarialHTML = (empresa) => {
 </td>
 </tr>
 </table>
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -5548,7 +5548,7 @@ const archivosPlanEmpresarialHTML = (empresa) => {
 <tbody>
 <tr>
 <td class="column column-1" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;" width="100%">
-<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"> </div>
+<div class="spacer_block" style="height:15px;line-height:15px;font-size:1px;"></div>
 </td>
 </tr>
 </tbody>
@@ -5601,7 +5601,7 @@ const archivosPlanEmpresarialHTML = (empresa) => {
 </table><!-- End -->
 </body>
 </html>
-	` 
+` 
 }
 
 module.exports = {
