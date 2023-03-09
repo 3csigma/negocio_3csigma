@@ -899,6 +899,7 @@
                         .then(res => res.json())
                         .catch(error => console.error('Error:', error))
                         .then(response => {
+                            console.log("\n RESPUESTA GUARDAR INFORME: " + response);
                             if (response.ok) {
 
                                 toastr.success("El informe ha sido cargado exitosamente", "Atención", {
