@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
+const dkim = require("nodemailer-dkim");
 const my_domain = process.env.MY_DOMAIN;
+const { privateKey_DKIM } = require("../config/index.js")
 
 /************************************************
  *  TRANSPORTER PARA ENVÍOS EN LOCAL
@@ -22,6 +24,11 @@ if (my_domain != 'http://localhost:4000') {
 		port: 25,
 		secure: false,
 		ignoreTLS: true,
+		dkim: {
+			domainName: "paomsystem.com",
+			keySelector: "mail-selector-noreply",
+			privateKey: privateKey_DKIM
+		}
 	}
 }
 
