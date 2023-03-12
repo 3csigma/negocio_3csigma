@@ -33,23 +33,21 @@ pagosController.pagarDiagnostico = async (req, res) => {
     const precio = precioDiag + '00'
     
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: parseFloat(precio),
+                product_data: {
+                    name: 'Pago Único - Diagnóstico de Negocio',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Diagnostico_de_Negocio.jpg'],
+                    description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Diagnóstico de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/diagnostico-de-negocio-pay.png'],
-                    },
-                    unit_amount: parseFloat(precio),
-                },
-                quantity: 1,
-                description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
-            },
-        ],
-        mode: 'payment',
     });
 
     req.session.intentPay = session.url;
@@ -74,26 +72,24 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago Único - Análisis de Negocio',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Analilsis_de_Negocio.jpg'],
+                    description: `Análisis y Evaluación dimensión producto. 
+                    - Análisis y Evaluación dimensión administración.   
+                    - Análisis y Evaluación dimensión Operaciones. 
+                    - Análisis y Evaluación dimensión Marketing.`
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
-            },
-        ],
-        mode: 'payment',
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -130,26 +126,24 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-        success_url: `${my_domain}/pago-exitoso`,
-        cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
+        line_items: [{
                 price_data: {
                     currency: 'usd',
+                    unit_amount: precio,
                     product_data: {
                         name: 'Pago primera cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
+                        images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Analilsis_de_Negocio_1.jpg'],
+                        description: `Análisis y Evaluación dimensión producto. 
+                        - Análisis y Evaluación dimensión administración.   
+                        - Análisis y Evaluación dimensión Operaciones. 
+                        - Análisis y Evaluación dimensión Marketing.`
                     },
-                    unit_amount: precio,
                 },
                 quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
-            },
-        ],
+        }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -185,26 +179,24 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: 'Pago segunda cuota - Análisis de Negocio',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Analilsis_de_Negocio_2.jpg'],
+                    description: `Análisis y Evaluación dimensión producto. 
+                    - Análisis y Evaluación dimensión administración.   
+                    - Análisis y Evaluación dimensión Operaciones. 
+                    - Análisis y Evaluación dimensión Marketing.`
+                },
+                unit_amount: precio,
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago segunda cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
-            },
-        ],
-        mode: 'payment',
     });
 
 
@@ -241,26 +233,24 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago tercera cuota - Análisis de Negocio',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Analilsis_de_Negocio_3.jpg'],
+                    description: `Análisis y Evaluación dimensión producto. 
+                    - Análisis y Evaluación dimensión administración.   
+                    - Análisis y Evaluación dimensión Operaciones. 
+                    - Análisis y Evaluación dimensión Marketing.`
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago tercera cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
-            },
-        ],
-        mode: 'payment',
     });
 
 
@@ -299,23 +289,21 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                product_data: {
+                    name: 'Pago Único - Proyecto de Consultoría',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Proyecto_de_Consultoria.jpg'],
+                    description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+                },
+                unit_amount: parseInt(precio),
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Proyecto de Consultoría',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: parseInt(precio),
-                },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
-            },
-        ],
-        mode: 'payment',
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -352,23 +340,21 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago primera cuota - Proyecto de Consultoría',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Proyecto_de_Consultoria_1.jpg'],
+                    description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago primera cuota - Proyecto de Consultoría',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
-            },
-        ],
-        mode: 'payment',
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -404,23 +390,21 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago segunda cuota - Proyecto de Consultoría',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Proyecto_de_Consultoria_2.jpg'],
+                    description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago segunda cuota - Proyecto de Consultoría',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
-            },
-        ],
-        mode: 'payment',
     });
 
 
@@ -457,23 +441,21 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago tercera cuota - Proyecto de Consultoría',
+                    images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Proyecto_de_Consultoria_3.jpg'],
+                    description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+                },
+            },
+            quantity: 1,
+        }],
+        mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago tercera cuota - Proyecto de Consultoría',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
-                },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
-            },
-        ],
-        mode: 'payment',
     });
 
 

@@ -34,7 +34,7 @@
                             <p class="fs-13 mb-0 text-black">Asignadas a ti</p>
                         </div>
                     </div>
-                   {{#if datosJson_empresas_asignadass}}
+                    {{#if datosJson_empresas_asignadass}}
                     <input type="hidden" id="datosJson_empresas_asignadas" value="{{datosJson_empresas_asignadas}}">
                     <div class="card-body pb-0">
                         <div id="chartBar"></div>
@@ -72,7 +72,7 @@
                             <p class="fs-13 mb-0 text-black">Subidos por mes</p>
                         </div>
                     </div>
-                     {{#if datosJson_historialI_consultor}}
+                    {{#if datosJson_historialI_consultor}}
                     <input type="hidden" id="datosJson_historialI_consultor" value="{{datosJson_historialI_consultor }}">
                     <div class="card-body pb-0">
                         <div id="chartBar3"></div>
@@ -163,7 +163,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{#if ultimosInformes}}
+                                            {{#unless ultimosInformes}}
+                                            <tr>
+                                                <td colspan="4">Aún no hay informes generados.</td>
+                                            </tr>
+                                            {{/unless}}
                                             {{#each ultimosInformes}}
                                             <tr>
                                                 <td>{{fecha}}</td>
@@ -177,11 +181,6 @@
                                                 </td>
                                             </tr>
                                             {{/each}}
-                                            {{else}}
-                                            <tr>
-                                                <td colspan="4">Aún no hay informes generados.</td>
-                                            </tr>
-                                            {{/if}}
                                         </tbody>
                                     </table>
                                 </div>
