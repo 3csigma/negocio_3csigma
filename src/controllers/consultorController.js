@@ -9,7 +9,7 @@ consultorController.index = async (req, res) => {
     let empresas = []
     const consultores = await consultarDatos('consultores')
     const consultor = consultores.find(x => x.codigo == codigo)
-    const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 2`)
+    const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC`)
     const idEmpresas = consultores_asignados.reduce((acc,item) => {
         if(!acc.includes(item.empresa)) acc.push(item.empresa);
         return acc;
@@ -17,7 +17,7 @@ consultorController.index = async (req, res) => {
     let dataEmpresas = await consultarDatos('empresas')
     idEmpresas.forEach(x => {
         const e = dataEmpresas.find(i => i.id_empresas == x)
-        if (e) empresas.push(e);
+        if (empresas.length < 2) if (e) empresas.push(e);
     })
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
@@ -33,9 +33,13 @@ consultorController.index = async (req, res) => {
     // FIN DE LA FUNCIÓN <<====
 
     // Informe de diagnóstico de empresa subido
-    let ultimosInformes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
-    ultimosInformes = ultimosInformes.filter(x => x.id_consultor == consultor.id_consultores)
-    if (ultimosInformes.length > 0) {
+    let ultimosInformes = [];
+    let ultimos_informes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
+    ultimos_informes = ultimosInformes.filter(x => x.id_consultor == consultor.id_consultores)
+    if (ultimos_informes.length > 0) {
+        idEmpresas.forEach(e => {
+            ultimosInformes = ultimos_informes.filter(x => x.id_empresa == e);
+        })
         ultimosInformes.forEach(x => {
             if (x.nombre == 'Informe diagnóstico') { x.etapa = 'Diagnóstico' }
             if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }

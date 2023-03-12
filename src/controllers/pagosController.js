@@ -35,20 +35,18 @@ pagosController.pagarDiagnostico = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Diagnóstico de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/diagnostico-de-negocio-pay.png'],
-                    },
-                    unit_amount: parseFloat(precio),
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: parseFloat(precio),
+                product_data: {
+                    name: 'Pago Único - Diagnóstico de Negocio',
+                    images: ['https://3csigma.com/app_public_files/img/diagnostico-de-negocio-pay.png'],
                 },
-                quantity: 1,
-                description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
             },
-        ],
+            quantity: 1,
+            description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
+            }],
         mode: 'payment',
     });
 
@@ -76,23 +74,21 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago Único - Análisis de Negocio',
+                    images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                 },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
             },
-        ],
+            quantity: 1,
+            description: `Análisis y Evaluación dimensión producto. 
+            - Análisis y Evaluación dimensión administración.   
+            - Análisis y Evaluación dimensión Operaciones. 
+            - Análisis y Evaluación dimensión Marketing.`
+        }],
         mode: 'payment',
     });
 
@@ -132,23 +128,21 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago primera cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago primera cuota - Análisis de Negocio',
+                    images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                 },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
             },
-        ],
+            quantity: 1,
+            description: `Análisis y Evaluación dimensión producto. 
+            - Análisis y Evaluación dimensión administración.   
+            - Análisis y Evaluación dimensión Operaciones. 
+            - Análisis y Evaluación dimensión Marketing.`
+        }],
         mode: 'payment',
     });
 
@@ -187,23 +181,21 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago segunda cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago segunda cuota - Análisis de Negocio',
+                    images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                 },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
             },
-        ],
+            quantity: 1,
+            description: `Análisis y Evaluación dimensión producto. 
+            - Análisis y Evaluación dimensión administración.   
+            - Análisis y Evaluación dimensión Operaciones. 
+            - Análisis y Evaluación dimensión Marketing.`
+        }],
         mode: 'payment',
     });
 
@@ -243,23 +235,21 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago tercera cuota - Análisis de Negocio',
-                        images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago tercera cuota - Análisis de Negocio',
+                    images: ['https://3csigma.com/app_public_files/img/Analisis-de-negocio.png'],
                 },
-                quantity: 1,
-                description: `Análisis y Evaluación dimensión producto. 
-                - Análisis y Evaluación dimensión administración.   
-                - Análisis y Evaluación dimensión Operaciones. 
-                - Análisis y Evaluación dimensión Marketing.`
             },
-        ],
+            quantity: 1,
+            description: `Análisis y Evaluación dimensión producto. 
+            - Análisis y Evaluación dimensión administración.   
+            - Análisis y Evaluación dimensión Operaciones. 
+            - Análisis y Evaluación dimensión Marketing.`
+        }],
         mode: 'payment',
     });
 
@@ -293,20 +283,18 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago Único - Plan Empresarial',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago Único - Plan Empresarial',
+                    images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                 },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
             },
-        ],
+            quantity: 1,
+            description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+        }],
         mode: 'payment',
     });
 
@@ -346,20 +334,18 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago primera cuota - Plan Empresarial',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago primera cuota - Plan Empresarial',
+                    images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                 },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
             },
-        ],
+            quantity: 1,
+            description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+        }],
         mode: 'payment',
     });
 
@@ -398,20 +384,18 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago segunda cuota - PLan Empresarial',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago segunda cuota - PLan Empresarial',
+                    images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                 },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
             },
-        ],
+            quantity: 1,
+            description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+        }],
         mode: 'payment',
     });
 
@@ -451,20 +435,18 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
         success_url: `${my_domain}/pago-exitoso`,
         cancel_url: `${my_domain}/pago-cancelado`,
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: 'Pago tercera cuota - Plan Empresarial',
-                        images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
-                    },
-                    unit_amount: precio,
+        line_items: [{
+            price_data: {
+                currency: 'usd',
+                unit_amount: precio,
+                product_data: {
+                    name: 'Pago tercera cuota - Plan Empresarial',
+                    images: ['https://3csigma.com/app_public_files/img/Plan-Empresarial-Stripe.png'],
                 },
-                quantity: 1,
-                description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
             },
-        ],
+            quantity: 1,
+            description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
+        }],
         mode: 'payment',
     });
 
