@@ -302,6 +302,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.code = codigo;
     datos.idEmpresa = idEmpresa
     datos.foto = userEmpresa.foto
+    datos.idConsultor = 1
 
     // PAGOS DE LA EMPRESA
     const pagos = await consultarDatos('pagos')
@@ -311,7 +312,6 @@ dashboardController.editarEmpresa = async (req, res) => {
     let pagoRealizado = false // variable para activar el pago de forma manual desde el admin
     if (datosEmpresa) {
         datosEmpresa.estadoEmail == 1 ? datos.etapa = 'Email confirmado' : datos.etapa = datos.etapa;
-        // datosEmpresa.consultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
 
         if (pay) {
             const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
@@ -323,6 +323,7 @@ dashboardController.editarEmpresa = async (req, res) => {
                 if (consulDg) {
                     infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
                     pago_diagnostico.btn = 'color: white;'
+                    datos.idConsultor = infoConsul.id_consultores;
                     if (infoConsul.nivel == '1') {
                         pago_diagnostico.valor = 197
                     } else if (infoConsul.nivel == '2') {
@@ -1600,7 +1601,7 @@ const subirInforme = multer({ storage })
 dashboardController.subirInforme = subirInforme.single('file')
 dashboardController.guardarInforme = async (req, res) => {
     const r = { ok: false }
-    const { codigoEmpresa, nombreInforme, zonaHoraria } = req.body
+    const { codigoEmpresa, consultor, nombreInforme, zonaHoraria } = req.body
     console.log(req.body)
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
@@ -1608,6 +1609,7 @@ dashboardController.guardarInforme = async (req, res) => {
     const fecha = new Date()
     const nuevoInforme = {
         id_empresa: e.id_empresas,
+        consultor,
         nombre: nombreInforme,
         url: '../informes_empresas/' + urlInforme,
         fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),

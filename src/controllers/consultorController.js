@@ -33,13 +33,8 @@ consultorController.index = async (req, res) => {
     // FIN DE LA FUNCIÓN <<====
 
     // Informe de diagnóstico de empresa subido
-    let ultimosInformes = [];
-    let ultimos_informes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
-    ultimos_informes = ultimosInformes.filter(x => x.id_consultor == consultor.id_consultores)
-    if (ultimos_informes.length > 0) {
-        idEmpresas.forEach(e => {
-            ultimosInformes = ultimos_informes.filter(x => x.id_empresa == e);
-        })
+    let ultimosInformes = await consultarDatos('informes', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_informes DESC LIMIT 2`)
+    if (ultimosInformes.length > 0) {
         ultimosInformes.forEach(x => {
             if (x.nombre == 'Informe diagnóstico') { x.etapa = 'Diagnóstico' }
             if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
