@@ -2,7 +2,7 @@ const name = process.env.APP_NAME;
 console.log("APP_NAME: " + name);
 module.exports = {
     apps: [{
-        name: process.env.APP_NAME || "App PAOM",
+        name: name || "Student PAOM",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart
@@ -22,6 +22,3 @@ module.exports = {
         }
     }]
 }
-
-// id_producto_estrategico = 'prod_NEK8lDJGAH1qiK' -> SERVER
-// id_producto_estrategico = 'prod_MoQcrJC6jsrtcY' -> LOCAL
