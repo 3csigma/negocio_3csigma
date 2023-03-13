@@ -983,6 +983,7 @@
                 const informeDiag = document.getElementById('inputInformeDiag');
                 const btnVerInforme = document.getElementById('btnVerInforme');
                 const codigoEmpresa = document.getElementById("codigoEmpresa").value;
+                const consultor = document.getElementById("idConsultor").value;
 
                 if (informeDiag) {
                     informeDiag.addEventListener('change', (e) => {
@@ -996,7 +997,8 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
-                        formData.append('nombreInforme', nomInformeDiag);
+                        formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstado, spanFecha, 1)
                     });
@@ -1018,6 +1020,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomProducto);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoProd, spanFechaProd, 2)
@@ -1039,6 +1042,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomAdmin);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoAdmin, spanFechaAdmin, 3)
@@ -1060,6 +1064,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomOperacion);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoOpe, spanFechaOpe, 4)
@@ -1081,6 +1086,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomMarketing);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoMarketing, spanFechaMarketing, 5)
@@ -1102,6 +1108,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomInformeAnalisis);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoGeneral, spanFechaGeneral, 6)
@@ -1124,6 +1131,7 @@
                         const formData = new FormData();
                         formData.append('file', file);
                         formData.append('codigoEmpresa', codigoEmpresa);
+                        formData.append('consultor', consultor);
                         formData.append('nombreInforme', nomInformePlan);
                         formData.append('zonaHoraria', tzLocal);
                         guardarInforme(formData, infoEstadoPlan, spanFechaPlan, 7)
