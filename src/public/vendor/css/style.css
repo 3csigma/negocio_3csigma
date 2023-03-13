@@ -37925,8 +37925,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .light.badge-info {
-  background-color: #a4e3f1;
-  color: #1EA7C5;
+  background-color: #FFE000;
+  color: #000000;
 }
 
 [data-theme-version="dark"] .light.badge-info {
@@ -37943,8 +37943,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .light.badge-secondary {
-  background-color: #f1dffe;
-  color: #A02CFA;
+  background-color: #FFE000;
+  color: #000000;
 }
 
 [data-theme-version="dark"] .light.badge-secondary {
