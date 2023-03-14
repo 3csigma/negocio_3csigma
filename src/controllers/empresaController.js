@@ -946,7 +946,7 @@ empresaController.planEmpresarial = async (req, res) => {
         msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico, btnActivo, btnDesactivo, tienePropuesta,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        itemEmpresarial: true, tareas, modalAcuerdo, portalClientes
+        itemEmpresarial: true, tareas, modalAcuerdo
     })
 }
 
@@ -1031,6 +1031,6 @@ empresaController.planEstrategico = async (req, res) => {
         itemEstrategico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        subCancelada, modalAcuerdo
+        subCancelada, modalAcuerdo, portalClientes
     })
 }
