@@ -1011,7 +1011,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         
         if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
+        // if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
         if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
    

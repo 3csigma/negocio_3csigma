@@ -117,7 +117,7 @@
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
                                                 <option value="Diagnóstico" selected>Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
-                                                <option value="Proyecto_de_Consultoría">Proyecto de Consultoría</option>
+                                                {{!-- <option value="Proyecto_de_Consultoría">Proyecto de Consultoría</option> --}}
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
@@ -378,11 +378,11 @@
                             {{else}}
                             <li class="nav-item"><a href="#analisis" data-toggle="tab" class="nav-link" id="item-analisis">Análisis</a></li>
                             {{/if}}
-                            {{#if botonesEtapas.plan1}}
+                            {{!-- {{#if botonesEtapas.plan1}}
                             <li class="nav-item"><a href="#proyecto-consultoria" data-toggle="tab"  style="{{tab_tareaAsignada}}" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
                             {{else}}
                             <li class="nav-item"><a href="#proyecto-consultoria" data-toggle="tab" class="nav-link" id="item-empresarial">Proyecto de Consultoría</a></li>
-                            {{/if}}
+                            {{/if}} --}}
                             {{#if botonesEtapas.plan2}}
                             <li class="nav-item"><a href="#plan-estrategico" data-toggle="tab" style="{{tab_tareaAsignada}}" class="nav-link" id="item-estrategico">Plan Estrategico</a></li>
                             {{else}}
@@ -657,7 +657,7 @@
                                 </div>
 
                                 {{!-- PAGO MANUAL DE DIAGNÓSTICO --}}
-                                <div class="card">
+                                {{!-- <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Pago Diagnóstico</h4>
@@ -700,7 +700,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
@@ -723,7 +723,7 @@
                                                     <tbody>
                                                         <!-- CUESTIONARIO EMPRESA NUEVA  -->
                                                         {{#if frmDiag.tablasVacias}}
-                                                        <tr id="newEmp">
+                                                        {{!-- <tr id="newEmp">
                                                             <td>{{#if frmDiag.fecha}}{{frmDiag.fecha}}{{else}}N/A{{/if}}
                                                             </td>
                                                             <td>Nueva</td>
@@ -743,7 +743,7 @@
                                                                     <i class="fa fa-search"></i></button>
                                                                 {{/if}}
                                                             </td>
-                                                        </tr>
+                                                        </tr> --}}
                                                         <!-- CUESTIONARIO EMPRESA ESTABLECIDA  -->
                                                         <tr id="oldEmp">
                                                             <td>N/A</td>
@@ -910,14 +910,14 @@
                             <div id="analisis" class="tab-pane fade">
 
                                 <!-- ======================== PROPUESTA TÉCNICA ======================== -->
-                                <div class="card">
+                                {{!-- <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta de Análisis de Negocio</h4>
-                                        </div>
+                                        </div> --}}
                                         {{#if botonesEtapas.dos}}
-                                        {{#unless propuesta.analisis.pago}}
-                                        <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
+                                        {{!-- {{#unless propuesta.analisis.pago}} --}}
+                                        {{!-- <form action="/enviar-propuesta-empresa" method="POST" enctype="multipart/form-data">
                                             <div class="row mt-3">
                                                 <div class="form-group col-md-6">
                                                     <input type="number" name="precioPropuesta" placeholder="Introduce un precio" class="form-control required" required>
@@ -939,11 +939,11 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                        </form>
-                                        <hr class="mt-4">
-                                        {{/unless}}
+                                        </form> --}}
+                                        {{!-- <hr class="mt-4"> --}}
+                                        {{!-- {{/unless}} --}}
                                         {{/if}}
-                                        <div class="table-responsive">
+                                        {{!-- <div class="table-responsive">
                                             <table class="table table-responsive-md text-center">
                                                 <thead>
                                                     <tr>
@@ -974,14 +974,14 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
+                                        </div> --}}
 
-                                    </div>
-                                </div>
+                                    {{!-- </div>
+                                </div> --}}
 
                                 {{!-- PROPUESTA MONTADA --}}
-                                {{#if propuesta.analisis.fecha}}
-                                <div class="card">
+                                {{!-- {{#if propuesta.analisis.fecha}} --}}
+                                {{!-- <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
@@ -1081,10 +1081,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {{/if}}
+                                </div> --}}
+                                {{!-- {{/if}} --}}
 
-                                {{#if archivos}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -1119,9 +1118,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{/if}}
                                 
-                                {{#if propuesta.analisis.pago}}
                                     <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO PARA EL ANÁLISIS ======================== -->
                                     <div class="card">
                                         <div class="card-body">
@@ -1564,7 +1561,6 @@
                                     </div>
                                     <!-- ========================================================================== -->
 
-                                {{/if}}
                             </div>
 
                             {{!-- PESTAÑA 4 - PROYECTO DE CONSULTORÍA --}}
@@ -2277,7 +2273,7 @@
                             <div id="plan-estrategico" class="tab-pane fade">
                             
                                 <!-- =========== PROPUESTA PLAN ESTRATÉGICO ========== -->
-                                <div class="card">
+                                {{!-- <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
                                             <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
@@ -2360,10 +2356,10 @@
                                         </div>
                             
                                     </div>
-                                </div>
+                                </div> --}}
                             
                                 {{!-- PROPUESTA MONTADA + PRECIO --}}
-                                {{#if propuesta.estrategico.fecha}}
+                                {{!-- {{#if propuesta.estrategico.fecha}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -2417,9 +2413,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{/if}}
+                                {{/if}} --}}
                             
-                                {{#if pagoEstrategico.fecha}}
+                                {{!-- {{#if pagoEstrategico.fecha}} --}}
                                 {{!-- CREAR NUEVAS TAREAS --}}
                                 {{#if botonesEtapas.plan2}}
                                 <div class="card">
@@ -2661,7 +2657,7 @@
                                 </div>
                                 <!-- ========================================================================== -->
 
-                                {{/if}} {{!-- CERRANDO IF DE PAGO ESTRATÉGICO FECHAS --}}
+                                {{!-- {{/if}} CERRANDO IF DE PAGO ESTRATÉGICO FECHAS --}}
 
                             </div>
 

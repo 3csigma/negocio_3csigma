@@ -945,7 +945,7 @@ empresaController.planEmpresarial = async (req, res) => {
         msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico, btnActivo, btnDesactivo, tienePropuesta,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        itemEmpresarial: true, tareas, modalAcuerdo
+        /*itemEmpresarial: true,*/ tareas, modalAcuerdo
     })
 }
 

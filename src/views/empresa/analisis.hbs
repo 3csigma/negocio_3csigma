@@ -11,14 +11,14 @@
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
           <div class="card-body">
-            {{#if tienePropuesta}}
+            {{!-- {{#if tienePropuesta}} --}}
             <h2 style="color: #000; font-weight: bold;">Analicemos tu empresa en 4 dimensiones</h2>
             <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa, a través de las dimensiones:</p>
-            {{else}}
+            {{!-- {{else}} --}}
             <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
             <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu análisis de negocio.</p>
             <p style="color: #000; font-weight: bold;">Revisaremos tu empresa en 4 dimensiones:</p>
-            {{/if}}
+            {{!-- {{/if}} --}}
             <p style="color: #000; font-weight: bold;">
               <i class="fa-solid fa-box"></i> Producto</li></br>
               <i class="fa-solid fa-user-tie"></i> Administración</br>
@@ -31,7 +31,7 @@
       <div class="col-md-12 col-xl-6 col-xxl-6">
         <div class="card avtivity-card"
           style="background: transparent !important;border: none !important; box-shadow: none !important">
-          {{#if tienePropuesta}}
+          {{!-- {{#if tienePropuesta}} --}}
           {{#if btnPagar.analisisPer}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
@@ -44,192 +44,17 @@
             <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
           {{/if}}
-          {{/if}}
+          {{!-- {{/if}} --}}
         </div>
       </div>
     </div>
     {{!-- Fin de la 1era fila --}}
-    {{#if tienePropuesta}}
+    {{!-- {{#if tienePropuesta}} --}}
     <div class="row">
       {{!-- TARJETAS IZQUIERDA (PROPUESTAS - PAGOS - INFORMES) --}}
       <div class="col-xl-6 col-xxl-6">
-        {{!-- PROPUESTA --}}
-        <div class="row">
-          <div class="col-xl-12">
-            <div class="card">
-              <div class="card-header">
-                <h4 class="card-title">Propuesta técnica</h4>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-responsive-md text-center">
-                    <thead>
-                      <tr>
-                        <th>FECHA DE PROPUESTA</th>
-                        <th>ESTADO DE PAGO</th>
-                        {{#unless propuesta.pago}}
-                        <th>PAGO EN COUTAS</th>
-                        <th>PAGO ÚNICO</th>
-                        {{/unless}}
-                        <th>VALOR TOTAL</th>
-                        <th>REVISAR PROPUESTA</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
-                        <td>
-                          {{#if propuesta.porcentaje}}
-                            <span class="badge light badge-success">Pagado {{propuesta.porcentaje}}</span>
-                          {{else}}
-                            <span class="badge light badge-warning">Pendiente</span>
-                          {{/if}}
-                        </td>
-                        {{#unless propuesta.pago}}
-                        <td>
-                          <div class="d-flex">
-                            
-                            {{#if escena1}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "==" 1 --}}
-                                <form action="/pagar-analisis-per1" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}">
-                                    <i class="fa fa-usd"></i>
-                                  </button>
-                                </form>
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena2}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "!=" 1 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena3}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 1 --}}
-                                <form action="/pagar-analisis-per2" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
-                                </form>
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena4}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 0 --}}
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena5}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 1 --}}
-                                <form action="/pagar-analisis-per3" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
-                                </form>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena6}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                              {{!-- btnPagar.obj1 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj2 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  {{!-- btnPagar.obj3 "==" 2 --}}
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-                          </div>
-                        </td>
-
-                        {{!-- CELDA DE PAGO ÚNICO ANÁLISIS DE NEGOCIO --}}
-                        <td>
-                          <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                            {{#if activarPagoUnico}}
-                            <form action="/pagar-analisis" method="POST">
-                              <button type="submit" class="btn btn-sm btn-pago-analisis " title="Pagar ahora">Pagar con 10% OFF</button>
-                            </form>
-                            {{else}}
-                            {{#if escena6}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="Análisis de negocio pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            {{else}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="Pago de cuotas en proceso" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            {{/if}}
-                            {{/if}}
-                          </div>
-                        </td>
-
-                        {{/unless}}
-                        <td class="precios_celdas">{{propuesta.precio_total}}</td>
-                        <td>
-                          <a href="{{propuesta.link_propuesta}}" target="_blank"
-                              class="btn color_primary shadow btn-xs sharp text-white"
-                              style="margin: 0 auto">
-                              <i class="fa fa-search"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {{!-- INFORMES GENERADOS --}}
-        {{#unless escena1}}
         <div class="row">
           <div class="col-xl-12">
             {{!-- INFORMES GENERADOS --}}
@@ -273,11 +98,9 @@
             </div>
           </div>
         </div>
-        {{/unless}}
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
-      {{#unless escena1}}
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
@@ -548,9 +371,7 @@
         </div>
         
       </div>
-      {{/unless}}
     </div>
-    {{/if}}
   </div>
 </div>
 

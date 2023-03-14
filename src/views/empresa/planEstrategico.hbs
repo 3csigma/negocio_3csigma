@@ -9,9 +9,9 @@
                 <div class="card avtivity-card"
                     style="background: transparent !important;border: none !important; box-shadow: none !important">
                     <div class="card-body">
-                        {{#if tienePropuesta}}
+                        {{!-- {{#if tienePropuesta}}
                             {{#unless subCancelada}}
-                            {{#if propuesta.pagada}}
+                            {{#if propuesta.pagada}} --}}
                             <h2 style="color: #000; font-weight: bold;">Planifiquemos tus estrategías</h2>
                             <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una
                                 lista de tareas para mejorar tu empresa, a través de las dimensiones:</p>
@@ -21,24 +21,24 @@
                                 <i class="fa-solid fa-gear"></i> Operaciones ({{dimObj.d3}} tareas)</br>
                                 <i class="fa-solid fa-bullhorn"></i> Marketing ({{dimObj.d4}} tareas)</br>
                             </p>
-                            {{else}}
+                            {{!-- {{else}} --}}
                             <h2 style="color: #000; font-weight: bold;">Todo listo para empezar</h2>
                             <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha cargado una propuesta para iniciar el plan estratégico de tu empresa, si estas de acuerdo, puedes iniciar la subscripción para que avancemos al siguiente paso.</p>
-                            {{/if}} 
-                            {{/unless}}
+                            {{!-- {{/if}} 
+                            {{/unless}} --}}
                             {{#if subCancelada}}
                             <h2 style="color: #000; font-weight: bold;">Subscripción finalizada</h2>
                             <p style="text-align: justify;margin-top: 2em;color: #000">La subscripción al Plan Estratégico de negocio ha concluido, gracias por habernos elegido para realizar este viaje corporativo juntos, esperamos que llegues cada vez más lejos y pongas en práctica lo aprendido, si has llegado hasta aquí, eres uno de los afortunados empresarios que decidió tomar las riendas de su empresa y llevarla al siguiente nivel. <br><strong>¡Te deseamos el mayor de los éxitos!</strong></p>
                             {{/if}}
-                        {{else}}
+                        {{!-- {{else}} --}}
                         <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
                         <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar con el plan estratégico.</p>
-                        {{/if}}
+                        {{!-- {{/if}} --}}
                     </div>
                 </div>
             </div>
-            {{#if tienePropuesta}}
-            {{#if propuesta.pagada}}
+            {{!-- {{#if tienePropuesta}}
+            {{#if propuesta.pagada}} --}}
             <div class="col-md-12 col-xl-5 col-xxl-5">
                 {{!-- VALIDANDO SI LA EMPRESA ES NUEVA O ESTABLECIDA --}}
                 {{#if etapaCompleta.verAnalisis}}
@@ -67,17 +67,17 @@
                 </div>
                 {{/if}}
             </div>
-            {{/if}}
-            {{/if}}
+            {{!-- {{/if}}
+            {{/if}} --}}
         </div>
         {{!-- Fin de la 1era fila --}}
-        {{#if tienePropuesta}}
+        {{!-- {{#if tienePropuesta}} --}}
         <div class="row">
             {{!-- TARJETAS LADO IZQUIERDO --}}
-            <div class="col-xl-7 col-xxl-12">
-                <div class="row">
+            {{!-- <div class="col-xl-7 col-xxl-12">
+                <div class="row"> --}}
                     {{!-- PROPUESTA --}}
-                    <div class="col-xl-12">
+                    {{!-- <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Propuesta de plan estratégico de negocio</h4>
@@ -152,12 +152,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
             {{!-- TARJETAS LADO DERECHO (INFORMES GENERADOS) --}}
-            {{#if propuesta.pagada}}
+            {{!-- {{#if propuesta.pagada}} --}}
             <div class="col-xl-5 col-xxl-12">     
                 <div class="row">
                     <div class="col-xl-12">
@@ -201,9 +201,9 @@
                     </div>
                 </div>
             </div>
-            {{/if}}
+            {{!-- {{/if}} --}}
 
-            {{#if propuesta.pagada}}
+            {{!-- {{#if propuesta.pagada}} --}}
             {{!-- TAREAS ASIGNADAS --}}
             <div class="col-xl-12 mt-2">
                 <div class="card plan-list">
@@ -400,10 +400,10 @@
 
                 </div>
             </div>
-            {{/if}}
+            {{!-- {{/if}} --}}
 
         </div>
-        {{/if}}
+        {{!-- {{/if}} --}}
     </div>
 </div>
 

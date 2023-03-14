@@ -92,7 +92,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => {
 
-    const { nombres, apellidos, countryCode, telConsul, direccion_consultor, experiencia_years, zh_consultor } = req.body
+    const { nombres, apellidos, countryCode, telConsul, direccion_consultor, empresa_seleccionada, zh_consultor } = req.body
     const rol = 'Consultor'
     pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
 
@@ -118,12 +118,12 @@ passport.use('local.registroConsultores', new LocalStrategy({
             const year = arrayFecha[2];
 
             // Capturando Certificado de Consul Group
-            const certificado = '../certificados_consultores/' + urlCertificado
+            // const certificado = '../certificados_consultores/' + urlCertificado
 
             // Objeto de Usuario
             const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Consultor', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, empresa_seleccionada, codigo, fecha_creacion, mes, year };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);

@@ -10,11 +10,8 @@
           style="background: transparent !important;border: none !important; box-shadow: none !important">
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Queremos conocerte un poco más</h2>
-            {{#if existencia}}
-            <p style="text-align: justify;margin-top: 2em;color: #000">Ahora que tu consultor ha sido asignado puedes realizar el pago del diagnóstico de negocio, y podremos comenzar juntos el proceso de llevar tu empresa al siguiente nivel.</p>
-            {{else}}
+            <p style="text-align: justify;margin-top: 2em;color: #000">Ahora que tu consultor ha sido asignado, podremos comenzar juntos el proceso de llevar tu empresa al siguiente nivel.</p>
             <p style="text-align: justify;margin-top: 2em;color: #000">Por favor completa el formulario a continuación para tener información mas detallada sobre tu empresa, estos datos son vitales para realizar un diagnóstico preciso. Si deseas modificar, agregar datos o rehacer el formulario puedes hacerlo.</p>
-            {{/if}}
           </div>
         </div>
       </div>
@@ -33,7 +30,7 @@
     {{!-- Fin de la 1era fila --}}
 
     {{!-- TARJETA DE PAGO DIAGNÓSTICO --}}
-    <div class="col-xl-6 col-xxl-6">
+    {{!-- <div class="col-xl-6 col-xxl-6">
       <div class="row">
         <div class="col-xl-12">
           <div class="card">
@@ -78,8 +75,7 @@
           </div>
         </div>
       </div>
-    </div>
-    {{#unless existencia}}
+    </div> --}}
     {{!-- TARJETAS FORMULARIOS E INFORMES --}}
     <div class="row">
       {{!-- FORMULARIOS --}}
@@ -173,7 +169,6 @@
         </div>
       </div>
     </div>
-    {{/unless}}
   </div>
 </div>
 
