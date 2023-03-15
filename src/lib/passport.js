@@ -39,11 +39,15 @@ passport.use('local.registro', new LocalStrategy({
             username = username[0]
 
             let tableUsers = await consultarDatos('users')
-            tableUsers = tableUsers.find(x => x.rol == 'Admin')
-            const emailAdmin = tableUsers.email
+            const admin  = tableUsers.find(x => x.rol == 'Admin')
+            let lastEmpresa  = tableUsers.filter(x => x.rol == 'Empresa')
+            lastEmpresa = lastEmpresa[lastEmpresa.length-1];
+            console.log(lastEmpresa);
+            const hashCode = email+(parseInt(lastEmpresa.id_usuarios+1));
+            console.log("HASH CODE >> ", hashCode);
 
             // Generar código MD5 con base a su email
-            const codigo = crypto.createHash('md5').update(email).digest("hex");
+            const codigo = crypto.createHash('md5').update(hashCode).digest("hex");
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
@@ -66,7 +70,7 @@ passport.use('local.registro', new LocalStrategy({
 
             // Enviar Email
             const resultEmail = await sendEmail(email, 'Confirma tu registro en PAOM System', template)
-            const resultEmail2 = await sendEmail(emailAdmin, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
+            const resultEmail2 = await sendEmail(admin.email, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
 
             if (resultEmail == false || resultEmail2 == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
@@ -102,13 +106,15 @@ passport.use('local.registroConsultores', new LocalStrategy({
             return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
         } else {
 
-            // Generar código MD5 con base a su email
-            let codigo = crypto.createHash('md5').update(email).digest("hex");
-            clave = codigo.slice(5, 13);
-
             let tableUsers = await consultarDatos('users')
-            tableUsers = tableUsers.find(x => x.rol == 'Admin')
-            const emailAdmin = tableUsers.email
+            const admin  = tableUsers.find(x => x.rol == 'Admin')
+            let lastConsultor  = tableUsers.filter(x => x.rol == 'Consultor')
+            lastConsultor = lastConsultor[lastConsultor.length-1];
+            const hashCode = email+(parseInt(lastConsultor.id_usuarios+1));
+
+            // Generar código MD5 con base a su email
+            let codigo = crypto.createHash('md5').update(hashCode).digest("hex");
+            clave = codigo.slice(5, 13);
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
@@ -132,7 +138,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             console.log("\nEnviando email al admin del registro de un consultor nuevo..\n")
             const nombreCompleto = nombres + ' ' + apellidos
             const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
-            const resultEmail = await sendEmail(emailAdmin, '¡Se ha registrado una nuevo consultor!', templateConsul)
+            const resultEmail = await sendEmail(admin.email, '¡Se ha registrado una nuevo consultor!', templateConsul)
 
             if (resultEmail == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
