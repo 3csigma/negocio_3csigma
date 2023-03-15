@@ -1233,7 +1233,7 @@ const nuevoConsultorRegistrado = (admin, consultor) => {
 <td class="pad" style="padding-bottom:20px;padding-left:25px;padding-right:25px;padding-top:20px;">
 <div style="font-family: sans-serif">
 <div class="" style="font-size: 14px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 25.2px; color: #000000; line-height: 1.8;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 32.4px;"><span style="font-size:18px;">${consultor} acaba de registrarse en PAOM System como consultor, haz clic en el botón para saber más</span></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 32.4px;"><span style="font-size:18px;">${consultor} acaba de registrarse en PAOM System como estudiante, haz clic en el botón para saber más</span></p>
 </div>
 </div>
 </td>
@@ -1243,7 +1243,7 @@ const nuevoConsultorRegistrado = (admin, consultor) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/consultores" style="height:48px;width:297px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/consultores" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR CONSULTORES</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/consultores" style="height:48px;width:297px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/consultores" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REVISAR ESTUDIANTES</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -1543,7 +1543,7 @@ const consultorAprobadoHTML = (consultor, clave) => {
 <table border="0" cellpadding="0" cellspacing="0" class="image_block block-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td class="pad" style="padding-bottom:5px;padding-left:20px;padding-right:20px;padding-top:25px;width:100%;">
-<div align="center" class="alignment" style="line-height:10px"><img alt="Has sido aprobado como consultor" src="https://consultant.paomsystem.com/public_files/emails_img/Consultor_Aprobado.jpg" style="display: block; height: auto; border: 0; width: 245px; max-width: 100%;" title="Has sido aprobado como consultor" width="245"/></div>
+<div align="center" class="alignment" style="line-height:10px"><img alt="Has sido aprobado como estudiante" src="https://consultant.paomsystem.com/public_files/emails_img/Consultor_Aprobado.jpg" style="display: block; height: auto; border: 0; width: 245px; max-width: 100%;" title="Has sido aprobado como consultor" width="245"/></div>
 </td>
 </tr>
 </table>

@@ -18,7 +18,7 @@ module.exports = {
                 const adm = rutasObj.rutasAdmin.find(x => x == url.toLowerCase())
                 const adm2 = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
                 if (adm || adm2) return next(); else console.log("El Admin no tiene acceso a esta ruta o no se encuentra en el Array rutasAdmin.. (Rutas en minúsculas)");
-            } else if (req.user.rol == "Consultor") {
+            } else if (req.user.rol == "Estudiante") {
                 const ok = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
                 if (ok) return next(); else console.log("El Consultor no tiene acceso a esta ruta o no se encuentra en el Array rutasConsultor.. (Rutas en minúsculas)");
             } else {
@@ -34,7 +34,7 @@ module.exports = {
         if (req.isAuthenticated && req.user) {
             if (req.user.rol == "Empresa") {
                 empresaController.index(req, res);
-            } else if(req.user.rol == "Consultor") {    
+            } else if(req.user.rol == "Estudiante") {    
                 consultorController.index(req, res);
             } else {
                 dashboardController.admin(req, res);

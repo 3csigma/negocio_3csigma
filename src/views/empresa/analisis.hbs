@@ -13,11 +13,8 @@
           <div class="card-body">
             {{!-- {{#if tienePropuesta}} --}}
             <h2 style="color: #000; font-weight: bold;">Analicemos tu empresa en 4 dimensiones</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa, a través de las dimensiones:</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">¡Bienvenido(a)! Si estás aquí es porque seguramente estás buscando mejorar los resultados de tu empresa, y estás en el lugar indicado. Con nuestro método PAOM obtendrás un análisis de negocio completo y detallado para que puedas conocer en profundidad cómo está funcionando tu empresa en la actualidad y cuáles son las oportunidades de mejora, teniendo en cuenta las dimensiones:</p>
             {{!-- {{else}} --}}
-            <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu análisis de negocio.</p>
-            <p style="color: #000; font-weight: bold;">Revisaremos tu empresa en 4 dimensiones:</p>
             {{!-- {{/if}} --}}
             <p style="color: #000; font-weight: bold;">
               <i class="fa-solid fa-box"></i> Producto</li></br>
@@ -40,8 +37,6 @@
           {{else}}
           <div class="card-body">
             {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
-            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pagar con 10% OFF"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
-            <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
           {{/if}}
           {{!-- {{/if}} --}}
@@ -100,7 +95,9 @@
         </div>
       </div>
 
-      {{!-- CARGA DE ARCHIVOS --}}
+
+     {{!-- CARGA DE ARCHIVOS --}}
+    {{#if tieneCuestionario}}
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
@@ -362,15 +359,12 @@
                   </div>
                 </div>
                 {{/if}}
-
               </div>
             </div>
           </div>
-
-          
         </div>
-        
       </div>
+      {{/if}}
     </div>
   </div>
 </div>

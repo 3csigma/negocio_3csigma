@@ -18,7 +18,7 @@ dashboardController.admin = async (req, res) => {
 
     /** Acceso directo para Consultores pendientes por aprobar */
     aprobarConsultor = false;
-    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
+    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Estudiante" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
 
     const consultorAsignado = await consultarDatos('consultores')
@@ -87,7 +87,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante" AND c.id_consultores != 1;')
     
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
@@ -96,7 +96,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
     
     /** Acceso directo para Consultores pendientes por aprobar */
     aprobarConsultor = false;
-    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
+    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Estudiante" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
     
     res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
@@ -104,7 +104,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
 
 dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
-    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ? AND c.codigo = u.codigo AND u.rol = "Consultor";', [codigo])
+    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ? AND c.codigo = u.codigo AND u.rol = "Estudiante";', [codigo])
     consultor = consultor[0];
     if (consultor.certificado) {
         consultor.txtCertificado = consultor.certificado.split('/')[2]
@@ -116,9 +116,9 @@ dashboardController.actualizarConsultor = async (req, res) => {
     const { codigo, estado, nivel } = req.body;
     const estadoNivel = {nivel}
     const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
-    const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
+    const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Estudiante"', [nuevoEstado, codigo])
     const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
-    const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [codigo]) // Consultando Consultor Aprobado
+    const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Estudiante"', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
 
     if (c1.affectedRows > 0) {
@@ -165,11 +165,11 @@ dashboardController.bloquearConsultor = async (req, res) => {
     const actualizar = { estadoAdm: 2 }
     const consultor = await pool.query('SELECT id_consultores, codigo FROM consultores WHERE id_consultores = ? LIMIT 1', [id])
     if (consultor.length > 0) {
-        const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [consultor[0].codigo])
+        const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Estudiante"', [consultor[0].codigo])
         if (c.length > 0 && c[0].estadoAdm == 2) {
             res.send(respu)
         } else {
-            await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [actualizar, consultor[0].codigo], (err, result) => {
+            await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Estudiante"', [actualizar, consultor[0].codigo], (err, result) => {
                 if (err) throw err;
                 if (result.affectedRows > 0) { respu = true }
                 res.send(respu)

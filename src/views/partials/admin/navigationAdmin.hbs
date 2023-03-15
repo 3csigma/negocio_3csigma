@@ -69,7 +69,7 @@
           <div class="header-left">
             <div class="dashboard_bar">
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
-              {{#comparar itemActivo '==' 2}}Consultores registrados{{/comparar}}
+              {{#comparar itemActivo '==' 2}}Estudiantes registrados{{/comparar}}
               {{#comparar itemActivo '==' 3}}Empresas registradas{{/comparar}}
               {{!-- {{#comparar itemActivo '==' 4}}Informes generales{{/comparar}} --}}
               {{#if consultor.foto}}Perfil{{/if}}
@@ -282,13 +282,13 @@
       <a href="/consultores/{{aprobarConsultor}}" class="add-menu-sidebar color_tertiary text-black"
         style="padding: 10px 15px;">
         <img src="/img/icon_consultor.png" alt="Aprobar consultor" class="mr-2">
-        <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
+        <p class="font-w500 mb-0 text-center">Aprobar estudiantes</p>
       </a>
       {{else}}
       <a class="add-menu-sidebar"
         style="background: #585858 !important; color:#fff !important; cursor: default; padding: 10px 15px;">
         <img src="/img/icon_consultor.png" alt="Aprobar consultor" class="mr-2" style="filter: grayscale(1)">
-        <p class="font-w500 mb-0 text-center">Aprobar consultores</p>
+        <p class="font-w500 mb-0 text-center">Aprobar estudiantes</p>
       </a>
       {{/if}}
 

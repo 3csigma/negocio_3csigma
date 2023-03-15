@@ -190,7 +190,7 @@ userController.update_user = async (req, res) => {
     }
 
     // Actualizar datos consultor y administrador
-    if (rol == 'Consultor' || rol == 'Admin') {
+    if (rol == 'Estudiante' || rol == 'Admin') {
         consultorDash = true;
         let { email_consultor, clave_consultor, tel_consultor, direccion_consultor } = req.body;
         let email = email_consultor
@@ -224,7 +224,7 @@ userController.actualizarFotoPerfil = async (req, res) => {
     if (rol == 'Empresa') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
     }
-    if (rol == 'Consultor' || rol == 'Admin') {
+    if (rol == 'Estudiante' || rol == 'Admin') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
     }
     res.send(true);
