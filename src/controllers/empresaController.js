@@ -435,7 +435,7 @@ empresaController.diagnostico = async (req, res) => {
     const ficha = fichaCliente[0]
 
     if (fichaCliente.length == 0) {
-        formDiag.color = 'badge-warning'
+        formDiag.color = 'badge-danger'
         formDiag.texto = 'Pendiente'
         formDiag.fechaLocal = true;
     } else {
@@ -452,7 +452,7 @@ empresaController.diagnostico = async (req, res) => {
             formDiag.estado = true;
         } else {
             formDiag.color = 'badge-success'
-            formDiag.estilo = '#000000; color: #FFFF'
+            formDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
             formDiag.texto = 'Completado'
             formDiag.estado = true;
         }
@@ -801,7 +801,7 @@ empresaController.planEmpresarial = async (req, res) => {
     const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
     const id_empresa = row[0].id_empresas;
     const propuestas = await consultarDatos('propuestas')
-    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
+    const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
     const etapa2 = {lista: true}
@@ -867,9 +867,9 @@ empresaController.planEmpresarial = async (req, res) => {
             escena6 = true
             activarPagoUnico = false
             btnDesactivo
-            msgDesactivo = "Proyecto de consultoría pagado"
-            msgDesactivo2 = "Proyecto de consultoría pagado"
-            msgDesactivo3 = "Proyecto de consultoría pagado"
+            msgDesactivo = "Plan empresarial pagado"
+            msgDesactivo2 = "Plan empresarial pagado"
+            msgDesactivo3 = "Plan empresarial pagado"
         } else if  (objEmpresarial1.estado == 1 && objEmpresarial2.estado == 0 && objEmpresarial3.estado == 0) {
             escena1 = true
             msgActivo = "Primera cuota lista para pagarse"

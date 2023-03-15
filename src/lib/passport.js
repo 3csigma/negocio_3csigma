@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
-const { getTemplate, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
+const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos } = require('../lib/helpers')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
@@ -38,12 +38,15 @@ passport.use('local.registro', new LocalStrategy({
             let username = email.split('@')
             username = username[0]
 
-            let tableUsers = await consultarDatos('users')
-            tableUsers = tableUsers.find(x => x.rol == 'Admin')
-            const emailAdmin = tableUsers.email
+            const tableUsers = await consultarDatos('users')
+            const admin  = tableUsers.find(x => x.rol == 'Admin')
+            const lastUser = tableUsers[tableUsers.length-1];
+            const hashCode = email+(parseInt(lastEmpresa.id_usuarios+1));
+            console.log(lastUser);
+            console.log("HASH CODE >> ", hashCode);
 
             // Generar código MD5 con base a su email
-            const codigo = crypto.createHash('md5').update(email).digest("hex");
+            const codigo = crypto.createHash('md5').update(hashCode).digest("hex");
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
@@ -59,14 +62,14 @@ passport.use('local.registro', new LocalStrategy({
             newUser.clave = await helpers.encryptPass(clave)
 
             // Obtener la plantilla de Email
-            const template = getTemplate(nombres, nombre_empresa, codigo);
+            const template = confirmarRegistro(nombres, nombre_empresa, codigo);
             const templateNuevaEmpresa = nuevaEmpresa('Carlos', nombre_empresa)
 
             console.log("\nEnviando email al admin de nueva empresa registrada..\n")
 
             // Enviar Email
             const resultEmail = await sendEmail(email, 'Confirma tu registro en 3C Sigma', template)
-            const resultEmail2 = await sendEmail(emailAdmin, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
+            const resultEmail2 = await sendEmail(admin.email, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
 
             if (resultEmail == false || resultEmail2 == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
@@ -102,13 +105,16 @@ passport.use('local.registroConsultores', new LocalStrategy({
             return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
         } else {
 
-            // Generar código MD5 con base a su email
-            let codigo = crypto.createHash('md5').update(email).digest("hex");
-            clave = codigo.slice(5, 13);
+            const tableUsers = await consultarDatos('users')
+            const admin  = tableUsers.find(x => x.rol == 'Admin')
+            const lastUser = tableUsers[tableUsers.length-1];
+            const hashCode = email+(parseInt(lastEmpresa.id_usuarios+1));
+            console.log(lastUser);
+            console.log("HASH CODE >> ", hashCode);
 
-            let tableUsers = await consultarDatos('users')
-            tableUsers = tableUsers.find(x => x.rol == 'Admin')
-            const emailAdmin = tableUsers.email
+            // Generar código MD5 con base a su email
+            let codigo = crypto.createHash('md5').update(hashCode).digest("hex");
+            clave = codigo.slice(5, 13);
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
@@ -132,7 +138,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             console.log("\nEnviando email al admin del registro de un consultor nuevo..\n")
             const nombreCompleto = nombres + ' ' + apellidos
             const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
-            const resultEmail = await sendEmail(emailAdmin, '¡Se ha registrado una nuevo consultor!', templateConsul)
+            const resultEmail = await sendEmail(admin.email, '¡Se ha registrado una nuevo consultor!', templateConsul)
 
             if (resultEmail == false) {
                 return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
