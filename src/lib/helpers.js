@@ -136,7 +136,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'primera cuota de tu análisis de negocio en 3C Sigma, tu segundo'
+                                const texto = 'primera cuota de tu análisis de negocio en PAOM System, tu segundo'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
@@ -165,7 +165,7 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'segunda cuota de tu análisis de negocio en 3C Sigma, tu tercer y último'
+                                const texto = 'segunda cuota de tu análisis de negocio en PAOM System, tu tercer y último'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
@@ -192,7 +192,7 @@ helpers.habilitar_siguientePago = async () => {
         }
 
         // PROCESO PARA VALIDAR PAGO EN PROPUESTAS DE PLAN EMPRESARIAL
-        const propuestas_empresarial = propuestas.filter(x => x.tipo_propuesta == 'Plan empresarial')
+        const propuestas_empresarial = propuestas.filter(x => x.tipo_propuesta == 'Proyecto de Consultoría')
         if (propuestas_empresarial.length > 0) {
             propuestas_empresarial.forEach(async (x) => {
                 const isFound = pagos.find(p => p.id_empresa == x.empresa)
@@ -204,7 +204,7 @@ helpers.habilitar_siguientePago = async () => {
                     const obj2 = JSON.parse(isFound.empresarial2)
                     const obj3 = JSON.parse(isFound.empresarial3)
 
-                    const etapa = 'Plan Empresarial'; const link = 'plan-empresarial';
+                    const etapa = 'Proyecto de Consultoría'; const link = 'proyecto-de-consultoría';
     
                     if (obj1.fecha && obj2.estado == 0) {
                         console.log("COMPARACIÓN DE PLAN EMPRESARIAL 1ER PAGO --", obj1.fecha)
@@ -221,18 +221,18 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'primera cuota de tu plan empresarial en 3C Sigma, tu segundo'
+                                const texto = 'primera cuota de tu Proyecto de consultoría en PAOM System, tu segundo'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
                         
                                 // Enviar Email
-                                const resultEmail = await sendEmail(email, 'Tu segundo cobro de plan empresarial está listo', template)
+                                const resultEmail = await sendEmail(email, 'Tu segundo cobro de Proyecto de consultoría está listo', template)
                     
                                 if (resultEmail == false) {
-                                    console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de plan empresarial")
+                                    console.log("Ocurrio un error inesperado al enviar el email del 2do Cobro de Proyecto de consultoría")
                                 } else {
-                                    console.log("Email del 2do cobro PLAN EMPRESARIAL enviado satisfactoriamente")
+                                    console.log("Email del 2do cobro Proyecto de consultoría enviado satisfactoriamente")
                                 }
                             }
                         }
@@ -250,18 +250,18 @@ helpers.habilitar_siguientePago = async () => {
                                 const empresa = empresas.find(i => i.id_empresas == x.empresa)
                                 const email = empresa.email
                                 const nombre_empresa = empresa.nombre_empresa
-                                const texto = 'segunda cuota de tu plan empresarial en 3C Sigma, tu tercer y último'
+                                const texto = 'segunda cuota de tu Proyecto de consultoría en PAOM System, tu tercer y último'
                                 
                                 // Obtener la plantilla de Email
                                 const template = proximoPagoPendienteHTML(nombre_empresa, texto, etapa, link);
                         
                                 // Enviar Email
-                                const resultEmail = await sendEmail(email, 'Tu último cobro de plan empresarial está listo', template)
+                                const resultEmail = await sendEmail(email, 'Tu último cobro de Proyecto de consultoría está listo', template)
                     
                                 if (resultEmail == false){
-                                    console.log("Ocurrio un error inesperado al enviar el email del último Cobro de plan empresarialo")
+                                    console.log("Ocurrio un error inesperado al enviar el email del último Cobro de Proyecto de consultoría")
                                 } else {
-                                    console.log("Email del último cobro PLAN EMPRESARIAL enviado satisfactoriamente")
+                                    console.log("Email del último cobro Proyecto de consultoría enviado satisfactoriamente")
                                 }
                             }
                         }
@@ -551,13 +551,13 @@ helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {
         if (x.prioridad == 0) {
             x.prioridad = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px";
         } else if (x.prioridad == 1) {
-            x.prioridad = 'Baja'; x.background = "background: #a184e3";
+            x.prioridad = 'Baja'; x.background = "background: #666666";
         } else if (x.prioridad == 2) {
-            x.prioridad = 'Media'; x.background = "background: #825fd3;"
+            x.prioridad = 'Media'; x.background = "background: #454546;"
         } else if (x.prioridad == 3) {
-            x.prioridad = 'Alta'; x.background = "background: #6647af;"
+            x.prioridad = 'Alta'; x.background = "background: #272727;"
         } else if (x.prioridad == 4) {
-            x.prioridad = 'Crítica'; x.background = "background: #50368c;"
+            x.prioridad = 'Crítica'; x.background = "background: #000000;"
         }
 
         const dateObj = new Date(x.fecha_entrega);
@@ -620,13 +620,13 @@ helpers.consultarTareas = async (empresa, fechaActual) => {
         if (x.prioridad == 0) {
             x.prioridad = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px";
         } else if (x.prioridad == 1) {
-            x.prioridad = 'Baja'; x.background = "background: #a184e3";
+            x.prioridad = 'Baja'; x.background = "background: #666666";
         } else if (x.prioridad == 2) {
-            x.prioridad = 'Media'; x.background = "background: #825fd3;"
+            x.prioridad = 'Media'; x.background = "background: #454546;"
         } else if (x.prioridad == 3) {
-            x.prioridad = 'Alta'; x.background = "background: #6647af;"
+            x.prioridad = 'Alta'; x.background = "background: #272727;"
         } else if (x.prioridad == 4) {
-            x.prioridad = 'Crítica'; x.background = "background: #50368c;"
+            x.prioridad = 'Crítica'; x.background = "background: #000000;"
         }
 
         const dateObj = new Date(x.fecha_entrega);

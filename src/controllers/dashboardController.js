@@ -140,7 +140,7 @@ dashboardController.actualizarConsultor = async (req, res) => {
             const template = consultorAprobadoHTML(nombre, clave);
 
             // Enviar Email
-            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en 3C Sigma', template)
+            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en PAOM System', template)
 
             if (resultEmail == false) {
                 res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
@@ -303,6 +303,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.idEmpresa = idEmpresa
     datos.foto = userEmpresa.foto
     datos.idConsultor = 1
+    datos.idConsultor = 1
 
     // PAGOS DE LA EMPRESA
     const pagos = await consultarDatos('pagos')
@@ -323,6 +324,7 @@ dashboardController.editarEmpresa = async (req, res) => {
                 if (consulDg) {
                     infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
                     pago_diagnostico.btn = 'color: white;'
+                    datos.idConsultor = infoConsul.id_consultores;
                     datos.idConsultor = infoConsul.id_consultores;
                     if (infoConsul.nivel == '1') {
                         pago_diagnostico.valor = 197
@@ -399,13 +401,13 @@ dashboardController.editarEmpresa = async (req, res) => {
     dgNuevasEmpresas = dgNuevasEmpresas.find(x => x.id_empresa == idEmpresa)
     
     if (!diagnostico && !dgNuevasEmpresas) {
-        frmDiag.color = 'badge-danger'
+        frmDiag.color = 'badge-warning'
         frmDiag.texto = 'Pendiente'
         frmDiag.fechaLocal = true;
         frmDiag.tablasVacias = true;
     } else {        
         frmDiag.color = 'badge-success'
-        frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); color: #FFFF'
+        frmDiag.estilo = 'linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%); color: #FFFF'
         frmDiag.texto = 'Completado'
         frmDiag.estado = true;
 
@@ -749,9 +751,9 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     /**************************************************************************************** */
-    /* => PLAN EMPRESARIAL ***************************************************************** */
+    /* => Plan Empresarial ***************************************************************** */
     // PROPUESTA
-    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
+    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan Empresarial')
     let pagos_empresarial = {}, tareasEmpresarial = null;
     const empresarial = {                     
         negocio: { ver: 'none' },
@@ -764,7 +766,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         otro3: { ver: 'none' }
     }
     if (propuesta.empresarial) {
-        datos.etapa = 'Propuesta de plan empresarial enviada'
+        datos.etapa = 'Propuesta de Plan Empresarial enviada'
         propuesta.empresarial.finalizada = false;
         if (datosEmpresa.etapa_empresarial == 1) { propuesta.empresarial.finalizada = true; }
 
@@ -785,7 +787,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagos_empresarial.unico.precio = parseFloat(propuesta.empresarial.precio_total*0.9);
 
         if (pagos_empresarial.unico.estado == 1) {
-            datos.etapa = 'Plan empresarial pago único'
+            datos.etapa = 'Plan Empresarial pago único'
             pagos_empresarial.unico.color = 'success'
             pagos_empresarial.unico.txt = 'Pagado 100%'
             propuesta.empresarial.pago = true;
@@ -793,7 +795,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             precioPagado = pagos_empresarial.unico.precio;
         }
         if (pagos_empresarial.uno.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 60%'
+            datos.etapa = 'Plan Empresarial - Pagado 60%'
             pagos_empresarial.uno.color = 'success'
             pagos_empresarial.uno.txt = 'Pagado 60%'
             propuesta.empresarial.pago = true;
@@ -801,14 +803,14 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_empresarial.dos.btn = true;
         }
         if (pagos_empresarial.dos.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 80%'
+            datos.etapa = 'Plan Empresarial - Pagado 80%'
             pagos_empresarial.dos.color = 'success'
             pagos_empresarial.dos.txt = 'Pagado 80%'
             pagos_empresarial.dos.btn = false;
             pagos_empresarial.tres.btn = true;
         }
         if (pagos_empresarial.tres.estado == 2) {
-            datos.etapa = 'Plan empresarial - Pagado 100%'
+            datos.etapa = 'Plan Empresarial - Pagado 100%'
             pagos_empresarial.tres.color = 'success'
             pagos_empresarial.tres.txt = 'Pagado 100%'
             pagos_empresarial.tres.btn = false;
@@ -865,7 +867,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             datos.etapa = 'Archivos - Plan Empresarial'
         }
         // OTRO 2
-        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 2")
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro2")
         if (archivo) {
             empresarial.otro2.fecha = archivo.fecha;
             empresarial.otro2.ver = 'block';
@@ -874,7 +876,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             datos.etapa = 'Archivos - Plan Empresarial'
         }
         // OTRO 3
-        archivo = archivosEmpresarial.find(x => x.tipo == "Otro 3")
+        archivo = archivosEmpresarial.find(x => x.tipo == "Otro3")
         if (archivo) {
             empresarial.otro3.fecha = archivo.fecha;
             empresarial.otro3.ver = 'block';
@@ -1008,13 +1010,13 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
         let tab_tareaAsignada
-        if (botonesEtapas.uno) tab_tareaAsignada = "color: #85bb65;"
+        if (botonesEtapas.uno) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.dos) tab_tareaAsignada = "color: #85bb65;"
+        if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #85bb65;"
+        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
         
-        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #85bb65;"
+        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
    
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
     // TAREAS PLAN EMPRESARIAL
@@ -1107,23 +1109,14 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         const filtro = asignados.find(x => x.etapa == key)
         // console.log("\n FILTRO ---> ", filtro)
         let orden = 1;
-        let link_Imagen = '';
-        let mensaje = 'Recibirás instrucciones sobre como continuar en tu plataforma 3C sigma o a través de tu correo'
-        if (key == 'Diagnóstico') {
-            link_Imagen = linkBase+'Consultor-asignado_Diagnostico.jpg';
-            mensaje = 'Ahora puedes realizar el pago del Diagnóstico de Negocio'
-        }
         if (key == 'Análisis') {
             orden = 2;
-            link_Imagen = linkBase+'Consultor-asignado_analisis.jpg';
         }
         if (key == 'Plan Empresarial') {
             orden = 3;
-            link_Imagen = linkBase+'Consultor-asignado_Plan_Empresarial.jpg';
         }
         if (key == 'Plan Estratégico') {
             orden = 4;
-            link_Imagen = linkBase+'Consultor-asignado_Plan_Estrategico.jpg';
         }
         if (filtro) {
             const dato = {consultor: value.id}
@@ -1136,7 +1129,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
             const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
-            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, link_Imagen, mensaje);
+            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, key);
             const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
             if (resultEmail == false) {
                 console.log("\nOcurrio un error inesperado al enviar el email consultor asignado")
@@ -1688,21 +1681,13 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     const fecha = new Date()
-    let nombre = ''
-    tipo == 'Otro' || tipo == 'Otro 2' || tipo == 'Otro 3' ? nombre = nombreArchivo : nombre = req.file.originalname;
+    let nombre = '', urlFile = '../archivos_plan_empresarial/' + req.file.filename;
+    tipo == 'Otro' || tipo == 'Otro2' || tipo == 'Otro3' ? nombre = nombreArchivo : nombre = req.file.originalname;
     const nuevoArchivo = {
         empresa: e.id_empresas,
         tipo,
         nombre,
-        url: '../archivos_plan_empresarial/' + req.file.filename,
-        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-        mes: fecha.getMonth() + 1,
-        year: fecha.getFullYear()
-    }
-
-    const actualizar = {
-        nombre,
-        url: '../archivos_plan_empresarial/' + req.file.originalname,
+        url: urlFile,
         fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
         mes: fecha.getMonth() + 1,
         year: fecha.getFullYear()
@@ -1713,19 +1698,27 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
     let archivoActual = null;
 
     if (tieneArchivo.length > 0) {
+        urlFile = '../archivos_plan_empresarial/' + req.file.originalname; 
+        const actualizar = {
+            nombre,
+            url: urlFile,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
         archivoActual = await pool.query('UPDATE archivos_plan_empresarial SET ? WHERE empresa = ? AND tipo = ?', [actualizar, e.id_empresas, tipo])
     } else {
-        // archivoActual = await pool.query('INSERT INTO archivos_plan_empresarial SET ?', [nuevoArchivo])
         archivoActual = await insertarDatos('archivos_plan_empresarial', nuevoArchivo)
     }
 
+    console.log("ARCHIVO ACTUAL PRO CON: >>>> ", archivoActual)
+
     if (archivoActual.affectedRows > 0) {
-        const email = e.email
         let asunto = 'Se ha cargado un nuevo archivo en Plan Empresarial'
         let template = archivosPlanEmpresarialHTML(e.nombre_empresa);
         
         // Enviar Email
-        const resultEmail = await sendEmail(email, asunto, template)
+        const resultEmail = await sendEmail(e.email, asunto, template)
 
         if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de archivo subido a la empresa >>>> \n")
@@ -1734,8 +1727,8 @@ dashboardController.guardarArchivo_Empresarial = async (req, res) => {
         }
 
         r.ok = true;
-        r.fecha = nuevoArchivo.fecha;
-        r.url = nuevoArchivo.url
+        r.fecha = fecha.toLocaleString("en-US", { timeZone: zonaHoraria });
+        r.url = urlFile;
     }
 
     res.send(r)
@@ -1814,7 +1807,7 @@ dashboardController.finalizarEtapa = async (req, res) => {
         const link = 'plan-empresarial';
         template = etapaFinalizadaHTML(empresa.nombre_empresa, 'Plan Empresarial', texto, link);
         // Enviar Email
-        const resultEmail = await sendEmail(empresa.email, 'Plan empresarial finalizado', template)
+        const resultEmail = await sendEmail(empresa.email, 'Plan Empresarial finalizado', template)
         if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de etapa de Plan Empresarial finalizada >>>> \n")
         } else {

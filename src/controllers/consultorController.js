@@ -32,7 +32,7 @@ consultorController.index = async (req, res) => {
     if (historialInformes.length > 0) { datosJson_historialI_consultor = JSON.stringify(historialInformes) }
     // FIN DE LA FUNCIÓN <<====
 
-    // Informe de diagnóstico de empresa subido
+    // ÚLTIMOS INFORMES CARGADOS
     let ultimosInformes = await consultarDatos('informes', `WHERE consultor = ${consultor.id_consultores} ORDER BY id_informes DESC LIMIT 2`)
     if (ultimosInformes.length > 0) {
         ultimosInformes.forEach(x => {
@@ -85,7 +85,6 @@ consultorController.enviarPropuesta = async (req, res) => {
     const nombreEmpresa = empresa.nombre_empresa
     const propuestasDB = await consultarDatos('propuestas');
     const fila = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == tipo_propuesta)
-    // const fila2 = propuestasDB.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
     const link_propuesta = '../propuestas_empresa/' + urlPropuestaNegocio
     const fecha = new Date().toLocaleDateString("en-US")
     const precio_per1 = parseFloat(precioPropuesta) * 0.6
@@ -101,11 +100,11 @@ consultorController.enviarPropuesta = async (req, res) => {
         asunto = 'Tenemos una propuesta de plan estratégico para tu empresa'
         etapa = 'Plan Estratégico'
         link = 'plan-estrategico'
-    } else if (tipo_propuesta == 'Plan empresarial') {
-        hash = '#plan-empresarial';
-        asunto = 'Tenemos una propuesta de plan empresarial para tu empresa'
-        etapa = 'Plan Emrpesarial'
-        link = 'plan-empresarial'
+    } else if (tipo_propuesta == 'Proyecto de Consultoría') {
+        hash = '#proyecto-consultoria';
+        asunto = 'Tenemos una propuesta de proyecto de consultoría para tu empresa'
+        etapa = 'Proyecto de Consultoria'
+        link = 'proyecto-de-consultoria'
     } else {
         hash = hash;
     }

@@ -48,6 +48,8 @@ pagosController.pagarDiagnostico = async (req, res) => {
             description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
             }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     req.session.intentPay = session.url;
@@ -90,6 +92,8 @@ pagosController.pagarAnalisisCompleto = async (req, res) => {
             - Análisis y Evaluación dimensión Marketing.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -113,7 +117,7 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per1;
         precio = pay.precio_per1 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -144,6 +148,8 @@ pagosController.pagarAnalisis_parte1 = async (req, res) => {
             - Análisis y Evaluación dimensión Marketing.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -166,7 +172,7 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per2;
         precio = pay.precio_per2 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -197,6 +203,8 @@ pagosController.pagarAnalisis_parte2 = async (req, res) => {
             - Análisis y Evaluación dimensión Marketing.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
 
@@ -220,7 +228,7 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
     const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per3;
         precio = pay.precio_per3 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -251,6 +259,8 @@ pagosController.pagarAnalisis_parte3 = async (req, res) => {
             - Análisis y Evaluación dimensión Marketing.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
 
@@ -271,12 +281,20 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
         precio = (parseFloat(pay.precio_total*0.9))
         precioE3 = precio;
-        precio = precio + '00'
+        precio = precio + ''
+        if (precio.includes('.')) {
+            precio = precio.split('.')
+            precio = precio[0] + '' + precio[1]
+            precio = precio + '0'
+        } else {
+            precio = precio + '00'
+        }
+        precio = parseInt(precio)
         console.log("Precio => ", precio)
     }
 
@@ -296,6 +314,8 @@ pagosController.pagarEmpresarialCompleto = async (req, res) => {
             description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -316,10 +336,10 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per1;
         precio = pay.precio_per1 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -347,6 +367,8 @@ pagosController.pagarEmpresarial_parte1 = async (req, res) => {
             description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
     console.log("RESPUESTA STRIPE SESSION", session.url)
@@ -366,10 +388,10 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per2;
         precio = pay.precio_per2 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -397,6 +419,8 @@ pagosController.pagarEmpresarial_parte2 = async (req, res) => {
             description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
 
@@ -417,10 +441,10 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
     const e = empresas.find(x => x.email == req.user.email)
     const id_empresa = e.id_empresas;
     const propuesta = await consultarDatos('propuestas')
-    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Plan empresarial')
+    const pay = propuesta.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Proyecto de Consultoría')
     let precio = 0;
     if (pay) {
-        precioE2 = precio;
+        precioE2 = pay.precio_per3;
         precio = pay.precio_per3 + ''
         if (precio.includes('.')) {
             precio = precio.split('.')
@@ -448,6 +472,8 @@ pagosController.pagarEmpresarial_parte3 = async (req, res) => {
             description: `Establecer las Actividades a desarrollar, las pautas pertinentes para cada área vital y escalar tu negocio.`
         }],
         mode: 'payment',
+        success_url: `${my_domain}/pago-exitoso`,
+        cancel_url: `${my_domain}/pago-cancelado`,
     });
 
 

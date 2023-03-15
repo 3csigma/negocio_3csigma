@@ -88,7 +88,7 @@ userController.resetPassword = async (req, res, next) => {
         if (result.length > 0) {
             const token = randtoken.generate(20);
             // ! ************* PROCESO DEL EMAIL PARA VENDEDOR ************
-            const asunto = "Bienvenido a 3C Sigma"
+            const asunto = "Reestablece tu contraseña en PAOM System"
             const plantilla = restablecerCuentaHTML(token)
             // Enviar email
             const resultEmail = sendEmail(email, asunto, plantilla)
