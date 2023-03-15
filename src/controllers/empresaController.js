@@ -326,10 +326,10 @@ empresaController.perfilUsuarios = async (req, res) => {
     let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
     consultor = consultor[0]
 
-    if (consultor) {
-        if(consultor.nivel == 1){
-            consultor.nivel = "Estudiante"
-        }
+    // if (consultor) {
+    //     if(consultor.nivel == 1){
+    //         consultor.nivel = "Estudiante"
+    //     }
         // else if(consultor.nivel == 2){
         //     consultor.nivel = "Business Leader"
         // }else if(consultor.nivel == 3){
@@ -337,7 +337,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         // }else if(consultor.nivel == 4){
         //     consultor.nivel = "Executive Director"
         // }
-    }         
+    // }         
     let user_dash = false, adminDash = false, consultorDash = false
     if (rol == 'Empresa') {
         user_dash = true;
@@ -346,10 +346,10 @@ empresaController.perfilUsuarios = async (req, res) => {
         consultor.foto ? consultor.foto = consultor.foto: consultor.foto = "../img/profile_default/user.jpg";
         if (rol == 'Estudiante') {
             consultorDash = true;
-            consultor.nivel
+            consultor.nivel = "Estudiante"
         } else {
             adminDash = true;
-            consultor.nivel
+            consultor.nivel = "Admin"
         }
     }
 
