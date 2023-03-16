@@ -87,7 +87,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante"  rol = "Tutor" AND c.id_consultores != 1;')
     
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
@@ -113,43 +113,32 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
-    const { codigo, estado, nivel=1} = req.body;
+    const { codigo, estado, nivel=1, rol} = req.body;
     const estadoNivel = {nivel}
-    const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
-    const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Estudiante"', [nuevoEstado, codigo])
+    const nuevoEstado = { estadoAdm: estado , rol } // Estado Consultor Aprobado, Pendiente, Bloqueado
+    const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ?', [nuevoEstado, codigo])
     const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
-    const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Estudiante"', [codigo]) // Consultando Consultor Aprobado
+    const c = await pool.query('SELECT * FROM users WHERE codigo = ?', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
 
     if (c1.affectedRows > 0) {
-
         // Enviando Email - Consultor Aprobado
         if (c.length > 0 && c[0].estadoAdm == 1) {
             const nombre = c[0].nombres + " " + c[0].apellidos;
             const email = c[0].email
-
-            console.log("\nINFO CONSULTOR >>>\n", c);
-
-            // Generar código MD5 con base a su email (Esta es la clave del Consultor)
-            let codigo = crypto.createHash('md5').update(email).digest("hex");
-            const clave = codigo.slice(5, 13);
-
-            console.log("\n<<<< Clave del Consultor: ", clave);
+            const clave = c[0].codigo.slice(5, 13);
 
             // Obtener la plantilla de Email
             const template = consultorAprobadoHTML(nombre, clave);
-
             // Enviar Email
             const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en PAOM System', template)
-
-            if (resultEmail == false) {
-                res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+            if (!resultEmail) {
+                console.log("\n*_*_*_*_*_* Ocurrio un error inesperado al enviar el email de Consultor Asignado *_*_*_*_*_* \n");
             } else {
                 console.log("\n>>>> Email de Consultor Aprobado - ENVIADO <<<<<\n")
                 respuesta = true;
             }
         }
-
     }
 
     if (c2.affectedRows > 0) {

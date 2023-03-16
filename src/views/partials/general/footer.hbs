@@ -212,11 +212,11 @@
             // Actualizar Estado del Consultor
             $("#btnActualizarConsultor").click(function () {
                 const estado = $("#estado_consul option:selected").val()
-                const nivel = $("#nivel_consul option:selected").val()
+                const rol = $("#tipo_decuenta option:selected").val()
                 const codigo = $("#codigo_consultor").val()
                 fetch('/actualizarConsultor', {
                     method: 'POST',
-                    body: JSON.stringify({ codigo, estado, nivel }),
+                    body: JSON.stringify({ codigo, estado, rol }),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))

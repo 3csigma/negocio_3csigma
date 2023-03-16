@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Dirección</label>
                             <textarea class="form-control" style="min-height: 45px; height: 45px; max-height: 108px"
@@ -71,7 +71,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Empresa seleccionada</label>
                             <input type="text" value="{{consultor.empresa_seleccionada}}" class="form-control"
@@ -79,7 +79,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Estado</label>
                             <select id="estado_consul" class="mr-sm-2 default-select">
@@ -106,6 +106,21 @@
                                 <option value="1">Activo</option>
                                 <option value="2">Bloqueado</option>
                                 <option value="3" selected>Rechazado</option>
+                                {{/comparar}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label>Tipo de cuenta</label>
+                            <select id="tipo_decuenta" class="mr-sm-2 default-select">
+                                {{#comparar consultor.rol '==' 'Estudiante'}}
+                                <option value="Estudiante" selected>Estudiante</option>
+                                <option value="Tutor">Tutor</option>
+                                {{/comparar}}
+                                {{#comparar consultor.rol '==' 'Tutor'}}
+                                <option value="Estudiante">Estudiante</option>
+                                <option value="Tutor" selected>Tutor</option>
                                 {{/comparar}}
                             </select>
                         </div>
