@@ -113,7 +113,7 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
-    const { codigo, estado, nivel } = req.body;
+    const { codigo, estado, nivel=1} = req.body;
     const estadoNivel = {nivel}
     const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Estudiante"', [nuevoEstado, codigo])
