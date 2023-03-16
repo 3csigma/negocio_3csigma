@@ -122,8 +122,19 @@
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
-                                        <div class="col-2 pt-3">
-                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm color_gradient text-white mt-4" style="border-color: transparent"><i class="fa fa-check"></i></button>
+
+                                        <div class="col-12 mt-3" id="divSede" style="display:none">
+                                            <label>Sede</label>
+                                            <select id="sede" name="sede" class="default-select">
+                                                <option value="1">Online</option>
+                                                <option value="2">Miami</option>
+                                                <option value="3">Resto de USA</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 pt-3">
+                                            <button type="button" onclick="addConsulEtapa()" class="btn color_primary text-white mt-4 w-100" style="border-color: transparent">
+                                                Asignar Consultor <i class="fa fa-check"></i></button>
                                         </div>
 
                                         <div class="col-12" id="divTablaConsul" style="display: {{divConsultores}}">
