@@ -87,7 +87,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante"  rol = "Tutor" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante" AND c.id_consultores != 1;')
     
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
