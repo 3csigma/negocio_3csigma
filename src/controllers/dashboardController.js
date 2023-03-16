@@ -1,11 +1,9 @@
 const dashboardController = exports;
 const pool = require('../database')
 const passport = require('passport')
-const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
-
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
@@ -113,48 +111,43 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
+    let respuesta = false;
     const { codigo, estado, nivel } = req.body;
     const estadoNivel = {nivel}
     const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
     const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
-    const c = await pool.query('SELECT * FROM users WHERE codigo = ? AND rol = "Consultor"', [codigo]) // Consultando Consultor Aprobado
-    let respuesta = false;
+    // Capturando el Consultor Aprobado
+    let consultor = await consultarDatos('users')
+    consultor = consultor.find(x => x.codigo == codigo && x.rol == 'Consultor')
 
-    if (c1.affectedRows > 0) {
+    console.group("CONSULTOR INFORMATION")
+    console.log(c1);
+    console.log("consultor");
+    console.log(consultor);
+    console.groupEnd();
 
+    if (c1.changedRows > 0) {
         // Enviando Email - Consultor Aprobado
-        if (c.length > 0 && c[0].estadoAdm == 1) {
-            const nombre = c[0].nombres + " " + c[0].apellidos;
-            const email = c[0].email
-
-            console.log("\nINFO CONSULTOR >>>\n", c);
-
-            // Generar código MD5 con base a su email (Esta es la clave del Consultor)
-            let codigo = crypto.createHash('md5').update(email).digest("hex");
-            const clave = codigo.slice(5, 13);
-
-            console.log("\n<<<< Clave del Consultor: ", clave);
+        if (consultor.estadoAdm == 1) {
+            const nombre = consultor.nombres + " " + consultor.apellidos;
+            const clave = consultor.codigo.slice(5, 13);
 
             // Obtener la plantilla de Email
             const template = consultorAprobadoHTML(nombre, clave);
-
             // Enviar Email
-            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en PAOM System', template)
+            const resultEmail = await sendEmail(consultor.email, 'Has sido aprobado como consultor en PAOM System', template)
 
             if (resultEmail == false) {
-                res.json("Ocurrio un error inesperado al enviar el email de Consultor Asignado")
+                console.log("\n*_*_*_*_*_* Ocurrio un error inesperado al enviar el email de Consultor Asignado *_*_*_*_*_* \n");
             } else {
-                console.log("\n>>>> Email de Consultor Aprobado - ENVIADO <<<<<\n")
+                console.log(`\n>>>> Email de Consultor Aprobado - ENVIADO a => ${consultor.email} <<<<<\n`)
                 respuesta = true;
             }
         }
-
     }
 
-    if (c2.affectedRows > 0) {
-        respuesta = true;
-    }
+    if (c2.affectedRows > 0) respuesta = true;
 
     res.send(respuesta)
 }
@@ -289,7 +282,8 @@ dashboardController.editarEmpresa = async (req, res) => {
         btn : false,
         fecha : 'N/A',
         valor: 'Sin consultor',
-        activarBtn : false
+        activarBtn : false,
+        sede: false
     }
 
     // Capturando Consultores Activos
@@ -320,21 +314,30 @@ dashboardController.editarEmpresa = async (req, res) => {
             let consulDg = await consultarDatos('consultores_asignados')
             let infoConsul = await consultarDatos('consultores')
             if (consulDg.length > 0) {
+                // Buscando el Consultor asignado en la Etapa Diagnóstico para la empresa actual
                 consulDg = consulDg.find(x => x.empresa == datos.idEmpresa && x.orden == 1)
                 if (consulDg) {
                     infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
                     pago_diagnostico.btn = 'color: white;'
                     datos.idConsultor = infoConsul.id_consultores;
                     if (infoConsul.nivel == '1') {
-                        pago_diagnostico.valor = 197
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL1
                     } else if (infoConsul.nivel == '2') {
-                        pago_diagnostico.valor= 297;
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL2;
                     } else if (infoConsul.nivel == '3') {
-                        pago_diagnostico.valor= 497;
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL3;
                     } else if (infoConsul.nivel == '4') {
-                        pago_diagnostico.valor= 697;
+                        if (consulDg.sede == 1) {
+                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE1;
+                            pago_diagnostico.sede = process.env.SEDE1;
+                        } else if (consulDg.sede == 2) {
+                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE2;
+                            pago_diagnostico.sede = process.env.SEDE2;
+                        } else if (consulDg.sede == 3) {
+                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE3;
+                            pago_diagnostico.sede = process.env.SEDE3;
+                        }
                     }
-                    pago_diagnostico.valor = pago_diagnostico.valor
                 }
             }
         
@@ -1008,15 +1011,15 @@ dashboardController.editarEmpresa = async (req, res) => {
         console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
     }
 
-        let tab_tareaAsignada
-        if (botonesEtapas.uno) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
-        
-        if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
-        
-        if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
-        
-        if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
-   
+    let tab_tareaAsignada
+    if (botonesEtapas.uno) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
+    
+    if(botonesEtapas.dos) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
+    
+    if(botonesEtapas.plan1) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
+    
+    if(botonesEtapas.plan2) tab_tareaAsignada = "color: #FFE000; font-weight: 500;"
+
     // VALIDANDO CUALES TAREAS ESTÁN COMPLETADAS (EN GENERAL)
     // TAREAS PLAN EMPRESARIAL
     if (tareasEmpresarial) {
@@ -1031,8 +1034,6 @@ dashboardController.editarEmpresa = async (req, res) => {
             botonesEtapas.plan2 ? x.taskBtns = true : x.taskBtns = false;
         })
     }
-
-    
 
     let tblConclusiones = await consultarDatos('conclusiones');
     tblConclusiones = tblConclusiones.filter(x => x.id_empresa == idEmpresa)
@@ -1088,16 +1089,8 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const mapaConsultores = new Map(Object.entries(mapa)) 
     console.log("mapaConsultores > ", mapaConsultores)
 
-    console.log("\nCódigo ->", codigo)
-    
-    const linkBase = 'https://3csigma.com/app_public_files/emails_consultor/'
     // Consultar Datos de la empresa
     let empresa = await consultarDatos('empresas')
-    
-    console.group("\n Empresas ---> ")
-    console.log(empresa)
-    console.groupEnd()
-    console.log("******************\n")
     
     empresa = empresa.find(x => x.codigo == codigo)
     console.log("Empresa Actual --> ", empresa)
@@ -1119,9 +1112,11 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         }
         if (filtro) {
             const dato = {consultor: value.id}
+            if (value.sede) { dato.sede = value.sede }
             await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
         } else {
             const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
+            if (value.sede) { datos.sede = value.sede }
             // await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
             await insertarDatos('consultores_asignados', datos)
             

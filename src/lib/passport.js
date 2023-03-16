@@ -42,7 +42,6 @@ passport.use('local.registro', new LocalStrategy({
             const admin  = tableUsers.find(x => x.rol == 'Admin')
             const lastUser = tableUsers[tableUsers.length-1];
             const hashCode = email+(parseInt(lastUser.id_usuarios+1));
-            console.log("ultimo usuario ID >> ", lastUser);
 
             // Generar código MD5 con base a su email
             const codigo = crypto.createHash('md5').update(hashCode).digest("hex");
@@ -108,11 +107,10 @@ passport.use('local.registroConsultores', new LocalStrategy({
             const admin  = tableUsers.find(x => x.rol == 'Admin')
             const lastUser = tableUsers[tableUsers.length-1];
             const hashCode = email+(parseInt(lastUser.id_usuarios+1));
-            console.log("ultimo usuario ID >> ", lastUser);
 
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(hashCode).digest("hex");
-            clave = codigo.slice(5, 13);
+            clave = codigo.slice(5, 13);            
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
