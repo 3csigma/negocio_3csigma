@@ -96,7 +96,7 @@ userController.resetPassword = async (req, res, next) => {
             if (!resultEmail) {
                 type = 'error';
                 msg = 'Ocurrió un error. Inténtalo de nuevo';
-                // res.json("Ocurrio un error inesperado al enviar el email al vendedor")
+                console.log("Ocurrio un error inesperado al enviar el email de restablecer la clave");
             } else {
                 const data = {
                     token: token

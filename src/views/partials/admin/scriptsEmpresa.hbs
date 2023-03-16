@@ -37,38 +37,45 @@
         const idConsultor = $("#id_consultor option:selected").val();
         const nomConsultor = $("#id_consultor option:selected").text();
         const etapa = $('#etapaConsultor option:selected').val();
-        const consultor = { id: idConsultor, nombre: nomConsultor.trim() }
-        const etapa_ = etapa.replace(/[$_]/g, ' ');
-        mapaConsultores.set(etapa_, consultor)
-        console.log("MAPA CONSULTORES -->> ", mapaConsultores)
-        let filas = ``
-        let idFila = $(`#tblConsulAsignados>tbody>tr#${etapa}`)
         
-        if (idFila.length > 0) {
-            console.log("Existe")
-            idFila = idFila[0].id
-            console.log("ETAPA >> ", idFila)
-            const etapaTxt = idFila.replace(/[$_]/g, ' ')
-            $(`#tblConsulAsignados>tbody>tr#${idFila.trim()}`).empty().append(`
-                <td>${etapaTxt}</td>
-                <td>${nomConsultor.trim()}</td>
-            `)
+        if (etapa == "") {
+            $("#txtNulo").show();
         } else {
-            console.log("ETAPA >> ", idFila)
-            console.log("NO EXISTE ESTE TR")
-            for (const [key, value] of mapaConsultores) {
-                const idFila = key.replace(/[$ ]/g, '_');
-                $(`#tblConsulAsignados>tbody>tr#${idFila}`).remove();
-                $('#tblConsulAsignados>tbody').append(`
-                    <tr id="${idFila}">
-                        <td>${key}</td>
-                        <td>${value.nombre}</td>
-                    </tr>`)
+            $("#txtNulo").hide();
+            const etapa_ = etapa.replace(/[$_]/g, ' ');
+            let consultor = { id: idConsultor, nombre: nomConsultor.trim() }
+            if (etapa_ == 'Diagnóstico') {
+                const sede = $('#sede option:selected').val();
+                consultor = { id: idConsultor, nombre: nomConsultor.trim(), sede }
             }
-        }
+            mapaConsultores.set(etapa_, consultor)
+            console.log("MAPA CONSULTORES -->> ", mapaConsultores)
+            let filas = ``
+            let idFila = $(`#tblConsulAsignados>tbody>tr#${etapa}`)
+            
+            if (idFila.length > 0) {
+                idFila = idFila[0].id
+                const etapaTxt = idFila.replace(/[$_]/g, ' ')
+                $(`#tblConsulAsignados>tbody>tr#${idFila.trim()}`).empty().append(`
+                    <td>${etapaTxt}</td>
+                    <td>${nomConsultor.trim()}</td>
+                `)
+            } else {
+                for (const [key, value] of mapaConsultores) {
+                    const idFila = key.replace(/[$ ]/g, '_');
+                    $(`#tblConsulAsignados>tbody>tr#${idFila}`).remove();
+                    $('#tblConsulAsignados>tbody').append(`
+                        <tr id="${idFila}">
+                            <td>${key}</td>
+                            <td>${value.nombre}</td>
+                        </tr>`)
+                }
+            }
 
-        if ($('#divTablaConsul').hide()) {
-            $('#divTablaConsul').show()
+            if ($('#divTablaConsul').css('display') == 'none') {
+                $('#divTablaConsul').show()
+            }
+            
         }
 
     }
@@ -291,5 +298,21 @@
             locale: "en-US",
         }
     })
+
+    document.addEventListener("DOMContentLoaded", function(event) {
+        const consultor_ = document.getElementById("id_consultor");
+        const etapa_consultor = document.getElementById("etapaConsultor");
+        consultor_.addEventListener('change', (e) => {
+            console.log("ASDASDASD")
+            //alert($('#divSede').css('display'))
+            //if ($('#divSede').css('display') == 'block') { $('#divSede').hide();}
+        })
+        etapa_consultor.addEventListener('change', (e) => {
+            if ($('#id_consultor option:selected').attr("id") == 4 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
+                $('#divSede').show();
+            else
+                $('#divSede').hide();
+        })
+    });
 
 </script>
