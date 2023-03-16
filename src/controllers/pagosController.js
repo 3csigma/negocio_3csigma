@@ -4,6 +4,7 @@ const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 const { consultarDatos } = require('../lib/helpers')
 const my_domain = process.env.MY_DOMAIN
 const id_producto_estrategico = process.env.ID_PRODUCTO_ESTRATEGICO
+const nivel4_s3 = process.env.PRECIO_NIVEL4_SEDE3;
 
 let precioDiag = 0, precioE2 = 0, precioE3 = 0;
 
@@ -14,21 +15,34 @@ pagosController.pagarDiagnostico = async (req, res) => {
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.email == req.user.email)
     let consulDiag = await consultarDatos('consultores_asignados')
+    // Buscando el Consultor asignado en la Etapa Diagnóstico para la empresa actual
     consulDiag = consulDiag.find(x => x.empresa == e.id_empresas && x.orden == 1)
     let consul = await consultarDatos('consultores')
     consul = consul.find(x => x.id_consultores == consulDiag.consultor)
+
+    console.group("PRECIO >> ")
+    console.log(nivel4_s3);
+    console.groupEnd();
     
     if (consul) {
         if (consul.nivel == '1') {
-            precioDiag = 197
+            precioDiag = process.env.PRECIO_NIVEL1
         } else if (consul.nivel == '2') {
-            precioDiag = 297
+            precioDiag = process.env.PRECIO_NIVEL2
         } else if (consul.nivel == '3') {
-            precioDiag = 497
+            precioDiag = process.env.PRECIO_NIVEL3
         } else if (consul.nivel == '4') {
-            precioDiag = 697
+            if (consulDiag.sede == 1)
+                precioDiag = process.env.PRECIO_NIVEL4_SEDE1
+            else if (consulDiag.sede == 2)
+                precioDiag = process.env.PRECIO_NIVEL4_SEDE2
+            else if (consulDiag.sede == 3)
+                precioDiag = process.env.PRECIO_NIVEL4_SEDE3
         }
     }
+    console.group("PRECIO >> ")
+    console.log(precioDiag);
+    console.groupEnd();
 
     const precio = precioDiag + '00'
     
@@ -36,7 +50,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
         line_items: [{
             price_data: {
                 currency: 'usd',
-                unit_amount: parseFloat(precio),
+                unit_amount: parseInt(precio),
                 product_data: {
                     name: 'Pago Único - Diagnóstico de Negocio',
                     images: ['https://consultant.paomsystem.com/public_files/images/PAOM_System_Diagnostico_de_Negocio.jpg'],

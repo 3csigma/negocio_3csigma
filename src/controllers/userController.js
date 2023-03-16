@@ -88,7 +88,7 @@ userController.resetPassword = async (req, res, next) => {
         if (result.length > 0) {
             const token = randtoken.generate(20);
             // ! ************* PROCESO DEL EMAIL PARA VENDEDOR ************
-            const asunto = "Reestablece tu contraseña en PAOM System"
+            const asunto = "Reestablece tu contraseña en PAOM System"
             const plantilla = restablecerCuentaHTML(token)
             // Enviar email
             const resultEmail = sendEmail(email, asunto, plantilla)
@@ -96,7 +96,7 @@ userController.resetPassword = async (req, res, next) => {
             if (!resultEmail) {
                 type = 'error';
                 msg = 'Ocurrió un error. Inténtalo de nuevo';
-                // res.json("Ocurrio un error inesperado al enviar el email al vendedor")
+                console.log("Ocurrio un error inesperado al enviar el email de restablecer la clave");
             } else {
                 const data = {
                     token: token

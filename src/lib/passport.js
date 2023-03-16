@@ -40,11 +40,8 @@ passport.use('local.registro', new LocalStrategy({
 
             let tableUsers = await consultarDatos('users')
             const admin  = tableUsers.find(x => x.rol == 'Admin')
-            let lastEmpresa  = tableUsers.filter(x => x.rol == 'Empresa')
-            lastEmpresa = lastEmpresa[lastEmpresa.length-1];
-            console.log(lastEmpresa);
-            const hashCode = email+(parseInt(lastEmpresa.id_usuarios+1));
-            console.log("HASH CODE >> ", hashCode);
+            const lastUser = tableUsers[tableUsers.length-1];
+            const hashCode = email+(parseInt(lastUser.id_usuarios+1));
 
             // Generar código MD5 con base a su email
             const codigo = crypto.createHash('md5').update(hashCode).digest("hex");
@@ -108,13 +105,12 @@ passport.use('local.registroConsultores', new LocalStrategy({
 
             let tableUsers = await consultarDatos('users')
             const admin  = tableUsers.find(x => x.rol == 'Admin')
-            let lastConsultor  = tableUsers.filter(x => x.rol == 'Consultor')
-            lastConsultor = lastConsultor[lastConsultor.length-1];
-            const hashCode = email+(parseInt(lastConsultor.id_usuarios+1));
+            const lastUser = tableUsers[tableUsers.length-1];
+            const hashCode = email+(parseInt(lastUser.id_usuarios+1));
 
             // Generar código MD5 con base a su email
             let codigo = crypto.createHash('md5').update(hashCode).digest("hex");
-            clave = codigo.slice(5, 13);
+            clave = codigo.slice(5, 13);            
 
             // Fecha de Creación
             let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })

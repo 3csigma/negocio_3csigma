@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="../css/editarEmpresa.css">
 <style>
     .chosen-container-single .chosen-single span {
-        font-size: 11px;
+        font-size: 14px;
     }
     .mostrar{
         display: none;
@@ -87,7 +87,7 @@
                                     {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
                                     <div class="row">
                                         <div class="col-12">
-                                            <label>Estado</label>
+                                            <label>Estado de la empresa</label>
                                             <select id="estadoAdm" class="mr-sm-2 default-select text-center">
                                                 {{#comparar datos.estadoAdm '==' '1'}}
                                                 <option value="1" selected>Activa</option>
@@ -100,30 +100,41 @@
                                             </select>
                                         </div>
                                     </div>
+                                    
                                     <div class="row mt-3">
                                         
-                                        <div class="col-5">
+                                        <div class="col-12">
                                             <label>Consultor</label>
                                             <select name="id_consultor" id="id_consultor" class="form-control sltBuscar chosen-container chosen-container-single required">
-                                                {{!-- <option value=""></option> --}}
                                                 {{#each consultores}}
-                                                <option {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
+                                                <option id="{{nivel}}" {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
                                                     {{nombres}} {{apellidos}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
 
-                                        <div class="col-5">
-                                            <label>Etapa</label>
+                                        <div class="col-12 mt-3" id="divSede" style="display:none">
+                                            <label>Sede</label>
+                                            <select id="sede" name="sede" class="default-select">
+                                                <option value="1">Online</option>
+                                                <option value="2">Miami</option>
+                                                <option value="3">Resto de USA</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 mt-3">
+                                            <label>Etapa <span class="text-red" id="txtNulo" style="display: none;">*Opción vacía*</span></label>
                                             <select id="etapaConsultor" name="etapaConsultor" class="default-select">
-                                                <option value="Diagnóstico" selected>Diagnóstico</option>
+                                                <option value="">Selecciona una opción</option>
+                                                <option value="Diagnóstico">Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
                                                 <option value="Proyecto_de_Consultoría">Proyecto de Consultoría</option>
                                                 <option value="Plan_Estratégico">Plan Estratégico</option>
                                             </select>
                                         </div>
-                                        <div class="col-2 pt-3">
-                                            <button type="button" onclick="addConsulEtapa()" class="btn btn-sm color_primary text-white mt-4" style="border-color: transparent"><i class="fa fa-check"></i></button>
+                                        <div class="col-12 pt-3">
+                                            <button type="button" onclick="addConsulEtapa()" class="btn color_primary text-white mt-4 w-100" style="border-color: transparent">
+                                                Asignar Consultor <i class="fa fa-check"></i></button>
                                         </div>
 
                                         <div class="col-12" id="divTablaConsul" style="display: {{divConsultores}};">
@@ -153,9 +164,9 @@
                                         {{#if adminDash}}
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button type="button" class="btn color_primary text-white"
+                                                <button type="button" class="btn color_primary text-white w-100"
                                                     onclick="guardarConsulEtapas()"
-                                                    style="margin-top: 1em; width: 100%; padding: 10px 15px;">
+                                                    style="margin-top: 1em; padding: 10px 15px;">
                                                     <p class="font-w500 m-auto">Guardar cambios</p>
                                                 </button>
                                             </div>
@@ -670,6 +681,9 @@
                                                         <tr>
                                                             <th>FECHA PAGO</th>
                                                             <th>VALOR</th>
+                                                            {{#if pago_diagnostico.sede}}
+                                                            <th>SEDE</th>
+                                                            {{/if}}
                                                             <th>ESTADO DE PAGO</th>
                                                             {{#if rolAdmin}}
                                                             <th>PAGAR</th>
@@ -680,6 +694,9 @@
                                                         <tr>
                                                             <td>{{pago_diagnostico.fecha}}</td>
                                                             <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
+                                                            {{#if pago_diagnostico.sede}}
+                                                            <td>{{pago_diagnostico.sede}}</td>
+                                                            {{/if}}
                                                             <td><span class="badge light {{pago_diagnostico.color}}"
                                                                 style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
                                                             </td>
@@ -2251,8 +2268,6 @@
                                         </div>
                                     </div>
 
-                                {{/if}}
-
                                 <!-- ======================== CONCLUSIONES - PLAN EMPRESARIAL ======================== -->
                                 <div class="card">
                                     <div class="card-body">
@@ -2271,6 +2286,8 @@
                                     </div>
                                 </div>
                                 <!-- ========================================================================== -->
+                                {{/if}}
+
 
                             </div>
 
