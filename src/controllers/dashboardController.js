@@ -281,7 +281,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         texto : 'Pendiente',
         btn : false,
         fecha : 'N/A',
-        valor: 'Sin consultor',
         activarBtn : false,
         sede: false
     }
@@ -297,58 +296,59 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.idEmpresa = idEmpresa
     datos.foto = userEmpresa.foto
     datos.idConsultor = 1
+    datos.consultor_diagnostico = false;
 
     // PAGOS DE LA EMPRESA
     const pagos = await consultarDatos('pagos')
     const pay = pagos.find(i => i.id_empresa == idEmpresa)
 
     // INFO DE LA EMPRESA HASTA LA FICHA CLIENTE
-    let pagoRealizado = false // variable para activar el pago de forma manual desde el admin
+    let pagoDg_Realizado = false;
     if (datosEmpresa) {
         datosEmpresa.estadoEmail == 1 ? datos.etapa = 'Email confirmado' : datos.etapa = datos.etapa;
         // datosEmpresa.consultor != null ? datos.etapa = 'Consultor asignado' : datos.etapa = datos.etapa;
-
-        if (pay) {
-            const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
-            
-            let consulDg = await consultarDatos('consultores_asignados')
-            let infoConsul = await consultarDatos('consultores')
-            if (consulDg.length > 0) {
-                // Buscando el Consultor asignado en la Etapa Diagnóstico para la empresa actual
-                consulDg = consulDg.find(x => x.empresa == datos.idEmpresa && x.orden == 1)
-                if (consulDg) {
-                    infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
-                    pago_diagnostico.btn = 'color: white;'
-                    datos.idConsultor = infoConsul.id_consultores;
-                    if (infoConsul.nivel == '1') {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL1
-                    } else if (infoConsul.nivel == '2') {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL2;
-                    } else if (infoConsul.nivel == '3') {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL3;
-                    } else if (infoConsul.nivel == '4') {
-                        if (consulDg.sede == 1) {
-                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE1;
-                            pago_diagnostico.sede = process.env.SEDE1;
-                        } else if (consulDg.sede == 2) {
-                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE2;
-                            pago_diagnostico.sede = process.env.SEDE2;
-                        } else if (consulDg.sede == 3) {
-                            pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE3;
-                            pago_diagnostico.sede = process.env.SEDE3;
-                        }
+        
+        let consulDg = await consultarDatos('consultores_asignados')
+        let infoConsul = await consultarDatos('consultores')
+        if (consulDg.length > 0) {
+            // Buscando el Consultor asignado en la Etapa Diagnóstico para la empresa actual
+            consulDg = consulDg.find(x => x.empresa == datos.idEmpresa && x.orden == 1)
+            if (consulDg) {
+                datos.consultor_diagnostico = true;
+                infoConsul = infoConsul.find(x => x.id_consultores == consulDg.consultor)
+                pago_diagnostico.btn = 'color: white;'
+                datos.idConsultor = infoConsul.id_consultores;
+                if (infoConsul.nivel == '1') {
+                    pago_diagnostico.valor = process.env.PRECIO_NIVEL1
+                } else if (infoConsul.nivel == '2') {
+                    pago_diagnostico.valor = process.env.PRECIO_NIVEL2;
+                } else if (infoConsul.nivel == '3') {
+                    pago_diagnostico.valor = process.env.PRECIO_NIVEL3;
+                } else if (infoConsul.nivel == '4') {
+                    if (consulDg.sede == 1) {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE1;
+                        pago_diagnostico.sede = process.env.SEDE1;
+                    } else if (consulDg.sede == 2) {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE2;
+                        pago_diagnostico.sede = process.env.SEDE2;
+                    } else if (consulDg.sede == 3) {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE3;
+                        pago_diagnostico.sede = process.env.SEDE3;
                     }
                 }
             }
-        
-            // Validando Diagnóstico de negocio ha sido pagado
+        }
+
+        // Validando Diagnóstico de negocio ha sido pagado
+        if (pay) {
+            const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)    
             if (pagoDiagnostico.estado == 1) {
                 datos.etapa = 'Diagnóstico pagado'
                 pago_diagnostico.color = 'badge-success'
                 pago_diagnostico.texto = 'Pagado'
                 pago_diagnostico.valor = pagoDiagnostico.precio;
                 pago_diagnostico.fecha = pagoDiagnostico.fecha
-                pagoRealizado = true // pago fue registrado 
+                pagoDg_Realizado = true // Pago de Diagnóstico realizado
             }
         }
 
@@ -429,7 +429,9 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     // Respuestas del Cuestionario Diagnóstico Empresa Establecida
     const resDiag = {}
+    datos.cuestionarios = false;
     if (frmDiag.tabla1) {
+        datos.cuestionarios = true;
         const r = diagnostico
         resDiag.producto = JSON.parse(r.productos_servicios)
         resDiag.administracion = JSON.parse(r.administracion)
@@ -448,6 +450,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     // Respuestas del Cuestionario Diagnóstico Empresa Nueva
     if (frmDiag.tabla2) {
         console.log("Info para Diagnóstico empresa nueva")
+        datos.cuestionarios = true;
         const r = dgNuevasEmpresas
         resDiag.rubro = r.rubro
         resDiag.exp_rubro = JSON.parse(r.exp_rubro)
@@ -1060,7 +1063,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
-        tareas, jsonDim, jsonRendimiento, fechaActual, pagoRealizado,
+        tareas, jsonDim, jsonRendimiento, fechaActual, pagoDg_Realizado,
         pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
         rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada
     })
@@ -1177,13 +1180,23 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 /** PAGOS MANUALES ETAPA 1 y 2 */
 dashboardController.pagoManualDiagnostico = async (req, res) => {
     const { id, precio } = req.body
+    const pagos = await consultarDatos('pagos')
+    let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
     const fecha = new Date().toLocaleDateString("en-US")
-    const data = { estado: 1, fecha, precio}
-    const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
-    await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
-        if (err) throw err;
-        res.send(result)
-    })
+    const data = { estado: 1, fecha, precio }
+    if (!pago_empresa) {
+        const pago = { id_empresa: id, diagnostico_negocio: JSON.stringify(data) }
+        await pool.query('INSERT INTO pagos SET ?', [pago], (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    } else {
+        const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
+        await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
+            if (err) throw err;
+            res.send(result)
+        })
+    }
 }
 
 dashboardController.pagoManualEmpresas = async (req, res) => {

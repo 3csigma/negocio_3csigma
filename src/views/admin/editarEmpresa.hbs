@@ -104,19 +104,20 @@
                                     <div class="row mt-3">
                                         
                                         <div class="col-12">
-                                            <label>Consultor</label>
-                                            <select name="id_consultor" id="id_consultor" class="form-control sltBuscar chosen-container chosen-container-single required">
+                                            <label>Consultor <span class="text-red" id="txtNulo1" style="display: none;">*Obligatorio*</span></label>
+                                            <select id="id_consultor" onchange="validar_nivelConsultor()" class="form-control sltBuscar chosen-container chosen-container-single">
+                                                <option value=""></option>
                                                 {{#each consultores}}
                                                 <option id="{{nivel}}" {{#comparar id_consultores '==' idCon}} selected {{/comparar}} value="{{id_consultores}}">
-                                                    {{nombres}} {{apellidos}}</option>
+                                                    {{nombres}} {{apellidos}} - Nivel {{nivel}}</option>
                                                 {{/each}}
                                             </select>
                                         </div>
 
                                         <div class="col-12 mt-3">
-                                            <label>Etapa <span class="text-red" id="txtNulo" style="display: none;">*Opción vacía*</span></label>
-                                            <select id="etapaConsultor" name="etapaConsultor" class="default-select">
-                                                <option value="">Selecciona una opción</option>
+                                            <label>Etapa <span class="text-red" id="txtNulo2" style="display: none;">*Obligatorio*</span></label>
+                                            <select id="etapaConsultor" class="selectpicker" onchange="validar_nivelEtapa()">
+                                                <option value="0" selected>Selecciona una opción</option>
                                                 <option value="Diagnóstico">Diagnóstico</option>
                                                 <option value="Análisis">Análisis</option>
                                                 <option value="Proyecto_de_Consultoría">Proyecto de Consultoría</option>
@@ -126,7 +127,7 @@
 
                                         <div class="col-12 mt-3" id="divSede" style="display:none">
                                             <label>Sede</label>
-                                            <select id="sede" name="sede" class="default-select">
+                                            <select id="sede" class="selectpicker">
                                                 <option value="1">Online</option>
                                                 <option value="2">Miami</option>
                                                 <option value="3">Resto de USA</option>
@@ -577,7 +578,60 @@
 
                             {{!-- PESTAÑA 2 - DIAGNÓSTICO DE NEGOCIO --}}
                             <div id="diagnostico" class="tab-pane fade">
+                                {{#if datos.consultor_diagnostico}}
+                                {{!-- PAGO MANUAL DE DIAGNÓSTICO --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header">
+                                            <h4 class="card-title" style="margin:0 auto">Pago Diagnóstico</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-responsive-md text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>FECHA PAGO</th>
+                                                            <th>VALOR</th>
+                                                            {{#if pago_diagnostico.sede}}
+                                                            <th>SEDE</th>
+                                                            {{/if}}
+                                                            <th>ESTADO DE PAGO</th>
+                                                            {{#if rolAdmin}}
+                                                            <th>PAGAR</th>
+                                                            {{/if}}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{pago_diagnostico.fecha}}</td>
+                                                            <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
+                                                            {{#if pago_diagnostico.sede}}
+                                                            <td>{{pago_diagnostico.sede}}</td>
+                                                            {{/if}}
+                                                            <td><span class="badge light {{pago_diagnostico.color}}"
+                                                                style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
+                                                            </td>
+                                                            {{#if rolAdmin}}
+                                                            {{#if pagoDg_Realizado}}
+                                                            <td>
+                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
+                                                                <i class="fa fa-usd"></i></button>
+                                                            </td>
+                                                            {{else}}
+                                                            <td>
+                                                                <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp text-white" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
+                                                            </td>
+                                                            {{/if}}
+                                                            {{/if}}
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                {{#if pagoDg_Realizado}} {{!-- // Inicio de pagoDg_Realizado --}}
                                 {{!-- Grafíco de indicadores --}}
                                 <div class="card">
                                     <div class="card-body">
@@ -664,58 +718,6 @@
 
                                                 </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{!-- PAGO MANUAL DE DIAGNÓSTICO --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Pago Diagnóstico</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA PAGO</th>
-                                                            <th>VALOR</th>
-                                                            {{#if pago_diagnostico.sede}}
-                                                            <th>SEDE</th>
-                                                            {{/if}}
-                                                            <th>ESTADO DE PAGO</th>
-                                                            {{#if rolAdmin}}
-                                                            <th>PAGAR</th>
-                                                            {{/if}}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{pago_diagnostico.fecha}}</td>
-                                                            <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
-                                                            {{#if pago_diagnostico.sede}}
-                                                            <td>{{pago_diagnostico.sede}}</td>
-                                                            {{/if}}
-                                                            <td><span class="badge light {{pago_diagnostico.color}}"
-                                                                style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
-                                                            </td>
-                                                            {{#if rolAdmin}}
-                                                            {{#if pagoRealizado}}
-                                                            <td>
-                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                                                                <i class="fa fa-usd"></i></button>
-                                                            </td>
-                                                            {{else}}
-                                                            <td>
-                                                                <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp text-white" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
-                                                            </td>
-                                                            {{/if}}
-                                                            {{/if}}
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
                                             </div>
                                         </div>
                                     </div>
@@ -826,6 +828,7 @@
                                     </div>
                                 </div>
 
+                                {{#if datos.cuestionarios}} {{!-- // Inicio resDiag --}}
                                 <!-- ======================== INFORMES DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
                                     <div class="card-body">
@@ -922,6 +925,22 @@
                                     </div>
                                 </div>
                                 <!-- ========================================================================== -->
+                                {{/if}} {{!-- // Fin resDiag --}}
+
+                                {{/if}} {{!-- // Fin de pagoDg_Realizado --}}
+
+                                {{else}}
+                                {{!-- NO HAY CONSULTOR ASIGNADO --}}
+                                <div class="card">
+                                    <div class="card-body px-0" style=" display: flex; justify-content: center; align-items: center;">
+                                        <div>
+                                            <center><i class="far fa-clipboard" style="font-size: 30px; width: 60px; height: 60px; background-color: #f4f4f4; padding-top: 14px;
+                                                    border-radius: 35px;"></i></center><br>
+                                            <label style="font-size:22px;color:#000;font-weight:600;margin-bottom: 20px;">No sé ha asignado un consultor a esta etapa</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{/if}}
 
                             </div>
 
@@ -2299,7 +2318,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Propuesta del Plan Estratégico de Negocio</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Propuesta de Plan Estratégico de Negocio</h4>
                                         </div>
                                         {{#if botonesEtapas.plan2}}
                                         {{#unless propuesta.estrategico.pago}}
