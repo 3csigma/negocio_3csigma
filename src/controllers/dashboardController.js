@@ -87,7 +87,7 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Estudiante" AND c.id_consultores != 1;')
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" OR rol = "Tutor" AND c.id_consultores != 1;')
     
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
@@ -104,7 +104,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
 
 dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
-    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ? AND c.codigo = u.codigo AND u.rol = "Estudiante";', [codigo])
+    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ?  WHERE c.codigo = u.codigo AND u.rol = "Estudiante" OR u.rol = "Tutor" LIMIT 1;', [codigo])
     consultor = consultor[0];
     if (consultor.certificado) {
         consultor.txtCertificado = consultor.certificado.split('/')[2]
@@ -113,38 +113,53 @@ dashboardController.editarConsultor = async (req, res) => {
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
-    const { codigo, estado, nivel=1, rol} = req.body;
-    const estadoNivel = {nivel}
-    const nuevoEstado = { estadoAdm: estado , rol } // Estado Consultor Aprobado, Pendiente, Bloqueado
-    const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ?', [nuevoEstado, codigo])
-    const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
-    const c = await pool.query('SELECT * FROM users WHERE codigo = ?', [codigo]) // Consultando Consultor Aprobado
     let respuesta = false;
+    const { codigo, estado, nivel=1 , rol } = req.body;
+    const estadoNivel = {nivel}
+    const nuevoEstado = { estadoAdm: estado, rol} // Estado Consultor Aprobado, Pendiente, Bloqueado
+    let c1 
 
-    if (c1.affectedRows > 0) {
-        // Enviando Email - Consultor Aprobado
-        if (c.length > 0 && c[0].estadoAdm == 1) {
-            const nombre = c[0].nombres + " " + c[0].apellidos;
-            const email = c[0].email
-            const clave = c[0].codigo.slice(5, 13);
+    // Capturando el Consultor recien registrado
+    let consultor = await consultarDatos('users')
+    consultor = consultor.find(x => x.codigo == codigo)
+    if (consultor.estadoAdm == 1) {
+        const nuevoRol = { rol}
+        c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
+    }else{ 
+        c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoEstado, codigo])
+        await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
+    
+    // Capturando el Consultor Aprobado
+        let consultor = await consultarDatos('users')
+        consultor = consultor.find(x => x.codigo == codigo)
 
-            // Obtener la plantilla de Email
-            const template = consultorAprobadoHTML(nombre, clave);
-            // Enviar Email
-            const resultEmail = await sendEmail(email, 'Has sido aprobado como consultor en PAOM System', template)
-            if (!resultEmail) {
-                console.log("\n*_*_*_*_*_* Ocurrio un error inesperado al enviar el email de Consultor Asignado *_*_*_*_*_* \n");
-            } else {
-                console.log("\n>>>> Email de Consultor Aprobado - ENVIADO <<<<<\n")
-                respuesta = true;
+        console.group("CONSULTOR INFORMATION")
+        console.log(c1);
+        console.log("consultor");
+        console.log(consultor);
+        console.groupEnd();
+    
+        if (c1.changedRows > 0) {
+            // Enviando Email - Consultor Aprobado
+            if (consultor.estadoAdm == 1) {
+                const nombre = consultor.nombres + " " + consultor.apellidos;
+                const clave = consultor.codigo.slice(5, 13);
+    
+                // Obtener la plantilla de Email
+                const template = consultorAprobadoHTML(nombre, clave);
+                // Enviar Email
+                const resultEmail = await sendEmail(consultor.email, 'Has sido aprobado como consultor en PAOM System', template)
+    
+                if (resultEmail == false) {
+                    console.log("\n*_*_*_*_*_* Ocurrio un error inesperado al enviar el email de Consultor Asignado *_*_*_*_*_* \n");
+                } else {
+                    console.log(`\n>>>> Email de Consultor Aprobado - ENVIADO a => ${consultor.email} <<<<<\n`)
+                    respuesta = true;
+                }
             }
         }
     }
-
-    if (c2.affectedRows > 0) {
-        respuesta = true;
-    }
-
+    if (c1.affectedRows > 0) respuesta = true;
     res.send(respuesta)
 }
 
