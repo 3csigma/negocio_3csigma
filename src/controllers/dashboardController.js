@@ -1181,7 +1181,7 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 dashboardController.pagoManualDiagnostico = async (req, res) => {
     const { id, precio } = req.body
     const pagos = await consultarDatos('pagos')
-    let pago_empresa = pagos.find(i => i.id_empresa == id_empresa);
+    let pago_empresa = pagos.find(i => i.id_empresa == id);
     const fecha = new Date().toLocaleDateString("en-US")
     const data = { estado: 1, fecha, precio }
     if (!pago_empresa) {
