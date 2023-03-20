@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "Test PAOM",
+        name: "Test PAOM App",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000,
