@@ -104,11 +104,11 @@ dashboardController.mostrarConsultores = async (req, res) => {
 
 dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
-    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ?  WHERE c.codigo = u.codigo AND u.rol = "Estudiante" OR u.rol = "Tutor" LIMIT 1;', [codigo])
+    let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ?  AND c.codigo = u.codigo WHERE u.rol = "Estudiante" OR u.rol = "Tutor" LIMIT 1;', [codigo])
     consultor = consultor[0];
-    if (consultor.certificado) {
-        consultor.txtCertificado = consultor.certificado.split('/')[2]
-    }
+    // if (consultor.certificado) {
+    //     consultor.txtCertificado = consultor.certificado.split('/')[2]
+    // }
     res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor })
 }
 
