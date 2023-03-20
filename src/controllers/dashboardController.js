@@ -1187,6 +1187,8 @@ dashboardController.bloquearEmpresa = async (req, res) => {
 /** PAGOS MANUALES ETAPA 1 y 2 */
 dashboardController.pagoManualDiagnostico = async (req, res) => {
     const { id, precio } = req.body
+    const pagos = await consultarDatos('pagos')
+    let pago_empresa = pagos.find(i => i.id_empresa == id);
     const fecha = new Date().toLocaleDateString("en-US")
     const data = { estado: 1, fecha, precio}
     const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
