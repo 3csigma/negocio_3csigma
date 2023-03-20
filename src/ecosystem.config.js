@@ -1,11 +1,9 @@
-const name = process.env.APP_NAME;
-console.log("APP_NAME: " + name);
 module.exports = {
     apps: [{
-        name: name || "App PAOM",
+        name: "Test PAOM",
         script: "./app.js",
         watch: ["server", "client"],
-        watch_delay: 1000, // Delay between restart
+        watch_delay: 1000,
         ignore_watch: [
             "node_modules",
             "**/*/certificados_consultores",
