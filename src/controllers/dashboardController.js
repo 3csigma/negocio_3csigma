@@ -94,6 +94,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
         c.num_empresas = num[0].numEmpresas
 
+        //=> Mostrar el tutor a cargo de estudiantes 
         let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
         tutor = tutor.find(x => x.id_tutor == c.tutor_asignado)
         if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos} else {c.tutor = "N/A"}
@@ -140,17 +141,17 @@ dashboardController.editarConsultor = async (req, res) => {
 
 dashboardController.actualizarConsultor = async (req, res) => {
     let respuesta = false;
-    const { codigo, estado, nivel=1 , rol, asignar_tutor } = req.body;
-    const estadoNivel = {nivel}
-    const nuevoEstado = { estadoAdm: estado, rol} // Estado Consultor Aprobado, Pendiente, Bloqueado
+    const { codigo, estado, nivel=1 , rol, asignar_tutor, email } = req.body;
+    const estadoNivel = {nivel, email}
+    const nuevoEstado = { estadoAdm: estado, rol, email} // Estado Consultor Aprobado, Pendiente, Bloqueado
     let c1 
 
     // Capturando el Consultor recien registrado
     let consultor = await consultarDatos('users')
     consultor = consultor.find(x => x.codigo == codigo)
     if (consultor.estadoAdm == 1) {
-        const nuevoRol = { rol}
-        let id_tutor = { tutor_asignado:asignar_tutor }
+        const nuevoRol = { rol, estadoAdm: estado, email}
+        let datos = { id_tutor:"N/A", tutor_asignado:asignar_tutor, email }
 
         if(nuevoRol.rol == 'Tutor'){
             const codigoTutor = (num) => {
@@ -163,12 +164,12 @@ dashboardController.actualizarConsultor = async (req, res) => {
                 
                 return result1;
             };
-        
-        id_tutor = { id_tutor: codigoTutor(10)}
-        c1 = await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [id_tutor, codigo])
+        datos = { id_tutor: codigoTutor(10), email}
+        await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
+        c1 = await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
         }
         c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
-        await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [id_tutor, codigo])
+        await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
         
     }else{ 
         c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoEstado, codigo])

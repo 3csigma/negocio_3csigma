@@ -215,9 +215,10 @@
                 const rol = $("#tipo_decuenta option:selected").val()
                 const asignar_tutor = $("#asignar_tutor option:selected").val()
                 const codigo = $("#codigo_consultor").val()
+                const email = $("#correoConsultor").val()
                 fetch('/actualizarConsultor', {
                     method: 'POST',
-                    body: JSON.stringify({ codigo, estado, rol, asignar_tutor }),
+                    body: JSON.stringify({ codigo, estado, rol, asignar_tutor, email }),
                     headers: { 'Content-Type': 'application/json' }
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))
