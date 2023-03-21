@@ -7,6 +7,7 @@ const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
+const { log } = require('console');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
 let aprobarConsultor = false;
@@ -88,10 +89,15 @@ dashboardController.addConsultores = (req, res, next) => {
 
 dashboardController.mostrarConsultores = async (req, res) => {
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" OR rol = "Tutor" AND c.id_consultores != 1;')
-    
+
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
         c.num_empresas = num[0].numEmpresas
+
+        let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
+        tutor = tutor.find(x => x.id_tutor == c.tutor_asignado)
+        if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos} else {c.tutor = "N/A"}
+        
     });
     
     /** Acceso directo para Consultores pendientes por aprobar */
@@ -106,15 +112,35 @@ dashboardController.editarConsultor = async (req, res) => {
     const codigo = req.params.codigo
     let consultor = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c LEFT OUTER JOIN users u ON c.codigo = ?  AND c.codigo = u.codigo WHERE u.rol = "Estudiante" OR u.rol = "Tutor" LIMIT 1;', [codigo])
     consultor = consultor[0];
-    // if (consultor.certificado) {
-    //     consultor.txtCertificado = consultor.certificado.split('/')[2]
-    // }
-    res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor })
+
+    let esEstudiante = false, miTutor
+    if (consultor.rol == 'Estudiante') esEstudiante = true
+
+    if (consultor.tutor_asignado) {
+        miTutor = consultor.tutor_asignado
+    }
+
+    // => Consulta para capturar el Tutor asignado al estudiante y mostrarlo
+    let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"', [miTutor])
+    tutor = tutor.find(x => x.id_tutor == miTutor)
+    let nombreTutor = "N/A"
+    if (tutor) {
+    nombreTutor = tutor.nombres + " " + tutor.apellidos
+    }
+    // => Consulta para mostrar lista de Tutores a escoger
+    let tutores = await pool.query('SELECT c.*, u.rol FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
+    tutores.forEach(t => {
+        nombres =t.nombres
+        apellidos = t.apellidos
+        rol = t.rol
+        id_tutor_asignado = t.id_tutor_asignado 
+    });
+    res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor, tutores, esEstudiante, nombreTutor })
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
     let respuesta = false;
-    const { codigo, estado, nivel=1 , rol } = req.body;
+    const { codigo, estado, nivel=1 , rol, asignar_tutor } = req.body;
     const estadoNivel = {nivel}
     const nuevoEstado = { estadoAdm: estado, rol} // Estado Consultor Aprobado, Pendiente, Bloqueado
     let c1 
@@ -124,7 +150,26 @@ dashboardController.actualizarConsultor = async (req, res) => {
     consultor = consultor.find(x => x.codigo == codigo)
     if (consultor.estadoAdm == 1) {
         const nuevoRol = { rol}
+        let id_tutor = { tutor_asignado:asignar_tutor }
+
+        if(nuevoRol.rol == 'Tutor'){
+            const codigoTutor = (num) => {
+                const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+                let result1 = "";
+                const charactersLength = characters.length;
+                for (let i = 0; i < num; i++) {
+                    result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+                
+                return result1;
+            };
+        
+        id_tutor = { id_tutor: codigoTutor(10)}
+        c1 = await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [id_tutor, codigo])
+        }
         c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
+        await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [id_tutor, codigo])
+        
     }else{ 
         c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoEstado, codigo])
         await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])

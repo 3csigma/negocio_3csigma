@@ -39,7 +39,7 @@
             <div class="card-body">
                 <div class="row">
 
-                    <div class="col-xl-4 mt-2">
+                    <div class="col-xl-3 mt-2">
                         <div class="form-group text-center">
                             <label>Nombres y Apellidos</label>
                             <input type="text" value="{{consultor.nombres}} {{consultor.apellidos}}"
@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Email</label>
                             <input type="text" value="{{consultor.email}}" class="form-control" style="line-height:4"
@@ -56,7 +56,7 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="form-group">
                             <label>Teléfono</label>
                             <input type="text" value="{{consultor.tel_consultor}}" class="form-control" disabled>
@@ -125,6 +125,21 @@
                             </select>
                         </div>
                     </div>
+                    {{#if esEstudiante}}
+                    <div class="col-xl-3">
+                        <div class="form-group">
+                            <label>Asignar Tutor</label>
+                            <select id="asignar_tutor" class="form-control sltBuscar chosen-container chosen-container-single required">
+                                    <option value="N/A" selected >Lista de tutores</option>
+                                {{#each tutores}}
+                                    <option value="{{id_tutor}}">{{nombres}} {{apellidos}}</option>
+                                {{/each}}
+                            </select>
+                            <p style="font-size: 13px;"><strong style="color:#ffbc11">Tutor Asignado:</strong> {{nombreTutor}}</p>
+                        </div>
+                    </div>
+                     {{/if}}
+
                      {{!-- <div class="col-xl-3">
                         <div class="form-group">
                             <label>Nivel</label>
