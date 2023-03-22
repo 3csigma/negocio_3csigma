@@ -121,12 +121,6 @@ dashboardController.actualizarConsultor = async (req, res) => {
     let consultor = await consultarDatos('users')
     consultor = consultor.find(x => x.codigo == codigo && x.rol == 'Consultor')
 
-    console.group("CONSULTOR INFORMATION")
-    console.log(c1);
-    console.log("consultor");
-    console.log(consultor);
-    console.groupEnd();
-
     if (c1.changedRows > 0) {
         // Enviando Email - Consultor Aprobado
         if (consultor.estadoAdm == 1) {
@@ -1085,6 +1079,7 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const mapaConsultores = new Map(Object.entries(mapa)) 
     console.log("mapaConsultores > ", mapaConsultores)
 
+    const linkBase = 'https://3csigma.com/app_public_files/emails_consultor/'
     // Consultar Datos de la empresa
     let empresa = await consultarDatos('empresas')
     

@@ -20,10 +20,6 @@ pagosController.pagarDiagnostico = async (req, res) => {
     let consul = await consultarDatos('consultores')
     consul = consul.find(x => x.id_consultores == consulDiag.consultor)
 
-    console.group("PRECIO >> ")
-    console.log(nivel4_s3);
-    console.groupEnd();
-    
     if (consul) {
         if (consul.nivel == '1') {
             precioDiag = process.env.PRECIO_NIVEL1
@@ -40,9 +36,6 @@ pagosController.pagarDiagnostico = async (req, res) => {
                 precioDiag = process.env.PRECIO_NIVEL4_SEDE3
         }
     }
-    console.group("PRECIO >> ")
-    console.log(precioDiag);
-    console.groupEnd();
 
     const precio = precioDiag + '00'
     
@@ -59,7 +52,7 @@ pagosController.pagarDiagnostico = async (req, res) => {
                 },
             },
             quantity: 1,
-            description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
+            description: '✓ Sesión online 1:1 con un Consultor de Negocio. ✓ Estudio global de su proyecto o empresa. ✓ Aplicación del Método PAOM. ✓ Recomendaciones estratégicas. ✓ Sesión de preguntas y respuestas ✓ Informe de Resultados.'
             }],
         mode: 'payment',
         success_url: `${my_domain}/pago-exitoso`,
