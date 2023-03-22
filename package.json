@@ -1,6 +1,6 @@
 {
-  "name": "app-negocio-3sigma",
-  "version": "1.0.1",
+  "name": "test-student-app",
+  "version": "1.1.0",
   "description": "Plataforma para Automatización de Documentos",
   "main": "src/app.js",
   "scripts": {
