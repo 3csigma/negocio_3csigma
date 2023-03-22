@@ -35,13 +35,18 @@
     const mapaConsultores = new Map();
     function addConsulEtapa() {
         const idConsultor = $("#id_consultor option:selected").val();
-        const nomConsultor = $("#id_consultor option:selected").text();
+        let nomConsultor = $("#id_consultor option:selected").text();
+        nomConsultor = nomConsultor.split('-')[0]
         const etapa = $('#etapaConsultor option:selected').val();
         
-        if (etapa == "") {
-            $("#txtNulo").show();
+        if ($(".search-choice-close").length == 0) {
+            $("#txtNulo1").show();
+        } else if (etapa == 0) {
+            $("#txtNulo1").hide();
+            $("#txtNulo2").show();
         } else {
-            $("#txtNulo").hide();
+            $("#txtNulo1").hide();
+            $("#txtNulo2").hide();
             const etapa_ = etapa.replace(/[$_]/g, ' ');
             let consultor = { id: idConsultor, nombre: nomConsultor.trim() }
             if (etapa_ == 'Diagnóstico') {
@@ -75,6 +80,11 @@
             if ($('#divTablaConsul').css('display') == 'none') {
                 $('#divTablaConsul').show()
             }
+
+            $('#etapaConsultor').prop('selectedIndex', 0).selectpicker('refresh');
+            $('#id_consultor').prop('selectedIndex', 0).trigger('chosen:updated');
+            $('.search-choice-close').trigger('click')
+            if ($('#divSede').css('display') == 'block') $('#divSede').hide()
             
         }
 
@@ -299,20 +309,18 @@
         }
     })
 
-    document.addEventListener("DOMContentLoaded", function(event) {
-        const consultor_ = document.getElementById("id_consultor");
-        const etapa_consultor = document.getElementById("etapaConsultor");
-        consultor_.addEventListener('change', (e) => {
-            console.log("ASDASDASD")
-            //alert($('#divSede').css('display'))
-            //if ($('#divSede').css('display') == 'block') { $('#divSede').hide();}
-        })
-        etapa_consultor.addEventListener('change', (e) => {
-            if ($('#id_consultor option:selected').attr("id") == 4 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
-                $('#divSede').show();
-            else
-                $('#divSede').hide();
-        })
-    });
+    function validar_nivelConsultor() {
+        if ($('#id_consultor option:selected').attr("id") == 4)
+            $('#divSede').show();
+        else
+            $('#divSede').hide();
+    }
+    
+    function validar_nivelEtapa() {
+        if ($('#id_consultor option:selected').attr("id") == 4 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
+            $('#divSede').show();
+        else
+            $('#divSede').hide();
+    }
 
 </script>
