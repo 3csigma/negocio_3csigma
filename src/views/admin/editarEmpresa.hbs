@@ -741,58 +741,6 @@
                                     </div>
                                 </div>
 
-                                {{!-- PAGO MANUAL DE DIAGNÓSTICO --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Pago Diagnóstico</h4>
-                                        </div>
-                                        <div class="row">
-                                            <div class="table-responsive">
-                                                <table class="table table-responsive-md text-center">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>FECHA PAGO</th>
-                                                            <th>VALOR</th>
-                                                            {{#if pago_diagnostico.sede}}
-                                                            <th>SEDE</th>
-                                                            {{/if}}
-                                                            <th>ESTADO DE PAGO</th>
-                                                            {{#if rolAdmin}}
-                                                            <th>PAGAR</th>
-                                                            {{/if}}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{pago_diagnostico.fecha}}</td>
-                                                            <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
-                                                            {{#if pago_diagnostico.sede}}
-                                                            <td>{{pago_diagnostico.sede}}</td>
-                                                            {{/if}}
-                                                            <td><span class="badge light {{pago_diagnostico.color}}"
-                                                                style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
-                                                            </td>
-                                                            {{#if rolAdmin}}
-                                                            {{#if pagoRealizado}}
-                                                            <td>
-                                                                <button type="button" class="btn btn-primary btn-xs sharp" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                                                                <i class="fa fa-usd"></i></button>
-                                                            </td>
-                                                            {{else}}
-                                                            <td>
-                                                                <a onclick="pagoManual({{datos.idEmpresa}}, '{{pago_diagnostico.valor}}')"  class="btn btn-success shadow btn-xs sharp" style="{{pago_diagnostico.btn}}"><i class="fa fa-usd"></i></a>
-                                                            </td>
-                                                            {{/if}}
-                                                            {{/if}}
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO ======================== -->
                                 <div class="card">
                                     <div class="card-body">
