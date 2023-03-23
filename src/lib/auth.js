@@ -11,7 +11,6 @@ module.exports = {
             url = url[1]
             console.log("Ruta >> ", url)
             if (req.user.rol == 'Empresa') {
-                console.log("ROBJ => ", rutasObj)
                 const ok = rutasObj.rutasEmpresa.find(x => x == url.toLowerCase())
                 if (ok) return next(); else return console.log("La empresa no tiene acceso a esta ruta o no se encuentra en el Array rutasEmpresa.. (Rutas en minúsculas)");
             } else if (req.user.rol == 'Admin') {
