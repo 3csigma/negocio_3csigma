@@ -46,6 +46,88 @@
 		)
 	}
 
+	{{#if archivos}}
+	function cargarArchivos_Empresa(tabla, idArchivo) {
+		const idEmpresa = document.getElementById("idEmpresa").value;
+		const inputArchivo = document.getElementById("inputArchivo"+idArchivo);
+		if (inputArchivo) {
+			const estado = document.getElementById("spanEstado"+idArchivo);
+			const btnArchivo = document.getElementById("btnVer"+idArchivo);
+			inputArchivo.addEventListener('change', (e) => {
+				const file = e.target.files[0]
+				console.log(file)
+				let ruta = '/guardar-archivos-analisis', etapa = 2
+				if (tabla == 'archivos_empresarial') { etapa= 3; ruta = '/guardar-archivos-empresarial' }
+				else if (tabla == 'archivos_estrategico') { etapa = 4; ruta = '/guardar-archivos-estrategico' }
+
+				const formData = new FormData();
+				formData.append('idEmpresa', idEmpresa);
+				formData.append('id', idArchivo);
+				formData.append('file', file);
+				formData.append('etapa', etapa);
+
+				function guardarArchivo_Empresarial() {
+					fetch(ruta, {
+                        method: 'POST',
+                        body: formData,
+                    })
+						.then(res => res.json())
+						.catch(error => console.error('Error:', error))
+						.then(response => {
+                            if (response.ok) {
+                                toastr.success("El archivo ha sido cargado exitosamente", "Atención", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+
+								btnArchivo.style.display = 'block'
+								btnArchivo.href = response.url
+                                estado.classList.remove("badge-warning")
+                                estado.classList.add("badge-success")
+                                estado.innerHTML = "Cargado"
+                                
+                            } else {
+                                toastr.warning("No sé pudo subir el archivo, contacte a soporte", "Error", {
+                                    positionClass: "toast-top-center",
+                                    timeOut: 5e3,
+                                    closeButton: !0,
+                                    debug: !1,
+                                    newestOnTop: !0,
+                                    progressBar: !0,
+                                    preventDuplicates: !0,
+                                    onclick: null,
+                                    showDuration: "300",
+                                    hideDuration: "1000",
+                                    extendedTimeOut: "1000",
+                                    showEasing: "swing",
+                                    hideEasing: "linear",
+                                    showMethod: "fadeIn",
+                                    hideMethod: "fadeOut",
+                                    tapToDismiss: !1
+                                })
+                            }
+                        });
+                }
+                
+			});
+		}
+	}
+	{{/if}}
+
     (function ($) {
 
         const dzGraficasEmpresa = function () {

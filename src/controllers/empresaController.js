@@ -1,6 +1,6 @@
 const pool = require('../database')
 const empresaController = exports;
-const { encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
+const { encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos, cargarArchivo } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 const portalClientes = process.env.PORTAL_CLIENTES;
@@ -648,13 +648,19 @@ empresaController.analisis = async (req, res) => {
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
     let archivos = false;
-    let analisis = await consultarDatos('analisis_empresa')
-    analisis = analisis.find(i => i.id_empresa == id_empresa)
-    if (analisis) {
-        if (analisis.archivos){
-            archivos = JSON.parse(analisis.archivos)
-        }
+    let analisis = await consultarDatos('archivos_analisis')
+    archivos = analisis.filter(i => i.empresa == id_empresa)
+    if (archivos.length > 0) {
+        archivos.forEach(x => {
+            x.estado = 'Pendiente';
+            x.color = 'warning';
+            if (x.link != null) {
+                x.estado = 'Cargado';
+                x.color = 'success';
+            }
+        })
     }
+    /************************************************************************************* */
 
     const informesAnalisis = []
     const info0Analisis = await consultarInformes(id_empresa, "Informe de análisis")
@@ -762,42 +768,17 @@ empresaController.analisis = async (req, res) => {
         btnActivo, btnDesactivo, tienePropuesta,
         itemAnalisis: true,
         consulAsignado: req.session.consulAsignado,
-        etapaCompleta: req.session.etapaCompleta, modalAcuerdo,
+        etapaCompleta: req.session.etapaCompleta, modalAcuerdo, id_empresa
     })
 }
 
-/** GUARDAR ARCHIVOS SOLICITADOS POR EL CONSULTOR */
+/****************************************************************
+ * GUARDAR ARCHIVOS SOLICITADOS POR EL CONSULTOR
+*/
 empresaController.guardarArchivos = async (req, res) => {
-    const nom = req.body.nombreArchivo
-    let colArchivos = []
-    const row = await consultarDatos('empresas', `WHERE email = "${req.user.email}" LIMIT 1`)
-    const id_empresa = row[0].id_empresas;
-    let analisis = await consultarDatos('analisis_empresa')
-    analisis = analisis.find(i => i.id_empresa == id_empresa)
-    if (analisis) {
-        // const n = nombreArchivo.filter(i => i != '')
-        req.files.forEach((x, i) => {
-            colArchivos.push({
-                nombre: nom[i],
-                link: '../archivos_analisis_empresa/'+x.filename,
-            })
-        })
-
-        if (analisis.archivos){
-            const datos = JSON.parse(analisis.archivos)
-            datos.forEach(x => {
-                colArchivos.push(x)
-            });
-        }
-
-        console.log("\nCOLUMNA ARCHIVOS >> ", colArchivos)
-        colArchivos = JSON.stringify(colArchivos)
-        const updateCol = {archivos: colArchivos}
-        await pool.query('UPDATE analisis_empresa SET ? WHERE id_empresa = ?', [updateCol, id_empresa])
-    }
-    console.log("\nARHIVOS >> ", req.files)
-    res.redirect('/analisis-de-negocio');
 }
+
+/************************************************************************* */
 
 /** PLAN EMPRESARIAL + LISTADO DE TAREAS DEL CONSULTOR */
 empresaController.planEmpresarial = async (req, res) => {

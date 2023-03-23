@@ -277,268 +277,62 @@
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
-      {{#unless escena1}}
+      {{#if archivos}}
+      <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
               <div class="card-header">
                 <h4 class="card-title">Carga de archivos</h4>
-                <button type="button" onclick="addFile()" id="btnAddFile" class="btn color_gradient btn-xs text-white" style="float: right"><i class="mdi mdi-plus"></i></button>
               </div>
+
               <div class="card-body">
-
-                <form action="/guardar-archivos-analisis" method="post" enctype="multipart/form-data">
-
-                  <div class="row">
-
-                    <div class="col-12">
-                      <table class="table table-responsive w-100">
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table table-responsive-md text-center">
+                      <thead>
                         <tr>
-                          <td style="border-color: #fff;"><label>Nombre del documento</label></td>
-                          <td style="border-color: #fff;"><label>Documento solicitado por tu consultor</label></td>
+                          <th>DIMENSIÓN</th>
+                          <th>DESCRIPCIÓN</th>
+                          <th>ESTADO</th>
+                          <th>ACCIÓN</th>
                         </tr>
+                      </thead>
+                      <tbody>
+                        {{#each archivos}}
                         <tr>
-                          <td style="border-color: #fff;" class="w-40">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?" required>
-                          </td>
-                          <td style="border-color: #fff;" class="w-60">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                    
-                        <tr class="newRows_1" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_2" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
+                          <td>{{dimension}}</td>
+                          <td>{{descripcion}}</td>
+                          <td><span id="spanEstado{{id}}" class="badge light badge-{{color}}">{{estado}}</span></td>
+                          <td>
+                            <table border="0" cellspacing="0" style="margin: 0 auto;">
+                              <tr>
+                                <td style="border-color: transparent; padding:3px">
+                                  <label for="inputArchivo{{id}}" onclick="cargarArchivos_Empresa('archivos_analisis', '{{id}}')">
+                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white" style="border-color: white;">
+                                      <i class="fa fa-upload"></i>
+                                    </div>
+                                  </label>
+                                  <input id="inputArchivo{{id}}" type="file" style="display:none"/>
+                                </td>
+                                {{#if link}}              
+                                <td style="border-color: transparent; padding:3px">
+                                  <a id="btnVer{{id}}" href="{{link}}"
+                                    style="margin: 0 auto; margin-top: -8px; border-color: #FED061"
+                                    target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
+                                    <i class="fa fa-search"></i></a>
+                                </td>
+                                {{/if}}
+                              </tr>
+                            </table>
                           </td>
                         </tr>
-                        <tr class="newRows_3" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_4" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_5" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_6" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_7" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_8" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_9" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_10" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_11" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_12" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_13" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr class="newRows_14" style="display: none;">
-                          <td style="border-color: #fff;">
-                            <input class="form-control form-control-md" name="nombreArchivo[]" style="height: 42px;" type="text"
-                              placeholder="¿Qué info tiene el doc..?">
-                          </td>
-                          <td style="border-color: #fff;">
-                            <div class="custom-file">
-                              <input type="file" class="custom-file-input form-control-md" name="archivosAnalisis[]">
-                              <span class="custom-file-label form-control-md"
-                                style="border-radius: 1.25rem; font-size: 0.875rem !important; font-weight: 300;">Cargar documento</span>
-                            </div>
-                          </td>
-                        </tr>
-                    
-                      </table>
-                    </div>
-
-                    
-                  </div>
-
-                  <div class="row mt-3">
-                    <button type="submit" class="btn color_gradient btn-md mx-auto text-white">Guardar Archivos</button>
-                  </div>
-
-                </form>
-
-                {{!-- TABLA DE ARCHIVOS CARGADOS --}}
-                {{#if archivos}}
-                <hr>
-                <div class="row mt-3">
-                  <div class="col-xl-12">
-                    <h4 class="card-title text-center">Documentos enviados</h4>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-responsive-md text-center">
-                        <thead>
-                          <tr>
-                            <th>Nombre / Descripción</th>
-                            <th>Documento</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {{#each archivos}}
-                          <tr>
-                            <td>{{nombre}}</td>
-                            <td>
-                              <a href="{{link}}" target="_blank" class="btn btn-primary shadow btn-xs sharp" style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
-                                <i class="fa fa-search"></i>
-                              </a>
-                            </td>
-                          </tr>
-                          {{/each}}
-                        </tbody>
-                      </table>
-                    </div>
+                        {{/each}}
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-                {{/if}}
 
               </div>
             </div>
@@ -548,26 +342,8 @@
         </div>
         
       </div>
-      {{/unless}}
+      {{/if}}
     </div>
     {{/if}}
   </div>
 </div>
-
-<!--**********************************
-            Scripts
-***********************************-->
-<script>
-  let cont = 1;
-  document.getElementById('btnAddFile').style.display = 'table-row';
-  // AGREGAR NUEVA FILA PARA SUBIR ARCHIVOS
-  function addFile() {
-    if (cont == 15) {
-      document.getElementById('btnAddFile').style.display = 'none';
-    } else {
-      const fila = document.querySelector('.newRows_' + cont)
-      fila.style.display = 'table-row';
-      cont++; 
-    }
-  }
-</script>

@@ -441,6 +441,13 @@ helpers.historial_empresas_consultor = async () => {
     console.log("HISTORIAL DE EMPRESAS CONSULTOR FINALIZADO...");
 };
 
+/**************************************************************
+ * CARGAR ARCHIVOS USUARIO EMPRESA (ANÁLISIS, EMPRESARIAL, ESTRATÉGICO)
+*/
+helpers.cargarArchivo = async () => {
+    
+}
+
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
 helpers.historial_informes_consultor = async () => {
     const informes = await helpers.consultarDatos("informes")
