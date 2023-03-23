@@ -24,7 +24,7 @@ router.post('/guardar-archivos-analisis', checkLogin, uploadFiles('Análisis-de-
 
 // Plan Empresarial
 router.get('/proyecto-de-consultoria', checkLogin, empresaController.planEmpresarial)
-router.post('/guardar-archivos-empresarial', checkLogin, uploadFiles('Proyecto-de-consultoría_', false, 'archivos_empresarial_empresa', false), empresaController.guardarArchivos)
+router.post('/guardar-archivos-empresariales', checkLogin, uploadFiles('Proyecto-de-consultoría_', false, 'archivos_empresarial_empresa', false), empresaController.guardarArchivos)
 
 // Plan Estratégico de Negocio
 router.get('/plan-estrategico', checkLogin, empresaController.planEstrategico)

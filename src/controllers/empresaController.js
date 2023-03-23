@@ -654,9 +654,11 @@ empresaController.analisis = async (req, res) => {
         archivos.forEach(x => {
             x.estado = 'Pendiente';
             x.color = 'warning';
+            x.display = 'none';
             if (x.link != null) {
                 x.estado = 'Cargado';
                 x.color = 'success';
+                x.display = 'block';
             }
         })
     }
@@ -776,6 +778,15 @@ empresaController.analisis = async (req, res) => {
  * GUARDAR ARCHIVOS SOLICITADOS POR EL CONSULTOR
 */
 empresaController.guardarArchivos = async (req, res) => {
+    const { id, empresa, etapa, tabla } = req.body;
+    let link = '../archivos_analisis_empresa/Análisis-de-negocio_'+req.file.originalname;
+    if (etapa == 3) link = '../archivos_empresarial_empresa/Proyecto-de-consultoría_'+req.file.originalname;
+    else if (etapa == 4) link = '../archivos_estrategico_empresa/Plan-estratégico_'+req.file.originalname;
+    let result = await cargarArchivo(id, empresa, link, tabla)
+    if (result) result = {ok:true,url:link}
+    console.log("Resultado Guardar Archivos >>> ");
+    console.log(result);
+    res.send(result)
 }
 
 /************************************************************************* */
