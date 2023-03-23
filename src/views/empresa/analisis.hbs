@@ -316,14 +316,14 @@
                                   </label>
                                   <input id="inputArchivo{{id}}" type="file" style="display:none"/>
                                 </td>
-                                {{#if link}}              
+                                {{!-- {{#if link}}               --}}
                                 <td style="border-color: transparent; padding:3px">
                                   <a id="btnVer{{id}}" href="{{link}}"
-                                    style="margin: 0 auto; margin-top: -8px; border-color: #FED061"
+                                    style="display: {{display}}; margin: 0 auto; margin-top: -8px; border-color: #FED061"
                                     target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                     <i class="fa fa-search"></i></a>
                                 </td>
-                                {{/if}}
+                                {{!-- {{/if}} --}}
                               </tr>
                             </table>
                           </td>
