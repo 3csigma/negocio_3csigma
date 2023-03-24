@@ -53,4 +53,10 @@ router.post('/actualizarTarea', checkLogin, consultorController.actualizarTarea)
 router.post('/eliminarTarea', checkLogin, consultorController.eliminarTarea)
 router.post('/nuevoRendimiento', checkLogin, consultorController.nuevoRendimiento)
 router.post('/comentarioTareas', checkLogin, consultorController.comentarioTareas)
+
+/********************************************************************************/
+// SOLICITAR ARCHIVOS (ETAPA 2, 3 Y 4)
+router.post('/solicitar-archivos-empresa', checkLogin, consultorController.solicitarArchivo)
+/********************************************************************************/
+
 module.exports = router

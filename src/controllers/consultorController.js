@@ -75,6 +75,9 @@ consultorController.empresasAsignadas = async (req, res) => {
     res.render('consultor/empresas', { consultorDash: true, itemActivo: 2, empresas })
 }
 
+/********************************************************************************/
+// Etapa 2 - Análisis de Negocio
+/********************************************************************************/
 /* ------------------------------------------------------------------------------------------------ */
 // PROPUESTA DE ANÁLISIS DE NEGOCIO
 consultorController.enviarPropuesta = async (req, res) => {
@@ -466,6 +469,16 @@ consultorController.eliminarTarea = async (req, res) => {
 }
 
 /************************************************************************************************* */
+// SOLICITAR ARCHIVOS (ETAPA 2, 3 Y 4)
+consultorController.solicitarArchivo = async (req, res) => {
+    const { empresa, dimension, descripcion, tabla }  = req.body;
+    const datos = { empresa, dimension, descripcion }
+    const insertar = await insertarDatos(tabla, datos)
+    console.log("<<<<<<<<<<<<<<<<< result insertar archivo >>>>>>>>>>");
+    insertar.affectedRows == 1 ? res.send(true) : res.send(false);
+}
+
+// AGREGAR NUEVO RENDIMIENTO DE LA EMPRESA (VENTAS, COMPRAS, GASTOS)
 consultorController.nuevoRendimiento = async (req, res) => {
     let { total_ventas, total_compras, total_gastos, codigo } = req.body
     let datosTabla = await consultarDatos('empresas')
