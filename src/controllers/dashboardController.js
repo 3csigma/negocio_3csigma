@@ -659,16 +659,6 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     /************************************************************************************* */
-    // ARCHIVOS CARGADOS
-    let archivos = false;
-    let analisis = await consultarDatos('analisis_empresa')
-    analisis = analisis.find(i => i.id_empresa == idEmpresa)
-    if (analisis) {
-        if (analisis.archivos) {
-            archivos = JSON.parse(analisis.archivos)
-        }
-    }
-
     /** ANÁLISIS DE NEGOCIO POR DIMENSIONES - RESPUESTAS DE CUESTIONARIOS */
     let dimProducto = false, dimAdmin = false, dimOperacion = false, dimMarketing = false;
     const analisis_empresa = await consultarDatos('analisis_empresa')
@@ -1057,15 +1047,40 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     }
 
+    /******************************************************************************
+     * SOLICITUD DE ARCHIVOS PARA LAS ETAPAS 2, 3 Y 4 
+    */
+    let archivos_solicitados = {};
+    archivos_solicitados.analisis = await consultarDatos('archivos_analisis')
+    archivos_solicitados.analisis = archivos_solicitados.analisis.filter(x => x.empresa == idEmpresa);
+    archivos_solicitados.analisis.forEach(x => {
+        x.color = 'warning'; x.estado = 'Pendiente';
+        if (x.link) { x.color = 'success'; x.estado = 'Cargado' }
+    })
+    archivos_solicitados.empresarial = await consultarDatos('archivos_empresarial')
+    archivos_solicitados.empresarial = archivos_solicitados.empresarial.filter(x => x.empresa == idEmpresa);
+    archivos_solicitados.empresarial.forEach(x => {
+        x.color = 'warning'; x.estado = 'Pendiente';
+        if (x.link) { x.color = 'success'; x.estado = 'Cargado' }
+    })
+    archivos_solicitados.estrategico = await consultarDatos('archivos_estrategico')
+    archivos_solicitados.estrategico = archivos_solicitados.estrategico.filter(x => x.empresa == idEmpresa);
+    archivos_solicitados.estrategico.forEach(x => {
+        x.color = 'warning'; x.estado = 'Pendiente';
+        if (x.link) { x.color = 'success'; x.estado = 'Cargado' }
+    })
+    /******************************************************************************/
+
     res.render('admin/editarEmpresa', {
         adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,
         aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
-        graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
+        graficas2: true, propuesta, pagos_analisis, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
         tareas, jsonDim, jsonRendimiento, fechaActual, pagoDg_Realizado,
         pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
-        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada
+        rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada,
+        archivos_solicitados
     })
 
 }

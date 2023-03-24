@@ -1122,7 +1122,7 @@
                                 </div>
                                 {{/if}}
 
-                                {{#if archivos}}
+                                {{!-- {{#if archivos}}
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
@@ -1157,9 +1157,74 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{/if}}
+                                {{/if}} --}}
                                 
                                 {{#if propuesta.analisis.pago}}
+                                    <!-- ======================== SOLICITUD DE ARCHIVOS ANÁLISIS DE NEGOCIO ======================== -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="card-header">
+                                                <h4 class="card-title" style="margin:0 auto">Solicitar Archivos</h4>
+                                            </div>
+                                            <div class="row text-center">
+                                                <div class="col-4 mt-3">
+                                                    <label>Dimensión <span class="text-red" id="txtNulo3" style="display: none;">*Obligatorio*</span></label>
+                                                    <select id="archivo-dimension2" class="selectpicker">
+                                                        <option value="0" selected>Selecciona una opción</option>
+                                                        <option value="Producto">Producto</option>
+                                                        <option value="Administración">Administración</option>
+                                                        <option value="Operación">Operación</option>
+                                                        <option value="Marketing">Marketing</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 mt-3">
+                                                    <label>Descripción <span class="text-red" id="txtNulo4" style="display: none;">*Obligatorio*</span></label>
+                                                    <textarea id="archivo-descripcion2" style="height: 55px; min-height: 55px; max-height: 55px;" class="form-control barra-scroll overflow-y-auto w-100"></textarea>
+                                                </div>
+                                                <div class="col-2 mt-3">
+                                                    <label>Solicitar</label> <br>
+                                                    <button class="btn btn-primary shadow btn-md sharp" onclick="solicitarArchivo('archivos_analisis', 2)"><i class="fa fa-upload"></i></button>
+                                                </div>
+                                            </div>
+                                            {{#if archivos_solicitados.analisis}}
+                                            <hr>
+                                            {{!-- ARCHIVOS SOLICITADOS ANÁLISIS DE NEGOCIO (CARGADOS POR LA EMPRESA) --}}
+                                            <div class="row text-center">
+                                                <div class="table-responsive">
+                                                    <table class="table table-responsive-md text-center">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>DIMENSIÓN</th>
+                                                                <th>DESCRIPCIÓN</th>
+                                                                <th>ESTADO</th>
+                                                                <th>REVISAR</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {{#each archivos_solicitados.analisis}}
+                                                            <tr>
+                                                                <td>{{dimension}}</td>
+                                                                <td>{{descripcion}}</td>
+                                                                <td><span class="badge light badge-{{color}}">{{estado}}</span></td>
+                                                                <td>
+                                                                    {{#if link}}
+                                                                    <a href="{{link}}" style="margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white"><i class="fa fa-search"></i></a>
+                                                                    {{else}}
+                                                                    <button class="btn btn-primary shadow btn-xs sharp mr-1"
+                                                                        style="filter:grayscale(1); cursor: default;"><i class="fa fa-search"></i></button>
+                                                                    {{/if}}
+                                                                </td>
+                                                            </tr>
+                                                            {{/each}}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    <!--================================================================================================--->
+
                                     <!-- ======================== CUESTIONARIOS DE DIAGNÓSTICO PARA EL ANÁLISIS ======================== -->
                                     <div class="card">
                                         <div class="card-body">

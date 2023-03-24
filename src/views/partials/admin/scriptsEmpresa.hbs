@@ -121,37 +121,50 @@
         });
     }
 
-    function mostrarSelector() {
-        $('#tipoArchivo').show();
-        $('#div-btnAtras').hide();
-    }
-
-    function archivosItems(e) {
-        $('#div-archivo').show()
-        $('#div-link').hide()
-        if (e == 'Website') {
-            $('#div-archivo').hide()
-            $('#div-link').show()
+    function solicitarArchivo(tabla, i) {
+        const empresa = $('#idEmpresa').val()
+        const dimension = $(`#archivo-dimension${i} option:selected`).val()
+        const descripcion = $('#archivo-descripcion'+i).val()
+        if (dimension == 0) {
+            $("#txtNulo3").show();
+            $("#txtNulo4").hide();
+        } else if (descripcion == '') {
+            $("#txtNulo3").hide();
+            $("#txtNulo4").show();
+        } else {
+            $("#txtNulo3").hide();
+            $("#txtNulo4").hide();
+            Swal.fire({
+                title: '¿Deseas solicitar este archivo?',
+                text: "Asegúrate de que esta información sea correcta.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#FFE000',
+                cancelButtonColor: '#000000',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Solicitar'
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/solicitar-archivos-empresa', {
+                        method: 'POST',
+                        body: JSON.stringify({empresa, dimension, descripcion, tabla}),
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => {
+                            if (response) {
+                                window.location.hash = 'analisis_'
+                                if (i == 3) window.location.hash = 'proyecto-consultoria';
+                                else if (i == 4) window.location.hash = 'plan-estrategico';
+                                location.reload();
+                            } else {
+                                Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
+                            }
+                        });
+                }
+            })
         }
-        if (e == 'Otro') {
-            $('#div-btnAtras').show();
-            $('#tipoArchivo').hide();
-        }
-    }
-
-    function agregarArchivo() {
-        const tipoArchivo = $('#tipoArchivo').val()
-        if (tipoArchivo == 'Website') {
-            const link = $('#input-link').val()
-            guardarArchivo(tipoArchivo, link)
-        } else if (tipoArchivo == 'Otro') {
-            const nombre = $('#txt-nomArchivo').val()
-        }
-
-    }
-
-    function guardarArchivo(nombre, archivo) {
-        console.log("Función para guardar los datos en DB & luego responder en la misma vista")
     }
     
     // REGISTRAR PAGO MANUAL (DIAGNÓSTICO DE NEGOCIO)
