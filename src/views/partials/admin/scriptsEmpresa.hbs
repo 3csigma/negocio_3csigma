@@ -167,6 +167,38 @@
         }
     }
     
+    function eliminarArchivo_(id, tab, tabla) {
+        Swal.fire({
+            title: '¿Deseas eliminar este archivo?',
+            text: "Esta acción no se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FFE000',
+            cancelButtonColor: '#000000',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Eliminar'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminar-archivos-empresa', {
+                    method: 'POST',
+                    body: JSON.stringify({id, tabla}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response) {
+                            window.location.hash = 'analisis_'
+                            if (tab == 3) window.location.hash = 'proyecto-consultoria';
+                            else if (tab == 4) window.location.hash = 'plan-estrategico';
+                            location.reload();
+                        } else {
+                            Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
+                        }
+                    });
+            }
+        })
+    }
     // REGISTRAR PAGO MANUAL (DIAGNÓSTICO DE NEGOCIO)
     function pagoManual(id, precio) {
         Swal.fire({
