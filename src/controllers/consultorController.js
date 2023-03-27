@@ -478,6 +478,16 @@ consultorController.solicitarArchivo = async (req, res) => {
     insertar.affectedRows == 1 ? res.send(true) : res.send(false);
 }
 
+// ELIMINAR ARCHIVOS EMPRESAS (ETAPA 2, 3 Y 4)
+consultorController.eliminarArchivo = async (req, res) => {
+    const { id, tabla } = req.body;
+    const eliminar = await eliminarDatos(tabla, `WHERE id = ${id}` )
+    console.log("<<<<<<<<<<<<<<<<< result insertar archivo >>>>>>>>>>");
+    console.log(eliminar);
+    console.log("<<<<<<<<<<<<<<<<< result insertar archivo >>>>>>>>>>");
+    eliminar.affectedRows == 1 ? res.send(true) : res.send(false);
+}
+
 // AGREGAR NUEVO RENDIMIENTO DE LA EMPRESA (VENTAS, COMPRAS, GASTOS)
 consultorController.nuevoRendimiento = async (req, res) => {
     let { total_ventas, total_compras, total_gastos, codigo } = req.body
