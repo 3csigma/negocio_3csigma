@@ -206,53 +206,71 @@
       </div>
 
       {{!-- TARJETA DERECHA (ARCHIVOS CARGADOS POR EL CONSULTOR) --}}
+      {{!-- CARGA DE ARCHIVOS --}}
+      <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title">Archivos cargados</h4>
+                <h4 class="card-title">Carga de archivos</h4>
               </div>
+
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-responsive-md text-center">
-                    <thead>
-                      <tr>
-                        <th>FECHA</th>
-                        <th>NOMBRE</th>
-                        <th>REVISAR</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {{#if archivos}}
-                      {{#each archivos}}
-                      <tr>
-                        <td>{{fecha}}</td>
-                        <td>{{tipo}}</td>
-                        <td>
-                          <a href="{{url}}" target="_blank"
-                            class="btn btn-primary shadow btn-xs sharp"
-                            style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #50368C 129.46%); margin: 0 auto">
-                            <i class="fa fa-search"></i>
-                          </a>
-                        </td>
-                      </tr>
-                      {{/each}}
-                      {{else}}
-                      <tr>
-                        <td colspan="3">El consultor no ha cargado archivos aún</td>
-                      </tr>
-                      {{/if}}
-                    </tbody>
-                  </table>
+                <div class="row">
+                  <div class="table-responsive">
+                    <table class="table table-responsive-md text-center">
+                      <thead>
+                        <tr>
+                          <th>DIMENSIÓN</th>
+                          <th>DESCRIPCIÓN</th>
+                          <th>ESTADO</th>
+                          <th>ACCIÓN</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {{#unless archivos}}
+                          <tr><td colspan=" 4">Tu consultor aún no ha solicitado archivos</td></tr>
+                        {{/unless}}
+                        {{#each archivos}}
+                        <tr>
+                          <td>{{dimension}}</td>
+                          <td>{{descripcion}}</td>
+                          <td><span id="spanEstado{{id}}" class="badge light badge-{{color}}">{{estado}}</span></td>
+                          <td>
+                            <table border="0" cellspacing="0" style="margin: 0 auto;">
+                              <tr>
+                                <td style="border-color: transparent; padding:3px">
+                                  <label for="inputArchivo{{id}}" onclick="cargarArchivos_Empresa('archivos_empresarial', '{{id}}')">
+                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white" style="border-color: white;">
+                                      <i class="fa fa-upload"></i>
+                                    </div>
+                                  </label>
+                                  <input id="inputArchivo{{id}}" type="file" style="display:none"/>
+                                </td>
+                                <td style="border-color: transparent; padding:3px">
+                                  <a id="btnVer{{id}}" href="{{link}}"
+                                    style="display: {{display}}; margin: 0 auto; margin-top: -8px; border-color: #FED061"
+                                    target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
+                                    <i class="fa fa-search"></i></a>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                        {{/each}}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
+      {{!-- FIN COLUMNAS - IZQUIERDA DERECHA --}}
+      
       {{!-- TAREAS ASIGNADAS --}}
       {{#if propuesta.porcentaje}}
       <div class="col-xl-12 mt-2">

@@ -277,7 +277,6 @@
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
-      {{#if archivos}}
       <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
@@ -300,6 +299,9 @@
                         </tr>
                       </thead>
                       <tbody>
+                        {{#unless archivos}}
+                          <tr><td colspan=" 4">Tu consultor aún no ha solicitado archivos</td></tr>
+                        {{/unless}}
                         {{#each archivos}}
                         <tr>
                           <td>{{dimension}}</td>
@@ -335,12 +337,8 @@
               </div>
             </div>
           </div>
-
-          
         </div>
-        
       </div>
-      {{/if}}
     </div>
     {{/if}}
   </div>
