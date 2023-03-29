@@ -224,7 +224,7 @@ userController.actualizarFotoPerfil = async (req, res) => {
     if (rol == 'Empresa') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
     }
-    if (rol == 'Estudiante' || rol == 'Admin') {
+    if (rol == 'Estudiante' || rol == 'Admin' || rol == 'Tutor') {
         await pool.query("UPDATE users SET ? WHERE codigo = ?", [actualizar, codigo]);
     }
     res.send(true);

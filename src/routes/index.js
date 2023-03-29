@@ -69,6 +69,7 @@ router.post('/bloquearConsultor', checkLogin, dashboardController.bloquearConsul
 router.get('/empresas', checkLogin, dashboardController.mostrarEmpresas)
 router.get('/empresas/:codigo', checkLogin, dashboardController.editarEmpresa)
 router.get('/empresas-asignadas/:codigo', checkLogin, dashboardController.editarEmpresa)
+router.get('/estudiantes-asignados/:codigo', checkLogin, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
 router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
@@ -111,7 +112,7 @@ cron.schedule('0 1 1 * *',() => {
     historial_informes_consultor();
 });
 
-router.post('/historial_empresas_admin', historial_empresas_admin)
+router.post('/historial_empresas_consultor', historial_empresas_consultor)
 
 // Ejecución Semanal
 cron.schedule('0 10 * * Mon',() => {

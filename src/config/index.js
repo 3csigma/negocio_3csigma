@@ -2,6 +2,8 @@ const rutasEmpresa = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil
 
 const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'comentariotareas', 'empresas', 'empresas-asignadas', 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme', 'conclusiones', 'guardar-archivos-empresarial', 'website-empresarial', 'finalizaretapa']
 
+const rutasTutor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'comentariotareas', 'empresas', 'estudiantes-asignados', 'empresas-relacionadas' , 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme', 'conclusiones', 'guardar-archivos-empresarial', 'website-empresarial', 'finalizaretapa']
+
 const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagomanual-diagnostico', 'pagomanual-empresas', 'cancelarsub']
 
 const privateKey_DKIM = `-----BEGIN RSA PRIVATE KEY-----
@@ -33,5 +35,5 @@ amtez0n8Pc1ks4+zXw7JBf3+8Xoxvmeyujc1kjqYfLdIU9ggbCiYEPnhloH1bhUU
 -----END RSA PRIVATE KEY-----`
 
 module.exports = {
-  rutasEmpresa, rutasConsultor, rutasAdmin, privateKey_DKIM
+  rutasEmpresa, rutasConsultor, rutasTutor, rutasAdmin, privateKey_DKIM
 };

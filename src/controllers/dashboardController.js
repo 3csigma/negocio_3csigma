@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
 
-const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
+const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, nuevoEstudiante_paraTutor, tutor_asignadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { log } = require('console');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
@@ -97,8 +97,7 @@ dashboardController.mostrarConsultores = async (req, res) => {
         //=> Mostrar el tutor a cargo de estudiantes 
         let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
         tutor = tutor.find(x => x.id_tutor == c.tutor_asignado)
-        if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos} else {c.tutor = "N/A"}
-        
+        if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos; } else {c.tutor = "N/A"}
     });
     
     /** Acceso directo para Consultores pendientes por aprobar */
@@ -125,52 +124,81 @@ dashboardController.editarConsultor = async (req, res) => {
     let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"', [miTutor])
     tutor = tutor.find(x => x.id_tutor == miTutor)
     let nombreTutor = "N/A"
-    if (tutor) {
-    nombreTutor = tutor.nombres + " " + tutor.apellidos
-    }
+        if (tutor) {
+            nombreTutor = tutor.nombres + " " + tutor.apellidos
+        }
     // => Consulta para mostrar lista de Tutores a escoger
     let tutores = await pool.query('SELECT c.*, u.rol FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
     tutores.forEach(t => {
         nombres =t.nombres
         apellidos = t.apellidos
         rol = t.rol
-        id_tutor_asignado = t.id_tutor_asignado 
     });
-    res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor, tutores, esEstudiante, nombreTutor })
+    res.render('admin/editarConsultor', { adminDash: true, itemActivo: 2, consultor, formEdit: true, aprobarConsultor, tutores, esEstudiante, nombreTutor, tutor })
 }
 
 dashboardController.actualizarConsultor = async (req, res) => {
     let respuesta = false;
-    const { codigo, estado, nivel=1 , rol, asignar_tutor, email } = req.body;
-    const estadoNivel = {nivel, email}
+    const { codigo, estado, nivel=1 , rol, asignar_tutor, email , nombre_estudiante , id_miTutor } = req.body;
+    const estadoNivel = {nivel, email,  id_tutor: codigoTutor(10), tutor_asignado:asignar_tutor}
     const nuevoEstado = { estadoAdm: estado, rol, email} // Estado Consultor Aprobado, Pendiente, Bloqueado
-    let c1 
+    let c1, datos, emailTutor 
 
     // Capturando el Consultor recien registrado
     let consultor = await consultarDatos('users')
     consultor = consultor.find(x => x.codigo == codigo)
-    if (consultor.estadoAdm == 1) {
-        const nuevoRol = { rol, estadoAdm: estado, email}
-        let datos = { id_tutor:"N/A", tutor_asignado:asignar_tutor, email }
 
-        if(nuevoRol.rol == 'Tutor'){
-            const codigoTutor = (num) => {
-                const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-                let result1 = "";
-                const charactersLength = characters.length;
-                for (let i = 0; i < num; i++) {
-                    result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
-                }
-                
-                return result1;
-            };
-        datos = { id_tutor: codigoTutor(10), email}
+    if (consultor.estadoAdm == 1) {
+        // Actualizando el rol, en otros casos el email y el estado
+        const nuevoRol = { rol, estadoAdm: estado, email}
         await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
-        c1 = await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
+
+        // Generando codigo unico al tutor
+        if(nuevoRol.rol == 'Tutor'){
+            datos = {email, id_tutor: codigoTutor(10), tutor_asignado:'N/A'}
+           c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
+        }else{
+        // Asignando al estudiante el tutor seleccionado
+        datos = {email, id_tutor:"N/A", tutor_asignado:asignar_tutor }
+
+        // Capturando el tutor asignado del estudiante para mostrar el nombre en el correo que le llega al tutor
+        let tutor = await consultarDatos('consultores')
+        tutor = tutor.find(t => t.id_tutor == asignar_tutor)
+
+        if (tutor) {
+           nombreTutor = tutor.nombres + " " + tutor.apellidos; 
+           emailTutor = tutor.email
         }
-        c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoRol, codigo])
-        await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
-        
+        // Correo para el tutor
+        const subject = "Has sido asignado como tutor para un estudiante";
+        const template = nuevoEstudiante_paraTutor(nombreTutor, nombre_estudiante);
+        const resultTutor = await sendEmail(emailTutor, subject, template)
+        if (resultTutor == false) {
+            console.log("\nOcurrio un error inesperado al enviar el email *Nuevo estudiante para tutor*")
+        } else {
+            console.log("\n<<<<< Se envío email para el tutor de que ha sido relacionado a un estudiante")
+        }
+
+        if (asignar_tutor != 'N/A') {
+            // Correo para el estudiante
+            const mensaje = "Se te ha asignado un tutor";
+            const plantilla = tutor_asignadoHTML(nombreTutor, nombre_estudiante);
+            const resultEstudiante = await sendEmail(consultor.email, mensaje, plantilla)
+            if (resultEstudiante == false) {
+                console.log("\nOcurrio un error inesperado al enviar el email *Tutor asignado*")
+            } else {
+                console.log("\n<<<<< Se envío email para el estudiante de que ha sido relacionado a un tutor")
+            }
+        }
+
+
+        // Validando select de la lista de tutores
+        if (asignar_tutor == 'N/A' && id_miTutor) datos = {email, tutor_asignado:id_miTutor}
+
+        // Actualizando el cambio de tutor del estudiante segun lo validado al comienzo del else 
+        c1 = await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
+    }
+    // Cuando el estudiante es recien registrado
     }else{ 
         c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? ', [nuevoEstado, codigo])
         await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
@@ -1019,9 +1047,12 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /*************************************************************************************************** */
     // Objeto para Botones de las tarjetas con base a la etapa del consultor
-    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true;
+    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true, tutorDash= false
     const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
     
+    let cLogin = await consultarDatos('consultores'); // Consulta a la tabla de consultores
+    cLogin = cLogin.find(i => i.codigo == req.user.codigo) // Buscando el código del consultor logueado
+
     // VALIDAR EL ROL DEL USUARIO
     if (req.user.rol == 'Admin') {
         rolAdmin = true;
@@ -1029,14 +1060,12 @@ dashboardController.editarEmpresa = async (req, res) => {
         botonesEtapas.dos = true;
         botonesEtapas.plan1 = true;
         botonesEtapas.plan2 = true;
-    } else {
+    } else if(req.user.rol == 'Estudiante'){
         consultorDash = true;
         itemActivo = 2;
         adminDash = false;
         aprobarConsultor = false;
 
-        let cLogin = await consultarDatos('consultores'); // Consulta a la tabla de consultores
-        cLogin = cLogin.find(i => i.codigo == req.user.codigo) // Buscando el código del consultor logueado
         // Filtro para saber a que etapas de la empresa está asignado el consultor
         const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
         console.group("\n* Soy un consultor - ETAPAS ASIGNADAS")
@@ -1054,6 +1083,33 @@ dashboardController.editarEmpresa = async (req, res) => {
         }
 
         console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
+    }else {
+        tutorDash =  true
+        itemActivo = 3;
+        adminDash = false;
+        aprobarConsultor = false;
+        
+        let response = await pool.query('SELECT * FROM consultores WHERE tutor_asignado = ?' , [cLogin.id_tutor])
+        
+        response.forEach(async (r) => {
+            let etapasAsignadas = consultores_asignados.filter(ca => ca.idConsultor == r.id_consultores)
+
+            console.group("\n* Soy un tutor - ETAPAS ASIGNADAS")
+            console.log(etapasAsignadas)
+            console.log(botonesEtapas)
+            console.groupEnd()
+            if (etapasAsignadas.length > 0) {
+                etapasAsignadas.forEach(x => {
+                    console.log("X Etapa -> ", x.etapa)
+                    x.orden == 1 ? botonesEtapas.uno = true : false;
+                    x.orden == 2 ? botonesEtapas.dos = true : false;
+                    x.orden == 3 ? botonesEtapas.plan1 = true : false;
+                    x.orden == 4 ? botonesEtapas.plan2 = true : false;
+                })
+            }
+    
+            console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
+        });
     }
 
         let tab_tareaAsignada
@@ -1102,7 +1158,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     res.render('admin/editarEmpresa', {
-        adminDash, consultorDash, itemActivo, empresa, formEdit: true, datos, consultores,
+        adminDash, consultorDash, tutorDash, itemActivo, empresa, formEdit: true, datos, consultores,
         aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
@@ -1863,3 +1919,14 @@ dashboardController.finalizarEtapa = async (req, res) => {
     }
     res.send(result)
 }
+
+let codigoTutor = (num) => {
+    let characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let result1 = "";
+    let charactersLength = characters.length;
+    for (let i = 0; i < num; i++) {
+        result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    
+    return result1;
+};

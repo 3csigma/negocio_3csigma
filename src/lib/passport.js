@@ -94,7 +94,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => {
 
-    const { nombres, apellidos, countryCode, telConsul, direccion_consultor, empresa_seleccionada, zh_consultor } = req.body
+    const { nombres, apellidos, countryCode, telConsul, direccion_consultor, /*empresa_seleccionada,*/ zh_consultor } = req.body
     const rol = 'Estudiante'
     pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
 
@@ -127,7 +127,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Objeto de Usuario
             const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Estudiante', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, empresa_seleccionada, codigo, fecha_creacion, mes, year };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, /*empresa_seleccionada,*/ codigo, id_tutor:'N/A', tutor_asignado:'N/A', fecha_creacion, mes, year };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
@@ -183,9 +183,9 @@ passport.use('local.login', new LocalStrategy({
                 } else {
                     return done(null, false, req.flash('message', 'Aún no has verificado la cuenta desde tu email.'))
                 }
-            } else if (usuario.rol == 'Estudiante') { // Usuario Consultor
+            } else if (usuario.rol == 'Estudiante') { // Usuario Estudiante
                 console.log("\n**************");
-                console.log("Consultor LOGUEADO >>> ");
+                console.log("Estudiante LOGUEADO >>> ");
                 console.log("**************");
                 if (usuario.estadoEmail == 1 && usuario.estadoAdm == '1') {
                     req.session.consultor = true;
@@ -197,7 +197,21 @@ passport.use('local.login', new LocalStrategy({
                 } else {
                     return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
                 }
-            } else if (usuario.rol == 'Admin') { // Administrador
+            }else if(usuario.rol == 'Tutor') {
+                console.log("\n**************");
+                console.log("Tutor LOGUEADO >>> ");
+                console.log("**************");
+                if (usuario.estadoEmail == 1 && usuario.estadoAdm == '1') {
+                    req.session.tutor = true;
+                    return done(null, usuario, req.flash('success', 'Bienvenido Tutor'))
+                } else if (usuario.estadoAdm == 2) {
+                    return done(null, false, req.flash('message', 'Tu cuenta esta bloqueada. Contacta a un administrador.'))
+                } else if (usuario.estadoAdm == 3) {
+                    return done(null, false, req.flash('message', 'Tu cuenta fue rechazada.'))
+                } else {
+                    return done(null, false, req.flash('message', 'Tu cuenta está suspendida o aún no ha sido activada.'))
+                }
+            }else if (usuario.rol == 'Admin') { // Administrador
                 console.log("\n**************");
                 console.log("Admin LOGUEADO >>> ");
                 console.log("**************");

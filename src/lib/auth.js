@@ -2,6 +2,7 @@ const rutasObj = require('../config/index.js');
 const empresaController = require('../controllers/empresaController');
 const consultorController = require('../controllers/consultorController');
 const dashboardController = require('../controllers/dashboardController');
+const tutorController = require('../controllers/tutorController');
 
 module.exports = {
 
@@ -36,7 +37,9 @@ module.exports = {
                 empresaController.index(req, res);
             } else if(req.user.rol == "Estudiante") {    
                 consultorController.index(req, res);
-            } else {
+            }else if(req.user.rol == "Tutor") {    
+                tutorController.index(req, res);
+            }else {
                 dashboardController.admin(req, res);
             }
         } else {

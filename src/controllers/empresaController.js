@@ -325,7 +325,7 @@ empresaController.perfilUsuarios = async (req, res) => {
     empresa = empresa[0]
     let consultor = await pool.query("SELECT c.*, u.foto, u.rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE c.codigo = ?", [codigo])
     consultor = consultor[0]
-
+   
     // if (consultor) {
     //     if(consultor.nivel == 1){
     //         consultor.nivel = "Estudiante"
@@ -338,7 +338,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         //     consultor.nivel = "Executive Director"
         // }
     // }         
-    let user_dash = false, adminDash = false, consultorDash = false
+    let user_dash = false, adminDash = false, consultorDash = false, tutorDash = false
     if (rol == 'Empresa') {
         user_dash = true;
         empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
@@ -347,6 +347,9 @@ empresaController.perfilUsuarios = async (req, res) => {
         if (rol == 'Estudiante') {
             consultorDash = true;
             consultor.nivel = "Estudiante"
+        } else if (rol == 'Tutor') {
+            tutorDash = true;
+            consultor.nivel = "Tutor"
         } else {
             adminDash = true;
             consultor.nivel = "Admin"
@@ -357,7 +360,7 @@ empresaController.perfilUsuarios = async (req, res) => {
     acuerdo = acuerdo.find(x => x.id_empresa == empresa)
 
     res.render('pages/profile', {
-        rol, adminDash, user_dash, consultorDash, consultor, empresa,
+        rol, adminDash, user_dash, tutorDash, consultorDash, consultor, empresa,
         pagoPendiente,
         diagnosticoPagado,
         etapa1, modalAcuerdo,
