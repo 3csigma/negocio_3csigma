@@ -17,6 +17,9 @@
     {{#if consultorDash}}
         {{> consultor/navigationConsultor}}
     {{/if}}
+     {{#if tutorDash}}
+        {{> tutor/navigationTutor}}
+    {{/if}}
     
     {{{ body }}}
 
@@ -37,7 +40,12 @@
     {{#if consultorDash}}
         {{> consultor/footerConsultor }}
     {{/if}}
+      {{#if tutorDash}}
+        {{> tutor/footerTutor }}
+    {{/if}}
 
 </body>
 
 </html>
+
+

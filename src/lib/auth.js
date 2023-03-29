@@ -14,15 +14,18 @@ module.exports = {
             if (req.user.rol == 'Empresa') {
                 console.log("ROBJ => ", rutasObj)
                 const ok = rutasObj.rutasEmpresa.find(x => x == url.toLowerCase())
-                if (ok) return next(); else return console.log("La empresa no tiene acceso a esta ruta o no se encuentra en el Array rutasEmpresa.. (Rutas en minúsculas)");
+                if (ok) return next(); else return console.log("La Empresa no tiene acceso a esta ruta o no se encuentra en el Array rutasEmpresa.. (Rutas en minúsculas)");
             } else if (req.user.rol == 'Admin') {
                 const adm = rutasObj.rutasAdmin.find(x => x == url.toLowerCase())
                 const adm2 = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
                 if (adm || adm2) return next(); else console.log("El Admin no tiene acceso a esta ruta o no se encuentra en el Array rutasAdmin.. (Rutas en minúsculas)");
             } else if (req.user.rol == "Estudiante") {
                 const ok = rutasObj.rutasConsultor.find(x => x == url.toLowerCase())
-                if (ok) return next(); else console.log("El Consultor no tiene acceso a esta ruta o no se encuentra en el Array rutasConsultor.. (Rutas en minúsculas)");
-            } else {
+                if (ok) return next(); else console.log("El Estudiante no tiene acceso a esta ruta o no se encuentra en el Array rutasConsultor.. (Rutas en minúsculas)");
+            }else if (req.user.rol == "Tutor") {
+                const ok = rutasObj.rutasTutor.find(x => x == url.toLowerCase())
+                if (ok) return next(); else console.log("El Tutor no tiene acceso a esta ruta o no se encuentra en el Array rutasConsultor.. (Rutas en minúsculas)");
+            }else {
                 res.redirect('/404')
             }
         } else {

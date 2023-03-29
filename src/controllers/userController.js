@@ -214,6 +214,32 @@ userController.update_user = async (req, res) => {
         await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [datos_tbl_consultores, codigo])
 
     } 
+
+    if (rol == 'Tutor') {
+        consultorDash = false;
+        tutorDash = true;
+        let { email_consultor, clave_consultor, tel_consultor, direccion_consultor } = req.body;
+        let email = email_consultor
+        let clave = clave_consultor
+
+        let resultDatos = await pool.query("SELECT u.*, c.* FROM users u JOIN consultores c ON u.codigo = c.codigo WHERE u.codigo = ?", [codigo]);
+        resultDatos = resultDatos[0];
+        const email_db = resultDatos.email;
+        const clave_db = resultDatos.clave;
+        const tel_db = resultDatos.tel_consultor;
+        const dire_db = resultDatos.direccion_consultor;
+
+        email_consultor == '' ? email = email_db : email
+        clave_consultor == '' ? clave = clave_db : clave = await bcrypt.hash(clave, 12);
+        tel_consultor == '' ? tel_consultor = tel_db : tel_consultor
+        direccion_consultor == '' ? direccion_consultor = dire_db : direccion_consultor
+
+        const datos_tbl_user = { email, clave }
+        const datos_tbl_consultores = { email, tel_consultor, direccion_consultor }
+        await pool.query('UPDATE users SET ? WHERE codigo = ?', [datos_tbl_user, codigo])
+        await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [datos_tbl_consultores, codigo])
+    }
+
     res.redirect("/perfil/" + codigo);
 }
 // Actualizar foto
