@@ -1,0 +1,54 @@
+<!--**********************************
+          Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Datos de empresas</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="empresasTutorTabla" class="table table-striped text-center" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Empresa</th>
+                                        <th>Nombre</th>
+                                        <th>Correo</th>
+                                        <th>Teléfono</th>
+                                        <th>Asignado a:</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each empresas}}
+                                    <tr>
+                                        <td>{{nombre_empresa}}</td>
+                                        <td>{{nombres}} {{apellidos}}</td>
+                                        <td>{{email}}</td>
+                                        <td>{{telefono}}</td>
+                                        <td>{{{etapa}}}</td>
+                                        <td>
+                                            <div style="margin: 0 auto">
+                                                <a  href="/estudiantes-asignados/{{codigo}}" class="btn color_primary shadow btn-xs sharp mr-1 text-white">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

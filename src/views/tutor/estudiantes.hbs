@@ -1,0 +1,69 @@
+<!--**********************************
+          Content body start
+***********************************-->
+<div class="content-body">
+    <!-- row -->
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Datos de estudiantes</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="consultoresTabla" class="table table-striped text-center" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Nombre</th>
+                                        <th>Fecha de registro</th>
+                                        <th>Email</th>
+                                        <th>Teléfono</th>
+                                        <th>Empresas asignadas</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each consultores}}
+                                    <tr>
+                                        <td>
+                                            {{#if foto}}
+                                            <img class="rounded-circle" style="height: 48px; width: 48px;object-fit: cover;" src="{{foto}}" alt="Perfil_Consultor">
+                                            {{else}}
+                                            <img class="rounded-circle" style="height: 48px; width: 48px;object-fit: cover;" src="../img/profile_default/user.jpg" alt="Perfil_Consultor" />
+                                            {{/if}} 
+                                        </td>
+                                        <td>{{nombres}} {{apellidos}}</td>
+                                        <td>{{fecha_creacion}}</td>
+                                        <td>{{email}}</td>
+                                        <td>{{tel_consultor}}</td>
+                                        <td>{{num_empresas}}</td>
+                                        <td>
+                                            {{#comparar estadoAdm '==' 0}}
+                                            <span class="badge light badge-warning">Pendiente</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 1}}
+                                            <span class="badge light badge-success" >Aprobado</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 2}}
+                                            <span class="badge light badge-warning" >Bloqueado</span>
+                                            {{/comparar}}
+                                            {{#comparar estadoAdm '==' 3}}
+                                            <span class="badge light badge-danger" >Rechazado</span>
+                                            {{/comparar}}
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

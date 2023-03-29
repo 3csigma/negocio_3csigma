@@ -1,0 +1,183 @@
+<style>
+  [data-sidebar-position="fixed"][data-layout="vertical"] .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgGrande {
+    display: none;
+  }
+  [data-sidebar-position="fixed"][data-layout="vertical"] .menu-toggle .imgToggle_ {
+    display: block;
+  }
+
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgGrande {
+    display: none;
+  }
+  [data-sidebar-style="mini"] .deznav .imgToggle_ {
+    display: block;
+  }
+
+</style>
+<!--*******************
+        Preloader start
+********************-->
+<div id="preloader">
+  <div class="sk-three-bounce">
+    <div class="sk-child sk-bounce1"></div>
+    <div class="sk-child sk-bounce2"></div>
+    <div class="sk-child sk-bounce3"></div>
+  </div>
+</div>
+<!--*******************
+        Preloader end
+********************-->
+<!--**********************************
+        Main wrapper start
+***********************************-->
+
+<div id="main-wrapper">
+  <!--**********************************
+                START Nav header start
+    ***********************************-->
+  <div class="nav-header">
+    <a href="/" class="brand-logo">
+      <img class="logo-abbr" src="/img/Favicon.svg" alt="">
+      <img class="logo-compact" src="/img/navigation-logo.svg" alt="" style="padding-top: 1em !important;">
+      <img class="brand-title mx-auto" src="/img/navigation-logo.svg" alt="" style="padding-top: 1em !important;">
+    </a>
+
+    <div class="nav-control">
+      <div class="hamburger">
+        <span class="line"></span><span class="line"></span><span class="line"></span>
+      </div>
+    </div>
+  </div>
+  <!--**********************************
+                END Nav header end
+    ***********************************-->
+
+  <!--**********************************
+                Header start
+    ***********************************-->
+  <div class="header">
+    <div class="header-content">
+      <nav class="navbar navbar-expand">
+        <div class="collapse navbar-collapse justify-content-between">
+          <div class="header-left">
+            <div class="dashboard_bar">
+              {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
+              {{#comparar itemActivo '==' 2}}Estudiantes asignados{{/comparar}}
+              {{#comparar itemActivo '==' 3}}Empresas asignadas{{/comparar}}
+              {{#if consultor.foto}}Perfil{{/if}}
+            </div>
+          </div>
+          <ul class="navbar-nav header-right">
+
+            <li class="nav-item dropdown header-profile">
+              <a class="nav-link" href="javascript:void(0)" role="button" data-toggle="dropdown">
+              {{#if user.foto}}
+                <img src="{{user.foto}}" width="20" alt="profile"  style="object-fit: cover;" />
+              {{else}}
+                <img src="../img/profile_default/user.jpg" width="20" alt="profile" style="object-fit: cover;" />
+              {{/if}}
+                <div class="header-info">
+                  <span class="text-black"><strong>{{user.nombres}} {{user.apellidos}}</strong></span>
+                  <p class="fs-12 mb-0">Editar Perfil</p>
+                </div>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right">
+                <a href="/perfil/{{user.codigo}}"  class="dropdown-item ai-icon">
+                  <svg id="icon-user1" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span class="ml-2">Perfil </span>
+                </a>
+                <a href="/logout" class="dropdown-item ai-icon">
+                  <svg id="icon-logout" xmlns="http://www.w3.org/2000/svg" class="text-primary" width="18" height="18"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span class="ml-2">Cerrar sesión </span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <!--**********************************
+                Header end ti-comment-alt
+    ***********************************-->
+
+  <!--**********************************
+              START Sidebar start
+    ***********************************-->
+  <div class="deznav">
+    <div class="deznav-scroll">
+      <form><input type="button"></form>
+
+      {{!-- MENÚ LATERAL IZQUIERDO --}}
+      <ul class="metismenu" id="menu">
+
+        {{#comparar itemActivo '==' 1}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 1}}
+        <li>
+          {{/comparar}}
+          <a href="/" aria-expanded="false">
+            <i class="zmdi zmdi-view-dashboard"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        
+
+        {{#comparar itemActivo '==' 2}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 2}}
+        <li>
+          {{/comparar}}
+          <a href="/estudiantes-asignados" aria-expanded="false">
+            <i class="fas fa-file-invoice"></i>
+            <span class="nav-text">Estudiantes asignados</span>
+          </a>
+        </li>
+        {{#comparar itemActivo '==' 3}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 3}}
+        <li>
+          {{/comparar}}
+          <a href="/empresas-relacionadas" aria-expanded="false">
+            <i class="fas fa-city"></i>
+            <span class="nav-text">Empresas asignadas</span>
+          </a>
+        </li>
+      </ul>
+
+        {{!-- BOTÓN AGENDAR CITA --}}
+          <a href="https://calendly.com/app/scheduled_events/user/me" target="_blank">
+            <div class="text-center">
+              <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+              <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
+            </div>
+          </a>
+
+      <div class="copyright text-center">
+        <p><strong>­© PAOM System</strong> </p>
+      </div>
+    </div>
+  </div>
+  <!--**********************************
+              END Sidebar end
+    ***********************************-->
