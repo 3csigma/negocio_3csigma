@@ -1,6 +1,7 @@
 const pool = require('../database')
 const empresaController = exports;
 const { encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos, cargarArchivo } = require('../lib/helpers')
+const { sendEmail, archivosCargadosHTML } = require('../lib/mail.config');
 const { Country } = require('country-state-city');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 const portalClientes = process.env.PORTAL_CLIENTES;
@@ -646,10 +647,9 @@ empresaController.analisis = async (req, res) => {
     }
 
     /************************************************************************************* */
-    // ARCHIVOS CARGADOS
-    let archivos = false;
-    let analisis = await consultarDatos('archivos_analisis')
-    archivos = analisis.filter(i => i.empresa == id_empresa)
+    // ARCHIVOS CARGADOS - ANÁLISIS DE NEGOCIO
+    let archivos = await consultarDatos('archivos_analisis')
+    archivos = archivos.filter(i => i.empresa == id_empresa)
     if (archivos.length > 0) {
         archivos.forEach(x => {
             x.estado = 'Pendiente';
@@ -661,6 +661,8 @@ empresaController.analisis = async (req, res) => {
                 x.display = 'block';
             }
         })
+    } else {
+        archivos = false;
     }
     /************************************************************************************* */
 
@@ -779,13 +781,52 @@ empresaController.analisis = async (req, res) => {
 */
 empresaController.guardarArchivos = async (req, res) => {
     const { id, empresa, etapa, tabla } = req.body;
-    let link = '../archivos_analisis_empresa/Análisis-de-negocio_'+req.file.originalname;
-    if (etapa == 3) link = '../archivos_empresarial_empresa/Proyecto-de-consultoría_'+req.file.originalname;
-    else if (etapa == 4) link = '../archivos_estrategico_empresa/Plan-estratégico_'+req.file.originalname;
+    let info = await consultarDatos('consultores_asignados')
+    let link = ''
+    let linkEmail = ''
+    let txtEtapa = ''
+    if (etapa == 2) {
+        link = '../archivos_analisis_empresa/Análisis-de-negocio_'+req.file.originalname;
+        linkEmail = 'analisis-de-negocio';
+        txtEtapa = 'Análisis de negocio'
+        info = info.find(x => x.empresa == empresa && x.orden == 2)
+        const consultores = await consultarDatos('consultores')
+        info = consultores.find(x => x.id_consultores == info.consultor)
+    } else if (etapa == 3) {
+        link = '../archivos_empresarial_empresa/Proyecto-de-consultoría_'+req.file.originalname;
+        linkEmail = 'proyecto-de-consultoria';
+        txtEtapa = 'Proyecto de consultoría'
+        info = info.find(x => x.empresa == empresa && x.orden == 3)
+        const consultores = await consultarDatos('consultores')
+        info = consultores.find(x => x.id_consultores == info.consultor)
+    } else {
+        link = '../archivos_estrategico_empresa/Plan-estratégico_'+req.file.originalname;
+        linkEmail = 'plan-estrategico';
+        txtEtapa = 'Plan estratégico'
+        info = info.find(x => x.empresa == empresa && x.orden == 4)
+        const consultores = await consultarDatos('consultores')
+        info = consultores.find(x => x.id_consultores == info.consultor)
+    }
     let result = await cargarArchivo(id, empresa, link, tabla)
-    if (result) result = {ok:true,url:link}
-    console.log("Resultado Guardar Archivos >>> ");
-    console.log(result);
+    if (result) {
+        result = {ok:true,url:link}
+
+        const nombreConsultor = info.nombres + ' ' + info.apellidos;
+        let e = await consultarDatos('empresas')
+        e = e.find(x => x.id_empresas == empresa)
+        const nombreEmpresa = e.nombre_empresa;
+        // Obtener la plantilla de Email
+        const template = archivosCargadosHTML(nombreConsultor, nombreEmpresa, txtEtapa, linkEmail)
+        // Enviar Email
+        const resultEmail = await sendEmail(info.email, 'Una empresa ha cargado un archivo nuevo', template)
+
+        if (resultEmail == false) {
+            console.log("\n*_*_*_*_*_* Ocurrio un error inesperado al enviar el email de Archivo Cargado *_*_*_*_*_* \n");
+        } else {
+            console.log(`\n>>>> Email de Archivo cargado - ENVIADO a => ${info.email} <<<<<\n`)
+            respuesta = true;
+        }
+    }
     res.send(result)
 }
 
@@ -927,13 +968,23 @@ empresaController.planEmpresarial = async (req, res) => {
 
     /************************************************************************************* */
     // ARCHIVOS CARGADOS
-    let archivos = await consultarDatos('archivos_plan_empresarial')
+    let archivos = await consultarDatos('archivos_empresarial')
     archivos = archivos.filter(i => i.empresa == id_empresa)
-    archivos.forEach(x => {
-        if (x.tipo == 'Otro') {
-            x.tipo = x.nombre;
-        }
-    });
+    if (archivos.length > 0) {
+        archivos.forEach(x => {
+            x.estado = 'Pendiente';
+            x.color = 'warning';
+            x.display = 'none';
+            if (x.link != null) {
+                x.estado = 'Cargado';
+                x.color = 'success';
+                x.display = 'block';
+            }
+        })
+    } else {
+        archivos = false;
+    }
+    /************************************************************************************* */
     
     res.render('empresa/planEmpresarial', {
         user_dash: true, pagoDiag: true,
@@ -943,7 +994,7 @@ empresaController.planEmpresarial = async (req, res) => {
         msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico, btnActivo, btnDesactivo, tienePropuesta,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        itemEmpresarial: true, tareas, modalAcuerdo
+        itemEmpresarial: true, tareas, modalAcuerdo, id_empresa
     })
 }
 
@@ -1020,6 +1071,26 @@ empresaController.planEstrategico = async (req, res) => {
         
     }
 
+    /************************************************************************************* */
+    // ARCHIVOS CARGADOS
+    let archivos = await consultarDatos('archivos_estrategico')
+    archivos = archivos.filter(i => i.empresa == empresa)
+    if (archivos.length > 0) {
+        archivos.forEach(x => {
+            x.estado = 'Pendiente';
+            x.color = 'warning';
+            x.display = 'none';
+            if (x.link != null) {
+                x.estado = 'Cargado';
+                x.color = 'success';
+                x.display = 'block';
+            }
+        })
+    } else {
+        archivos = false;
+    }
+    /************************************************************************************* */
+
     res.render('empresa/planEstrategico', {
         user_dash: true, pagoDiag: true,
         actualYear: req.actualYear, botones,
@@ -1028,6 +1099,6 @@ empresaController.planEstrategico = async (req, res) => {
         itemEstrategico: true,
         consulAsignado: req.session.consulAsignado,
         etapaCompleta: req.session.etapaCompleta,
-        subCancelada, modalAcuerdo, portalClientes
+        subCancelada, modalAcuerdo, portalClientes, archivos, empresa
     })
 }

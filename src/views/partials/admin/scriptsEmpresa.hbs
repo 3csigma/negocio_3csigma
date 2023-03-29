@@ -126,14 +126,17 @@
         const dimension = $(`#archivo-dimension${i} option:selected`).val()
         const descripcion = $('#archivo-descripcion'+i).val()
         if (dimension == 0) {
-            $("#txtNulo3").show();
-            $("#txtNulo4").hide();
+            $("#txtDimension"+i).show();
+            $("#txtDescripcion"+i).hide();
         } else if (descripcion == '') {
-            $("#txtNulo3").hide();
-            $("#txtNulo4").show();
+            $("#txtDimension"+i).hide();
+            $("#txtDescripcion"+i).show();
         } else {
-            $("#txtNulo3").hide();
-            $("#txtNulo4").hide();
+            $("#txtDimension"+i).hide();
+            $("#txtDescripcion"+i).hide();
+            window.location.hash = 'analisis_'
+            if (i == 3) window.location.hash = 'proyecto-consultoria';
+            else if (i == 4) window.location.hash = 'plan-estrategico';
             Swal.fire({
                 title: '¿Deseas solicitar este archivo?',
                 text: "Asegúrate de que esta información sea correcta.",
