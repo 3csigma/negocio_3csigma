@@ -48,6 +48,7 @@
 
 	{{#if archivos}}
 	function cargarArchivos_Empresa(tabla, idArchivo) {
+		alert("askjdajksdgbahjkshdjikasd")
 		const idEmpresa = document.getElementById("idEmpresa").value;
 		const inputArchivo = document.getElementById("inputArchivo"+idArchivo);
 		if (inputArchivo) {
@@ -57,7 +58,7 @@
 				const file = e.target.files[0]
 				console.log(file)
 				let ruta = '/guardar-archivos-analisis', etapa = 2
-				if (tabla == 'archivos_empresarial') { etapa= 3; ruta = '/guardar-archivos-empresarial' }
+				if (tabla == 'archivos_empresarial') { etapa= 3; ruta = '/guardar-archivos-empresariales' }
 				else if (tabla == 'archivos_estrategico') { etapa = 4; ruta = '/guardar-archivos-estrategico' }
 
 				const formData = new FormData();

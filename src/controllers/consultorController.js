@@ -1,6 +1,6 @@
 const consultorController = exports;
 const pool = require('../database')
-const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
+const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML, solicitarArchivoHTML } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
 // Dashboard Administrativo
@@ -474,8 +474,37 @@ consultorController.solicitarArchivo = async (req, res) => {
     const { empresa, dimension, descripcion, tabla }  = req.body;
     const datos = { empresa, dimension, descripcion }
     const insertar = await insertarDatos(tabla, datos)
-    console.log("<<<<<<<<<<<<<<<<< result insertar archivo >>>>>>>>>>");
-    insertar.affectedRows == 1 ? res.send(true) : res.send(false);
+    if (insertar.affectedRows == 1) {
+        let datosEmpresa = await consultarDatos('empresas')
+        datosEmpresa = datosEmpresa.find(x => x.id_empresas == empresa)
+        if (datosEmpresa) {
+            let etapa = '', link = '';
+            if (tabla == 'archivos_analisis') {
+                etapa = 'Análisis de Negocio'
+                link = 'analisis-de-negocio'
+            } else if (tabla == 'archivos_empresarial') {
+                etapa = 'Proyecto de Consultoría'
+                link = 'proyecto-de-consultoria'
+            } else {
+                etapa = 'Plan Estratégico de Negocio'
+                link = 'plan-estrategico'
+            }
+
+            const asunto = 'Se ha solitado un nuevo archivo';
+            const template = solicitarArchivoHTML(datosEmpresa.nombre_empresa, descripcion, etapa, link)
+            const resultEmail = await sendEmail(datosEmpresa.email, asunto, template);
+            console.log("Result email >>>> ");
+            console.log(resultEmail);
+            if (resultEmail == false) {
+                console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de nuevo archivo solicitado >>>> \n")
+            } else {
+                console.log("\n<<<<< Se ha notificado al email ("+datosEmpresa.email+") que se ha solicitado un nuevo archivo >>>>>\n")
+            }
+        }
+        res.send(true)
+    } else {
+        res.send(false);
+    }
 }
 
 // ELIMINAR ARCHIVOS EMPRESAS (ETAPA 2, 3 Y 4)
