@@ -272,7 +272,7 @@ dashboardController.mostrarEmpresas = async (req, res) => {
     const consultor = await pool.query('SELECT id_consultores, nombres AS nombresC, apellidos AS apellidosC FROM consultores')
     const informe = await consultarDatos('informes')
     const propuestas = await consultarDatos('propuestas')
-    let consultor_empresa = [], datosConsultor = [], id_empresass
+    let consultor_empresa = [], datosConsultor = []
 
     empresas.forEach(e => {
         e.pagoEtapa1 = false;

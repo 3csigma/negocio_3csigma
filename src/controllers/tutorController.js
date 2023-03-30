@@ -128,13 +128,22 @@ tutorController.empresasAsignadas = async (req, res) => {
                 if (!acc.includes(item.empresa)) acc.push(item.empresa);
                 return acc;
             }, [])
-
+            
             idEmpresas.forEach(x => {
                 const info = tablaEmpresas.find(e => e.id_empresas == x)
+                const etapa= estudiantesAsignados.filter(y => y.empresa == info.id_empresas)
+
+                const infoEtapa = etapa.reduce((acc, item) => {
+                    if (!acc.includes(item.etapa)) acc.push(item.etapa);
+                    return acc;
+                }, [])
+                info.etapa= ''
                 if (info) {
+                    info.etapa += infoEtapa + "<br>" 
                     empresas.push(info)
                 }
             });
+              console.log(">>>>>>>>>>>>>" , empresas);
         }
     res.render('tutor/empresas', { tutorDash: true, itemActivo: 3, empresas })
 }
