@@ -1,23 +1,34 @@
 const tutorController = exports;
 const pool = require('../database')
-const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
 tutorController.index = async (req, res) => {
     const { codigo } = req.user
-    let empresas = []
     const consultores = await consultarDatos('consultores')
     const consultor = consultores.find(x => x.codigo == codigo)
-    const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC`)
-    const idEmpresas = consultores_asignados.reduce((acc,item) => {
-        if(!acc.includes(item.empresa)) acc.push(item.empresa);
-        return acc;
-    },[])
-    let dataEmpresas = await consultarDatos('empresas')
-    idEmpresas.forEach(x => {
-        const e = dataEmpresas.find(i => i.id_empresas == x)
-        if (empresas.length < 2) if (e) empresas.push(e);
-    })
+
+    let estudiante = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" AND c.id_consultores != 1 AND c.tutor_asignado = ?', [consultor.id_tutor])
+    let estudiantesAsignados = await consultarDatos('consultores_asignados')
+    let tablaEmpresas = await pool.query('SELECT e.*, f.telefono FROM empresas e LEFT OUTER JOIN ficha_cliente f ON e.id_empresas = f.id_empresa INNER JOIN users u ON e.codigo = u.codigo AND rol = "Empresa"')
+    let asignados = [], empresas = []
+  
+    estudiante.forEach(c => {
+        asignados = estudiantesAsignados.filter(a => a.consultor == c.id_consultores)
+    });
+        if (asignados.length > 0) {
+            const idEmpresas = asignados.reduce((acc, item) => {
+                if (!acc.includes(item.empresa)) acc.push(item.empresa);
+                return acc;
+            }, [])
+
+            idEmpresas.forEach(x => {
+                const info = tablaEmpresas.find(e => e.id_empresas == x)
+                if (info) {
+                    if (empresas.length < 2) if (info) empresas.push(info);
+                }
+            });
+        }
+
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
     // const sss = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
@@ -43,7 +54,6 @@ tutorController.index = async (req, res) => {
     if (empresas_asignadas.length > 0) {
         datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas)
     }
-    console.log("ssssssssssss" , datosJson_empresas_asignadas);
     // FIN DE LA FUNCIÓN <<====
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
@@ -67,7 +77,6 @@ tutorController.index = async (req, res) => {
             if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
         })
     }
-
     res.render('tutor/panelTutor', {
         tutorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
@@ -81,7 +90,6 @@ tutorController.estudiantesAsignados = async (req, res) => {
     tutorActual = tutorActual.find(x => x.codigo == req.user.codigo)
     
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" AND c.id_consultores != 1 AND c.tutor_asignado = ?', [tutorActual.id_tutor])
-
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
         c.num_empresas = num[0].numEmpresas
@@ -104,16 +112,13 @@ tutorController.estudiantesAsignados = async (req, res) => {
 
 // EMPRESAS ASIGANADAS
 tutorController.empresasAsignadas = async (req, res) => {
-    let estudiantes = []
     let tutorActual = await consultarDatos('consultores')
     tutorActual = tutorActual.find(x => x.codigo == req.user.codigo)
 
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" AND c.id_consultores != 1 AND c.tutor_asignado = ?', [tutorActual.id_tutor])
     let estudiantesAsignados = await consultarDatos('consultores_asignados')
     let tablaEmpresas = await pool.query('SELECT e.*, f.telefono FROM empresas e LEFT OUTER JOIN ficha_cliente f ON e.id_empresas = f.id_empresa INNER JOIN users u ON e.codigo = u.codigo AND rol = "Empresa"')
-    let asignados = [];
-    let empresas = []
-    console.log("\n");
+    let asignados = [], empresas = []
   
     consultores.forEach(c => {
         asignados = estudiantesAsignados.filter(a => a.consultor == c.id_consultores)
@@ -130,9 +135,6 @@ tutorController.empresasAsignadas = async (req, res) => {
                     empresas.push(info)
                 }
             });
-           
         }
-  
-    console.log("\n");
     res.render('tutor/empresas', { tutorDash: true, itemActivo: 3, empresas })
 }
