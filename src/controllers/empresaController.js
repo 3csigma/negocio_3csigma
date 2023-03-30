@@ -45,6 +45,7 @@ empresaController.index = async (req, res) => {
         diagnosticoPagado = false;
         const estado = JSON.stringify({estado:0})
         const nuevoPago = { 
+            id_empresa,
             diagnostico_negocio: estado,
             analisis_negocio: estado,
             analisis_negocio1: JSON.stringify({estado:1}),
@@ -55,22 +56,20 @@ empresaController.index = async (req, res) => {
             empresarial1: JSON.stringify({estado:1}),
             empresarial2: estado,
             empresarial3: estado,
-            id_empresa
         }
-        // await pool.query('INSERT INTO pagos SET ?', [nuevoPago])
         await insertarDatos('pagos', nuevoPago)
     } else {
         const objDiagnostico = JSON.parse(pago_empresa.diagnostico_negocio)
-        if (objDiagnostico.estado == 1) {
-            // PAGÓ EL DIAGNOSTICO
-            diagnosticoPagado = objDiagnostico;
-            /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
-            let acuerdo = await consultarDatos('acuerdo_confidencial')
-            acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
-            if (!acuerdo) {
-                modalAcuerdo = true;
+            if (objDiagnostico.estado == 1) {
+                // PAGÓ EL DIAGNOSTICO
+                diagnosticoPagado = objDiagnostico;
+                /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
+                let acuerdo = await consultarDatos('acuerdo_confidencial')
+                acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
+                if (!acuerdo) {
+                    modalAcuerdo = true;
+                }
             }
-        }
 
     }
 
@@ -95,10 +94,10 @@ empresaController.index = async (req, res) => {
 
     const e = dataEmpresa[0];
     const diagnosticoPago = JSON.parse(e.diagnostico_negocio)
-    if (diagnosticoPago.estado == 1){
-        diagPorcentaje.txt = 'Diagnóstico pagado'
-        porcentajeEtapa1 = porcentaje
-    }
+        if (diagnosticoPago.estado == 1){
+            diagPorcentaje.txt = 'Diagnóstico pagado'
+            porcentajeEtapa1 = porcentaje
+        }
     if (e.estadoAcuerdo == 1){
         diagPorcentaje.txt = 'Acuerdo enviado'
         porcentajeEtapa1 = porcentaje*2
@@ -600,10 +599,15 @@ empresaController.analisis = async (req, res) => {
     const propuesta = propuestas.find(i => i.empresa == id_empresa && i.tipo_propuesta == 'Análisis de negocio')
     const pagos = await consultarDatos('pagos')
     const pago_empresa = pagos.find(i => i.id_empresa == id_empresa)
-    const etapa1 = {lista: true}
+    const etapa1 = { lista: true }
     let tienePropuesta = false
+
+    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
+        msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
+        btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;",
+        btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
     /************************************************************************************* */
-    // PROPUESTA DE ANÁLISIS DE NEGOCIO
+    // PROPUESTA DE ANÁLISIS DE NEGOCIO -- VALIDANDO PAGOS DE ANÁLISIS DE NEGOCIO
     if (propuesta) {
         tienePropuesta = true
         btnPagar.etapa1 = false;
@@ -611,15 +615,15 @@ empresaController.analisis = async (req, res) => {
         btnPagar.etapa2 = true;
         btnPagar.activar2 = true;
         propuesta.porcentaje = "0%";
-        
+
         /************************************************************************************* */
         const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
         const objAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
         const objAnalisis2 = JSON.parse(pago_empresa.analisis_negocio2)
         const objAnalisis3 = JSON.parse(pago_empresa.analisis_negocio3)
-        
+
         // PAGÓ EL ANÁLISIS
-        if (objAnalisis.estado == 1 ) {
+        if (objAnalisis.estado == 1) {
             btnPagar.etapa1 = false;
             btnPagar.activar1 = false;
             btnPagar.etapa2 = true;
@@ -632,7 +636,7 @@ empresaController.analisis = async (req, res) => {
         btnPagar.obj1 = parseInt(objAnalisis1.estado)
         btnPagar.obj2 = parseInt(objAnalisis2.estado)
         btnPagar.obj3 = parseInt(objAnalisis3.estado)
-        
+
         if (objAnalisis1.estado == 2) {
             btnPagar.etapa1 = false;
             btnPagar.activar1 = false;
@@ -641,9 +645,75 @@ empresaController.analisis = async (req, res) => {
             btnPagar.analisisPer = true;
             propuesta.porcentaje = "60%";
         }
-        if (objAnalisis2.estado == 2) {propuesta.porcentaje = "80%";}
-        if (objAnalisis3.estado == 2) {propuesta.porcentaje = "100%";}
+        if (objAnalisis2.estado == 2) { propuesta.porcentaje = "80%"; }
+        if (objAnalisis3.estado == 2) { propuesta.porcentaje = "100%"; }
 
+        let fechaDB = new Date(objAnalisis1.fecha)
+        let fechaDB2 = new Date(objAnalisis1.fecha)
+
+        if (msgDesactivo2) {
+            fechaDB.setDate(fechaDB2.getDate() + 30);
+            fechaDB = fechaDB.toLocaleDateString("en-US")
+            msgDesactivo2 = "Pago disponible apartir de: " + fechaDB + ""
+        }
+
+        if (msgDesactivo3) {
+            fechaDB2.setDate(fechaDB2.getDate() + 60);
+            fechaDB2 = fechaDB2.toLocaleDateString("en-US")
+            msgDesactivo3 = "Pago disponible apartir de: " + fechaDB2 + ""
+        }
+
+        if (objAnalisis.estado == 1) {
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Análisis de negocio pagado"
+            msgDesactivo2 = "Análisis de negocio pagado"
+            msgDesactivo3 = "Análisis de negocio pagado"
+        } else if (btnPagar.obj1 == 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0) {
+            escena1 = true
+            msgActivo = "Primera cuota lista para pagarse"
+            btnActivo
+            msgDesactivo = "Pago no disponible aun"
+            btnDesactivo
+        } else if (btnPagar.obj1 != 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0) {
+            escena2 = true
+            activarPagoUnico = false
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2
+            msgDesactivo3
+            btnDesactivo
+        } else if (btnPagar.obj1 == 2 && btnPagar.obj2 == 1 && btnPagar.obj3 == 0) {
+            escena3 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgActivo = "Segunda cuota lista para pagarse"
+            btnActivo
+            msgDesactivo3
+        } else if (btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 0) {
+            escena4 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3
+        } else if (btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 1) {
+            escena5 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgActivo = "Tercera cuota lista para pagarse"
+            btnActivo
+        } else if (btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 2) {
+            escena6 = true
+            activarPagoUnico = false
+            btnDesactivo
+            msgDesactivo = "Primera cuota pagada"
+            msgDesactivo2 = "Segunda cuota pagada"
+            msgDesactivo3 = "Tercera cuota pagada"
+        }
     }
 
     /************************************************************************************* */
@@ -678,97 +748,16 @@ empresaController.analisis = async (req, res) => {
     info3Analisis ? informesAnalisis.push(info3Analisis) : false;
     info4Analisis ? informesAnalisis.push(info4Analisis) : false;
 
-    console.log("INFORME 0 -> ", info0Analisis)
-    console.log("ARRAY DE INFORMES --> ", informesAnalisis)
-
-    let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
-    msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
-    btnActivo = "background: #85bb65;margin: 0 auto;border-color: #85bb65;", 
-    btnDesactivo = "background: #656c73;margin: 0 auto;border-color: #656c73;"
-
-    let objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
-    objAnalisis = objAnalisis.estado
-    
-    let fechaAnalisis1 = JSON.parse(pago_empresa.analisis_negocio1)
-    fechaAnalisis1 = fechaAnalisis1.fecha
-    let fechaDB = new Date(fechaAnalisis1)
-    let fechaDB2 = new Date(fechaAnalisis1)
-    
-    if (msgDesactivo2) {
-        fechaDB.setDate(fechaDB2.getDate() + 30);
-        fechaDB = fechaDB.toLocaleDateString("en-US")
-        msgDesactivo2 = "Pago disponible apartir de: "+fechaDB+""
-    }
-
-    if (msgDesactivo3) {
-        fechaDB2.setDate(fechaDB2.getDate() + 60);
-        fechaDB2 = fechaDB2.toLocaleDateString("en-US")
-        msgDesactivo3 = "Pago disponible apartir de: "+fechaDB2+""
-    }
-
-    if(objAnalisis == 1 ) {
-        escena6 = true
-        activarPagoUnico = false
-        btnDesactivo
-        msgDesactivo = "Análisis de negocio pagado"
-        msgDesactivo2 = "Análisis de negocio pagado"
-        msgDesactivo3 = "Análisis de negocio pagado"
-
-    }else if(btnPagar.obj1 == 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0) {
-        escena1 = true
-        msgActivo = "Primera cuota lista para pagarse"
-        btnActivo  
-        msgDesactivo = "Pago no disponible aun"
-        btnDesactivo
-    }else if(btnPagar.obj1 != 1 && btnPagar.obj2 == 0 && btnPagar.obj3 == 0){
-        escena2 = true
-        activarPagoUnico = false
-        msgDesactivo = "Primera cuota pagada"
-        msgDesactivo2
-        msgDesactivo3 
-        btnDesactivo
-    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 1 && btnPagar.obj3 == 0){
-        escena3 = true
-        activarPagoUnico = false
-        btnDesactivo
-        msgDesactivo = "Primera cuota pagada"
-        msgActivo = "Segunda cuota lista para pagarse"
-        btnActivo 
-        msgDesactivo3
-    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 0){
-        escena4 = true
-        activarPagoUnico = false
-        btnDesactivo
-        msgDesactivo = "Primera cuota pagada"
-        msgDesactivo2 = "Segunda cuota pagada"
-        msgDesactivo3
-    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 1){
-        escena5 = true
-        activarPagoUnico = false
-        btnDesactivo
-        msgDesactivo = "Primera cuota pagada"
-        msgDesactivo2 = "Segunda cuota pagada"
-        msgActivo = "Tercera cuota lista para pagarse"
-        btnActivo
-    }else if(btnPagar.obj1 == 2 && btnPagar.obj2 == 2 && btnPagar.obj3 == 2){
-        escena6 = true
-        activarPagoUnico = false
-        btnDesactivo
-        msgDesactivo = "Primera cuota pagada"
-        msgDesactivo2 = "Segunda cuota pagada"
-        msgDesactivo3 = "Tercera cuota pagada"
-    }
-
     res.render('empresa/analisis', {
         user_dash: true, pagoDiag: true,
         actualYear: req.actualYear,
         informe: false, propuesta, btnPagar,
         etapa1, archivos,
         informesAnalisis,
-        escena1,escena2,
-        escena3,escena4,
-        escena5,escena6, 
-        msgActivo, msgDesactivo,msgDesactivo2,msgDesactivo3, activarPagoUnico,
+        escena1, escena2,
+        escena3, escena4,
+        escena5, escena6,
+        msgActivo, msgDesactivo, msgDesactivo2, msgDesactivo3, activarPagoUnico,
         btnActivo, btnDesactivo, tienePropuesta,
         itemAnalisis: true,
         consulAsignado: req.session.consulAsignado,

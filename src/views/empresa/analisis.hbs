@@ -277,6 +277,7 @@
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
+      {{#unless escena1}}
       <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
@@ -339,6 +340,7 @@
           </div>
         </div>
       </div>
+      {{/unless}}
     </div>
     {{/if}}
   </div>
