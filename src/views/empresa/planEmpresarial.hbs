@@ -206,6 +206,7 @@
       </div>
 
       {{!-- TARJETA DERECHA (ARCHIVOS CARGADOS POR EL CONSULTOR) --}}
+      {{#if btnPagar.empresarialPer}} {{!-- Inicio Condicional del Pago Etapa 3 --}}
       {{!-- CARGA DE ARCHIVOS --}}
       <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
@@ -437,6 +438,8 @@
         </div>
       </div>
       {{/if}}
+
+      {{/if}} {{!-- Fin Condicional del Pago Etapa 3 --}}
 
     </div>
     {{/if}}

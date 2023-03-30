@@ -47,9 +47,8 @@ passport.use('local.registro', new LocalStrategy({
             const codigo = crypto.createHash('md5').update(hashCode).digest("hex");
 
             // Fecha de Creación
-            let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
+            const fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_empresa })
             const arrayFecha = fecha_creacion.split("/")
-            fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
             const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
@@ -113,9 +112,8 @@ passport.use('local.registroConsultores', new LocalStrategy({
             clave = codigo.slice(5, 13);            
 
             // Fecha de Creación
-            let fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
+            const fecha_creacion = new Date().toLocaleDateString("en-US", { timeZone: zh_consultor })
             const arrayFecha = fecha_creacion.split("/")
-            fecha_creacion = arrayFecha[0] + "/" + arrayFecha[2]
             const mes = arrayFecha[0] ;
             const year = arrayFecha[2];
 
