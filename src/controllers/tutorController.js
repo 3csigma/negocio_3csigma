@@ -2,6 +2,7 @@ const tutorController = exports;
 const pool = require('../database')
 const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
+// PANEL DEL TUTOR
 tutorController.index = async (req, res) => {
     const { codigo } = req.user
     const consultores = await consultarDatos('consultores')
