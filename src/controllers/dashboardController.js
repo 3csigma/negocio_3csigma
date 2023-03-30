@@ -299,8 +299,25 @@ dashboardController.editarEmpresa = async (req, res) => {
     datos.consultor_diagnostico = false;
 
     // PAGOS DE LA EMPRESA
-    const pagos = await consultarDatos('pagos')
-    const pay = pagos.find(i => i.id_empresa == idEmpresa)
+    let pagos = await consultarDatos('pagos')
+    let pay = pagos.find(i => i.id_empresa == idEmpresa)
+    if (!pay) {
+        const estado = JSON.stringify({estado:0})
+        const nuevoPago = { 
+            id_empresa: idEmpresa,
+            diagnostico_negocio: estado,
+            analisis_negocio: estado,
+            analisis_negocio1: JSON.stringify({estado:1}),
+            analisis_negocio2: estado,
+            analisis_negocio3: estado,
+            estrategico: estado,
+            empresarial0: estado,
+            empresarial1: JSON.stringify({estado:1}),
+            empresarial2: estado,
+            empresarial3: estado,
+        }
+        await insertarDatos('pagos', nuevoPago)
+    }
 
     // INFO DE LA EMPRESA HASTA LA FICHA CLIENTE
     let pagoDg_Realizado = false;
@@ -339,6 +356,9 @@ dashboardController.editarEmpresa = async (req, res) => {
             }
         }
 
+        // PAGOS DE LA EMPRESA
+        pagos = await consultarDatos('pagos')
+        pay = pagos.find(i => i.id_empresa == idEmpresa)
         // Validando Diagnóstico de negocio ha sido pagado
         if (pay) {
             const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)    
@@ -523,7 +543,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (propuesta.analisis) {
         datos.etapa = 'Propuesta de análisis enviada'
 
-        /** PAGOS DE ANÁLISIS DE NEGOCIO (ÚNICO o DIVIDIDO*/
+        /** PAGOS DE ANÁLISIS DE NEGOCIO (ÚNICO o DIVIDIDO) */
         pagos_analisis.unico = JSON.parse(pay.analisis_negocio)
         pagos_analisis.uno = JSON.parse(pay.analisis_negocio1)
         pagos_analisis.dos = JSON.parse(pay.analisis_negocio2)
@@ -1199,19 +1219,11 @@ dashboardController.pagoManualDiagnostico = async (req, res) => {
     let pago_empresa = pagos.find(i => i.id_empresa == id);
     const fecha = new Date().toLocaleDateString("en-US")
     const data = { estado: 1, fecha, precio }
-    if (!pago_empresa) {
-        const pago = { id_empresa: id, diagnostico_negocio: JSON.stringify(data) }
-        await pool.query('INSERT INTO pagos SET ?', [pago], (err, result) => {
-            if (err) throw err;
-            res.send(result)
-        })
-    } else {
-        const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
-        await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
-            if (err) throw err;
-            res.send(result)
-        })
-    }
+    const actualizarPago = { diagnostico_negocio: JSON.stringify(data) }
+    await pool.query('UPDATE pagos SET ? WHERE id_empresa = ?', [actualizarPago, id], (err, result) => {
+        if (err) throw err;
+        res.send(result)
+    })
 }
 
 dashboardController.pagoManualEmpresas = async (req, res) => {

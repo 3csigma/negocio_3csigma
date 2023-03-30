@@ -270,7 +270,7 @@
             }).then(res => res.json())
             .catch(error => console.error('Error Actualizar Tarea: ', error))
             .then(response => {
-                location.hash = '#proyecto-de-consultoria';
+                window.location.hash = 'proyecto-de-consultoria'
                 location.reload(true)
             })
         }
@@ -841,7 +841,7 @@
             if (URLhash === '#plan-estrategico') {
                 $('#item-estrategico').trigger("click");
             }
-            if (URLhash === '#proyecto-consultoria') {
+            if (URLhash === '#proyecto-de-consultoria') {
                 $('#item-empresarial').trigger("click");
             }
 
