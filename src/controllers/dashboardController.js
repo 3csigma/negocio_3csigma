@@ -352,7 +352,6 @@ dashboardController.mostrarEmpresas = async (req, res) => {
                 return acc;
             }, [])
             e.nombreConsultor = ""
-            console.log("sssss" , idConsultor);
             idConsultor.forEach(x => {
                 let info = {}
                 info = consultor.find(e => e.id_consultores == x)
@@ -389,7 +388,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     // Capturando Consultores Activos
-    const consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
+    const consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa" AND u.rol != "Tutor"')
 
     datos.nombre_completo = datosEmpresa.nombres + " " + datosEmpresa.apellidos;
     datos.nombre_empresa = datosEmpresa.nombre_empresa;
