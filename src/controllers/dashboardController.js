@@ -8,6 +8,7 @@ const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpre
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, nuevoEstudiante_paraTutor, tutor_asignadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { log } = require('console');
+const { loadavg } = require('os');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
 let aprobarConsultor = false;
@@ -88,8 +89,8 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" OR rol = "Tutor" AND c.id_consultores != 1;')
-
+    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm, rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" OR rol = "Tutor" AND c.id_consultores != 1;')
+    let rol
     consultores.forEach(async c => {
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
         c.num_empresas = num[0].numEmpresas
@@ -98,6 +99,10 @@ dashboardController.mostrarConsultores = async (req, res) => {
         let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
         tutor = tutor.find(x => x.id_tutor == c.tutor_asignado)
         if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos; } else {c.tutor = "N/A"}
+
+        if (c.rol == "Tutor") {
+            rol  = c.rol
+        }
     });
     
     /** Acceso directo para Consultores pendientes por aprobar */
@@ -263,9 +268,11 @@ dashboardController.mostrarEmpresas = async (req, res) => {
     const dg_nueva = await consultarDatos('dg_empresa_nueva')
     const dg_establecida = await consultarDatos('dg_empresa_establecida')
     const dg_analisis = await consultarDatos('analisis_empresa')
-    const consultor = await consultarDatos('consultores')
+    const consultorAsignado = await consultarDatos('consultores_asignados')
+    const consultor = await pool.query('SELECT id_consultores, nombres AS nombresC, apellidos AS apellidosC FROM consultores')
     const informe = await consultarDatos('informes')
     const propuestas = await consultarDatos('propuestas')
+    let consultor_empresa = [], datosConsultor = [], id_empresass
 
     empresas.forEach(e => {
         e.pagoEtapa1 = false;
@@ -338,12 +345,23 @@ dashboardController.mostrarEmpresas = async (req, res) => {
         informe_empresa = informe.find(i => i.id_empresa == e.id_empresas && i.nombre == 'Informe de plan estratégico')
         if (informe_empresa) { e.etapa = 'Informe plan estratégico'; }
 
-        const consultor_empresa = consultor.find(item => item.id_consultores == e.consultor)
-        if (consultor_empresa) {
-            e.nombre_consultor = consultor_empresa.nombres + " " + consultor_empresa.apellidos;
-            e.codigo_consultor = consultor_empresa.codigo
+        consultor_empresa = consultorAsignado.filter(item => item.empresa == e.id_empresas)
+        if (consultor_empresa.length > 0) {
+            const idConsultor = consultor_empresa.reduce((acc, item) => {
+                if (!acc.includes(item.consultor)) acc.push(item.consultor);
+                return acc;
+            }, [])
+            e.nombreConsultor = ""
+            console.log("sssss" , idConsultor);
+            idConsultor.forEach(x => {
+                let info = {}
+                info = consultor.find(e => e.id_consultores == x)
+                if (info) {
+                    e.nombreConsultor += info.nombresC + ' ' + info.apellidosC + "<br>"
+                }
+                datosConsultor.push(e)
+            });
         }
-
     });
 
     res.render('admin/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas, aprobarConsultor })
