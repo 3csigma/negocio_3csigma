@@ -91,7 +91,7 @@ app.use(require('./routes/pagos'));
 // RUTAS PARA ERROR 404 Y 502
 app.get('*', (req, res) => {
   res.status(404)
-  res.render('pages/404');
+  res.render('pages/404', {dominio: process.env.MY_DOMAIN});
 });
 
 app.listen(app.get('port'), () => {

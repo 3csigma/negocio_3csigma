@@ -447,8 +447,8 @@ helpers.historial_empresas_consultor = async () => {
 helpers.cargarArchivo = async (id, empresa, link, tabla) => {
     let result = false;
     const actualizarTabla = await pool.query(`UPDATE ${tabla} SET ? WHERE id = ? AND empresa = ?`, [{link}, id, empresa])
-    actualizarTabla.changedRows == 1 ? result = true : result;
-    return result;
+    actualizarTabla.affectedRows > 0 ? result = true : result;
+    return true;
 }
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES CONSULTOR
