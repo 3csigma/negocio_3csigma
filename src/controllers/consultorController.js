@@ -104,7 +104,7 @@ consultorController.enviarPropuesta = async (req, res) => {
         etapa = 'Plan Estratégico'
         link = 'plan-estrategico'
     } else if (tipo_propuesta == 'Proyecto de Consultoría') {
-        hash = '#proyecto-consultoria';
+        hash = '#proyecto-de-consultoria';
         asunto = 'Tenemos una propuesta de proyecto de consultoría para tu empresa'
         etapa = 'Proyecto de Consultoria'
         link = 'proyecto-de-consultoria'
