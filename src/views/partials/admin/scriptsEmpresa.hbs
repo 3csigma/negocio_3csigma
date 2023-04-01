@@ -137,36 +137,22 @@
             window.location.hash = 'analisis_'
             if (i == 3) window.location.hash = 'proyecto-consultoria';
             else if (i == 4) window.location.hash = 'plan-estrategico';
-            Swal.fire({
-                title: '¿Deseas solicitar este archivo?',
-                text: "Asegúrate de que esta información sea correcta.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#FFE000',
-                cancelButtonColor: '#000000',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Solicitar'
-            })
-            .then((result) => {
-                if (result.isConfirmed) {
-                    fetch('/solicitar-archivos-empresa', {
-                        method: 'POST',
-                        body: JSON.stringify({empresa, dimension, descripcion, tabla}),
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(res => res.json())
-                        .catch(error => console.error('Error:', error))
-                        .then(response => {
-                            if (response) {
-                                window.location.hash = 'analisis_'
-                                if (i == 3) window.location.hash = 'proyecto-consultoria';
-                                else if (i == 4) window.location.hash = 'plan-estrategico';
-                                location.reload();
-                            } else {
-                                Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
-                            }
-                        });
-                }
-            })
+            fetch('/solicitar-archivos-empresa', {
+                method: 'POST',
+                body: JSON.stringify({empresa, dimension, descripcion, tabla}),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => {
+                    if (response) {
+                        window.location.hash = 'analisis_'
+                        if (i == 3) window.location.hash = 'proyecto-consultoria';
+                        else if (i == 4) window.location.hash = 'plan-estrategico';
+                        location.reload();
+                    } else {
+                        Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
+                    }
+                });
         }
     }
     
@@ -176,8 +162,8 @@
             text: "Esta acción no se puede revertir.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#FFE000',
-            cancelButtonColor: '#000000',
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
             cancelButtonText: 'Cancelar',
             confirmButtonText: 'Eliminar'
         })
