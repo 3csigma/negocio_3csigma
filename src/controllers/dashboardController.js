@@ -336,21 +336,20 @@ dashboardController.editarEmpresa = async (req, res) => {
                 pago_diagnostico.btn = 'color: white;'
                 datos.idConsultor = infoConsul.id_consultores;
                 if (infoConsul.nivel == '1') {
-                    pago_diagnostico.valor = process.env.PRECIO_NIVEL1
-                } else if (infoConsul.nivel == '2') {
-                    pago_diagnostico.valor = process.env.PRECIO_NIVEL2;
-                } else if (infoConsul.nivel == '3') {
-                    pago_diagnostico.valor = process.env.PRECIO_NIVEL3;
-                } else if (infoConsul.nivel == '4') {
                     if (consulDg.sede == 1) {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE1;
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL1_SEDE1;
                         pago_diagnostico.sede = process.env.SEDE1;
-                    } else if (consulDg.sede == 2) {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE2;
+                    } else {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL1_SEDE2;
                         pago_diagnostico.sede = process.env.SEDE2;
-                    } else if (consulDg.sede == 3) {
-                        pago_diagnostico.valor = process.env.PRECIO_NIVEL4_SEDE3;
-                        pago_diagnostico.sede = process.env.SEDE3;
+                    }
+                } else if (infoConsul.nivel == '2') {
+                    if (consulDg.sede == 1) {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL2_SEDE1;
+                        pago_diagnostico.sede = process.env.SEDE1;
+                    } else {
+                        pago_diagnostico.valor = process.env.PRECIO_NIVEL2_SEDE2;
+                        pago_diagnostico.sede = process.env.SEDE2;
                     }
                 }
             }

@@ -239,7 +239,7 @@
 
     // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
     function pagoManualEmpresas(num, id, tipo, precio = null) {
-        let txt = 'pago único';
+        let txt = 'pago';
         let etapa = 2;
         if (tipo == 'plan estratégico') etapa = 3;
         else if (tipo == 'proyecto de consultoría') etapa = 4
@@ -357,17 +357,11 @@
     })
 
     function validar_nivelConsultor() {
-        if ($('#id_consultor option:selected').attr("id") != 0) {
-            $('#divSede').show();
-        } else {
-            $('#divSede').hide();
-            $('#divEtapa_').hide()
-        }
         $('#divEtapa_').show()
     }
     
     function validar_nivelEtapa() {
-        if ($('#id_consultor option:selected').attr("id") != 0 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
+        if ($('#etapaConsultor option:selected').val() == "Diagnóstico")
             $('#divSede').show();
         else
             $('#divSede').hide();

@@ -394,24 +394,27 @@ empresaController.diagnostico = async (req, res) => {
         color : 'badge-warning',
         texto : 'Pendiente',
         btn : 'background: #85bb65; color: white',
-        fecha : 'N/A'
+        fecha : 'N/A',
     }
+
+    console.log("ASUDHASIDHUAISDHIAUS ASDAS DAS ASDA SDAS DASDASD ");
 
     let infoConsul = await consultarDatos('consultores')
     infoConsul = infoConsul.find(x => x.id_consultores == consulAsignado.c1.consultor)
-    let costo = process.env.PRECIO_NIVEL1;
-    if (infoConsul.nivel == '2'){
-        costo = process.env.PRECIO_NIVEL2;
-    } else if (infoConsul.nivel == '3') {
-        costo = process.env.PRECIO_NIVEL3;
-    } else if (infoConsul.nivel == '4') {
-        if (consulAsignado.c1.sede == 1)
-            costo = process.env.PRECIO_NIVEL4_SEDE1
-        else if (consulAsignado.c1.sede == 2)
-            costo = process.env.PRECIO_NIVEL4_SEDE2
-        else if (consulAsignado.c1.sede == 3)
-            costo = process.env.PRECIO_NIVEL4_SEDE3
-    }
+    // let costo = process.env.PRECIO_NIVEL1;
+
+    // if (infoConsul.nivel == '2') {
+    //     costo = process.env.PRECIO_NIVEL2;
+    // } else if (infoConsul.nivel == '3') {
+    //     costo = process.env.PRECIO_NIVEL3;
+    // } else if (infoConsul.nivel == '4') {
+    //     if (consulAsignado.c1.sede == 1)
+    //         costo = process.env.PRECIO_NIVEL4_SEDE1
+    //     else if (consulAsignado.c1.sede == 2)
+    //         costo = process.env.PRECIO_NIVEL4_SEDE2
+    //     else if (consulAsignado.c1.sede == 3)
+    //         costo = process.env.PRECIO_NIVEL4_SEDE3
+    // }
 
     // Validando Diagnóstico de negocio ha sido pagado
     if (diagnosticoPagado.estado == 1) {
@@ -421,6 +424,11 @@ empresaController.diagnostico = async (req, res) => {
         estadoPago.btn = 'background: #656c73; color: white; disabled= "true" '
         costo = diagnosticoPagado.precio;
         estadoPago.fecha = diagnosticoPagado.fecha
+        if (consulAsignado.c1.sede == 1) {
+            estadoPago.sede = process.env.SEDE1;
+        } else {
+            estadoPago.sede = process.env.SEDE2;
+        }
     }
 
     /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
@@ -468,7 +476,7 @@ empresaController.diagnostico = async (req, res) => {
 
     res.render('empresa/diagnostico', {
         user_dash: true, pagoDiag: true, formDiag,
-        existencia, costo, estadoPago,
+        existencia, estadoPago,
         actualYear: req.actualYear,
         etapa1, informe: informeEmpresa[0],
         itemDiagnostico: true,
@@ -614,7 +622,7 @@ empresaController.analisis = async (req, res) => {
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
         btnPagar.activar2 = true;
-        propuesta.porcentaje = "0%";
+        propuesta.pagada = false;
 
         /************************************************************************************* */
         const objAnalisis = JSON.parse(pago_empresa.analisis_negocio)
@@ -628,7 +636,7 @@ empresaController.analisis = async (req, res) => {
             btnPagar.activar1 = false;
             btnPagar.etapa2 = true;
             btnPagar.activar2 = false;
-            propuesta.porcentaje = "100%";
+            propuesta.pagada = true;
             btnPagar.analisisPer = true
             propuesta.precio_total = objAnalisis.precio;
         }
@@ -851,7 +859,7 @@ empresaController.planEmpresarial = async (req, res) => {
         btnPagar.activar1 = false;
         btnPagar.etapa2 = true;
         btnPagar.activar2 = true;
-        propuesta.porcentaje = "0%";
+        propuesta.pagada = false;
         
         /************************************************************************************* */
         let fechaEmpresarial = JSON.parse(pago_empresa.empresarial1)
@@ -887,7 +895,7 @@ empresaController.planEmpresarial = async (req, res) => {
             btnPagar.activar1 = false;
             btnPagar.etapa2 = true;
             btnPagar.activar2 = false;
-            propuesta.porcentaje = "100%";
+            propuesta.pagada = true;
             btnPagar.empresarialPer = true
             propuesta.precio_total = objEmpresarial.precio;
 
@@ -951,7 +959,7 @@ empresaController.planEmpresarial = async (req, res) => {
             propuesta.porcentaje = "60%";
         }
         if (objEmpresarial2.estado == 2) {propuesta.porcentaje = "80%";}
-        if (objEmpresarial3.estado == 2) {propuesta.porcentaje = "100%";}
+        if (objEmpresarial3.estado == 2) {propuesta.porcentaje = true}
 
     }
 
@@ -1018,9 +1026,15 @@ empresaController.planEstrategico = async (req, res) => {
         propuesta.pagada = false;
         const objEstrategico = JSON.parse(pagos.estrategico)
 
+        if (objEstrategico.estado == 1) {
+            propuesta.color = 'success';
+            propuesta.texto = 'Completado';
+            propuesta.pagada = true;
+        }
+
         /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN - POR SI RENUEVA O NO LA SUB */
         let id_sub = null;
-        let subscription = null;
+        let subscription = null;        
         if (objEstrategico.subscription) {
             id_sub = objEstrategico.subscription;
             subscription = await stripe.subscriptions.retrieve(id_sub);

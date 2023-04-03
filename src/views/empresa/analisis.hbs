@@ -25,6 +25,7 @@
               <i class="fa-solid fa-gear"></i> Operaciones</br>
               <i class="fa-solid fa-bullhorn"></i> Marketing</br>
             </p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
         </div>
       </div>
@@ -36,12 +37,6 @@
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
             <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Tu consultor agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
-          </div>
-          {{else}}
-          <div class="card-body">
-            {{!-- <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2> --}}
-            <p style="text-align: justify;margin-top: 2em;color: #000">Si estas deacuerdo haz clic en el botón <strong>"Pagar con 10% OFF"</strong>, también tienes la posibilidad de hacer el pago en 3 partes, en la columna pago en cuotas.
-            <br>Haz clic en el icono de la lupa para ver todos los detalles.</p>
           </div>
           {{/if}}
           {{/if}}
@@ -74,8 +69,8 @@
                       <tr>
                         <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
                         <td>
-                          {{#if propuesta.porcentaje}}
-                            <span class="badge light badge-success">Pagado {{propuesta.porcentaje}}</span>
+                          {{#if propuesta.pagada}}
+                            <span class="badge light badge-success">Pagado</span>
                           {{else}}
                             <span class="badge light badge-warning">Pendiente</span>
                           {{/if}}
@@ -97,7 +92,7 @@
         </div>
 
         {{!-- INFORMES GENERADOS --}}
-        {{#unless escena1}}
+        {{#if propuesta.pagada}}
         <div class="row">
           <div class="col-xl-12">
             {{!-- INFORMES GENERADOS --}}
@@ -141,11 +136,11 @@
             </div>
           </div>
         </div>
-        {{/unless}}
+        {{/if}}
       </div>
 
       {{!-- CARGA DE ARCHIVOS --}}
-      {{#unless escena1}}
+      {{#if propuesta.pagada}}
       <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
         <div class="row">
@@ -208,7 +203,7 @@
           </div>
         </div>
       </div>
-      {{/unless}}
+      {{/if}}
     </div>
     {{/if}}
   </div>
