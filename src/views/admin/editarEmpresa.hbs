@@ -590,10 +590,8 @@
                                                     <thead>
                                                         <tr>
                                                             <th>FECHA PAGO</th>
-                                                            {{!-- <th>VALOR</th> --}}
-                                                            {{#if pago_diagnostico.sede}}
+                                                            <th>PRECIO</th>
                                                             <th>SEDE</th>
-                                                            {{/if}}
                                                             <th>ESTADO DE PAGO</th>
                                                             {{#if rolAdmin}}
                                                             <th>PAGAR</th>
@@ -603,10 +601,8 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>{{pago_diagnostico.fecha}}</td>
-                                                            {{!-- <td class="precios_celdas">{{pago_diagnostico.valor}}</td> --}}
-                                                            {{#if pago_diagnostico.sede}}
+                                                            <td class="precios_celdas">{{pago_diagnostico.valor}}</td>
                                                             <td>{{pago_diagnostico.sede}}</td>
-                                                            {{/if}}
                                                             <td><span class="badge light {{pago_diagnostico.color}}"
                                                                 style="background: {{formDiag.estilo}}">{{pago_diagnostico.texto}}</span></td>
                                                             </td>
@@ -1021,7 +1017,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Pago Realizado</h4>
                                         </div>
 
                                         <div class="row mt-3">
@@ -1031,7 +1027,6 @@
                                                     <thead>
                                                     <tr>
                                                         <th>FECHA DE PAGO</th>
-                                                        <th>NOMBRE</th>
                                                         {{!-- <th>PRECIO</th> --}}
                                                         <th>PAGO DE ANÁLISIS</th>
                                                         {{#if rolAdmin}}
@@ -1043,7 +1038,6 @@
                                                         {{#unless pagos_analisis.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_analisis.unico.fecha}}{{pagos_analisis.unico.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Pago Único</td>
                                                             {{!-- <td class="precios_celdas">{{pagos_analisis.unico.precio}}</td> --}}
                                                             <td><span class="badge light badge-{{pagos_analisis.unico.color}}">{{pagos_analisis.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
@@ -1728,7 +1722,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Pagos realizados</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Pago Realizado</h4>
                                         </div>
 
                                         <div class="row mt-3">
@@ -1738,7 +1732,6 @@
                                                     <thead>
                                                     <tr>
                                                         <th>FECHA DE PAGO</th>
-                                                        <th>NOMBRE</th>
                                                         {{!-- <th>PRECIO</th> --}}
                                                         <th>ESTADO</th>
                                                         {{#if rolAdmin}}
@@ -1750,7 +1743,6 @@
                                                         {{#unless pagos_empresarial.uno.fecha}}
                                                         <tr>
                                                             <td>{{#if pagos_empresarial.unico.fecha}}{{pagos_empresarial.unico.fecha}}{{else}}N/A{{/if}}</td>
-                                                            <td>Pago Único</td>
                                                             {{!-- <td class="precios_celdas">{{pagos_empresarial.unico.precio}}</td> --}}
                                                             <td><span class="badge light badge-{{pagos_empresarial.unico.color}}">{{pagos_empresarial.unico.txt}}</span></td>
                                                             {{#if rolAdmin}}
@@ -2509,7 +2501,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="card-header">
-                                            <h4 class="card-title" style="margin:0 auto">Subscripción Plan Estratégico</h4>
+                                            <h4 class="card-title" style="margin:0 auto">Pago Realizado</h4>
                                         </div>
                             
                                         <div class="row mt-3">
@@ -2518,8 +2510,7 @@
                                                     <table class="table table-responsive-md text-center">
                                                         <thead>
                                                             <tr>
-                                                                <th>FECHA DE INICIO</th>
-                                                                <th>NOMBRE</th>
+                                                                <th>FECHA</th>
                                                                 {{!-- <th>PRECIO</th> --}}
                                                                 {{#if pagoEstrategico.fechaCancelacion}}
                                                                 <th>ACTIVA HASTA</th>
@@ -2533,7 +2524,6 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td>{{#if pagoEstrategico.fecha}}{{pagoEstrategico.fecha}}{{else}}N/A{{/if}}</td>
-                                                                <td>Suscripción mensual</td>
                                                                 {{!-- <td class="precios_celdas">{{pagoEstrategico.precio}}</td>
                                                                 {{#if pagoEstrategico.fechaCancelacion}}
                                                                 <td>{{pagoEstrategico.fechaCancelacion}}</td>

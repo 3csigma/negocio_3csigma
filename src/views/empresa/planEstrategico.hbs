@@ -23,7 +23,7 @@
                             </p>
                             {{else}}
                             <h2 style="color: #000; font-weight: bold;">Todo listo para empezar</h2>
-                            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha cargado una propuesta para iniciar el plan estratégico de tu empresa, si estas de acuerdo, puedes iniciar la subscripción para que avancemos al siguiente paso.</p>
+                            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha cargado una propuesta para iniciar el plan estratégico de tu empresa. Haz clic en el icono de la lupa para ver todos los detalles.</p>
                             {{/if}} 
                             {{/unless}}
                             {{#if subCancelada}}
@@ -88,26 +88,14 @@
                                         <thead>
                                             <tr>
                                                 <th>FECHA DE PROPUESTA</th>
-                                                <th>ESTADO DE SUBSCRIPCIÓN</th>
-                                                {{!-- {{#unless subCancelada}}
-                                                <th>ACCIONES</th>
-                                                {{/unless}}
-                                                <th>VALOR TOTAL</th> --}}
-                                                {{#if propuesta.fechaCancelacion}}
-                                                <th>FECHA DE CANCELACIÓN</th>
-                                                {{/if}}
+                                                <th>ESTADO DEl PAGO</th>
                                                 <th>REVISAR PROPUESTA</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>{{#if propuesta.fecha}}{{propuesta.fecha}}{{else}}N/A{{/if}}</td>
-                                                <td>
-                                                    <span class="badge light badge-{{propuesta.color}}">{{propuesta.texto}}</span>
-                                                </td>
-                                                {{#if propuesta.fechaCancelacion}}
-                                                <td>{{propuesta.fechaCancelacion}}</td>
-                                                {{/if}}
+                                                <td><span class="badge light badge-{{propuesta.color}}">{{propuesta.texto}}</span></td>
                                                 <td>
                                                     <a href="{{propuesta.link_propuesta}}" target="_blank"
                                                         class="btn color_primary shadow btn-xs sharp text-white"
@@ -171,6 +159,7 @@
             </div>
 
             {{!-- TARJETAS LADO DERECHO - CARGA DE ARCHIVOS --}}
+            {{#if propuesta.pagada}}
             <input type="hidden" id="idEmpresa" value="{{empresa}}">
             <div class="col-xl-5 col-xxl-12">
                 <div class="row">
@@ -235,7 +224,6 @@
             </div>
             {{!-- FIN COLUMNAS - IZQUIERDA DERECHA --}}
 
-            {{#if propuesta.pagada}}
             {{!-- TAREAS ASIGNADAS --}}
             <div class="col-xl-12 mt-2">
                 <div class="card plan-list">
