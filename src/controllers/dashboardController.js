@@ -563,7 +563,7 @@ dashboardController.editarEmpresa = async (req, res) => {
             propuesta.analisis.precio_total = propuesta.analisis.precio_total;
             datos.etapa = 'Análisis de negocio pago único'
             pagos_analisis.unico.color = 'success'
-            pagos_analisis.unico.txt = 'Pagado 100%'
+            pagos_analisis.unico.txt = 'Pagado'
             propuesta.analisis.pago = true;
             pagos_analisis.unico.btn = false;
         }
@@ -585,7 +585,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (pagos_analisis.tres.estado == 2) {
             datos.etapa = 'Análisis de negocio - Pagado 100%'
             pagos_analisis.tres.color = 'success'
-            pagos_analisis.tres.txt = 'Pagado 100%'
+            pagos_analisis.tres.txt = 'Pagado'
             pagos_analisis.tres.btn = false;
         }
     }
@@ -804,7 +804,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (pagos_empresarial.unico.estado == 1) {
             datos.etapa = 'Proyecto de consultoría pago único'
             pagos_empresarial.unico.color = 'success'
-            pagos_empresarial.unico.txt = 'Pagado 100%'
+            pagos_empresarial.unico.txt = 'Pagado'
             propuesta.empresarial.pago = true;
             pagos_empresarial.unico.btn = false;
             precioPagado = pagos_empresarial.unico.precio;
@@ -827,7 +827,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         if (pagos_empresarial.tres.estado == 2) {
             datos.etapa = 'Proyecto de consultoría - Pagado 100%'
             pagos_empresarial.tres.color = 'success'
-            pagos_empresarial.tres.txt = 'Pagado 100%'
+            pagos_empresarial.tres.txt = 'Pagado'
             pagos_empresarial.tres.btn = false;
         }
 
@@ -920,48 +920,54 @@ dashboardController.editarEmpresa = async (req, res) => {
         pagoEstrategico.btn = false;
         pagoEstrategico.precio = propuesta.estrategico.precio_total
 
-        /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN - POR SI RENUEVA O NO LA SUB */
-        let id_sub = null;
-        let subscription = null;
-        if (pagoEstrategico.subscription) {
-            id_sub = pagoEstrategico.subscription;
-            subscription = await stripe.subscriptions.retrieve(id_sub);
-            if (subscription.cancel_at != null) {
-                pagoEstrategico.fechaCancelacion = new Date(subscription.cancel_at*1000).toLocaleDateString('en-US');
-            } else {
-                pagoEstrategico.fechaCancelacion = false;
-            }
-            console.log("\n>>> DATA SUBSCRIPTION DESDE ADMIN ===> ", subscription)
-            console.log('\n*******************\n');
-            if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at != null) {
-                datos.etapa = 'Pago por subscripción de plan estratégico iniciado'
-                pagoEstrategico.color = 'success'
-                pagoEstrategico.txt = 'Activa'
-                pagoEstrategico.btn = true;
-                propuesta.estrategico.pago = true;
-                propuesta.pagada = true;
-            } else if (subscription.status == 'active' && subscription.cancel_at_period_end && subscription.cancel_at != null) {
-                datos.etapa = 'Subscripción de plan estratégico pendiente por cancelar'
-                pagoEstrategico.txt = 'Pendiente por cancelar';
-                pagoEstrategico.color = 'secondary';
-                pagoEstrategico.btn = false;
-                propuesta.estrategico.pago = true;
-                propuesta.pagada = true;
-            } else if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at == null) {
-                datos.etapa = 'Subscripción de plan estratégico pendiente por renovar'
-                pagoEstrategico.txt = 'Pendiente por renovar';
-                pagoEstrategico.color = 'info'
-                pagoEstrategico.btn = true;
-                propuesta.estrategico.pago = true;
-                propuesta.pagada = true;
-            } else {
-                datos.etapa = 'Subscripción de plan estratégico cancelada'
-                pagoEstrategico.color = 'danger'
-                pagoEstrategico.txt = 'Cancelada'
-                pagoEstrategico.btn = false;
-                propuesta.estrategico.pago = true;
-            }
+        if (pagoEstrategico.estado == 1) {
+            pagoEstrategico.color = 'success';
+            pagoEstrategico.txt = 'Pagado';
+            pagoEstrategico.btn = false;
         }
+
+        /** VALIDANDO ESTADO DE LA SUBSCRIPCIÓN - POR SI RENUEVA O NO LA SUB */
+        // let id_sub = null;
+        // let subscription = null;
+        // if (pagoEstrategico.subscription) {
+        //     id_sub = pagoEstrategico.subscription;
+        //     subscription = await stripe.subscriptions.retrieve(id_sub);
+        //     if (subscription.cancel_at != null) {
+        //         pagoEstrategico.fechaCancelacion = new Date(subscription.cancel_at*1000).toLocaleDateString('en-US');
+        //     } else {
+        //         pagoEstrategico.fechaCancelacion = false;
+        //     }
+        //     console.log("\n>>> DATA SUBSCRIPTION DESDE ADMIN ===> ", subscription)
+        //     console.log('\n*******************\n');
+        //     if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at != null) {
+        //         datos.etapa = 'Pago por subscripción de plan estratégico iniciado'
+        //         pagoEstrategico.color = 'success'
+        //         pagoEstrategico.txt = 'Activa'
+        //         pagoEstrategico.btn = true;
+        //         propuesta.estrategico.pago = true;
+        //         propuesta.pagada = true;
+        //     } else if (subscription.status == 'active' && subscription.cancel_at_period_end && subscription.cancel_at != null) {
+        //         datos.etapa = 'Subscripción de plan estratégico pendiente por cancelar'
+        //         pagoEstrategico.txt = 'Pendiente por cancelar';
+        //         pagoEstrategico.color = 'secondary';
+        //         pagoEstrategico.btn = false;
+        //         propuesta.estrategico.pago = true;
+        //         propuesta.pagada = true;
+        //     } else if (subscription.status == 'active' && !subscription.cancel_at_period_end && subscription.cancel_at == null) {
+        //         datos.etapa = 'Subscripción de plan estratégico pendiente por renovar'
+        //         pagoEstrategico.txt = 'Pendiente por renovar';
+        //         pagoEstrategico.color = 'info'
+        //         pagoEstrategico.btn = true;
+        //         propuesta.estrategico.pago = true;
+        //         propuesta.pagada = true;
+        //     } else {
+        //         datos.etapa = 'Subscripción de plan estratégico cancelada'
+        //         pagoEstrategico.color = 'danger'
+        //         pagoEstrategico.txt = 'Cancelada'
+        //         pagoEstrategico.btn = false;
+        //         propuesta.estrategico.pago = true;
+        //     }
+        // }
 
     }
 

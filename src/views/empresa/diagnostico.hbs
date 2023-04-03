@@ -46,18 +46,18 @@
                   <thead>
                     <tr>
                       <th>FECHA PAGO</th>
-                      <th>VALOR</th>
+                      {{!-- <th>VALOR</th> --}}
                       <th>ESTADO DE PAGO</th>
-                      <th>PAGAR</th>
+                      {{!-- <th>PAGAR</th> --}}
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>{{estadoPago.fecha}}</td>
-                      <td class="precios_celdas">{{costo}}</td>
+                      {{!-- <td class="precios_celdas">{{costo}}</td> --}}
                       <td><span class="badge light {{estadoPago.color}}"
                           style="background: {{formDiag.estilo}}">{{estadoPago.texto}}</span></td>
-                      <td>
+                      {{!-- <td>
                         {{#if existencia}}
                         <form action="/pagar-diagnostico" method="POST">
                             <button type="submit" class="btn btn-xs sharp" title="{{estadoPago.texto}}" style="{{estadoPago.btn}}">
@@ -69,7 +69,7 @@
                           <i class="fa fa-usd"></i>
                         </button>
                         {{/if}}
-                      </td>
+                      </td> --}}
                     </tr>
                   </tbody>
                 </table>

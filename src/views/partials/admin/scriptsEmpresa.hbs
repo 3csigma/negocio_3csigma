@@ -85,9 +85,8 @@
             $('#id_consultor').prop('selectedIndex', 0).trigger('chosen:updated');
             $('.search-choice-close').trigger('click')
             if ($('#divSede').css('display') == 'block') $('#divSede').hide()
-            
+            $('#divEtapa_').hide()
         }
-
     }
 
     function guardarConsulEtapas () {
@@ -239,7 +238,7 @@
     }
 
     // REGISTRAR PAGO MANUAL (ANÁLISIS Y PLAN EMPRESARIAL)
-    function pagoManualEmpresas(num, id, tipo, precio) {
+    function pagoManualEmpresas(num, id, tipo, precio = null) {
         let txt = 'pago único';
         let etapa = 2;
         if (tipo == 'plan estratégico') etapa = 3;
@@ -272,7 +271,7 @@
                             else if (etapa == 3)
                                 window.location.hash = 'plan-estrategico'
                             else
-                                window.location.hash = 'proyecto-consultoria'
+                                window.location.hash = 'proyecto-de-consultoria'
                             location.reload();
                         } else {
                             Swal.fire(
@@ -358,17 +357,29 @@
     })
 
     function validar_nivelConsultor() {
-        if ($('#id_consultor option:selected').attr("id") == 4)
+        if ($('#id_consultor option:selected').attr("id") != 0) {
+            $('#divSede').show();
+        } else {
+            $('#divSede').hide();
+            $('#divEtapa_').hide()
+        }
+        $('#divEtapa_').show()
+    }
+    
+    function validar_nivelEtapa() {
+        if ($('#id_consultor option:selected').attr("id") != 0 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
             $('#divSede').show();
         else
             $('#divSede').hide();
     }
-    
-    function validar_nivelEtapa() {
-        if ($('#id_consultor option:selected').attr("id") == 4 && $('#etapaConsultor option:selected').val() == "Diagnóstico")
-            $('#divSede').show();
-        else
-            $('#divSede').hide();
+
+    if (document.querySelector(".search-choice-close") != null) {
+        document.querySelector(".search-choice-close").addEventListener("click", (event) => {
+            alert("asjkdaskjd")
+            console.log("awdjaksdhkjashdkjashdja")
+            $('#etapaConsultor').prop('selectedIndex', 0).selectpicker('refresh');
+            if ($('#divSede').css('display') == 'block') $('#divSede').hide()
+        });
     }
 
 </script>

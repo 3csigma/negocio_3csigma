@@ -75,8 +75,8 @@
         <div class="row">
             {{!-- TARJETAS LADO IZQUIERDO --}}
             <div class="col-xl-7 col-xxl-12">
+                {{!-- PROPUESTA - ESTADO DEL PAGO --}}
                 <div class="row">
-                    {{!-- PROPUESTA --}}
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header">
@@ -89,10 +89,10 @@
                                             <tr>
                                                 <th>FECHA DE PROPUESTA</th>
                                                 <th>ESTADO DE SUBSCRIPCIÓN</th>
-                                                {{#unless subCancelada}}
+                                                {{!-- {{#unless subCancelada}}
                                                 <th>ACCIONES</th>
                                                 {{/unless}}
-                                                <th>VALOR TOTAL</th>
+                                                <th>VALOR TOTAL</th> --}}
                                                 {{#if propuesta.fechaCancelacion}}
                                                 <th>FECHA DE CANCELACIÓN</th>
                                                 {{/if}}
@@ -105,37 +105,6 @@
                                                 <td>
                                                     <span class="badge light badge-{{propuesta.color}}">{{propuesta.texto}}</span>
                                                 </td>
-                                                {{#unless subCancelada}}
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                                            {{#if botones.pagar}}
-                                                            <form action="/pagar-plan-estrategico" method="POST">
-                                                                <button type="submit" class="btn btn-primary btn-xs sharp"
-                                                                    style="background: #85bb65;margin: 0 auto;border-color: #85bb65;">
-                                                                    <i class="fa fa-usd"></i>
-                                                                </button>
-                                                            </form>
-                                                            {{else}}
-                                                            <button type="button" class="btn btn-primary btn-xs sharp"
-                                                                style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                                                                <i class="fa fa-usd"></i></button>
-                                                            {{/if}}
-                                                        </div>
-                                                        <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                                        {{#if botones.editSub}}
-                                                            <a type="button" target="_blank" href="{{portalClientes}}" style="border-color:white" class="btn color_primary btn-xs sharp text-white">
-                                                                <i class="fa fa-pencil"></i></a>
-                                                        {{else}}
-                                                            <button type="button" title="Puedes editar tus subscripciones activas" class="btn btn-primary btn-xs sharp"
-                                                            style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                                                                <i class="fa fa-pencil"></i></button>
-                                                        {{/if}}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                {{/unless}}
-                                                <td class="precios_celdas">{{propuesta.precio_total}}</td>
                                                 {{#if propuesta.fechaCancelacion}}
                                                 <td>{{propuesta.fechaCancelacion}}</td>
                                                 {{/if}}
