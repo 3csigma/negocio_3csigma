@@ -46,7 +46,6 @@
     <div class="row">
       {{!-- TARJETAS IZQUIERDA (PROPUESTAS - PAGOS) --}}
       <div class="col-xl-6 col-xxl-6">
-        {{!-- PROPUESTA --}}
         <div class="row">
           <div class="col-xl-12">
             <div class="card">
@@ -60,11 +59,11 @@
                       <tr>
                         <th>FECHA DE PROPUESTA</th>
                         <th>ESTADO DE PAGO</th>
-                        {{#unless propuesta.pago}}
+                        {{!-- {{#unless propuesta.pago}}
                         <th>PAGO EN COUTAS</th>
                         <th>PAGO ÚNICO</th>
                         {{/unless}}
-                        <th>VALOR TOTAL</th>
+                        <th>VALOR TOTAL</th> --}}
                         <th>REVISAR PROPUESTA</th>
                       </tr>
                     </thead>
@@ -78,115 +77,6 @@
                             <span class="badge light badge-warning">Pendiente</span>
                           {{/if}}
                         </td>
-                        {{#unless propuesta.pago}}
-                        <td>
-                          <div class="d-flex">
-                            
-                            {{#if escena1}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <form action="/pagar-empresarial-per1" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}">
-                                    <i class="fa fa-usd"></i>
-                                  </button>
-                                </form>
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena2}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena3}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <form action="/pagar-empresarial-per2" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
-                                </form>
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena4}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                  <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena5}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <form action="/pagar-empresarial-per3" method="POST">
-                                  <button type="submit" class="btn btn-primary btn-xs sharp" title="{{msgActivo}}" style="{{btnActivo}}"><i class="fa fa-usd"></i></button> 
-                                </form>
-                              </div>
-                            {{/if}}
-
-                            {{#if escena6}}
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo2}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>                            
-                              </div>
-                              <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                                <button type="button" class="btn btn-primary btn-xs sharp" title="{{msgDesactivo3}}" style="{{btnDesactivo}}"><i class="fa fa-usd"></i></button>
-                              </div>
-                            {{/if}}
-                          </div>
-                        </td>
-
-                        {{!-- CELDA DE PAGO ÚNICO PLAN EMPRESARIAL --}}
-                        <td>
-                          <div class="col" style="padding-right: 7px;padding-left: 7px;">
-                            {{#if activarPagoUnico}}
-                            <form action="/pagar-empresarial" method="POST">
-                              <button type="submit" class="btn btn-sm btn-pago-analisis" title="Pagar ahora">Pagar con 10% OFF</button>
-                            </form>
-                            {{else}}
-                            {{#if escena6}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="Proyecto de consultoría pagado" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            {{else}}
-                            <button type="button" class="btn btn-primary btn-xs sharp" title="Pago de cuotas en proceso" style="background: #656c73;margin: 0 auto;border-color: #656c73;">
-                              <i class="fa fa-usd"></i>
-                            </button>
-                            {{/if}}
-                            {{/if}}
-                          </div>
-                        </td>
-
-                        {{/unless}}
-                        <td class="precios_celdas">{{propuesta.precio_total}}</td>
                         <td>
                           <a href="{{propuesta.link_propuesta}}" target="_blank"
                               class="btn color_primary shadow btn-xs sharp text-white"
