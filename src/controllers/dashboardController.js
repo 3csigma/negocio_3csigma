@@ -1160,12 +1160,11 @@ dashboardController.actualizarEmpresa = async (req, res) => {
         } else {
             const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
             if (value.sede) { datos.sede = value.sede }
-            // await pool.query('INSERT INTO consultores_asignados SET ?', [datos])
             await insertarDatos('consultores_asignados', datos)
             
             /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
             console.log("Enviando email de consultor Asignado - Etapa: " + key)
-            const asunto = "Tu Consultor ha sido asignado para la etapa de " + key;
+            const asunto = "Tu Consultor(a) ha sido asignado(a) para la etapa de " + key;
             const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, key);
             const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
             if (resultEmail == false) {
@@ -1178,13 +1177,13 @@ dashboardController.actualizarEmpresa = async (req, res) => {
             let consultor = await consultarDatos('consultores')
             consultor = consultor.find(x => x.id_consultores == value.id)
             console.log("\nEnviando email para el consultor de que fue Asignado a una empresa en la Etapa: " + key)
-            const subject = "Has sido asignado a una empresa para la etapa de " + key;
+            const subject = "Has sido asignado(a) a una empresa para la etapa de " + key;
             const template = consultor_AsignadoEtapa(consultor.nombres, empresa.nombre_empresa, key);
             const resultConsultor = await sendEmail(consultor.email, subject, template)
             if (resultConsultor == false) {
                 console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
             } else {
-                console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado a una empresa - Email Consultor: " + consultor.email + " >>>>>\n")
+                console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado(a) a una empresa - Email Consultor: " + consultor.email + " >>>>>\n")
             }
         }
     }
@@ -1673,7 +1672,7 @@ dashboardController.guardarInforme = async (req, res) => {
         let tipoInforme = nombreInforme.toLowerCase();
         let asunto = 'Se ha cargado un nuevo ' + tipoInforme
         let template = informesHTML(nombreEmpresa_, tipoInforme);
-        const texto = "Tu consultor ha cargado el informe general."
+        const texto = "Tu consultor(a) ha cargado el informe general."
         
         if (nombreInforme == 'Informe diagnóstico') {
             asunto = 'Diagnóstico de negocio finalizado'
@@ -1842,7 +1841,7 @@ dashboardController.finalizarEtapa = async (req, res) => {
     if (empresa) {
         const etapa = {etapa_empresarial: 1}
         await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [etapa, codigo]);
-        const texto = 'Ingresa a tu cuenta para revisar los archivos cargados por tu consultor.'
+        const texto = 'Ingresa a tu cuenta para revisar los archivos cargados por tu consultor(a).'
         const link = 'plan-empresarial';
         template = etapaFinalizadaHTML(empresa.nombre_empresa, 'Proyecto de consultoría', texto, link);
         // Enviar Email
