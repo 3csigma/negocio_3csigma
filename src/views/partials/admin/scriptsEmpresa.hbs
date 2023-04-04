@@ -3,19 +3,13 @@
     function agregarCorreccion(etapa){
         let correccion, informe
         const id_empresa = $("#idEmpresa").val()
-        if(etapa == 1) {
-            informe = "Informe diagnóstico";
-            correccion = CKEDITOR.instances.correccionDiag.getData();
-        }
-        if(etapa == 2) {
-            informe = "Informe de análisis";
-            correccion = CKEDITOR.instances.correccionAnali.getData();
-        }
-        if(etapa == 3) {
-            informe = "Informe de plan estratégico";
-            correccion = CKEDITOR.instances.correccionPlanE.getData();
-            
-            }
+        if(etapa == 1) {informe = "Informe diagnóstico";correccion = CKEDITOR.instances.correccionDiag.getData();}
+        if(etapa == 2) {informe = "Informe de dimensión producto";correccion = CKEDITOR.instances.correccionInfoProd.getData();}
+        if(etapa == 3) {informe = "Informe de dimensión administración"; correccion = CKEDITOR.instances.correccionAdmin.getData();}
+        if(etapa == 4) {informe = "Informe de dimensión operaciones";correccion = CKEDITOR.instances.correccionOpe.getData();}
+        if(etapa == 5) {informe = "Informe de dimensión marketing"; correccion = CKEDITOR.instances.correccionMark.getData();}
+        if(etapa == 6) {informe = "Informe de análisis";correccion = CKEDITOR.instances.correccionAnali.getData();}
+        if(etapa == 7) {informe = "Informe de plan estratégico";correccion = CKEDITOR.instances.correccionPlanE.getData(); }
 
         fetch('/correcciones', {
             method: 'POST',
@@ -35,6 +29,48 @@
                 }
             });
     }
+    function aprobarCorreccion(etapa){
+        Swal.fire({
+            title: 'Confirmación de aprobación de informe',
+            text: "Al aprobar este informe, será enviado a la empresa, ¿Deseas continuar?",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#FFE000',
+            cancelButtonColor: '#000000',
+            confirmButtonText: 'Si, aprobar'
+        }).then((result) => {
+        if (result.isConfirmed) {
+            let estado, informe
+            const id_empresa = $("#idEmpresa").val()
+            if(etapa == 1) {informe = "Informe diagnóstico";estado = 1}
+            if(etapa == 2) {informe = "Informe de dimensión producto";estado = 1}
+            if(etapa == 3) {informe = "Informe de dimensión administración";estado = 1}
+            if(etapa == 4) {informe = "Informe de dimensión operaciones";estado = 1}
+            if(etapa == 5) {informe = "Informe de dimensión marketing";estado = 1}
+            if(etapa == 6) {informe = "Informe de análisis";estado = 1}
+            if(etapa == 7) {informe = "Informe de plan estratégico";estado = 1}
+        fetch('/correcciones-aprobadas', {
+            method: 'POST',
+            body: JSON.stringify({id_empresa, informe, estado}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                if (response){
+                 Swal.fire(
+                    'Infome aprobado!',
+                    '',
+                    'success'
+                )
+                } else {
+                    console.log("TODO FALSE")
+                }
+            });
+           
+        }
+        })
+    }
+
 
     function agregarConclusion(etapa){
         let conclusion = 0

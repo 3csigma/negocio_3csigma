@@ -528,6 +528,10 @@ helpers.consultarInformes = async (empresa, nombreInforme) => {
     const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? `, [empresa, nombreInforme])
     return informe[0];
 }
+helpers.consultarInformeCompleto = async (empresa, nombreInforme) => {
+    const informe = await pool.query(`SELECT * FROM informes WHERE id_empresa = ? AND nombre = ? AND estado = 1`, [empresa, nombreInforme])
+    return informe[0];
+}
 
 // CONSULTAR TAREAS DE PLAN EMPRESARIAL
 helpers.consultarTareasEmpresarial = async (empresa, fechaActual) => {

@@ -557,7 +557,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     /***************** Tabla de Informes ******************* */
-    const frmInfo = {}
+    const frmInfo = {}, infoProd = {}, infoAdmin = {}, infoOpe = {}, infoM = {}, infoA = {}
     const info = {
         prod: { ver: 'none' },
         adm: { ver: 'none' },
@@ -657,12 +657,12 @@ dashboardController.editarEmpresa = async (req, res) => {
             pagos_analisis.tres.btn = false;
         }
     }
-
     if (informeProd) {
         info.prod.fecha = informeProd.fecha;
         info.prod.ver = 'block';
         info.prod.url = informeProd.url;
         datos.etapa = 'Informe análisis dimensión producto'
+        infoProd.correccion = informeProd.correccion
     }
 
     if (informeAdmin) {
@@ -670,6 +670,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.adm.ver = 'block';
         info.adm.url = informeAdmin.url;
         datos.etapa = 'Informe análisis dimensión administración'
+        infoAdmin.correccion = informeAdmin.correccion
     }
 
     if (informeOperaciones) {
@@ -677,6 +678,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.op.ver = 'block';
         info.op.url = informeOperaciones.url;
         datos.etapa = 'Informe análisis dimensión operaciones'
+        infoOpe.correccion = informeOperaciones.correccion
     }
 
     if (informeMarketing) {
@@ -684,6 +686,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.marketing.ver = 'block';
         info.marketing.url = informeMarketing.url;
         datos.etapa = 'Informe análisis dimensión marketing'
+        infoM.correccion = informeMarketing.correccion
     }
 
     if (informeAnalisis) {
@@ -691,7 +694,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.analisis.ver = 'block';
         info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe general de análisis de negocio'
-        info.correccion = informeAnalisis.correccion
+        infoA.correccion = informeAnalisis.correccion
     }
 
     if (informePlan) {
@@ -1179,7 +1182,8 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     res.render('admin/editarEmpresa', {
         adminDash, consultorDash, tutorDash, crearCorrenccion, itemActivo, empresa, formEdit: true, datos, consultores,
-        aprobarConsultor, frmDiag, informeDiag, informeAnalisis, informePlan, frmInfo, consultores_asignados, divConsultores,
+        aprobarConsultor, frmDiag, informeDiag, informeAnalisis, informePlan, informeProd, informeAdmin, informeOperaciones, informeMarketing, frmInfo,
+        infoProd, infoAdmin, infoOpe, infoM, infoA, consultores_asignados, divConsultores,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
@@ -1201,6 +1205,18 @@ dashboardController.correcciones = async (req, res) => {
     }
     res.send(true)
 }
+dashboardController.correccionesAprobadas = async (req, res) => {
+    const {id_empresa, informe, estado} = req.body
+    let row = await consultarDatos('informes');
+
+    row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
+    if (row) {
+        const obj = {estado}
+        await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+    }
+    res.send(true)
+}
+
 dashboardController.conclusiones = async (req, res) => {
     const {id_empresa, etapa, conclusion} = req.body
     let row = await consultarDatos('conclusiones');

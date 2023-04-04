@@ -74,6 +74,7 @@ router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpr
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
 router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
 router.post('/correcciones', checkLogin, dashboardController.correcciones)
+router.post('/correcciones-aprobadas', checkLogin, dashboardController.correccionesAprobadas)
 // PAGOS MANUALES (EXTERNOS)
 router.post('/pagoManual-Diagnostico', checkLogin, dashboardController.pagoManualDiagnostico)
 router.post('/pagoManual-Empresas', checkLogin, dashboardController.pagoManualEmpresas)

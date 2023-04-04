@@ -1,6 +1,6 @@
 const pool = require('../database')
 const empresaController = exports;
-const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
+const { authToken, encriptarTxt, desencriptarTxt, consultarTareasEmpresarial, consultarInformes, consultarInformeCompleto, consultarDatos, tareasGenerales, eliminarDatos, insertarDatos } = require('../lib/helpers')
 const { Country } = require('country-state-city');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
@@ -140,8 +140,8 @@ empresaController.index = async (req, res) => {
 
     // Informe de diagnóstico de empresa subido
     let ultimosInformes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
-    ultimosInformes = ultimosInformes.filter(x => x.id_empresa == id_empresa)
-    if (ultimosInformes.length > 0) {
+    ultimosInformes = ultimosInformes.filter(x => x.id_empresa == id_empresa && x.estado == 1)
+     if (ultimosInformes.length > 0) {
         ultimosInformes.forEach(x => {
             if (x.nombre == 'Informe diagnóstico') {
                 x.etapa = 'Diagnóstico'
@@ -149,7 +149,7 @@ empresaController.index = async (req, res) => {
             if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
             if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
         })
-    }
+     }
 
     /****************************************************************************** */
     // PORCENTAJE ETAPA 2
@@ -465,7 +465,7 @@ empresaController.diagnostico = async (req, res) => {
     }
 
     // Informe de la empresa subido
-    let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" LIMIT 1`)
+    let informeEmpresa = await consultarDatos('informes', `WHERE id_empresa = "${id_empresa}" AND estado = 1 LIMIT 1`)
 
     res.render('empresa/diagnostico', {
         user_dash: true, pagoDiag: true, formDiag,
@@ -654,14 +654,13 @@ empresaController.analisis = async (req, res) => {
     let tieneCuestionario = false
     if (analisis) {
         tieneCuestionario = true
-        console.log(">>>>>>>>>>>>" , tieneCuestionario);
         if (analisis.archivos){
             archivos = JSON.parse(analisis.archivos)
         }
     }
 
     const informesAnalisis = []
-    const info0Analisis = await consultarInformes(id_empresa, "Informe de análisis")
+    const info0Analisis = await consultarInformeCompleto(id_empresa, "Informe de análisis")
     const info1Analisis = await consultarInformes(id_empresa, "Informe de dimensión producto")
     const info2Analisis = await consultarInformes(id_empresa, "Informe de dimensión administración")
     const info3Analisis = await consultarInformes(id_empresa, "Informe de dimensión operaciones")
@@ -671,9 +670,6 @@ empresaController.analisis = async (req, res) => {
     info2Analisis ? informesAnalisis.push(info2Analisis) : false;
     info3Analisis ? informesAnalisis.push(info3Analisis) : false;
     info4Analisis ? informesAnalisis.push(info4Analisis) : false;
-
-    console.log("INFORME 0 -> ", info0Analisis)
-    console.log("ARRAY DE INFORMES --> ", informesAnalisis)
 
     let escena1 = false, escena2 = false, escena3 = false, escena4 = false, escena5 = false, escena6 = false, activarPagoUnico = true,
     msgActivo, msgDesactivo, msgDesactivo2 = true, msgDesactivo3 = true,
@@ -969,7 +965,7 @@ empresaController.planEstrategico = async (req, res) => {
     const dimObj = await tareasGenerales(empresa, fechaActual)
     const tareas = dimObj.tareas;
 
-    const informePlan = await consultarInformes(empresa, "Informe de plan estratégico")
+    const informePlan = await consultarInformeCompleto(empresa, "Informe de plan estratégico")
     let datosTabla = await consultarDatos('rendimiento_empresa')
     datosTabla = datosTabla.filter(x => x.empresa == empresa)
     const jsonRendimiento = JSON.stringify(datosTabla)
