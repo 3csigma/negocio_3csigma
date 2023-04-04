@@ -1,8 +1,6 @@
-const name = process.env.APP_NAME;
-console.log("APP_NAME: " + name);
 module.exports = {
     apps: [{
-        name: name || "App PAOM",
+        name: "App PAOM System",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart
