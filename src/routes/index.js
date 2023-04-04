@@ -73,6 +73,7 @@ router.get('/estudiantes-asignados/:codigo', checkLogin, dashboardController.edi
 router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
 router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
+router.post('/correcciones', checkLogin, dashboardController.correcciones)
 // PAGOS MANUALES (EXTERNOS)
 router.post('/pagoManual-Diagnostico', checkLogin, dashboardController.pagoManualDiagnostico)
 router.post('/pagoManual-Empresas', checkLogin, dashboardController.pagoManualEmpresas)

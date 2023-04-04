@@ -579,7 +579,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /** **************************************************************** */
     // Informe de diagnóstico
-    const informeDiag = await consultarInformes(idEmpresa, "Informe diagnóstico")
+    let informeDiag = await consultarInformes(idEmpresa, "Informe diagnóstico")
     // Informe de dimensión producto
     const informeProd = await consultarInformes(idEmpresa, "Informe de dimensión producto")
     // Informe de dimensión administración
@@ -598,6 +598,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         frmInfo.ver1 = 'block';
         frmInfo.url = informeDiag.url;
         datos.etapa = 'Informe general de diagnóstico de negocio'
+        frmInfo.correccion = informeDiag.correccion
     }
 
     /************************************************************************************* */
@@ -690,6 +691,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.analisis.ver = 'block';
         info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe general de análisis de negocio'
+        info.correccion = informeAnalisis.correccion
     }
 
     if (informePlan) {
@@ -698,6 +700,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.plan.ver = 'block';
         info.plan.url = informePlan.url;
         datos.etapa = 'Informe de plan estratégico de negocio'
+        info.correccion = informePlan.correccion
     }
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
@@ -1064,7 +1067,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /*************************************************************************************************** */
     // Objeto para Botones de las tarjetas con base a la etapa del consultor
-    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true, tutorDash= false
+    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true, tutorDash= false, crearCorrenccion = false
     const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
     
     let cLogin = await consultarDatos('consultores'); // Consulta a la tabla de consultores
@@ -1077,11 +1080,13 @@ dashboardController.editarEmpresa = async (req, res) => {
         botonesEtapas.dos = true;
         botonesEtapas.plan1 = true;
         botonesEtapas.plan2 = true;
+        crearCorrenccion = true
     } else if(req.user.rol == 'Estudiante'){
         consultorDash = true;
         itemActivo = 2;
         adminDash = false;
         aprobarConsultor = false;
+        crearCorrenccion = false;
 
         // Filtro para saber a que etapas de la empresa está asignado el consultor
         const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
@@ -1101,10 +1106,10 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         console.log("BOTONES ETAPAS - RESULTADO >> ", botonesEtapas)
     }else {
+        crearCorrenccion = true
         tutorDash =  true
         itemActivo = 3;
         adminDash = false;
-        aprobarConsultor = false;
         
         let response = await pool.query('SELECT * FROM consultores WHERE tutor_asignado = ?' , [cLogin.id_tutor])
         
@@ -1153,8 +1158,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         })
     }
 
-    
-
     let tblConclusiones = await consultarDatos('conclusiones');
     tblConclusiones = tblConclusiones.filter(x => x.id_empresa == idEmpresa)
     let objconclusion = {}
@@ -1175,8 +1178,8 @@ dashboardController.editarEmpresa = async (req, res) => {
     }
 
     res.render('admin/editarEmpresa', {
-        adminDash, consultorDash, tutorDash, itemActivo, empresa, formEdit: true, datos, consultores,
-        aprobarConsultor, frmDiag, frmInfo, consultores_asignados, divConsultores,
+        adminDash, consultorDash, tutorDash, crearCorrenccion, itemActivo, empresa, formEdit: true, datos, consultores,
+        aprobarConsultor, frmDiag, informeDiag, informeAnalisis, informePlan, frmInfo, consultores_asignados, divConsultores,
         jsonAnalisis1, jsonAnalisis2, jsonDimensiones1, jsonDimensiones2, resDiag, nuevosProyectos, rendimiento,
         graficas2: true, propuesta, pagos_analisis, archivos, divInformes, filaInforme,
         pagoEstrategico, info, dimProducto, dimAdmin, dimOperacion, dimMarketing,
@@ -1187,6 +1190,17 @@ dashboardController.editarEmpresa = async (req, res) => {
 
 }
 
+dashboardController.correcciones = async (req, res) => {
+    const {id_empresa, informe, correccion} = req.body
+    let row = await consultarDatos('informes');
+
+    row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
+    if (row) {
+        const obj = {correccion}
+        await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+    }
+    res.send(true)
+}
 dashboardController.conclusiones = async (req, res) => {
     const {id_empresa, etapa, conclusion} = req.body
     let row = await consultarDatos('conclusiones');

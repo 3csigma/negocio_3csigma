@@ -42014,9 +42014,9 @@ code {
   }
 }
 
-.table strong {
+/* .table strong {
   color: #B1B1B1;
-}
+} */
 
 .table td {
   border-color: #f0f1f5;

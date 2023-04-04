@@ -66,22 +66,22 @@ tutorController.index = async (req, res) => {
     // FIN DE LA FUNCIÓN <<====
 
     // ÚLTIMOS INFORMES CARGADOS
-    let ultimosInformes = [];
-    let ultimos_informes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
-    if (ultimos_informes.length > 0) {
-        idEmpresas.forEach(e => {
-            ultimosInformes = ultimos_informes.filter(x => x.id_empresa == e)
-        })
-        ultimosInformes.forEach(x => {
-            if (x.nombre == 'Informe diagnóstico') { x.etapa = 'Diagnóstico' }
-            if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
-            if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
-        })
-    }
+    // let ultimosInformes = [];
+    // let ultimos_informes = await consultarDatos('informes', 'ORDER BY id_informes DESC LIMIT 2')
+    // if (ultimos_informes.length > 0) {
+    //     idEmpresas.forEach(e => {
+    //         ultimosInformes = ultimos_informes.filter(x => x.id_empresa == e)
+    //     })
+    //     ultimosInformes.forEach(x => {
+    //         if (x.nombre == 'Informe diagnóstico') { x.etapa = 'Diagnóstico' }
+    //         if (x.nombre == 'Informe de dimensión producto' || x.nombre == 'Informe de dimensión administración' || x.nombre == 'Informe de dimensión operaciones' || x.nombre == 'Informe de dimensión marketing' || x.nombre == 'Informe de análisis') { x.etapa = 'Análisis' }
+    //         if (x.nombre == 'Informe de plan estratégico') { x.etapa = 'Plan estratégico' }
+    //     })
+    // }
     res.render('tutor/panelTutor', {
         tutorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
-        ultimosInformes
+        
     });
 }
 

@@ -42,6 +42,14 @@
 <script src="../js/chartjs.init.js"></script>
 {{/if}} 
 
+<script src="../ckeditor/ckeditor.js"></script>
+<script>
+document.querySelectorAll('.ckeditor').forEach(textarea => {
+  CKEDITOR.replace(textarea.correccionDiag);
+  CKEDITOR.replace(textarea.correccionAnali);
+  CKEDITOR.replace(textarea.correccionPlanE);
+});
+</script>
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
 <script>
     // ==> Previsualizar foto de perfil == INICIO <==

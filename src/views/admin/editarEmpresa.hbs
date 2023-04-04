@@ -854,6 +854,66 @@
                                                                     <tr>
                                                                         {{#if botonesEtapas.uno}}
                                                                         <td style="border-color: transparent; padding:3px">
+                                                                                {{#if crearCorrenccion}}
+                                                                                        {{#if informeDiag}}
+                                                                                        <div data-toggle="modal" data-target="#corregirDiag"
+                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                            style="border-color: white;" >
+                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
+                                                                                        <div class="modal fade" id="corregirDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                        <div class="modal-dialog" role="document">
+                                                                                            <div class="modal-content">
+                                                                                            <div class="modal-header" style="justify-content: center;">
+                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                <form>
+                                                                                                <div class="form-group">
+                                                                                                    <textarea class="form-control ckeditor" name="correccion" id="correccionDiag">{{frmInfo.correccion}}</textarea>
+                                                                                                </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                            <div class="modal-footer" style="justify-content: center;">
+                                                                                                <button onclick="agregarCorreccion(1)" class="btn color_primary text-white">Enviar anotaciones</button>
+                                                                                                <button type="button" class="btn color_tertiary text-black" data-dismiss="modal">Aprobar informe</button>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        </div>
+                                                                                        {{/if}}
+                                                                                {{else}}
+                                                                                    {{#if informeDiag}}
+                                                                                        <div data-toggle="modal" data-target="#verCorrecionDiag"
+                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                                    style="border-color: white;" >
+                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
+                                                                                        <div class="modal fade" id="verCorrecionDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                                <div class="modal-dialog" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                    <div class="modal-header" style="justify-content: center;">
+                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div class="modal-body">
+                                                                                                        <form>
+                                                                                                        <div class="form-group">
+                                                                                                           {{{frmInfo.correccion}}}
+                                                                                                        </div>
+                                                                                                        </form>
+                                                                                                    </div>
+                                                                                                   
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    {{/if}}
+                                                                                {{/if}}
                                                                             <label for="inputInformeDiag" >
                                                                                 <div id="btnSubirInforme"
                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
@@ -865,7 +925,7 @@
                                                                         </td>
                                                                         {{/if}}
                                                                         <td style="border-color: transparent; padding:3px">
-                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp"><i class="fa fa-search"></i></a>
+                                                                            <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; border-color: #FED061; margin-left:-3px" target="_blank" class="btn color_tertiary shadow btn-xs sharp"><i class="fa fa-search"></i></a>
                                                                         </td>
                                                                     </tr>
                                                                 </table>
@@ -1506,6 +1566,65 @@
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
                                                                             <td style="border-color: transparent; padding:3px">
+                                                                                  {{#if crearCorrenccion}}
+                                                                                        {{#if informeAnalisis}}
+                                                                                        <div data-toggle="modal" data-target="#corregir"
+                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                            style="border-color: white;" >
+                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
+                                                                                        <div class="modal fade" id="corregir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                        <div class="modal-dialog" role="document">
+                                                                                            <div class="modal-content">
+                                                                                            <div class="modal-header" style="justify-content: center;">
+                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                <form>
+                                                                                                <div class="form-group">
+                                                                                                    <textarea class="form-control ckeditor" id="correccionAnali">{{info.correccion}}</textarea>
+                                                                                                </div>
+                                                                                                </form>
+                                                                                            </div>
+                                                                                            <div class="modal-footer" style="justify-content: center;">
+                                                                                                <button onclick="agregarCorreccion(2)" class="btn color_primary text-white">Enviar anotaciones</button>
+                                                                                                <button type="button" class="btn color_tertiary text-black" data-dismiss="modal">Aprobar informe</button>
+                                                                                            </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        </div>
+                                                                                        {{/if}}
+                                                                                {{else}}
+                                                                                    {{#if informeAnalisis}}
+                                                                                        <div data-toggle="modal" data-target="#verCorrecionAnali"
+                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                                    style="border-color: white;" >
+                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
+                                                                                        <div class="modal fade" id="verCorrecionAnali" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                                <div class="modal-dialog" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                    <div class="modal-header" style="justify-content: center;">
+                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div class="modal-body">
+                                                                                                        <form>
+                                                                                                        <div class="form-group">
+                                                                                                          {{{info.correccion}}}
+                                                                                                        </div>
+                                                                                                        </form>
+                                                                                                    </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    {{/if}}
+                                                                                {{/if}}
                                                                                 <label for="inputInformeGeneral" >
                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -2604,6 +2723,66 @@
                                                                     <tr>
                                                                         {{#if botonesEtapas.plan2}}
                                                                         <td style="border-color: transparent; padding:3px">
+                                                                            {{#if crearCorrenccion}}
+                                                                                    {{#if informePlan}}
+                                                                                    <div data-toggle="modal" data-target="#corregirPlanE"
+                                                                                        class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: white;" >
+                                                                                    <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                    </div>
+                                                                                    <div class="modal fade" id="corregirPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                    <div class="modal-dialog" role="document">
+                                                                                        <div class="modal-content">
+                                                                                        <div class="modal-header" style="justify-content: center;">
+                                                                                            <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                            <span aria-hidden="true">&times;</span>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            <form>
+                                                                                            <div class="form-group">
+                                                                                                <textarea class="form-control ckeditor" name="correccion" id="correccionPlanE">{{info.correccion}}</textarea>
+                                                                                            </div>
+                                                                                            </form>
+                                                                                        </div>
+                                                                                        <div class="modal-footer" style="justify-content: center;">
+                                                                                            <button onclick="agregarCorreccion(3)" class="btn color_primary text-white">Enviar anotaciones</button>
+                                                                                            <button type="button" class="btn color_tertiary text-black" data-dismiss="modal">Aprobar informe</button>
+                                                                                        </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    </div>
+                                                                                    {{/if}}
+                                                                                {{else}}
+                                                                                    {{#if informePlan}}
+                                                                                        <div data-toggle="modal" data-target="#verCorrecionPlanE"
+                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                                    style="border-color: white;" >
+                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
+                                                                                        <div class="modal fade" id="verCorrecionPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                                                <div class="modal-dialog" role="document">
+                                                                                                    <div class="modal-content">
+                                                                                                    <div class="modal-header" style="justify-content: center;">
+                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                        <span aria-hidden="true">&times;</span>
+                                                                                                        </button>
+                                                                                                    </div>
+                                                                                                    <div class="modal-body">
+                                                                                                        <form>
+                                                                                                        <div class="form-group">
+                                                                                                           {{{info.correccion}}}
+                                                                                                        </div>
+                                                                                                        </form>
+                                                                                                    </div>
+                                                                                                   
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                        </div>
+                                                                                    {{/if}}
+                                                                                {{/if}}
                                                                             <label for="inputInformePlan">
                                                                                 <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                     style="border-color: white;">
