@@ -14,10 +14,12 @@
             {{#if tienePropuesta}}
             <h2 style="color: #000; font-weight: bold;">Realicemos tu Proyecto de Consultoría</h2>
             <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa.</p>
+            {{#if tienePropuesta}}
             <p style="text-align: justify;margin-top: 2em;color: #000">Haz clic en el icono de la lupa para ver todos los detalles.</p>
+            {{/if}}
             {{else}}
             <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu proyecto de consultoría.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Tu Consultor(a) ha sido asignado(a) y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu proyecto de consultoría.</p>
             {{/if}}
           </div>
         </div>
@@ -29,7 +31,7 @@
           {{#if btnPagar.empresarialPer}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de proyecto de consultoría. Tu consultor agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de proyecto de consultoría. Tu consultor(a) agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
           </div>
           {{/if}}
           {{/if}}
@@ -91,7 +93,6 @@
       </div>
 
       {{!-- TARJETA DERECHA (ARCHIVOS CARGADOS POR EL CONSULTOR) --}}
-      {{#if btnPagar.empresarialPer}} {{!-- Inicio Condicional del Pago Etapa 3 --}}
       {{!-- CARGA DE ARCHIVOS --}}
       <input type="hidden" id="idEmpresa" value="{{id_empresa}}">
       <div class="col-xl-6 col-xxl-6">
@@ -323,8 +324,6 @@
         </div>
       </div>
       {{/if}}
-
-      {{/if}} {{!-- Fin Condicional del Pago Etapa 3 --}}
 
     </div>
     {{/if}}

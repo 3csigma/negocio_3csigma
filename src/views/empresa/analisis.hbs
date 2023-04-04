@@ -16,7 +16,7 @@
             <p style="text-align: justify;margin-top: 2em;color: #000">A continuación te presentamos una propuesta para impulsar el desarrollo corporativo de tu empresa, a través de las dimensiones:</p>
             {{else}}
             <h2 style="color: #000; font-weight: bold;">Nos estamos preparando para ti</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Tu consultor ha sido asignado y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu análisis de negocio.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Tu Consultor(a) ha sido asignado(a) y se encuentra revisando la información de tu empresa para presentarte una propuesta, recibirás un correo muy pronto y podrás regresar a esta página para continuar tu análisis de negocio.</p>
             <p style="color: #000; font-weight: bold;">Revisaremos tu empresa en 4 dimensiones:</p>
             {{/if}}
             <p style="color: #000; font-weight: bold;">
@@ -25,7 +25,9 @@
               <i class="fa-solid fa-gear"></i> Operaciones</br>
               <i class="fa-solid fa-bullhorn"></i> Marketing</br>
             </p>
+            {{#if tienePropuesta}}
             <p style="text-align: justify;margin-top: 2em;color: #000">Haz clic en el icono de la lupa para ver todos los detalles.</p>
+            {{/if}}
           </div>
         </div>
       </div>
@@ -36,7 +38,7 @@
           {{#if btnPagar.analisisPer}}
           <div class="card-body">
             <h2 style="color: #000; font-weight: bold;">Tu pago ha sido recibido</h2>
-            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Tu consultor agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
+            <p style="text-align: justify;margin-top: 2em;color: #000">Hemos recibido tu pago, ahora puedes continuar con tu proceso de análisis de negocio. Tu consultor(a) agendará una cita contigo pronto, recibirás una notificación de esto en tu correo electrónico.</p>
           </div>
           {{/if}}
           {{/if}}
@@ -164,7 +166,7 @@
                       </thead>
                       <tbody>
                         {{#unless archivos}}
-                          <tr><td colspan=" 4">Tu consultor aún no ha solicitado archivos</td></tr>
+                          <tr><td colspan=" 4">Tu consultor(a) aún no ha solicitado archivos</td></tr>
                         {{/unless}}
                         {{#each archivos}}
                         <tr>

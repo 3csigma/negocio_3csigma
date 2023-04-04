@@ -5941,13 +5941,13 @@ a.badge-warning.focus {
 
 .badge-danger {
   color: #fff;
-  background-color: #F94687;
+  background-color: #DC0000;
 }
 
 a.badge-danger:hover,
 a.badge-danger:focus {
   color: #fff;
-  background-color: #f71567;
+  background-color: #DC0000;
 }
 
 a.badge-danger:focus,
@@ -37900,7 +37900,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .badge-danger {
-  background-color: #F94687;
+  background-color: #DC0000;
 }
 
 .badge-dark {
@@ -37962,8 +37962,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .light.badge-danger {
-  background-color: #fff3f7;
-  color: #F94687;
+  background-color: #DC0000;
+  color: #fff;
 }
 
 [data-theme-version="dark"] .light.badge-danger {
