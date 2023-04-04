@@ -1,4 +1,41 @@
 <script>
+
+    function agregarCorreccion(etapa){
+        let correccion, informe
+        const id_empresa = $("#idEmpresa").val()
+        if(etapa == 1) {
+            informe = "Informe diagnóstico";
+            correccion = CKEDITOR.instances.correccionDiag.getData();
+        }
+        if(etapa == 2) {
+            informe = "Informe de análisis";
+            correccion = CKEDITOR.instances.correccionAnali.getData();
+        }
+        if(etapa == 3) {
+            informe = "Informe de plan estratégico";
+            correccion = CKEDITOR.instances.correccionPlanE.getData();
+            
+            }
+
+        fetch('/correcciones', {
+            method: 'POST',
+            body: JSON.stringify({id_empresa, informe, correccion}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                if (response){
+                Swal.fire(
+                'Corrección enviada!',
+                'Presiona ok para salir!',
+                'success'
+                )
+                } else {
+                    console.log("TODO FALSE")
+                }
+            });
+    }
+
     function agregarConclusion(etapa){
         let conclusion = 0
         if(etapa == 1) {conclusion = $("#conclusion_diagnostico").val()}
