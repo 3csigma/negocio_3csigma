@@ -3,7 +3,7 @@ const pool = require('../database')
 const passport = require('passport')
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos, eliminarDatos } = require('../lib/helpers')
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
@@ -112,20 +112,14 @@ dashboardController.editarConsultor = async (req, res) => {
 
 dashboardController.actualizarConsultor = async (req, res) => {
     let respuesta = false;
-    const { codigo, estado, nivel } = req.body;
-    const estadoNivel = {nivel}
-    const nuevoEstado = { estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
+    const { codigo, estado, nivel, email } = req.body;
+    const estadoNivel = { nivel, email }
+    const nuevoEstado = { email, estadoAdm: estado } // Estado Consultor Aprobado, Pendiente, Bloqueado
     const c1 = await pool.query('UPDATE users SET ? WHERE codigo = ? AND rol = "Consultor"', [nuevoEstado, codigo])
     const c2 = await pool.query('UPDATE consultores SET ? WHERE codigo = ?', [estadoNivel, codigo])
     // Capturando el Consultor Aprobado
     let consultor = await consultarDatos('users')
     consultor = consultor.find(x => x.codigo == codigo && x.rol == 'Consultor')
-
-    console.group("CONSULTOR INFORMATION")
-    console.log(c1);
-    console.log("consultor");
-    console.log(consultor);
-    console.groupEnd();
 
     if (c1.changedRows > 0) {
         // Enviando Email - Consultor Aprobado
@@ -169,6 +163,22 @@ dashboardController.bloquearConsultor = async (req, res) => {
             })
         }
     }
+}
+
+dashboardController.eliminarConsultor = async (req, res) => {
+    const { id } = req.body
+    let result = false;
+    let datos = await consultarDatos('consultores_asignados')
+    datos = datos.find(x => x.consultor == id)
+    console.log(datos);
+    if (!datos) {
+        datos = await consultarDatos('consultores')
+        datos = datos.find(x => x.id_consultores == id)
+        await eliminarDatos('users', `WHERE codigo = "${datos.codigo}"`)
+        await eliminarDatos('consultores', `WHERE id_consultores = "${id}"`)
+        result = true;
+    }
+    res.send(result)
 }
 
 // EMPRESAS
@@ -1214,6 +1224,23 @@ dashboardController.bloquearEmpresa = async (req, res) => {
             })
         }
     }
+}
+
+dashboardController.eliminarEmpresa = async (req, res) => {
+    const { id } = req.body
+    let result = false;
+    let datos = await consultarDatos('consultores_asignados')
+    datos = datos.find(x => x.empresa == id)
+    console.log(datos);
+    if (!datos) {
+        console.log("Entré pa eliminar");
+        datos = await consultarDatos('empresas')
+        datos = datos.find(x => x.id_empresas == id)
+        await eliminarDatos('users', `WHERE codigo = "${datos.codigo}"`)
+        await eliminarDatos('empresas', `WHERE id_empresas = "${id}"`)
+        result = true;
+    }
+    res.send(result)
 }
 
 /** PAGOS MANUALES ETAPA 1 y 2 */
