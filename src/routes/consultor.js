@@ -17,7 +17,7 @@ const rutaAlmacen = multer.diskStorage({
     },
 
     filename: function (req, file, callback) {
-        urlPropuestaNegocio = "Propuesta-Técnica-Etapa2-" + file.originalname;
+        urlPropuestaNegocio = "Propuesta-Técnica-" + file.originalname;
         console.log(urlPropuestaNegocio)
         callback(null, urlPropuestaNegocio)
     }
