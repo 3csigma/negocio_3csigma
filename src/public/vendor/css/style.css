@@ -37962,8 +37962,8 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .light.badge-danger {
-  background-color: #fff3f7;
-  color: #F94687;
+  background-color: #ffcaca;
+  color: #DC0000;
 }
 
 [data-theme-version="dark"] .light.badge-danger {

@@ -6,7 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
 
-const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, nuevoEstudiante_paraTutor, tutor_asignadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
+const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, nuevoEstudiante_paraTutor, tutor_asignadoHTML, informesHTML, estudianteSubeInforme, tutorSubeCorrecciones, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { log } = require('console');
 const { loadavg } = require('os');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
@@ -1195,13 +1195,49 @@ dashboardController.editarEmpresa = async (req, res) => {
 }
 
 dashboardController.correcciones = async (req, res) => {
+    const emailUser = req.user.email
     const {id_empresa, informe, correccion} = req.body
     let row = await consultarDatos('informes');
+    let consultores_asignados = await consultarDatos('consultores_asignados');
+    let consultores = await consultarDatos('consultores');
+    let empresas = await consultarDatos('empresas');
+    const user = consultores.find(x => x.email == emailUser)
+
+    let etapa
+    if (informe == 'Informe diagnóstico') etapa = 1
+    if (informe == 'Informe de dimensión producto') etapa = 2
+    if (informe == 'Informe de dimensión administración') etapa = 3
+    if (informe == 'Informe de dimensión operaciones') etapa = 4
+    if (informe == 'Informe de dimensión marketing') etapa = 5
+    if (informe == 'Informe de análisis') etapa = 6
+    if (informe == 'Informe de plan estratégico') etapa = 7
 
     row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
+    empresas = empresas.find(e => e.id_empresas == id_empresa)
+    let result = consultores_asignados.find(r => r.empresa == id_empresa && r.orden == etapa)
+    const estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado == user.id_tutor)
+
+    let nombre_estudiante = estudiante.nombres
+    let email = estudiante.email
+    let nombreTutor = user.nombres
+    let nombreEmpresa = empresas.nombres
+     // PARA EL ESTUDIANTE 
+     const mensaje = "Tu tutor ha corrgido tu informe";
+     let plantilla = tutorSubeCorrecciones(nombre_estudiante, nombreTutor, informe, nombreEmpresa);
+   
+
     if (row) {
         const obj = {correccion}
-        await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+       let upd = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+       if (upd.affectedRows > 0) {
+        plantilla = tutorSubeCorrecciones(nombre_estudiante, nombreTutor, informe, nombreEmpresa);
+        }
+        const resultEstudiante = await sendEmail(email, mensaje, plantilla)
+        if (resultEstudiante == false) {
+            console.log("\nOcurrio un error inesperado al enviar el email *Estudiante*")
+        } else {
+            console.log("\n<<<<< Se envío email para el estudiante")
+        }
     }
     res.send(true)
 }
@@ -1748,6 +1784,11 @@ dashboardController.guardarInforme = async (req, res) => {
     console.log(req.body)
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
+    
+    const emailUser = req.user.email
+    const consultor = await consultarDatos('consultores')
+    const clog = consultor.find(x => x.email == emailUser)
+    const tutor = consultor.find(x => x.id_tutor == clog.tutor_asignado)
 
     const fecha = new Date()
     const nuevoInforme = {
@@ -1784,29 +1825,45 @@ dashboardController.guardarInforme = async (req, res) => {
         let asunto = 'Se ha cargado un nuevo ' + tipoInforme
         let template = informesHTML(nombreEmpresa_, tipoInforme);
         const texto = "Tu consultor ha cargado el informe general."
-        
+
+        // PARA EL TUTOR 
+        const nombreTutor = tutor.nombres
+        const nombre_estudiante = clog.nombres
+        const mensaje = "Un estudiante ha subido un nuevo informe";
+        let plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+
         if (nombreInforme == 'Informe diagnóstico') {
             asunto = 'Diagnóstico de negocio finalizado'
             const etapa = 'Diagnóstico de negocio';
             const link = 'diagnostico-de-negocio';
             template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
         }
         if (nombreInforme == 'Informe de análisis') {
             asunto = 'Análisis de negocio finalizado'
             const etapa = 'Análisis de negocio';
             const link = 'analisis-de-negocio';
             template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+
         }
         if (nombreInforme == 'Informe de plan estratégico') {
             asunto = 'Plan estratégico de negocio finalizado'
             const etapa = 'Plan estratégico de negocio';
             const link = 'plan-estrategico';
             template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
         }
         
         // Enviar Email
         const resultEmail = await sendEmail(email, asunto, template)
+        const resultTutor = await sendEmail(tutor.email, mensaje, plantilla)
 
+        if (resultTutor == false) {
+            console.log("\nOcurrio un error inesperado al enviar el email *Tutor asignado*")
+        } else {
+            console.log("\n<<<<< Se envío email para el tutor")
+        }
         if (resultEmail == false) {
             console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de informe subido >>>> \n")
         } else {

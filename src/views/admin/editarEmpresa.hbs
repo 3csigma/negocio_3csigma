@@ -850,12 +850,12 @@
                                                                     <button style="margin: 0 auto; margin-top: -8px;color: white;filter: grayscale(1)" class="btn btn-primary shadow btn-xs sharp"><i class="fa fa-search"></i></button>
                                                                     {{/if}}
                                                                 {{else}}
-                                                                <table border="0" cellspacing="0" style="margin: 0 auto;">
+                                                                <table border="0" cellspacing="0" style="margin:0 auto">
                                                                     <tr>
                                                                         {{#if botonesEtapas.uno}}
-                                                                        <td style="border-color: transparent; padding:3px">
+                                                                        <td style="border-color: transparent; padding:3px 0px 9px">
                                                                                 {{#if crearCorrenccion}}
-                                                                                        {{#if informeDiag}}
+                                                                                    {{#if informeDiag}}
                                                                                         <div data-toggle="modal" data-target="#corregirDiag"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
@@ -884,6 +884,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeDiag}}
@@ -903,7 +909,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                            {{{frmInfo.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -914,15 +920,17 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
-                                                                            <label for="inputInformeDiag" >
-                                                                                <div id="btnSubirInforme"
-                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                    style="border-color: white;">
-                                                                                    <i class="fa fa-upload"></i>
-                                                                                </div>
-                                                                            </label>
-                                                                            <input id="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
-                                                                        </td>
+                                                                            </td>
+                                                                            <td style="border-color: transparent; padding:3px">
+                                                                                <label for="inputInformeDiag" >
+                                                                                    <div id="btnSubirInforme"
+                                                                                        class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+                                                                                        style="border-color: white;">
+                                                                                        <i class="fa fa-upload"></i>
+                                                                                    </div>
+                                                                                </label>
+                                                                                <input id="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
+                                                                            </td>
                                                                         {{/if}}
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; border-color: #FED061; margin-left:-3px" target="_blank" class="btn color_tertiary shadow btn-xs sharp"><i class="fa fa-search"></i></a>
@@ -1359,7 +1367,7 @@
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px">
+                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
                                                                                  {{#if crearCorrenccion}}
                                                                                         {{#if informeProd}}
                                                                                         <div data-toggle="modal" data-target="#corregirInfoProd"
@@ -1390,6 +1398,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeProd}}
@@ -1409,7 +1423,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                           {{{infoProd.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -1419,6 +1433,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                            </td>
+                                                                            <td style="border-color: transparent; padding:3px">
                                                                                 <label for="inputInformeProd">
                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -1426,7 +1442,7 @@
                                                                                     </div>
                                                                                 </label>
                                                                                 <input id="inputInformeProd" type="file" style="display:none" name="inputInformeProd"
-                                                                                    accept="application/pdf" />
+                                                                                    accept="application/pdf"/>
                                                                             </td>
                                                                             {{else}}
                                                                             {{#unless info.prod.url}}
@@ -1465,7 +1481,7 @@
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px">
+                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
                                                                                  {{#if crearCorrenccion}}
                                                                                     {{#if informeAdmin}}
                                                                                         <div data-toggle="modal" data-target="#corregirAdmin"
@@ -1496,6 +1512,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeAdmin}}
@@ -1515,7 +1537,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                           {{{infoAdmin.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -1525,6 +1547,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                            </td>
+                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="inputInformeAdmin">
                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -1569,7 +1593,7 @@
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px">
+                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
                                                                                  {{#if crearCorrenccion}}
                                                                                     {{#if informeOperaciones}}
                                                                                         <div data-toggle="modal" data-target="#corregirOpe"
@@ -1600,6 +1624,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeOperaciones}}
@@ -1619,7 +1649,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                           {{{infoOpe.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -1629,6 +1659,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                            </td>
+                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="inputInformeOperaciones" >
                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -1672,7 +1704,7 @@
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px">
+                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
                                                                                  {{#if crearCorrenccion}}
                                                                                     {{#if informeMarketing}}
                                                                                         <div data-toggle="modal" data-target="#informeMarketing"
@@ -1703,6 +1735,11 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeMarketing}}
@@ -1722,7 +1759,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                           {{{infoM.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -1732,6 +1769,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                            </td>
+                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="inputInformeMarketing" >
                                                                                      <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -1800,7 +1839,7 @@
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
                                                                             {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px">
+                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
                                                                                   {{#if crearCorrenccion}}
                                                                                         {{#if informeAnalisis}}
                                                                                         <div data-toggle="modal" data-target="#corregirAnalisis"
@@ -1831,6 +1870,12 @@
                                                                                             </div>
                                                                                         </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeAnalisis}}
@@ -1850,7 +1895,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                           {{{infoA.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -1860,6 +1905,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                            </td>
+                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <label for="inputInformeGeneral" >
                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;">
@@ -2957,7 +3004,7 @@
                                                                 <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                     <tr>
                                                                         {{#if botonesEtapas.plan2}}
-                                                                        <td style="border-color: transparent; padding:3px">
+                                                                        <td style="border-color: transparent; padding:3px 0px 10px">
                                                                             {{#if crearCorrenccion}}
                                                                                     {{#if informePlan}}
                                                                                     <div data-toggle="modal" data-target="#corregirPlanE"
@@ -2988,6 +3035,12 @@
                                                                                         </div>
                                                                                     </div>
                                                                                     </div>
+                                                                                    {{else}}
+                                                                                        <div 
+                                                                                            class="btn btn-primary shadow btn-xs sharp"
+                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
+                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        </div>
                                                                                     {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informePlan}}
@@ -3007,7 +3060,7 @@
                                                                                                     </div>
                                                                                                     <div class="modal-body">
                                                                                                         <form>
-                                                                                                        <div class="form-group">
+                                                                                                        <div class="form-group" style="padding: 53px;">
                                                                                                            {{{info.correccion}}}
                                                                                                         </div>
                                                                                                         </form>
@@ -3018,6 +3071,8 @@
                                                                                         </div>
                                                                                     {{/if}}
                                                                                 {{/if}}
+                                                                        </td>
+                                                                        <td style="border-color: transparent; padding:3px">
                                                                             <label for="inputInformePlan">
                                                                                 <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                     style="border-color: white;">
