@@ -103,11 +103,11 @@ consultorController.enviarPropuesta = async (req, res) => {
         asunto = 'Tenemos una propuesta de plan estratégico para tu empresa'
         etapa = 'Plan Estratégico'
         link = 'plan-estrategico'
-    } else if (tipo_propuesta == 'Proyecto de Consultoría') {
-        hash = '#proyecto-de-consultoria';
-        asunto = 'Tenemos una propuesta de proyecto de consultoría para tu empresa'
-        etapa = 'Proyecto de Consultoria'
-        link = 'proyecto-de-consultoria'
+    } else if (tipo_propuesta == 'Plan empresarial') {
+        hash = '#plan-empresarial';
+        asunto = 'Tenemos una propuesta de plan empresarial para tu empresa'
+        etapa = 'Plan Empresarial'
+        link = 'plan-empresarial'
     } else {
         hash = hash;
     }
@@ -484,7 +484,7 @@ consultorController.solicitarArchivo = async (req, res) => {
                 link = 'analisis-de-negocio'
             } else if (tabla == 'archivos_empresarial') {
                 etapa = 'Proyecto de Consultoría'
-                link = 'proyecto-de-consultoria'
+                link = 'plan-empresarial'
             } else {
                 etapa = 'Plan Estratégico de Negocio'
                 link = 'plan-estrategico'

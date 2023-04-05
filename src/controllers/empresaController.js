@@ -783,7 +783,7 @@ empresaController.guardarArchivos = async (req, res) => {
         info = consultores.find(x => x.id_consultores == info.consultor)
     } else if (etapa == 3) {
         link = '../archivos_empresarial_empresa/Proyecto-de-consultoría_'+req.file.originalname;
-        linkEmail = 'proyecto-de-consultoria';
+        linkEmail = 'plan-empresarial';
         txtEtapa = 'Proyecto de consultoría'
         info = info.find(x => x.empresa == empresa && x.orden == 3)
         const consultores = await consultarDatos('consultores')

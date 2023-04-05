@@ -135,7 +135,7 @@
             $("#txtDimension"+i).hide();
             $("#txtDescripcion"+i).hide();
             window.location.hash = 'analisis_'
-            if (i == 3) window.location.hash = 'proyecto-consultoria';
+            if (i == 3) window.location.hash = 'plan-empresarial';
             else if (i == 4) window.location.hash = 'plan-estrategico';
             fetch('/solicitar-archivos-empresa', {
                 method: 'POST',
@@ -146,7 +146,7 @@
                 .then(response => {
                     if (response) {
                         window.location.hash = 'analisis_'
-                        if (i == 3) window.location.hash = 'proyecto-consultoria';
+                        if (i == 3) window.location.hash = 'plan-empresarial';
                         else if (i == 4) window.location.hash = 'plan-estrategico';
                         location.reload();
                     } else {
@@ -178,7 +178,7 @@
                     .then(response => {
                         if (response) {
                             window.location.hash = 'analisis_'
-                            if (tab == 3) window.location.hash = 'proyecto-consultoria';
+                            if (tab == 3) window.location.hash = 'plan-empresarial';
                             else if (tab == 4) window.location.hash = 'plan-estrategico';
                             location.reload();
                         } else {

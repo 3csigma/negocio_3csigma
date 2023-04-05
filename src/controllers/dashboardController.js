@@ -762,7 +762,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     /**************************************************************************************** */
     /* => Plan Empresarial ***************************************************************** */
     // PROPUESTA
-    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan Empresarial')
+    propuesta.empresarial = propuestas.find(i => i.empresa == idEmpresa && i.tipo_propuesta == 'Plan empresarial')
     let pagos_empresarial = {}, tareasEmpresarial = null;
     const empresarial = {                     
         negocio: { ver: 'none' },
