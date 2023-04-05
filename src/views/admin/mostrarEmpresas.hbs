@@ -50,7 +50,8 @@
                                                 <a  href="/empresas/{{codigo}}" class="btn color_primary shadow btn-xs sharp mr-1 text-white">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a onclick="bloquearEmpresa({{id_empresas}})" class="btn btn-danger shadow btn-xs sharp text-white"><i class="fa fa-ban"></i></a>
+                                                <a onclick="bloquearEmpresa({{id_empresas}})" class="btn btn-warning shadow btn-xs sharp text-white"><i class="fa fa-ban"></i></a>
+                                                <a onclick="eliminarEmpresa({{id_empresas}})" class="btn btn-danger shadow btn-xs sharp text-white"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -97,6 +98,40 @@
                             Swal.fire(
                                 'Error!',
                                 'La empresa ya está bloqueada/inactiva.',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
+
+    function eliminarEmpresa(id) {
+        Swal.fire({
+            title: '¿Deseas eliminar esta empresa?',
+            text: "Este proceso no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FFE000',
+            cancelButtonColor: '#000000',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarEmpresa', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response){
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                '¡Error!',
+                                'No sé puede eliminar porque la empresa ya está en proceso de consultoría.',
                                 'error'
                             )
                         }
