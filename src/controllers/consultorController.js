@@ -1,7 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
 const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML, solicitarArchivoHTML } = require('../lib/mail.config')
-const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
+const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers');
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -79,7 +79,7 @@ consultorController.empresasAsignadas = async (req, res) => {
 // Etapa 2 - Análisis de Negocio
 /********************************************************************************/
 /* ------------------------------------------------------------------------------------------------ */
-// PROPUESTA DE ANÁLISIS DE NEGOCIO
+// PROPUESTA DE ANÁLISIS, PLAN EMPRESARIAL Y ESTRATÉGICO
 consultorController.enviarPropuesta = async (req, res) => {
     const { precioPropuesta, idEmpresa, codigo, tipo_propuesta, limiteSub } = req.body
     const empresas = await consultarDatos('empresas')
@@ -94,22 +94,25 @@ consultorController.enviarPropuesta = async (req, res) => {
     const precio_per2 = parseFloat(precioPropuesta) * 0.2
     const precio_per3 = parseFloat(precioPropuesta) * 0.2
 
-    let hash = '#analisis_';
-    let asunto = 'Tenemos una propuesta de análisis de negocio para tu empresa'
-    let etapa = 'Análisis de Negocio'
-    let link = 'analisis-de-negocio'
-    if (tipo_propuesta == 'Plan estratégico') {
+    let hash = '';
+    let asunto = ''
+    let etapa = ''
+    let link = '' 
+    if (tipo_propuesta == 'Análisis de negocio') {
+        hash = '#analisis_';
+        asunto = 'Tenemos una propuesta de análisis de negocio para tu empresa'
+        etapa = 'Análisis de Negocio'
+        link = 'analisis-de-negocio' 
+    } else if (tipo_propuesta == 'Plan estratégico') {
         hash = '#plan-estrategico';
         asunto = 'Tenemos una propuesta de plan estratégico para tu empresa'
         etapa = 'Plan Estratégico'
         link = 'plan-estrategico'
-    } else if (tipo_propuesta == 'Plan empresarial') {
+    } else {
         hash = '#plan-empresarial';
         asunto = 'Tenemos una propuesta de plan empresarial para tu empresa'
         etapa = 'Plan Empresarial'
         link = 'plan-empresarial'
-    } else {
-        hash = hash;
     }
 
     if (fila) {
@@ -126,11 +129,8 @@ consultorController.enviarPropuesta = async (req, res) => {
     // Enviar Email
     const resultEmail = await sendEmail(email, asunto, template)
 
-    if (resultEmail == false) {
-        console.log("Ocurrio un error inesperado al enviar el email propuesta de análisis")
-    } else {
-        console.log("\n<<<<< Se envió Email de la propuesta de Análisis de Negocio >>>>>\n")
-    }
+    resultEmail ? console.log("\n<<<<< Se envió Email de la propuesta de " + tipo_propuesta)
+    : console.log("Ocurrio un error inesperado al enviar el email propuesta de " + tipo_propuesta)
 
     res.redirect('/empresas/' + codigo + hash)
 }
