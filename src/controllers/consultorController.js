@@ -1,7 +1,7 @@
 const consultorController = exports;
 const pool = require('../database')
 const { sendEmail, propuestaCargadaHTML, tareaCompletadaHTML, tareaNuevaHTML, solicitarArchivoHTML } = require('../lib/mail.config')
-const { consultarDatos, insertarDatos, eliminarDatos } = require('../lib/helpers')
+const { consultarDatos, insertarDatos, eliminarDatos, consultarTareasConsultores } = require('../lib/helpers')
 
 // Dashboard Administrativo
 consultorController.index = async (req, res) => {
@@ -42,10 +42,16 @@ consultorController.index = async (req, res) => {
         })
     }
 
+    /**
+     * TAREAS ADMINISTRADOR
+     */
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
+
     res.render('consultor/panelConsultor', {
         consultorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
-        ultimosInformes
+        ultimosInformes, ide_consultor: consultor.id_consultores, tareas
     });
 }
 
@@ -323,7 +329,7 @@ consultorController.guardarAnalisisMarketing = async (req, res) => {
 /********************************************************************************/
 // Etapa 3 - Plan Estratégico de Negocio
 /********************************************************************************/
-// AGREGAR NUEVAS TAREAS x EMPRESA
+// AGREGAR NUEVAS TAREAS (PARA EMPRESAS Y CONSULTORES)
 consultorController.agregarTarea = async (req, res) => {
     const { actividad, fecha_inicio, fecha_entrega, dimension, empresa, nombreEmpresa, email } = req.body
     // nuevaTarea.fecha_inicio = new Date().toLocaleDateString("en-CA")
@@ -357,10 +363,15 @@ consultorController.editarTarea = async (req, res) => {
         infoTarea = infoTarea.find(x => x.id === idTarea)
         console.log("\n *********** INFO TAREA EMPRESARIAL DB >>> ", infoTarea)
         res.send(infoTarea)
-    } else {
+    } else if (item == 2) {
         let infoTarea = await consultarDatos('tareas_plan_estrategico')
         infoTarea = infoTarea.find(x => x.id === idTarea)
         console.log("\n *********** INFO TAREA ESTRATEGICO DB >>> ", infoTarea)
+        res.send(infoTarea)
+    } else {
+        let infoTarea = await consultarDatos('tareas_consultores')
+        infoTarea = infoTarea.find(x => x.id === idTarea)
+        console.log("\n *********** INFO TAREAS CONSULTORES DB >>> ", infoTarea)
         res.send(infoTarea)
     }
 }
@@ -377,7 +388,7 @@ consultorController.actualizarTarea = async (req, res) => {
         res.send(tarea)
     }
     // Para Plan Estrategico
-    else {
+    else if (item == 2) {
         const actualizarTarea = { actividad, responsable, descripcion, fecha_inicio, fecha_entrega, dimension, estado, prioridad }
         if (estado == 2) {
             const email = req.body.email;
@@ -394,12 +405,16 @@ consultorController.actualizarTarea = async (req, res) => {
         const tarea = await pool.query('UPDATE tareas_plan_estrategico SET ? WHERE id = ?', [actualizarTarea, idTarea])
         console.log("INFO TAREA PLAN ESTRATÉGICO DB >>> ", tarea)
         res.send(tarea)
+    } else {
+        const actualizarTarea = { actividad, responsable, descripcion, fecha_inicio, fecha_entrega, estado, prioridad }
+        const tarea = await pool.query('UPDATE tareas_consultores SET ? WHERE id = ?', [actualizarTarea, idTarea])
+        console.log("INFO TAREA TAREAS CONSULTORES DB >>> ", tarea)
+        res.send(tarea)
     }
 }
 
 // COMENTARIO DE TAREAS
 consultorController.comentarioTareas = async (req, res) => {
-    console.log("\n---***--\**--**\nINFO DE TAREA A EDITAR -- COMENTARIOS -- ", req.body);
     const { comentario, idTarea, fecha, item } = req.body
     let objActualizar = {mensajes:null}, resultado = false;
     let datosTareas = false;
@@ -407,8 +422,11 @@ consultorController.comentarioTareas = async (req, res) => {
     if (item == 1) {
         datosTareas = await consultarDatos('tareas_plan_empresarial')
         datosTareas = datosTareas.find(x => x.id == idTarea)
-    } else {
+    } else if (item == 2) {
         datosTareas = await consultarDatos('tareas_plan_estrategico')
+        datosTareas = datosTareas.find(x => x.id == idTarea)
+    } else {
+        datosTareas = await consultarDatos('tareas_consultores')
         datosTareas = datosTareas.find(x => x.id == idTarea)
     }
 
@@ -442,9 +460,16 @@ consultorController.comentarioTareas = async (req, res) => {
         if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
             resultado = true;
         }
-    } else {
+    } else if (item == 2) {
         const addMensaje = await pool.query('UPDATE tareas_plan_estrategico SET ? WHERE id = ?', [objActualizar, idTarea])
         console.log("\nMENSAJE AGREGADO A DB PLAN ESTRATÉGICO: ", addMensaje)
+        console.log("------------------------------------------------");
+        if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
+            resultado = true;
+        }
+    } else {
+        const addMensaje = await pool.query('UPDATE tareas_consultores SET ? WHERE id = ?', [objActualizar, idTarea])
+        console.log("\nMENSAJE AGREGADO A DB TAREAS CONSULTORES: ", addMensaje)
         console.log("------------------------------------------------");
         if (addMensaje.affectedRows > 0 || addMensaje.changedRows == 1) {
             resultado = true;
@@ -461,10 +486,14 @@ consultorController.eliminarTarea = async (req, res) => {
     if (item == 1) {
         const infoTarea = await eliminarDatos('tareas_plan_empresarial', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN EMPRESARIAL ---- ", infoTarea)
-    } else {
+    } else if (item == 2) {
         const infoTarea = await eliminarDatos('tareas_plan_estrategico', `WHERE id = ${idTarea}`)
         console.log("ELIMINAR => INFO PLAN ESTRATÉGICO ---- ", infoTarea)
+    } else {
+        const infoTarea = await eliminarDatos('tareas_consultores', `WHERE id = ${idTarea}`)
+        console.log("ELIMINAR => INFO TAREAS CONSULTORES ---- ", infoTarea)
     }
+
     res.send(true)
 }
 
@@ -536,4 +565,14 @@ consultorController.nuevoRendimiento = async (req, res) => {
     // await pool.query('INSERT INTO rendimiento_empresa SET ?', [nuevoRendimiento])
     await insertarDatos('rendimiento_empresa', nuevoRendimiento)
     res.redirect('/empresas/' + codigo)
+}
+
+/************************************************************************************** */
+// AGREGAR NUEVAS TAREAS CONSULTORES/ADMIN
+consultorController.agregarTareaConsultores = async (req, res) => {
+    const { consultor, actividad, fecha_inicio, fecha_entrega } = req.body
+    const nuevaTarea = { consultor, actividad, fecha_inicio, fecha_entrega }
+    const tarea = await insertarDatos('tareas_consultores', nuevaTarea)
+    console.log("INFO TAREA DB >>> ", tarea)
+    res.send(tarea)
 }

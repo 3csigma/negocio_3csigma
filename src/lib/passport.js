@@ -26,7 +26,7 @@ passport.use('local.registro', new LocalStrategy({
     const { nombres, apellidos, nombre_empresa, zh_empresa } = req.body
     const rol = 'Empresa'
     // Verificando si el usuario existe o no
-    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
+    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
 
         // Si ocurre un error
         if (err) throw err;
@@ -94,7 +94,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
 
     const { nombres, apellidos, countryCode, telConsul, direccion_consultor, experiencia_years, zh_consultor } = req.body
     const rol = 'Consultor'
-    pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
+    pool.query('SELECT * FROM users WHERE email = ?', [email,], async (err, result) => {
 
         if (err) throw err;
 
@@ -200,9 +200,6 @@ passport.use('local.login', new LocalStrategy({
                 if (req.session.initialised) {
                     req.session.admin = true;
                 }
-                console.group("\nDESDE PASSPORT");
-                console.log(req.session);
-                console.groupEnd();
                 return done(null, usuario, req.flash('success', 'Bienvenido Admin'))
             }
 
