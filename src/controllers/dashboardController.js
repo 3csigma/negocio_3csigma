@@ -3,7 +3,7 @@ const pool = require('../database')
 const passport = require('passport')
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos, eliminarDatos } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos, eliminarDatos, consultarTareasConsultores } = require('../lib/helpers')
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
@@ -67,7 +67,15 @@ dashboardController.admin = async (req, res) => {
     }
     // FIN DE LA FUNCIÓN <<====
 
-    res.render('admin/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm });
+    /**
+     * TAREAS ADMINISTRADOR
+     */
+    let consultor = await consultarDatos('consultores')
+    consultor = consultor.find(x => x.codigo == req.user.codigo)
+    const fechaActual = new Date().toLocaleDateString('fr-CA');
+    const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
+
+    res.render('admin/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm, ide_consultor: consultor.id_consultores, tareas });
 
 }
 
