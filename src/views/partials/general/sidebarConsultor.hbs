@@ -1,0 +1,416 @@
+<link rel="stylesheet" href="../css/sidebarRight.css">
+
+<div class="pb-5 chatbox" id="sidebarConsultor">
+    <div id="close-sidebar-consultor" class="chatbox-close"></div>
+    <div class="contentAll p-0 barra-scroll overflow-y-auto">
+        <div class="custom-sidebar">
+            <div class="mb-4">
+                <input type="hidden" id="idTarea-sidebar-c">
+                <textarea id="actividad-sidebar-c" class="form-control mb-2" maxlength="68" placeholder="Escribe un título..">{{#if tarea.actividad}}{{actividad}}{{/if}}</textarea>
+                <textarea id="descripcion-sidebar-c" rows="3" class="form-control" maxlength="195" placeholder="Escribe una descripción detallada u observación para esta tarea.." style="width: 100%;"></textarea>
+            </div>
+
+            {{!-- MINI TARJETAS (SELECTORES e INFO DEL TIEMPO DE LA TAREA --}}
+            <div class="row mb-1">
+                <div class="col-5">
+                    <select class="form-select" id="estado-c" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em;">
+                        <option value="0">Pendiente</option>
+                        <option value="1">En Proceso</option>
+                        <option value="2">Completada</option>
+                    </select>
+                    <span id="estado-sidebar-c" class="badge light badge-success color_tertiary" style="color: #000000; padding: 10px 30px; padding-left: 20px; display:none; margin: 0px -11px"></span>
+                </div>
+                <div class="col-5" id="prioridad-sidebar-div-c">
+                    <select class="form-select" id="prioridad-c" style="border-radius: 1.25rem;height: 43px;width: 140px;padding-left: 1em; margin-left: -26px;font-size: 14px;">
+                        <option value="0">Sin especificar</option>
+                        <option value="1">Baja</option>
+                        <option value="2">Media</option>
+                        <option value="3">Alta</option>
+                        <option value="4">Crítica</option>
+                    </select>
+                </div>
+                <div class="col-2" style="margin-left: -52px;">
+                    <span id="tiempo-sidebar-c" class="badge light badge-success color_tertiary text-black" style="padding: 10px 30px; padding-left: 20px;"><i class="fa-regular fa-clock pr-2"></i> <span id="tiempoTxt-sidebar1"></span>
+                </div>
+                <div class="col-12">
+                    <hr style="border-top: 1px solid #fff !important;">                                
+                </div>
+            </div>
+
+            {{!-- RESPONSABLE --}}
+            <div class="row">
+                <div class="col-2">
+                    <svg width="74" height="42" viewBox="0 0 51 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M34 41V36.6667C34 34.3681 33.0729 32.1637 31.4225 30.5384C29.7722 28.9131 27.5339 28 25.2 28H9.8C7.46609 28 5.22778 28.9131 3.57746 30.5384C1.92714 32.1637 1 34.3681 1 36.6667L1 41" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M18 19C22.9706 19 27 14.9706 27 10C27 5.02944 22.9706 1 18 1C13.0294 1 9 5.02944 9 10C9 14.9706 13.0294 19 18 19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M37 18.5L41.3333 23L50 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="col-10" style="padding-left: 2em;">
+                    <p class="txtSidebar"><span style="padding-left: 10px;">Asignado a: </span><br>
+                        <input type="text" id="responsable-sidebar-c" placeholder="Escribe un nombre.." class="subtitulos-Sidebar" value="{{tarea.responsable}}" maxlength="25" />
+                    </p>
+                </div>
+            </div>
+            {{!-- FECHA DE INICIO --}}
+            <div class="row">
+                <div class="col-2">
+                    <svg width="60" height="52" viewBox="0 0 33 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1.15869 14.1836H31.5585" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.9263 20.8457H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.3584 20.8457H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.77393 20.8457H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.9263 27.4736H23.9432" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16.3584 27.4736H16.3754" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.77393 27.4736H8.7909" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23.2471 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M9.46973 1.55566V7.16865" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M23.5786 4.24951H9.13715C4.12846 4.24951 1 7.03969 1 12.1685V27.6031C1 32.8125 4.12846 35.6672 9.13715 35.6672H23.5628C28.5873 35.6672 31.7 32.8609 31.7 27.7322V12.1685C31.7158 7.03969 28.6031 4.24951 23.5786 4.24951Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="col-10" style="padding-left: 2em;">
+                    <p class="txtSidebar">
+                        <span style="padding-left: 10px;">Fecha de inicio: </span><br>
+                        <duet-date-picker id="fechaIni-sidebar-c" value="{{#if tarea.fecha_inicio}}{{tarea.fecha_inicio}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                        <span id="txtFechaIni-c" style="display: none;padding-left: 10px;"></span>
+                    </p>
+                </div>
+            </div>
+            {{!-- FECHA DE ENTREGA --}}
+            <div class="row">
+                <div class="col-2">
+                    <svg width="60" height="52" viewBox="0 0 32 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M27.8904 2.65313H26.2118V2.32826C26.2118 1.04501 25.1668 0 23.8836 0C22.6003 0 21.5553 1.04501 21.5553 2.32826V2.65313H10.4447V2.32826C10.4447 1.04501 9.39966 0 8.11641 0C6.83316 0 5.78816 1.04501 5.78816 2.32826V2.65313H4.10964C1.84095 2.65313 0 4.49949 0 6.76277V30.5435C0 32.8122 1.84636 34.6531 4.10964 34.6531H27.8904C30.1591 34.6531 32 32.8068 32 30.5435V6.76277C32 4.49408 30.1591 2.65313 27.8904 2.65313ZM22.8927 2.32826C22.8927 1.78139 23.3367 1.33739 23.8836 1.33739C24.4305 1.33739 24.8744 1.78139 24.8744 2.32826V5.8423C24.8744 6.38917 24.4305 6.83316 23.8836 6.83316C23.3367 6.83316 22.8927 6.38917 22.8927 5.8423V2.32826ZM7.12555 2.32826C7.12555 1.78139 7.56954 1.33739 8.11641 1.33739C8.66328 1.33739 9.10728 1.78139 9.10728 2.32826V5.8423C9.10728 6.38917 8.66328 6.83316 8.11641 6.83316C7.56954 6.83316 7.12555 6.38917 7.12555 5.8423V2.32826V2.32826ZM30.6626 30.5435C30.6626 32.0704 29.4173 33.3157 27.8904 33.3157H4.10964C2.58274 33.3157 1.33739 32.0704 1.33739 30.5435V11.0782H30.668V30.5435H30.6626ZM30.6626 9.74078H1.33739V6.76277C1.33739 5.23046 2.58274 3.99052 4.10964 3.99052H5.78816V5.84772C5.78816 7.13096 6.83316 8.17597 8.11641 8.17597C9.39966 8.17597 10.4447 7.13096 10.4447 5.84772V3.99052H21.5553V5.84772C21.5553 7.13096 22.6003 8.17597 23.8836 8.17597C25.1668 8.17597 26.2118 7.13096 26.2118 5.84772V3.99052H27.8904C29.4227 3.99052 30.6626 5.23587 30.6626 6.76277V9.74078V9.74078Z" fill="white"/>
+                        <path d="M11.977 28.0041L26.997 14.511C27.2731 14.2619 27.2948 13.8396 27.0457 13.5689C26.7966 13.2927 26.3743 13.2711 26.1036 13.5202L12.0853 26.109L6.77903 20.0934C6.53537 19.8173 6.11304 19.7902 5.8369 20.0339C5.56075 20.2775 5.53368 20.6998 5.77734 20.976L11.977 28.0041Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="col-10" style="padding-left: 2em;">
+                    <p class="txtSidebar"><span style="padding-left: 10px;">Fecha de entrega: </span><br>
+                        <duet-date-picker id="fechaFin-sidebar-c" value="{{#if tarea.fecha_entrega}}{{tarea.fecha_entrega}}{{/if}}" class="fechaSidebar" min="{{fechaActual}}" first-day-of-week="0"></duet-date-picker>
+                        <span id="txtFechaFin-c" style="display: none;padding-left: 10px;"></span>
+                    </p>
+                </div>
+            </div>
+
+            {{!-- MENSAJES --}}
+            <div class="row">
+                <div id="divComentarios-c" class="widget-timeline dz-scroll style-1 height180 w-100 ps ps--active-y" style="display: none;">
+                    <ul class="timeline" id="listaComentarios-c" ></ul>
+                </div>
+            </div>
+            <div class="row" id="divTxtComentario-c" style="height: 108px;background: #f7f7f7;justify-content: right;border-radius: 12px;">
+                <textarea id="comentario-c" rows="2" class="form-control" placeholder="Escribe un mensaje o actualización..." style="width: 100%; border-radius: 1em; padding: 1em; border:none;"></textarea>
+                    <button id="btnComentario-c" class="color_primary text-white" onclick="addComentario('-c')" style="width: 28%;border: none;height: 32px; margin-right: 10px;font-size: 13px;">
+                        Comentar
+                    </button>
+            </div>
+
+            {{!-- BOTÓN DE GUARDAR CAMBIOS - ACTUALIZAR TAREA --}}
+            <div class="row" id="btnGuardar-sidebar-c">
+                <div class="col-md-12 mt-2 d-flex justify-content-center align-items-center">
+                    <button onclick="actualizarTarea_Consultor()" class="btn color_tertiary text-black" style="margin-top: 1em;padding: 10px 15px;border:none">
+                        <p class="font-w500 m-auto">Guardar Cambios</p>
+                    </button>
+                </div>
+            </div>
+
+            <div class="ps__rail-y" style="top: 159px; height: 831px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 134px; height: 697px;"></div></div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        $("#close-sidebar-consultor").on("click", () => {
+            $("#sidebarConsultor").removeClass("active")
+            $('#cuerpoGeneral').css('overflow-y', 'auto')
+            $('#actividad-sidebar-c').attr('readonly', false)
+            $("#descripcion-sidebar-c").attr({ 'readonly': false, 'placeholder': 'Escribe una descripción detallada u observación para esta tarea..' })
+            $("#estado-c").css('display', 'inline-block')
+            $('#txtFechaIni-c').css('display', 'none')
+            $('#txtFechaFin-c').css('display', 'none')
+            $('#estado-sidebar-c').css('display', 'none')
+            $('#fechaIni-sidebar-c').css('display', 'inline-block')
+            $('#fechaFin-sidebar-c').css('display', 'inline-block')
+            $('#btnGuardar-sidebar-c').css('display', 'flex')
+        })
+    });
+
+    // => FUNCIONES PARA LAS TAREAS DE PLAN EMPRESARIAL
+    function addTaskToList_(id, actividad, fecha_inicio, fecha_entrega) {
+        return `
+        <tr>
+            <td>${actividad}</td>
+            <td>N/A</td>
+            <td class="text-primary font-w600" style="font-size: 14px;">Pendiente</td>
+            <td>
+                <div style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
+                    ${fecha_inicio} - ${fecha_entrega}
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        style="width:0%;height: 16px;margin-top: -13px;"></div>
+                </div>
+            </td>
+            <td class="text-white" style="background: #585858;font-size: 11px; text-align:center">Sin especificar</td>
+            <td>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a onclick="editarTarea_(${id})" title="Editar"
+                        class="btn btn-primary shadow btn-xs sharp mr-1"
+                        style="background: linear-gradient(189.55deg, #FED061 -131.52%, #812082 -11.9%, #000000 129.46%);"><i
+                            style="color:white ;" class="fa fa-pencil"></i>
+                    </a>
+                    <a onclick="eliminarTarea_(${id})" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
+                        style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
+                            width="12px" viewBox="0 0 448 512">
+                            <path
+                                d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                fill="white" />
+                        </svg>
+                    </a>
+                </div>
+            </td>
+        </tr>
+        `
+    }
+
+    function agregarTarea_() {
+        const actividad = $("#actividad-consultor").val();
+        const fecha_inicio = $("#fecha_inicio-consultor").val();
+        const fecha_entrega = $("#fecha_entrega-consultor").val();
+        let fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+        let fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+            toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else if (actividad == '' || fecha_inicio == '' || fecha_entrega == '') {
+            toastr.warning("Hay campos vacíos", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            // Activar Sidebar
+            $('#sidebarConsultor').addClass('active');
+            $('#cuerpoGeneral').css('overflow-y', 'hidden')
+            $('#tiempoTxt-sidebar-c').text('A tiempo')
+
+            // CAMPOS FUERA DEL SIDEBAR
+            $("#actividad-consultor").val('');
+            $("#fecha_inicio-consultor").val('');
+            $("#fecha_entrega-consultor").val('');
+
+            // Enviar info a la base de datos
+            const consultor = $("#idConsultor").val();
+            const data = JSON.stringify({ consultor, actividad, fecha_inicio, fecha_entrega })
+            fetch('/agregarTarea-consultores', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Agregar Tarea: ', error))
+            .then(response => {
+                if (response) {
+                    const idTarea = response.insertId
+                    const itemTaskList = addTaskToList_(idTarea, actividad, fecha_inicio, fecha_entrega)
+                    $('#cuerpoTareasConsultor').prepend(itemTaskList);
+                    $('#actividad-sidebar-c').val(actividad)
+                    $('#estado-c').val(0)
+                    $('#prioridad-c').val(0)
+                    $('#idTarea-sidebar-c').val(idTarea)
+                    $('#fechaIni-sidebar-c').val(fecha_inicio)
+                    $('#fechaFin-sidebar-c').val(fecha_entrega)
+
+                } else {
+                    toastr.warning("Hubo una inconsistencia al agregar la tarea.", "Error", {
+                        positionClass: "toast-top-full-width",
+                        timeOut: 3e3,
+                        closeButton: !0,
+                        debug: !1,
+                        newestOnTop: !0,
+                        progressBar: !0,
+                        preventDuplicates: !0,
+                        onclick: null,
+                        showDuration: "200",
+                        hideDuration: "200",
+                        extendedTimeOut: "200",
+                        showEasing: "swing",
+                        hideEasing: "linear",
+                        showMethod: "fadeIn",
+                        hideMethod: "fadeOut",
+                        tapToDismiss: !1
+                    })
+                }
+            });
+        }
+    }
+
+    function editarTarea_(idTarea){
+        const listaComentarios = document.querySelector('#listaComentarios-c')
+        listaComentarios.innerHTML = ''
+        $("#comentario-c").val("");
+        const tiempo = $('#tiempo-sidebar-c')
+        tiempo.css('display', 'none')
+        $('#tiempoTxt-sidebar-c').text('A tiempo')
+        $('#sidebarConsultor').addClass('active');
+        $('#cuerpoGeneral').css('overflow-y', 'hidden')
+        fetch('/editarTarea', {
+            method: 'POST',
+            body: JSON.stringify({idTarea, item:3}),
+            headers: {'Content-Type': 'application/json'}
+        }).then(res => res.json())
+        .catch(error => console.error('Error Editar Tarea: ', error))
+        .then(r => {
+            $("#idConsultor").val(r.consultor)
+            $('#idTarea-sidebar-c').val(idTarea)
+            $('#actividad-sidebar-c').val(r.actividad)
+            $('#responsable-sidebar-c').val(r.responsable)
+            $("#descripcion-sidebar-c").val(r.descripcion)
+            $("#responsable-sidebar-c").val(r.responsable)
+            $('#fechaIni-sidebar-c').val(r.fecha_inicio)
+            $('#fechaFin-sidebar-c').val(r.fecha_entrega)
+            $("#estado-c").val(r.estado)
+            $("#prioridad-c").val(r.prioridad)
+
+            const comentarios = JSON.parse(r.mensajes)
+            if (comentarios) {
+                $('#divComentarios-c').css('display', 'inline-block')
+                comentarios.forEach(x => {
+                    listaComentarios.innerHTML += `
+                        <li>
+                            <div class="timeline-badge primary"></div>
+                            <a class="timeline-panel text-muted">
+                                <span class="fechaMensajes">${x.fecha}</span>
+                                <h6 class="mb-0 txtSidebar">${x.mensaje}<br>
+                                    <span class="txtYellow">${x.nombres} ${x.apellidos} - ${x.rol}</span>
+                                </h6>
+                            </a>
+                        </li>
+                    `
+                })
+            } else {
+                $('#divComentarios-c').css('display', 'none')
+            }
+
+            if (r.estado == 0 || r.estado == 1) {
+                tiempo.css('display', 'inline-block')
+                const fechaActual = new Date().toLocaleDateString('fr-CA')
+                $('#tiempoTxt-sidebar-c').text('A tiempo')
+                if (fechaActual > r.fecha_entrega){
+                    $('#tiempoTxt-sidebar-c').text('Retrasada')
+                }
+            }
+        })
+    }
+
+    function actualizarTarea_() {
+        const idTarea = $("#idTarea-sidebar-c").val();
+        const consultor = $("#idConsultor").val();
+        const actividad = $("#actividad-sidebar-c").val();
+        const responsable = $("#responsable-sidebar-c").val();
+        const descripcion = $("#descripcion-sidebar-c").val();
+        let fecha_inicio = $("#fechaIni-sidebar-c").val();
+        let fecha_entrega = $("#fechaFin-sidebar-c").val();
+        const prioridad = $("#prioridad-c").val();
+        const estado = $("#estado-c").val();
+
+        let fechaini, fechafin
+        fechaini = new Date(fecha_inicio);
+        fechaini = fechaini.getTime();
+        fechaini = (((fechaini / 1000) / 60) / 60) / 24
+        fechafin = new Date(fecha_entrega);
+        fechafin = fechafin.getTime();
+        fechafin = (((fechafin / 1000) / 60) / 60) / 24
+
+        if(fechaini > fechafin){
+            toastr.warning("La fecha de finalización no puede ser inferior a la fecha de inicio", "Atención", {
+                positionClass: "toast-top-full-width",
+                timeOut: 3e3,
+                closeButton: !0,
+                debug: !1,
+                newestOnTop: !0,
+                progressBar: !0,
+                preventDuplicates: !0,
+                onclick: null,
+                showDuration: "200",
+                hideDuration: "200",
+                extendedTimeOut: "200",
+                showEasing: "swing",
+                hideEasing: "linear",
+                showMethod: "fadeIn",
+                hideMethod: "fadeOut",
+                tapToDismiss: !1
+            })
+        } else {
+            const data = JSON.stringify({ idTarea, consultor, actividad, descripcion, responsable, fecha_inicio, fecha_entrega, estado, prioridad, item:3 })
+            fetch('/actualizarTarea', {
+                method: 'POST',
+                body: data,
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+            .catch(error => console.error('Error Actualizar Tarea: ', error))
+            .then(response => {
+                location.reload(true)
+            })
+        }
+    }
+
+    function eliminarTarea_(idTarea) {
+        Swal.fire({
+            title: '¿Deseas eliminar la tarea?',
+            text: "Esta acción no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FFE000',
+            cancelButtonColor: '#000000',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarTarea', {
+                    method: 'POST',
+                    body: JSON.stringify({idTarea, item: 3}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                .catch(error => console.error('Error Eliminar Tarea: ', error))
+                .then(response => {
+                    location.reload(true)
+                })
+            }
+        })
+    }
+
+</script>

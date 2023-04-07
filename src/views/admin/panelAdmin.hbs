@@ -129,7 +129,111 @@
                 </div>
             </div>
 
-            {{!-- TABLAS --}}
+            {{!-- TAREAS PROPIAS ADMIN --}}
+            <input type="hidden" id="idConsultor" value="{{ide_consultor}}">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-header">
+                            <h4 class="card-title" style="margin:0 auto">Tareas Administrador</h4>
+                        </div>
+            
+                        <div class="row mt-3">
+                            <div class="form-group col-md-12">
+                                <label for="actividad">Título de actividad a realizar *</label>
+                                <input type="text" class="form-control" id="actividad-consultor" maxlength="47"
+                                    placeholder="Escriba un título..">
+                            </div>
+            
+                            <div class="form-group col-md-6">
+                                <label for="fecha_inicio">Fecha de inicio *</label>
+                                <duet-date-picker id="fecha_inicio-consultor" min="{{fechaActual}}"
+                                    first-day-of-week="0"></duet-date-picker>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="fecha_entrega-consultor">Fecha de entrega *</label>
+                                <duet-date-picker id="fecha_entrega-consultor" min="{{fechaActual}}"
+                                    first-day-of-week="0"></duet-date-picker>
+                            </div>
+            
+                            <div class="col-md-3 mx-auto">
+                                <button onclick="agregarTarea_()" class="btn color_primary text-white"
+                                    style="margin-top: 1em; width: 100%;padding: 10px 15px;">
+                                    <p class="font-w500 m-auto">Agregar</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{!-- LISTADO DE TAREAS --}}
+            <div class="col-xl-12">
+                <div class="card plan-list">
+                    <div class="card-header d-sm-flex flex-wrap d-block pb-0 border-0">
+                        <div class="mr-auto pr-3 mb-3">
+                            <h4 class="text-black fs-20">Lista de tareas</h4>
+                            <p class="fs-13 mb-0 text-black">Haz clic en una tarea para editarla</p>
+                        </div>
+                        <div class="card-action card-tabs mr-4 mt-3 mt-sm-0 mb-3">
+                        </div>
+                    </div>
+            
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered verticle-middle table-responsive-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 17em;">Nombre</th>
+                                        <th scope="col">Responsable</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Cronograma</th>
+                                        <th scope="col">Prioridad</th>
+                                        <th scope="col">Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cuerpoTareasConsultor">
+                                    {{#if tareas}}
+                                    {{#each tareas}}
+                                    <tr>
+                                        <td>{{actividad}}</td>
+                                        <td>{{responsable}}</td>
+                                        <td class="text-{{color}} font-w600" style="font-size: 14px;">{{estado}}</td>
+                                        <td>
+                                            <div
+                                                style="width:100% ; margin-left: -8px;font-size: 8px;height: 15px; text-align: center;color: white;background: #ada7a7;border-radius: 7px;">
+                                                {{fecha_inicio}} - {{fecha_entrega}}
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                    style="width:{{resultado}}%;height: 16px;margin-top: -13px;"></div>
+                                            </div>
+                                        </td>
+                                        <td class="text-white" style="{{background}};{{fontSize}}; text-align:center">{{prioridad}}
+                                        </td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <a onclick="editarTarea_({{id}})" title="Editar"
+                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"><i
+                                                        style="color:white ;" class="fa fa-pencil"></i>
+                                                </a>
+                                                <a onclick="eliminarTarea_({{id}}, 1)" title="Eliminar"
+                                                    class="btn btn-danger shadow btn-xs sharp" style="background: #DC0000;"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="12px" viewBox="0 0 448 512">
+                                                        <path
+                                                            d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
+                                                            fill="white" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                    {{/if}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {{!-- ÚLTIMAS EMPRESAS REGISTRADAS --}}
             <div class="col-xl-6 col-xxl-6">
@@ -243,54 +347,3 @@
         </div>
     </div>
 </div>
-
-<!--**********************************
-        Fin Content body end
-***********************************-->
-<script>
-    
-    function bloquearEmpresa(id) {
-        Swal.fire({
-            title: '¿Deseas bloquear esta empresa?',
-            text: "Podrás activarla nuevamente más adelante.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#50368C',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: '¡Sí, bloquear!'
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-                fetch('/bloquearEmpresa', {
-                    method: 'POST',
-                    body: JSON.stringify({id}),
-                    headers: {'Content-Type': 'application/json'}
-                }).then(res => res.json())
-                    .catch(error => console.error('Error:', error))
-                    .then(response => {
-                        if (response){
-                            location.reload();
-                        } else {
-                            Swal.fire(
-                                'Error!',
-                                'La empresa ya está bloqueada/inactiva.',
-                                'error'
-                            )
-                        }
-                    });
-            }
-        })
-    }
-
-    function mensajeFichaCliente(){
-        Swal.fire({
-            title: 'Sin ficha cliente',
-            text: "Esta empresa aún no ha llenado la ficha de cliente",
-            icon: 'warning',
-            showCancelButton: false,
-            confirmButtonColor: '#50368C',
-            confirmButtonText: 'Ok'
-        })
-    }
-</script>
