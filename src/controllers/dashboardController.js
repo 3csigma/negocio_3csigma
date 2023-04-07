@@ -75,7 +75,11 @@ dashboardController.admin = async (req, res) => {
     const fechaActual = new Date().toLocaleDateString('fr-CA');
     const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
 
-    res.render('admin/panelAdmin', { adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm, ide_consultor: consultor.id_consultores, tareas });
+    res.render('admin/panelAdmin', { 
+        adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, 
+        datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm, 
+        ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user)
+    });
 
 }
 

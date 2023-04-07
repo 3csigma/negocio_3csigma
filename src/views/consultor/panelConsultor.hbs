@@ -95,6 +95,7 @@
 
             {{!-- TAREAS PROPIAS ADMIN --}}
             <input type="hidden" id="idConsultor" value="{{ide_consultor}}">
+            <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
@@ -175,7 +176,6 @@
                                         </td>
                                         <td>
                                             <div class="d-flex justify-content-center align-items-center">
-                                                {{#if taskBtns}}
                                                 <a onclick="editarTarea_({{id}})" title="Editar"
                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"><i
                                                         style="color:white ;" class="fa fa-pencil"></i>
@@ -188,12 +188,6 @@
                                                             fill="white" />
                                                     </svg>
                                                 </a>
-                                                {{else}}
-                                                <a onclick="verTarea_({{id}})" title="Mostrar"
-                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"><i
-                                                        style="color:white ;" class="fa fa-search"></i>
-                                                </a>
-                                                {{/if}}
                                             </div>
                                         </td>
                                     </tr>
