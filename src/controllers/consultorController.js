@@ -51,7 +51,7 @@ consultorController.index = async (req, res) => {
     res.render('consultor/panelConsultor', {
         consultorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
-        ultimosInformes, ide_consultor: consultor.id_consultores, tareas
+        ultimosInformes, ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user)
     });
 }
 
