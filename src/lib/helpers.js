@@ -699,13 +699,13 @@ helpers.consultarTareasConsultores = async (consultor, fechaActual) => {
         if (x.prioridad == 0) {
             x.prioridad = 'Sin especificar'; x.background = "background: #585858"; x.fontSize = "font-size: 11px";
         } else if (x.prioridad == 1) {
-            x.prioridad = 'Baja'; x.background = "background: #666666";
+            x.prioridad = 'Baja'; x.background = "background: #a184e3";
         } else if (x.prioridad == 2) {
-            x.prioridad = 'Media'; x.background = "background: #454546;"
+            x.prioridad = 'Media'; x.background = "background: #825fd3;"
         } else if (x.prioridad == 3) {
-            x.prioridad = 'Alta'; x.background = "background: #272727;"
+            x.prioridad = 'Alta'; x.background = "background: #6647af;"
         } else if (x.prioridad == 4) {
-            x.prioridad = 'Crítica'; x.background = "background: #000000;"
+            x.prioridad = 'Crítica'; x.background = "background: #50368c;"
         }
 
         const dateObj = new Date(x.fecha_entrega);
