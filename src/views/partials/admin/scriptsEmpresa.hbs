@@ -307,42 +307,6 @@
         })
     }
 
-    /*************************************************************************/    
-    // CAMPO DATE PICKER (DUET LIBRARY)
-    const elementos = document.querySelectorAll("duet-date-picker")
-    const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-
-    elementos.forEach(picker => {
-        picker.dateAdapter = {
-            parse(value = "", createDate) {
-                const matches = value.match(DATE_FORMAT_US)
-
-                if (matches) {
-                    return createDate(matches[3], matches[1], matches[2])
-                }
-            },
-            format(date) {
-                return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-            },
-        }
-
-        picker.localization = {
-            placeholder: "MM/DD/AAAA",
-            selectedDateMessage: "La fecha seleccionada es",
-            prevMonthLabel: "Mes anterior",
-            nextMonthLabel: "Mes siguiente",
-            monthSelectLabel: "Mes",
-            yearSelectLabel: "Año",
-            closeLabel: "Cerrar ventana",
-            calendarHeading: "Selecciona una fecha",
-            dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-            //dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
-            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-            locale: "en-US",
-        }
-    })
-
     function validar_nivelConsultor() {
         if ($('#id_consultor option:selected').attr("id") == 4)
             $('#divSede').show();

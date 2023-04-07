@@ -15,7 +15,7 @@
     margin-top: 6em;
 }
 
-#actividad-sidebar1, #actividad-sidebar2 {
+#actividad-sidebar1, #actividad-sidebar2, #actividad-sidebar-c {
     font-size: 30px;
     font-weight: 900;
     color: #fff;
@@ -26,12 +26,12 @@
     color: #fff;
 }
 
-textarea#actividad-sidebar1, #actividad-sidebar2 {
+textarea#actividad-sidebar1, #actividad-sidebar2, #actividad-sidebar-c {
     height: 4em;
 }
 
-textarea#actividad-sidebar1, #actividad-sidebar2,
-textarea#descripcion-sidebar1, #descripcion-sidebar2 {
+textarea#actividad-sidebar1, #actividad-sidebar2, #actividad-sidebar-c,
+textarea#descripcion-sidebar1, #descripcion-sidebar2, #descripcion-sidebar-c {
     width: 100%;
     padding: 1em 2px;
     border: 0px solid transparent;
@@ -41,9 +41,9 @@ textarea#descripcion-sidebar1, #descripcion-sidebar2 {
     overflow-y: hidden;
 }
 
-textarea#actividad-sidebar1::placeholder, textarea#actividad-sidebar2::placeholder,
-textarea#descripcion-sidebar1::placeholder, textarea#descripcion-sidebar2::placeholder,
-input#responsable-sidebar1::placeholder, input#responsable-sidebar2::placeholder {
+textarea#actividad-sidebar1::placeholder, textarea#actividad-sidebar2::placeholder, textarea#actividad-sidebar-c::placeholder,
+textarea#descripcion-sidebar1::placeholder, textarea#descripcion-sidebar2::placeholder, textarea#descripcion-sidebar-c::placeholder,
+input#responsable-sidebar1::placeholder, input#responsable-sidebar2::placeholder, input#responsable-sidebar-c::placeholder {
     color: #E1D9E1;
 }
 
