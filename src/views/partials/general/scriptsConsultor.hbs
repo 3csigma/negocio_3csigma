@@ -602,7 +602,6 @@
         .catch(error => console.error('Error:', error))
         .then(response => {
             if (response){
-                //console.log("\nCOMENTARIO AGREGADO A DB EXITOSAMENTE !!\n");
                 document.getElementById("comentario"+item).value = "";
             } else {
                 const msg = "Ocurrió un error inesperado al agregar el mensaje por favor recargue la página e intente nuevamente. Si el error persiste contactar a soporte."
