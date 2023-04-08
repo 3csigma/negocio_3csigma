@@ -24,9 +24,8 @@ passport.use('local.registro', new LocalStrategy({
 }, async (req, email, clave, done) => {
 
     const { nombres, apellidos, nombre_empresa, zh_empresa } = req.body
-    const rol = 'Empresa'
     // Verificando si el usuario existe o no
-    await pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
+    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) =>{
 
         // Si ocurre un error
         if (err) throw err;
@@ -95,8 +94,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
 }, async (req, email, clave, done) => {
 
     const { nombres, apellidos, countryCode, telConsul, direccion_consultor, /*empresa_seleccionada,*/ zh_consultor } = req.body
-    const rol = 'Estudiante'
-    pool.query('SELECT * FROM users WHERE email = ? AND rol = ?', [email, rol], async (err, result) => {
+    await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) => {
 
         if (err) throw err;
 

@@ -20,8 +20,8 @@
             .then(response => {
                 if (response){
                 Swal.fire(
-                'Corrección enviada!',
-                'Presiona ok para salir!',
+                '¡Corrección enviada!',
+                'Tu estudiante recibirá una notificación',
                 'success'
                 )
                 } else {
@@ -37,7 +37,8 @@
             showCancelButton: true,
             confirmButtonColor: '#FFE000',
             cancelButtonColor: '#000000',
-            confirmButtonText: 'Si, aprobar'
+            confirmButtonText: 'Si, aprobar',
+            cancelButtonText:'Cancelar'
         }).then((result) => {
         if (result.isConfirmed) {
             let estado, informe
@@ -58,7 +59,7 @@
             .then(response => {
                 if (response){
                  Swal.fire(
-                    'Infome aprobado!',
+                    '¡Infome aprobado!',
                     '',
                     'success'
                 )

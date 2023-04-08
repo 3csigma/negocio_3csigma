@@ -9,6 +9,8 @@
     .table td{
         padding: 12px 15px;
     }
+    
+
 </style>
 <!--**********************************
         Content body start
@@ -859,7 +861,7 @@
                                                                                         <div data-toggle="modal" data-target="#corregirDiag"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="corregirDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -885,18 +887,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                      {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeDiag}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionDiag"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -907,17 +905,20 @@
                                                                                                         <span aria-hidden="true">&times;</span>
                                                                                                         </button>
                                                                                                     </div>
+                                                                                                    <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                           {{{frmInfo.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewDiag">{{{frmInfo.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                    
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                             </td>
@@ -1373,7 +1374,7 @@
                                                                                         <div data-toggle="modal" data-target="#corregirInfoProd"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="corregirInfoProd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -1399,18 +1400,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                       {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeProd}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionProd"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionProd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -1422,15 +1419,18 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                    <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                          {{{infoProd.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewProd">{{{infoProd.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                             </td>
@@ -1487,7 +1487,7 @@
                                                                                         <div data-toggle="modal" data-target="#corregirAdmin"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="corregirAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -1513,18 +1513,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                       {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeAdmin}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionInfo"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -1536,15 +1532,18 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                    <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                          {{{infoAdmin.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewAdm">{{{infoAdmin.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                             </td>
@@ -1599,7 +1598,7 @@
                                                                                         <div data-toggle="modal" data-target="#corregirOpe"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="corregirOpe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -1625,18 +1624,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                        {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeOperaciones}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionOpe"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionOpe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -1648,15 +1643,18 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                        <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                          {{{infoOpe.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewOpe">{{{infoOpe.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                             </td>
@@ -1710,7 +1708,7 @@
                                                                                         <div data-toggle="modal" data-target="#informeMarketing"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="informeMarketing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -1736,17 +1734,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                       {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeMarketing}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionMark"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionMark" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -1758,16 +1753,19 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                        <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                          {{{infoM.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewMark">{{{infoM.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
-                                                                                    {{/if}}
+                                                                                     {{else}}
+                                                                                 {{> general/verCorreccion}}
+                                                                                 {{/if}}
                                                                                 {{/if}}
                                                                             </td>
                                                                              <td style="border-color: transparent; padding:3px">
@@ -1845,7 +1843,7 @@
                                                                                         <div data-toggle="modal" data-target="#corregirAnalisis"
                                                                                             class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                             style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="corregirAnalisis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                         <div class="modal-dialog" role="document">
@@ -1871,18 +1869,14 @@
                                                                                         </div>
                                                                                         </div>
                                                                                         {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                       {{> general/verCorreccion}}
                                                                                         {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informeAnalisis}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionAnali"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionAnali" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -1894,15 +1888,18 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                    <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                          {{{infoA.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewA">{{{infoA.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                             </td>
@@ -3010,7 +3007,7 @@
                                                                                     <div data-toggle="modal" data-target="#corregirPlanE"
                                                                                         class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                         style="border-color: white;" >
-                                                                                    <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                    <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                     </div>
                                                                                     <div class="modal fade" id="corregirPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                     <div class="modal-dialog" role="document">
@@ -3036,18 +3033,14 @@
                                                                                     </div>
                                                                                     </div>
                                                                                     {{else}}
-                                                                                        <div 
-                                                                                            class="btn btn-primary shadow btn-xs sharp"
-                                                                                            style="border-color: white; filter: grayscale(1);pointer-events:none;" >
-                                                                                          <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
-                                                                                        </div>
+                                                                                       {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{else}}
                                                                                     {{#if informePlan}}
                                                                                         <div data-toggle="modal" data-target="#verCorrecionPlanE"
                                                                                                     class="btn color_primary shadow btn-xs sharp mr-1 text-white"
                                                                                                     style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-glasses" style="color: #ffffff;"></i>
+                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
                                                                                         </div>
                                                                                         <div class="modal fade" id="verCorrecionPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                                                                 <div class="modal-dialog" role="document">
@@ -3059,16 +3052,18 @@
                                                                                                         </button>
                                                                                                     </div>
                                                                                                     <div class="modal-body">
-                                                                                                        <form>
+                                                                                                        <style>
+                                                                                                    .cke_top{display: none;}
+                                                                                                    </style>
                                                                                                         <div class="form-group" style="padding: 53px;">
-                                                                                                           {{{info.correccion}}}
+                                                                                                            <textarea class="form-control" id="viewInfo">{{{info.correccion}}}</textarea>
                                                                                                         </div>
-                                                                                                        </form>
                                                                                                     </div>
-                                                                                                   
                                                                                                     </div>
                                                                                                 </div>
                                                                                         </div>
+                                                                                        {{else}}
+                                                                                        {{> general/verCorreccion}}
                                                                                     {{/if}}
                                                                                 {{/if}}
                                                                         </td>

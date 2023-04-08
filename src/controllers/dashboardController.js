@@ -1196,35 +1196,31 @@ dashboardController.editarEmpresa = async (req, res) => {
 
 dashboardController.correcciones = async (req, res) => {
     const emailUser = req.user.email
-    const {id_empresa, informe, correccion} = req.body
+    const {id_empresa, correccion, informe} = req.body
     let row = await consultarDatos('informes');
+    let empresas = await consultarDatos('empresas');
     let consultores_asignados = await consultarDatos('consultores_asignados');
     let consultores = await consultarDatos('consultores');
-    let empresas = await consultarDatos('empresas');
     const user = consultores.find(x => x.email == emailUser)
 
-    let etapa
-    if (informe == 'Informe diagnóstico') etapa = 1
-    if (informe == 'Informe de dimensión producto') etapa = 2
-    if (informe == 'Informe de dimensión administración') etapa = 3
-    if (informe == 'Informe de dimensión operaciones') etapa = 4
-    if (informe == 'Informe de dimensión marketing') etapa = 5
-    if (informe == 'Informe de análisis') etapa = 6
-    if (informe == 'Informe de plan estratégico') etapa = 7
+    let etapa = 2
+    if (informe == 'Informe diagnóstico' ) {etapa = 1}
+    if (informe == 'Informe de plan estratégico') etapa = 3
 
     row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
     empresas = empresas.find(e => e.id_empresas == id_empresa)
+
     let result = consultores_asignados.find(r => r.empresa == id_empresa && r.orden == etapa)
-    const estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado == user.id_tutor)
+    let estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado == user.id_tutor || req.user.rol == 'Admin')
 
     let nombre_estudiante = estudiante.nombres
     let email = estudiante.email
     let nombreTutor = user.nombres
-    let nombreEmpresa = empresas.nombres
+    let nombreEmpresa = empresas.nombre_empresa
+
      // PARA EL ESTUDIANTE 
      const mensaje = "Tu tutor ha corrgido tu informe";
      let plantilla = tutorSubeCorrecciones(nombre_estudiante, nombreTutor, informe, nombreEmpresa);
-   
 
     if (row) {
         const obj = {correccion}

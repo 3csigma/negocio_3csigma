@@ -43,17 +43,31 @@
 {{/if}} 
 
 <script src="../ckeditor/ckeditor.js"></script>
+
 <script>
-document.querySelectorAll('.ckeditor').forEach(textarea => {
-  CKEDITOR.replace(textarea.correccionDiag);
-  CKEDITOR.replace(textarea.correccionInfoProd);
-  CKEDITOR.replace(textarea.correccionAdmin);
-  CKEDITOR.replace(textarea.correccionOpe);
-  CKEDITOR.replace(textarea.correccionMark);
-  CKEDITOR.replace(textarea.correccionAnali);
-  CKEDITOR.replace(textarea.correccionPlanE);
-});
+
+
+// Configuración de CKEditor
+const general = document.querySelector('.ckeditor') 
+CKEDITOR.replace(general);
+ 
+
+ let editorConfig = {
+   readOnly: true,
+   toolbarClasses: 'cke_top', // Agregar la clase a la barra de herramientas
+   toolbarStartupExpanded: false // No expandir la barra de herramientas
+};
+
+// Creación de la instancia de CKEditor
+CKEDITOR.replace('viewDiag', editorConfig);
+CKEDITOR.replace('viewProd', editorConfig);
+CKEDITOR.replace('viewAdm', editorConfig);
+CKEDITOR.replace('viewOpe', editorConfig);
+CKEDITOR.replace('viewMark', editorConfig);
+CKEDITOR.replace('viewA', editorConfig);
+CKEDITOR.replace('viewInfo', editorConfig);
 </script>
+
 {{!-- SCRIPTS - VALIDACIONES FICHA CLIENTE --}}
 <script>
     // ==> Previsualizar foto de perfil == INICIO <==
