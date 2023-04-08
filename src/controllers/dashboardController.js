@@ -173,6 +173,9 @@ dashboardController.actualizarConsultor = async (req, res) => {
         if (tutor) {
            nombreTutor = tutor.nombres + " " + tutor.apellidos; 
            emailTutor = tutor.email
+        }else{
+            nombreTutor = "No existe"
+           emailTutor = "No existe"
         }
         // Correo para el tutor
         const subject = "Has sido asignado como tutor para un estudiante";
