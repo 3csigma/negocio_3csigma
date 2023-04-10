@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "App 3C Sigma",
+        name: "Enterprise 3C Sigma",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart
