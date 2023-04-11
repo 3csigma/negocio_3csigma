@@ -834,10 +834,14 @@
                                                             </td>
                                                             <td><span class="nombreInformeConsul">Informe diagnóstico</span></td>
                                                             <td>
-                                                                {{#if frmInfo.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{#if frmInfo.ok}}
+                                                                    <span class="badge light badge-success">Aprobado</span>
                                                                 {{else}}
-                                                                <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                    {{#if frmInfo.fecha}}
+                                                                        <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                        <span id="infoEstado" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
                                                                 {{/if}}
                                                             </td>
                                                             <td>
@@ -854,85 +858,7 @@
                                                                 {{else}}
                                                                 <table border="0" cellspacing="0" style="margin:0 auto">
                                                                     <tr>
-                                                                        {{#if botonesEtapas.uno}}
-                                                                        <td style="border-color: transparent; padding:3px 0px 9px">
-                                                                                {{#if crearCorrenccion}}
-                                                                                    {{#if informeDiag}}
-                                                                                        <div data-toggle="modal" data-target="#corregirDiag"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="corregirDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" name="correccion" id="correccionDiag">{{frmInfo.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(1)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(1)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                      {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeDiag}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionDiag"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                    <div class="modal-body">
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewDiag">{{{frmInfo.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                   
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeDiag" >
-                                                                                    <div id="btnSubirInforme"
-                                                                                        class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
-                                                                            </td>
-                                                                        {{/if}}
+                                                                      {{> modals/crearCorreccionDiag}}
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <a id="btnVerInforme" href="{{frmInfo.url}}" style="display:{{frmInfo.ver1}}; margin: 0 auto; margin-top: -8px;color: white; border-color: #FED061; margin-left:-3px" target="_blank" class="btn color_tertiary shadow btn-xs sharp"><i class="fa fa-search"></i></a>
                                                                         </td>
@@ -1358,98 +1284,20 @@
                                                                 </td>
                                                                 <td><span>Informe de dimensión producto</span></td>
                                                                 <td>
+                                                                {{#if infoProd.ok}}
+                                                                    <span class="badge light badge-success">Aprobado</span>
+                                                                {{else}}
                                                                     {{#if info.prod.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                        <span class="badge light badge-success">Cargado</span>
                                                                     {{else}}
-                                                                    <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
+                                                                        <span id="infoEstadoProd" class="badge light badge-warning">No cargado</span>
                                                                     {{/if}}
+                                                                {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
-                                                                            {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                                 {{#if crearCorrenccion}}
-                                                                                        {{#if informeProd}}
-                                                                                        <div data-toggle="modal" data-target="#corregirInfoProd"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="corregirInfoProd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" id="correccionInfoProd">{{infoProd.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(2)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(2)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                       {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeProd}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionProd"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionProd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                    <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewProd">{{{infoProd.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                            <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeProd">
-                                                                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeProd" type="file" style="display:none" name="inputInformeProd"
-                                                                                    accept="application/pdf"/>
-                                                                            </td>
-                                                                            {{else}}
-                                                                            {{#unless info.prod.url}}
-                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                            {{/unless}}
-                                                                            {{/if}}
-
+                                                                             {{> modals/crearCorreccionInfoProd}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeProd" href="{{info.prod.url}}"
                                                                                     style="display:{{info.prod.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061"
@@ -1471,97 +1319,20 @@
                                                                 </td>
                                                                 <td><span>Informe de dimensión administración</span></td>
                                                                 <td>
-                                                                    {{#if info.adm.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{#if infoAdmin.ok}}
+                                                                    <span class="badge light badge-success">Aprobado</span>
                                                                     {{else}}
-                                                                    <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                        {{#if info.adm.fecha}}
+                                                                            <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                            <span id="infoEstadoAdmin" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
-                                                                            {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                                 {{#if crearCorrenccion}}
-                                                                                    {{#if informeAdmin}}
-                                                                                        <div data-toggle="modal" data-target="#corregirAdmin"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="corregirAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" id="correccionAdmin">{{infoAdmin.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(3)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(3)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                       {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeAdmin}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionInfo"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                    <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewAdm">{{{infoAdmin.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeAdmin">
-                                                                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeAdmin" type="file" style="display:none" name="informeAdmin" accept="application/pdf" />
-                                                                            </td>
-                                                                            {{else}}
-                                                                            {{#unless info.prod.url}}
-                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                            {{/unless}}
-                                                                            {{/if}}
-                                                                            
+                                                                             {{> modals/crearCorreccionIadm}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a id="btnVerInformeAdmin" href="{{info.adm.url}}" style="display:{{info.adm.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
@@ -1582,97 +1353,20 @@
                                                                 </td>
                                                                 <td><span>Informe de dimensión operaciones</span></td>
                                                                 <td>
-                                                                    {{#if info.op.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{#if infoOpe.ok}}
+                                                                        <span class="badge light badge-success">Aprobado</span>
                                                                     {{else}}
-                                                                    <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                        {{#if info.op.fecha}}
+                                                                            <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                            <span id="infoEstadoOpe" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
-                                                                            {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                                 {{#if crearCorrenccion}}
-                                                                                    {{#if informeOperaciones}}
-                                                                                        <div data-toggle="modal" data-target="#corregirOpe"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="corregirOpe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" id="correccionOpe">{{infoOpe.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(4)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(4)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeOperaciones}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionOpe"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionOpe" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                        <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewOpe">{{{infoOpe.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeOperaciones" >
-                                                                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeOperaciones" type="file" style="display:none" name="informeOpe" accept="application/pdf" />
-                                                                            </td>
-                                                                            {{else}}
-                                                                            {{#unless info.prod.url}}
-                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                            {{/unless}}
-                                                                            {{/if}}
-
+                                                                             {{> modals/crearCorreccionIope}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a  id="btnVerInformeOpe" href="{{info.op.url}}" style="display:{{info.op.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
@@ -1692,97 +1386,20 @@
                                                                 </td>
                                                                 <td><span>Informe de dimensión marketing</span></td>
                                                                 <td>
-                                                                    {{#if info.marketing.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{#if infoM.ok}}
+                                                                        <span class="badge light badge-success">Aprobado</span>
                                                                     {{else}}
-                                                                    <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                        {{#if info.marketing.fecha}}
+                                                                            <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                            <span id="infoEstadoMarketing" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
-                                                                            {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                                 {{#if crearCorrenccion}}
-                                                                                    {{#if informeMarketing}}
-                                                                                        <div data-toggle="modal" data-target="#informeMarketing"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="informeMarketing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" id="correccionMark">{{infoM.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(5)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(5)" class="btn color_tertiary text-black" >Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                       {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeMarketing}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionMark"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionMark" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                        <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewMark">{{{infoM.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                     {{else}}
-                                                                                 {{> general/verCorreccion}}
-                                                                                 {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeMarketing" >
-                                                                                     <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeMarketing" type="file" style="display:none" name="informeMarketing" accept="application/pdf" />
-                                                                            </td>
-                                                                            {{else}}
-                                                                            {{#unless info.prod.url}}
-                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                            {{/unless}}
-                                                                            {{/if}}
-
+                                                                            {{> modals/crearCorreccionImark}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a  id="btnVerInformeMarketing" href="{{info.marketing.url}}" style="display:{{info.marketing.ver}}; margin: 0 auto; margin-top: -8px;border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
@@ -1826,98 +1443,20 @@
                                                                 </td>
                                                                 <td><span>Informe de análisis</span></td>
                                                                 <td>
-                                                                    {{#if info.analisis.fecha}}
-                                                                    <span class="badge light badge-success">Cargado</span>
+                                                                    {{#if infoA.ok}}
+                                                                        <span class="badge light badge-success">Aprobado</span>
                                                                     {{else}}
-                                                                    <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
+                                                                        {{#if info.analisis.fecha}}
+                                                                            <span class="badge light badge-success">Cargado</span>
+                                                                        {{else}}
+                                                                            <span id="infoEstadoGeneral" class="badge light badge-warning">No cargado</span>
+                                                                        {{/if}}
                                                                     {{/if}}
                                                                 </td>
                                                                 <td>
-
                                                                     <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                         <tr>
-                                                                            {{#if botonesEtapas.dos}}
-                                                                            <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                                  {{#if crearCorrenccion}}
-                                                                                        {{#if informeAnalisis}}
-                                                                                        <div data-toggle="modal" data-target="#corregirAnalisis"
-                                                                                            class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                            style="border-color: white;" >
-                                                                                        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="corregirAnalisis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                        <div class="modal-dialog" role="document">
-                                                                                            <div class="modal-content">
-                                                                                            <div class="modal-header" style="justify-content: center;">
-                                                                                                <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                <span aria-hidden="true">&times;</span>
-                                                                                                </button>
-                                                                                            </div>
-                                                                                            <div class="modal-body">
-                                                                                                <form>
-                                                                                                <div class="form-group">
-                                                                                                    <textarea class="form-control ckeditor" id="correccionAnali">{{infoA.correccion}}</textarea>
-                                                                                                </div>
-                                                                                                </form>
-                                                                                            </div>
-                                                                                            <div class="modal-footer" style="justify-content: center;">
-                                                                                                <button onclick="agregarCorreccion(6)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                                <button onclick="aprobarCorreccion(6)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                       {{> general/verCorreccion}}
-                                                                                        {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informeAnalisis}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionAnali"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionAnali" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                    <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewA">{{{infoA.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                            </td>
-                                                                             <td style="border-color: transparent; padding:3px">
-                                                                                <label for="inputInformeGeneral" >
-                                                                                    <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                    </div>
-                                                                                </label>
-                                                                                <input id="inputInformeGeneral" class="inputInformeGeneral" type="file" style="display:none" name="inputInformeGeneral" accept="application/pdf" />
-                                                                            </td>
-                                                                            {{else}}
-                                                                            {{#unless info.analisis.url}}
-                                                                            <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                            {{/unless}}
-                                                                            {{/if}}
-
+                                                                             {{> modals/crearCorreccionAnalisis}}
                                                                             <td style="border-color: transparent; padding:3px">
                                                                                 <a  id="btnVerInformeGeneral" href="{{info.analisis.url}}" style="display:{{info.analisis.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white">
                                                                                 <i class="fa fa-search"></i></a>
@@ -2528,16 +2067,12 @@
                                                                     </table>
                                                                 </td>
                                                             </tr>
-
-
                                                         </tbody>
                                                     </table>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
-
                                     {{!-- CREAR NUEVAS TAREAS --}}
                                     {{#if botonesEtapas.plan1}}
                                     <div class="card">
@@ -2621,7 +2156,7 @@
                                                                             style="color:white ;" class="fa fa-pencil"></i>
                                                                     </a>
                                                                     <a onclick="eliminarTarea({{id}}, 1)" title="Eliminar" class="btn btn-danger shadow btn-xs sharp"
-                                                                        style="background: #DC0000;"><svg xmlns="http://www.w3.org/2000/svg"
+                                                                        ><svg xmlns="http://www.w3.org/2000/svg"
                                                                             width="12px" viewBox="0 0 448 512">
                                                                             <path
                                                                                 d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"
@@ -2991,98 +2526,20 @@
                                                             </td>
                                                             <td><span class="nomInformePlan">Informe de Plan estratégico</span></td>
                                                             <td>
-                                                                {{#if info.plan.fecha}}
-                                                                <span class="badge light badge-success">Cargado</span>
+                                                                {{#if info.ok}}
+                                                                    <span class="badge light badge-success">Aprobado</span>
                                                                 {{else}}
-                                                                <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
+                                                                    {{#if info.plan.fecha}}
+                                                                        <span class="badge light badge-success">Cargado</span>
+                                                                    {{else}}
+                                                                        <span id="infoEstadoPlan" class="badge light badge-warning">No cargado</span>
+                                                                    {{/if}}
                                                                 {{/if}}
                                                             </td>
                                                             <td>
                                                                 <table border="0" cellspacing="0" style="margin: 0 auto;">
                                                                     <tr>
-                                                                        {{#if botonesEtapas.plan2}}
-                                                                        <td style="border-color: transparent; padding:3px 0px 10px">
-                                                                            {{#if crearCorrenccion}}
-                                                                                    {{#if informePlan}}
-                                                                                    <div data-toggle="modal" data-target="#corregirPlanE"
-                                                                                        class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                        style="border-color: white;" >
-                                                                                    <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                    </div>
-                                                                                    <div class="modal fade" id="corregirPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                    <div class="modal-dialog" role="document">
-                                                                                        <div class="modal-content">
-                                                                                        <div class="modal-header" style="justify-content: center;">
-                                                                                            <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                            <span aria-hidden="true">&times;</span>
-                                                                                            </button>
-                                                                                        </div>
-                                                                                        <div class="modal-body">
-                                                                                            <form>
-                                                                                            <div class="form-group">
-                                                                                                <textarea class="form-control ckeditor" name="correccion" id="correccionPlanE">{{info.correccion}}</textarea>
-                                                                                            </div>
-                                                                                            </form>
-                                                                                        </div>
-                                                                                        <div class="modal-footer" style="justify-content: center;">
-                                                                                            <button onclick="agregarCorreccion(7)" class="btn color_primary text-white">Enviar anotaciones</button>
-                                                                                            <button onclick="aprobarCorreccion(7)" class="btn color_tertiary text-black">Aprobar informe</button>
-                                                                                        </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    </div>
-                                                                                    {{else}}
-                                                                                       {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{else}}
-                                                                                    {{#if informePlan}}
-                                                                                        <div data-toggle="modal" data-target="#verCorrecionPlanE"
-                                                                                                    class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                                    style="border-color: white;" >
-                                                                                                <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
-                                                                                        </div>
-                                                                                        <div class="modal fade" id="verCorrecionPlanE" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                                                <div class="modal-dialog" role="document">
-                                                                                                    <div class="modal-content">
-                                                                                                    <div class="modal-header" style="justify-content: center;">
-                                                                                                        <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
-                                                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                                                        <span aria-hidden="true">&times;</span>
-                                                                                                        </button>
-                                                                                                    </div>
-                                                                                                    <div class="modal-body">
-                                                                                                        <style>
-                                                                                                    .cke_top{display: none;}
-                                                                                                    </style>
-                                                                                                        <div class="form-group" style="padding: 53px;">
-                                                                                                            <textarea class="form-control" id="viewInfo">{{{info.correccion}}}</textarea>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                        </div>
-                                                                                        {{else}}
-                                                                                        {{> general/verCorreccion}}
-                                                                                    {{/if}}
-                                                                                {{/if}}
-                                                                        </td>
-                                                                        <td style="border-color: transparent; padding:3px">
-                                                                            <label for="inputInformePlan">
-                                                                                <div class="btn color_primary shadow btn-xs sharp mr-1 text-white"
-                                                                                    style="border-color: white;">
-                                                                                    <i class="fa fa-upload"></i>
-                                                                                </div>
-                                                                            </label>
-                                                                            <input id="inputInformePlan" type="file"
-                                                                                style="display:none" name="informePlan" accept="application/pdf" />
-                                                                        </td>
-                                                                        {{else}}
-                                                                        {{#unless info.plan.url}}
-                                                                        <button class="btn btn-primary shadow btn-xs sharp mr-1" style="filter:grayscale(1)"><i class="fa fa-search"></i></button>
-                                                                        {{/unless}}
-                                                                        {{/if}}
-                            
+                                                                         {{> modals/crearCorreccionPlanE}}
                                                                         <td style="border-color: transparent; padding:3px">
                                                                             <a id="btnVerInformePlan" href="{{info.plan.url}}" style="display:{{info.plan.ver}}; margin: 0 auto; margin-top: -8px; border-color: #FED061" target="_blank" class="btn color_tertiary shadow btn-xs sharp text-white"><i class="fa fa-search"></i></a>
                                                                         </td>

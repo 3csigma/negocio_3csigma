@@ -1,0 +1,106 @@
+{{#if botonesEtapas.uno}}
+<td style="border-color: transparent; padding:3px 0px 9px">
+    {{#if crearCorrenccion}}
+    {{#if informeDiag}}
+    <div data-toggle="modal" data-target="#corregirDiag" class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+        style="border-color: white;">
+        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
+    </div>
+    <div class="modal fade" id="corregirDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="justify-content: center;">
+                    <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <textarea class="form-control ckeditor" name="correccion"
+                                id="correccionDiag">{{frmInfo.correccion}}</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="justify-content: center;">
+                    <button onclick="agregarCorreccion(1)" class="btn color_primary text-white" data-dismiss="modal"
+                        aria-label="Close">Enviar anotaciones</button>
+                    <button id="gh" onclick="aprobarCorreccion(1)" class="btn color_tertiary text-black"
+                        data-dismiss="modal" aria-label="Close">Aprobar informe</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    {{> general/verCorreccion}}
+    {{/if}}
+    {{else}}
+    {{#if informeDiag}}
+    <div data-toggle="modal" data-target="#verCorrecionDiag"
+        class="btn color_primary shadow btn-xs sharp mr-1 text-white" style="border-color: white;">
+        <i class="fa-solid fa-pen-to-square" style="color: #ffffff;"></i>
+    </div>
+    <div class="modal fade" id="verCorrecionDiag" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="justify-content: center;">
+                    <h5 class="modal-title" id="exampleModalLabel">ANOTACIONES DE INFORME</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <style>
+                    .cke_top {
+                        display: none;
+                    }
+                </style>
+                <div class="modal-body">
+                    <div class="form-group" style="padding: 53px;">
+                        <textarea class="form-control" id="viewDiag">{{{frmInfo.correccion}}}</textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{else}}
+    {{> general/verCorreccion}}
+    {{/if}}
+    {{/if}}
+</td>
+{{#if consultorDash}}
+{{#if frmInfo.ok}}
+<td style="border-color: transparent; padding:3px">
+    <label for="inputInformeDiag">
+        <div id="btnSubirInforme" class="btn btn-primary shadow btn-xs sharp mr-1 text-white"
+            style="border-color: white;filter: grayscale(1);pointer-events:none">
+            <i class="fa fa-upload"></i>
+        </div>
+    </label>
+</td>
+{{else}}
+<td style="border-color: transparent; padding:3px">
+    <label for="inputInformeDiag">
+        <div id="btnSubirInforme" class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+            style="border-color: white;">
+            <i class="fa fa-upload"></i>
+        </div>
+    </label>
+    <input id="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
+</td>
+{{/if}}
+{{else}}
+<td style="border-color: transparent; padding:3px">
+    <label for="inputInformeDiag">
+        <div id="btnSubirInforme" class="btn color_primary shadow btn-xs sharp mr-1 text-white"
+            style="border-color: white;">
+            <i class="fa fa-upload"></i>
+        </div>
+    </label>
+    <input id="inputInformeDiag" type="file" style="display:none" name="informeDiag" accept="application/pdf" />
+</td>
+{{/if}}
+{{/if}}

@@ -413,7 +413,6 @@ dashboardController.editarEmpresa = async (req, res) => {
 
         if (pay) {
             const pagoDiagnostico = JSON.parse(pay.diagnostico_negocio)
-            
             let consulDg = await consultarDatos('consultores_asignados')
             let infoConsul = await consultarDatos('consultores')
             if (consulDg.length > 0) {
@@ -582,7 +581,7 @@ dashboardController.editarEmpresa = async (req, res) => {
 
     /** **************************************************************** */
     // Informe de diagnóstico
-    let informeDiag = await consultarInformes(idEmpresa, "Informe diagnóstico")
+    const informeDiag = await consultarInformes(idEmpresa, "Informe diagnóstico")
     // Informe de dimensión producto
     const informeProd = await consultarInformes(idEmpresa, "Informe de dimensión producto")
     // Informe de dimensión administración
@@ -595,15 +594,18 @@ dashboardController.editarEmpresa = async (req, res) => {
     const informeAnalisis = await consultarInformes(idEmpresa, "Informe de análisis")
     // Informe de Plan estratégico
     const informePlan = await consultarInformes(idEmpresa, "Informe de plan estratégico")
-
     if (informeDiag) {
         frmInfo.fecha = informeDiag.fecha;
         frmInfo.ver1 = 'block';
         frmInfo.url = informeDiag.url;
         datos.etapa = 'Informe general de diagnóstico de negocio'
         frmInfo.correccion = informeDiag.correccion
+        frmInfo.estado = informeDiag.estado
+        if (frmInfo.estado === 1) {
+            frmInfo.ok = true
+        }
     }
-
+    console.log(">>>>>",frmInfo.ok)
     /************************************************************************************* */
 
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
@@ -666,6 +668,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.prod.url = informeProd.url;
         datos.etapa = 'Informe análisis dimensión producto'
         infoProd.correccion = informeProd.correccion
+        infoProd.estado = informeProd.estado
+        if (infoProd.estado === 1) {
+            infoProd.ok = true
+        }
     }
 
     if (informeAdmin) {
@@ -674,6 +680,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.adm.url = informeAdmin.url;
         datos.etapa = 'Informe análisis dimensión administración'
         infoAdmin.correccion = informeAdmin.correccion
+        infoAdmin.estado = informeAdmin.estado
+        if (infoAdmin.estado === 1) {
+            infoAdmin.ok = true
+        }
     }
 
     if (informeOperaciones) {
@@ -682,6 +692,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.op.url = informeOperaciones.url;
         datos.etapa = 'Informe análisis dimensión operaciones'
         infoOpe.correccion = informeOperaciones.correccion
+        infoOpe.estado = informeOperaciones.estado
+        if (infoOpe.estado === 1) {
+            infoOpe.ok = true
+        }
     }
 
     if (informeMarketing) {
@@ -690,6 +704,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.marketing.url = informeMarketing.url;
         datos.etapa = 'Informe análisis dimensión marketing'
         infoM.correccion = informeMarketing.correccion
+        infoM.estado = informeMarketing.estado
+        if (infoM.estado === 1) {
+            infoM.ok = true
+        }
     }
 
     if (informeAnalisis) {
@@ -698,6 +716,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.analisis.url = informeAnalisis.url;
         datos.etapa = 'Informe general de análisis de negocio'
         infoA.correccion = informeAnalisis.correccion
+        infoA.estado = informeAnalisis.estado
+        if (infoA.estado === 1) {
+            infoA.ok = true
+        }
     }
 
     if (informePlan) {
@@ -707,6 +729,10 @@ dashboardController.editarEmpresa = async (req, res) => {
         info.plan.url = informePlan.url;
         datos.etapa = 'Informe de plan estratégico de negocio'
         info.correccion = informePlan.correccion
+        info.estado = informePlan.estado
+        if (info.estado === 1) {
+            info.ok = true
+        }
     }
 
     /************** DATOS PARA LAS GRÁFICAS DE DIAGNÓSTICO - ÁREAS VITALES & POR DIMENSIONES ****************/
@@ -1243,11 +1269,47 @@ dashboardController.correcciones = async (req, res) => {
 dashboardController.correccionesAprobadas = async (req, res) => {
     const {id_empresa, informe, estado} = req.body
     let row = await consultarDatos('informes');
-
+    let empresas = await consultarDatos('empresas');
+    let upd
     row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
+    empresas = empresas.find(e => e.id_empresas == id_empresa)
     if (row) {
-        const obj = {estado}
-        await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+       const obj = {estado}
+       upd = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [obj, id_empresa, informe])
+    }
+
+    if (upd.affectedRows > 0) {
+        const nombreEmpresa_ = empresas.nombre_empresa;
+        const email = empresas.email
+        let tipoInforme = informe.toLowerCase();
+        let asunto = 'Se ha cargado un nuevo ' + tipoInforme
+        const texto = "Tu consultor ha cargado el informe general."
+        let template = informesHTML(nombreEmpresa_, tipoInforme);
+
+        if (informe == 'Informe diagnóstico') {
+            asunto = 'Diagnóstico de negocio finalizado'
+            const etapa = 'Diagnóstico de negocio';
+            const link = 'diagnostico-de-negocio';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+        }
+        if (informe == 'Informe de análisis') {
+            asunto = 'Análisis de negocio finalizado'
+            const etapa = 'Análisis de negocio';
+            const link = 'analisis-de-negocio';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+        }
+        if (informe == 'Informe de plan estratégico') {
+            asunto = 'Plan estratégico de negocio finalizado'
+            const etapa = 'Plan estratégico de negocio';
+            const link = 'plan-estrategico';
+            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+        }
+        const resultEmail = await sendEmail(email, asunto, template)
+        if (resultEmail == false) {
+            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de informe subido >>>> \n")
+        } else {
+            console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
+        }
     }
     res.send(true)
 }
@@ -1780,7 +1842,6 @@ dashboardController.subirInforme = subirInforme.single('file')
 dashboardController.guardarInforme = async (req, res) => {
     const r = { ok: false }
     const { codigoEmpresa, nombreInforme, zonaHoraria } = req.body
-    console.log(req.body)
     const empresas = await consultarDatos('empresas')
     const e = empresas.find(x => x.codigo == codigoEmpresa)
     
@@ -1790,21 +1851,43 @@ dashboardController.guardarInforme = async (req, res) => {
     const tutor = consultor.find(x => x.id_tutor == clog.tutor_asignado)
 
     const fecha = new Date()
-    const nuevoInforme = {
-        id_empresa: e.id_empresas,
-        nombre: nombreInforme,
-        url: '../informes_empresas/' + urlInforme,
-        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-        mes: fecha.getMonth() + 1,
-        year: fecha.getFullYear()
-    }
+    let actualizar, nuevoInforme
+    if (req.user.rol == "Tutor" || req.user.rol == "Admin") {
+        actualizar = {
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear(),
+            estado: 1
+        }
 
-    const actualizar = {
-        url: '../informes_empresas/' + urlInforme,
-        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-        mes: fecha.getMonth() + 1,
-        year: fecha.getFullYear()
+        nuevoInforme = {
+            id_empresa: e.id_empresas,
+            nombre: nombreInforme,
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear(),
+            estado: 1
+        }
+
+    } else {
+        actualizar = {
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
+        nuevoInforme = {
+            id_empresa: e.id_empresas,
+            nombre: nombreInforme,
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
     }
+    
 
     // Validando si ya tiene un informe montado
     const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
@@ -1819,11 +1902,7 @@ dashboardController.guardarInforme = async (req, res) => {
 
     if (informe.affectedRows > 0) {
         const nombreEmpresa_ = e.nombre_empresa;
-        const email = e.email
         let tipoInforme = nombreInforme.toLowerCase();
-        let asunto = 'Se ha cargado un nuevo ' + tipoInforme
-        let template = informesHTML(nombreEmpresa_, tipoInforme);
-        const texto = "Tu consultor ha cargado el informe general."
 
         // PARA EL TUTOR 
         const nombreTutor = tutor.nombres
@@ -1832,41 +1911,22 @@ dashboardController.guardarInforme = async (req, res) => {
         let plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
 
         if (nombreInforme == 'Informe diagnóstico') {
-            asunto = 'Diagnóstico de negocio finalizado'
-            const etapa = 'Diagnóstico de negocio';
-            const link = 'diagnostico-de-negocio';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
             plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
         }
         if (nombreInforme == 'Informe de análisis') {
-            asunto = 'Análisis de negocio finalizado'
-            const etapa = 'Análisis de negocio';
-            const link = 'analisis-de-negocio';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
             plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
-
         }
         if (nombreInforme == 'Informe de plan estratégico') {
-            asunto = 'Plan estratégico de negocio finalizado'
-            const etapa = 'Plan estratégico de negocio';
-            const link = 'plan-estrategico';
-            template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
             plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
         }
         
         // Enviar Email
-        const resultEmail = await sendEmail(email, asunto, template)
         const resultTutor = await sendEmail(tutor.email, mensaje, plantilla)
 
         if (resultTutor == false) {
             console.log("\nOcurrio un error inesperado al enviar el email *Tutor asignado*")
         } else {
             console.log("\n<<<<< Se envío email para el tutor")
-        }
-        if (resultEmail == false) {
-            console.log("\n<<<<< Ocurrio un error inesperado al enviar el email de informe subido >>>> \n")
-        } else {
-            console.log("\n<<<<< Se ha notificado la subida de un informe al email de la empresa >>>>>\n")
         }
 
         r.ok = true;

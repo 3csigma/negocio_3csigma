@@ -119,7 +119,7 @@ empresaController.index = async (req, res) => {
     }
 
     // VERIFICACIÓN DE ETAPAS FINALIZADAS (Estapa 1)
-    const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico')
+    const informeEtapa1 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe diagnóstico' && x.estado == 1)
     if (informeEtapa1) {
         porcentajeEtapa1 = 100;
         etapaCompleta.e1 =  true
@@ -174,7 +174,7 @@ empresaController.index = async (req, res) => {
     const informeMarketing = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de dimensión marketing')
     if (informeMarketing) porcentajeEtapa2 = porcentajeEtapa2 + 12.5;
 
-    const informeEtapa2 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de análisis')
+    const informeEtapa2 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de análisis' && x.estado == 1)
     if (informeEtapa2) {
         porcentajeEtapa2 = 100;
         etapaCompleta.e2 = true;
@@ -215,7 +215,7 @@ empresaController.index = async (req, res) => {
         porcentajeEtapa4 = Math.round(porcentajeEtapa4)
         verGraficasCircular = true;
     }
-    const informeEtapa4 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico')
+    const informeEtapa4 = informes_empresa.find(x => x.id_empresa == id_empresa && x.nombre == 'Informe de plan estratégico' && x.estado == 1)
     if (informeEtapa4) {
         porcentajeEtapa4 = 100;
         etapaCompleta.e4 = true;
