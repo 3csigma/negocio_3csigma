@@ -144,8 +144,8 @@ dashboardController.editarConsultor = async (req, res) => {
 
 dashboardController.actualizarConsultor = async (req, res) => {
     let respuesta = false;
-    const { codigo, estado, nivel=1 , rol, asignar_tutor, email , nombre_estudiante , id_miTutor } = req.body;
-    const estadoNivel = {nivel, email,  id_tutor: codigoTutor(10), tutor_asignado:asignar_tutor}
+    let { codigo, estado, nivel=1, rol, asignar_tutor, email , nombre_estudiante , id_miTutor } = req.body;
+    let estadoNivel = {nivel, email,  id_tutor: codigoTutor(10), tutor_asignado:asignar_tutor}
     const nuevoEstado = { estadoAdm: estado, rol, email} // Estado Consultor Aprobado, Pendiente, Bloqueado
     let c1, datos, emailTutor 
 
@@ -160,11 +160,15 @@ dashboardController.actualizarConsultor = async (req, res) => {
 
         // Generando codigo unico al tutor
         if(nuevoRol.rol == 'Tutor'){
-            datos = {email, id_tutor: codigoTutor(10), tutor_asignado:'N/A'}
-           c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
+            console.log("ENTRANDO 1");
+            if (asignar_tutor != "N/A" ) {
+                asignar_tutor = ""
+            }
+            datos = {email, id_tutor: codigoTutor(10), tutor_asignado:''}
+            c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
         }else{
         // Asignando al estudiante el tutor seleccionado
-        datos = {email, id_tutor:"N/A", tutor_asignado:asignar_tutor }
+        datos = {email, id_tutor:"", tutor_asignado:asignar_tutor }
 
         // Capturando el tutor asignado del estudiante para mostrar el nombre en el correo que le llega al tutor
         let tutor = await consultarDatos('consultores')
