@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "Test Student PAOM",
+        name: "Student PAOM",
         script: "./app.js",
         watch: ["server", "client"],
         watch_delay: 1000, // Delay between restart
