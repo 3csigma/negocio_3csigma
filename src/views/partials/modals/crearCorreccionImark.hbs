@@ -1,5 +1,5 @@
 {{#if botonesEtapas.dos}}
-<td style="border-color: transparent; padding:3px 0px 10px">
+<td style="border-color: transparent; padding:3px 0px 10px" title="No hay correcciones para este informe">
     {{#if crearCorrenccion}}
     {{#if informeMarketing}}
     <div data-toggle="modal" data-target="#informeMarketing"
@@ -72,9 +72,9 @@
 {{#if consultorDash}}
 {{#if infoM.ok}}
 <td style="border-color: transparent; padding:3px">
-    <label for="inputInformeMarketing">
+    <label for="inputInformeMarketing" title="Este informe ya fue aprobado">
         <div class="btn btn-primary shadow btn-xs sharp mr-1 text-white"
-            style="border-color: white;filter: grayscale(1);pointer-events:none ">
+            style="border-color: white;filter: grayscale(1);pointer-events:none" >
             <i class="fa fa-upload"></i>
         </div>
     </label>

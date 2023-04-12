@@ -605,7 +605,6 @@ dashboardController.editarEmpresa = async (req, res) => {
             frmInfo.ok = true
         }
     }
-    console.log(">>>>>",frmInfo.ok)
     /************************************************************************************* */
 
     /** PROPUESTA DE ANÁLISIS DE NEGOCIO - PDF */
@@ -1225,26 +1224,33 @@ dashboardController.editarEmpresa = async (req, res) => {
 
 dashboardController.correcciones = async (req, res) => {
     const emailUser = req.user.email
-    const {id_empresa, correccion, informe} = req.body
+    let {id_empresa, correccion, informe} = req.body
     let row = await consultarDatos('informes');
     let empresas = await consultarDatos('empresas');
     let consultores_asignados = await consultarDatos('consultores_asignados');
     let consultores = await consultarDatos('consultores');
-    const user = consultores.find(x => x.email == emailUser)
+    let user = consultores.find(x => x.email == emailUser)
 
-    let etapa = 2
+    let etapa = 2, result, estudiante, nombreTutor
     if (informe == 'Informe diagnóstico' ) {etapa = 1}
     if (informe == 'Informe de plan estratégico') etapa = 3
 
     row = row.find(x => x.id_empresa == id_empresa && x.nombre == informe)
     empresas = empresas.find(e => e.id_empresas == id_empresa)
 
-    let result = consultores_asignados.find(r => r.empresa == id_empresa && r.orden == etapa)
-    let estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado == user.id_tutor || req.user.rol == 'Admin')
+    if (req.user.rol == 'Tutor') {
+        result = consultores_asignados.find(r => r.empresa == id_empresa && r.orden == etapa)
+        estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado == user.id_tutor)
+        nombreTutor = user.nombres
+
+    } else {
+        result = consultores_asignados.find(r => r.empresa == id_empresa && r.orden == etapa)
+        estudiante = consultores.find(c => c.id_consultores == result.consultor && c.tutor_asignado)
+        nombreTutor = "El administrador"
+    }
 
     let nombre_estudiante = estudiante.nombres
     let email = estudiante.email
-    let nombreTutor = user.nombres
     let nombreEmpresa = empresas.nombre_empresa
 
      // PARA EL ESTUDIANTE 
@@ -1851,89 +1857,131 @@ dashboardController.guardarInforme = async (req, res) => {
     const tutor = consultor.find(x => x.id_tutor == clog.tutor_asignado)
 
     const fecha = new Date()
-    let actualizar, nuevoInforme
-    if (req.user.rol == "Tutor" || req.user.rol == "Admin") {
-        actualizar = {
-            url: '../informes_empresas/' + urlInforme,
-            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-            mes: fecha.getMonth() + 1,
-            year: fecha.getFullYear(),
-            estado: 1
-        }
-
-        nuevoInforme = {
-            id_empresa: e.id_empresas,
-            nombre: nombreInforme,
-            url: '../informes_empresas/' + urlInforme,
-            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-            mes: fecha.getMonth() + 1,
-            year: fecha.getFullYear(),
-            estado: 1
-        }
-
-    } else {
-        actualizar = {
-            url: '../informes_empresas/' + urlInforme,
-            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-            mes: fecha.getMonth() + 1,
-            year: fecha.getFullYear()
-        }
-        nuevoInforme = {
-            id_empresa: e.id_empresas,
-            nombre: nombreInforme,
-            url: '../informes_empresas/' + urlInforme,
-            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
-            mes: fecha.getMonth() + 1,
-            year: fecha.getFullYear()
-        }
-    }
-    
-
-    // Validando si ya tiene un informe montado
-    const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
     let informe = null;
 
-    if (tieneInforme.length > 0) {
-        informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e.id_empresas, nombreInforme])
-    } else {
-        // informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
-        informe = await insertarDatos('informes', nuevoInforme)
+    let actualizar = {
+        url: '../informes_empresas/' + urlInforme,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear(),
+        estado: 1
     }
 
-    if (informe.affectedRows > 0) {
-        const nombreEmpresa_ = e.nombre_empresa;
-        let tipoInforme = nombreInforme.toLowerCase();
+    let nuevoInforme = {
+        id_empresa: e.id_empresas,
+        nombre: nombreInforme,
+        url: '../informes_empresas/' + urlInforme,
+        fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+        mes: fecha.getMonth() + 1,
+        year: fecha.getFullYear(),
+        estado: 1
+    }
 
-        // PARA EL TUTOR 
-        const nombreTutor = tutor.nombres
-        const nombre_estudiante = clog.nombres
-        const mensaje = "Un estudiante ha subido un nuevo informe";
-        let plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+    if (req.user.rol == "Tutor" || req.user.rol == "Admin") {
 
-        if (nombreInforme == 'Informe diagnóstico') {
-            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
-        }
-        if (nombreInforme == 'Informe de análisis') {
-            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
-        }
-        if (nombreInforme == 'Informe de plan estratégico') {
-            plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
-        }
-        
-        // Enviar Email
-        const resultTutor = await sendEmail(tutor.email, mensaje, plantilla)
-
-        if (resultTutor == false) {
-            console.log("\nOcurrio un error inesperado al enviar el email *Tutor asignado*")
+        // Validando si ya tiene un informe montado
+        const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
+ 
+        if (tieneInforme.length > 0) {
+             informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e.id_empresas, nombreInforme])
         } else {
-            console.log("\n<<<<< Se envío email para el tutor")
+             informe = await insertarDatos('informes', nuevoInforme)
         }
 
-        r.ok = true;
-        r.fecha = nuevoInforme.fecha;
-        r.url = nuevoInforme.url
-    }
+         if (informe.affectedRows > 0) {
+            const nombreEmpresa_ = e.nombre_empresa;
+            const email = e.email
+            let tipoInforme = nombreInforme.toLowerCase();
+            let asunto = 'Se ha cargado un nuevo ' + tipoInforme
+            const texto = "Tu consultor ha cargado el informe general."
+            let template = informesHTML(nombreEmpresa_, tipoInforme);
+    
+            if (nombreInforme == 'Informe diagnóstico') {
+                asunto = 'Diagnóstico de negocio finalizado'
+                const etapa = 'Diagnóstico de negocio';
+                const link = 'diagnostico-de-negocio';
+                template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            }
+            if (nombreInforme == 'Informe de análisis') {
+                asunto = 'Análisis de negocio finalizado'
+                const etapa = 'Análisis de negocio';
+                const link = 'analisis-de-negocio';
+                template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            }
+            if (nombreInforme == 'Informe de plan estratégico') {
+                asunto = 'Plan estratégico de negocio finalizado'
+                const etapa = 'Plan estratégico de negocio';
+                const link = 'plan-estrategico';
+                template = etapaFinalizadaHTML(nombreEmpresa_, etapa, texto, link);
+            }
+            const resultEmail = await sendEmail(email, asunto, template)
+            if (resultEmail == false) {
+                console.log("\n<<<<< Ocurrio un error inesperado al enviar el email al estudiante de informe subido >>>> \n")
+            } else {
+                console.log("\n<<<<< El tutor o admin han subido el informe - ...Enviando correo a la empresa... >>>>>\n")
+            }
+        }
 
+    } else {
+        actualizar = {
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
+        nuevoInforme = {
+            id_empresa: e.id_empresas,
+            nombre: nombreInforme,
+            url: '../informes_empresas/' + urlInforme,
+            fecha: fecha.toLocaleString("en-US", { timeZone: zonaHoraria }),
+            mes: fecha.getMonth() + 1,
+            year: fecha.getFullYear()
+        }
+
+    // Validando si ya tiene un informe montado
+        const tieneInforme = await consultarDatos('informes', `WHERE id_empresa = "${e.id_empresas}" AND nombre = "${nombreInforme}"`)
+
+        if (tieneInforme.length > 0) {
+            informe = await pool.query('UPDATE informes SET ? WHERE id_empresa = ? AND nombre = ?', [actualizar, e.id_empresas, nombreInforme])
+        } else {
+            // informe = await pool.query('INSERT INTO informes SET ?', [nuevoInforme])
+            informe = await insertarDatos('informes', nuevoInforme)
+        }
+
+        if (informe.affectedRows > 0) {
+            const nombreEmpresa_ = e.nombre_empresa;
+            let tipoInforme = nombreInforme.toLowerCase();
+
+            // PARA EL TUTOR 
+            const nombreTutor = tutor.nombres
+            const nombre_estudiante = clog.nombres
+            const mensaje = "Un estudiante ha subido un nuevo informe";
+            let plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+
+            if (nombreInforme == 'Informe diagnóstico') {
+                plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+            }
+            if (nombreInforme == 'Informe de análisis') {
+                plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+            }
+            if (nombreInforme == 'Informe de plan estratégico') {
+                plantilla = estudianteSubeInforme(nombreTutor, nombre_estudiante, tipoInforme, nombreEmpresa_);
+            }
+
+            // Enviar Email
+            const resultTutor = await sendEmail(tutor.email, mensaje, plantilla)
+
+            if (resultTutor == false) {
+                console.log("\nOcurrio un error inesperado al enviar el email *Tutor asignado*")
+            } else {
+                console.log("\n<<<<< Se envío email para el tutor")
+            }
+
+        }
+    }
+    r.ok = true;
+    r.fecha = nuevoInforme.fecha;
+    r.url = nuevoInforme.url
     res.send(r)
 }
 

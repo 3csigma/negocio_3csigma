@@ -661,10 +661,10 @@ empresaController.analisis = async (req, res) => {
 
     const informesAnalisis = []
     const info0Analisis = await consultarInformeCompleto(id_empresa, "Informe de análisis")
-    const info1Analisis = await consultarInformes(id_empresa, "Informe de dimensión producto")
-    const info2Analisis = await consultarInformes(id_empresa, "Informe de dimensión administración")
-    const info3Analisis = await consultarInformes(id_empresa, "Informe de dimensión operaciones")
-    const info4Analisis = await consultarInformes(id_empresa, "Informe de dimensión marketing")
+    const info1Analisis = await consultarInformeCompleto(id_empresa, "Informe de dimensión producto")
+    const info2Analisis = await consultarInformeCompleto(id_empresa, "Informe de dimensión administración")
+    const info3Analisis = await consultarInformeCompleto(id_empresa, "Informe de dimensión operaciones")
+    const info4Analisis = await consultarInformeCompleto(id_empresa, "Informe de dimensión marketing")
     info0Analisis ? informesAnalisis.push(info0Analisis) : false;
     info1Analisis ? informesAnalisis.push(info1Analisis) : false;
     info2Analisis ? informesAnalisis.push(info2Analisis) : false;
