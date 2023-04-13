@@ -84,6 +84,7 @@
 ***********************************-->
 <script>
     function bloquearConsultor(id) {
+        console.log(id)
         Swal.fire({
             title: '¿Deseas bloquear este consultor?',
             text: "Podrás activarlo nuevamente más adelante.",
@@ -104,11 +105,11 @@
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response){
-                            location.reload();
+                            location.reload(true);
                         } else {
                             Swal.fire(
                                 'Error!',
-                                'El/la consultor(a) ya está bloqueado(a)/inactivo(a).',
+                                'El consultor ya está bloqueado/inactivo.',
                                 'error'
                             )
                         }
@@ -138,7 +139,6 @@
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response) {
-                            alert("Se eliminó el consultor")
                             location.reload(true);
                         } else {
                             Swal.fire(
