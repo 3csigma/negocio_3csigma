@@ -64,6 +64,7 @@ router.get('/consultores', checkLogin, dashboardController.mostrarConsultores)
 router.get('/consultores/:codigo', checkLogin, dashboardController.editarConsultor)
 router.post('/actualizarConsultor', checkLogin, dashboardController.actualizarConsultor)
 router.post('/bloquearConsultor', checkLogin, dashboardController.bloquearConsultor)
+router.post('/eliminarConsultor', checkLogin, dashboardController.eliminarConsultor)
 
 // Empresas Admin
 router.get('/empresas', checkLogin, dashboardController.mostrarEmpresas)

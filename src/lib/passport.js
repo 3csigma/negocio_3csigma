@@ -125,7 +125,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             // Objeto de Usuario
             const tel_consultor = "+" + countryCode + " " + telConsul
             const newUser = { nombres, apellidos, email, clave, rol: 'Estudiante', codigo, estadoEmail: 1, estadoAdm: 0 };
-            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, /*empresa_seleccionada,*/ codigo, id_tutor:'N/A', tutor_asignado:'N/A', fecha_creacion, mes, year };
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, /*empresa_seleccionada,*/ codigo, id_tutor:'', tutor_asignado:'', fecha_creacion, mes, year };
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);

@@ -66,6 +66,7 @@
                                                 </a>
                                                 <a onclick="bloquearConsultor({{id_consultores}})" class="btn btn-danger shadow btn-xs sharp text-white"><i class="fa fa-ban"></i>
                                                 </a>
+                                                <a onclick="eliminarConsultor({{id_consultores}})" class="btn btn-danger shadow btn-xs sharp text-white"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -120,4 +121,40 @@
             }
         })
     }
+
+ 
+      function eliminarConsultor(id) {
+        Swal.fire({
+            title: '¿Deseas eliminar este consultor?',
+            text: "Este proceso no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#FFE000',
+            cancelButtonColor: '#000000',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarConsultor', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response) {
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'El consultor(a) ya está asignado(a) a una empresa.',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
+
 </script>
