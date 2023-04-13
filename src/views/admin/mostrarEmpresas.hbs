@@ -69,7 +69,7 @@
 </div>
 
 <!--**********************************
-            Scripts
+            Scripts EMPRESA
 ***********************************-->
 <script>
     function bloquearEmpresa(id) {
@@ -92,7 +92,7 @@
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))
                     .then(response => {
-                        if (response){
+                        if (response) {
                             location.reload();
                         } else {
                             Swal.fire(
@@ -127,7 +127,6 @@
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response) {
-                            alert("Se eliminó la empresa")
                             location.reload(true);
                         } else {
                             Swal.fire(
