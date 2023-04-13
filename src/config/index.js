@@ -4,7 +4,7 @@ const rutasConsultor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperf
 
 const rutasTutor = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'comentariotareas', 'empresas', 'estudiantes-asignados', 'empresas-relacionadas' , 'enviar-propuesta-empresa', 'analisis-dimension-producto', 'analisis-dimension-administracion', 'analisis-dimension-operaciones', 'analisis-dimension-marketing', 'agregartarea', 'editartarea', 'actualizartarea', 'eliminartarea', 'nuevorendimiento', 'cuestionario-diagnostico', 'diagnostico-proyecto', 'guardarinforme', 'conclusiones', 'correcciones', 'correcciones-aprobadas', 'guardar-archivos-empresarial', 'website-empresarial', 'finalizaretapa']
 
-const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'eliminarconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'pagomanual-diagnostico', 'pagomanual-empresas', 'cancelarsub']
+const rutasAdmin = ['logout', 'perfil', 'updateprofile', 'actualizarfotoperfil', 'consultores', 'actualizarconsultor', 'bloquearconsultor', 'eliminarconsultor', 'empresas', 'actualizarempresa', 'bloquearempresa', 'eliminarempresa', 'pagomanual-diagnostico', 'pagomanual-empresas', 'cancelarsub']
 
 const privateKey_DKIM = `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAxnOodBzxqzPuLrbLtK34c/RwxGDOUcb9R1505XsocKSxuFZS
