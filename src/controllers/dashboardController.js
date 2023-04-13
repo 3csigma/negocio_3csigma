@@ -273,16 +273,14 @@ dashboardController.eliminarConsultor = async (req, res) => {
     let result = false;
     let datos = await consultarDatos('consultores_asignados')
     datos = datos.find(x => x.consultor == id)
-    console.log("filtro" , datos);
     if (datos) {
-       console.log(" aqui no borramos");
     }else if(datos == undefined) {
-        console.log("aqui borramos");
         datos = await consultarDatos('consultores')
         datos = datos.find(x => x.id_consultores == id)
-        
-        await pool.query('DELETE FROM users WHERE codigo = ?', [datos.codigo])
-        await pool.query('DELETE FROM consultores WHERE codigo = ?', [datos.codigo])
+       let accion = await pool.query('DELETE FROM users WHERE codigo = ?', [datos.codigo])
+       if (accion.affectedRows > 0) {
+           await pool.query('DELETE FROM consultores WHERE codigo = ?', [datos.codigo])
+       }
          result = true;
     }
     res.send(result)
@@ -1455,6 +1453,23 @@ dashboardController.bloquearEmpresa = async (req, res) => {
             })
         }
     }
+}
+
+dashboardController.eliminarEmpresa = async (req, res) => {
+    const { id } = req.body
+    let result = false;
+    let datos = await consultarDatos('consultores_asignados')
+    datos = datos.find(x => x.empresa == id)
+    console.log(datos);
+    if (!datos) {
+        console.log("Entré pa eliminar");
+        datos = await consultarDatos('empresas')
+        datos = datos.find(x => x.id_empresas == id)
+        await eliminarDatos('users', `WHERE codigo = "${datos.codigo}"`)
+        await eliminarDatos('empresas', `WHERE id_empresas = "${id}"`)
+        result = true;
+    }
+    res.send(result)
 }
 
 /** PAGOS MANUALES ETAPA 1 y 2 */

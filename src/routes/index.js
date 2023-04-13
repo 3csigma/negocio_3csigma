@@ -73,6 +73,7 @@ router.get('/empresas-asignadas/:codigo', checkLogin, dashboardController.editar
 router.get('/estudiantes-asignados/:codigo', checkLogin, dashboardController.editarEmpresa)
 router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpresa)
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
+router.post('/eliminarEmpresa', checkLogin, dashboardController.eliminarEmpresa)
 router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
 router.post('/correcciones', checkLogin, dashboardController.correcciones)
 router.post('/correcciones-aprobadas', checkLogin, dashboardController.correccionesAprobadas)
