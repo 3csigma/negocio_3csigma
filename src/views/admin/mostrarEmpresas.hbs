@@ -126,8 +126,9 @@
                 }).then(res => res.json())
                     .catch(error => console.error('Error:', error))
                     .then(response => {
-                        if (response){
-                            location.reload();
+                        if (response) {
+                            alert("Se eliminó la empresa")
+                            location.reload(true);
                         } else {
                             Swal.fire(
                                 '¡Error!',

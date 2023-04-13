@@ -138,7 +138,8 @@
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response) {
-                            location.reload();
+                            alert("Se eliminó el consultor")
+                            location.reload(true);
                         } else {
                             Swal.fire(
                                 'Error!',
