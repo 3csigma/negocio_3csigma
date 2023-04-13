@@ -103,4 +103,39 @@
             }
         })
     }
+
+    function eliminarEmpresa(id) {
+        Swal.fire({
+            title: '¿Deseas eliminar esta empresa?',
+            text: "Este proceso no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarEmpresa', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response) {
+                            alert("Se eliminó la empresa")
+                            location.reload(true);
+                        } else {
+                            Swal.fire(
+                                '¡Error!',
+                                'No sé puede eliminar porque la empresa ya está en proceso de consultoría.',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
 </script>

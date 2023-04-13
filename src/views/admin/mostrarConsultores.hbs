@@ -62,6 +62,7 @@
                                                 </a>
                                                 <a onclick="bloquearConsultor({{id_consultores}})" class="btn btn-warning shadow btn-xs sharp mr-1 text-white"><i class="fa fa-ban"></i>
                                                 </a>
+                                                <a onclick="eliminarConsultor({{id_consultores}})" class="btn btn-danger shadow btn-xs sharp text-white"><i class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -104,11 +105,46 @@
                     .catch(error => console.error('Error:', error))
                     .then(response => {
                         if (response){
-                            location.reload();
+                            location.reload(true);
                         } else {
                             Swal.fire(
                                 'Error!',
                                 'El consultor ya está bloqueado/inactivo.',
+                                'error'
+                            )
+                        }
+                    });
+            }
+        })
+    }
+
+    function eliminarConsultor(id) {
+        Swal.fire({
+            title: '¿Deseas eliminar este consultor?',
+            text: "Este proceso no es reversible.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#50368C',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: '¡Sí, eliminar!'
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                fetch('/eliminarConsultor', {
+                    method: 'POST',
+                    body: JSON.stringify({id}),
+                    headers: {'Content-Type': 'application/json'}
+                }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                        if (response) {
+                            alert("Se eliminó el consultor")
+                            location.reload(true);
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                'El consultor(a) ya está asignado(a) a una empresa.',
                                 'error'
                             )
                         }
