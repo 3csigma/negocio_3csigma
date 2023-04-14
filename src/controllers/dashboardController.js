@@ -4,7 +4,7 @@ const passport = require('passport')
 const crypto = require('crypto');
 const multer = require('multer');
 const path = require('path');
-const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos } = require('../lib/helpers')
+const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos, eliminarDatos } = require('../lib/helpers')
 
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, nuevoEstudiante_paraTutor, tutor_asignadoHTML, informesHTML, estudianteSubeInforme, tutorSubeCorrecciones, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
 const { log } = require('console');
