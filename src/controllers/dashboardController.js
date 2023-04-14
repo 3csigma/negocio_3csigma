@@ -151,7 +151,9 @@ dashboardController.actualizarConsultor = async (req, res) => {
 
     // Capturando el Consultor recien registrado
     let consultor = await consultarDatos('users')
+    let infoConsul = await consultarDatos('consultores')
     consultor = consultor.find(x => x.codigo == codigo)
+    infoConsul = infoConsul.find(y => y.codigo == consultor.codigo)
 
     if (consultor.estadoAdm == 1) {
         // Actualizando el rol, en otros casos el email y el estado
@@ -160,12 +162,14 @@ dashboardController.actualizarConsultor = async (req, res) => {
 
         // Generando codigo unico al tutor
         if(nuevoRol.rol == 'Tutor'){
-            console.log("ENTRANDO 1");
-            if (asignar_tutor != "N/A" ) {
-                asignar_tutor = ""
+            if (asignar_tutor != "N/A" ) asignar_tutor = ""
+            if (infoConsul.id_tutor) {
+                datos = {email, tutor_asignado:''}
+                c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
+            }else{
+                datos = {email, id_tutor: codigoTutor(10), tutor_asignado:''}
+                c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
             }
-            datos = {email, id_tutor: codigoTutor(10), tutor_asignado:''}
-            c1= await pool.query('UPDATE consultores SET ? WHERE codigo = ? ', [datos, codigo])
         }else{
         // Asignando al estudiante el tutor seleccionado
         datos = {email, id_tutor:"", tutor_asignado:asignar_tutor }
