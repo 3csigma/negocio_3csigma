@@ -90,19 +90,18 @@ dashboardController.addConsultores = (req, res, next) => {
 
 dashboardController.mostrarConsultores = async (req, res) => {
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm, rol FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" OR rol = "Tutor" AND c.id_consultores != 1;')
-    let rol
     consultores.forEach(async c => {
+        //=> Mostrar cantidad de empresas asigandas a los estudiantes
         const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
         c.num_empresas = num[0].numEmpresas
 
         //=> Mostrar el tutor a cargo de estudiantes 
         let tutor = await pool.query('SELECT * FROM consultores c INNER JOIN users u ON c.codigo = u.codigo WHERE u.rol = "Tutor"')
         tutor = tutor.find(x => x.id_tutor == c.tutor_asignado)
-        if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos; } else {c.tutor = "N/A"}
 
-        if (c.rol == "Tutor") {
-            rol  = c.rol
-        }
+        if (tutor) {c.tutor = tutor.nombres + " " + tutor.apellidos; } else {c.tutor = "N/A"}
+        if (c.rol == "Tutor") {c.rol}
+
     });
     
     /** Acceso directo para Consultores pendientes por aprobar */

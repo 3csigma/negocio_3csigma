@@ -129,7 +129,7 @@ tutorController.empresasAsignadas = async (req, res) => {
                 if (!acc.includes(item.empresa)) acc.push(item.empresa);
                 return acc;
             }, [])
-        // Recorriendo la variable idEmpresa
+        // Recorriendo idEmpresa
             idEmpresas.forEach(ids => {
                 // Guardo los id obtenidos anteriormente guardandolos en array por separados
                 //- saveId: para guardar los datos obtenidos (save id)
