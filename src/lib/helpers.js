@@ -91,7 +91,7 @@ capturarMes = () => {
     const f = new Date()
     f.setMonth(mesAnterior - 1);
     let txtMes = f.toLocaleDateString("es", { month: "short" })
-    let mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1);
+    let mes = txtMes.charAt(0).toUpperCase() + txtMes.slice(1)
 
     return {mes, mesAnterior}
 
@@ -407,17 +407,16 @@ helpers.historial_empresas_consultor = async () => {
       /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     const year = new Date().getFullYear();
-    
     const objMes = capturarMes()
     const mesAnterior = objMes.mesAnterior;
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let idConsultor = 0
-
+    let idConsultor = 0, tutorAsignado = 0
     consultores.forEach(async (c) => {
         idConsultor = c.id_consultores;
-        console.log("IDDDDD  idConsultor DDDD", idConsultor);
+        tutorAsignado = c.tutor_asignado;
+        if (tutorAsignado == null) tutorAsignado = ''
 
         let filtroEmpresas, num_empresas_asignadas = 0
         filtroEmpresas = empresas.filter((item) => item.consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
@@ -426,13 +425,13 @@ helpers.historial_empresas_consultor = async () => {
             num_empresas_asignadas = filtroEmpresas.length;
 
             // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
-            const datos_empresas_consultor = { fecha, mes, num_empresas_asignadas, idConsultor };
+            const datos_empresas_consultor = { fecha, mes, year, num_empresas_asignadas, idConsultor, tutorAsignado };
             await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
             console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
             console.log("==--..>> (1) consultor");
         } else {
             // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
-            datos_empresas_consultor = { fecha, mes, num_empresas_asignadas: 0, idConsultor };
+            datos_empresas_consultor = { fecha, mes, year, num_empresas_asignadas: 0, idConsultor, tutorAsignado };
             await pool.query("INSERT INTO historial_empresas_consultor SET ?", [datos_empresas_consultor]);
             console.log("==--..>> (2) consultor");
         }
@@ -455,9 +454,11 @@ helpers.historial_informes_consultor = async () => {
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let idConsultor = 0
+    let idConsultor = 0, tutorAsignado = 0
     consultores.forEach(async (c) => {
         idConsultor = c.id_consultores;
+        tutorAsignado = c.tutor_asignado;
+        if (tutorAsignado == null) tutorAsignado = "" 
 
         let filtroInformes, num_informes = 0
         filtroInformes = informes.filter((item) => item.id_consultor == c.id_consultores && mesAnterior == item.mes && year == item.year);
@@ -467,13 +468,13 @@ helpers.historial_informes_consultor = async () => {
             num_informes = filtroInformes.length;
 
             // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
-            const datos_informes_consultor = { fecha, mes, num_informes, idConsultor };
+            const datos_informes_consultor = { fecha, mes, year, num_informes, idConsultor, tutorAsignado };
             await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
             console.log("Realizando registro en DB HISTORIAL INFORMES CONSULTOR....")
             console.log("==--..>> (1) consultor");
         } else {
             // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL CONSULTOR FILTRADOS POR MES Y AÑO 
-            datos_informes_consultor = { fecha, mes, num_informes: 0, idConsultor };
+            datos_informes_consultor = { fecha, mes, year, num_informes: 0, idConsultor, tutorAsignado };
             await pool.query("INSERT INTO historial_informes_consultor SET ?", [datos_informes_consultor]);
             console.log("==--..>> (2) consultor");
 
@@ -481,6 +482,93 @@ helpers.historial_informes_consultor = async () => {
     });
 
     console.log("HISTORIAL DE INFORMES CONSULTOR FINALIZADO...");
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS TUTOR
+helpers.historial_empresas_tutor = async () => {
+
+    const consultores = await helpers.consultarDatos("consultores")
+    const h_empresaC = await helpers.consultarDatos("historial_empresas_consultor")
+
+      /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
+
+    let idConsultor = 0, idTutor = 0
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+        idTutor = c.id_tutor;
+        if (idTutor == null)  idTutor = ''
+
+        let filtroEmpresas, num_empresas = 0
+        filtroEmpresas = h_empresaC.filter((item) => item.tutorAsignado == c.id_tutor && mes == item.mes && year == item.year);
+        if (filtroEmpresas.length > 0) {
+            filtroEmpresas.forEach(numE => {
+                num_empresas += numE.num_empresas_asignadas
+            });
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            const datos_empresas_tutor = { fecha, mes, num_empresas, idTutor };
+            await pool.query("INSERT INTO historial_empresas_tutor SET ?", [datos_empresas_tutor]);
+            console.log("==--..>> (1) TUTOR");
+        } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL CONSULTOR FILTRADOS POR MES Y AÑO 
+            datos_empresas_tutor = { fecha, mes, num_empresas: 0, idTutor };
+            await pool.query("INSERT INTO historial_empresas_tutor SET ?", [datos_empresas_tutor]);
+            console.log("==--..>> (2) TUTOR");
+        }
+    });
+
+    console.log("HISTORIAL DE EMPRESAS TUTOR FINALIZADO...");
+};
+
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES TUTOR
+helpers.historial_informes_tutor = async () => {
+    const informes = await helpers.consultarDatos("historial_informes_consultor")
+    const consultores = await helpers.consultarDatos("consultores")
+
+     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
+
+    let idConsultor = 0, idTutor = 0
+    consultores.forEach(async (c) => {
+        idConsultor = c.id_consultores;
+        idTutor = c.id_tutor;
+        if (idTutor == null)  idTutor = ''
+
+        let filtroInformes, num_informes = 0
+        filtroInformes = informes.filter((item) => item.tutorAsignado == c.id_tutor && mes == item.mes && year == item.year);
+
+        if (filtroInformes.length > 0) {
+            filtroInformes.forEach(numI => {
+                num_informes += numI.num_informes
+            });
+
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL TUTOR FILTRADOS POR MES Y AÑO 
+            const datos_informes_tutor = { fecha, mes, num_informes, idTutor };
+            await pool.query("INSERT INTO historial_informes_tutor SET ?", [datos_informes_tutor]);
+            console.log("Realizando registro en DB HISTORIAL INFORMES TUTOR....")
+            console.log("==--..>> (1) tutor");
+        } else {
+            // ==> ENVIANDO A LA TABLA HISTORIAL INFORMES DEL TUTOR FILTRADOS POR MES Y AÑO 
+            datos_informes_tutor = { fecha, mes, num_informes: 0, idTutor };
+            await pool.query("INSERT INTO historial_informes_tutor SET ?", [datos_informes_tutor]);
+            console.log("==--..>> (2) tutor");
+
+        }
+    });
+
+    console.log("HISTORIAL DE INFORMES TUTOR FINALIZADO...");
 };
 
 // Consultar Tareas Retrasadas x Empresas y Enviar Email (PLAN ESTRATÉGICO)

@@ -31,26 +31,25 @@ tutorController.index = async (req, res) => {
         }
 
 
+        // const sss = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+        // let suma  = 0
+        // const estudiantes = await pool.query("SELECT * FROM consultores WHERE tutor_asignado = ? " , [consultor.id_tutor]);
+        // estudiantes.forEach(async (datos) => {
+            //     const historialConsultor = await pool.query("SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? " , [datos.id_consultores]);
+            //     const row = historialConsultor.filter(x => x.idConsultor == datos.id_consultores)
+            
+            //     row.forEach(r => {
+                //         console.log("Cantidad de empresas >>" , r.num_empresas_asignadas);
+                //         suma = suma + r.num_empresas_asignadas
+                //         // console.log("suma >>" , suma);
+                
+                //     });     
+                
+                //      console.log("suma >>" , suma);
+                // });
+                
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS ASIGANADAS MENSUALMENTE <<====
-    // const sss = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
-    // let suma  = 0
-    // const estudiantes = await pool.query("SELECT * FROM consultores WHERE tutor_asignado = ? " , [consultor.id_tutor]);
-    // estudiantes.forEach(async (datos) => {
-    //     const historialConsultor = await pool.query("SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? " , [datos.id_consultores]);
-    //     const row = historialConsultor.filter(x => x.idConsultor == datos.id_consultores)
-        
-    //     row.forEach(r => {
-    //         console.log("Cantidad de empresas >>" , r.num_empresas_asignadas);
-    //         suma = suma + r.num_empresas_asignadas
-    //         // console.log("suma >>" , suma);
-
-    //     });     
-       
-    //      console.log("suma >>" , suma);
-    // });
-
-    const empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
-
+    const empresas_asignadas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_tutor WHERE idTutor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_tutor]);
     let datosJson_empresas_asignadas
     if (empresas_asignadas.length > 0) {
         datosJson_empresas_asignadas = JSON.stringify(empresas_asignadas)
@@ -58,7 +57,7 @@ tutorController.index = async (req, res) => {
     // FIN DE LA FUNCIÓN <<====
 
     // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
-    const historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_consultor WHERE idConsultor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_consultores]);
+    const historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_tutor WHERE idTutor = ? ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;", [consultor.id_tutor]);
     let datosJson_historialI_consultor
     if (historialInformes.length > 0) {
          datosJson_historialI_consultor = JSON.stringify(historialInformes)
