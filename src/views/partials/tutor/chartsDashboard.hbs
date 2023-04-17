@@ -8,14 +8,14 @@
 				    let valoresE = []   // => Valores historial empresas consultor
                     const datosY_empresas = []  // => Datos para la barras de la grafica
                     const datosX_empresas = [] // => Datos para el eje X (los meses)
-                    valoresE = $('#datosJson_empresas_asignadas').val();
+                    valoresE = $('#tutorJson_empresas_asignadas').val();
 
-                    console.log("Valores historial empresas consultor >> ",valoresE)
+                    console.log("Valores historial empresas tutor >> ",valoresE)
                     if (valoresE) {
                         valoresE = JSON.parse(valoresE);
                         console.log(valoresE)
                         valoresE.forEach(e => {
-                        datosY_empresas.push(e.num_empresas_asignadas)
+                        datosY_empresas.push(e.num_empresas)
                         datosX_empresas.push(e.mes)
                         })
                     }
@@ -124,7 +124,7 @@
 				    let valoresI = []   // => Valores historial informes consultor
                     const datosY = []  // => Datos para la barras de la grafica
                     const datosX = [] // => Datos para el eje X (los meses)
-                    valoresI = $('#datosJson_historialI_consultor').val();
+                    valoresI = $('#tutorJson_historialI_consultor').val();
 
                     console.log("Valores historial informes consultor >> ",valoresI)
                     if (valoresI) {
