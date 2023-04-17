@@ -119,32 +119,51 @@ tutorController.empresasAsignadas = async (req, res) => {
     let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo WHERE rol = "Estudiante" AND c.id_consultores != 1 AND c.tutor_asignado = ?', [tutorActual.id_tutor])
     let estudiantesAsignados = await consultarDatos('consultores_asignados')
     let tablaEmpresas = await pool.query('SELECT e.*, f.telefono FROM empresas e LEFT OUTER JOIN ficha_cliente f ON e.id_empresas = f.id_empresa INNER JOIN users u ON e.codigo = u.codigo AND rol = "Empresa"')
-    let asignados = [], empresas = []
+    let asignados, empresas = [], idEmpresas , saveId = [], resultado = []
   
     consultores.forEach(c => {
+        // Filtrando los datos de tbl consultores con la tbl de los consultores asignados
         asignados = estudiantesAsignados.filter(a => a.consultor == c.id_consultores)
-    });
-        if (asignados.length > 0) {
-            const idEmpresas = asignados.reduce((acc, item) => {
+        // Reduciendo los datos a id de empresas
+            idEmpresas = asignados.reduce((acc, item) => {
                 if (!acc.includes(item.empresa)) acc.push(item.empresa);
                 return acc;
             }, [])
-            
-            idEmpresas.forEach(x => {
-                const info = tablaEmpresas.find(e => e.id_empresas == x)
-                const etapa= estudiantesAsignados.filter(y => y.empresa == info.id_empresas)
+        // Recorriendo la variable idEmpresa
+            idEmpresas.forEach(ids => {
+                // Guardo los id obtenidos anteriormente guardandolos en array por separados
+                //- saveId: para guardar los datos obtenidos (save id)
+                saveId = [ids]
+                //Recorriendo el nuevo array para concatenar cada uno de los arrays anteriores
+                    saveId.forEach(sid => {
+                        //Concatenando array
+                        resultado = resultado.concat(sid)
+                    });
+            });
+        });
+        // Eliminamos los datos duplicados del arreglo concatenado
+        let result = resultado.filter((item,index)=>{
+            return resultado.indexOf(item) === index;
+          })
 
+        if (result.length > 0) {
+            // Recorriendo el array 
+            result.forEach(r => {
+                // Buscando datos basicos para encontrar la información de las empresas y filtrando para buscar la etapa
+                const info = tablaEmpresas.find(e => e.id_empresas == r)
+                const etapa= estudiantesAsignados.filter(y => y.empresa == info.id_empresas)
+                // Reduciendo datos a etapas
                 const infoEtapa = etapa.reduce((acc, item) => {
                     if (!acc.includes(item.etapa)) acc.push(item.etapa);
                     return acc;
                 }, [])
+                // Guardando la información para mandarla a la vista
                 info.etapa= ''
                 if (info) {
                     info.etapa += infoEtapa + "<br>" 
                     empresas.push(info)
                 }
             });
-              console.log(">>>>>>>>>>>>>" , empresas);
         }
     res.render('tutor/empresas', { tutorDash: true, itemActivo: 3, empresas })
 }
