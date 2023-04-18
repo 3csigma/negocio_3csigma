@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
-const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
+const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado, consultor_AsignadoEtapa } = require('../lib/mail.config')
 const { consultarDatos, insertarDatos } = require('../lib/helpers')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
@@ -76,12 +76,14 @@ passport.use('local.registro', new LocalStrategy({
             // Guardar en la base de datos
             // const fila = await pool.query('INSERT INTO users SET ?', [newUser])
             const fila = await insertarDatos('users', newUser)
-            let consultor, etapa, orden
+            let idconsultor, etapa, orden, email_estudiante, consultor 
             if (codeEstudiante) {
-                let student = await pool.query('SELECT * FROM  consultores WHERE codigo = ?', [codeEstudiante])
+                let student = await pool.query('SELECT * FROM consultores WHERE codigo = ?', [codeEstudiante])
                 student = student[0]
                 
-                consultor = student.id_consultores
+                idconsultor = student.id_consultores
+                consultor = student.nombres
+                email_estudiante = student.email
                 etapa = "Diagnóstico"
                 orden = 1
             }
@@ -93,10 +95,23 @@ passport.use('local.registro', new LocalStrategy({
                 await insertarDatos('empresas', datosEmpresa)
                 let resEmpresa = await pool.query('SELECT * FROM  empresas WHERE codigo = ?', [codigo])
                 resEmpresa = resEmpresa[0]
-                const empresa = resEmpresa.id_empresas
+                const idempresa = resEmpresa.id_empresas
+                let empresa = resEmpresa.nombre_empresa
                 if (codeEstudiante) {
-                    let consulAsignado = { consultor, empresa , etapa, orden  }
-                    await insertarDatos('consultores_asignados', consulAsignado)
+                    let consulAsignado = { consultor:idconsultor, empresa:idempresa , etapa, orden  }
+                    let upd = await insertarDatos('consultores_asignados', consulAsignado)
+
+                    if (upd.affectedRows > 0) {
+                        const key = "Diagnóstico de negocio"
+                        const subject = "Has sido asignado a una empresa para la etapa de " + key;
+                        const template = consultor_AsignadoEtapa(consultor, empresa, key);
+                        const resultConsultor = await sendEmail(email_estudiante, subject, template)
+                        if (resultConsultor == false) {
+                            console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
+                        } else {
+                            console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado a una empresa - Email Consultor: " + email_estudiante + " >>>>>\n")
+                        }
+                    }
                 }
 
             }
