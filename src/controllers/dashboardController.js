@@ -406,7 +406,7 @@ dashboardController.editarEmpresa = async (req, res) => {
     if (datosEmpresa.codeEstudiante) {
         let datosEstudiante = await consultarDatos('consultores')
         datosEstudiante = datosEstudiante.find(x => x.codigo == datosEmpresa.codeEstudiante)
-        datos.estudiante = datosEstudiante.email;
+        datos.estudiante = datosEstudiante.nombres + " " + datosEstudiante.apellidos
     }else{
         datos.estudiante = "N/A";
     }
