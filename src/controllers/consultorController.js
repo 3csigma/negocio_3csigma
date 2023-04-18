@@ -49,7 +49,7 @@ consultorController.index = async (req, res) => {
     res.render('consultor/panelConsultor', {
         consultorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
-        ultimosInformes
+        ultimosInformes, dominio: process.env.MY_DOMAIN
     });
 }
 

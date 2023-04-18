@@ -23,7 +23,7 @@ passport.use('local.registro', new LocalStrategy({
     passReqToCallback: true
 }, async (req, email, clave, done) => {
 
-    const { nombres, apellidos, nombre_empresa, zh_empresa } = req.body
+    const { nombres, apellidos, nombre_empresa, zh_empresa, codeEstudiante } = req.body
     // Verificando si el usuario existe o no
     await pool.query('SELECT * FROM users WHERE email = ?', [email], async (err, result) =>{
 
@@ -76,10 +76,29 @@ passport.use('local.registro', new LocalStrategy({
             // Guardar en la base de datos
             // const fila = await pool.query('INSERT INTO users SET ?', [newUser])
             const fila = await insertarDatos('users', newUser)
-            const empresa = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion, mes, year }
+            let consultor, etapa, orden
+            if (codeEstudiante) {
+                let student = await pool.query('SELECT * FROM  consultores WHERE codigo = ?', [codeEstudiante])
+                student = student[0]
+                
+                consultor = student.id_consultores
+                etapa = "Diagnóstico"
+                orden = 1
+            }
+            
+            const datosEmpresa = { nombres, apellidos, nombre_empresa, email, codigo, codeEstudiante, fecha_creacion, mes, year }
+          
             if (fila.affectedRows > 0) {
                 // await pool.query('INSERT INTO empresas SET ?', [empresa])
-                await insertarDatos('empresas', empresa)
+                await insertarDatos('empresas', datosEmpresa)
+                let resEmpresa = await pool.query('SELECT * FROM  empresas WHERE codigo = ?', [codigo])
+                resEmpresa = resEmpresa[0]
+                const empresa = resEmpresa.id_empresas
+                if (codeEstudiante) {
+                    let consulAsignado = { consultor, empresa , etapa, orden  }
+                    await insertarDatos('consultores_asignados', consulAsignado)
+                }
+
             }
             return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
         }

@@ -118,8 +118,6 @@ cron.schedule('0 1 1 * *',() => {
     historial_informes_tutor();
 });
 
-router.post('/historial_informes_tutor', historial_informes_tutor)
-
 // Ejecución Semanal
 cron.schedule('0 10 * * Mon',() => {
     consultar_tiempo_tareas();

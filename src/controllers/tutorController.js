@@ -79,7 +79,7 @@ tutorController.index = async (req, res) => {
     // }
     res.render('tutor/panelTutor', {
         tutorDash: true, itemActivo: 1, empresas, graficas1: true,
-        datosJson_empresas_asignadas, datosJson_historialI_consultor,
+        datosJson_empresas_asignadas, datosJson_historialI_consultor
         
     });
 }
