@@ -19,6 +19,18 @@
     display: block;
   }
 
+   .mensaje-copy{
+     visibility: hidden;
+     text-align: center;
+     font-size: 11px;
+     color: black;`
+    }
+  .show {
+    visibility: visible ;
+    transition: all .10s;
+    padding: 2px;
+  }
+
 </style>
 <!--*******************
         Preloader start
@@ -165,6 +177,21 @@
         </li> --}}
       </ul>
 
+
+            <input type="hidden" id="contenido-texto" value="{{dominio}}/registro?code={{user.codigo}}">
+              <span style="visibility: hidden;" >
+                  {{user.codigo}}
+              </span>
+              <center>
+              <a class="add-menu-sidebar color_tertiary" id="botonCopy" style="padding: 10px 15px;margin: 0;width: 72%;" href="#">
+                  <img src="/img/copy.png" alt="Aprobar consultor" class="mr-2" style="width: 30px;">
+                  <p class="font-w500 mb-0 text-center text-black">Invitar empresa</p>
+              </a>
+              </center>
+              <div class="mensaje-copy" role="alert">
+                  <b>¡Link de invitación copiado!</b>
+              </div>
+
         {{!-- BOTÓN AGENDAR CITA --}}
           <a href="https://calendly.com/app/scheduled_events/user/me" target="_blank">
             <div class="text-center">
@@ -173,11 +200,39 @@
             </div>
           </a>
 
-      <div class="copyright text-center">
-        <p><strong>­© PAOM System</strong> </p>
-      </div>
+        <div class="copyright text-center">
+          <p><strong>­© PAOM System</strong> </p>
+        </div>
     </div>
   </div>
+
+<script>
+  
+
+// * COPIAR CODIGO
+const elemento = document.querySelector('#contenido-texto').value
+  document.querySelector('#botonCopy').addEventListener('click',()=>{
+
+  document.querySelector('.mensaje-copy').classList.add('show');
+
+  copyToClipBoard(elemento);
+
+  setTimeout(() => {
+    document.querySelector('.mensaje-copy').classList.remove('show')
+  }, 2000)
+})
+
+function copyToClipBoard(elemento){
+    const inputOculto = document.createElement('input');
+    inputOculto.setAttribute('value', elemento);
+    document.body.appendChild(inputOculto);
+    inputOculto.select();
+    document.execCommand('copy');
+    document.body.removeChild(inputOculto);
+}
+
+</script>
+
   <!--**********************************
               END Sidebar end
     ***********************************-->

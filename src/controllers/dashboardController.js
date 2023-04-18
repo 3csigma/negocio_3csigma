@@ -403,6 +403,13 @@ dashboardController.editarEmpresa = async (req, res) => {
     let datosEmpresa = await consultarDatos('empresas')
     datosEmpresa = datosEmpresa.find(x => x.codigo == codigo)
     const idEmpresa = datosEmpresa.id_empresas;
+    if (datosEmpresa.codeEstudiante) {
+        let datosEstudiante = await consultarDatos('consultores')
+        datosEstudiante = datosEstudiante.find(x => x.codigo == datosEmpresa.codeEstudiante)
+        datos.estudiante = datosEstudiante.email;
+    }else{
+        datos.estudiante = "N/A";
+    }
     // Empresa tabla Ficha Cliente
     let empresa = await consultarDatos('ficha_cliente')
     empresa = empresa.find(x => x.id_empresa == idEmpresa)

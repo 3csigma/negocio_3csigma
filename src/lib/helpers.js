@@ -499,9 +499,8 @@ helpers.historial_empresas_tutor = async () => {
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let idConsultor = 0, idTutor = 0
+    let idTutor = 0
     consultores.forEach(async (c) => {
-        idConsultor = c.id_consultores;
         idTutor = c.id_tutor;
         if (idTutor == null)  idTutor = ''
 
@@ -540,9 +539,8 @@ helpers.historial_informes_tutor = async () => {
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let idConsultor = 0, idTutor = 0
+    let idTutor = 0
     consultores.forEach(async (c) => {
-        idConsultor = c.id_consultores;
         idTutor = c.id_tutor;
         if (idTutor == null)  idTutor = ''
 

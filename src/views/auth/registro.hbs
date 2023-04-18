@@ -93,6 +93,7 @@
                             <label style="color:#000;font-weight: bold !important;">Empresa*</label>
                             <input class="form-control" type="text" name="nombre_empresa"
                                 placeholder="Ingresa el nombre de tu empresa" required autofocus>
+                            <input type="hidden" name="codeEstudiante" id="estuReferido">
                         </div>
                         <div class="row d-flex align-items-center">
                             <div class="col-12 text-center fw-bold mx-auto mb-4">
@@ -150,4 +151,25 @@
     // Asignando Zona horaria
     const tzLocal = Intl.DateTimeFormat().resolvedOptions().timeZone;
     document.getElementById("zh_empresa").value = tzLocal
+
+
+      jQuery(document).ready(function () {
+    'use strict';
+
+   
+   const urlParams = new URLSearchParams(location.search);
+   const estuReferido =  $('#estuReferido').removeAttr("readonly");
+
+  if (location.search) {
+
+    let codeEstudi = []
+    for (const value of urlParams.values()) {
+      codeEstudi.push(value)
+    }
+    $('#estuReferido').val(codeEstudi[0])
+    $('#estuReferido').attr("readonly", true);
+  }
+
+  });
+
 </script>
