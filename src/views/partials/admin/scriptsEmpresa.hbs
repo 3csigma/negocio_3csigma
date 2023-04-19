@@ -136,24 +136,22 @@
             window.location.hash = 'analisis_'
             if (i == 3) window.location.hash = 'proyecto-consultoria';
             else if (i == 4) window.location.hash = 'plan-estrategico';
-            if (result.isConfirmed) {
-                fetch('/solicitar-archivos-empresa', {
-                    method: 'POST',
-                    body: JSON.stringify({empresa, dimension, descripcion, tabla}),
-                    headers: {'Content-Type': 'application/json'}
-                }).then(res => res.json())
-                    .catch(error => console.error('Error:', error))
-                    .then(response => {
-                        if (response) {
-                            window.location.hash = 'analisis_'
-                            if (i == 3) window.location.hash = 'proyecto-consultoria';
-                            else if (i == 4) window.location.hash = 'plan-estrategico';
-                            location.reload();
-                        } else {
-                            Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
-                        }
-                    });
-            }
+            fetch('/solicitar-archivos-empresa', {
+                method: 'POST',
+                body: JSON.stringify({empresa, dimension, descripcion, tabla}),
+                headers: {'Content-Type': 'application/json'}
+            }).then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => {
+                    if (response) {
+                        window.location.hash = 'analisis_'
+                        if (i == 3) window.location.hash = 'proyecto-consultoria';
+                        else if (i == 4) window.location.hash = 'plan-estrategico';
+                        location.reload();
+                    } else {
+                        Swal.fire('Error!','No sé pudo efectuar está acción, contactar a soporte..','error')
+                    }
+                });
         }
     }
     
