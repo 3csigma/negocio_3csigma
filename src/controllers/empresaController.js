@@ -66,7 +66,7 @@ empresaController.index = async (req, res) => {
                 /** Consultando si el usuario ya firmó el acuerdo de confidencialidad */
                 let acuerdo = await consultarDatos('acuerdo_confidencial')
                 acuerdo = acuerdo.find(x => x.id_empresa == id_empresa);
-                if (!acuerdo) {
+                if (!acuerdo || acuerdo == undefined) {
                     modalAcuerdo = true;
                 }
             }
