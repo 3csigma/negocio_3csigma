@@ -153,7 +153,8 @@
 								<div class="form-group col-md-6">
 									<duet-date-picker placeholder="Fecha de nacimiento" name="fecha_nacimiento"
 										id="fecha_nacimiento" min="1932-01-01" max="{{fechaMaxima}}"
-										value="{{ficha.fecha_nacimiento}}" class="required" required first-day-of-week="0"></duet-date-picker>
+										value="{{ficha.fecha_nacimiento}}" class="required" required first-day-of-week="0" readonly></duet-date-picker>
+									<small id="txtFecha_" class="text-red" style="display: none;">Por favor selecciona una fecha valida</small><br>
 								</div>
 
 								{{!-- CAMPO PAIS/NACIONALIDAD --}}
@@ -459,7 +460,6 @@
 	<script src="https://unpkg.com/imask"></script>
 
 	<script>
-
 		//Capturando Campo Nombres para el paso Final
 		const nom1 = document.getElementById("nombres");
 		const nameFinal = document.getElementById("nameStepFinal");
@@ -513,43 +513,8 @@
 			}
 		});
 
-		// CAMPO DATE PICKER (DUET LIBRARY)
-		const picker = document.querySelector("duet-date-picker")
-		const DATE_FORMAT_US = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
-
-		picker.dateAdapter = {
-			parse(value = "", createDate) {
-				const matches = value.match(DATE_FORMAT_US)
-
-				if (matches) {
-					return createDate(matches[3], matches[1], matches[2])
-				}
-			},
-			format(date) {
-				return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`
-			},
-		}
-
-		picker.localization = {
-			buttonLabel: "Fecha de Nacimiento",
-			placeholder: "Fecha de Nacimiento",
-			selectedDateMessage: "La fecha seleccionada es",
-			prevMonthLabel: "Mes anterior",
-			nextMonthLabel: "Mes siguiente",
-			monthSelectLabel: "Mes",
-			yearSelectLabel: "Año",
-			closeLabel: "Cerrar ventana",
-			calendarHeading: "Selecciona una fecha",
-			dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-			//dayNamesShort: ["DO", "LU", "MA", "MI", "JU", "VI", "SA"],
-			monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-			monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-			locale: "en-US",
-		}
-
 		// Asignando Fecha de la base de datos
 		const fna = document.getElementById("fecha_nacimiento");
 		const fechaDB = document.getElementById("fechaDB").value;
 		fna.value = fechaDB
-
 	</script>
