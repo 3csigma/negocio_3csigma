@@ -398,7 +398,7 @@ const confirmarRegistro = (usuario, empresa, codigo) => {
 `;
 }
 
-const restablecerCuentaHTML = (token) => {
+const restablecerCuentaHTML = (token, txt1, txt2, txt3) => {
 	return `
 	<!DOCTYPE html>
 
@@ -541,14 +541,14 @@ const restablecerCuentaHTML = (token) => {
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block block-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td class="pad" style="padding-bottom:5px;padding-left:25px;padding-right:25px;padding-top:25px;text-align:center;width:100%;">
-<h1 style="margin: 0; color: #000000; direction: ltr; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">¿Olvidaste tu contraseña?</span></h1>
+<h1 style="margin: 0; color: #000000; direction: ltr; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><span class="tinyMce-placeholder">¿${txt1} tu contraseña?</span></h1>
 </td>
 </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0" class="heading_block block-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
 <tr>
 <td class="pad" style="padding-bottom:5px;padding-left:25px;padding-right:25px;text-align:center;width:100%;">
-<h1 style="margin: 0; color: #000000; direction: ltr; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><strong><span class="tinyMce-placeholder">Haz clic en el botón de abajo para reestablecerla ahora</span></strong></h1>
+<h1 style="margin: 0; color: #000000; direction: ltr; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;"><strong><span class="tinyMce-placeholder">Haz clic en el botón de abajo para ${txt2} ahora</span></strong></h1>
 </td>
 </tr>
 </table>
@@ -556,7 +556,7 @@ const restablecerCuentaHTML = (token) => {
 <tr>
 <td class="pad" style="padding-bottom:30px;padding-left:15px;padding-right:15px;padding-top:20px;text-align:center;">
 <div align="center" class="alignment">
-<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/reset-password?token=${token}" style="height:48px;width:336px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/reset-password?token=${token}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">REESTABLECER CONTRASEÑA</span></span></a>
+<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="${my_domain}/reset-password?token=${token}" style="height:48px;width:336px;v-text-anchor:middle;" arcsize="9%" stroke="false" fillcolor="#ffe000"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#000000; font-family:Tahoma, sans-serif; font-size:14px"><![endif]--><a href="${my_domain}/reset-password?token=${token}" style="text-decoration:none;display:inline-block;color:#000000;background-color:#ffe000;border-radius:4px;width:auto;border-top:0px solid #000000;font-weight:700;border-right:0px solid #000000;border-bottom:0px solid #000000;border-left:0px solid #000000;padding-top:10px;padding-bottom:10px;font-family:Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;font-size:14px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:60px;padding-right:60px;font-size:14px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 28px;">${txt3} CONTRASEÑA</span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
 </div>
 </td>
@@ -699,7 +699,7 @@ const restablecerCuentaHTML = (token) => {
 <td class="pad" style="padding-bottom:5px;padding-left:5px;padding-right:5px;padding-top:30px;">
 <div style="font-family: Tahoma, sans-serif">
 <div class="" style="font-size: 12px; font-family: Montserrat, Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14.399999999999999px; color: #262b30; line-height: 1.2;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 16.8px;"><strong><span style="font-size:12px;">¿Tienes dudas? Escríbenos a </span></strong></p>
 </div>
 </div>
 </td>

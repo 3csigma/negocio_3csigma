@@ -64,6 +64,7 @@ app.use((req, res, next) => {
   const f = new Date();
   res.locals.actualYear = f.getFullYear();; // Año Actual
   res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
   res.locals.message = req.flash('message');
   res.locals.registro = req.flash('registro');
   res.locals.user = req.user; //Variable local para Empresas

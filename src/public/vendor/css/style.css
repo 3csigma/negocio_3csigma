@@ -37523,7 +37523,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 .alert-danger {
   background: #fff3f7;
   border-color: #fff3f7;
-  color: #F94687;
+  color: #F55050;
 }
 
 [data-theme-version="dark"] .alert-danger {
@@ -37577,7 +37577,7 @@ html:not([dir=rtl]) .noUi-horizontal .noUi-handle {
 }
 
 .alert-alt.alert-danger {
-  border-left: 4px solid #F94687;
+  border-left: 4px solid #F55050;
 }
 
 .alert-alt.alert-info {

@@ -74,33 +74,41 @@
         </div>
     </div>
 </div>
+{{#if error}}
+<input type="hidden" id="portal" value="{{portal}}">
+{{/if}}
 <script src="../vendor/js/global.min.js"></script>
 <script src="../login/clave.js"></script>
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
  <script>
-   // {{!-- FUNCIÓN PARA RECORDAR LAS CREDENCIALES DE USUARIO --}}
-            $(function() {
-                if (localStorage.chkbx && localStorage.chkbx != '') {
-                    $('#remember_me').attr('checked', 'checked');
-                    $('#username').val(localStorage.usrname);
-                    $('#pass').val(localStorage.pass);
-                } else {
-                    $('#remember_me').removeAttr('checked');
-                    $('#username').val('');
-                    $('#pass').val('');
-                }
-                $('#remember_me').click(function() {
-                    if ($('#remember_me').is(':checked')) {
-                        // save username and password
-                        localStorage.usrname = $('#username').val();
-                        localStorage.pass = $('#pass').val();
-                        localStorage.chkbx = $('#remember_me').val();
-                    } else {
-                        localStorage.usrname = '';
-                        localStorage.pass = '';
-                        localStorage.chkbx = '';
-                    }
-                });
-            });
-    // {{!--  FIN DE LA FUNCIÓN  --}}
+    $(function() {
+        // RECORDAR LAS CREDENCIALES DE USUARIO
+        if (localStorage.chkbx && localStorage.chkbx != '') {
+            $('#remember_me').attr('checked', 'checked');
+            $('#username').val(localStorage.usrname);
+            $('#pass').val(localStorage.pass);
+        } else {
+            $('#remember_me').removeAttr('checked');
+            $('#username').val('');
+            $('#pass').val('');
+        }
+        $('#remember_me').click(function() {
+            if ($('#remember_me').is(':checked')) {
+                // save username and password
+                localStorage.usrname = $('#username').val();
+                localStorage.pass = $('#pass').val();
+                localStorage.chkbx = $('#remember_me').val();
+            } else {
+                localStorage.usrname = '';
+                localStorage.pass = '';
+                localStorage.chkbx = '';
+            }
+        });
+
+        {{#if error}}
+        setTimeout(function() {
+            location.href = $('#portal').val();
+        }, 2000);
+        {{/if}}
+    });
 </script>

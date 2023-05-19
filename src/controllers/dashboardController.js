@@ -85,7 +85,11 @@ dashboardController.admin = async (req, res) => {
 
 // CONSULTORES
 dashboardController.registroConsultores = (req, res) => {
-    res.render('auth/registroConsultor', { wizarx: true, csrfToken: req.csrfToken() })
+    let id_afiliado = false;
+    if (req.query.corporative_user_id) {
+        id_afiliado = req.query.corporative_user_id;
+    }
+    res.render('auth/registroConsultor', { wizarx: true, id_afiliado, csrfToken: req.csrfToken() })
 }
 
 dashboardController.addConsultores = (req, res, next) => {
@@ -1164,7 +1168,6 @@ dashboardController.actualizarEmpresa = async (req, res) => {
     const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
     for (const [key, value] of mapaConsultores) {
         const filtro = asignados.find(x => x.etapa == key)
-        // console.log("\n FILTRO ---> ", filtro)
         let orden = 1;
         if (key == 'Análisis') {
             orden = 2;

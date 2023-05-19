@@ -1,7 +1,7 @@
 <div class="form-body">
     <div class="top_logo">
         <a href="/">
-            <div class="logo-Login" >
+            <div class="logo-Login">
                 <img class="logo-size-Login" src="/img/logo.svg" alt="Logo 3CSigma">
             </div>
         </a>
@@ -15,47 +15,57 @@
         <div class="loginBanner">
             <img class="loginBanner-size" src="/img/Login_Banner_movil.jpg" alt="Banner Móvil">
         </div>
-        
+
         <div class="form-holder form-abajo">
             <div class="form-content">
                 <div class="form-items">
                     {{> general/message }}
-                    <h3 class="tituH3">Restablacer cuenta</h3>
+                    <h3 class="tituH3">{{tituloH3}}</h3>
+                    {{#if resetUser}}
                     <p class="msg-Login-Top">¡Bienvenido de nuevo!</p>
+                    {{else}}
+                    <p class="msg-Login-Top">¡Bienvenido!</p>
+                    {{/if}}
                     <p class="msg-Login-Top">Ingresa tu correo registrado en la plataforma!</p>
                     <br>
                     <form action="/reset-password-email" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                         <label style="color:#000;font-weight: bold !important; margin-top: 6px;">Correo electrónico</label>*</label>
-                        <input class="form-control" type="email" id="email" name="email" placeholder="ejemplo@tusitioweb.com" required autofocus>
-                       
-                        <p id="message" style = "font-size: 12px; font-weight: bold;" class="text-primary"></p>
+                        <input class="form-control" type="email" id="email" name="email"
+                            placeholder="ejemplo@tusitioweb.com" required autofocus>
+                        <p id="message" style="font-size: 12px; font-weight: bold;" class="text-primary"></p>
                         <div class="row">
-                            <div class="col-14 col-sm-6" style="margin-top: -15px; font-size: 14px;">¿Recordaste? 
+                            <div class="col-14 col-sm-6" style="margin-top: -15px; font-size: 14px;">
+                                {{#if resetUser}}¿Recordaste?{{/if}}
                                 <a href="/login" class="text-tertiary">Ingresa aquí</a>
                             </div>
                         </div>
                         <div class="form-button d-flex align-items-center">
-                            <button id="submit" type="submit"class="ibtn login-ingresar color_primary text-center fw-bold mx-auto mb-4">Enviar</button>
+                            <button id="submit" type="submit"
+                                class="ibtn login-ingresar color_primary text-center fw-bold mx-auto mb-4">Enviar</button>
                         </div>
+                        <input type="hidden" name="resetUser" value="{{resetUser}}">
                     </form>
+
+                    <!--
                     {{#if messages.error}}
-                    <div class="alert alert-danger alert-border-left alert-dismissible fade show" style="width: 102%;" role="alert"><i
-                            class="mdi mdi-block-helper me-3 align-middle"></i><strong>Error:</strong>
+                    <div class="alert alert-danger alert-border-left alert-dismissible fade show" style="width: 102%;"
+                        role="alert"><i class="mdi mdi-block-helper me-3 align-middle"></i><strong>Error:</strong>
                         {{messages.error}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                 {{/if}}
-                  {{#if messages.success}}
+                    {{/if}}
+                    {{#if messages.success}}
                     <div class="alert alert-success alert-border-left alert-dismissible fade show" role="alert"
                         style="width: 116%; margin-left: -7%;"> - {{messages.error}}
-                            <a href="/login"><strong>Iniciar sesión</strong></a>
+                        <a href="/login"><strong>Iniciar sesión</strong></a>
                     </div>
-                 {{/if}}
+                    {{/if}}
+                    -->
 
                     <div class="other-links d-flex align-items-center my-4">
-                        <span class="text-center fw-bold mx-auto" style="color:#000;font-weight: bold !important;">¿No
-                            estas registrado?<a href="/registro"><span class="text-tertiary"
+                        <span class="text-center fw-bold mx-auto" style="color:#000;font-weight: bold !important;">
+                            ¿No estas registrado?<a href="/registro"><span class="text-tertiary"
                                     style="font-weight: bold !important;"> Crea una cuenta hoy</span>
                         </span></a>
                     </div>
@@ -69,18 +79,3 @@
         </div>
     </div>
 </div>
-<script src="./vendor/js/global.min.js"></script>
-<script>
-   //{{!-- FUNCIÓN PARA VISUALIZAR LA CONTRASEÑA INGRESADA  --}}
-	jQuery(document).ready(function(){
-		jQuery('.show-pass').on('click',function(){
-			jQuery(this).toggleClass('active');
-			if(jQuery('#pass').attr('type') == 'password'){
-				jQuery('#pass').attr('type','text');
-			}else if(jQuery('#pass').attr('type') == 'text'){
-				jQuery('#pass').attr('type','password');
-			}
-		});
-	});
-      //{{!-- FIN DE LA FUNCIÓN--}} 
-</script> 

@@ -26,7 +26,10 @@ router.post('/login', noLogueado, csrfProtection, passport.authenticate('local.l
 /** Cerrar Sesión */
 router.get('/logout', userController.cerrarSesion)
 
-// Restablecer Clave de Usuario
+// Solicitar Creación de Clave para el Usuario Nuevo
+router.get('/solicitar-clave', csrfProtection, userController.solicitarClave)
+
+// Restablecer Clave de Usuario Existente
 router.get('/restablecer-clave', csrfProtection, userController.getrestablecerClave)
 
 /* RUTA DONDE SE COLOCARÁ LA NUEVA CLAVE DE LA CUENTA */
