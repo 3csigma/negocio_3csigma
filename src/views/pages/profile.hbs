@@ -1,7 +1,9 @@
 <div class="content-body">
   <!-- row -->
   <style>
-    .nav-tabs .nav-item .nav-link.active:before{background-color: #000000;}
+    .nav-tabs .nav-item .nav-link.active:before {
+      background-color: #000000;
+    }
   </style>
   <div class="container-fluid">
     <!-- row -->
@@ -14,22 +16,26 @@
             </div> --}}
             <div class="profile-info">
               <div class="profile-photo" style="width: 220px !important;">
-                 <label class="input-group-btn">
+                <label class="input-group-btn">
                   <span class="btn btn-primary" style="padding: 0;background: white; border: none;">
-                   {{#if empresa.foto}}
-                      <img id="imagePre1" src="{{empresa.foto}}" alt="" style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="" >
-                      <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;" onchange="fileValidation()">
+                    {{#if empresa.foto}}
+                    <img id="imagePre1" src="{{empresa.foto}}" alt=""
+                      style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="">
+                    <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;"
+                      onchange="fileValidation()">
                     {{/if}}
                     {{#if consultor.foto}}
-                      <img id="imagePre1" src="{{consultor.foto}}" alt="" style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="" >
-                      <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;" onchange="fileValidation()">
-                  {{/if}}
-                    </span>
+                    <img id="imagePre1" src="{{consultor.foto}}" alt=""
+                      style="height: 100px; width: 100px;object-fit: cover;" class="img-fluid rounded-circle" alt="">
+                    <input type="file" name="editFoto" class="filePhoto" id="previewProfile" style="display: none;"
+                      onchange="fileValidation()">
+                    {{/if}}
+                  </span>
                 </label>
               </div>
-            {{#if empresa}}
+              {{#if empresa}}
               <div class="profile-details">
-                 <div class="profile-name px-3 pt-2">
+                <div class="profile-name px-3 pt-2">
                   <h4 class="text-primary mb-0">{{empresa.rol}}</h4>
                   <p>Tipo de cuenta</p>
                 </div>
@@ -52,6 +58,7 @@
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
@@ -59,85 +66,105 @@
             <div class="profile-tab">
               <div class="custom-tab-1">
                 <ul class="nav nav-tabs">
-                  <li class="nav-item"><a href="#about-me"  data-toggle="tab" class="nav-link active show text-primary">Configura tu cuenta</a>
-                  </li>
+                  <li class="nav-item"><a class="nav-link active show text-primary">Configura tu cuenta</a></li>
                 </ul>
+                {{#if portalClientes}}
+                <div class="row mt-3 mb-3">
+                  <div class="col">
+                    <h4 class="text-primary">Gestionar Facturación</h4>
+                    <a href="{{portalClientes}}" class="btn color_primary btn-save text-white">
+                      <span class="text-btn">Portal Clientes</span>
+                    </a>
+                  </div>
+                </div>
+                {{/if}}
+
                 <div class="tab-content">
                   <div id="about-me" class="tab-pane fade active show">
                   </div>
-                   <div id="profile-settings" class="tab-pane fade active show">
+                  <div id="profile-settings" class="tab-pane fade active show">
                     <form action="/updateProfile" method="POST">
-                    <div class="pt-3">
-                      <div class="settings-form">
+                      <div class="pt-3">
+                        <div class="settings-form">
                           {{#if empresa}}
-                            <div class="form-row">
-                              <div class="form-group col-md-4">
-                                <label>Nombre</label>
-                                <input type="text" name="nombres_empresa" value="{{empresa.nombres}}" class="form-control">
-                              </div>
-                              <div class="form-group col-md-4">
-                                <label>Apellido</label>
-                                <input type="text" name="apellidos_empresa" value="{{empresa.apellidos}}" class="form-control">
-                              </div>
-                                <div class="form-group col-md-4">
-                                <label>Nombre de empresa</label>
-                                <input type="text" name="nombre_empresa" value="{{empresa.nombre_empresa}}" class="form-control">
-                              </div>
+                          <div class="form-row">
+                            <div class="form-group col-md-4">
+                              <label>Nombre</label>
+                              <input type="text" name="nombres_empresa" value="{{empresa.nombres}}"
+                                class="form-control">
                             </div>
-                            <div class="form-row">
-                              <div class="form-group col-md-6">
-                                <label>Correo</label>
-                                <input type="email" name="email_empresa" value="{{empresa.email}}" class="form-control">
-                              </div>
-                              <div class="form-group col-md-6">
-                                <label>Contraseña</label>
-                                <input type="password" name="clave_empresa" value="{{empresa.clave}}" placeholder="********" class="form-control">
-                              </div>
+                            <div class="form-group col-md-4">
+                              <label>Apellido</label>
+                              <input type="text" name="apellidos_empresa" value="{{empresa.apellidos}}"
+                                class="form-control">
                             </div>
-                          {{/if}} 
-                         {{#if consultor}}
+                            <div class="form-group col-md-4">
+                              <label>Nombre de empresa</label>
+                              <input type="text" name="nombre_empresa" value="{{empresa.nombre_empresa}}"
+                                class="form-control">
+                            </div>
+                          </div>
                           <div class="form-row">
                             <div class="form-group col-md-6">
                               <label>Correo</label>
-                              <input type="email" name="email_consultor" value="{{consultor.email}}" class="form-control">
+                              <input type="email" name="email_empresa" value="{{empresa.email}}" class="form-control">
                             </div>
                             <div class="form-group col-md-6">
                               <label>Contraseña</label>
-                              <input type="password" name="clave_consultor" value="{{consultor.clave}}" placeholder="********" class="form-control">
+                              <input type="password" name="clave_empresa" value="{{empresa.clave}}"
+                                placeholder="********" class="form-control">
+                            </div>
+                          </div>
+                          {{/if}}
+                          {{#if consultor}}
+                          <div class="form-row">
+                            <div class="form-group col-md-6">
+                              <label>Correo</label>
+                              <input type="email" name="email_consultor" value="{{consultor.email}}"
+                                class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                              <label>Contraseña</label>
+                              <input type="password" name="clave_consultor" value="{{consultor.clave}}"
+                                placeholder="********" class="form-control">
                             </div>
                           </div>
                           <div class="form-row">
                             <div class="form-group col-md-6">
                               <label>Teléfono</label>
-                              <input type="text" name="tel_consultor" value="{{consultor.tel_consultor}}" class="form-control">
+                              <input type="text" name="tel_consultor" value="{{consultor.tel_consultor}}"
+                                class="form-control">
                             </div>
                             <div class="form-group col-md-6">
                               <label>Dirección</label>
-                              <input type="text" name="direccion_consultor" value="{{consultor.direccion_consultor}}" class="form-control">
+                              <input type="text" name="direccion_consultor" value="{{consultor.direccion_consultor}}"
+                                class="form-control">
                             </div>
                           </div>
                           {{/if}}
-                          </div>
-                          <br>
-                          {{!-- <button type="submit" class="btn btn-primary" style="background: #812082; border: none;" >Guardar</button> --}}
-                        <button class="btn color_primary btn-save text-white">
+                        </div>
+
+                        <button class="btn color_primary btn-save text-white mt-2">
                           <i class="loading-icon fa fa-spinner fa-spin mostrar"></i>
                           <span class="text-btn">Guardar</span>
                         </button>
-                       </div>
-                      </form>
-                      <style>
-                        .mostrar{
-                          display: none;
-                        }
-                      </style>
-                    </div>
+
+                      </div>
+                    </form>
+                    <style>
+                      .mostrar {
+                        display: none;
+                      }
+                    </style>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
+</div>

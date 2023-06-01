@@ -65,6 +65,9 @@ router.get('/consultores/:codigo', checkLogin, dashboardController.editarConsult
 router.post('/actualizarConsultor', checkLogin, dashboardController.actualizarConsultor)
 router.post('/bloquearConsultor', checkLogin, dashboardController.bloquearConsultor)
 router.post('/eliminarConsultor', checkLogin, dashboardController.eliminarConsultor)
+/*********************************** */
+// Consultores Externos
+router.get('/consultores-externos', checkLogin, dashboardController.mostrarConsultores)
 
 // Empresas Admin
 router.get('/empresas', checkLogin, dashboardController.mostrarEmpresas)
@@ -74,6 +77,10 @@ router.post('/actualizarEmpresa', checkLogin, dashboardController.actualizarEmpr
 router.post('/bloquearEmpresa', checkLogin, dashboardController.bloquearEmpresa)
 router.post('/eliminarEmpresa', checkLogin, dashboardController.eliminarEmpresa)
 router.post('/conclusiones', checkLogin, dashboardController.conclusiones)
+/*********************************** */
+// Empresas Externos
+router.get('/empresas-externas', checkLogin, dashboardController.mostrarEmpresas)
+
 // PAGOS MANUALES (EXTERNOS)
 router.post('/pagoManual-Diagnostico', checkLogin, dashboardController.pagoManualDiagnostico)
 router.post('/pagoManual-Empresas', checkLogin, dashboardController.pagoManualEmpresas)

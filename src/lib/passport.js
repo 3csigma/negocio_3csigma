@@ -4,7 +4,7 @@ const pool = require('../database')
 const helpers = require('../lib/helpers')
 const crypto = require('crypto');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
-const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado } = require('../lib/mail.config')
+const { confirmarRegistro, sendEmail, nuevaEmpresa, nuevoConsultorRegistrado, consultor_AsignadoEtapa } = require('../lib/mail.config')
 
 passport.serializeUser((user, done) => { // Almacenar usuario en una sesión de forma codificada
     done(null, user.id_usuarios);
@@ -33,9 +33,6 @@ passport.use('local.registro', new LocalStrategy({
         if (result.length > 0) {
             return done(null, false, req.flash('message', 'Ya existe un usuario con este Email'))
         } else {
-            // Capturando Nombre de usuario con base al email del usuario
-            let username = email.split('@')
-            username = username[0]
 
             let tableUsers = await helpers.consultarDatos('users')
             const admin  = tableUsers.find(x => x.rol == 'Super Admin')
@@ -57,13 +54,14 @@ passport.use('local.registro', new LocalStrategy({
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave)
 
-            const empresaNueva = { nombres, apellidos, nombre_empresa, email, codigo, fecha_creacion, mes, year }
+            const empresaNueva = { nombres, apellidos, nombre_empresa, email, codigo, id_afiliado, fecha_creacion, mes, year }
+            const newEmpresa = await helpers.insertarDatos('empresas', empresaNueva)
             
-            console.log("ID Afiliado >> ", id_afiliado)
-            if (id_afiliado) { 
-                let corporativo = await helpers.consultarDatos('consultores')
-                corporativo = corporativo.find(x => x.id_corporativo == id_afiliado)
-                if (corporativo) {
+            let corporativo = (await helpers.consultarDatos('consultores')).find(x => x.id_corporativo == id_afiliado)
+
+            if (corporativo) {
+                // Validar si el usuario primario tiene suscription_id o no
+                if (corporativo.suscription_id != '') {
                     // Validar si el Usuario Primario (Admin o Consultor independiente) tiene subscripción activa o no
                     const subscription = await stripe.subscriptions.retrieve(corporativo.suscription_id);
                     console.log("\n>>> DATOS DE LA SUSCRIPCIÓN:: ", subscription)
@@ -71,53 +69,52 @@ passport.use('local.registro', new LocalStrategy({
                         req.session.empresa = false;
                         return done(null, false, req.flash('error', 'La cuenta de tu administrador se encuentra suspendida, intenta mas tarde'))
                     }
-                    // const actualizarEmpresa = { id_afiliado };
-                    // await pool.query('UPDATE empresas SET ? WHERE codigo = ?', [actualizarEmpresa, codigo]);
-                    empresaNueva.id_afiliado = id_afiliado;
-                    await helpers.insertarDatos('empresas', empresaNueva)
-                    // VALIDANDO SI LA EMPRESA QUE SE ESTÁ REGISTRANDO ESTARÁ AFILIADA A UN CONSULTOR INDEPENDIENTE
-                    let usuario = await helpers.consultarDatos('users')
-                    usuario = usuario.find(u => u.codigo == corporativo.codigo && u.rol == 'Consultor independiente')
-                    if (usuario) {
-                        let empresa = await helpers.consultarDatos('empresas')
-                        empresa = empresa.find(e => e.codigo == codigo)
-                        empresa = empresa.id_empresas;
-                        // ASIGNANDO CONSULTOR INDEPENDIENTE A TODAS LAS ETAPAS PARA LA NUEVA EMPRESA
-                        for (let i = 1; i <= 4; i++) {
-                            let etapa = ''
-                            if (i == 1) {
-                                etapa = 'Diagnóstico'
-                            } else if (i == 2) {
-                                etapa = 'Análisis'
-                            } else if (i == 3) {
-                                etapa = 'Proyecto de Consultoría'
-                            } else {
-                                etapa = 'Plan Estratégico'
-                            }
-                            
-                            const datos = {consultor: corporativo.id_consultores, empresa, etapa, orden: i}
-                            await helpers.insertarDatos('consultores_asignados', datos)
-                        }
-                    }
                 }
-            } else {
-                await helpers.insertarDatos('empresas', empresaNueva)
-            }
-            // Obtener la plantilla de Email
-            const template = confirmarRegistro(nombres, nombre_empresa, codigo);
-            const templateNuevaEmpresa = nuevaEmpresa('Carlos', nombre_empresa)
 
-            // Guardar en la base de datos
-            await helpers.insertarDatos('users', newUser)
+                const email_admin = corporativo.email, adminName = corporativo.nombres;
+                // Obtener la plantilla de Email
+                const template = confirmarRegistro(nombres, nombre_empresa, codigo);
+                const templateNuevaEmpresa = nuevaEmpresa(adminName, nombre_empresa)
 
-            // Enviar Email 
-            const resultEmail = await sendEmail(email, 'Confirma tu registro en PAOM System', template)
-            console.log("\nEnviando email al admin de nueva empresa registrada..\n")
-            const resultEmail2 = await sendEmail(admin.email, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
-            if (resultEmail == false || resultEmail2 == false) {
-                return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
-            } else {
+                // Guardar en la base de datos
+                await helpers.insertarDatos('users', newUser)
+
+                // Enviar Email 
+                const resultEmail = await sendEmail(email, 'Confirma tu registro en PAOM System', template)
+                console.log("\nEnviando email al admin de nueva empresa registrada..\n")
+
+                // VALIDANDO SI LA EMPRESA QUE SE ESTÁ REGISTRANDO ESTARÁ AFILIADA A UN CONSULTOR INDEPENDIENTE
+                let usuario = (await helpers.consultarDatos('users')).find(u => u.codigo == corporativo.codigo && u.rol == 'Consultor independiente')
+                if (usuario) {
+                    // ASIGNANDO CONSULTOR INDEPENDIENTE A TODAS LAS ETAPAS PARA LA NUEVA EMPRESA
+                    for (let i = 1; i <= 4; i++) {
+                        let etapa = ''
+                        if (i == 1) {
+                            etapa = 'Diagnóstico'
+                        } else if (i == 2) {
+                            etapa = 'Análisis'
+                        } else if (i == 3) {
+                            etapa = 'Proyecto de Consultoría'
+                        } else {
+                            etapa = 'Plan Estratégico'
+                        }
+                        
+                        const datos = {consultor: corporativo.id_consultores, empresa: newEmpresa.insertId, etapa, orden: i}
+                        await helpers.insertarDatos('consultores_asignados', datos)
+
+                        // Enviando Correo al Consultor independiente
+                        const subject = "Ahora eres consultor de la empresa " + empresaNueva.nombre_empresa + " en la etapa " + etapa;
+                        const template = consultor_AsignadoEtapa(corporativo.nombres, empresaNueva.nombre_empresa, etapa);
+                        await sendEmail(email_admin, subject, template)
+                    }
+                } else {
+                    // Enviando Correo al Admin
+                    await sendEmail(email_admin, '¡Se ha registrado una nueva empresa!', templateNuevaEmpresa)
+                }
+
                 return done(null, false, req.flash('registro', 'Registro enviado, revisa tu correo en unos minutos y activa tu cuenta.'))
+            } else {
+                return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
             }
             
         }
@@ -139,7 +136,7 @@ passport.use('local.registroConsultores', new LocalStrategy({
             return done(null, false, req.flash('message', 'Ya existe un consultor con este Email'));
         } else {
 
-            let tableUsers = await helpers.consultarDatos('users')
+            const tableUsers = await helpers.consultarDatos('users')
             const admin  = tableUsers.find(x => x.rol == 'Super Admin')
             const lastUser = tableUsers[tableUsers.length-1];
             const hashCode = email+(parseInt(lastUser.id_usuarios+1));
@@ -162,46 +159,46 @@ passport.use('local.registroConsultores', new LocalStrategy({
 
             // Encriptando la clave
             newUser.clave = await helpers.encryptPass(clave);
-
-            // Enviando email al admin del registro
-            console.log("\nEnviando email al admin del registro de un consultor nuevo..\n")
-            const nombreCompleto = nombres + ' ' + apellidos
-            const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
-            const resultEmail = await sendEmail(admin.email, '¡Se ha registrado una nuevo consultor!', templateConsul)
-
-            if (resultEmail == false) {
-                return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
-            } else {
-                // Objeto para crear el Consultor
-                const tel_consultor = "+" + countryCode + " " + telConsul
-                const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, fecha_creacion, mes, year };
-                console.log("ID AFILIADO >> ", id_afiliado);
-                if (id_afiliado) { 
-                    let corporativo = await helpers.consultarDatos('consultores')
-                    corporativo = corporativo.find(c => c.id_corporativo == id_afiliado)
-                    if (corporativo) {
-                        console.log("Existe un consultor con id_corporativo");
-                        // Validar si el Usuario Primario (Admin o Consultor independiente) tiene subscripción activa o no
-                        const subscription = await stripe.subscriptions.retrieve(corporativo.suscription_id);
-                        console.log("\n>>> DATOS DE LA SUSCRIPCIÓN:: ", subscription)
-                        if (subscription.status != 'active') {
-                            req.session.empresa = false;
-                            return done(null, false, req.flash('error', 'La cuenta de tu administrador se encuentra suspendida, intenta mas tarde.'))
-                        }
-                        let usuario = await helpers.consultarDatos('users')
-                        usuario = usuario.find(u => u.codigo == corporativo.codigo)
-                        if (usuario.rol == 'Admin') {
-                            nuevoConsultor.id_afiliado = id_afiliado;
-                            await helpers.insertarDatos('consultores', nuevoConsultor);
-                        }
+           
+            // Objeto para crear el Consultor
+            const tel_consultor = "+" + countryCode + " " + telConsul
+            const nuevoConsultor = { nombres, apellidos, email, tel_consultor, direccion_consultor, experiencia_years, certificado, codigo, id_afiliado, fecha_creacion, mes, year };
+            console.log("ID AFILIADO >> ", id_afiliado);
+            const corporativo = (await helpers.consultarDatos('consultores')).find(c => c.id_corporativo == id_afiliado)
+            if (corporativo) {
+                let email_admin = admin.email;
+                if (id_afiliado != 'de_paom') {
+                    email_admin = corporativo.email;
+                    // Validar si el Usuario Primario (Admin o Consultor independiente) tiene subscripción activa o no
+                    const subscription = await stripe.subscriptions.retrieve(corporativo.suscription_id);
+                    console.log("\n>>> DATOS DE LA SUSCRIPCIÓN:: ", subscription)
+                    if (subscription.status != 'active') {
+                        req.session.empresa = false;
+                        return done(null, false, req.flash('error', 'La cuenta de tu administrador se encuentra suspendida, intenta mas tarde.'))
                     }
-                } else {
-                    await helpers.insertarDatos('consultores', nuevoConsultor);
                 }
-                // Guardar en la base de datos
-                await helpers.insertarDatos('users', newUser);
 
-                return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
+
+                // Guardar en la base de datos
+                const guardarConsultor = await helpers.insertarDatos('consultores', nuevoConsultor);
+                const guardarUsuario = await helpers.insertarDatos('users', newUser);
+
+                if (guardarConsultor.affectedRows > 0 && guardarUsuario.affectedRows > 0) {
+                    // Enviando email al admin del registro
+                    console.log("\nEnviando email al admin del registro de un consultor nuevo..\n")
+                    const nombreCompleto = nombres + ' ' + apellidos
+                    const templateConsul = nuevoConsultorRegistrado('Carlos', nombreCompleto)
+                    const resultEmail = await sendEmail(email_admin, '¡Se ha registrado una nuevo consultor!', templateConsul)
+
+                    if (resultEmail == false) {
+                        return done(null, false, req.flash('message', 'Ocurrió algo inesperado al enviar el registro'))
+                    } else {
+                        return done(null, false, req.flash('registro', 'Registro enviado. Recibirás una confirmación en tu correo cuando tu cuenta sea aprobada por un administrador'));
+                    }
+                }
+
+            } else {
+                return done(null, false, req.flash('error', 'El link de registro es invalido, intenta más tarde.'))
             }
 
         }

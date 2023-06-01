@@ -83,8 +83,39 @@
                                     <input type="hidden" id="idEmpresa" value="{{datos.idEmpresa}}">
                                     <input type="hidden" id="idConsultor" value="{{datos.idConsultor}}">
                                     <input type="hidden" id="datosUsuario" value="{{datosUsuario}}">
+
+                                    {{#if consultorIndependiente}}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label>Estado de la empresa</label>
+                                            <select id="estadoAdm" class="mr-sm-2 default-select text-center">
+                                                {{#comparar datos.estadoAdm '==' '1'}}
+                                                <option value="1" selected>Activa</option>
+                                                <option value="0">Bloqueada</option>
+                                                {{/comparar}}
+                                                {{#comparar datos.estadoAdm '!=' '1'}}
+                                                <option value="0" selected>Bloqueada</option>
+                                                <option value="1">Activa</option>
+                                                {{/comparar}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {{!-- Boton actualizar empresa --}}
+                                    <div class="row">
+                                        <input type="hidden" value="{{datos.code}}" name="codigo" id="codigoEmpresa">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <button type="button" class="btn color_primary text-white w-100"
+                                                    style="margin-top: 1em; padding: 10px 15px;">
+                                                    <p class="font-w500 m-auto">Guardar cambios</p>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{/if}}
+                                    
                                     {{#if adminDash}}
-                                    {{!-- Fila para Selectores Asginar consultor & Estado de la cuenta --}}
+                                    <!-- Estado de la cuenta -->
                                     <div class="row">
                                         <div class="col-12">
                                             <label>Estado de la empresa</label>
@@ -101,6 +132,7 @@
                                         </div>
                                     </div>
                                     
+                                    <!-- ASIGNAR CONSULTORES -->
                                     <div class="row mt-3">
                                         
                                         <div class="col-12">

@@ -5,14 +5,26 @@ const multer = require('multer');
 const path = require('path');
 const { consultarInformes, consultarDatos, tareasGenerales, consultarTareasEmpresarial, insertarDatos, eliminarDatos, consultarTareasConsultores } = require('../lib/helpers')
 const { sendEmail, consultorAsignadoHTML, consultorAprobadoHTML, informesHTML, etapaFinalizadaHTML, consultor_AsignadoEtapa, archivosPlanEmpresarialHTML } = require('../lib/mail.config');
+const { log } = require('console');
 const stripe = require('stripe')(process.env.CLIENT_SECRET_STRIPE);
 
 let aprobarConsultor = false;
 
 // Dashboard Administrativo
 dashboardController.admin = async (req, res) => {
-    const consultores = await pool.query('SELECT * FROM consultores WHERE id_consultores != 1 ORDER BY id_consultores DESC LIMIT 2')
-    const empresas = await pool.query('SELECT * FROM empresas ORDER BY id_empresas DESC LIMIT 2')
+    const consultor = (await consultarDatos('consultores')).find(x => x.codigo == req.user.codigo)
+    /**
+     * Ultimos 2 registros (Empresas & Consultores) 
+    */ 
+    // Super Admin
+    let consultores = await pool.query('SELECT * FROM consultores WHERE id_consultores != 1 ORDER BY id_consultores DESC LIMIT 2')
+    let empresas = await pool.query('SELECT * FROM empresas ORDER BY id_empresas DESC LIMIT 2')
+
+    // Admin (Empresas Franquiciadoras)
+    if (req.user.rol == "Admin") {
+        consultores = await pool.query(`SELECT * FROM consultores WHERE id_afiliado = "${consultor.id_corporativo}" ORDER BY id_consultores DESC LIMIT 2`)
+        empresas = await pool.query(`SELECT * FROM empresas  WHERE id_afiliado = "${consultor.id_corporativo}" ORDER BY id_empresas DESC LIMIT 2`)
+    }
 
     /** Acceso directo para Consultores pendientes por aprobar */
     aprobarConsultor = false;
@@ -70,15 +82,23 @@ dashboardController.admin = async (req, res) => {
     /**
      * TAREAS ADMINISTRADOR
      */
-    let consultor = await consultarDatos('consultores')
-    consultor = consultor.find(x => x.codigo == req.user.codigo)
     const fechaActual = new Date().toLocaleDateString('fr-CA');
     const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
+
+    const invitar = {
+        empresa: process.env.MY_DOMAIN+'/registro?corporative_user_id='+consultor.id_corporativo,
+        consultor: process.env.MY_DOMAIN+'/registro-de-consultores?corporative_user_id='+consultor.id_corporativo
+    }
+    let superAdmin = true;
+    if (req.user.rol != 'Super Admin') {
+        superAdmin = false;
+    }
 
     res.render('admin/panelAdmin', { 
         adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, 
         datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm, 
-        ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user)
+        ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user),
+        invitar, superAdmin
     });
 
 }
@@ -101,19 +121,38 @@ dashboardController.addConsultores = (req, res, next) => {
 }
 
 dashboardController.mostrarConsultores = async (req, res) => {
-    let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1;')
-    
-    consultores.forEach(async c => {
-        const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
-        c.num_empresas = num[0].numEmpresas
-    });
-    
-    /** Acceso directo para Consultores pendientes por aprobar */
-    aprobarConsultor = false;
-    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
-    pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
-    
-    res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
+    let id_corporativo = "de_paom";
+    if (req.user.rol == "Admin") {
+        const userAdmin = (await consultarDatos('consultores')).find(c => c.codigo == req.user.codigo)
+        id_corporativo = userAdmin.id_corporativo;
+    }
+    if (req.url == '/consultores') {
+        let consultores = await pool.query(`SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1 AND c.id_afiliado = "${id_corporativo}"`)
+        
+        consultores.forEach(async c => {
+            const num = await pool.query('SELECT COUNT(distinct empresa) AS numEmpresas FROM consultores_asignados WHERE consultor = ?', [c.id_consultores])
+            c.num_empresas = num[0].numEmpresas
+        });
+        
+        /** Acceso directo para Consultores pendientes por aprobar */
+        aprobarConsultor = false;
+        const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
+        pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
+        
+        res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 2, consultores, aprobarConsultor })
+    } else {
+        let consultores = await pool.query('SELECT c.*, u.codigo, u.foto, u.estadoAdm FROM consultores c JOIN users u ON c.codigo = u.codigo AND rol = "Consultor" AND c.id_consultores != 1 AND c.id_afiliado != "de_paom"')
+
+        consultores.forEach(c => c.externo = true)
+        
+        /** Acceso directo para Consultores pendientes por aprobar */
+        aprobarConsultor = false;
+        const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor independiente" AND rol = "Admin" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
+        pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
+        const rolNAme = true;
+        
+        res.render('admin/mostrarConsultores', { adminDash: true, itemActivo: 3, consultores, aprobarConsultor, consul_externo: true })
+    }
 }
 
 dashboardController.editarConsultor = async (req, res) => {
@@ -197,9 +236,20 @@ dashboardController.eliminarConsultor = async (req, res) => {
     res.send(result)
 }
 
-// EMPRESAS
+// EMPRESAS ADMIN Y EXTERNAS
 dashboardController.mostrarEmpresas = async (req, res) => {
-    let empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa"')
+    let id_corporativo = "de_paom", superAdmin = true;
+    if (req.user.rol != "Super Admin") {
+        superAdmin = false;
+        const adminUser = (await consultarDatos('consultores')).find(c => c.codigo == req.user.codigo)
+        id_corporativo = adminUser.id_corporativo;
+    }
+    let empresas = await pool.query(`SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.id_afiliado = "${id_corporativo}"`)
+    let externa = false, itemActivo = 4;
+    if (req.url == '/empresas-externas') {
+        empresas = await pool.query('SELECT e.*, u.codigo, u.estadoEmail, u.estadoAdm, f.telefono, f.id_empresa, p.*, a.id_empresa, a.estadoAcuerdo FROM empresas e LEFT OUTER JOIN ficha_cliente f ON f.id_empresa = e.id_empresas LEFT OUTER JOIN pagos p ON p.id_empresa = e.id_empresas LEFT OUTER JOIN acuerdo_confidencial a ON a.id_empresa = e.id_empresas INNER JOIN users u ON u.codigo = e.codigo AND rol = "Empresa" AND e.id_afiliado != "de_paom"')
+        externa = true; itemActivo = 5;
+    }
 
     const dg_nueva = await consultarDatos('dg_empresa_nueva')
     const dg_establecida = await consultarDatos('dg_empresa_establecida')
@@ -287,7 +337,7 @@ dashboardController.mostrarEmpresas = async (req, res) => {
 
     });
 
-    res.render('admin/mostrarEmpresas', { adminDash: true, itemActivo: 3, empresas, aprobarConsultor })
+    res.render('admin/mostrarEmpresas', { adminDash: true, itemActivo, empresas, externa, aprobarConsultor, superAdmin })
 }
 
 dashboardController.editarEmpresa = async (req, res) => {
@@ -310,9 +360,6 @@ dashboardController.editarEmpresa = async (req, res) => {
         activarBtn : false,
         sede: false
     }
-
-    // Capturando Consultores Activos
-    const consultores = await pool.query('SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND u.rol != "Empresa"')
 
     datos.nombre_completo = datosEmpresa.nombres + " " + datosEmpresa.apellidos;
     datos.nombre_empresa = datosEmpresa.nombre_empresa;
@@ -1011,31 +1058,56 @@ dashboardController.editarEmpresa = async (req, res) => {
         ])
     }
 
-    let datosTabla = await consultarDatos('rendimiento_empresa')
-    datosTabla = datosTabla.filter(x => x.empresa == idEmpresa)
+    let datosTabla = (await consultarDatos('rendimiento_empresa')).filter(x => x.empresa == idEmpresa)
     let jsonRendimiento = false;
     if (datosTabla.length > 0) jsonRendimiento = JSON.stringify(datosTabla);
 
     /*************************************************************************************************** */
     // Objeto para Botones de las tarjetas con base a la etapa del consultor
-    let rolAdmin = false, consultorDash = false, itemActivo = 3, adminDash = true;
+    let rolAdmin = false, consultorDash = false, itemActivo = 4, adminDash = true, consultorIndependiente = false;
     const botonesEtapas = { uno:false, dos:false, plan1:false, plan2:false }
+    if (req.headers.referer == process.env.MY_DOMAIN+'/empresas-externas') itemActivo = 5;
+
+    // Capturando Consultores Activos
+    let consultores = false
+    
+    // Buscando el código del consultor logueado
+    const cLogin = (await consultarDatos('consultores')).find(i => i.codigo == req.user.codigo) 
     
     // VALIDAR EL ROL DEL USUARIO
     if (req.user.rol == 'Admin') {
+        consultores = await pool.query(`SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND c.id_afiliado = "${cLogin.id_corporativo}" AND u.rol = "Consultor"`)
         rolAdmin = true;
         botonesEtapas.uno = true;
         botonesEtapas.dos = true;
         botonesEtapas.plan1 = true;
         botonesEtapas.plan2 = true;
+    } else if (req.user.rol == 'Consultor independiente') {
+        consultorIndependiente = true;
+    }
+
+    if (req.user.rol == 'Super Admin') {
+        rolAdmin = true;
+        botonesEtapas.uno = true;
+        botonesEtapas.dos = true;
+        botonesEtapas.plan1 = true;
+        botonesEtapas.plan2 = true;
+
+        // consultores = await pool.query(`SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND c.id_afiliado = "de_admin" AND u.rol = "Consultor"`)
+        const empresaActual = (await consultarDatos('empresas')).find(e => e.id_empresas == idEmpresa);
+        if (empresaActual) {
+            const consultorPadre = (await consultarDatos('consultores')).find(e => e.id_corporativo == empresaActual.id_afiliado);
+            if (consultorPadre) {
+                consultores = await pool.query(`SELECT c.*, u.codigo, u.estadoAdm, u.rol FROM consultores c INNER JOIN users u ON u.estadoAdm = 1 AND c.codigo = u.codigo AND c.id_afiliado = "${consultorPadre.id_corporativo}" AND u.rol = "Consultor"`)
+                consultores.push(consultorPadre)
+            }
+        }
     } else {
         consultorDash = true;
         itemActivo = 2;
         adminDash = false;
         aprobarConsultor = false;
 
-        let cLogin = await consultarDatos('consultores'); // Consulta a la tabla de consultores
-        cLogin = cLogin.find(i => i.codigo == req.user.codigo) // Buscando el código del consultor logueado
         // Filtro para saber a que etapas de la empresa está asignado el consultor
         const etapasAsignadas = consultores_asignados.filter(x => x.idConsultor == cLogin.id_consultores)
         console.group("\n* Soy un consultor - ETAPAS ASIGNADAS")
@@ -1131,7 +1203,7 @@ dashboardController.editarEmpresa = async (req, res) => {
         tareas, jsonDim, jsonRendimiento, fechaActual, pagoDg_Realizado,
         pago_diagnostico, pagos_empresarial, empresarial, tareasEmpresarial,
         rolAdmin, botonesEtapas, objconclusion, datosUsuario: JSON.stringify(req.user), tab_tareaAsignada,
-        archivos_solicitados
+        archivos_solicitados, consultorIndependiente
     })
 
 }
@@ -1155,60 +1227,60 @@ dashboardController.conclusiones = async (req, res) => {
 
 dashboardController.actualizarEmpresa = async (req, res) => {
     const { idEmpresa, codigo, estadoAdm, mapa } = req.body;
-    const mapaConsultores = new Map(Object.entries(mapa)) 
-    console.log("mapaConsultores > ", mapaConsultores)
 
     // Consultar Datos de la empresa
     let empresa = await consultarDatos('empresas')
-    
     empresa = empresa.find(x => x.codigo == codigo)
     console.log("Empresa Actual --> ", empresa)
-
-    // Consultores Asignados
-    const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
-    for (const [key, value] of mapaConsultores) {
-        const filtro = asignados.find(x => x.etapa == key)
-        let orden = 1;
-        if (key == 'Análisis') {
-            orden = 2;
-        }
-        if (key == 'Proyecto de Consultoría') {
-            orden = 3;
-        }
-        if (key == 'Plan Estratégico') {
-            orden = 4;
-        }
-        if (filtro) {
-            const dato = {consultor: value.id}
-            if (value.sede) { dato.sede = value.sede }
-            await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
-        } else {
-            const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
-            if (value.sede) { datos.sede = value.sede }
-            await insertarDatos('consultores_asignados', datos)
-            
-            /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
-            console.log("Enviando email de consultor Asignado - Etapa: " + key)
-            const asunto = "Tu Consultor(a) ha sido asignado(a) para la etapa de " + key;
-            const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, key);
-            const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
-            if (resultEmail == false) {
-                console.log("\nOcurrio un error inesperado al enviar el email consultor asignado")
-            } else {
-                console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + empresa.email + " >>>>>\n")
+    if (mapa) {
+        const mapaConsultores = new Map(Object.entries(mapa)) 
+        console.log("mapaConsultores > ", mapaConsultores)
+        // Consultores Asignados
+        const asignados = await consultarDatos('consultores_asignados', `WHERE empresa = "${idEmpresa}"`)
+        for (const [key, value] of mapaConsultores) {
+            const filtro = asignados.find(x => x.etapa == key)
+            let orden = 1;
+            if (key == 'Análisis') {
+                orden = 2;
             }
-
-            /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
-            let consultor = await consultarDatos('consultores')
-            consultor = consultor.find(x => x.id_consultores == value.id)
-            console.log("\nEnviando email para el consultor de que fue Asignado a una empresa en la Etapa: " + key)
-            const subject = "Has sido asignado(a) a una empresa para la etapa de " + key;
-            const template = consultor_AsignadoEtapa(consultor.nombres, empresa.nombre_empresa, key);
-            const resultConsultor = await sendEmail(consultor.email, subject, template)
-            if (resultConsultor == false) {
-                console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
+            if (key == 'Proyecto de Consultoría') {
+                orden = 3;
+            }
+            if (key == 'Plan Estratégico') {
+                orden = 4;
+            }
+            if (filtro) {
+                const dato = {consultor: value.id}
+                if (value.sede) { dato.sede = value.sede }
+                await pool.query('UPDATE consultores_asignados SET ? WHERE empresa = ? AND etapa = ?', [dato, idEmpresa, key])
             } else {
-                console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado(a) a una empresa - Email Consultor: " + consultor.email + " >>>>>\n")
+                const datos = {consultor: value.id, empresa: idEmpresa, etapa: key, orden}
+                if (value.sede) { datos.sede = value.sede }
+                await insertarDatos('consultores_asignados', datos)
+                
+                /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
+                console.log("Enviando email de consultor Asignado - Etapa: " + key)
+                const asunto = "Tu Consultor(a) ha sido asignado(a) para la etapa de " + key;
+                const plantilla = consultorAsignadoHTML(empresa.nombre_empresa, key);
+                const resultEmail = await sendEmail(empresa.email, asunto, plantilla)
+                if (resultEmail == false) {
+                    console.log("\nOcurrio un error inesperado al enviar el email consultor asignado")
+                } else {
+                    console.log("\n<<<<< Se envío emails de consultor(es) asignados a la empresa - Email: " + empresa.email + " >>>>>\n")
+                }
+
+                /** INFO PARA ENVÍO DE EMAIL A LA EMPRESA - NOTIFICANDO CONSULTOR ASIGNADO */
+                let consultor = await consultarDatos('consultores')
+                consultor = consultor.find(x => x.id_consultores == value.id)
+                console.log("\nEnviando email para el consultor de que fue Asignado a una empresa en la Etapa: " + key)
+                const subject = "Has sido asignado(a) a una empresa para la etapa de " + key;
+                const template = consultor_AsignadoEtapa(consultor.nombres, empresa.nombre_empresa, key);
+                const resultConsultor = await sendEmail(consultor.email, subject, template)
+                if (resultConsultor == false) {
+                    console.log("\nOcurrio un error inesperado al enviar el email *Haz sido asignado a una empresa*")
+                } else {
+                    console.log("\n<<<<< Se envío email para el consultor de que ha sido asignado(a) a una empresa - Email Consultor: " + consultor.email + " >>>>>\n")
+                }
             }
         }
     }

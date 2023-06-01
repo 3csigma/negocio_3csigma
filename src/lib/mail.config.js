@@ -7,7 +7,7 @@ const { privateKey_DKIM } = require("../config/index.js")
  *  TRANSPORTER PARA ENVÍOS EN LOCAL
 */
 let data = {
-	host: "3csigma.com",
+	host: process.env.HOST_EMAIL,
 	port: 465,
 	secure: true,
 	auth: {
@@ -2283,7 +2283,7 @@ const consultor_AsignadoEtapa = (consultor, empresa, etapa) => {
 <td class="pad" style="padding-left:25px;padding-right:25px;padding-top:20px;">
 <div style="font-family: 'Trebuchet MS', Tahoma, sans-serif">
 <div class="" style="font-size: 14px; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; mso-line-height-alt: 21px; color: #000000; line-height: 1.5;">
-<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 33px;"><span style="font-size:22px;"><span style="">Has sido asignado(a) como consultor a la empresa <strong>${empresa}</strong> para la etapa <strong>${etapa}</strong>, ingresa a tu plataforma PAOM System para iniciar</span></span></p>
+<p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 33px;"><span style="font-size:22px;"><span style="">Ahora eres consultor(a) de la empresa <strong>${empresa}</strong> para la etapa <strong>${etapa}</strong>, ingresa a tu plataforma PAOM System para iniciar</span></span></p>
 </div>
 </div>
 </td>

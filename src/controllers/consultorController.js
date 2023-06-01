@@ -7,13 +7,13 @@ const { consultarDatos, insertarDatos, eliminarDatos, consultarTareasConsultores
 consultorController.index = async (req, res) => {
     const { codigo } = req.user
     let empresas = []
-    const consultores = await consultarDatos('consultores')
-    const consultor = consultores.find(x => x.codigo == codigo)
+    const consultor = (await consultarDatos('consultores')).find(x => x.codigo == codigo)
     const consultores_asignados = await consultarDatos('consultores_asignados', `WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC`)
     const idEmpresas = consultores_asignados.reduce((acc,item) => {
         if(!acc.includes(item.empresa)) acc.push(item.empresa);
         return acc;
     },[])
+
     let dataEmpresas = await consultarDatos('empresas')
     idEmpresas.forEach(x => {
         const e = dataEmpresas.find(i => i.id_empresas == x)
@@ -48,10 +48,19 @@ consultorController.index = async (req, res) => {
     const fechaActual = new Date().toLocaleDateString('fr-CA');
     const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
 
+    const invitar = process.env.MY_DOMAIN+'/registro-de-consultores?corporative_user_id='+consultor.id_corporativo
+    req.session.consul2 = false;
+    if (req.user.rol == 'Consultor independiente') {
+        req.session.consul2 = true;
+    }
+     console.log("CONSUL 2 >>> ", req.session.consul2);
+     console.log(invitar);
+
     res.render('consultor/panelConsultor', {
         consultorDash: true, itemActivo: 1, empresas, graficas1: true,
         datosJson_empresas_asignadas, datosJson_historialI_consultor,
-        ultimosInformes, ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user)
+        ultimosInformes, ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user),
+        invitar, consul_independiente: req.session.consul2
     });
 }
 

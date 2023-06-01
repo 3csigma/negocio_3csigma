@@ -335,7 +335,7 @@ empresaController.perfilUsuarios = async (req, res) => {
             consultor.nivel = "Executive Director"
         }
     }         
-    let user_dash = false, adminDash = false, consultorDash = false
+    let user_dash = false, adminDash = false, consultorDash = false, portalClientes = false;
     if (rol == 'Empresa') {
         user_dash = true;
         empresa.foto ? empresa.foto = empresa.foto : empresa.foto = "../img/profile_default/user.jpg";
@@ -344,6 +344,11 @@ empresaController.perfilUsuarios = async (req, res) => {
         if (rol == 'Consultor') {
             consultorDash = true;
             consultor.nivel
+        } else if (rol == 'Consultor independiente') {
+            consultorDash = true;
+            portalClientes = process.env.PORTAL_CLIENTES
+        } else if (rol == 'Admin') {
+            portalClientes = process.env.PORTAL_CLIENTES
         } else {
             adminDash = true;
             consultor.nivel
@@ -359,6 +364,7 @@ empresaController.perfilUsuarios = async (req, res) => {
         diagnosticoPagado,
         etapa1, modalAcuerdo,
         consulAsignado: req.session.consulAsignado, etapaCompleta: req.session.etapaCompleta,
+        portalClientes
     })
 }
 

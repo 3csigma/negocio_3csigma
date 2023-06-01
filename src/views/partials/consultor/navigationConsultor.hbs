@@ -68,7 +68,7 @@
           <div class="header-left">
             <div class="dashboard_bar">
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
-              {{#comparar itemActivo '==' 2}}Empresas asignadas{{/comparar}}
+              {{#comparar itemActivo '==' 2}}Mis empresas{{/comparar}}
               {{!-- {{#comparar itemActivo '==' 3}}Informes generales{{/comparar}} --}}
               {{#if consultor.foto}}Perfil{{/if}}
             </div>
@@ -148,7 +148,7 @@
           {{/comparar}}
           <a href="/empresas-asignadas" aria-expanded="false">
             <i class="fas fa-city"></i>
-            <span class="nav-text">Empresas asignadas</span>
+            <span class="nav-text">Mis empresas</span>
           </a>
         </li>
 
@@ -165,13 +165,21 @@
         </li> --}}
       </ul>
 
-        {{!-- BOTÓN AGENDAR CITA --}}
-          <a href="https://calendly.com/app/scheduled_events/user/me" target="_blank">
-            <div class="text-center">
-              <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
-              <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
-            </div>
-          </a>
+      {{#if consul_independiente}}
+      <a class="add-menu-sidebar color_tertiary" onclick="copiarAlPortapapeles('{{invitar}}')"
+        style="color:#000 !important; padding: 10px 15px; cursor: pointer;">
+        <i class="fa fa-lg fa-file-lines mr-2"></i>
+        <p class="font-w500 mb-0 text-center">Invitar empresa</p>
+      </a>
+      {{/if}}
+
+      {{!-- BOTÓN AGENDAR CITA --}}
+      <a href="https://calendly.com/app/scheduled_events/user/me" target="_blank">
+        <div class="text-center">
+          <img src="../img/Boton-Agendar-cita.png" class="imgGrande" alt="Agendar Cita" width="245">
+          <img src="../img/Boton-Agendar-cita_Comprimido.png" class="imgToggle_" alt="Agendar Cita" width="80">
+        </div>
+      </a>
 
       <div class="copyright text-center">
         <p><strong>­© PAOM System</strong> </p>

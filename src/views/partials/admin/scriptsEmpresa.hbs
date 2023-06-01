@@ -98,8 +98,8 @@
         console.log("Estado Empresa >> ", estadoAdm)
         console.log("Consultores Asignados >> ", mapaConsultores)
         console.groupEnd()
-
-        const mapa = Object.fromEntries(mapaConsultores)
+        let mapa = false;
+        if (mapaConsultores.size > 0) mapa = Object.fromEntries(mapaConsultores)
 
         fetch('/actualizarEmpresa', {
             method: 'POST',

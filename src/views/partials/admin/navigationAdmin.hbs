@@ -69,9 +69,10 @@
           <div class="header-left">
             <div class="dashboard_bar">
               {{#comparar itemActivo '==' 1}}Dashboard{{/comparar}}
-              {{#comparar itemActivo '==' 2}}Consultores registrados{{/comparar}}
-              {{#comparar itemActivo '==' 3}}Empresas registradas{{/comparar}}
-              {{!-- {{#comparar itemActivo '==' 4}}Informes generales{{/comparar}} --}}
+              {{#comparar itemActivo '==' 2}}Mis consultores{{/comparar}}
+              {{#comparar itemActivo '==' 3}}Consultores externos{{/comparar}}
+              {{#comparar itemActivo '==' 4}}Mis empresas{{/comparar}}
+              {{#comparar itemActivo '==' 5}}Empresas externas{{/comparar}}
               {{#if consultor.foto}}Perfil{{/if}}
             </div>
           </div>
@@ -251,20 +252,50 @@
           <a href="/consultores" aria-expanded="false">
             {{!-- <i class="fas fa-user-circle"></i> --}}
             <i class="zmdi zmdi-accounts"></i>
-            <span class="nav-text">Consultores registrados</span>
+            <span class="nav-text">Mis consultores</span>
           </a>
         </li>
+
+        {{#if superAdmin}}
         {{#comparar itemActivo '==' 3}}
         <li class="mm-active">
           {{/comparar}}
           {{#comparar itemActivo '!=' 3}}
         <li>
           {{/comparar}}
-          <a href="/empresas" aria-expanded="false">
-            <i class="fas fa-city"></i>
-            <span class="nav-text">Empresas registradas</span>
+          <a href="/consultores-externos" aria-expanded="false">
+            <i class="zmdi zmdi-accounts"></i>
+            <span class="nav-text">Consultores externos</span>
           </a>
         </li>
+        {{/if}}
+
+        {{#comparar itemActivo '==' 4}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 4}}
+        <li>
+          {{/comparar}}
+          <a href="/empresas" aria-expanded="false">
+            <i class="fas fa-city"></i>
+            <span class="nav-text">Mis empresas</span>
+          </a>
+        </li>
+
+        {{#if superAdmin}}
+        {{#comparar itemActivo '==' 5}}
+        <li class="mm-active">
+          {{/comparar}}
+          {{#comparar itemActivo '!=' 5}}
+        <li>
+          {{/comparar}}
+          <a href="/empresas-externas" aria-expanded="false">
+            <i class="fas fa-city"></i>
+            <span class="nav-text">Empresas externas</span>
+          </a>
+        </li>
+        {{/if}}
+        
         {{!-- {{#comparar itemActivo '==' 4}}
         <li class="mm-active">
           {{/comparar}}
@@ -277,6 +308,18 @@
           </a>
         </li> --}}
       </ul>
+
+      <a class="add-menu-sidebar color_tertiary" onclick="copiarAlPortapapeles('{{invitar.empresa}}')"
+        style="color:#000 !important; padding: 10px 15px; cursor: pointer">
+        <i class="fa fa-lg fa-file-lines mr-2"></i>
+        <p class="font-w500 mb-0 text-center">Invitar empresa</p>
+      </button>
+
+      <a class="add-menu-sidebar color_tertiary" onclick="copiarAlPortapapeles('{{invitar.consultor}}')"
+        style="color:#000 !important; padding: 10px 15px; cursor: pointer">
+        <i class="fa fa-lg fa-file-contract mr-2"></i>
+        <p class="font-w500 mb-0 text-center">Invitar consultor</p>
+      </a>
 
       {{#if aprobarConsultor}}
       <a href="/consultores/{{aprobarConsultor}}" class="add-menu-sidebar color_tertiary text-black"
