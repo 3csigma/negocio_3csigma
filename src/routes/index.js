@@ -8,7 +8,7 @@ const csrfProtection = csrf({ cookie: true })
 const multer = require('multer');
 const path = require('path');
 const cron = require('node-cron');
-const { habilitar_siguientePago, historial_consultores_admin, historial_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas, uploadFiles } = require('../lib/helpers')
+const { habilitar_siguientePago, historial_consultores_superadmin, historial_empresas_superadmin, historial_consultores_empresas_admin, historial_informes_admin, historial_informes_consultor, historial_empresas_consultor, consultar_tiempo_tareas, uploadFiles } = require('../lib/helpers')
 
 /** SUBIR CERTIFICADOS CONSULTORES */
 const rutaAlmacen = multer.diskStorage({
@@ -113,14 +113,15 @@ cron.schedule('0 12 * * 0-6',() => {
 
 // Ejecución Mensual
 cron.schedule('0 1 1 * *',() => {
-    historial_empresas_admin();
-    historial_consultores_admin();
+    historial_empresas_superadmin();
+    historial_consultores_superadmin();
+    historial_consultores_empresas_admin();
     historial_informes_admin();
     historial_empresas_consultor();
     historial_informes_consultor();
 });
 
-router.post('/historial_empresas_admin', historial_empresas_admin)
+router.post('/consultores-admin', historial_consultores_empresas_admin)
 
 // Ejecución Semanal
 cron.schedule('0 10 * * Mon',() => {

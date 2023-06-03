@@ -13,6 +13,8 @@ let aprobarConsultor = false;
 // Dashboard Administrativo
 dashboardController.admin = async (req, res) => {
     const consultor = (await consultarDatos('consultores')).find(x => x.codigo == req.user.codigo)
+    // Objeto para el Historial de Empresas, consultores e informes
+    let jsonHistorial = {}, superAdmin = true;
     /**
      * Ultimos 2 registros (Empresas & Consultores) 
     */ 
@@ -22,18 +24,32 @@ dashboardController.admin = async (req, res) => {
 
     // Admin (Empresas Franquiciadoras)
     if (req.user.rol == "Admin") {
+        superAdmin = false;
         consultores = await pool.query(`SELECT * FROM consultores WHERE id_afiliado = "${consultor.id_corporativo}" ORDER BY id_consultores DESC LIMIT 2`)
         empresas = await pool.query(`SELECT * FROM empresas  WHERE id_afiliado = "${consultor.id_corporativo}" ORDER BY id_empresas DESC LIMIT 2`)
+        // DATOS PARA EL NÚMERO DE CONSULTORES, EMPRESAS E INFORMES REGISTRADOS MENSUALMENTE (USUARIO ADMIN)
+        jsonHistorial.consultores = await pool.query(`SELECT * FROM (SELECT * FROM historial_consultores_admin WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`)
+        jsonHistorial.consultores.length > 0 ? jsonHistorial.consultores = JSON.stringify(jsonHistorial.consultores) : jsonHistorial.consultores = false;
+        jsonHistorial.empresas = await pool.query(`SELECT * FROM (SELECT * FROM historial_empresas_admin WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`);
+        jsonHistorial.empresas.length > 0 ? jsonHistorial.empresas = JSON.stringify(jsonHistorial.empresas) : jsonHistorial.empresas = false;
+        jsonHistorial.informes = await pool.query(`SELECT * FROM (SELECT * FROM historial_informes_admin WHERE consultor = ${consultor.id_consultores} ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`);
+        jsonHistorial.informes.length > 0 ? jsonHistorial.informes = JSON.stringify(jsonHistorial.informes) : jsonHistorial.informes = false;
+    } else {
+        // DATOS PARA EL NÚMERO DE CONSULTORES, EMPRESAS E INFORMES REGISTRADOS MENSUALMENTE (USUARIO SUPERADMIN)
+        jsonHistorial.consultores = await pool.query(`SELECT * FROM (SELECT * FROM historial_consultores_superadmin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`);
+        jsonHistorial.consultores.length > 0 ? jsonHistorial.consultores = JSON.stringify(jsonHistorial.consultores) : jsonHistorial.consultores = false;
+        jsonHistorial.empresas = await pool.query(`SELECT * FROM (SELECT * FROM historial_empresas_superadmin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`);
+        jsonHistorial.empresas.length > 0 ? jsonHistorial.empresas = JSON.stringify(jsonHistorial.empresas) : jsonHistorial.empresas = false;
+        jsonHistorial.informes = await pool.query(`SELECT * FROM (SELECT * FROM historial_informes_superadmin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC`);
+        jsonHistorial.informes.length > 0 ? jsonHistorial.informes = JSON.stringify(jsonHistorial.informes) : jsonHistorial.informes = false;
     }
 
     /** Acceso directo para Consultores pendientes por aprobar */
     aprobarConsultor = false;
-    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC;')
+    const pendientes = await pool.query('SELECT id_usuarios, codigo, estadoAdm FROM users WHERE rol = "Consultor" AND estadoAdm = 0 ORDER BY id_usuarios ASC')
     pendientes.length > 0 ? aprobarConsultor = pendientes[0].codigo : aprobarConsultor = aprobarConsultor;
-
     const consultorAsignado = await consultarDatos('consultores')
     const ficha = await consultarDatos('ficha_cliente')
-
     empresas.forEach(e => {
         consultorAsignado.forEach(c => {
             if (e.consultor == c.id_consultores) {
@@ -49,55 +65,20 @@ dashboardController.admin = async (req, res) => {
         });
     });
 
-    // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE CONSULTORES REGISTRADOS MENSUALMENTE <<====
-    let historialConsultores = await pool.query("SELECT * FROM (SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
-    let datosJson_historialC_adm
-    if (historialConsultores.length > 0) {
-        datosJson_historialC_adm = JSON.stringify(historialConsultores);
-        console.log("\n");
-        console.log("IMPIMIENDO datosJson_historialC_adm ====>>>", datosJson_historialC_adm);
-    }
-    // FIN DE LA FUNCIÓN <<====
-
-    // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE EMPRESAS REGISTRADOS MENSUALMENTE <<====
-    let historialEmpresas = await pool.query("SELECT * FROM (SELECT * FROM historial_empresas_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
-    let datosJson_historialE_adm
-    if (historialEmpresas.length > 0) {
-        datosJson_historialE_adm = JSON.stringify(historialEmpresas);
-        console.log("\n");
-        console.log("IMPIMIENDO datosJson_historialE_adm ====>>>", datosJson_historialE_adm);
-    }
-    // FIN DE LA FUNCIÓN <<====
-
-    // MOSTRAR DATOS PARA LA GRAFICA NUMERO DE INFORMES REGISTRADOS MENSUALMENTE <<====
-    let historialInformes = await pool.query("SELECT * FROM (SELECT * FROM historial_informes_admin ORDER BY id DESC LIMIT 6) sub ORDER BY id ASC;");
-    let datosJson_historialI_adm
-    if (historialInformes.length > 0) {
-        datosJson_historialI_adm = JSON.stringify(historialInformes);
-        console.log("\n");
-        console.log("IMPIMIENDO datosJson_historialI_adm ====>>>", datosJson_historialI_adm);
-    }
-    // FIN DE LA FUNCIÓN <<====
-
     /**
      * TAREAS ADMINISTRADOR
      */
     const fechaActual = new Date().toLocaleDateString('fr-CA');
     const tareas = await consultarTareasConsultores(consultor.id_consultores, fechaActual)
-
     const invitar = {
         empresa: process.env.MY_DOMAIN+'/registro?corporative_user_id='+consultor.id_corporativo,
         consultor: process.env.MY_DOMAIN+'/registro-de-consultores?corporative_user_id='+consultor.id_corporativo
     }
-    let superAdmin = true;
-    if (req.user.rol != 'Super Admin') {
-        superAdmin = false;
-    }
 
     res.render('admin/panelAdmin', { 
         adminDash: true, itemActivo: 1, consultores, empresas, aprobarConsultor, graficas1: true, 
-        datosJson_historialC_adm, datosJson_historialE_adm, datosJson_historialI_adm, 
-        ide_consultor: consultor.id_consultores, fechaActual, tareas, datosUsuario: JSON.stringify(req.user),
+        jsonHistorial, ide_consultor: consultor.id_consultores, fechaActual, tareas,
+        datosUsuario: JSON.stringify(req.user),
         invitar, superAdmin
     });
 

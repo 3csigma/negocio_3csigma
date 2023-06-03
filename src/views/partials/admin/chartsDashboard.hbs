@@ -8,7 +8,7 @@
                     let valoresE = []   // => Valores historial empresas
                     const datosY = []  // => Datos para la barras de la grafica
                     const datosX = [] // => Datos para el eje X (los meses)
-                    valoresE = $('#datosJson_historialE_adm').val();
+                    valoresE = $('#historialEmpresas').val();
                     console.log(valoresE)
                     if (valoresE) {
                         valoresE = JSON.parse(valoresE);
@@ -126,7 +126,7 @@
                     let valoresC = []   // => Valores historial consultores
                     const datosY = []  // => Datos para la barras de la grafica
                     const datosX = [] // => Datos para el eje X (los meses)
-                    valoresC = $('#datosJson_historialC_adm').val();
+                    valoresC = $('#historialConsultores').val();
                     if (valoresC) {
                         valoresC = JSON.parse(valoresC);
                         console.log(valoresC)
@@ -243,7 +243,7 @@
                     let valoresI = []   // => Valores historial informes
                     const datosY = []  // => Datos para la barras de la grafica
                     const datosX = [] // => Datos para el eje X (los meses)
-                    valoresI = $('#datosJson_historialI_adm').val();
+                    valoresI = $('#historialInformes').val();
                     console.log(valoresI)
                     if (valoresI) {
                         valoresI = JSON.parse(valoresI);

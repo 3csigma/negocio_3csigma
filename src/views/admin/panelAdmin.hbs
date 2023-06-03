@@ -29,8 +29,8 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
-                    {{#if datosJson_historialC_adm}}
-                    <input type="hidden" id="datosJson_historialC_adm" value="{{datosJson_historialC_adm }}">
+                    {{#if jsonHistorial.consultores}}
+                    <input type="hidden" id="historialConsultores" value="{{jsonHistorial.consultores}}">
                     <div class="card-body pb-0">
                         <div id="chartBar2"></div>
                     </div>
@@ -71,8 +71,8 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
-                        {{#if datosJson_historialE_adm}}
-                    <input type="hidden" id="datosJson_historialE_adm" value="{{datosJson_historialE_adm }}">
+                        {{#if jsonHistorial.empresas}}
+                    <input type="hidden" id="historialEmpresas" value="{{jsonHistorial.empresas}}">
                     <div class="card-body pb-0">
                         <div id="chartBar"></div>
                     </div>
@@ -109,8 +109,8 @@
                             <p class="fs-13 mb-0 text-black">Registros recientes</p>
                         </div>
                     </div>
-                     {{#if datosJson_historialI_adm}}
-                    <input type="hidden" id="datosJson_historialI_adm" value="{{datosJson_historialI_adm }}">
+                     {{#if jsonHistorial.informes}}
+                    <input type="hidden" id="historialInformes" value="{{jsonHistorial.informes}}">
                     <div class="card-body pb-0">
                         <div id="chartBar3"></div>
                     </div>

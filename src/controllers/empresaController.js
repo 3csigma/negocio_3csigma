@@ -349,6 +349,7 @@ empresaController.perfilUsuarios = async (req, res) => {
             portalClientes = process.env.PORTAL_CLIENTES
         } else if (rol == 'Admin') {
             portalClientes = process.env.PORTAL_CLIENTES
+            adminDash = true;
         } else {
             adminDash = true;
             consultor.nivel

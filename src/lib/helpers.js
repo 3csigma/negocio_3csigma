@@ -279,10 +279,9 @@ helpers.habilitar_siguientePago = async () => {
     console.log("\n***************\nEJECUCIÓN CRON JOB FINALIZADA - PAGOS (ANÁLISIS & EMPRESARIAL) \n***************\n");
 }
 
-// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES ADMIN
-helpers.historial_consultores_admin = async () => {
-    const consultores = await helpers.consultarDatos('consultores')
-
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL CONSULTORES PARA EL SUPERADMIN
+helpers.historial_consultores_superadmin = async () => {
+    
     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     const year = new Date().getFullYear();
@@ -292,8 +291,8 @@ helpers.historial_consultores_admin = async () => {
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let filtroConsultores, num_consultores
-    filtroConsultores = consultores.filter((item) => mesAnterior == item.mes && year == item.year);
+    let num_consultores = 0;
+    const filtroConsultores = (await helpers.consultarDatos('consultores')).filter((item) => mesAnterior == item.mes && year == item.year);
 
     if (filtroConsultores.length > 0) {
         num_consultores = filtroConsultores.length;
@@ -301,28 +300,27 @@ helpers.historial_consultores_admin = async () => {
 
         // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES FILTRADOS
         const datos_consultor_admin = { fecha, mes, num_consultores };
-        await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
-        console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+        await pool.query("INSERT INTO historial_consultores_superadmin SET ?", [datos_consultor_admin]);
+        console.log("Realizando registro en DB HISTORIAL CONSULTORES SUPER ADMINISTRADOR....")
     } else {
-        let numRepetido = await pool.query("SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 1");
+        let numRepetido = await pool.query("SELECT * FROM historial_consultores_superadmin ORDER BY id DESC LIMIT 1");
         if (numRepetido.length == 0) {
             const datos_consultor_admin = { fecha, mes, num_consultores: '0' };
-            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
-            console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+            await pool.query("INSERT INTO historial_consultores_superadmin SET ?", [datos_consultor_admin]);
+            console.log("Realizando registro en DB HISTORIAL CONSULTORES SUPER ADMINISTRADOR....")
         } else {
             num_consultores = numRepetido[0].num_consultores
             // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES DEL ADMIN FILTRADOS POR SEMANA Y AÑO 
             const datos_consultor_admin = { fecha, mes, num_consultores };
-            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
-            console.log("3");
+            await pool.query("INSERT INTO historial_consultores_superadmin SET ?", [datos_consultor_admin]);
         }
     }
     console.log("CRON JOB HISTORIAL DE CONSULTORES ADMIN FINALIZADO...");
 };
 
-// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS ADMIN
-helpers.historial_empresas_admin = async () => {
-    const empresas = await helpers.consultarDatos('empresas')
+// ===>>> INSERTAR DATOS A LA TABLA HISTORIAL EMPRESAS PARA EL SUPERADMIN
+helpers.historial_empresas_superadmin = async () => {
+    
     /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
     let fecha = new Date().toLocaleDateString("en-CA");
     let year = new Date().getFullYear();
@@ -332,31 +330,82 @@ helpers.historial_empresas_admin = async () => {
     mesAnterior == 12 ? year = year - 1 : false
     const mes = objMes.mes;
 
-    let filtroEmpresas, num_empresas
-    filtroEmpresas = empresas.filter((item) => mesAnterior == item.mes && year == item.year);
+    let num_empresas = 0;
+    const filtroEmpresas = (await helpers.consultarDatos('empresas')).filter((item) => mesAnterior == item.mes && year == item.year);
 
     if (filtroEmpresas.length > 0) {
         num_empresas = filtroEmpresas.length;
         // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
         const datos_empresas_admin = { fecha, mes, num_empresas };
-        await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+        await pool.query("INSERT INTO historial_empresas_superadmin SET ?", [datos_empresas_admin]);
         console.log("Realizando registro en DB HISTORIAL EMPRESAS ADMINISTRADOR....")
     } else {
-        let numRepetido = await pool.query("SELECT * FROM historial_empresas_admin ORDER BY id DESC LIMIT 1");
+        let numRepetido = await pool.query("SELECT * FROM historial_empresas_superadmin ORDER BY id DESC LIMIT 1");
         if (numRepetido.length == 0) {
             const datos_empresas_admin = { fecha, mes, num_empresas: '0' };
-            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            await pool.query("INSERT INTO historial_empresas_superadmin SET ?", [datos_empresas_admin]);
             console.log("2");
         } else {
             num_empresas = numRepetido[0].num_empresas
             // ==> ENVIANDO A LA TABLA HISTORIAL EMPRESAS DEL ADMIN FILTRADOS POR MES Y AÑO 
             const datos_empresas_admin = { fecha, mes, num_empresas };
-            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            await pool.query("INSERT INTO historial_empresas_superadmin SET ?", [datos_empresas_admin]);
             console.log("3");
         }
     }
 
     console.log("CRON JOB HISTORIAL DE EMPRESAS ADMIN FINALIZADO...");
+};
+
+// HISTORIAL DE CONSULTORES Y EMPRESAS REGISTRADOS POR MES PARA LOS USUARIOS TIPO ADMIN
+helpers.historial_consultores_empresas_admin = async () => {
+    
+    /** Proceso de Captura de Mes Actual & Anterior respecto a la Fecha */
+    let fecha = new Date().toLocaleDateString("en-CA");
+    const year = new Date().getFullYear();
+    
+    const objMes = capturarMes()
+    const mesAnterior = objMes.mesAnterior;
+    mesAnterior == 12 ? year = year - 1 : false
+    const mes = objMes.mes;
+
+    // Filtrando por Consultores con id_corporativo diferente al SuperAdmin
+    let filtroConsultores = (await helpers.consultarDatos('consultores')).filter(c => c.id_corporativo != 'de_paom' && c.id_corporativo != null)
+    
+    if (filtroConsultores.length > 0) {
+
+        // Recorriendo consultores que tienen el id_corporativo
+        filtroConsultores.forEach(async x => {
+            const num_consultores = ((await helpers.consultarDatos('consultores')).filter(c => c.id_afiliado == x.id_corporativo && mesAnterior == c.mes && year == c.year)).length
+            console.log("FILTRADOS >>>>>", x);
+            console.log("Num Filtro => ", num_consultores);
+            // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES
+            const datos_consultor_admin = { consultor: x.id_consultores, fecha, mes, num_consultores };
+            await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+            console.log("-- REALIZANDO REGISTRO EN TABLA HISTORIAL CONSULTORES ADMINISTRADOR....")
+
+            // INSERTANDO DATOS PARA EL HISTORIAL DE EMPRESAS
+            const num_empresas = ((await helpers.consultarDatos('empresas')).filter(e => e.id_afiliado == x.id_corporativo && mesAnterior == e.mes && year == e.year)).length
+            const datos_empresas_admin = { consultor: x.id_consultores, fecha, mes, num_empresas };
+            await pool.query("INSERT INTO historial_empresas_admin SET ?", [datos_empresas_admin]);
+            console.log("REALIZANDO REGISTRO EN TABLA HISTORIAL EMPRESAS ADMINISTRADOR....")
+        });
+
+    } 
+    // else {
+    //     let numRepetido = await pool.query("SELECT * FROM historial_consultores_admin ORDER BY id DESC LIMIT 1");
+    //     if (numRepetido.length == 0) {
+    //         const datos_consultor_admin = { fecha, mes, num_consultores: '0' };
+    //         await pool.query("INSERT INTO historial_consultores_admin SET ?", [datos_consultor_admin]);
+    //         console.log("Realizando registro en DB HISTORIAL CONSULTORES ADMINISTRADOR....")
+    //     } else {
+    //         num_consultores = numRepetido[0].num_consultores
+    //         // ==> ENVIANDO A LA TABLA HISTORIAL CONSULTORES DEL ADMIN FILTRADOS POR SEMANA Y AÑO 
+    //         const datos_consultor_admin = { fecha, mes, num_consultores };
+    //         await pool.query("INSERT INTO historial_consultores_superadmin SET ?", [datos_consultor_admin]);
+    //     }
+    // }
+    console.log("CRON JOB HISTORIAL DE CONSULTORES ADMIN FINALIZADO...");
 };
 
 // ===>>> INSERTAR DATOS A LA TABLA HISTORIAL INFORMES ADMIN
