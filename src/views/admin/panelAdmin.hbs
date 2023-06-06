@@ -13,7 +13,7 @@
         <div class="row">
 
             {{!-- Nuevos consultores --}}
-            <div class="col-xl-4 col-lg-6">
+            <div class="{{#if superAdmin}}col-xl-4{{else}}col-xl-6{{/if}} col-lg-6">
                 <div class="card">
                     <div class="card-header pb-0 border-0">
                         <span class="p-3 mr-3 rounded color_primary">
@@ -50,7 +50,7 @@
                 </div>
             </div>
             {{!-- Nuevas empresas --}}
-            <div class="col-xl-4 col-lg-6">
+            <div class="{{#if superAdmin}}col-xl-4{{else}}col-xl-6{{/if}} col-lg-6">
                 <div class="card">
                     <div class="card-header pb-0 border-0">
                         <span class="p-3 mr-3 rounded color_primary" >
@@ -92,6 +92,7 @@
                 </div>
             </div>
 
+            {{#if superAdmin}}
             {{!-- Informes generados --}}
             <div class="col-xl-4">
                 <div class="card">
@@ -129,6 +130,7 @@
                     {{/if}}
                 </div>
             </div>
+            {{/if}}
 
             {{!-- TAREAS PROPIAS ADMIN --}}
             <input type="hidden" id="idConsultor" value="{{ide_consultor}}">
